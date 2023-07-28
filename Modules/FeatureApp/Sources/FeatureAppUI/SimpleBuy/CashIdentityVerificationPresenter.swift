@@ -2,6 +2,7 @@
 
 import DIKit
 import Localization
+import MoneyKit
 import PlatformKit
 import PlatformUIKit
 import RxCocoa
@@ -56,7 +57,7 @@ public final class CashIdentityVerificationPresenter {
         ]
         self.announcement = AnnouncementCardViewModel(
             badgeImage: .init(
-                image: .local(name: "icon-gbp", bundle: .platformUIKit),
+                image: FiatCurrency.GBP.logoResource,
                 contentColor: .white,
                 backgroundColor: .fiat,
                 cornerRadius: .roundedLow,

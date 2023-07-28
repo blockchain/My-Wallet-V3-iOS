@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import ComposableArchitecture
 import DIKit
 @testable import FeatureTourUI
@@ -18,6 +19,7 @@ final class TourViewTests: XCTestCase {
     }
 
     override func setUp() {
+        _ = App.preview
         super.setUp()
         isRecording = false
     }

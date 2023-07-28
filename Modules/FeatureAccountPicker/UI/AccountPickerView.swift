@@ -92,23 +92,30 @@ public struct AccountPickerView<
             success: { successStore in
                 WithViewStore(successStore, observe: \.content.isEmpty) { viewStore in
                     if viewStore.state {
-                        EmptyStateView(
-                            title: LocalizationConstants.AccountPicker.noWallets,
-                            subHeading: "",
-                            image: ImageAsset.emptyActivity.image
-                        )
+                        emptyState
                     } else {
                         contentView(successStore: successStore)
                     }
                 }
             },
             failure: { _ in
-                ErrorStateView(title: LocalizationConstants.Errors.genericError)
+                errorStateView
             }
         )
         .onAppear {
             ViewStore(store).send(.subscribeToUpdates)
         }
+    }
+
+
+    @ViewBuilder
+    private var errorStateView: some View {
+        VStack(spacing: Spacing.padding2) {
+            Text(LocalizationConstants.Errors.genericError)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
+        }
+        .padding([.leading, .trailing], 24)
     }
 
     struct HeaderScope: Equatable {
@@ -241,6 +248,27 @@ public struct AccountPickerView<
                 return false
             }
             return popularAssets.contains(currency) == false
+        }
+    }
+
+    @ViewBuilder
+    private var emptyState: some View {
+        VStack {
+            Text(LocalizationConstants.AccountPicker.noWallets)
+                .textStyle(.title)
+                .foregroundColor(.semantic.title)
+
+            Spacer()
+                .frame(height: 8)
+
+            Text("")
+                .textStyle(.subheading)
+                .foregroundColor(.semantic.text)
+
+            Spacer()
+                .frame(height: 24)
+
+            ImageAsset.emptyActivity.imageResource.image
         }
     }
 }
@@ -382,7 +410,7 @@ struct AccountPickerView_Previews: PreviewProvider {
         headerStyle: .normal(
             title: "Send Crypto Now",
             subtitle: "Choose a Wallet to send cypto from.",
-            image: ImageAsset.iconSend.image,
+            image: ImageAsset.iconSend.imageResource,
             tableTitle: "Select a Wallet",
             searchable: true
         ),

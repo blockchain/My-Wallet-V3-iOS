@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Errors
 import FeatureCardPaymentDomain
 import PlatformKit

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import DIKit
 import FeatureTransactionDomain
 import Localization
@@ -95,8 +96,8 @@ final class AccountAuxiliaryViewInteractor: AccountAuxiliaryViewInteractorAPI {
                 return .init(
                     title: bank.label,
                     subtitle: subtitle,
-                    imageResource: bank.logoResource,
-                    imageBackgroundColor: bank.logoBackgroundColor,
+                    imageResource: .local(name: "icon-bank", bundle: .platformUIKit),
+                    imageBackgroundColor: .background,
                     isEnabled: tapEnabled
                 )
 
@@ -119,8 +120,8 @@ final class AccountAuxiliaryViewInteractor: AccountAuxiliaryViewInteractorAPI {
                 return .init(
                     title: fiatAccount.label,
                     subtitle: "",
-                    imageResource: fiatAccount.logoResource,
-                    imageBackgroundColor: fiatAccount.logoBackgroundColor,
+                    imageResource: fiatAccount.fiatCurrency.logoResource,
+                    imageBackgroundColor: .background,
                     isEnabled: tapEnabled
                 )
 

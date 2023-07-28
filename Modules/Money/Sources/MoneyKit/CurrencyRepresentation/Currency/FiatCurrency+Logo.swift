@@ -8,21 +8,6 @@ import SwiftUI
 import BlockchainComponentLibrary
 import BlockchainNamespace
 
-extension CurrencyType {
-
-    @ViewBuilder public func logo(
-        size: Length = 24.pt,
-        showNetworkLogo: Bool? = nil
-    ) -> some View {
-        switch self {
-        case .fiat(let fiat):
-            fiat.logo(size: size)
-        case .crypto(let crypto):
-            crypto.logo(size: size, showNetworkLogo: showNetworkLogo)
-        }
-    }
-}
-
 extension FiatCurrency {
 
     public func logo(
@@ -41,15 +26,14 @@ extension FiatCurrency {
             self.size = size
         }
 
+        @ViewBuilder
         public var body: some View {
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color.semantic.fiatGreen)
                 .frame(width: size, height: size)
                 .overlay(
-                    Text(currency.displaySymbol)
-                        .minimumScaleFactor(0.6)
+                    currency.logoResource.image
                         .padding(2)
-                        .typography(.paragraph1.bold())
                         .foregroundColor(.semantic.light)
                 )
         }

@@ -9,7 +9,7 @@ import SwiftUI
 import UIComponentsKit
 
 struct TargetAccountAuxiliaryViewState: Equatable {
-    let image: ImageResource
+    let asset: CryptoCurrency
     let title: String
     let color: Color
     let enabled: Bool
@@ -51,10 +51,8 @@ struct TargetAccountAuxiliaryView: View {
                         spacing: Spacing.padding2
                     ) {
                         HStack(spacing: -6) {
-                            ImageResourceView(viewStore.image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 32.pt)
+                            viewStore.asset
+                                .logo(size: 32.pt, showNetworkLogo: false)
 
                             Icon.plus.circle()
                                 .color(viewStore.color)
@@ -91,7 +89,7 @@ extension TargetAccountAuxiliaryView {
         self.init(
             store: .init(
                 initialState: TargetAccountAuxiliaryViewState(
-                    image: asset.logoResource,
+                    asset: asset,
                     title: asset.name,
                     color: asset.brandColor,
                     enabled: true

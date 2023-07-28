@@ -1,12 +1,13 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import MoneyKit
 import PlatformKit
 import UIComponentsKit
 
 extension PaymentMethod {
 
-    public var logoResource: UIComponentsKit.ImageResource {
+    public var logoResource: ImageResource {
         switch type {
         case .card:
             return .local(name: "icon-card", bundle: .platformUIKit)
@@ -25,8 +26,7 @@ extension PaymentMethod {
 
 extension PaymentMethodAccount {
 
-    // This extension overrides the default implementation of `BlockchainAccount`
-    public var logoResource: UIComponentsKit.ImageResource {
+    public var logoResource: ImageResource {
         switch paymentMethodType {
         case .card(let cardData):
             return cardData.type.thumbnail ?? .local(name: "icon-card", bundle: .platformUIKit)

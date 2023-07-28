@@ -140,7 +140,7 @@ public struct PricesSceneView: View {
     }
 
     private var trailingIconTrendingIcon: (Icon, Color) {
-        (Icon.fireFilled, Color.WalletSemantic.warningMuted)
+        (.fireFilled, .semantic.warningMuted)
     }
 
     @ViewBuilder private var loadingSection: some View {

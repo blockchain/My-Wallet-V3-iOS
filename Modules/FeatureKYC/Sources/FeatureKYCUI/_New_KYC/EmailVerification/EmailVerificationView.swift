@@ -36,7 +36,7 @@ public struct EmailVerificationView: View {
 
                 // Root View when loading Email Verification Status
                 if viewStore.flowStep == .loadingVerificationState || viewStore.flowStep == .verificationCheckFailed {
-                    ActivityIndicatorView()
+                    ProgressView()
                         .accessibility(identifier: "KYC.EmailVerification.loading.spinner")
                         .alert(
                             store.scope(state: \.emailVerificationFailedAlert),

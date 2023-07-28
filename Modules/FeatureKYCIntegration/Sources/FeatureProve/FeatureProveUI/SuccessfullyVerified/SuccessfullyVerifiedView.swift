@@ -42,7 +42,7 @@ struct SuccessfullyVerifiedView: View {
                     }
                     .padding()
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color.textTitle)
+                    .foregroundColor(Color.semantic.title)
                 }
                 .frame(width: geometry.size.width)
                 .frame(height: geometry.size.height)

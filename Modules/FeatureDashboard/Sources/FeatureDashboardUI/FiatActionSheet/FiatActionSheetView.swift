@@ -7,6 +7,7 @@ import ComposableArchitecture
 import FeatureDashboardDomain
 import Foundation
 import Localization
+import MoneyKit
 import SwiftUI
 
 public struct FiatActionSheetView: View {
@@ -83,12 +84,7 @@ public struct FiatActionSheetView: View {
     private var headerView: some View {
         HStack(spacing: Spacing.padding1) {
             // Icon
-            model.currencyIcon?
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 24, height: 24)
-                .background(Color.semantic.fiatGreen)
-                .cornerRadius(6, corners: .allCorners)
+            model.currency.logo()
 
             // Text
             Text(model.titleString)
@@ -122,8 +118,8 @@ extension FiatActionSheetView {
             asset.currency.name
         }
 
-        var currencyIcon: Image? {
-            asset.currency.fiatCurrency?.image
+        var currency: CurrencyType {
+            asset.currency
         }
 
         init(with asset: AssetBalanceInfo) {

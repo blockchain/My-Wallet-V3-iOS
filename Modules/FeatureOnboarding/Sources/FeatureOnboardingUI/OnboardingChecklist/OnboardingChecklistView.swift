@@ -41,7 +41,7 @@ public struct OnboardingChecklistView: View {
                         VStack(spacing: Spacing.padding1) {
                             Text(LocalizationConstants.Onboarding.Checklist.screenTitle)
                                 .typography(.title3)
-                                .foregroundColor(Color.textTitle)
+                                .foregroundColor(Color.semantic.title)
                             Text(LocalizationConstants.Onboarding.Checklist.screenSubtitle)
                                 .typography(.body1)
                                 .foregroundColor(Color.textBody)

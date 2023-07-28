@@ -32,7 +32,7 @@ struct OnboardingChecklistRow: View {
                         .frame(width: 24, height: 24)
                 } else if status == .pending {
                     ProgressView(value: 0.25)
-                        .progressViewStyle(IndeterminateProgressStyle())
+                        .progressViewStyle(.indeterminate)
                         .frame(width: 24, height: 24)
                 } else {
                     Icon.chevronRight

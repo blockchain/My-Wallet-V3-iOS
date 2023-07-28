@@ -180,7 +180,7 @@ public struct AvailableBalanceView: View {
                         .typography(.caption1)
                         .foregroundColor(.semantic.body)
                 } else if viewStore.isDataPopulated {
-                    ActivityIndicatorView()
+                    ProgressView()
                         .frame(width: 14, height: 14)
                 }
             }

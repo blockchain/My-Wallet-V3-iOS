@@ -1,12 +1,17 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Combine
 import Foundation
 import SwiftUI
 
 #if canImport(UIKit)
+import UIKit
+typealias UniversalImage = UIImage
 private let makeImage = Image.init(uiImage:)
 #elseif canImport(AppKit)
+import AppKit
+typealias UniversalImage = NSImage
 private let makeImage = Image.init(nsImage:)
 #endif
 

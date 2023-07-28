@@ -34,7 +34,7 @@ struct InterestAccountListItem: View {
                                 .frame(width: 32, height: 32)
                             Text(viewStore.currency.name)
                                 .textStyle(.title)
-                                .foregroundColor(.textTitle)
+                                .foregroundColor(.semantic.title)
                         }
                         HStack {
                             Image.CircleIcon.infoIcon
@@ -48,7 +48,7 @@ struct InterestAccountListItem: View {
                                 )
                             )
                             .textStyle(.body)
-                            .foregroundColor(.textSubheading)
+                            .foregroundColor(.semantic.text)
                         }
                     }
                     Spacer(minLength: 12.0)
@@ -59,19 +59,19 @@ struct InterestAccountListItem: View {
                         VStack(alignment: .leading, spacing: 4.0) {
                             Text("\(viewStore.currency.displayCode) \(LocalizationId.balance)")
                                 .textStyle(.body)
-                                .foregroundColor(.textSubheading)
+                                .foregroundColor(.semantic.text)
                             Text(viewStore.balance.displayString)
                                 .textStyle(.heading)
-                                .foregroundColor(.textTitle)
+                                .foregroundColor(.semantic.title)
                         }
                         Spacer()
                         VStack(alignment: .leading, spacing: 4.0) {
                             Text(LocalizationId.totalEarned)
                                 .textStyle(.body)
-                                .foregroundColor(.textSubheading)
+                                .foregroundColor(.semantic.text)
                             Text(viewStore.interestEarned.displayString)
                                 .textStyle(.heading)
-                                .foregroundColor(.textTitle)
+                                .foregroundColor(.semantic.title)
                         }
                     }
                     Spacer(minLength: 12.0)
@@ -83,7 +83,7 @@ struct InterestAccountListItem: View {
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 14.0, height: 14.0)
                             Text(viewStore.ineligibilityReason.displayString)
-                                .font(Font(weight: .semibold, size: 16.0))
+                                .typography(.body2)
                                 .foregroundColor(.white)
                         }
                         .padding()

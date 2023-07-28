@@ -172,7 +172,7 @@ struct PendingTransactionView: View {
         ConfettiConfiguration(
             confetti: [
                 .icon(.blockchain.color(.semantic.primary)),
-                .view(model.currency.logoResource.view.clipShape(Circle())),
+                .view(model.currency.logoResource.image.clipShape(Circle())),
                 .view(Rectangle().frame(width: 5.pt).foregroundColor(.semantic.success)),
                 .view(Rectangle().frame(width: 5.pt).foregroundColor(.semantic.gold))
             ]
@@ -245,7 +245,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
             if let icon = dialog.icon {
                 AsyncMedia(url: icon.url)
             } else if currency.isCryptoCurrency {
-                currency.logoResource.view
+                currency.logoResource.image
             } else {
                 Icon.cash
             }

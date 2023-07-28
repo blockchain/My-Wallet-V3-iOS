@@ -4,6 +4,8 @@ import BlockchainComponentLibrary
 import Extensions
 import SwiftUI
 
+// TODO: @paulo: move to FeatureOpenBankingUI
+
 public struct InfoView: View {
 
     public struct Model: Equatable, Codable {
@@ -156,7 +158,7 @@ public struct InfoView: View {
             MediaView(icon, failure: Color.clear)
         } else if model.overlay?.progress == true {
             ProgressView(value: 0.25)
-                .progressViewStyle(IndeterminateProgressStyle())
+                .progressViewStyle(.indeterminate)
         } else {
             EmptyView()
         }

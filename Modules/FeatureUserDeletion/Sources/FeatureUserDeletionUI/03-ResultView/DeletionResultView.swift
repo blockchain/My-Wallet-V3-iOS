@@ -38,7 +38,7 @@ public struct DeletionResultView: View {
 
                 Text(LocalizedString.success.message)
                     .typography(.title2)
-                    .foregroundColor(.textTitle)
+                    .foregroundColor(.semantic.title)
                     .frame(maxWidth: 340)
                     .multilineTextAlignment(.center)
             } else {
@@ -47,7 +47,7 @@ public struct DeletionResultView: View {
                 Text(LocalizedString.failure.message)
                     .typography(.title2)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.textTitle)
+                    .foregroundColor(.semantic.title)
 
                 HStack {
                     Spacer()
@@ -59,14 +59,14 @@ public struct DeletionResultView: View {
 
                     Text(LocalizedString.failure.reason)
                         .typography(.body2)
-                        .foregroundColor(.textTitle)
+                        .foregroundColor(.semantic.title)
                         .padding(16)
 
                     Spacer()
                 }
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.dividerLineLight)
+                        .stroke(Color.semantic.light)
                 )
             }
 

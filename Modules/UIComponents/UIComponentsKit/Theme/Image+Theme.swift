@@ -7,10 +7,6 @@ extension Image {
         public static let blockchain = Image("logo_large")
     }
 
-    public enum ButtonIcon {
-        public static let qrCode = Image("qr-code-icon")
-    }
-
     public enum CircleIcon {
         public static let verifyDevice = Image("icon_verify_device")
         public static let importWallet = Image("icon_import_wallet")

@@ -312,8 +312,8 @@ class InvalidateDetentsHostingController<V: View>: UIHostingController<V>, Infor
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        if shouldInvalidateDetents, let sheet = viewController.sheetPresentationController {
-            sheet.performDetentInvalidation()
+        if shouldInvalidateDetents, let sheetPresentationController {
+            sheetPresentationController.performDetentInvalidation()
         }
     }
 

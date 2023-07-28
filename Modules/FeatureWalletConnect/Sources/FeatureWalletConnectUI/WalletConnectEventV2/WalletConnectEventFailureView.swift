@@ -60,7 +60,7 @@ public struct WalletConnectEventFailureView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Text(model.description)
                     .typography(.paragraph1)
-                    .foregroundColor(.textSubheading)
+                    .foregroundColor(.semantic.text)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.bottom, 32)

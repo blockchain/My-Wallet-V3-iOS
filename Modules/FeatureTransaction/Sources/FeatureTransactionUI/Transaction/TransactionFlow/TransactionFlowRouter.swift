@@ -5,6 +5,7 @@ import BINDWithdrawUI
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import Combine
+import ComposableArchitecture
 import DIKit
 import Errors
 import ErrorsUI
@@ -194,9 +195,9 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                     ux: error,
                     fallback: {
                         if let destination = state.destination {
-                            destination.currencyType.logoResource.view
+                            destination.currencyType.logoResource.image
                         } else if let source = state.source {
-                            source.currencyType.logoResource.view
+                            source.currencyType.logoResource.image
                         } else {
                             Icon.error.foregroundColor(.semantic.warning)
                         }
@@ -263,7 +264,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             message: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeMessage,
             callouts: [
                 .init(
-                    image: Image("icon-verified", bundle: .main),
+                    image: .local(name: "icon-verified", bundle: .main),
                     title: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutTitle,
                     message: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutMessage,
                     callToAction: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutCTA
@@ -296,10 +297,9 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         onCalloutTapped: @escaping (ErrorRecoveryState.Callout) -> Void
     ) {
         let view = ErrorRecoveryView(
-            store: .init(
+            store: Store(
                 initialState: ErrorRecoveryState(title: title, message: message, callouts: callouts),
-                reducer: errorRecoveryReducer,
-                environment: ErrorRecoveryEnvironment(close: onClose, calloutTapped: onCalloutTapped)
+                reducer: ErrorRecovery(close: onClose, calloutTapped: onCalloutTapped)
             )
         )
         let viewController = UIHostingController(rootView: view)

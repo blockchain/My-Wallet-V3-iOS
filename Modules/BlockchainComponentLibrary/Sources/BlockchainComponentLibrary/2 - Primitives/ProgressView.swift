@@ -65,7 +65,7 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
                 Circle()
                     .stroke(background, style: style)
                 Circle()
-                    .trim(from: 0, to: (configuration.fractionCompleted ?? 0.3).cg)
+                    .trim(from: 0, to: configuration.fractionCompleted.or(default: 0.3).cg)
                     .stroke(stroke, style: style)
                     .rotationEffect(angle)
                     .onAppear {
@@ -90,7 +90,7 @@ extension ProgressViewStyle where Self == BlockchainCircularProgressViewStyle {
 }
 
 #if DEBUG
-struct IndeterminateProgressStyle_Previews: PreviewProvider {
+struct ProgressView_Previews: PreviewProvider {
 
     static var previews: some View {
         ProgressView()
@@ -99,6 +99,9 @@ struct IndeterminateProgressStyle_Previews: PreviewProvider {
             .padding()
         ProgressView(value: 0.25)
             .progressViewStyle(.indeterminate)
+            .padding()
+        ProgressView(value: 0.25)
+            .progressViewStyle(.determinate)
             .padding()
     }
 }

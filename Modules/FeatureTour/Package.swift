@@ -37,6 +37,7 @@ let package = Package(
         .package(path: "../Localization"),
         .package(path: "../Platform"),
         .package(path: "../UIComponents"),
+        .package(path: "../BlockchainNamespace"),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../BlockchainComponentLibrary")
     ],
@@ -75,6 +76,7 @@ let package = Package(
                 .target(name: "FeatureTourData"),
                 .target(name: "FeatureTourDomain"),
                 .target(name: "FeatureTourUI"),
+                .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "DIKit", package: "DIKit")

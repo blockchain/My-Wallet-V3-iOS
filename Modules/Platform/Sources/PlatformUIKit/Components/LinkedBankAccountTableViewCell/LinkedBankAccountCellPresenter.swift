@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Localization
 import PlatformKit
 import RxCocoa
@@ -59,8 +60,10 @@ public final class LinkedBankAccountCellPresenter {
                 accessibility: .none
             )
         )
+        let iconBank = ImageResource.local(name: "icon-bank", bundle: .platformUIKit)
+        let accountIcon = account.data.icon.map(ImageResource.remote(url:))
         self.badgeImageViewModel = .just(.default(
-            image: account.data.icon.map(ImageResource.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit),
+            image: accountIcon ?? iconBank,
             cornerRadius: .round,
             accessibilityIdSuffix: ""
         ))

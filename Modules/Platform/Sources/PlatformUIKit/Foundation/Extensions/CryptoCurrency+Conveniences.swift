@@ -20,14 +20,4 @@ extension CryptoCurrency {
     public var accentColor: UIColor {
         assetModel.accentColor
     }
-
-    // MARK: Logo Image `ImageResource`
-
-    public var image: Image {
-        logoResource.image ?? Image("crypto-placeholder", bundle: .platformUIKit)
-    }
-
-    public var logoResource: ImageResource {
-        assetModel.logoResource
-    }
 }
