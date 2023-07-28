@@ -121,9 +121,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
     func presentTransactionFlow(
         to action: TransactionFlowAction
     ) -> AnyPublisher<TransactionFlowResult, Never> {
-        guard let viewController = topMostViewControllerProvider.topMostViewController else {
-            fatalError("Expected a UIViewController")
-        }
+        let viewController = topMostViewControllerProvider.findTopViewController(allowBeingDismissed: false)
         return presentTransactionFlow(to: action, from: viewController)
     }
 
