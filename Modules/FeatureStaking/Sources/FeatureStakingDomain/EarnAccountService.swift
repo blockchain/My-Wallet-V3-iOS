@@ -296,6 +296,10 @@ public final class EarnAccountService {
     public func pendingWithdrawalRequests(currency: CryptoCurrency) -> AnyPublisher<[EarnWithdrawalPendingRequest], UX.Error> {
         repository.pendingWithdrawalRequests(currencyCode: currency.code).mapError(UX.Error.init).eraseToAnyPublisher()
     }
+
+    public func bondingTxs(currency: CryptoCurrency) -> AnyPublisher<EarnBondingTxsRequest, UX.Error> {
+        repository.bondingStakingTxs(currencyCode: currency.code).mapError(UX.Error.init).eraseToAnyPublisher()
+    }
 }
 
 extension MoneyValue {

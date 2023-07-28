@@ -143,8 +143,8 @@ extension Localization.Staking {
 
                 These rules are not specific to Blockchain.com. They’re features of the Ethereum network.
                 """,
-                comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
-    )
+            comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
+        )
 
     enum PendingWithdrawal {
         static let sectionTitle = NSLocalizedString("Pending Activity", comment: "Pending Activity")
@@ -152,6 +152,10 @@ extension Localization.Staking {
         static let activeTitle = NSLocalizedString("Withdrew all %@", comment: "Staking: Withdrew all [CRYPTO]")
         static let title = NSLocalizedString("Withdrew %@", comment: "Staking: Withdrew [CRYPTO]")
         static let unbonding = NSLocalizedString("Unbonding", comment: "Staking: Unbonding")
+        static let unbondingPeriod = NSLocalizedString("Unbonding Period: %@ days", comment: "Staking: Unbonding period: [number of days]")
+        static let staked = NSLocalizedString("Staked %@", comment: "Staking: Staked [CRYPTO]")
+        static let bonding = NSLocalizedString("Bonding", comment: "Staking: Bonding")
+        static let bondingPeriod = NSLocalizedString("Bonding Period: %@ days", comment: "Staking: Bonding period: [number of days]")
         static let subtitle = NSLocalizedString("Requested", comment: "Staking: Requested")
         static let date = NSLocalizedString("Next Saturday", comment: "Staking: Next Saturday")
     }

@@ -26,6 +26,101 @@ extension EarnUserRates {
     }
 }
 
+public struct EarnBondingTxsRequest: Decodable {
+    public let bondingDeposits: [EarnBondingDeposits]
+    public let unbondingWithdrawals: [EarnUnbondingWithdrawals]
+
+    public var isEmpty: Bool {
+        bondingDeposits.isEmpty && unbondingWithdrawals.isEmpty
+    }
+}
+
+public struct EarnUnbondingWithdrawals: Decodable {
+    public let product: String
+    public let currency: String
+    public let userId: String
+    public let unbondingDays: Int
+    public let unbondingStartDate: Date?
+    public let unbondingExpiryDate: Date?
+    public let amount: MoneyValue?
+
+    enum CodingKeys: CodingKey {
+        case product
+        case currency
+        case userId
+        case unbondingDays
+        case unbondingStartDate
+        case unbondingExpiryDate
+        case isCustodialTransfer
+        case amount
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.product = try container.decode(String.self, forKey: .product)
+        self.currency = try container.decode(String.self, forKey: .currency)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.unbondingDays = try container.decode(Int.self, forKey: .unbondingDays)
+        self.amount = try? MoneyValue(from: decoder)
+
+        self.unbondingStartDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .unbondingStartDate)) ?? ""
+            )
+
+        self.unbondingExpiryDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .unbondingExpiryDate)) ?? ""
+            )
+    }
+}
+
+public struct EarnBondingDeposits: Decodable {
+    public let product: String
+    public let currency: String
+    public let userId: String
+    public let bondingDays: Int
+    public let bondingStartDate: Date?
+    public let bondingExpiryDate: Date?
+    public let amount: MoneyValue?
+
+    enum CodingKeys: CodingKey {
+        case product
+        case currency
+        case userId
+        case bondingDays
+        case bondingStartDate
+        case bondingExpiryDate
+        case isCustodialTransfer
+        case amount
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.product = try container.decode(String.self, forKey: .product)
+        self.currency = try container.decode(String.self, forKey: .currency)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.bondingDays = try container.decode(Int.self, forKey: .bondingDays)
+        self.amount = try? MoneyValue(from: decoder)
+
+        self.bondingStartDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .bondingStartDate)) ?? ""
+            )
+
+        self.bondingExpiryDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .bondingExpiryDate)) ?? ""
+            )
+    }
+}
+
 public struct EarnWithdrawalPendingRequest {
 
     public init(
