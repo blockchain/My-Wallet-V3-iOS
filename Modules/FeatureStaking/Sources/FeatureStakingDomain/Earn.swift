@@ -35,6 +35,46 @@ public struct EarnBondingTxsRequest: Decodable {
     }
 }
 
+public struct EarnBondingUnbondingRequests: Equatable, Hashable {
+    public enum RequestType: Equatable {
+        case bonding
+        case unbonding
+    }
+    public let type: RequestType
+    public let product: String
+    public let currency: String
+    public let userId: String
+    /// bonding or unbonding days
+    public let daysLeft: Int
+    /// bonding or unbonding start date
+    public let startDate: Date?
+    /// bonding or unbonding expiry date
+    public let expiryDate: Date?
+    public let amount: MoneyValue?
+
+    public init(bonding: EarnBondingDeposits) {
+        self.type = .bonding
+        self.product = bonding.product
+        self.currency = bonding.currency
+        self.userId = bonding.userId
+        self.daysLeft = bonding.bondingDays
+        self.startDate = bonding.bondingStartDate
+        self.expiryDate = bonding.bondingExpiryDate
+        self.amount = bonding.amount
+    }
+
+    public init(unbonding: EarnUnbondingWithdrawals) {
+        self.type = .unbonding
+        self.product = unbonding.product
+        self.currency = unbonding.currency
+        self.userId = unbonding.userId
+        self.daysLeft = unbonding.unbondingDays
+        self.startDate = unbonding.unbondingStartDate
+        self.expiryDate = unbonding.unbondingExpiryDate
+        self.amount = unbonding.amount
+    }
+}
+
 public struct EarnUnbondingWithdrawals: Decodable {
     public let product: String
     public let currency: String
