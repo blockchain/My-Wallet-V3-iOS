@@ -18,6 +18,7 @@ public struct CoinViewState: Equatable {
     public var error: CoinViewError?
     public var assetInformation: AssetInformation?
     public var isRecurringBuyEnabled: Bool
+    public var isDexEnabled: Bool
     public var earnRates: EarnRates?
     public var kycStatus: KYCStatus?
     public var isFavorite: Bool?
@@ -88,7 +89,7 @@ public struct CoinViewState: Equatable {
         let sellingDisabled = kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling
         let canSwap = accounts.hasPositiveBalanceForSelling && accounts.canSwap
         let canSell = accounts.hasPositiveBalanceForSelling && !sellingDisabled
-
+        
         let actions = [ canSwap ? swapAction : nil,
                         canSell ? sellAction : nil]
             .compactMap({$0})
@@ -104,6 +105,7 @@ public struct CoinViewState: Equatable {
         kycStatus: KYCStatus? = nil,
         accounts: [Account.Snapshot] = [],
         recurringBuys: [RecurringBuy]? = nil,
+        isDexEnabled: Bool = false,
         isRecurringBuyEnabled: Bool = false,
         assetInformation: AssetInformation? = nil,
         earnRates: EarnRates? = nil,
@@ -121,6 +123,7 @@ public struct CoinViewState: Equatable {
         self.graph = graph
         self.recurringBuys = recurringBuys
         self.isRecurringBuyEnabled = isRecurringBuyEnabled
+        self.isDexEnabled = isDexEnabled
     }
 }
 

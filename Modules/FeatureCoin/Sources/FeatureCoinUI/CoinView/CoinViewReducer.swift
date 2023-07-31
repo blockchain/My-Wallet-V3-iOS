@@ -48,6 +48,15 @@ public let coinViewReducer = Reducer<
                 .map(CoinViewAction.isRecurringBuyEnabled),
 
                 environment.app.publisher(
+                    for: blockchain.api.nabu.gateway.products["DEX"].is.eligible,
+                    as: Bool.self
+                )
+                .compactMap(\.value)
+                .receive(on: environment.mainQueue)
+                .eraseToEffect()
+                .map(CoinViewAction.isDexEnabled),
+
+                environment.app.publisher(
                     for: blockchain.ux.asset[state.currency.code].watchlist.is.on,
                     as: Bool.self
                 )
@@ -89,6 +98,10 @@ public let coinViewReducer = Reducer<
                 .catchToEffect()
                 .map(CoinViewAction.fetchedRecurringBuys)
 
+        case .isDexEnabled(let enabled):
+            state.isDexEnabled = enabled
+            return .none
+            
         case .fetchedRecurringBuys(let result):
             state.recurringBuys = try? result.get()
             return .none

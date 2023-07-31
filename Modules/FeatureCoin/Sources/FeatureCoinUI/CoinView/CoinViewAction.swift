@@ -20,6 +20,7 @@ public enum CoinViewAction: BlockchainNamespaceObservationAction, BindableAction
     case binding(BindingAction<CoinViewState>)
     case isOnWatchlist(Bool)
     case isRecurringBuyEnabled(Bool)
+    case isDexEnabled(Bool)
     case addToWatchlist
     case removeFromWatchlist
     case dismiss

@@ -26,6 +26,7 @@ import PlatformUIKit
 import SwiftUI
 import ToolKit
 
+
 public struct CoinAdapterView: View {
 
     let app: AppProtocol

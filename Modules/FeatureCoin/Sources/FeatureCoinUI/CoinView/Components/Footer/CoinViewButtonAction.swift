@@ -51,8 +51,11 @@ struct ButtonAction: Equatable {
         )
     }
 
-    static func swap(disabled: Bool = false) -> ButtonAction {
-        ButtonAction(
+    static func swap(disabled: Bool = false,
+                     blockchainSwapEnabled: Bool = false,
+                     dexEnabled: Bool = false) -> ButtonAction {
+        let canSwapAll = blockchainSwapEnabled && dexEnabled
+        return ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.swap,
             icon: Icon.walletSwap,
             event: blockchain.ux.asset.account.currency.exchange,
