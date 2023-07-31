@@ -32,13 +32,6 @@ public struct CoinViewState: Equatable {
         return appMode.isRecurringBuyViewSupported && isRecurringBuyEnabled
     }
 
-    var swapButton: ButtonAction? {
-        let swapDisabled = !accounts.hasPositiveBalanceForSelling
-        let swapAction = ButtonAction.swap(disabled: swapDisabled)
-        let action = action(swapAction, whenAccountCan: .swap)
-        return action
-    }
-
     @BindingState public var recurringBuy: RecurringBuy?
     @BindingState public var account: Account.Snapshot?
     @BindingState public var explainer: Account.Snapshot?
