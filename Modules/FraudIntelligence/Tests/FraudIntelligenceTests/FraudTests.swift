@@ -113,7 +113,7 @@ final class FraudIntelligenceTests: XCTestCase {
         XCTAssertEqual(Test.MobileIntelligence.options?.flow, "ach")
     }
 
-    func test_trigger() throws {
+    func test_trigger() async throws {
 
         let triggers: [Tag.Event] = [
             blockchain.session.event.did.sign.in,
@@ -125,19 +125,22 @@ final class FraudIntelligenceTests: XCTestCase {
         var count = 0
         let subscription = app.on(blockchain.app.fraud.sardine.submit) { _ in count += 1 }
         subscription.start()
-        defer { subscription.stop() }
+        addTeardownBlock { subscription.stop() }
 
         app.state.set(blockchain.app.fraud.sardine.current.flow, to: "TEST")
 
         app.post(event: blockchain.session.event.will.sign.in)
+        await Task.megaYield()
         XCTAssertEqual(count, 1)
         XCTAssertEqual(Test.MobileIntelligence.count, 1)
 
         app.post(event: blockchain.session.event.did.sign.in)
+        await Task.megaYield()
         XCTAssertEqual(count, 2)
         XCTAssertEqual(Test.MobileIntelligence.count, 2)
 
         app.post(event: blockchain.ux.transaction.event.did.finish)
+        await Task.megaYield()
         XCTAssertEqual(count, 3)
         XCTAssertEqual(Test.MobileIntelligence.count, 3)
     }
