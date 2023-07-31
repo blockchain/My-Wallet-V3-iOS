@@ -127,6 +127,8 @@ extension SuperAppRootController {
                 }
         )
 
+        viewController.view.backgroundColor = .semantic.background
+
         if
             let sheet = viewController.sheetPresentationController,
             let presentation = viewController.presentationController
