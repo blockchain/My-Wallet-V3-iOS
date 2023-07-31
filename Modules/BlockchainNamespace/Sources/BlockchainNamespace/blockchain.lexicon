@@ -1937,6 +1937,9 @@ blockchain:
 				currency:
 					exchange:
 					+ blockchain.ux.type.action
+					get:
+						token:
+						+ blockchain.ux.type.action
 				error:
 				+ blockchain.ux.type.analytics.error
 				exchange:

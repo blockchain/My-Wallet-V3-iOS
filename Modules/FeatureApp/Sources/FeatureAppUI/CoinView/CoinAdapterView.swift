@@ -178,7 +178,8 @@ public final class CoinViewObserver: Client.Observer {
             sell,
             send,
             stakingDeposit,
-            stakingWithdraw
+            stakingWithdraw,
+            getToken
         ]
     }
 
@@ -228,10 +229,10 @@ public final class CoinViewObserver: Client.Observer {
     lazy var currencyExchangeSwap = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
         let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
         let canBcdcSwap = (try? await account?.can(perform: .swap).await()) ?? false
-        let candDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset)
+        let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset)
 
         // if user can do both bcdc swap and dex swap
-        if candDexSwap && canBcdcSwap {
+        if canDexSwap && canBcdcSwap {
             try? await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context + [blockchain.ux.transaction.source: AnyJSON(account)])
             return
         }
@@ -241,12 +242,30 @@ public final class CoinViewObserver: Client.Observer {
             return
         }
 
-        if candDexSwap {
+        if canDexSwap {
             app.post(event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
                      context: event.context)
             return
         }
     }
+
+    lazy var getToken = app.on(blockchain.ux.asset.account.currency.get.token) { @MainActor [unowned self] event in
+        let account: CryptoAccount = try await cryptoAccount(from: event)
+        let canBcdcSwap = (try? await account.can(perform: .swap).await()) ?? false
+        let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account.asset)
+
+        if canBcdcSwap {
+            await transactionsRouter.presentTransactionFlow(to: .swap(account))
+            return
+        }
+
+        if canDexSwap {
+            app.post(event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
+                     context: event.context)
+            return
+        }
+    }
+
 
     lazy var rewardsWithdraw = app.on(blockchain.ux.asset.account.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {

@@ -59,4 +59,13 @@ struct ButtonAction: Equatable {
             disabled: false
         )
     }
+
+    static func getToken(currency: String) -> ButtonAction {
+        return ButtonAction(
+            title: "Get \(currency)",
+            icon: Icon.plus,
+            event: blockchain.ux.asset.account.currency.get.token,
+            disabled: false
+        )
+    }
 }

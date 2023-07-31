@@ -314,6 +314,14 @@ extension Collection<Account.Snapshot> {
         first(where: { account in account.actions.contains(.sell) }) != nil
     }
 
+    public var canSwapOnDex: Bool {
+        // move this logic someplace else
+        guard let currency = self.first?.cryptoCurrency else {
+            return false
+        }
+        return EnabledCurrenciesService.default.network(for: currency) != nil
+    }
+
     public var hasPositiveBalanceForSelling: Bool {
         first(where: { account in account.accountType == .trading })?.fiat?.isPositive
             ?? first(where: { account in account.accountType == .privateKey })?.fiat?.isPositive

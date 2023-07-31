@@ -83,15 +83,18 @@ public struct CoinViewState: Equatable {
     }
 
     private func primaryDefiModeCoinActions() -> [ButtonAction] {
-        let swapAction = ButtonAction.swap()
-        let sellAction = ButtonAction.sell()
+        let canSwapOnBcdc = accounts.canSwap
+        let canSwapOnDex = isDexEnabled && accounts.canSwapOnDex
+        let canSell = (kycStatus?.canSellCrypto ?? false) && accounts.canSell
 
-        let sellingDisabled = kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling
-        let canSwap = (accounts.hasPositiveBalanceForSelling && accounts.canSwap) || isDexEnabled
-        let canSell = accounts.hasPositiveBalanceForSelling && !sellingDisabled
-        
-        let actions = [ canSwap ? swapAction : nil,
-                        canSell ? sellAction : nil]
+        // if the token has no balance
+        guard accounts.hasPositiveBalanceForSelling else {
+            // if it can swap (on dex or bcdc) present the "Get Token" button
+            return canSwapOnDex || canSwapOnBcdc ? [ButtonAction.getToken(currency: currency.code)] : []
+        }
+
+        let actions = [ canSwapOnBcdc || canSwapOnDex ? ButtonAction.swap() : nil,
+                        canSell ? ButtonAction.sell() : nil]
             .compactMap({$0})
         return actions
     }

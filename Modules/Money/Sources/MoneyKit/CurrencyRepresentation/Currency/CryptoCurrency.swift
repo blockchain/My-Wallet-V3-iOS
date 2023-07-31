@@ -89,6 +89,10 @@ public struct CryptoCurrency: Currency, Hashable, Codable, Comparable, CustomDeb
         assetModel.kind.isCeloToken
     }
 
+    public var isDexSupported: Bool {
+        return self == .ethereum || self.isERC20
+    }
+
     public func supports(product: AssetModelProduct) -> Bool {
         assetModel.supports(product: product)
     }

@@ -7385,11 +7385,23 @@ public final class L_blockchain_ux_asset_account_currency: L, I_blockchain_ux_as
 public protocol I_blockchain_ux_asset_account_currency: I {}
 public extension I_blockchain_ux_asset_account_currency {
 	var `exchange`: L_blockchain_ux_asset_account_currency_exchange { .init("\(__).exchange") }
+	var `get`: L_blockchain_ux_asset_account_currency_get { .init("\(__).get") }
 }
 public final class L_blockchain_ux_asset_account_currency_exchange: L, I_blockchain_ux_asset_account_currency_exchange {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.currency.exchange", comment: "") }
 }
 public protocol I_blockchain_ux_asset_account_currency_exchange: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_asset_account_currency_get: L, I_blockchain_ux_asset_account_currency_get {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.currency.get", comment: "") }
+}
+public protocol I_blockchain_ux_asset_account_currency_get: I {}
+public extension I_blockchain_ux_asset_account_currency_get {
+	var `token`: L_blockchain_ux_asset_account_currency_get_token { .init("\(__).token") }
+}
+public final class L_blockchain_ux_asset_account_currency_get_token: L, I_blockchain_ux_asset_account_currency_get_token {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.currency.get.token", comment: "") }
+}
+public protocol I_blockchain_ux_asset_account_currency_get_token: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_asset_account_error: L, I_blockchain_ux_asset_account_error {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.account.error", comment: "") }
 }
