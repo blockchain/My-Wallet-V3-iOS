@@ -52,8 +52,8 @@ public struct CoinViewState: Equatable {
 
         let actionsDisabled = kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling
         if actionsDisabled == false {
-            let receive = ButtonAction.receive(disabled: false)
-            let send = ButtonAction.send(disabled: false)
+            let receive = ButtonAction.receive()
+            let send = ButtonAction.send()
             let swap = ButtonAction.swap()
             return [swap, receive, send]
         }
@@ -87,7 +87,7 @@ public struct CoinViewState: Equatable {
         let sellAction = ButtonAction.sell()
 
         let sellingDisabled = kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling
-        let canSwap = accounts.hasPositiveBalanceForSelling && accounts.canSwap
+        let canSwap = (accounts.hasPositiveBalanceForSelling && accounts.canSwap) || isDexEnabled
         let canSell = accounts.hasPositiveBalanceForSelling && !sellingDisabled
         
         let actions = [ canSwap ? swapAction : nil,

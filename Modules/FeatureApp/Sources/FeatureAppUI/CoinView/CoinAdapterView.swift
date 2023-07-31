@@ -227,10 +227,24 @@ public final class CoinViewObserver: Client.Observer {
 
     lazy var currencyExchangeSwap = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
         let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
-        if await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset) {
+        let canBcdcSwap = (try? await account?.can(perform: .swap).await()) ?? false
+        let candDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset)
+
+        // if user can do both bcdc swap and dex swap
+        if candDexSwap && canBcdcSwap {
             try? await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context + [blockchain.ux.transaction.source: AnyJSON(account)])
-        } else {
+            return
+        }
+
+        if canBcdcSwap {
             await transactionsRouter.presentTransactionFlow(to: .swap(account))
+            return
+        }
+
+        if candDexSwap {
+            app.post(event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
+                     context: event.context)
+            return
         }
     }
 
