@@ -1,10 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Extensions
 import SwiftUI
 
 public struct BlockchainProgressView: View {
-
+    @BlockchainApp var app
     public init() {}
 
     public var body: some View {
@@ -15,10 +16,25 @@ public struct BlockchainProgressView: View {
 }
 
 public struct BlockchainProgressViewStyle: ProgressViewStyle {
+    @Environment(\.scheduler) var scheduler
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
+    @State private var timeout: Int = 1
+    @BlockchainApp var app
 
     public func makeBody(configuration: Configuration) -> some View {
         LottieView(json: "loader".data())
             .scaledToFit()
+            .task {
+                do {
+                    try await scheduler.sleep(for: .seconds(timeout))
+                    $app.post(event: timeOutEventTag)
+                } catch {
+                    // cancelled, don't worry!
+                }
+            }
+            .bindings {
+                subscribe($timeout, to: BlockchainNamespace.blockchain.app.configuration.loading.indicator.timeout)
+            }
     }
 }
 
@@ -53,6 +69,11 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
     }
 
     @State private var angle: Angle = .degrees(-90)
+    @Environment(\.scheduler) var scheduler
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
+    @State private var timeout: Int = 1
+    @BlockchainApp var app
+
 
     public func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
@@ -76,6 +97,17 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
                                 }
                             }
                         }
+                    }
+                    .task {
+                        do {
+                            try await scheduler.sleep(for: .seconds(timeout))
+                            $app.post(event: timeOutEventTag)
+                        } catch {
+                            // cancelled, don't worry!
+                        }
+                    }
+                    .bindings {
+                        subscribe($timeout, to: BlockchainNamespace.blockchain.app.configuration.loading.indicator.timeout)
                     }
             }
             .padding(lineWidth / 2)
@@ -106,3 +138,16 @@ struct ProgressView_Previews: PreviewProvider {
     }
 }
 #endif
+
+
+public struct IndeterminateProgressView: View {
+    @BlockchainApp var app
+
+    public init() {}
+
+    public var body: some View {
+        ProgressView()
+            .frame(width: 25.vw, height: 25.vh)
+            .progressViewStyle(.indeterminate)
+    }
+}
