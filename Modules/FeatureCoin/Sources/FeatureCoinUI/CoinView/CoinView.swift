@@ -311,6 +311,7 @@ public struct CoinView: View {
                             $app.post(
                                 event: action.event,
                                 context: [
+                                    blockchain.ux.asset.account: viewStore.accounts.first,
                                     blockchain.coin.core.account.id: viewStore.accounts.first?.id,
                                     blockchain.ux.transaction.select.source.is.first.in.flow: false
                                 ]

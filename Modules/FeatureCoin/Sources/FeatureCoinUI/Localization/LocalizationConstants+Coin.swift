@@ -90,6 +90,11 @@ extension LocalizationConstants {
                     "Swap",
                     comment: "Coin View: Swap CTA"
                 )
+                static let getToken = NSLocalizedString(
+                    "Get %@",
+                    comment: "Coin View: Get token"
+                )
+
                 static let readMore = NSLocalizedString(
                     "Read More",
                     comment: "Coin View: Read More and expand on the Asset Description"
