@@ -62,29 +62,45 @@ public enum Nabu {
 
 extension Nabu.Error: FromNetworkErrorConvertible {
 
-    public static let network: String = "network"
-    public static let unknown = Nabu.Error(id: "MISSING", code: .unknown, type: .unknown)
+    enum Ids {
+        static let network: String = "network"
+        static let unknown: String = "MISSING"
+    }
+
+    public static let unknown = Nabu.Error(id: Ids.unknown, code: .unknown, type: .unknown)
 
     public static func from(_ networkError: NetworkError) -> Nabu.Error {
-        do {
-            let payload = networkError.payload.or(default: Data())
-            return try AnyDecoder(
-                userInfo: [
-                    .networkURLRequest: networkError.request as Any,
-                    .networkHTTPResponse: networkError.response as Any
-                ]
-            ).decode(Nabu.Error.self, from: JSONSerialization.jsonObject(with: payload))
-        } catch {
-            return Nabu.Error(
-                id: Nabu.Error.network,
-                code: networkError.code.map(UInt.init).map(Nabu.ErrorCode.init(_:)) ?? .unknown,
-                type: .unknown,
-                description: networkError.description,
-                ux: nil,
-                request: networkError.request,
-                response: networkError.response
-            )
+        extract(from: networkError) ?? defaultError(from: networkError)
+    }
+
+    private static func extract(from error: NetworkError) -> Nabu.Error? {
+        guard let payload = error.payload else {
+            return nil
         }
+        let decoder = AnyDecoder(
+            userInfo: [
+                .networkURLRequest: error.request as Any,
+                .networkHTTPResponse: error.response as Any
+            ]
+        )
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: payload)
+            return try decoder.decode(Nabu.Error.self, from: jsonObject)
+        } catch {
+            return nil
+        }
+    }
+
+    private static func defaultError(from networkError: NetworkError) -> Nabu.Error {
+        Nabu.Error(
+            id: Ids.network,
+            code: networkError.code.map(UInt.init).map(Nabu.ErrorCode.init(_:)) ?? .unknown,
+            type: .unknown,
+            description: networkError.description,
+            ux: nil,
+            request: networkError.request,
+            response: networkError.response
+        )
     }
 }
 

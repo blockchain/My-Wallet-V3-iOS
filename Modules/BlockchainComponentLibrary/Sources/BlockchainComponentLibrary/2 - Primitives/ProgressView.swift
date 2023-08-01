@@ -138,16 +138,3 @@ struct ProgressView_Previews: PreviewProvider {
     }
 }
 #endif
-
-
-public struct IndeterminateProgressView: View {
-    @BlockchainApp var app
-
-    public init() {}
-
-    public var body: some View {
-        ProgressView()
-            .frame(width: 25.vw, height: 25.vh)
-            .progressViewStyle(.indeterminate)
-    }
-}

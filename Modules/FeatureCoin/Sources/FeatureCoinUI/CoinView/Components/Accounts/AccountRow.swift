@@ -65,8 +65,6 @@ struct AccountRow: View {
                     Text(subtitle)
                         .typography(.caption1.slashedZero())
                         .foregroundColor(.semantic.body)
-                } else {
-                    redactedView
                 }
             },
             trailing: {

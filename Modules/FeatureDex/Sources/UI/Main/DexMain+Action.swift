@@ -15,6 +15,8 @@ extension DexMain {
         case confirmationAction(DexConfirmation.Action)
 
         case onAppear
+        case onDisappear
+
         case didTapSettings
         case didTapPreview
         case didTapFlip
