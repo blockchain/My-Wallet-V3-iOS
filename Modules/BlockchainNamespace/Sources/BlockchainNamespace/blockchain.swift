@@ -10072,6 +10072,7 @@ public final class L_blockchain_ux_onboarding: L, I_blockchain_ux_onboarding {
 public protocol I_blockchain_ux_onboarding: I {}
 public extension I_blockchain_ux_onboarding {
 	var `intro`: L_blockchain_ux_onboarding_intro { .init("\(__).intro") }
+	var `notification`: L_blockchain_ux_onboarding_notification { .init("\(__).notification") }
 }
 public final class L_blockchain_ux_onboarding_intro: L, I_blockchain_ux_onboarding_intro {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro", comment: "") }
@@ -10139,6 +10140,34 @@ public final class L_blockchain_ux_onboarding_intro_event_show_tutorial_trading:
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.tutorial.trading", comment: "") }
 }
 public protocol I_blockchain_ux_onboarding_intro_event_show_tutorial_trading: I {}
+public final class L_blockchain_ux_onboarding_notification: L, I_blockchain_ux_onboarding_notification {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification: I {}
+public extension I_blockchain_ux_onboarding_notification {
+	var `authorization`: L_blockchain_ux_onboarding_notification_authorization { .init("\(__).authorization") }
+}
+public final class L_blockchain_ux_onboarding_notification_authorization: L, I_blockchain_ux_onboarding_notification_authorization {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification.authorization", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification_authorization: I {}
+public extension I_blockchain_ux_onboarding_notification_authorization {
+	var `accept`: L_blockchain_ux_onboarding_notification_authorization_accept { .init("\(__).accept") }
+	var `display`: L_blockchain_ux_onboarding_notification_authorization_display { .init("\(__).display") }
+	var `reject`: L_blockchain_ux_onboarding_notification_authorization_reject { .init("\(__).reject") }
+}
+public final class L_blockchain_ux_onboarding_notification_authorization_accept: L, I_blockchain_ux_onboarding_notification_authorization_accept {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification.authorization.accept", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification_authorization_accept: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_onboarding_notification_authorization_display: L, I_blockchain_ux_onboarding_notification_authorization_display {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification.authorization.display", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification_authorization_display: I_blockchain_ux_type_story, I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_onboarding_notification_authorization_reject: L, I_blockchain_ux_onboarding_notification_authorization_reject {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification.authorization.reject", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification_authorization_reject: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_payment: L, I_blockchain_ux_payment {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment", comment: "") }
 }

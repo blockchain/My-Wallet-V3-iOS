@@ -23,6 +23,7 @@ import FeatureWireTransfer
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
 import PlatformKit
+import RemoteNotificationsKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
@@ -186,6 +187,8 @@ public struct SiteMap {
             try FeatureSettingsUI.SettingsSiteMap().view(for: ref, in: context)
         case isDescendant(of: blockchain.ux.user.custodial.onboarding):
             try FeatureCustodialOnboarding.SiteMap().view(for: ref, in: context)
+        case blockchain.ux.onboarding.notification.authorization.display, isDescendant(of: blockchain.ux.onboarding.notification.authorization.display):
+            RemoteNotificationAuthorizationView()
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

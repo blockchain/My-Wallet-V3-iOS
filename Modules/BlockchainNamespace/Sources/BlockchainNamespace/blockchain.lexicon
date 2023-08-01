@@ -2703,6 +2703,15 @@ blockchain:
 						tutorial:
 							defi:
 							trading:
+			notification:
+				authorization:
+					accept:
+					+ blockchain.ux.type.task
+					display:
+					+ blockchain.ux.type.action
+					+ blockchain.ux.type.story
+					reject:
+					+ blockchain.ux.type.task
 		payment:
 			method:
 				link:
