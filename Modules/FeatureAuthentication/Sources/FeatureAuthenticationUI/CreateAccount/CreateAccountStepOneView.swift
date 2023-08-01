@@ -97,9 +97,7 @@ private struct CreateAccountForm: View {
     var body: some View {
         VStack(spacing: Spacing.padding2) {
             countryAndStatePickers
-            if viewStore.state.referralFieldEnabled {
-                referralCodeField
-            }
+            referralCodeField
         }
     }
 
