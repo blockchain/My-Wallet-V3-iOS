@@ -53,9 +53,6 @@ enum DexFeature {
         }
 
         let service = EnabledCurrenciesService.default
-            guard service.network(for: cryptoCurrency) != nil else {
-                return false
-        }
-        return true
+        return service.network(for: cryptoCurrency) != nil
     }
 }
