@@ -63,7 +63,7 @@ struct ButtonAction: Equatable {
     static func getToken(currency: String) -> ButtonAction {
         return ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.getToken.interpolating(currency),
-            icon: Icon.plus,
+            icon: Icon.swap,
             event: blockchain.ux.asset.account.currency.get.token,
             disabled: false
         )

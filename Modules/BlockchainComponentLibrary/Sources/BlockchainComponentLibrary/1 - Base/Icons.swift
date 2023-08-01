@@ -353,6 +353,7 @@ extension Icon {
     public static let `portfolio` = Icon(name: "Portfolio")
     public static let `present` = Icon(name: "Present")
     public static let `prices` = Icon(name: "Prices")
+    public static let `pricesFilled` = Icon(name: "Prices Filled")
     public static let `print` = Icon(name: "Print")
     public static let `private` = Icon(name: "Private")
     public static let `qrCode` = Icon(name: "QR Code")
@@ -378,8 +379,6 @@ extension Icon {
     public static let `sun` = Icon(name: "sun")
     public static let `superAppHome` = Icon(name: "SuperApp Home")
     public static let `superAppHomeFilled` = Icon(name: "SuperApp Home Filled")
-    public static let `superAppPrices` = Icon(name: "SuperApp Prices")
-    public static let `superAppPricesFilled` = Icon(name: "SuperApp Prices Filled")
     public static let `support` = Icon(name: "Support")
     public static let `swap` = Icon(name: "Swap")
     public static let `sync` = Icon(name: "Sync")
@@ -529,7 +528,8 @@ extension Icon {
         .plusCircle,
         .portfolio,
         .present,
-        .prices,
+//        .prices,
+        .pricesFilled,
         .print,
         .private,
         .qrCode,
@@ -550,8 +550,6 @@ extension Icon {
         .subdirectory,
         .superAppHome,
         .superAppHomeFilled,
-        .superAppPrices,
-        .superAppPricesFilled,
         .support,
         .swap,
         .sync,
