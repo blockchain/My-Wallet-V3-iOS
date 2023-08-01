@@ -11,25 +11,20 @@ struct FormQuestionView: View {
     let fieldConfiguration: PrimaryFormFieldConfiguration
 
     var body: some View {
-        VStack(alignment: .leading) {
-            VStack(alignment: .leading, spacing: Spacing.textSpacing) {
-                Text(question.text)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.title)
-
-                if let instructions = question.instructions {
-                    Spacer(minLength: Spacing.padding1)
-                    Text(instructions)
-                        .typography(.caption1)
-                        .foregroundColor(.semantic.text)
-                }
-            }
-
-            Spacer(minLength: Spacing.padding1)
+        VStack(alignment: .leading, spacing: Spacing.padding1) {
+            Text(question.text)
+                .typography(.paragraph2)
+                .foregroundColor(.semantic.text)
 
             makeAnswersView(
                 fieldConfiguration: fieldConfiguration
             )
+
+            if let instructions = question.instructions {
+                Text(instructions)
+                    .typography(.caption1)
+                    .foregroundColor(.semantic.text)
+            }
         }
     }
 
@@ -107,6 +102,9 @@ struct FormQuestionView_Previews: PreviewProvider {
                 showAnswersState: $showAnswersState,
                 fieldConfiguration: defaultFieldConfiguration
             )
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding()
+            .background(Color.semantic.light)
         }
     }
 
@@ -143,5 +141,40 @@ struct FormQuestionView_Previews: PreviewProvider {
             ),
             showAnswersState: false
         )
+        .previewDisplayName("Single Selection")
+
+        PreviewHelper(
+            question: FormQuestion(
+                id: "q1",
+                type: .multipleSelection,
+                isDropdown: false,
+                text: "Question 1",
+                instructions: "Select one answer",
+                children: [
+                    FormAnswer(
+                        id: "q1-a1",
+                        type: .selection,
+                        text: "Answer 1",
+                        children: nil,
+                        input: nil,
+                        hint: nil,
+                        regex: nil,
+                        checked: true
+                    ),
+                    FormAnswer(
+                        id: "q1-a2",
+                        type: .selection,
+                        text: "Answer 2",
+                        children: nil,
+                        input: nil,
+                        hint: nil,
+                        regex: nil,
+                        checked: false
+                    )
+                ]
+            ),
+            showAnswersState: false
+        )
+        .previewDisplayName("Multiple Selection")
     }
 }

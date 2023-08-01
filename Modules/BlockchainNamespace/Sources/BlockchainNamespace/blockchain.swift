@@ -848,6 +848,7 @@ public extension I_blockchain_app_configuration {
 	var `frequent`: L_blockchain_app_configuration_frequent { .init("\(__).frequent") }
 	var `hot`: L_blockchain_app_configuration_hot { .init("\(__).hot") }
 	var `kyc`: L_blockchain_app_configuration_kyc { .init("\(__).kyc") }
+	var `loading`: L_blockchain_app_configuration_loading { .init("\(__).loading") }
 	var `localized`: L_blockchain_app_configuration_localized { .init("\(__).localized") }
 	var `manual`: L_blockchain_app_configuration_manual { .init("\(__).manual") }
 	var `new`: L_blockchain_app_configuration_new { .init("\(__).new") }
@@ -1663,6 +1664,24 @@ public final class L_blockchain_app_configuration_kyc_integration_prove_is_enabl
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.kyc.integration.prove.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_kyc_integration_prove_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_loading: L, I_blockchain_app_configuration_loading {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.loading", comment: "") }
+}
+public protocol I_blockchain_app_configuration_loading: I {}
+public extension I_blockchain_app_configuration_loading {
+	var `indicator`: L_blockchain_app_configuration_loading_indicator { .init("\(__).indicator") }
+}
+public final class L_blockchain_app_configuration_loading_indicator: L, I_blockchain_app_configuration_loading_indicator {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.loading.indicator", comment: "") }
+}
+public protocol I_blockchain_app_configuration_loading_indicator: I {}
+public extension I_blockchain_app_configuration_loading_indicator {
+	var `timeout`: L_blockchain_app_configuration_loading_indicator_timeout { .init("\(__).timeout") }
+}
+public final class L_blockchain_app_configuration_loading_indicator_timeout: L, I_blockchain_app_configuration_loading_indicator_timeout {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.loading.indicator.timeout", comment: "") }
+}
+public protocol I_blockchain_app_configuration_loading_indicator_timeout: I_blockchain_db_type_integer, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_localized: L, I_blockchain_app_configuration_localized {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.localized", comment: "") }
 }
@@ -7117,6 +7136,7 @@ public extension I_blockchain_ux {
 	var `frequent`: L_blockchain_ux_frequent { .init("\(__).frequent") }
 	var `home`: L_blockchain_ux_home { .init("\(__).home") }
 	var `kyc`: L_blockchain_ux_kyc { .init("\(__).kyc") }
+	var `loading`: L_blockchain_ux_loading { .init("\(__).loading") }
 	var `maintenance`: L_blockchain_ux_maintenance { .init("\(__).maintenance") }
 	var `multiapp`: L_blockchain_ux_multiapp { .init("\(__).multiapp") }
 	var `news`: L_blockchain_ux_news { .init("\(__).news") }
@@ -9860,6 +9880,38 @@ public final class L_blockchain_ux_kyc_user_email_verification: L, I_blockchain_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.user.email.verification", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_user_email_verification: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_loading: L, I_blockchain_ux_loading {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading", comment: "") }
+}
+public protocol I_blockchain_ux_loading: I {}
+public extension I_blockchain_ux_loading {
+	var `indicator`: L_blockchain_ux_loading_indicator { .init("\(__).indicator") }
+}
+public final class L_blockchain_ux_loading_indicator: L, I_blockchain_ux_loading_indicator {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator", comment: "") }
+}
+public protocol I_blockchain_ux_loading_indicator: I {}
+public extension I_blockchain_ux_loading_indicator {
+	var `event`: L_blockchain_ux_loading_indicator_event { .init("\(__).event") }
+}
+public final class L_blockchain_ux_loading_indicator_event: L, I_blockchain_ux_loading_indicator_event {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator.event", comment: "") }
+}
+public protocol I_blockchain_ux_loading_indicator_event: I {}
+public extension I_blockchain_ux_loading_indicator_event {
+	var `did`: L_blockchain_ux_loading_indicator_event_did { .init("\(__).did") }
+}
+public final class L_blockchain_ux_loading_indicator_event_did: L, I_blockchain_ux_loading_indicator_event_did {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator.event.did", comment: "") }
+}
+public protocol I_blockchain_ux_loading_indicator_event_did: I {}
+public extension I_blockchain_ux_loading_indicator_event_did {
+	var `timeout`: L_blockchain_ux_loading_indicator_event_did_timeout { .init("\(__).timeout") }
+}
+public final class L_blockchain_ux_loading_indicator_event_did_timeout: L, I_blockchain_ux_loading_indicator_event_did_timeout {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.loading.indicator.event.did.timeout", comment: "") }
+}
+public protocol I_blockchain_ux_loading_indicator_event_did_timeout: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_maintenance: L, I_blockchain_ux_maintenance {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.maintenance", comment: "") }
 }
@@ -10032,6 +10084,7 @@ public final class L_blockchain_ux_onboarding: L, I_blockchain_ux_onboarding {
 public protocol I_blockchain_ux_onboarding: I {}
 public extension I_blockchain_ux_onboarding {
 	var `intro`: L_blockchain_ux_onboarding_intro { .init("\(__).intro") }
+	var `notification`: L_blockchain_ux_onboarding_notification { .init("\(__).notification") }
 }
 public final class L_blockchain_ux_onboarding_intro: L, I_blockchain_ux_onboarding_intro {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro", comment: "") }
@@ -10099,6 +10152,34 @@ public final class L_blockchain_ux_onboarding_intro_event_show_tutorial_trading:
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event.show.tutorial.trading", comment: "") }
 }
 public protocol I_blockchain_ux_onboarding_intro_event_show_tutorial_trading: I {}
+public final class L_blockchain_ux_onboarding_notification: L, I_blockchain_ux_onboarding_notification {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification: I {}
+public extension I_blockchain_ux_onboarding_notification {
+	var `authorization`: L_blockchain_ux_onboarding_notification_authorization { .init("\(__).authorization") }
+}
+public final class L_blockchain_ux_onboarding_notification_authorization: L, I_blockchain_ux_onboarding_notification_authorization {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification.authorization", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification_authorization: I {}
+public extension I_blockchain_ux_onboarding_notification_authorization {
+	var `accept`: L_blockchain_ux_onboarding_notification_authorization_accept { .init("\(__).accept") }
+	var `display`: L_blockchain_ux_onboarding_notification_authorization_display { .init("\(__).display") }
+	var `reject`: L_blockchain_ux_onboarding_notification_authorization_reject { .init("\(__).reject") }
+}
+public final class L_blockchain_ux_onboarding_notification_authorization_accept: L, I_blockchain_ux_onboarding_notification_authorization_accept {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification.authorization.accept", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification_authorization_accept: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_onboarding_notification_authorization_display: L, I_blockchain_ux_onboarding_notification_authorization_display {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification.authorization.display", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification_authorization_display: I_blockchain_ux_type_story, I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_onboarding_notification_authorization_reject: L, I_blockchain_ux_onboarding_notification_authorization_reject {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.notification.authorization.reject", comment: "") }
+}
+public protocol I_blockchain_ux_onboarding_notification_authorization_reject: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_payment: L, I_blockchain_ux_payment {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.payment", comment: "") }
 }

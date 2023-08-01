@@ -148,33 +148,14 @@ extension RemoteNotificationAuthorizer: RemoteNotificationRegistering {
 
 extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequesting {
 
-    public func displayPreAuthorization() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
-        Deferred { [topMostViewControllerProvider] in
-            Future { [topMostViewControllerProvider] promise in
-                guard let topMost = topMostViewControllerProvider.topMostViewController else {
-                    promise(.failure(.unknowned))
-                    return
-                }
-                let controller = UIHostingController(
-                    rootView: RemoteNotificationAuthorizationView(
-                        onEnableTap: {
-                            topMost.dismiss(animated: true)
-                            promise(.success(()))
-                        },
-                        onDisableTap: {
-                            topMost.dismiss(animated: true)
-                            promise(.failure(RemoteNotificationAuthorizerError.dismissed))
-                        }
-                    )
-                )
-                topMost.present(controller, animated: true)
-            }
-        }
-        .eraseToAnyPublisher()
+    private var preauthorizedNotifications: AnyPublisher<Void, RemoteNotificationAuthorizerError> {
+        app.on(blockchain.ux.onboarding.notification.authorization.accept.paragraph.button.primary.tap)
+            .mapToVoid()
+            .setFailureType(to: RemoteNotificationAuthorizerError.self)
+            .eraseToAnyPublisher()
     }
 
-    // TODO: Handle a `.denied` case
-    func requestAuthorizationIfNeeded() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
+    private var tokenUpdateIfNeeded: AnyPublisher<Void, RemoteNotificationAuthorizerError> {
         app
             .publisher(for: blockchain.user.id)
             .filter(\.value.isNotNil)
@@ -190,13 +171,28 @@ extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequestin
             }
             .delay(for: .seconds(1), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)
-            .flatMap { [displayPreAuthorization] unregistered in
+            .flatMap { [app] unregistered -> AnyPublisher<Void, RemoteNotificationAuthorizerError> in
                 guard unregistered else {
-                    return displayPreAuthorization()
+                    app.post(
+                        action: blockchain.ux.onboarding.notification.authorization.display.then.enter.into,
+                        value: blockchain.ux.onboarding.notification.authorization.display,
+                        context: [
+                            blockchain.ui.type.action.then.enter.into.detents: [
+                                blockchain.ui.type.action.then.enter.into.detents.large
+                            ]
+                        ]
+                    )
+                    return .empty()
                 }
                 return .just(())
             }
-            .flatMap { [requestAuthorization] in
+            .eraseToAnyPublisher()
+    }
+
+    // TODO: Handle a `.denied` case
+    func requestAuthorizationIfNeeded() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
+        Publishers.Merge(preauthorizedNotifications, tokenUpdateIfNeeded)
+            .flatMap { [requestAuthorization] _ in
                 requestAuthorization()
             }
             .receive(on: DispatchQueue.main)

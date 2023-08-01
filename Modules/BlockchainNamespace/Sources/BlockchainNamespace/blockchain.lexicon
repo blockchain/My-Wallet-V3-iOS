@@ -418,6 +418,11 @@ blockchain:
 							enabled:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.configuration.value
+			loading:
+				indicator:
+					timeout:
+					+ blockchain.db.type.integer
+					+ blockchain.session.configuration.value
 			localized:
 				error:
 					override:
@@ -2633,6 +2638,12 @@ blockchain:
 				email:
 					verification:
 					+ blockchain.ux.type.story
+		loading:
+			indicator:
+				event:
+					did:
+						timeout:
+						+ blockchain.ux.type.analytics.event
 		maintenance:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story
@@ -2695,6 +2706,15 @@ blockchain:
 						tutorial:
 							defi:
 							trading:
+			notification:
+				authorization:
+					accept:
+					+ blockchain.ux.type.task
+					display:
+					+ blockchain.ux.type.action
+					+ blockchain.ux.type.story
+					reject:
+					+ blockchain.ux.type.task
 		payment:
 			method:
 				link:

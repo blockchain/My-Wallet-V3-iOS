@@ -132,7 +132,7 @@ extension EarnSummaryView {
         @Environment(\.context) var context
 
         let my: L_blockchain_user_earn_product_asset.JSON
-        let bondingTxsRequests: EarnBondingTxsRequest?
+        var bondingTxsRequests: [EarnBondingUnbondingRequests] = []
 
         var dayFormatter: DateComponentsFormatter = {
             let formatter = DateComponentsFormatter()
@@ -146,7 +146,7 @@ extension EarnSummaryView {
 
         init(
             json: L_blockchain_user_earn_product_asset.JSON,
-            bondingTxsRequests: EarnBondingTxsRequest?,
+            bondingTxsRequests: [EarnBondingUnbondingRequests],
             sheetModel: Binding<SheetModel?>
         ) {
             self.my = json
@@ -193,7 +193,7 @@ extension EarnSummaryView {
 
         @ViewBuilder var buttons: some View {
             VStack(spacing: Spacing.padding1) {
-                if product == .staking, let countdownDate = bondingTxsRequests?.unbondingWithdrawals.withdrawalLockDate {
+                if product == .staking, let countdownDate = bondingTxsRequests.withdrawalLockDate {
                     CountDownView(
                         secondsRemaining: countdownDate.timeIntervalSinceNow,
                         onComplete: {
@@ -219,7 +219,7 @@ extension EarnSummaryView {
                         .disabled(
                             my.limit.withdraw.is.disabled ?? false
                             || countDownLock
-                            || (product == .active && !(bondingTxsRequests?.isEmpty ?? false))
+                            || (product == .active && !bondingTxsRequests.isEmpty)
                             || (product == .active && earningBalance?.isZero ?? false)
                         )
                         SecondaryButton(
@@ -497,14 +497,13 @@ extension EarnSummaryView {
                         trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
                     )
                 } else if product == .staking {
-                    if let bondingTxsRequests = bondingTxsRequests {
-                        ForEach(bondingTxsRequests.bondingDeposits.indexed(), id: \.index) { _, request in
+                    ForEach(bondingTxsRequests, id: \.self) { request in
+                        if request.type == .bonding {
                             pendingBondingRow(request)
                                 .frame(minHeight: 80.pt)
                                 .backport
                                 .listDivider()
-                        }
-                        ForEach(bondingTxsRequests.unbondingWithdrawals.indexed(), id: \.index) { _, request in
+                        } else {
                             pendingUnbondingRow(request)
                                 .frame(minHeight: 80.pt)
                                 .backport
@@ -518,17 +517,17 @@ extension EarnSummaryView {
             .listRowInsets(.zero)
         }
 
-        @ViewBuilder func pendingBondingRow(_ request: EarnBondingDeposits) -> some View {
+        @ViewBuilder func pendingBondingRow(_ request: EarnBondingUnbondingRequests) -> some View {
             TableRow(
                 leading: { Icon.walletReceive.circle().small().color(.semantic.title) },
                 title: TableRowTitle(L10n.PendingWithdrawal.staked.interpolating(request.currency)),
                 byline: {
-                    TableRowByline(L10n.PendingWithdrawal.bondingPeriod.interpolating("\(request.bondingDays)"))
+                    TableRowByline(L10n.PendingWithdrawal.bondingPeriod.interpolating("\(request.daysLeft)"))
                         .typography(.caption1)
                 },
                 trailing: {
                     VStack(alignment: .trailing, spacing: 6) {
-                        if let expiry = request.bondingExpiryDate {
+                        if let expiry = request.expiryDate {
                             TableRowTitle(DateFormatter.medium.string(from: expiry))
                         }
                         if let amount = request.amount {
@@ -540,21 +539,21 @@ extension EarnSummaryView {
             )
         }
 
-        @ViewBuilder func pendingUnbondingRow(_ request: EarnUnbondingWithdrawals) -> some View {
+        @ViewBuilder func pendingUnbondingRow(_ request: EarnBondingUnbondingRequests) -> some View {
             TableRow(
                 leading: { Icon.walletSend.circle().small().color(.semantic.title) },
                 title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(request.currency)),
                 byline: {
-                    TableRowByline(L10n.PendingWithdrawal.unbondingPeriod.interpolating("\(request.unbondingDays)"))
+                    TableRowByline(L10n.PendingWithdrawal.unbondingPeriod.interpolating("\(request.daysLeft)"))
                         .typography(.caption1)
                 },
                 trailing: {
                     VStack(alignment: .trailing, spacing: 6) {
-                        if let expiry = request.unbondingExpiryDate {
+                        if let expiry = request.expiryDate {
                             TableRowTitle(DateFormatter.medium.string(from: expiry))
                         }
                         if let amount = request.amount {
-                            TableRowByline(amount.displayString)
+                            TableRowByline("-\(amount.displayString)")
                                 .typography(.caption1)
                         }
                     }
@@ -564,7 +563,7 @@ extension EarnSummaryView {
 
         @ViewBuilder var footer: some View {
             Group {
-                if !(bondingTxsRequests?.isEmpty ?? false), product != .savings {
+                if !bondingTxsRequests.isEmpty, product != .savings {
                     pendingRequestsSection
                 } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
                     Section {
@@ -622,7 +621,7 @@ extension EarnSummaryView {
     class Object: ObservableObject {
 
         @Published var model: L_blockchain_user_earn_product_asset.JSON?
-        @Published var pendingBondingRequests: EarnBondingTxsRequest?
+        @Published var pendingBondingRequests: [EarnBondingUnbondingRequests] = []
 
         private var cancellables: Set<AnyCancellable> = []
 
@@ -648,6 +647,16 @@ extension EarnSummaryView {
                 service.bondingTxs(currency: currency)
                     .ignoreFailure()
             }
+            .map { requests -> [EarnBondingUnbondingRequests] in
+                let bonding = requests.bondingDeposits.map(EarnBondingUnbondingRequests.init(bonding:))
+                let unbonding = requests.unbondingWithdrawals.map(EarnBondingUnbondingRequests.init(unbonding:))
+                return (bonding + unbonding).sorted(
+                    by: { lhs, rhs -> Bool in
+                        guard let left = lhs.expiryDate, let right = rhs.expiryDate else { return false }
+                        return left < right
+                    }
+                )
+            }
             .receive(on: DispatchQueue.main)
             .assign(to: &$pendingBondingRequests)
         }
@@ -669,7 +678,7 @@ struct EarnSummaryView_Previews: PreviewProvider {
             .previewDisplayName("Loading")
         EarnSummaryView.Loaded(
             json: preview,
-            bondingTxsRequests: nil,
+            bondingTxsRequests: [],
             sheetModel: .constant(nil)
         )
             .context(
@@ -719,9 +728,10 @@ extension Optional<MoneyValue> {
     }
 }
 
-extension Collection<EarnUnbondingWithdrawals> {
+extension Collection<EarnBondingUnbondingRequests> {
     var withdrawalLockDate: Date? {
-        compactMap { $0.unbondingStartDate?.addingTimeInterval(5 * 60) }
+        filter { $0.type == .unbonding }
+            .compactMap { $0.startDate?.addingTimeInterval(5 * 60) }
             .first(where: { $0 > Date() })
     }
 }

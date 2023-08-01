@@ -323,10 +323,19 @@ extension DependencyContainer {
                 guidProvider: DIKit.resolve(),
                 traitRepository: DIKit.resolve()
             )
+#if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
+            let pulse = PulseAnalyticsServiceProvider()
+            return AnalyticsEventRecorder(analyticsServiceProviders: [
+                firebaseAnalyticsServiceProvider,
+                nabuAnalyticsServiceProvider,
+                pulse
+            ])
+#else
             return AnalyticsEventRecorder(analyticsServiceProviders: [
                 firebaseAnalyticsServiceProvider,
                 nabuAnalyticsServiceProvider
             ])
+#endif
         }
 
         single {

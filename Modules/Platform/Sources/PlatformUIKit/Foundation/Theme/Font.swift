@@ -18,8 +18,6 @@ public struct Font {
 
     public enum FontType {
         case branded(FontName)
-        case custom(String)
-        case system
     }
 
     public enum FontSize {
@@ -111,20 +109,12 @@ extension Font.StandardSize {
 extension Font {
     public var result: UIFont {
         switch type {
-        case .custom(let fontName):
-            guard let font = UIFont(name: fontName, size: CGFloat(size.value)) else {
-                assertionFailure("\(fontName) font does not exist.")
-                return UIFont.systemFont(ofSize: CGFloat(size.value))
-            }
-            return font
         case .branded(let fontName):
             guard let font = UIFont(name: fontName.rawValue, size: CGFloat(size.value)) else {
                 assertionFailure("\(fontName.rawValue) font does not exist.")
                 return UIFont.systemFont(ofSize: CGFloat(size.value))
             }
             return font
-        case .system:
-            return UIFont.systemFont(ofSize: CGFloat(size.value))
         }
     }
 }

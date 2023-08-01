@@ -23,13 +23,13 @@ let package = Package(
         ),
         .package(path: "../Localization"),
         .package(path: "../BlockchainComponentLibrary"),
-        .package(path: "../Tool")
+        .package(path: "../Extensions")
     ],
     targets: [
         .target(
             name: "FeatureFormDomain",
             dependencies: [
-                .product(name: "ToolKit", package: "Tool")
+                .product(name: "Extensions", package: "Extensions")
             ]
         ),
         .target(
