@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Extensions
 import Foundation
-import ToolKit
 
 extension FormQuestion {
 
