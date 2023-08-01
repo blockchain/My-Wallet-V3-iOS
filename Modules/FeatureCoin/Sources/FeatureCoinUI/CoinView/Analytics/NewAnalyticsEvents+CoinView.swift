@@ -62,7 +62,7 @@ extension AnalyticsEvents.New {
             case rewardsSummary = "REWARDS_SUMMARY"
             case swap = "SWAP"
             case withdraw = "WITHDRAW"
-            case getToken = "GET TOKEN"
+            case getToken = "GET_TOKEN"
 
             // swiftlint:disable cyclomatic_complexity
             init?(_ tag: Tag) {
