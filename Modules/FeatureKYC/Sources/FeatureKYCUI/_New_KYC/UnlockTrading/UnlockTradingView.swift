@@ -85,10 +85,9 @@ struct UnlockTradingView: View {
             .primaryNavigation(
                 title: L10n.navigationTitle,
                 trailing: {
-                    Icon.closeCirclev2
-                        .onTapGesture {
-                            viewStore.send(.closeButtonTapped)
-                        }
+                    IconButton(icon: .navigationCloseButton()) {
+                        viewStore.send(.closeButtonTapped)
+                    }
                 }
             )
         }

@@ -8,6 +8,7 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 import UIComponentsKit
+import SwiftUI
 
 extension TransactionErrorState {
 
@@ -202,7 +203,7 @@ extension TransactionErrorState {
             callouts = [
                 ErrorRecoveryState.Callout(
                     id: ErrorRecoveryCalloutIdentifier.buy.rawValue,
-                    image: fees.currency.image,
+                    image: fees.currency.logoResource,
                     title: String.localizedStringWithFormat(
                         Localization.belowFeesRecoveryCalloutTitle_send,
                         fees.displayCode
@@ -218,7 +219,7 @@ extension TransactionErrorState {
             callouts = [
                 ErrorRecoveryState.Callout(
                     id: ErrorRecoveryCalloutIdentifier.buy.rawValue,
-                    image: targetCurrency.image,
+                    image: targetCurrency.logoResource,
                     title: String.localizedStringWithFormat(
                         Localization.overMaximumSourceLimitRecoveryCalloutTitle_send,
                         sourceCurrency.displayCode
@@ -234,7 +235,7 @@ extension TransactionErrorState {
             callouts = [
                 ErrorRecoveryState.Callout(
                     id: ErrorRecoveryCalloutIdentifier.buy.rawValue,
-                    image: availableAmount.currency.image,
+                    image: availableAmount.currency.logoResource,
                     title: String.localizedStringWithFormat(
                         Localization.overMaximumSourceLimitRecoveryCalloutTitle_send,
                         availableAmount.displayCode
@@ -261,10 +262,7 @@ extension TransactionErrorState {
             callouts = suggestedUpgrade == nil ? [] : [
                 ErrorRecoveryState.Callout(
                     id: ErrorRecoveryCalloutIdentifier.upgradeKYCTier.rawValue,
-                    image: ImageResource.local(
-                        name: "kyc-gold",
-                        bundle: .main
-                    ).image!,
+                    image: .local(name: "kyc-gold", bundle: .main),
                     title: calloutTitle,
                     message: Localization.overMaximumPersonalLimitRecoveryCalloutMessage,
                     callToAction: Localization.overMaximumPersonalLimitRecoveryCalloutCTA

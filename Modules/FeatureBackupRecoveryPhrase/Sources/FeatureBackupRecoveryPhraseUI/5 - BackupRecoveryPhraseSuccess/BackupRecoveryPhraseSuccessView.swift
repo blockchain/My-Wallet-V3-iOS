@@ -42,7 +42,7 @@ public struct BackupRecoveryPhraseSuccessView: View {
                     viewStore.send(.onDoneTapped)
                 } label: {
                     Icon
-                        .closev2
+                        .close
                         .circle(backgroundColor: .WalletSemantic.light)
                         .frame(width: 24, height: 24)
                 }
@@ -55,9 +55,7 @@ struct BackupRecoveryPhraseSuccessView_Previews: PreviewProvider {
     static var previews: some View {
         BackupRecoveryPhraseSuccessView(store: .init(
             initialState: .init(),
-            reducer: BackupRecoveryPhraseSuccessModule.reducer,
-            environment: .init(onNext: {}
-            )
+            reducer: BackupRecoveryPhraseSuccess(onNext: {})
         ))
     }
 }

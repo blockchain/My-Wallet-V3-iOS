@@ -5,6 +5,7 @@ import Pulse
 import PulseUI
 #endif
 
+import AnalyticsKit
 import BlockchainNamespace
 import Combine
 import FeatureDebugUI
@@ -30,9 +31,16 @@ final class PulseBlockchainNamespaceEventLogger: Client.Observer {
 
     func start() {
         subscription = app.on(blockchain.ux.type.analytics.event) { @MainActor [pulse] event async in
+            let level: Pulse.LoggerStore.Level = {
+                switch event.tag {
+                case blockchain.ux.type.analytics.error: return .error
+                case blockchain.ux.type.analytics.state: return .notice
+                default: return .info
+                }
+            }()
             pulse.storeMessage(
                 label: "namespace",
-                level: .info,
+                level: level,
                 message: event.reference.string,
                 metadata: event.context.mapKeysAndValues(
                     key: \.description,
@@ -136,3 +144,29 @@ final class PulseNetworkDebugScreenProvider: NetworkDebugScreenProvider {
     #endif
     }
 }
+
+#if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
+final class PulseAnalyticsServiceProvider: AnalyticsServiceProviderAPI {
+
+    var pulse: Pulse.LoggerStore = .shared
+
+    var banned = [
+        "Namespace Action",
+        "Namespace State",
+        "Namespace Error",
+        "Namespace Event"
+    ]
+    
+    func trackEvent(title: String, parameters: [String: Any]?) {
+        if banned.contains(title) { return }
+        pulse.storeMessage(
+            label: "analytics",
+            level: .info,
+            message: "📢 \(title)",
+            metadata: parameters?.mapValues { value in .string(String(describing: value)) }
+        )
+    }
+
+    var supportedEventTypes: [AnalyticsKit.AnalyticsEventType] { [.nabu] }
+}
+#endif

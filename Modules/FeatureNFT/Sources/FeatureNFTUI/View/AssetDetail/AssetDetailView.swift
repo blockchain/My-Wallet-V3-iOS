@@ -69,7 +69,7 @@ public struct AssetDetailView: View {
                     .primaryNavigation(
                         title: viewStore.asset.name,
                         trailing: {
-                            IconButton(icon: .closev2.circle()) {
+                            IconButton(icon: .navigationCloseButton()) {
                                 webViewPresented = false
                             }
                             .frame(width: 24.pt, height: 24.pt)
@@ -80,7 +80,7 @@ public struct AssetDetailView: View {
     }
 
     @ViewBuilder func dismiss() -> some View {
-        IconButton(icon: .closev2.circle()) {
+        IconButton(icon: .navigationCloseButton()) {
             presentationMode.wrappedValue.dismiss()
         }
         .frame(width: 24.pt, height: 24.pt)

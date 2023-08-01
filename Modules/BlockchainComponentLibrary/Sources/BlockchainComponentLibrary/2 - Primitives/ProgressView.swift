@@ -1,10 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Extensions
 import SwiftUI
 
 public struct BlockchainProgressView: View {
-
+    @BlockchainApp var app
     public init() {}
 
     public var body: some View {
@@ -15,10 +16,25 @@ public struct BlockchainProgressView: View {
 }
 
 public struct BlockchainProgressViewStyle: ProgressViewStyle {
+    @Environment(\.scheduler) var scheduler
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
+    @State private var timeout: Int = 1
+    @BlockchainApp var app
 
     public func makeBody(configuration: Configuration) -> some View {
         LottieView(json: "loader".data())
             .scaledToFit()
+            .task {
+                do {
+                    try await scheduler.sleep(for: .seconds(timeout))
+                    $app.post(event: timeOutEventTag)
+                } catch {
+                    // cancelled, don't worry!
+                }
+            }
+            .bindings {
+                subscribe($timeout, to: BlockchainNamespace.blockchain.app.configuration.loading.indicator.timeout)
+            }
     }
 }
 
@@ -53,6 +69,11 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
     }
 
     @State private var angle: Angle = .degrees(-90)
+    @Environment(\.scheduler) var scheduler
+    var timeOutEventTag: Tag.Event = BlockchainNamespace.blockchain.ux.loading.indicator.event.did.timeout
+    @State private var timeout: Int = 1
+    @BlockchainApp var app
+
 
     public func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
@@ -65,7 +86,7 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
                 Circle()
                     .stroke(background, style: style)
                 Circle()
-                    .trim(from: 0, to: (configuration.fractionCompleted ?? 0.3).cg)
+                    .trim(from: 0, to: configuration.fractionCompleted.or(default: 0.3).cg)
                     .stroke(stroke, style: style)
                     .rotationEffect(angle)
                     .onAppear {
@@ -76,6 +97,17 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
                                 }
                             }
                         }
+                    }
+                    .task {
+                        do {
+                            try await scheduler.sleep(for: .seconds(timeout))
+                            $app.post(event: timeOutEventTag)
+                        } catch {
+                            // cancelled, don't worry!
+                        }
+                    }
+                    .bindings {
+                        subscribe($timeout, to: BlockchainNamespace.blockchain.app.configuration.loading.indicator.timeout)
                     }
             }
             .padding(lineWidth / 2)
@@ -90,7 +122,7 @@ extension ProgressViewStyle where Self == BlockchainCircularProgressViewStyle {
 }
 
 #if DEBUG
-struct IndeterminateProgressStyle_Previews: PreviewProvider {
+struct ProgressView_Previews: PreviewProvider {
 
     static var previews: some View {
         ProgressView()
@@ -99,6 +131,9 @@ struct IndeterminateProgressStyle_Previews: PreviewProvider {
             .padding()
         ProgressView(value: 0.25)
             .progressViewStyle(.indeterminate)
+            .padding()
+        ProgressView(value: 0.25)
+            .progressViewStyle(.determinate)
             .padding()
     }
 }

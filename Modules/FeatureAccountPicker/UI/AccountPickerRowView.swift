@@ -232,13 +232,9 @@ private struct PaymentMethodRow: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center, spacing: 0) {
                 ZStack {
-                    if let url = model.badgeURL {
-                        AsyncMedia(url: url)
+                    if let badge = model.badge {
+                        badge.image
                             .frame(width: 24, height: 24)
-                    } else {
-                        model.badgeView
-                            .frame(width: 24, height: 24)
-                            .scaledToFit()
                     }
                 }
                 .frame(width: 24, height: 24)
@@ -345,11 +341,11 @@ private struct SingleAccountRow<
         }
 
         if delta.isSignMinus {
-            return Color.semantic.pink
+            return .semantic.negative
         } else if delta.isZero {
-            return Color.semantic.body
+            return .semantic.body
         } else {
-            return Color.semantic.success
+            return .semantic.success
         }
     }
 
@@ -468,7 +464,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
             id: UUID(),
             title: "Visa •••• 0000",
             description: "$1,200",
-            badgeView: Image(systemName: "creditcard"),
+            badge: .systemName("creditcard"),
             badgeBackground: .badgeBackgroundInfo,
             capabilities: nil
         )

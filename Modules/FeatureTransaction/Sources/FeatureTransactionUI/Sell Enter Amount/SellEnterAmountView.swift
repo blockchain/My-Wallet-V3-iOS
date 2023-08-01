@@ -160,10 +160,7 @@ public struct SellEnterAmountView: View {
             })
 
             viewStore.defaultFiatCurrency?
-                .image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 24, height: 24)
+                .logo()
                 .background(Color.WalletSemantic.fiatGreen)
                 .cornerRadius(8, corners: .allCorners)
         }

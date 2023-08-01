@@ -91,7 +91,7 @@ public struct MoreQuickActionSheet: View {
                     .typography(.body2)
                     .foregroundColor(.semantic.title)
                 Spacer()
-                IconButton(icon: .closeCirclev2.small()) {
+                IconButton(icon: .navigationCloseButton()) {
                     app.post(event: blockchain.ux.frequent.action.brokerage.more.article.plain.navigation.bar.button.close.tap)
                 }
             }

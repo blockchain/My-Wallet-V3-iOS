@@ -200,7 +200,7 @@ extension BuyCheckoutView.Loaded {
                     .typography(.body2)
                     .foregroundColor(.semantic.body)
                 Spacer()
-                IconButton(icon: .closeCirclev2) {
+                IconButton(icon: .close.circle()) {
                     isAvailableToTradeInfoPresented = false
                 }
                 .frame(width: 24.pt, height: 24.pt)
@@ -238,7 +238,7 @@ extension BuyCheckoutView.Loaded {
             .primaryNavigation(
                 title: L10n.ACHTermsInfo.title,
                 trailing: {
-                    IconButton(icon: .closeCirclev2) {
+                    IconButton(icon: .close.circle()) {
                         isACHTermsInfoPresented = false
                     }
                     .frame(width: 24.pt, height: 24.pt)

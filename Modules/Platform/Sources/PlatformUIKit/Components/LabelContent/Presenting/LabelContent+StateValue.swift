@@ -58,7 +58,7 @@ extension LabelContent.Value.Presentation {
         /// Descriptors that allows customized content and style
         public struct Descriptors {
 
-            let fontWeight: FontWeight
+            let fontWeight: Typography.Weight
             let contentColor: UIColor
             let fontSize: CGFloat
             let lineSpacing: CGFloat
@@ -66,7 +66,7 @@ extension LabelContent.Value.Presentation {
             let accessibility: Accessibility
 
             public init(
-                fontWeight: FontWeight = .medium,
+                fontWeight: Typography.Weight = .medium,
                 contentColor: UIColor = .semantic.title,
                 fontSize: CGFloat,
                 lineSpacing: CGFloat = 1,

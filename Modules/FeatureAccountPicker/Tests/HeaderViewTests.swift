@@ -20,7 +20,7 @@ final class HeaderViewTests: XCTestCase {
             viewModel: .normal(
                 title: "Send Crypto Now",
                 subtitle: "Choose a Wallet to send cypto from.",
-                image: ImageAsset.iconSend.image,
+                image: ImageAsset.iconSend.imageResource,
                 tableTitle: "Select a Wallet",
                 searchable: false
             ),
@@ -56,7 +56,7 @@ final class HeaderViewTests: XCTestCase {
             viewModel: .normal(
                 title: "Send Crypto Now",
                 subtitle: "Choose a Wallet to send cypto from.",
-                image: ImageAsset.iconSend.image,
+                image: ImageAsset.iconSend.imageResource,
                 tableTitle: nil,
                 searchable: false
             ),
@@ -74,7 +74,7 @@ final class HeaderViewTests: XCTestCase {
             viewModel: .normal(
                 title: "Send Crypto Now",
                 subtitle: "Choose a Wallet to send cypto from.",
-                image: ImageAsset.iconSend.image,
+                image: ImageAsset.iconSend.imageResource,
                 tableTitle: nil,
                 searchable: true
             ),
@@ -92,7 +92,7 @@ final class HeaderViewTests: XCTestCase {
             viewModel: .normal(
                 title: "Send Crypto Now",
                 subtitle: "Choose a Wallet to send cypto from.",
-                image: ImageAsset.iconSend.image,
+                image: ImageAsset.iconSend.imageResource,
                 tableTitle: nil,
                 searchable: true
             ),

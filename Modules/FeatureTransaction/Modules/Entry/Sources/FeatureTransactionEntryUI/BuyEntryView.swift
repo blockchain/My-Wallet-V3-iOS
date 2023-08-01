@@ -33,7 +33,7 @@ public struct BuyEntryView: View {
 
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3,
+            icon: .navigationCloseButton(),
             action: {
                 $app.post(event: blockchain.ux.transaction.select.target.article.plain.navigation.bar.button.close.tap)
                 // this resolves an edge case that might display the recurring buy frequency bottom sheet automatically
@@ -305,11 +305,11 @@ struct BuyEntryRow: View {
 extension Decimal {
     var color: Color {
         if isSignMinus {
-            return Color.semantic.pink
+            return .semantic.negative
         } else if isZero {
-            return Color.semantic.body
+            return .semantic.body
         } else {
-            return Color.semantic.success
+            return .semantic.success
         }
     }
 

@@ -68,7 +68,7 @@ struct AccountSheet: View {
                 .typography(.body2.slashedZero())
                 .foregroundColor(.semantic.title)
             Spacer()
-            IconButton(icon: Icon.closev2.circle(), action: onClose)
+            IconButton(icon: .navigationCloseButton(), action: onClose)
                 .frame(width: 24.pt, height: 24.pt)
         }
     }

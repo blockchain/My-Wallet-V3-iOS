@@ -22,7 +22,7 @@ public struct AddressInfoModalView: View {
                     .typography(.body2)
                     .foregroundColor(.semantic.title)
                 Spacer()
-                IconButton(icon: .closeCirclev2.small()) {
+                IconButton(icon: .close.circle().small()) {
                     $app.post(event: blockchain.ux.transaction.send.address.info.entry.paragraph.button.icon.tap)
                 }
                 .batch {

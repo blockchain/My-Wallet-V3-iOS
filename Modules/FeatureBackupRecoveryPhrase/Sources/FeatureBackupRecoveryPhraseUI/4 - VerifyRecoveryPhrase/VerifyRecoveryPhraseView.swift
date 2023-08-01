@@ -208,8 +208,7 @@ struct SeedPhraseVerifyView_Previews: PreviewProvider {
         PrimaryNavigationView {
             VerifyRecoveryPhraseView(store: .init(
                 initialState: .init(),
-                reducer: VerifyRecoveryPhraseModule.reducer,
-                environment: .init(
+                reducer: VerifyRecoveryPhrase(
                     mainQueue: .main,
                     recoveryPhraseRepository: resolve(),
                     recoveryPhraseService: resolve(),

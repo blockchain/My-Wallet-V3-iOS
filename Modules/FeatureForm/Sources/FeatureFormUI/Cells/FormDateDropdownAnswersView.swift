@@ -13,20 +13,19 @@ struct FormDateDropdownAnswersView: View {
     @Binding var showAnswerState: Bool
     var isEnabled: Bool { answer.isEnabled ?? true }
 
+    var dateString: String? {
+        guard let input = answer.input, let timeInterval = TimeInterval(input) else {
+            return nil
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        return dateFormatter.string(from: Date(timeIntervalSince1970: timeInterval))
+    }
+
     var body: some View {
         VStack {
             HStack(spacing: Spacing.padding1) {
-
-                let dateString: String? = {
-                    guard let input = answer.input, let timeInterval = TimeInterval(input) else {
-                        return nil
-                    }
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateStyle = .medium
-                    return dateFormatter.string(from: Date(timeIntervalSince1970: timeInterval))
-                }()
-
-                Text(dateString ?? "")
+                Text(dateString ?? LocalizationConstants.selectDate)
                     .typography(.body1)
                     .foregroundColor(textColor)
 
@@ -79,7 +78,7 @@ extension FormDateDropdownAnswersView {
     }
 
     private var textColor: Color {
-        if !isEnabled {
+        if dateString.isNil || !isEnabled {
             return .semantic.muted
         } else {
             return .semantic.title

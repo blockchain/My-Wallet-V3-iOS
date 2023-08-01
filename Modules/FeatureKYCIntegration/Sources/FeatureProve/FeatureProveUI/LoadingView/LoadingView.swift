@@ -31,9 +31,7 @@ struct LoadingView: View {
             ScrollView {
                 VStack(alignment: .center) {
                     ProgressView(value: 0.25)
-                        .progressViewStyle(
-                            IndeterminateProgressStyle()
-                        )
+                        .progressViewStyle(.indeterminate)
                         .frame(width: 45, height: 45)
                         .padding(.bottom, 35.pt)
                     if let title {

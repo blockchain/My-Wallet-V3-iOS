@@ -83,11 +83,9 @@ struct DexSettingsView: View {
                 .typography(.body2)
                 .foregroundColor(.semantic.title)
             Spacer()
-            Icon.closeCirclev2
-                .frame(width: 24, height: 24)
-                .onTapGesture {
-                    presentationMode.wrappedValue.dismiss()
-                }
+            IconButton(icon: .navigationCloseButton()) {
+                presentationMode.wrappedValue.dismiss()
+            }
         }
     }
 }

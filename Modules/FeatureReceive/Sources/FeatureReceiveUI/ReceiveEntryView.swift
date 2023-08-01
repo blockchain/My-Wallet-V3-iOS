@@ -77,7 +77,7 @@ public struct ReceiveEntryView: View {
 
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3.small(),
+            icon: .navigationCloseButton(),
             action: { $app.post(event: blockchain.ux.currency.receive.select.asset.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {

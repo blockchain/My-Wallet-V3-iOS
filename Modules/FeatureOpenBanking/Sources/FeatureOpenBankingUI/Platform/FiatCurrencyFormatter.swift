@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import UIComponentsKit
+import BlockchainComponentLibrary
 
 public protocol CurrencyFormatter {
     func displayString(amountMinor: String, currency: String) -> String?

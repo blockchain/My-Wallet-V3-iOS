@@ -12,9 +12,8 @@ struct PriceView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             HStack(spacing: 16) {
-                viewStore.icon
-                    .scaledToFit()
-                    .frame(width: 32.0, height: 32.0)
+                viewStore.currency
+                    .logo(size: 32.pt, showNetworkLogo: true)
                 VStack(spacing: 2) {
                     HStack {
                         Text(viewStore.title)
@@ -33,7 +32,7 @@ struct PriceView: View {
                             .textStyle(.subheading)
                         Spacer()
                         Text(viewStore.formattedDelta)
-                            .foregroundColor(Color.trend(for: Decimal(viewStore.deltaPercentage.value ?? 0)))
+                            .foregroundColor(color(viewStore.deltaPercentage.value))
                             .typography(.body1)
                             .shimmer(enabled: viewStore.deltaPercentage.isLoading)
                     }
@@ -47,6 +46,17 @@ struct PriceView: View {
             .onDisappear {
                 viewStore.send(.currencyDidDisappear)
             }
+        }
+    }
+
+    private func color(_ value: Double?) -> Color {
+        let delta: Decimal = Decimal(value ?? 0)
+        if delta.isSignMinus {
+            return .semantic.pink
+        } else if delta.isZero {
+            return .semantic.body
+        } else {
+            return .semantic.success
         }
     }
 }

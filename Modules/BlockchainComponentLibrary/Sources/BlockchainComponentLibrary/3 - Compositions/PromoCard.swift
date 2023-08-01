@@ -57,7 +57,7 @@ public struct PromoCard: View {
                 Button(
                     action: onCloseTapped,
                     label: {
-                        Icon.closev2
+                        Icon.close
                             .circle(
                                 backgroundColor: Color(
                                     light: .semantic.medium,

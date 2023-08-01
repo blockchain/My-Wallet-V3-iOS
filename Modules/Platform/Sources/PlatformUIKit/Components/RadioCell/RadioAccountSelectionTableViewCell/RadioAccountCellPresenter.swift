@@ -1,3 +1,6 @@
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
+
+import BlockchainComponentLibrary
 import PlatformKit
 import RxCocoa
 import RxDataSources

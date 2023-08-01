@@ -34,7 +34,7 @@ struct ConfirmationPageAvaiableWithdrawalInfoView: View {
                     .typography(.body2)
                     .foregroundTexture(.semantic.title)
                 Spacer()
-                IconButton(icon: .closeCirclev2) {
+                IconButton(icon: .navigationCloseButton()) {
                     onClose()
                 }
                 .frame(width: 24.pt, height: 24.pt)

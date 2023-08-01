@@ -154,7 +154,7 @@ struct DAppManageView: View {
     @ViewBuilder
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3.small(),
+            icon: .navigationCloseButton(),
             action: { $app.post(event: blockchain.ux.wallet.connect.manage.sessions.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {
@@ -250,7 +250,7 @@ struct DAppManageView: View {
                     } else {
                         Text(L10n.Manage.disconnectAll)
                             .typography(.title3)
-                            .foregroundColor(Color.semantic.destructive)
+                            .foregroundColor(Color.semantic.negative)
                     }
                 }
                 .background(

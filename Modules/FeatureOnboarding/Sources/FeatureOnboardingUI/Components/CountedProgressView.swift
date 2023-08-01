@@ -61,7 +61,7 @@ public struct CountedProgressView: View {
     public var body: some View {
         ProgressView(value: progressPercentage)
             .progressViewStyle(
-                IndeterminateProgressStyle(
+                BlockchainCircularProgressViewStyle(
                     stroke: strokeColor,
                     background: backgroundColor,
                     lineWidth: lineWidth,

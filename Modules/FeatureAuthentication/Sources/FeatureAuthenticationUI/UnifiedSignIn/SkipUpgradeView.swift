@@ -47,7 +47,6 @@ struct SkipUpgradeView: View {
 
         static let imageSideLength: CGFloat = 72
         static let imageBottomPadding: CGFloat = 16
-        static let descriptionFontSize: CGFloat = 16
         static let descriptionLineSpacing: CGFloat = 4
         static let buttonSpacing: CGFloat = 10
     }
@@ -73,8 +72,8 @@ struct SkipUpgradeView: View {
                         .accessibility(identifier: AccessibilityIdentifiers.SkipUpgradeScreen.skipUpgradeTitleText)
 
                     Text(LocalizedString.message)
-                        .font(Font(weight: .medium, size: Layout.descriptionFontSize))
-                        .foregroundColor(.textSubheading)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.text)
                         .lineSpacing(Layout.descriptionLineSpacing)
                         .accessibility(identifier: AccessibilityIdentifiers.SkipUpgradeScreen.skipUpgradeMessageText)
                     Spacer()

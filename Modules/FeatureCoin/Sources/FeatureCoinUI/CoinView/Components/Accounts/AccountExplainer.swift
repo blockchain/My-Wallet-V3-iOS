@@ -19,7 +19,7 @@ struct AccountExplainer: View {
 
     var body: some View {
         VStack(alignment: .trailing) {
-            IconButton(icon: Icon.closev2.circle(), action: onClose)
+            IconButton(icon: .navigationCloseButton(), action: onClose)
                 .frame(width: 24.pt, height: 24.pt)
                 .padding(.trailing, 8.pt)
             VStack(alignment: .center, spacing: 20) {

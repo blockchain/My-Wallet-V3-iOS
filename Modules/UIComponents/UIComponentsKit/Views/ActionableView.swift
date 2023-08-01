@@ -3,6 +3,8 @@
 import BlockchainComponentLibrary
 import SwiftUI
 
+// TODO: @paulo: move to FeatureOpenBankingUI
+
 /// Represents a `LoadingButton` in the Design System
 public struct ActionableViewButtonState: Hashable {
     public enum Style: Hashable {

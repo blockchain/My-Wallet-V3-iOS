@@ -25,7 +25,6 @@ public enum BadgeAsset {
                     case verified
                     case warning
                     case destructive
-                    case progress(BadgeCircleViewModel)
 
                     public static func == (
                         lhs: BadgeAsset.Value.Interaction.BadgeItem.BadgeType,
@@ -35,7 +34,6 @@ public enum BadgeAsset {
                         case (.default, .default),
                              (.verified, .verified),
                              (.destructive, .destructive),
-                             (.progress, .progress),
                              (.warning, .warning):
                             return true
                         default:
@@ -69,8 +67,6 @@ public enum BadgeAsset {
                         self.viewModel = .destructive(with: value.description)
                     case .verified:
                         self.viewModel = .affirmative(with: value.description)
-                    case .progress(let model):
-                        self.viewModel = .progress(with: value.description, model: model)
                     case .warning:
                         self.viewModel = .warning(with: value.description)
                     }

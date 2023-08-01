@@ -186,7 +186,20 @@ public struct MoneyValueDeltaView: View {
         guard let deltaDecimal else {
             return nil
         }
-        return "\(deltaDecimal.isSignMinus ? "↓" : "↑") \(deltaDecimal.abs().formatted(.percent.precision(.fractionLength(2))))"
+        
+        let arrowString = {
+            if deltaDecimal.isZero {
+                return ""
+            }
+            if deltaDecimal.isSignMinus {
+                return "↓ "
+            }
+
+            return "↑ "
+
+        }()
+
+        return "\(arrowString)\(deltaDecimal.abs().formatted(.percent.precision(.fractionLength(2))))"
     }
 }
 

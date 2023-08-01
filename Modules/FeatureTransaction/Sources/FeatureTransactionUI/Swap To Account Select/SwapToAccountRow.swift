@@ -151,6 +151,7 @@ extension SwapToAccountRow.State {
         if delta.isZero {
             return .semantic.muted
         }
-        return delta.isSignMinus ? .semantic.pinkHighlight : .semantic.success
+
+        return delta.isSignMinus ? .semantic.negative : .semantic.success
     }
 }

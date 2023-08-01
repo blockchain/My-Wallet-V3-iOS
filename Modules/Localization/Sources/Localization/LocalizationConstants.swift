@@ -59,6 +59,7 @@ public enum LocalizationConstants {
         comment: "Generic translation, may be used in multiple places."
     )
 
+    public static let selectDate = NSLocalizedString("Select Date", comment: "Select Date")
     public static let accountEndingIn = NSLocalizedString("Account Ending in", comment: "Account Ending in")
     public static let savingsAccount = NSLocalizedString("Savings Account", comment: "Savings Account")
     public static let maxPurchaseArg = NSLocalizedString("%@ max purchase", comment: "")

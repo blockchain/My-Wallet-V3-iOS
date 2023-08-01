@@ -341,7 +341,7 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                     header = .normal(
                         title: model.title,
                         subtitle: model.subtitle,
-                        image: model.imageContent.imageResource?.image,
+                        image: model.imageContent.imageResource,
                         tableTitle: model.tableTitle,
                         searchable: model.searchable
                     )
@@ -434,8 +434,7 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                                         .balance
                                         .displayString
                                 ),
-                                badgeView: presenter.account.logoResource.image,
-                                badgeURL: presenter.account.logoResource.url,
+                                badge: presenter.account.logoResource,
                                 badgeBackground: Color(presenter.account.logoBackgroundColor),
                                 capabilities: presenter.account.capabilities
                             )

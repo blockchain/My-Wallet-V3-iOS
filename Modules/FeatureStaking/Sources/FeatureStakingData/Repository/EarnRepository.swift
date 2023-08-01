@@ -76,6 +76,12 @@ public final class EarnRepository: EarnRepositoryAPI {
         client.pendingWithdrawalRequests(currencyCode: currencyCode)
     }
 
+    public func bondingStakingTxs(
+        currencyCode: String
+    ) -> AnyPublisher<EarnBondingTxsRequest, Nabu.Error> {
+        client.bondingStakingTxs(currencyCode: currencyCode)
+    }
+
     private func cache<Value>(
         _ publisher: @escaping () -> AnyPublisher<Value, Nabu.Error>,
         reset configuration: CacheConfiguration = .onLoginLogout(),

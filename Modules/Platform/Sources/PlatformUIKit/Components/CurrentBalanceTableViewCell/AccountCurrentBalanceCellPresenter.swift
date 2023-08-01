@@ -166,9 +166,9 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
             )
         case is NonCustodialAccount:
             if let cryptoCurrency = account.currencyType.cryptoCurrency {
-                if let resource = enabledCurrencies.network(for: cryptoCurrency)?.nativeAsset.assetModel.logoResource {
+                if let network = enabledCurrencies.network(for: cryptoCurrency) {
                     model = .default(
-                        image: resource,
+                        image: network.nativeAsset.logoResource,
                         backgroundColor: .semantic.background,
                         cornerRadius: .round,
                         accessibilityIdSuffix: ""

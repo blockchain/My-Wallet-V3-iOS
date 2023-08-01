@@ -81,10 +81,7 @@ struct DexConfirmationView: View {
         Button(
             action: { presentationMode.wrappedValue.dismiss() },
             label: {
-                Icon
-                    .closev2
-                    .circle(backgroundColor: .semantic.light)
-                    .frame(width: 24, height: 24)
+                Icon.navigationCloseButton()
             }
         )
     }

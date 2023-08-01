@@ -38,17 +38,4 @@ struct Price: Equatable, Identifiable {
         let delta = deltaPercentage.value ?? 0
         return "\(arrow) \(delta.string(with: 2))%"
     }
-
-    @MainActor @ViewBuilder var icon: some View {
-        switch currency.logoResource.resource {
-        case .image(let uiimage):
-            Image(uiImage: uiimage)
-                .resizable()
-        case .url(let url):
-            LazyImage(url: url)
-        case .none:
-            Image("crypto-placeholder", bundle: .platformUIKit)
-                .resizable()
-        }
-    }
 }

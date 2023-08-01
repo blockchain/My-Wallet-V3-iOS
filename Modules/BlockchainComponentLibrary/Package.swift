@@ -41,7 +41,8 @@ let package = Package(
             url: "https://github.com/kean/Nuke.git",
             from: "11.6.4"
         ),
-        .package(path: "../Extensions")
+        .package(path: "../Extensions"),
+        .package(path: "../BlockchainNamespace")
     ],
     targets: [
         .target(
@@ -52,7 +53,8 @@ let package = Package(
                 .product(name: "Nuke", package: "Nuke"),
                 .product(name: "NukeUI", package: "Nuke"),
                 .product(name: "NukeExtensions", package: "Nuke"),
-                .product(name: "Extensions", package: "Extensions")
+                .product(name: "Extensions", package: "Extensions"),
+                .product(name: "BlockchainNamespace", package: "BlockchainNamespace")
             ],
             resources: [
                 .process("Resources/Fonts"),

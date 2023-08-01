@@ -146,7 +146,7 @@ public struct InstitutionList: View {
                     ProgressView(value: 0.25)
                         .frame(width: 12.vmin, alignment: .center)
                         .aspectRatio(1, contentMode: .fit)
-                        .progressViewStyle(IndeterminateProgressStyle())
+                        .progressViewStyle(.indeterminate)
                         .onAppear { viewStore.send(.fetch) }
                 }
             }
@@ -164,7 +164,7 @@ public struct InstitutionList: View {
             Spacer()
             Text(Localization.InstitutionList.Error.couldNotFindBank)
                 .typography(.paragraph1)
-                .foregroundColor(.textDetail)
+                .foregroundColor(.semantic.text)
                 .frame(alignment: .center)
                 .multilineTextAlignment(.center)
                 .padding([.leading, .trailing], 12.5.vmin)

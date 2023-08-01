@@ -24,4 +24,8 @@ public protocol EarnRepositoryAPI {
     func pendingWithdrawalRequests(
         currencyCode: String
     ) -> AnyPublisher<[EarnWithdrawalPendingRequest], Nabu.Error>
+
+    func bondingStakingTxs(
+        currencyCode: String
+    ) -> AnyPublisher<EarnBondingTxsRequest, Nabu.Error>
 }

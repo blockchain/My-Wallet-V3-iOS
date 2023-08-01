@@ -42,7 +42,7 @@ public struct AllAssetsSceneView: View {
                     .foregroundColor(.semantic.title)
             },
             trailing: {
-                IconButton(icon: .closev2.circle()) {
+                IconButton(icon: .navigationCloseButton()) {
                     $app.post(event: blockchain.ux.user.assets.all.article.plain.navigation.bar.button.close.tap)
                 }
                 .frame(width: 24.pt, height: 24.pt)

@@ -39,7 +39,7 @@ public struct WalletConnectEventViewV2: View {
             VStack(spacing: 16) {
                 HStack(alignment: .top) {
                     Spacer()
-                    IconButton(icon: .closeCirclev2.small()) {
+                    IconButton(icon: .navigationCloseButton()) {
                         $app.post(event: blockchain.ux.wallet.connect.pair.request.entry.paragraph.button.icon.tap)
                     }
                     .batch {

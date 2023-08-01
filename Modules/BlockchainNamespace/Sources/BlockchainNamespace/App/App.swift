@@ -10,7 +10,16 @@ import OptionalSubscripts
 import AppKit
 #endif
 
-public private(set) var runningApp: AppProtocol!
+public var runningApp: AppProtocol {
+    if let lastRunningApp { return lastRunningApp }
+    #if DEBUG
+    return isInTest ? App.test : App.preview
+    #else
+    fatalError("Unexpected reference to `runningApp` without having an instance of App")
+    #endif
+}
+
+private var lastRunningApp: AppProtocol?
 
 public protocol AppProtocol: AnyObject, CustomStringConvertible {
 
@@ -89,7 +98,7 @@ public class App: AppProtocol {
         self.state = state
         self.clientObservers = clientObservers
         self.remoteConfiguration = remoteConfiguration
-        runningApp = self
+        lastRunningApp = self
     }
 
     deinit {
@@ -137,7 +146,8 @@ public class App: AppProtocol {
         aliases,
         copyItems,
         sets,
-        urls
+        urls,
+        currentAnalyticsState
     ]
 
     private lazy var actions = on(blockchain.ui.type.action) { [weak self] event async throws in
@@ -173,6 +183,10 @@ public class App: AppProtocol {
         } catch {
             post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
+    }
+
+    private lazy var currentAnalyticsState = on(blockchain.ux.type.story) { event async throws in
+        try await self.set(blockchain.ux.type.analytics.current.state, to: event.reference)
     }
 
     private lazy var urls = on(blockchain.ui.type.action.then.launch.url) { [weak self] event throws in

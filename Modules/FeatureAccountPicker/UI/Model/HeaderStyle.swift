@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Foundation
 import SwiftUI
 
@@ -14,7 +15,7 @@ public enum HeaderStyle: Equatable {
     case normal(
         title: String,
         subtitle: String?,
-        image: Image?,
+        image: ImageResource?,
         tableTitle: String?,
         searchable: Bool
     )

@@ -9,14 +9,14 @@ struct ErrorRecoveryState: Equatable {
 
     struct Callout: Equatable, Identifiable {
         let id: AnyHashable
-        let image: Image
+        let image: ImageResource
         let title: String
         let message: String
         let callToAction: String
 
         init(
             id: AnyHashable = UUID(),
-            image: Image,
+            image: ImageResource,
             title: String,
             message: String,
             callToAction: String
@@ -41,140 +41,113 @@ struct ErrorRecoveryState: Equatable {
     let callouts: [Callout]
 }
 
-enum ErrorRecoveryAction {
-    case closeTapped
-    case calloutTapped(ErrorRecoveryState.Callout)
-}
+struct ErrorRecovery: ReducerProtocol {
 
-struct ErrorRecoveryEnvironment {
+    enum Action {
+        case closeTapped
+        case calloutTapped(ErrorRecoveryState.Callout)
+    }
+
     let close: () -> Void
     let calloutTapped: (ErrorRecoveryState.Callout) -> Void
-}
 
-let errorRecoveryReducer = Reducer<
-    ErrorRecoveryState,
-    ErrorRecoveryAction,
-    ErrorRecoveryEnvironment
-> { _, action, environment in
-    switch action {
-    case .closeTapped:
-        environment.close()
-        return .none
-
-    case .calloutTapped(let callout):
-        environment.calloutTapped(callout)
-        return .none
+    var body: some ReducerProtocol<ErrorRecoveryState, Action> {
+        Reduce { state, action in
+            switch action {
+            case .closeTapped:
+                close()
+                return .none
+            case .calloutTapped(let callout):
+                calloutTapped(callout)
+                return .none
+            }
+        }
     }
 }
 
 struct ErrorRecoveryView: View {
 
-    let store: Store<ErrorRecoveryState, ErrorRecoveryAction>
+    let store: StoreOf<ErrorRecovery>
+    let viewStore: ViewStoreOf<ErrorRecovery>
 
-    var body: some View {
-        WithViewStore(store) { viewStore in
-            BottomSheetModal(
-                title: viewStore.title,
-                onClose: { viewStore.send(.closeTapped) },
-                content: {
-                    VStack(alignment: .leading, spacing: Spacing.padding2) {
-                        RichText(viewStore.message)
-                            .typography(.paragraph1)
-                        ForEach(viewStore.callouts, id: \.title) { callout in
-                            CalloutCard(
-                                leading: {
-                                    callout.image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                },
-                                title: callout.title,
-                                message: callout.message,
-                                control: Control(
-                                    title: callout.callToAction,
-                                    action: {
-                                        viewStore.send(.calloutTapped(callout))
-                                    }
-                                )
-                            )
-                        }
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
-                }
-            )
-        }
-    }
-}
-
-// TODO: extract to a component: IOS-5791
-/// A helper compoent to create bottom sheet modals. It shows a content underneat a header.
-/// The header contains a title and a close button.
-///  [Figma](https://www.figma.com/file/Tifx5rsJqUS6oqmrOC4kh1/Limits?node-id=727%3A18555)
-struct BottomSheetModal<Content: View>: View {
-
-    private let title: String
-    private let closeAction: () -> Void
-    @ViewBuilder private let content: () -> Content
-
-    init(
-        title: String,
-        onClose: @escaping () -> Void,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.title = title
-        self.closeAction = onClose
-        self.content = content
+    init(store: StoreOf<ErrorRecovery>) {
+        self.store = store
+        self.viewStore = ViewStore(store)
     }
 
+    @ViewBuilder
     var body: some View {
         VStack(alignment: .leading, spacing: .zero) {
             HStack(alignment: .top) {
-                Text(title)
+                Text(viewStore.title)
                     .typography(.body2)
                     .padding([.top], 12) // half the close button size
                 Spacer()
-                IconButton(icon: .closev2.circle(), action: closeAction)
-                    .frame(width: 24, height: 24)
+                IconButton(
+                    icon: .navigationCloseButton(),
+                    action: { viewStore.send(.closeTapped) }
+                )
+                .frame(width: 24, height: 24)
             }
-            content()
+            content
                 .padding([.top], Spacing.padding2)
         }
         .padding(Spacing.padding3)
         .background(Color.semantic.background)
     }
+
+    @ViewBuilder
+    private var content: some View {
+        VStack(alignment: .leading, spacing: Spacing.padding2) {
+            RichText(viewStore.message)
+                .typography(.paragraph1)
+            ForEach(viewStore.callouts, id: \.title) { callout in
+                CalloutCard(
+                    leading: { callout.image.image },
+                    title: callout.title,
+                    message: callout.message,
+                    control: Control(
+                        title: callout.callToAction,
+                        action: {
+                            viewStore.send(.calloutTapped(callout))
+                        }
+                    )
+                )
+            }
+        }
+        .fixedSize(horizontal: false, vertical: true)
+    }
 }
 
 struct ErrorRecoveryView_Previews: PreviewProvider {
 
+    static var state: ErrorRecoveryState {
+        ErrorRecoveryState(
+            title: "Lorem Ipsum",
+            message: "Lorem ipsum **dolor sit** amet, consectetur adipiscing elit. Aliquam nunc urna, *gravida* commodo justo cursus, convallis lobortis diam.",
+            callouts: [
+                .init(
+                    image: .local(name: "circle-locked-icon", bundle: .main),
+                    title: "Mauris quis quam non nibh imperdiet vestibulum.",
+                    message: "Praesent molestie, leo nec gravida.",
+                    callToAction: "GO"
+                ),
+                .init(
+                    id: "Some identifier",
+                    image: .local(name: "circle-locked-icon", bundle: .main),
+                    title: "Mauris quis quam non nibh imperdiet vestibulum.",
+                    message: "Praesent molestie, leo nec gravida.",
+                    callToAction: "GO"
+                )
+            ]
+        )
+    }
+
     static var previews: some View {
         ErrorRecoveryView(
-            store: .init(
-                initialState: ErrorRecoveryState(
-                    title: "Lorem Ipsum",
-                    message: "Lorem ipsum **dolor sit** amet, consectetur adipiscing elit. Aliquam nunc urna, *gravida* commodo justo cursus, convallis lobortis diam.",
-                    callouts: [
-                        .init(
-                            image: ImageResource.local(
-                                name: "circle-locked-icon",
-                                bundle: .main
-                            ).image!,
-                            title: "Mauris quis quam non nibh imperdiet vestibulum.",
-                            message: "Praesent molestie, leo nec gravida.",
-                            callToAction: "GO"
-                        ),
-                        .init(
-                            id: "Some identifier",
-                            image: ImageResource.local(
-                                name: "circle-locked-icon",
-                                bundle: .main
-                            ).image!,
-                            title: "Mauris quis quam non nibh imperdiet vestibulum.",
-                            message: "Praesent molestie, leo nec gravida.",
-                            callToAction: "GO"
-                        )
-                    ]
-                ),
-                reducer: errorRecoveryReducer,
-                environment: ErrorRecoveryEnvironment(
+            store: Store(
+                initialState: state,
+                reducer: ErrorRecovery(
                     close: {},
                     calloutTapped: { _ in }
                 )

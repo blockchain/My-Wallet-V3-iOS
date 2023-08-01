@@ -126,24 +126,6 @@ extension BadgeViewModel {
         return viewModel
     }
 
-    /// Returns a affirmative badge with text
-    public static func progress(
-        with text: String,
-        model: BadgeCircleViewModel,
-        accessibilityId: String = Accessibility.Identifier.General.affirmativeBadgeView
-    ) -> BadgeViewModel {
-        var viewModel = BadgeViewModel(
-            accessory: .progress(model),
-            accessibility: .id(accessibilityId)
-        )
-        viewModel.theme = Theme(
-            backgroundColor: .white,
-            contentColor: .defaultBadge,
-            text: text
-        )
-        return viewModel
-    }
-
     /// Returns a default badgeViewModel with text only
     public static func warning(
         with text: String,

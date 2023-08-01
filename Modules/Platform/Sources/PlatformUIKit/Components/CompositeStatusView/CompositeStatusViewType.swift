@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
+
 /// Describes the type of content inside the `CompositeStatusView`
 public enum CompositeStatusViewType: Equatable {
 

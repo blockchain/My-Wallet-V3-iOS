@@ -127,6 +127,8 @@ extension SuperAppRootController {
                 }
         )
 
+        viewController.view.backgroundColor = .semantic.background
+
         if
             let sheet = viewController.sheetPresentationController,
             let presentation = viewController.presentationController
@@ -312,8 +314,8 @@ class InvalidateDetentsHostingController<V: View>: UIHostingController<V>, Infor
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        if shouldInvalidateDetents, let sheet = viewController.sheetPresentationController {
-            sheet.performDetentInvalidation()
+        if shouldInvalidateDetents, let sheetPresentationController {
+            sheetPresentationController.performDetentInvalidation()
         }
     }
 

@@ -121,7 +121,7 @@ class AccountPickerRowViewTests: XCTestCase {
             id: account.identifier,
             title: account.label,
             description: account.paymentMethodType.balance.displayString,
-            badgeView: account.logoResource.image,
+            badge: account.logoResource,
             badgeBackground: Color(account.logoBackgroundColor)
         )
     }
