@@ -315,7 +315,6 @@ extension Collection<Account.Snapshot> {
     }
 
     public var canSwapOnDex: Bool {
-        // move this logic someplace else
         guard let currency = self.first?.cryptoCurrency else {
             return false
         }
