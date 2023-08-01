@@ -251,7 +251,9 @@ extension DexMainView {
     @ViewBuilder
     private var estimatedFeeIcon: some View {
         if viewStore.quoteFetching {
-            IndeterminateProgressView()
+            ProgressView()
+                .progressViewStyle(.indeterminate)
+                .frame(width: 16.pt, height: 16.pt)
         } else {
             Icon.gas
                 .color(.semantic.title)
