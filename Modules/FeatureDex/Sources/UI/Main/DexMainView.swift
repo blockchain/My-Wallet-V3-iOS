@@ -36,6 +36,9 @@ public struct DexMainView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
+        .onDisappear {
+            viewStore.send(.onDisappear)
+        }
         .bindings {
             subscribe(
                 viewStore.binding(\.$defaultFiatCurrency),

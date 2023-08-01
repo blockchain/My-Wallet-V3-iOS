@@ -51,7 +51,16 @@ public struct DexMain: ReducerProtocol {
                         .eraseToEffect(Action.onAvailableNetworksFetched)
                 }
 
-                return .merge(balances, supportedTokens, availableNetworks)
+                let refreshQuote = EffectTask<DexMain.Action>(value: .refreshQuote)
+
+                return .merge(balances, supportedTokens, availableNetworks, refreshQuote)
+
+            case .onDisappear:
+                return .merge(
+                    .cancel(id: CancellationID.allowanceFetch),
+                    .cancel(id: CancellationID.quoteFetch),
+                    .cancel(id: CancellationID.quoteDebounce)
+                )
 
             case .didTapSettings:
                 dismissKeyboard(&state)
