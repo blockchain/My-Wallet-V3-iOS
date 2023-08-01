@@ -117,10 +117,7 @@ public final class CoinViewAnalyticsObserver: Client.Observer {
         blockchain.ux.asset.account.currency.get.token
     ) { [analytics] event in
         guard let account = event.context[blockchain.ux.asset.account] as? Account.Snapshot else { return }
-        print(account)
-
         guard let transaction = AnalyticsEvents.New.CoinViewAnalyticsEvent.TransactionType(event.tag) else { return }
-        print(transaction)
         let accountType = AnalyticsEvents.New.CoinViewAnalyticsEvent.AccountType(account)
         try analytics.record(
             event: .transactionTypeClicked(
