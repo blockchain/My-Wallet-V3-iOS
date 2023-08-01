@@ -181,7 +181,7 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
         case .send:
             return isFunded
         case .swap:
-            return isPairToFiatAvailable
+            return isPairToCryptoAvailable
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .buy:
