@@ -337,11 +337,27 @@ extension Account.Snapshot {
             accountType: .privateKey,
             actions: [.send, .receive, .activity]
         ),
+        privateKeyNoBalance: Account.Snapshot.stub(
+            id: "PrivateKey",
+            name: "DeFi Wallet",
+            accountType: .privateKey,
+            actions: [.send, .receive, .activity, .swap, .sell],
+            crypto: .zero(currency: .USD),
+            fiat: .zero(currency: .USD)
+        ),
         trading: Account.Snapshot.stub(
             id: "Trading",
             name: "Blockchain.com Account",
             accountType: .trading,
             actions: [.buy, .sell, .send, .receive, .swap, .activity]
+        ),
+        tradingNoBalance: Account.Snapshot.stub(
+            id: "Trading",
+            name: "Blockchain.com Account",
+            accountType: .trading,
+            actions: [.buy, .sell, .send, .receive, .swap, .activity],
+            crypto: .zero(currency: .USD),
+            fiat: .zero(currency: .USD)
         ),
         rewards: Account.Snapshot.stub(
             id: "Rewards",

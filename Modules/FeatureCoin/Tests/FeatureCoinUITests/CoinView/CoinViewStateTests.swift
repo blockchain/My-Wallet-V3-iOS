@@ -26,7 +26,7 @@ final class CoinViewStateTests: XCTestCase {
         // No Balance, Can Swap
         state = CoinViewState(currency: .ethereum,
                               accounts: [
-            .preview.privateKeyNoBalance
+                                .preview.privateKeyNoBalance
         ],
         isDexEnabled: true)
         state.appMode = .pkw
