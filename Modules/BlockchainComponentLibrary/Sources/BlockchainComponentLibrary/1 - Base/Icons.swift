@@ -80,7 +80,6 @@ public struct Icon: View, Hashable, Codable {
                         .aspectRatio(1, contentMode: .fit)
                         .foregroundColor(backgroundColor)
                         .inscribed(aspectRatio: 4 / 3, _content)
-
                 } else {
                     Circle()
                         .aspectRatio(1, contentMode: .fit)
@@ -528,7 +527,7 @@ extension Icon {
         .plusCircle,
         .portfolio,
         .present,
-//        .prices,
+        .prices,
         .pricesFilled,
         .print,
         .private,
