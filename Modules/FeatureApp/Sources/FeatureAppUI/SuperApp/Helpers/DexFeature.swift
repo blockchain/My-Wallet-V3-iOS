@@ -51,6 +51,8 @@ enum DexFeature {
         guard let cryptoCurrency else {
             return true
         }
-        return cryptoCurrency == .ethereum || cryptoCurrency.isERC20
+
+        let service = EnabledCurrenciesService.default
+        return service.network(for: cryptoCurrency) != nil
     }
 }

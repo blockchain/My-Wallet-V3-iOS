@@ -112,7 +112,9 @@ public final class CoinViewAnalyticsObserver: Client.Observer {
         blockchain.ux.asset.account.exchange.deposit,
         blockchain.ux.asset.account.sell,
         blockchain.ux.asset.account.send,
-        blockchain.ux.asset.account.swap
+        blockchain.ux.asset.account.swap,
+        blockchain.ux.asset.account.currency.exchange,
+        blockchain.ux.asset.account.currency.get.token
     ) { [analytics] event in
         guard let account = event.context[blockchain.ux.asset.account] as? Account.Snapshot else { return }
         guard let transaction = AnalyticsEvents.New.CoinViewAnalyticsEvent.TransactionType(event.tag) else { return }

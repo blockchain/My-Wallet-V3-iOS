@@ -185,13 +185,15 @@ extension EarnProductCompare.State.Step {
         case .staking:
             Icon
                 .lockClosed
-                .color(.semantic.primary)
-                .frame(width: 20, height: 20)
+                .color(.white)
+                .circle(backgroundColor: Color.semantic.primary)
+                .frame(width: 24, height: 24)
         case .active:
             Icon
-                .superAppPricesFilled
-                .color(.semantic.primary)
-                .frame(width: 20, height: 20)
+                .prices
+                .color(.white)
+                .circle(backgroundColor: .semantic.primary)
+                .frame(width: 24, height: 24)
         }
     }
 

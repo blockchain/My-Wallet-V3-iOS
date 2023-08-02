@@ -18,6 +18,7 @@ public struct CoinViewState: Equatable {
     public var error: CoinViewError?
     public var assetInformation: AssetInformation?
     public var isRecurringBuyEnabled: Bool
+    public var isDexEnabled: Bool
     public var earnRates: EarnRates?
     public var kycStatus: KYCStatus?
     public var isFavorite: Bool?
@@ -30,13 +31,6 @@ public struct CoinViewState: Equatable {
         guard currency.supports(product: .custodialWalletBalance) else { return false }
         guard let appMode else { return false }
         return appMode.isRecurringBuyViewSupported && isRecurringBuyEnabled
-    }
-
-    var swapButton: ButtonAction? {
-        let swapDisabled = !accounts.hasPositiveBalanceForSelling
-        let swapAction = ButtonAction.swap(disabled: swapDisabled)
-        let action = action(swapAction, whenAccountCan: .swap)
-        return action
     }
 
     @BindingState public var recurringBuy: RecurringBuy?
@@ -58,8 +52,8 @@ public struct CoinViewState: Equatable {
 
         let actionsDisabled = kycStatus?.canSellCrypto == false || !accounts.hasPositiveBalanceForSelling
         if actionsDisabled == false {
-            let receive = ButtonAction.receive(disabled: false)
-            let send = ButtonAction.send(disabled: false)
+            let receive = ButtonAction.receive()
+            let send = ButtonAction.send()
             let swap = ButtonAction.swap()
             return [swap, receive, send]
         }
@@ -89,10 +83,22 @@ public struct CoinViewState: Equatable {
     }
 
     private func primaryDefiModeCoinActions() -> [ButtonAction] {
-        let swap = ButtonAction.swap()
-        let receive = ButtonAction.receive()
+        let canSwapOnBcdc = accounts.canSwap
+        let canSwapOnDex = isDexEnabled && accounts.canSwapOnDex
+        let canSell = (kycStatus?.canSellCrypto ?? false) && accounts.canSell
 
-        return accounts.hasPositiveBalanceForSelling && accounts.canSwap ? [swap] : [receive]
+        // if the token has no balance
+        guard accounts.hasPositiveBalanceForSelling else {
+            // if it can swap (on dex or bcdc) present the "Get Token" button
+            return canSwapOnDex || canSwapOnBcdc ? [ButtonAction.getToken(currency: currency.code)] : []
+        }
+
+        let actions = [
+            canSwapOnBcdc || canSwapOnDex ? ButtonAction.swap() : nil,
+            canSell ? ButtonAction.sell() : nil
+        ]
+            .compactMap { $0 }
+        return actions
     }
 
     private func action(_ action: ButtonAction, whenAccountCan accountAction: Account.Action) -> ButtonAction? {
@@ -104,6 +110,7 @@ public struct CoinViewState: Equatable {
         kycStatus: KYCStatus? = nil,
         accounts: [Account.Snapshot] = [],
         recurringBuys: [RecurringBuy]? = nil,
+        isDexEnabled: Bool = false,
         isRecurringBuyEnabled: Bool = false,
         assetInformation: AssetInformation? = nil,
         earnRates: EarnRates? = nil,
@@ -121,6 +128,7 @@ public struct CoinViewState: Equatable {
         self.graph = graph
         self.recurringBuys = recurringBuys
         self.isRecurringBuyEnabled = isRecurringBuyEnabled
+        self.isDexEnabled = isDexEnabled
     }
 }
 

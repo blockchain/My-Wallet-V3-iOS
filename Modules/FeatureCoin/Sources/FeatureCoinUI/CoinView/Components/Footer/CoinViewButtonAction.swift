@@ -15,7 +15,7 @@ struct ButtonAction: Equatable {
         self.disabled = disabled
     }
 
-    static func buy(disabled: Bool = false) -> ButtonAction {
+    static func buy() -> ButtonAction {
         ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.buy,
             icon: Icon.walletBuy,
@@ -24,16 +24,16 @@ struct ButtonAction: Equatable {
         )
     }
 
-    static func send(disabled: Bool = false) -> ButtonAction {
+    static func send() -> ButtonAction {
         ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.send,
             icon: Icon.walletSend,
             event: blockchain.ux.asset.send,
-            disabled: disabled
+            disabled: false
         )
     }
 
-    static func receive(disabled: Bool = false) -> ButtonAction {
+    static func receive() -> ButtonAction {
         ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.receive,
             icon: Icon.walletReceive,
@@ -42,21 +42,30 @@ struct ButtonAction: Equatable {
         )
     }
 
-    static func sell(disabled: Bool = false) -> ButtonAction {
+    static func sell() -> ButtonAction {
         ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.sell,
             icon: Icon.walletSell,
             event: blockchain.ux.asset.sell,
-            disabled: disabled
+            disabled: false
         )
     }
 
-    static func swap(disabled: Bool = false) -> ButtonAction {
-        ButtonAction(
+    static func swap() -> ButtonAction {
+        return ButtonAction(
             title: LocalizationConstants.Coin.Button.Title.swap,
             icon: Icon.walletSwap,
             event: blockchain.ux.asset.account.currency.exchange,
-            disabled: disabled
+            disabled: false
+        )
+    }
+
+    static func getToken(currency: String) -> ButtonAction {
+        return ButtonAction(
+            title: LocalizationConstants.Coin.Button.Title.getToken.interpolating(currency),
+            icon: Icon.swap,
+            event: blockchain.ux.asset.account.currency.get.token,
+            disabled: false
         )
     }
 }

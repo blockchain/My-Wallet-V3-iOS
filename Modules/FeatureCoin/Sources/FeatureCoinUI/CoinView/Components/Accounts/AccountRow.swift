@@ -52,7 +52,7 @@ struct AccountRow: View {
         TableRow(
             leading: {
                 account
-                    .icon(color: assetColor)
+                    .icon(color: .white)
                     .frame(width: 24, height: 24)
             },
             title: {
@@ -152,16 +152,20 @@ extension Account.Snapshot {
                 .walletExchange
                 .color(color)
         case .interest:
-            Icon.interestCircle
+            Icon.interest
+                .circle(backgroundColor: .semantic.muted)
                 .color(color)
         case .trading, .privateKey:
-            cryptoCurrency.logo()
+            cryptoCurrency
+                .logo()
         case .staking:
-            Icon.walletStaking
+            Icon.lockClosed
+                .circle(backgroundColor: .semantic.muted)
                 .color(color)
         case .activeRewards:
             Icon
                 .prices
+                .circle(backgroundColor: .semantic.muted)
                 .color(color)
         }
     }

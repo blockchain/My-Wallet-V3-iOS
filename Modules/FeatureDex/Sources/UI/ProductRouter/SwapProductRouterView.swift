@@ -4,7 +4,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import SwiftUI
 
-struct ProductRouterView: View {
+struct SwapProductRouterView: View {
 
     @BlockchainApp var app
     @Environment(\.scheduler) var scheduler
@@ -100,7 +100,7 @@ struct ProductRouterView: View {
 struct ProductRouterView_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
-            ProductRouterView()
+            SwapProductRouterView()
                 .app(App.preview)
         }
     }

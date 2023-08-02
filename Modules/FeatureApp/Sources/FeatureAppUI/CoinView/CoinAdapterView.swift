@@ -177,7 +177,8 @@ public final class CoinViewObserver: Client.Observer {
             sell,
             send,
             stakingDeposit,
-            stakingWithdraw
+            stakingWithdraw,
+            getToken
         ]
     }
 
@@ -226,10 +227,37 @@ public final class CoinViewObserver: Client.Observer {
 
     lazy var currencyExchangeSwap = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
         let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
-        if await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset) {
-            try? await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context + [blockchain.ux.transaction.source: AnyJSON(account)])
-        } else {
+        let canBcdcSwap = await (try? account?.can(perform: .swap).await()) ?? false
+        let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset)
+
+        switch (canDexSwap, canBcdcSwap) {
+        case (true, true):
+            try await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context + [blockchain.ux.transaction.source: AnyJSON(account)])
+        case (true, false):
+            app.post(event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select, context: event.context)
+        case (false, true):
             await transactionsRouter.presentTransactionFlow(to: .swap(account))
+        case (false, false):
+            break
+        }
+    }
+
+    lazy var getToken = app.on(blockchain.ux.asset.account.currency.get.token) { @MainActor [unowned self] event in
+        let account: CryptoAccount = try await cryptoAccount(from: event)
+        let canBcdcSwap = await (try? account.can(perform: .swap).await()) ?? false
+        let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account.asset)
+
+        if canBcdcSwap {
+            await transactionsRouter.presentTransactionFlow(to: .swap(account))
+            return
+        }
+
+        if canDexSwap {
+            app.post(
+                event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
+                context: event.context
+            )
+            return
         }
     }
 
