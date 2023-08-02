@@ -45,8 +45,9 @@ extension UIWindow: TopMostViewControllerProviding {
 }
 
 extension UIViewController {
+    private static var maxDepth = 10
 
-    public func enter(into viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
+    public func enter(into viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil, retries: Int = 0) {
         if NSClassFromString("XCTestCase") != nil {
             return present(viewController, animated: animated, completion: completion)
         }
@@ -58,8 +59,10 @@ extension UIViewController {
         }
         if view.window.isNotNil {
             present(viewController, animated: animated, completion: completion)
+        } else if retries < UIViewController.maxDepth {
+            UIApplication.shared.topMostViewController!.enter(into: viewController, animated: animated, completion: completion, retries: retries + 1)
         } else {
-            UIApplication.shared.topMostViewController!.enter(into: viewController, animated: animated, completion: completion)
+            print("❗️ Unable to find top view controller, hit max depth of searching")
         }
     }
 }
