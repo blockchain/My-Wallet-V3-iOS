@@ -197,7 +197,7 @@ extension CreateAccountViewStepTwo {
         .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
         .textInputAutocapitalization(.never)
         .autocorrectionDisabled()
-        .textContentType(.newPassword)
+        .textContentType(.password)
     }
 
     private var termsAgreementView: some View {

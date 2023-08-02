@@ -119,7 +119,6 @@ public struct CreateAccountStepOneState: Equatable, NavigationState {
     public var failureAlert: AlertState<CreateAccountStepOneAction>?
 
     public var isCreatingWallet = false
-    public var referralFieldEnabled = false
     public var isGoingToNextStep = false
 
     var isNextStepButtonDisabled: Bool {
