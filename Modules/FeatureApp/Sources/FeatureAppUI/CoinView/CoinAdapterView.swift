@@ -26,7 +26,6 @@ import PlatformUIKit
 import SwiftUI
 import ToolKit
 
-
 public struct CoinAdapterView: View {
 
     let app: AppProtocol
@@ -228,7 +227,7 @@ public final class CoinViewObserver: Client.Observer {
 
     lazy var currencyExchangeSwap = app.on(blockchain.ux.asset.account.currency.exchange) { @MainActor [unowned self] event in
         let account: CryptoAccount? = try? await cryptoAccount(for: .swap, from: event)
-        let canBcdcSwap = (try? await account?.can(perform: .swap).await()) ?? false
+        let canBcdcSwap = await (try? account?.can(perform: .swap).await()) ?? false
         let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset)
 
         switch (canDexSwap, canBcdcSwap) {
@@ -245,7 +244,7 @@ public final class CoinViewObserver: Client.Observer {
 
     lazy var getToken = app.on(blockchain.ux.asset.account.currency.get.token) { @MainActor [unowned self] event in
         let account: CryptoAccount = try await cryptoAccount(from: event)
-        let canBcdcSwap = (try? await account.can(perform: .swap).await()) ?? false
+        let canBcdcSwap = await (try? account.can(perform: .swap).await()) ?? false
         let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account.asset)
 
         if canBcdcSwap {
@@ -254,12 +253,13 @@ public final class CoinViewObserver: Client.Observer {
         }
 
         if canDexSwap {
-            app.post(event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
-                     context: event.context)
+            app.post(
+                event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
+                context: event.context
+            )
             return
         }
     }
-
 
     lazy var rewardsWithdraw = app.on(blockchain.ux.asset.account.rewards.withdraw) { @MainActor [unowned self] event in
         switch try await cryptoAccount(from: event) {

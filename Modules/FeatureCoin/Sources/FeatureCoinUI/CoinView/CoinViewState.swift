@@ -93,9 +93,11 @@ public struct CoinViewState: Equatable {
             return canSwapOnDex || canSwapOnBcdc ? [ButtonAction.getToken(currency: currency.code)] : []
         }
 
-        let actions = [ canSwapOnBcdc || canSwapOnDex ? ButtonAction.swap() : nil,
-                        canSell ? ButtonAction.sell() : nil]
-            .compactMap({$0})
+        let actions = [
+            canSwapOnBcdc || canSwapOnDex ? ButtonAction.swap() : nil,
+            canSell ? ButtonAction.sell() : nil
+        ]
+            .compactMap { $0 }
         return actions
     }
 

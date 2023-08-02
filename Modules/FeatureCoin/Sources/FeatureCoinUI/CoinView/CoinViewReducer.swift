@@ -101,7 +101,7 @@ public let coinViewReducer = Reducer<
         case .isDexEnabled(let enabled):
             state.isDexEnabled = enabled
             return .none
-            
+
         case .fetchedRecurringBuys(let result):
             state.recurringBuys = try? result.get()
             return .none
