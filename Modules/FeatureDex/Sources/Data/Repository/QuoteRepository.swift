@@ -60,8 +60,10 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                         }
                         try await backoff.next()
                         continue
+                    } catch let error as AsyncSequenceNextError {
+                        throw error
                     } catch {
-                        assertionFailure("Unknown error: \(error)")
+                        assertionFailure("Unknown error: '\(type(of: error))' '\(error)'")
                         throw error
                     }
 

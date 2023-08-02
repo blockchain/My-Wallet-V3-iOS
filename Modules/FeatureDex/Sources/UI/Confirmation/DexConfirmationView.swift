@@ -78,12 +78,9 @@ struct DexConfirmationView: View {
 
     @ViewBuilder
     private var closeButton: some View {
-        Button(
-            action: { presentationMode.wrappedValue.dismiss() },
-            label: {
-                Icon.navigationCloseButton()
-            }
-        )
+        IconButton(icon: .navigationCloseButton()) {
+            presentationMode.wrappedValue.dismiss()
+        }
     }
 
     @ViewBuilder
