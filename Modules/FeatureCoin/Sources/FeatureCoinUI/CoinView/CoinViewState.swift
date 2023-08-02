@@ -64,8 +64,13 @@ public struct CoinViewState: Equatable {
         guard accounts.isNotEmpty else {
             return []
         }
+
         let send = ButtonAction.send()
         let receive = ButtonAction.receive()
+
+        guard accounts.hasPositiveBalanceForSelling else {
+            return [receive]
+        }
         return [send, receive]
     }
 
