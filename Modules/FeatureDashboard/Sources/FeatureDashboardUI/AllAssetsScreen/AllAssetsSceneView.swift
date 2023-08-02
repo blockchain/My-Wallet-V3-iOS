@@ -7,6 +7,9 @@ import Localization
 import SwiftUI
 
 public struct AllAssetsSceneView: View {
+
+    typealias L10n = LocalizationConstants.SuperApp.AllAssets
+
     @BlockchainApp var app
     @Environment(\.context) var context
     @ObservedObject var viewStore: ViewStoreOf<AllAssetsScene>
@@ -17,6 +20,7 @@ public struct AllAssetsSceneView: View {
         self.viewStore = ViewStore(store)
     }
 
+    @ViewBuilder
     public var body: some View {
         VStack {
             searchBarSection
@@ -37,7 +41,7 @@ public struct AllAssetsSceneView: View {
                 .if(viewStore.showSmallBalances) { $0.highlighted() }
             },
             title: {
-                Text(LocalizationConstants.SuperApp.AllAssets.title)
+                Text(L10n.title)
                     .typography(.body2)
                     .foregroundColor(.semantic.title)
             },
@@ -67,8 +71,8 @@ public struct AllAssetsSceneView: View {
         SearchBar(
             text: viewStore.binding(\.$searchText),
             isFirstResponder: viewStore.binding(\.$isSearching),
-            cancelButtonText: LocalizationConstants.SuperApp.AllAssets.cancelButton,
-            placeholder: LocalizationConstants.SuperApp.AllAssets.searchPlaceholder
+            cancelButtonText: L10n.cancelButton,
+            placeholder: L10n.searchPlaceholder
         )
         .frame(height: 48)
         .padding(.horizontal, Spacing.padding2)
@@ -104,48 +108,59 @@ public struct AllAssetsSceneView: View {
         }
     }
 
+    @ViewBuilder
     private var filterSheet: some View {
-        ZStack(alignment: .topTrailing) {
-            VStack(alignment: .center, content: {
-                Text(LocalizationConstants.SuperApp.AllAssets.Filter.title)
-                    .typography(.paragraph2)
-                    .padding(.top, Spacing.padding1)
-
-                HStack {
-                    Text(LocalizationConstants.SuperApp.AllAssets.Filter.showSmallBalancesLabel)
-                        .typography(.paragraph2)
-                        .padding(.leading, Spacing.padding2)
+        VStack(alignment: .center, spacing: 0) {
+            ZStack(alignment: .trailing) {
+                HStack(spacing: 0) {
                     Spacer()
-                    PrimarySwitch(
-                        accessibilityLabel: "",
-                        isOn: viewStore.binding(\.$showSmallBalances)
-                    )
-                    .padding(.trailing, Spacing.padding2)
-                    .padding(.vertical, Spacing.padding2)
+                    Text(L10n.Filter.title)
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
+                    Spacer()
                 }
-                .background(Color.WalletSemantic.light)
-                .cornerRadius(16, corners: .allCorners)
-                .padding(.horizontal, Spacing.padding2)
-
-                PrimaryButton(title: LocalizationConstants.SuperApp.AllAssets.Filter.showButton) {
-                    viewStore.send(.onConfirmFilterTapped)
-                }
-                .padding(.horizontal, Spacing.padding2)
-                .padding(.vertical, Spacing.padding3)
-            })
-            .frame(maxWidth: .infinity)
-
-            Button {
-                viewStore.send(.onResetTapped)
-            } label: {
-                Text(LocalizationConstants.SuperApp.AllAssets.Filter.resetButton)
+                Button(
+                    action: { viewStore.send(.onResetTapped) },
+                    label: {
+                        Text(L10n.Filter.resetButton)
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.primaryMuted)
+                    }
+                )
+                .frame(minHeight: Spacing.padding3)
+                .padding(.trailing, Spacing.padding2)
             }
-            .typography(.body2)
             .padding(.top, Spacing.padding1)
-            .padding(.trailing, Spacing.padding2)
+            .padding(.bottom, Spacing.padding3)
+
+            HStack(spacing: 0) {
+                Text(L10n.Filter.showSmallBalancesLabel)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+                    .padding(.leading, Spacing.padding2)
+                Spacer()
+                PrimarySwitch(
+                    accessibilityLabel: "",
+                    isOn: viewStore.binding(\.$showSmallBalances)
+                )
+                .frame(height: 32.pt)
+                .padding(.trailing, Spacing.padding2)
+                .padding(.vertical, 12)
+            }
+            .background(Color.semantic.light)
+            .cornerRadius(16, corners: .allCorners)
+            .padding(.horizontal, Spacing.padding2)
+
+            PrimaryButton(title: L10n.Filter.showButton) {
+                viewStore.send(.onConfirmFilterTapped)
+            }
+            .frame(height: 56.pt)
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.vertical, Spacing.padding3)
         }
     }
 
+    @ViewBuilder
     private var loadingSection: some View {
         Group {
             SimpleBalanceRow(leadingTitle: "", trailingDescription: nil, leading: {})
@@ -156,9 +171,10 @@ public struct AllAssetsSceneView: View {
         }
     }
 
+    @ViewBuilder
     private var noResultsView: some View {
         HStack(alignment: .center, content: {
-            Text(LocalizationConstants.SuperApp.AllAssets.noResults)
+            Text(L10n.noResults)
                 .padding(.vertical, Spacing.padding2)
         })
         .frame(maxWidth: .infinity)
