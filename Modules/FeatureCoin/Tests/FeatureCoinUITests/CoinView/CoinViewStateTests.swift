@@ -200,7 +200,7 @@ final class CoinViewStateTests: XCTestCase {
         XCTAssertEqual(state.allActions, [])
     }
 
-    func test_all_defi_actions_kyc_verified() {
+    func test_all_defi_actions_balance_kyc_verified() {
         // Balance, KYC Verified
         let send = ButtonAction.send()
         let receive = ButtonAction.receive()
@@ -231,10 +231,10 @@ final class CoinViewStateTests: XCTestCase {
             isDexEnabled: true
         )
         state.appMode = .pkw
-        XCTAssertEqual(state.allActions, [send, receive])
+        XCTAssertEqual(state.allActions, [receive])
     }
 
-    func test_all_defi_actions_kyc_unverified() {
+    func test_all_defi_actions_balance_kyc_unverified() {
         // Balance, KYC Not Verified
         let send = ButtonAction.send()
         let receive = ButtonAction.receive()
