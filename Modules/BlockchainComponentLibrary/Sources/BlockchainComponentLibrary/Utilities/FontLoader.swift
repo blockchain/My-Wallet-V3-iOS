@@ -6,27 +6,28 @@ import Lottie
 import Nuke
 import NukeUI
 
-func loadCustomFonts() {
-    DispatchQueue.once {
-        Typography.FontResource.allCases
-            .map(\.rawValue)
-            .forEach { registerFont(fileName: $0) }
-        Task(priority: .userInitiated) { @MainActor in
-            registerImageFormats()
+public enum FontLoader {
+    public static func loadCustomFonts() {
+        DispatchQueue.once {
+            Typography.FontResource.allCases
+                .map(\.rawValue)
+                .forEach { registerFont(fileName: $0) }
+            Task(priority: .userInitiated) { @MainActor in
+                registerImageFormats()
+            }
         }
     }
 }
 
-func registerFont(fileName: String, bundle: Bundle = Bundle.componentLibrary) {
+private func registerFont(fileName: String, bundle: Bundle = Bundle.componentLibrary) {
     guard let fontURL = bundle.url(forResource: fileName, withExtension: "ttf") else {
-        print("No font named \(fileName).ttf was found in the module bundle")
+        assertionFailure("No font named \(fileName).ttf was found in the module bundle")
         return
     }
-
     var error: Unmanaged<CFError>?
     CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, &error)
     if error != nil {
-        print("Failed to register font: \(fileName)")
+        assertionFailure("Failed to register font: \(fileName)")
     }
 }
 
@@ -36,8 +37,7 @@ extension AssetType {
 }
 
 @MainActor
-func registerImageFormats() {
-
+private func registerImageFormats() {
     ImageDecoderRegistry.shared.register { context in
         guard let uniformTypeIdentifier = context.urlResponse?.url?.uniformTypeIdentifier else { return nil }
         if uniformTypeIdentifier.conforms(to: .svg) {

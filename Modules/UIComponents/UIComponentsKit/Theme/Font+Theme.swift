@@ -19,6 +19,12 @@ extension UIFont {
     }
 
     public static func main(_ weight: Typography.Weight, _ size: CGFloat) -> UIFont {
-        UIFont(name: fontName(for: weight), size: size) ?? UIFont.systemFont(ofSize: size)
+        FontLoader.loadCustomFonts()
+        let fontName = fontName(for: weight)
+        guard let font = UIFont(name: fontName, size: size) else {
+            assertionFailure("\(fontName) font does not exist.")
+            return UIFont.systemFont(ofSize: size)
+        }
+        return font
     }
 }
