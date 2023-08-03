@@ -50,7 +50,7 @@ struct EarnListView<Header: View, Content: View>: View {
     @State var isSearching: Bool = false
     @State var subscription: AnyCancellable?
 
-    let fuzzyAlgorithm = FuzzyAlgorithm()
+    let fuzzyAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
     var filtered: [Model] {
         state.value.filter { item in
             switch filter {
@@ -250,6 +250,7 @@ struct EarnListView<Header: View, Content: View>: View {
             }
             Spacer()
         }
+        .background(Color.semantic.light)
     }
 
     func clear() {
