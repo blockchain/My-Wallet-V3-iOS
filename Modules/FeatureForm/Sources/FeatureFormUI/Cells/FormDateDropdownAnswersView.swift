@@ -47,7 +47,7 @@ struct FormDateDropdownAnswersView: View {
             )
             .contentShape(Rectangle())
             .onTapGesture {
-                guard isEnabled else { return }
+                guard isEnabled, !selectionPanelOpened else { return }
                 // hide current keybaord if presented,
                 // delay needed to wait until keyboard is dismissed
                 stopEditing()
@@ -55,13 +55,13 @@ struct FormDateDropdownAnswersView: View {
                     selectionPanelOpened.toggle()
                 }
             }
-        }
-        .sheet(isPresented: $selectionPanelOpened) {
-            FormDatePickerView(
-                title: title,
-                answer: $answer,
-                selectionPanelOpened: $selectionPanelOpened
-            )
+            .popover(isPresented: $selectionPanelOpened) {
+                FormDatePickerView(
+                        title: title,
+                        answer: $answer,
+                        selectionPanelOpened: $selectionPanelOpened
+                    )
+            }
         }
     }
 }
@@ -107,65 +107,48 @@ struct FormDatePickerView: View {
     }
 
     var body: some View {
-        NavigationView {
-            ScrollView {
+        if #available(iOS 16.4, *) {
+            datePicker
+                .frame(minWidth: 300)
+                .presentationCompactAdaptation(.popover)
+        } else {
+            NavigationView {
                 datePicker
+                    .padding(.vertical, Spacing.padding1)
+                    .padding(.horizontal, Spacing.padding2)
+                    .background(Color.semantic.background)
+                    .navigationTitle(title)
+                    .navigationBarItems(
+                        trailing: Button(LocalizationConstants.done) {
+                            if answer.input.isNilOrEmpty, maxDate != .distantFuture {
+                                answer.input = String(maxDate.timeIntervalSince1970)
+                            }
+                            selectionPanelOpened.toggle()
+                        }
+                    )
+                    .navigationBarTitleDisplayMode(.inline)
             }
-            .padding(.vertical, Spacing.padding1)
-            .padding(.horizontal, Spacing.padding2)
-            .background(Color.semantic.background)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    VStack {
-                        Spacer()
-                        Text(title).typography(.body2)
-                    }
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
         }
-        primaryButton
     }
 
     private var datePicker: some View {
-        VStack {
-            DatePicker(
-                selection: Binding(
-                    get: {
-                        guard let input = answer.input, let timeInterval = TimeInterval(input) else {
-                            return Date()
-                        }
-                        return Date(timeIntervalSince1970: timeInterval)
-                    },
-                    set: {
-                        answer.input = String($0.timeIntervalSince1970)
+        DatePicker(
+            selection: Binding(
+                get: {
+                    guard let input = answer.input, let timeInterval = TimeInterval(input) else {
+                        return Date()
                     }
-                ),
-                in: minDate...maxDate,
-                displayedComponents: .date,
-                label: EmptyView.init
-            )
-            .datePickerStyle(.graphical)
-        }
-        .padding(.horizontal, Spacing.padding1)
-        .padding(.vertical, Spacing.padding1)
-    }
-
-    private var primaryButton: some View {
-        PrimaryButton(
-            title: LocalizationConstants.MultiSelection.Buttons.done
-        ) {
-            if answer.input.isNilOrEmpty, maxDate != .distantFuture {
-                answer.input = String(maxDate.timeIntervalSince1970)
-            }
-            selectionPanelOpened.toggle()
-        }
-        .frame(alignment: .bottom)
-        .padding([.horizontal, .bottom])
-        .background(
-            Rectangle()
-                .fill(Color.semantic.background)
-                .backgroundWithWhiteShadow
+                    return Date(timeIntervalSince1970: timeInterval)
+                },
+                set: {
+                    answer.input = String($0.timeIntervalSince1970)
+                }
+            ),
+            in: minDate...maxDate,
+            displayedComponents: .date,
+            label: EmptyView.init
         )
+        .datePickerStyle(.graphical)
+        .padding(Spacing.padding1)
     }
 }
