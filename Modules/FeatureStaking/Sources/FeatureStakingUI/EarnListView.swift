@@ -193,7 +193,7 @@ struct EarnListView<Header: View, Content: View>: View {
                             noResults
                             Spacer()
                         }
-                        .listRowBackground(Color.semantic.background)
+                        .listRowBackground(filtered.isEmpty ? Color.semantic.light : Color.semantic.background)
                         .backport
                         .hideListRowSeparator()
                     }
