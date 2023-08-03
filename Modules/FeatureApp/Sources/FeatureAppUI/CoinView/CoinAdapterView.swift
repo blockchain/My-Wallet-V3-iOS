@@ -547,7 +547,8 @@ extension FeatureCoinDomain.Account {
                     .eraseToAnyPublisher()
             },
             cryptoBalancePublisher: account.balance.ignoreFailure(),
-            fiatBalancePublisher: account.fiatBalance(fiatCurrency: fiatCurrency)
+            fiatBalancePublisher: account.balancePair(fiatCurrency: fiatCurrency)
+                .map(\.quote)
                 .optional()
                 .replaceError(with: nil)
                 .eraseToAnyPublisher(),

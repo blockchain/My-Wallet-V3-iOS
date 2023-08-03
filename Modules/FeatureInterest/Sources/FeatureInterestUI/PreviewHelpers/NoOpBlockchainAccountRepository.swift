@@ -1,29 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Coincore
 import Combine
+import FeatureInterestDomain
 import MoneyKit
-import PlatformKit
 
 final class NoOpBlockchainAccountRepository: BlockchainAccountRepositoryAPI {
-    func fetchAccountWithAddresss(
-        _ address: String,
-        currencyType: CurrencyType
-    ) -> AnyPublisher<BlockchainAccount, BlockchainAccountRepositoryError> {
-        Empty().eraseToAnyPublisher()
-    }
-
-    func accountsWithCurrencyType(
-        _ currency: CurrencyType
-    ) -> AnyPublisher<[BlockchainAccount], BlockchainAccountRepositoryError> {
-        Empty().eraseToAnyPublisher()
-    }
-
-    func accountsWithSingleAccountType(
-        _ accountType: SingleAccountType
-    ) -> AnyPublisher<[BlockchainAccount], BlockchainAccountRepositoryError> {
-        Empty().eraseToAnyPublisher()
-    }
-
     func accountsWithCurrencyType(
         _ currency: CurrencyType,
         accountType: SingleAccountType

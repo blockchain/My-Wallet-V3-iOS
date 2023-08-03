@@ -279,7 +279,8 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                 .tradingCurrencyPublisher
                 .flatMap { fiatCurrency in
                     account
-                        .fiatBalance(fiatCurrency: fiatCurrency)
+                        .balancePair(fiatCurrency: fiatCurrency)
+                        .map(\.quote)
                 }
                 .eraseToAnyPublisher()
         }

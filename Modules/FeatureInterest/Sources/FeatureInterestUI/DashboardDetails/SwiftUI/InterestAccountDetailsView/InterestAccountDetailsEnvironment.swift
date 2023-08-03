@@ -2,6 +2,7 @@
 
 import ComposableArchitecture
 import DIKit
+import FeatureInterestDomain
 import MoneyKit
 import PlatformKit
 

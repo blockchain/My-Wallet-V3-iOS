@@ -3,11 +3,11 @@
 import RxCocoa
 import RxSwift
 
-public final class AssetBalanceView: ThreeLabelStackView {
+final class AssetBalanceView: ThreeLabelStackView {
 
     // MARK: - Injected
 
-    public var presenter: AssetBalanceViewPresenter! {
+    var presenter: AssetBalanceViewPresenter! {
         willSet {
             disposeBag = DisposeBag()
         }
@@ -16,10 +16,6 @@ public final class AssetBalanceView: ThreeLabelStackView {
                 clear()
                 return
             }
-
-            presenter.alignment
-                .drive(rx.alignment)
-                .disposed(by: disposeBag)
 
             presenter.state
                 .compactMap(\.value)
@@ -54,10 +50,6 @@ public final class AssetBalanceView: ThreeLabelStackView {
         middleLabel
     }
 
-    fileprivate var pendingCryptoBalanceLabel: UILabel {
-        bottomLabel
-    }
-
     fileprivate var fiatLabelShimmeringView: ShimmeringView!
     fileprivate var cryptoLabelShimmeringView: ShimmeringView!
 
@@ -74,7 +66,7 @@ public final class AssetBalanceView: ThreeLabelStackView {
     }
 
     /// Should be called once when the parent view loads
-    public func shimmer(estimatedFiatLabelSize: CGSize, estimatedCryptoLabelSize: CGSize) {
+    func shimmer(estimatedFiatLabelSize: CGSize, estimatedCryptoLabelSize: CGSize) {
         fiatLabelShimmeringView?.removeFromSuperview()
         cryptoLabelShimmeringView?.removeFromSuperview()
 
@@ -133,10 +125,17 @@ public final class AssetBalanceView: ThreeLabelStackView {
 extension Reactive where Base: AssetBalanceView {
     var values: Binder<AssetBalanceViewModel.Value.Presentation> {
         Binder(base) { view, values in
-            view.fiatBalanceLabel.content = values.primaryBalance
-            view.cryptoBalanceLabel.content = values.secondaryBalance
-            view.pendingCryptoBalanceLabel.content = values.pendingBalance
-            view.pendingCryptoBalanceLabel.isHidden = values.pendingBalanceVisibility.isHidden
+            view.clear()
+            view.bottomLabel.isHidden = true
+            if let primaryBalance = values.primaryBalance {
+                view.fiatBalanceLabel.content = primaryBalance
+                view.cryptoBalanceLabel.content = values.secondaryBalance ?? LabelContent.empty
+                view.distribution = .fillEqually
+            } else {
+                view.fiatBalanceLabel.content = values.secondaryBalance ?? LabelContent.empty
+                view.cryptoBalanceLabel.isHidden = true
+                view.distribution = .equalCentering
+            }
         }
     }
 }

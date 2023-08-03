@@ -24,20 +24,16 @@ public enum AssetBalanceViewModel {
         /// The interaction value of asset
         public struct Interaction {
             /// The wallet's primary balance
-            let primaryValue: MoneyValue
+            let primaryValue: MoneyValue?
             /// The wallet's secondary balance
             let secondaryValue: MoneyValue?
-            /// The wallet's pending balance
-            let pendingValue: MoneyValue?
 
             init(
-                primaryValue: MoneyValue,
-                secondaryValue: MoneyValue?,
-                pendingValue: MoneyValue?
+                primaryValue: MoneyValue?,
+                secondaryValue: MoneyValue?
             ) {
                 self.primaryValue = primaryValue
                 self.secondaryValue = secondaryValue
-                self.pendingValue = pendingValue
             }
         }
 
@@ -50,17 +46,10 @@ public enum AssetBalanceViewModel {
             // MARK: - Properties
 
             /// The primary balance displayed on top
-            public let primaryBalance: LabelContent
+            public let primaryBalance: LabelContent?
 
             /// The optional secondary balance displayed on bottom
-            public let secondaryBalance: LabelContent
-
-            /// The visibility state of the `Pending` balance
-            let pendingBalanceVisibility: Visibility
-
-            /// The pending balance in crypto. This value is `.none`
-            /// should the user's pending balance be `.zero`
-            public let pendingBalance: LabelContent
+            public let secondaryBalance: LabelContent?
 
             /// Descriptors that allows customized content and style
             public struct Descriptors {
@@ -71,7 +60,6 @@ public enum AssetBalanceViewModel {
                 let secondaryFont: UIFont
                 let secondaryTextColor: UIColor
                 let secondaryAdjustsFontSizeToFitWidth: LabelContent.FontSizeAdjustment
-                let pendingTextColor: UIColor
                 let secondaryAccessibility: Accessibility
 
                 public init(
@@ -82,7 +70,6 @@ public enum AssetBalanceViewModel {
                     secondaryFont: UIFont,
                     secondaryTextColor: UIColor,
                     secondaryAdjustsFontSizeToFitWidth: LabelContent.FontSizeAdjustment = .false,
-                    pendingTextColor: UIColor = .mutedText,
                     secondaryAccessibility: Accessibility
                 ) {
                     self.primaryFont = primaryFont
@@ -93,56 +80,36 @@ public enum AssetBalanceViewModel {
                     self.secondaryTextColor = secondaryTextColor
                     self.secondaryAdjustsFontSizeToFitWidth = secondaryAdjustsFontSizeToFitWidth
                     self.secondaryAccessibility = secondaryAccessibility
-                    self.pendingTextColor = pendingTextColor
                 }
             }
 
             // MARK: - Setup
 
-            public init(with value: Interaction, alignment: UIStackView.Alignment, descriptors: Descriptors) {
-                let textAlignment: NSTextAlignment
-                switch alignment {
-                case .leading:
-                    textAlignment = .left
-                case .trailing:
-                    textAlignment = .right
-                default:
-                    textAlignment = .natural
+            public init(with value: Interaction, descriptors: Descriptors) {
+                if let primaryValue = value.primaryValue {
+                    self.primaryBalance = LabelContent(
+                        text: primaryValue.toDisplayString(includeSymbol: true, locale: .current),
+                        font: descriptors.primaryFont,
+                        color: descriptors.primaryTextColor,
+                        alignment: .right,
+                        adjustsFontSizeToFitWidth: descriptors.primaryAdjustsFontSizeToFitWidth,
+                        accessibility: descriptors.primaryAccessibility.with(idSuffix: primaryValue.code)
+                    )
+                } else {
+                    self.primaryBalance = nil
                 }
-                self.primaryBalance = LabelContent(
-                    text: value.primaryValue.toDisplayString(includeSymbol: true, locale: .current),
-                    font: descriptors.primaryFont,
-                    color: descriptors.primaryTextColor,
-                    alignment: textAlignment,
-                    adjustsFontSizeToFitWidth: descriptors.primaryAdjustsFontSizeToFitWidth,
-                    accessibility: descriptors.primaryAccessibility.with(idSuffix: value.primaryValue.code)
-                )
 
                 if let cryptoValue = value.secondaryValue, value.secondaryValue != value.primaryValue {
                     self.secondaryBalance = LabelContent(
                         text: cryptoValue.toDisplayString(includeSymbol: true, locale: .current),
                         font: descriptors.secondaryFont,
                         color: descriptors.secondaryTextColor,
-                        alignment: textAlignment,
+                        alignment: .right,
                         adjustsFontSizeToFitWidth: descriptors.secondaryAdjustsFontSizeToFitWidth,
                         accessibility: descriptors.secondaryAccessibility.with(idSuffix: cryptoValue.code)
                     )
                 } else {
-                    self.secondaryBalance = .empty
-                }
-
-                if let pendingValue = value.pendingValue, !pendingValue.isZero {
-                    self.pendingBalanceVisibility = .visible
-                    self.pendingBalance = LabelContent(
-                        text: pendingValue.toDisplayString(includeSymbol: true, locale: .current),
-                        font: descriptors.secondaryFont,
-                        color: descriptors.pendingTextColor,
-                        alignment: textAlignment,
-                        accessibility: descriptors.secondaryAccessibility.with(idSuffix: pendingValue.code)
-                    )
-                } else {
-                    self.pendingBalanceVisibility = .hidden
-                    self.pendingBalance = .empty
+                    self.secondaryBalance = nil
                 }
             }
         }
@@ -204,7 +171,6 @@ extension AssetBalanceViewModel.Value.Presentation.Descriptors {
 extension LoadingState where Content == AssetBalanceViewModel.Value.Presentation {
     init(
         with state: LoadingState<AssetBalanceViewModel.Value.Interaction>,
-        alignment: UIStackView.Alignment,
         descriptors: AssetBalanceViewModel.Value.Presentation.Descriptors
     ) {
         switch state {
@@ -214,7 +180,6 @@ extension LoadingState where Content == AssetBalanceViewModel.Value.Presentation
             self = .loaded(
                 next: .init(
                     with: content,
-                    alignment: alignment,
                     descriptors: descriptors
                 )
             )

@@ -70,7 +70,6 @@ extension BuyCheckoutView {
         @State var isInvestWeeklySelected = false
 
         @State private var isRecurringBuyEnabled: Bool = true
-        @State private var isUIPaymentsImprovementsEnabled: Bool = true
 
         let checkout: BuyCheckout
         let confirm: (() -> Void)?
@@ -117,7 +116,6 @@ extension BuyCheckoutView.Loaded {
         }
         .bindings {
             subscribe($isRecurringBuyEnabled, to: blockchain.app.configuration.recurring.buy.is.enabled)
-            subscribe($isUIPaymentsImprovementsEnabled, to: blockchain.app.configuration.ui.payments.improvements.is.enabled)
         }
     }
 
@@ -332,35 +330,33 @@ extension BuyCheckoutView.Loaded {
     }
 
     @ViewBuilder func availableDates() -> some View {
-        if isUIPaymentsImprovementsEnabled {
-            if let availableToTrade = checkout.depositTerms?.availableToTrade {
-                TableRow(
-                    title: TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToTrade).foregroundColor(.semantic.body),
-                    trailing: {
-                        TableRowTitle(availableToTrade)
-                    }
-                )
-            }
-
-            if let availableToWithdraw = checkout.depositTerms?.availableToWithdraw {
-                TableRow(
-                    title: {
-                        HStack {
-                            TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw).foregroundColor(.semantic.body)
-                            Icon
-                                .questionFilled
-                                .micro()
-                                .color(.semantic.muted)
-                        }
-                    },
-                    trailing: {
-                        TableRowTitle(availableToWithdraw)
-                    }
-                )
-                .background(Color.semantic.background)
-                .onTapGesture {
-                    isAvailableToTradeInfoPresented.toggle()
+        if let availableToTrade = checkout.depositTerms?.availableToTrade {
+            TableRow(
+                title: TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToTrade).foregroundColor(.semantic.body),
+                trailing: {
+                    TableRowTitle(availableToTrade)
                 }
+            )
+        }
+
+        if let availableToWithdraw = checkout.depositTerms?.availableToWithdraw {
+            TableRow(
+                title: {
+                    HStack {
+                        TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw).foregroundColor(.semantic.body)
+                        Icon
+                            .questionFilled
+                            .micro()
+                            .color(.semantic.muted)
+                    }
+                },
+                trailing: {
+                    TableRowTitle(availableToWithdraw)
+                }
+            )
+            .background(Color.semantic.background)
+            .onTapGesture {
+                isAvailableToTradeInfoPresented.toggle()
             }
         }
     }
@@ -404,7 +400,7 @@ extension BuyCheckoutView.Loaded {
 
     @ViewBuilder func disclaimer() -> some View {
         VStack(alignment: .leading) {
-            if isUIPaymentsImprovementsEnabled, checkout.paymentMethod.isACH {
+            if checkout.paymentMethod.isACH {
                 VStack(alignment: .leading, spacing: Spacing.padding2) {
                     Text(checkout.achTransferDisclaimerText)
                     .multilineTextAlignment(.leading)

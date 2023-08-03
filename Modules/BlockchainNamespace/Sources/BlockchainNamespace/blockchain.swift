@@ -871,7 +871,6 @@ public extension I_blockchain_app_configuration {
 	var `tabs`: L_blockchain_app_configuration_tabs { .init("\(__).tabs") }
 	var `test`: L_blockchain_app_configuration_test { .init("\(__).test") }
 	var `transaction`: L_blockchain_app_configuration_transaction { .init("\(__).transaction") }
-	var `ui`: L_blockchain_app_configuration_ui { .init("\(__).ui") }
 	var `unified`: L_blockchain_app_configuration_unified { .init("\(__).unified") }
 	var `unspent`: L_blockchain_app_configuration_unspent { .init("\(__).unspent") }
 	var `upsell`: L_blockchain_app_configuration_upsell { .init("\(__).upsell") }
@@ -2371,90 +2370,6 @@ public final class L_blockchain_app_configuration_transaction_should_prefill_wit
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.transaction.should.prefill.with.previous.amount", comment: "") }
 }
 public protocol I_blockchain_app_configuration_transaction_should_prefill_with_previous_amount: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_ui: L, I_blockchain_app_configuration_ui {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui: I {}
-public extension I_blockchain_app_configuration_ui {
-	var `payments`: L_blockchain_app_configuration_ui_payments { .init("\(__).payments") }
-}
-public final class L_blockchain_app_configuration_ui_payments: L, I_blockchain_app_configuration_ui_payments {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments: I {}
-public extension I_blockchain_app_configuration_ui_payments {
-	var `improvements`: L_blockchain_app_configuration_ui_payments_improvements { .init("\(__).improvements") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements: L, I_blockchain_app_configuration_ui_payments_improvements {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements: I {}
-public extension I_blockchain_app_configuration_ui_payments_improvements {
-	var `assets`: L_blockchain_app_configuration_ui_payments_improvements_assets { .init("\(__).assets") }
-	var `is`: L_blockchain_app_configuration_ui_payments_improvements_is { .init("\(__).is") }
-	var `wallet`: L_blockchain_app_configuration_ui_payments_improvements_wallet { .init("\(__).wallet") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements_assets: L, I_blockchain_app_configuration_ui_payments_improvements_assets {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.assets", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_assets: I {}
-public extension I_blockchain_app_configuration_ui_payments_improvements_assets {
-	var `balances`: L_blockchain_app_configuration_ui_payments_improvements_assets_balances { .init("\(__).balances") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements_assets_balances: L, I_blockchain_app_configuration_ui_payments_improvements_assets_balances {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.assets.balances", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_assets_balances: I {}
-public extension I_blockchain_app_configuration_ui_payments_improvements_assets_balances {
-	var `is`: L_blockchain_app_configuration_ui_payments_improvements_assets_balances_is { .init("\(__).is") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements_assets_balances_is: L, I_blockchain_app_configuration_ui_payments_improvements_assets_balances_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.assets.balances.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_assets_balances_is: I {}
-public extension I_blockchain_app_configuration_ui_payments_improvements_assets_balances_is {
-	var `enabled`: L_blockchain_app_configuration_ui_payments_improvements_assets_balances_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements_assets_balances_is_enabled: L, I_blockchain_app_configuration_ui_payments_improvements_assets_balances_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.assets.balances.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_assets_balances_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_ui_payments_improvements_is: L, I_blockchain_app_configuration_ui_payments_improvements_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_is: I {}
-public extension I_blockchain_app_configuration_ui_payments_improvements_is {
-	var `enabled`: L_blockchain_app_configuration_ui_payments_improvements_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements_is_enabled: L, I_blockchain_app_configuration_ui_payments_improvements_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_ui_payments_improvements_wallet: L, I_blockchain_app_configuration_ui_payments_improvements_wallet {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.wallet", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_wallet: I {}
-public extension I_blockchain_app_configuration_ui_payments_improvements_wallet {
-	var `balances`: L_blockchain_app_configuration_ui_payments_improvements_wallet_balances { .init("\(__).balances") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements_wallet_balances: L, I_blockchain_app_configuration_ui_payments_improvements_wallet_balances {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.wallet.balances", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_wallet_balances: I {}
-public extension I_blockchain_app_configuration_ui_payments_improvements_wallet_balances {
-	var `is`: L_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is { .init("\(__).is") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is: L, I_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.wallet.balances.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is: I {}
-public extension I_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is {
-	var `enabled`: L_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is_enabled: L, I_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.ui.payments.improvements.wallet.balances.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_ui_payments_improvements_wallet_balances_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_unified: L, I_blockchain_app_configuration_unified {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.unified", comment: "") }
 }

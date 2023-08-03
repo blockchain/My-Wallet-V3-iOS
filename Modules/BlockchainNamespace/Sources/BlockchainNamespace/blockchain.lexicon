@@ -591,25 +591,6 @@ blockchain:
 								amount:
 								+ blockchain.db.type.boolean
 								+ blockchain.session.configuration.value
-			ui:
-				payments:
-					improvements:
-						assets:
-							balances:
-								is:
-									enabled:
-									+ blockchain.db.type.boolean
-									+ blockchain.session.configuration.value
-						is:
-							enabled:
-							+ blockchain.db.type.boolean
-							+ blockchain.session.configuration.value
-						wallet:
-							balances:
-								is:
-									enabled:
-									+ blockchain.db.type.boolean
-									+ blockchain.session.configuration.value
 			unified:
 				balances:
 					mock:

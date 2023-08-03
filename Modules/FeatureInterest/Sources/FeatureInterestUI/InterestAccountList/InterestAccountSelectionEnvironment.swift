@@ -13,7 +13,6 @@ struct InterestAccountSelectionEnvironment {
     let fiatCurrencyService: FiatCurrencyServiceAPI
     let accountOverviewRepository: InterestAccountOverviewRepositoryAPI
     let accountBalanceRepository: InterestAccountBalanceRepositoryAPI
-    let accountRepository: BlockchainAccountRepositoryAPI
     let priceService: PriceServiceAPI
     let blockchainAccountRepository: BlockchainAccountRepositoryAPI
     let kycVerificationService: KYCVerificationServiceAPI
@@ -27,7 +26,6 @@ extension InterestAccountSelectionEnvironment {
         fiatCurrencyService: resolve(),
         accountOverviewRepository: resolve(),
         accountBalanceRepository: resolve(),
-        accountRepository: resolve(),
         priceService: resolve(),
         blockchainAccountRepository: resolve(),
         kycVerificationService: resolve(),

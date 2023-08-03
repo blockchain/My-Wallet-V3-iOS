@@ -33,36 +33,6 @@ extension AccountGroup {
         return type
     }
 
-    public func fiatBalance(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<MoneyValue, Error> {
-        guard accounts.isNotEmpty else {
-            let logService: LogMessageServiceAPI = DIKit.resolve()
-            logService.logError(
-                message: "No accounts error - \(#function)",
-                properties: [
-                    "currency": fiatCurrency.code,
-                    "time": time.timestamp ?? ""
-                ]
-            )
-            return .failure(AccountGroupError.noAccounts)
-        }
-        return accounts
-            .chunks(ofCount: 100)
-            .map { accounts in
-                accounts
-                    .map { account in
-                        account.fiatBalance(fiatCurrency: fiatCurrency, at: time)
-                            .replaceError(with: MoneyValue.zero(currency: fiatCurrency))
-                    }
-                    .zip()
-            }
-            .zip()
-            .tryMap { (balances: [[MoneyValue]]) -> MoneyValue in
-                try balances.flatMap { $0 }
-                    .reduce(MoneyValue.zero(currency: fiatCurrency), +)
-            }
-            .eraseToAnyPublisher()
-    }
-
     public func fiatMainBalanceToDisplay(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<MoneyValue, Error> {
         guard accounts.isNotEmpty else {
             let logService: LogMessageServiceAPI = DIKit.resolve()

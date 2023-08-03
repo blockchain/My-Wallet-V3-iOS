@@ -82,8 +82,8 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                                 return (
                                     id,
                                     .init(
-                                        fiatBalance: .loaded(next: balance.primaryBalance.text),
-                                        cryptoBalance: .loaded(next: balance.secondaryBalance.text)
+                                        fiatBalance: .loaded(next: balance.primaryBalance?.text ?? ""),
+                                        cryptoBalance: .loaded(next: balance.secondaryBalance?.text ?? "")
                                     )
                                 )
                             }

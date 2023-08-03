@@ -105,7 +105,6 @@ struct InterestAccountListView_Previews: PreviewProvider {
                     fiatCurrencyService: NoOpFiatCurrencyPublisher(),
                     accountOverviewRepository: NoOpInterestAccountOverviewRepository(),
                     accountBalanceRepository: NoOpInterestAccountBalanceRepository(),
-                    accountRepository: NoOpBlockchainAccountRepository(),
                     priceService: NoOpPriceService(),
                     blockchainAccountRepository: NoOpBlockchainAccountRepository(),
                     kycVerificationService: NoOpKYCVerificationService(),

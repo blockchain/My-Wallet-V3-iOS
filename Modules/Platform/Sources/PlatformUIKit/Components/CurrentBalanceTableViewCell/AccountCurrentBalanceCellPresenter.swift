@@ -90,7 +90,6 @@ public final class AccountCurrentBalanceCellPresenter: CurrentBalanceCellPresent
         self.descriptionAccessibilitySuffix = "\(AccessibilityId.descriptionLabel)"
         self.pendingAccessibilitySuffix = "\(AccessibilityId.pendingLabel)"
         self.assetBalanceViewPresenter = AssetBalanceViewPresenter(
-            alignment: .trailing,
             interactor: interactor,
             descriptors: .default(
                 cryptoAccessiblitySuffix: "\(AccessibilityId.cryptoAmountLabel)",

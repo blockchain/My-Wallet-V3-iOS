@@ -62,13 +62,7 @@ public protocol BlockchainAccount: Account {
     var isFunded: AnyPublisher<Bool, Error> { get }
 
     /// The balance of this account exchanged to the given fiat currency.
-    func fiatBalance(fiatCurrency: FiatCurrency) -> AnyPublisher<MoneyValue, Error>
-
-    /// The balance of this account exchanged to the given fiat currency.
     func fiatMainBalanceToDisplay(fiatCurrency: FiatCurrency) -> AnyPublisher<MoneyValue, Error>
-
-    /// The balance of this account exchanged to the given fiat currency.
-    func fiatBalance(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<MoneyValue, Error>
 
     /// The balance of this account exchanged to the given fiat currency.
     func fiatMainBalanceToDisplay(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<MoneyValue, Error>
@@ -92,6 +86,16 @@ public protocol BlockchainAccount: Account {
     /// of the account. All accounts have a 60 second cache but sometimes
     /// this cache should be invalidated.
     func invalidateAccountBalance()
+
+    /// The balance of this account exchanged to the given fiat currency.
+    func safeBalancePair(
+        fiatCurrency: FiatCurrency
+    ) -> AnyPublisher<(balance: MoneyValue?, quote: MoneyValue?), Never>
+
+    func safeBalancePair(
+        fiatCurrency: FiatCurrency,
+        at time: PriceTime
+    ) -> AnyPublisher<(balance: MoneyValue?, quote: MoneyValue?), Never>
 }
 
 extension BlockchainAccount {
@@ -139,18 +143,8 @@ extension BlockchainAccount {
         mainBalanceToDisplayPair(fiatCurrency: fiatCurrency, at: .now)
     }
 
-    public func fiatBalance(fiatCurrency: FiatCurrency) -> AnyPublisher<MoneyValue, Error> {
-        fiatBalance(fiatCurrency: fiatCurrency, at: .now)
-    }
-
     public func fiatMainBalanceToDisplay(fiatCurrency: FiatCurrency) -> AnyPublisher<MoneyValue, Error> {
         fiatMainBalanceToDisplay(fiatCurrency: fiatCurrency, at: .now)
-    }
-
-    public func fiatBalance(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<MoneyValue, Error> {
-        balancePair(fiatCurrency: fiatCurrency, at: time)
-            .map(\.quote)
-            .eraseToAnyPublisher()
     }
 
     public func fiatMainBalanceToDisplay(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<MoneyValue, Error> {
@@ -189,24 +183,24 @@ extension BlockchainAccount {
             .eraseToAnyPublisher()
     }
 
-    public func _napiBalance(
+    public func safeBalancePair(
         fiatCurrency: FiatCurrency
-    ) -> AnyPublisher<(isCryptoBalancePositive: Bool, fiatBalance: MoneyValue), Never> {
-        _napiBalance(fiatCurrency: fiatCurrency, at: .now)
+    ) -> AnyPublisher<(balance: MoneyValue?, quote: MoneyValue?), Never> {
+        safeBalancePair(fiatCurrency: fiatCurrency, at: .now)
     }
 
-    public func _napiBalance(
+    public func safeBalancePair(
         fiatCurrency: FiatCurrency,
         at time: PriceTime
-    ) -> AnyPublisher<(isCryptoBalancePositive: Bool, fiatBalance: MoneyValue), Never> {
+    ) -> AnyPublisher<(balance: MoneyValue?, quote: MoneyValue?), Never> {
         balancePair(fiatCurrency: fiatCurrency, at: time)
-            .map { ($0.base.isPositive, $0.quote) }
+            .map { ($0.base, $0.quote) }
             .catch { _ in
                 balance
-                    .map(\.isPositive)
-                    .replaceError(with: false)
-                    .map { isPositive -> (Bool, MoneyValue) in
-                        (isPositive, .zero(currency: fiatCurrency))
+                    .optional()
+                    .replaceError(with: nil)
+                    .map { balance -> (MoneyValue?, MoneyValue?) in
+                        (balance, nil)
                     }
                     .eraseToAnyPublisher()
             }
@@ -229,7 +223,12 @@ extension BlockchainAccount {
 
     public func hasSmallBalance(app: AppProtocol = resolve()) -> AnyPublisher<Bool, Error> {
         Task<Bool, Error>.Publisher { [account = self] in
-            try await account.balancePair(fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)).await().quote.isDust
+            try await account
+                .balancePair(
+                    fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)
+                )
+                .await().quote.isDust
+
         }
         .eraseToAnyPublisher()
     }

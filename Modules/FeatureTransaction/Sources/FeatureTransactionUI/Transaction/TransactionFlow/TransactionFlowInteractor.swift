@@ -502,9 +502,6 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             }
 
         case .selectTarget:
-            /// `TargetSelectionViewController` should only be shown for `SendP2`
-            /// and `.send`. Otherwise we should show the account picker to select
-            /// the destination/target.
             switch action {
             case .send:
                 // `Send` supports the target selection screen rather than a

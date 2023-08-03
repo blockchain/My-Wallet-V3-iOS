@@ -210,12 +210,13 @@ public final class CoincoreNAPI {
                             .compactMap(\.value)
                             .setFailureType(to: CoincoreError.self)
                     )
-                    .map { group, currency -> AnyPublisher<AnyJSON, Never> in
+                    .map { group, fiatCurrency -> AnyPublisher<AnyJSON, Never> in
                         group.accounts
                             .filter { $0 is CryptoAccount }
                             .map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
-                                account.fiatBalance(fiatCurrency: currency)
-                                    .replaceError(with: .zero(currency: currency))
+                                account.balancePair(fiatCurrency: fiatCurrency)
+                                    .map(\.quote)
+                                    .replaceError(with: .zero(currency: fiatCurrency))
                                     .map { balance in (account, balance) }
                                     .eraseToAnyPublisher()
                             }
@@ -262,8 +263,12 @@ public final class CoincoreNAPI {
                         typealias AccountData = (account: SingleAccount, isCryptoBalancePositive: Bool, fiatBalance: MoneyValue)
                         let publishers: [AnyPublisher<AccountData, Never>] = group.accounts
                             .map { account -> AnyPublisher<AccountData, Never> in
-                                account._napiBalance(fiatCurrency: fiatCurrency)
-                                    .map { (account, $0.isCryptoBalancePositive, $0.fiatBalance) }
+                                account.safeBalancePair(fiatCurrency: fiatCurrency)
+                                    .map { balance, quote -> AccountData in
+                                        let isPositive = balance?.isPositive ?? false
+                                        let quote: MoneyValue = quote ?? .zero(currency: .fiat(fiatCurrency))
+                                        return (account, isPositive, quote)
+                                    }
                                     .eraseToAnyPublisher()
                             }
                         return publishers

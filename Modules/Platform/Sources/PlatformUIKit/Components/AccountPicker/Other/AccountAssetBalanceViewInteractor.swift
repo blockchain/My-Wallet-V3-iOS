@@ -12,11 +12,6 @@ public final class AccountAssetBalanceViewInteractor: AssetBalanceViewInteractin
 
     public typealias InteractionState = AssetBalanceViewModel.State.Interaction
 
-    enum Source {
-        case account(BlockchainAccount)
-        case asset(CryptoAsset)
-    }
-
     // MARK: - Exposed Properties
 
     public var state: Observable<InteractionState> {
@@ -28,7 +23,7 @@ public final class AccountAssetBalanceViewInteractor: AssetBalanceViewInteractin
     private let disposeBag = DisposeBag()
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let refreshRelay = BehaviorRelay<Void>(value: ())
-    private let account: Source
+    private let account: BlockchainAccount
     private let app: AppProtocol
 
     public init(
@@ -36,88 +31,37 @@ public final class AccountAssetBalanceViewInteractor: AssetBalanceViewInteractin
         fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
         app: AppProtocol = resolve()
     ) {
-        self.account = .account(account)
-        self.fiatCurrencyService = fiatCurrencyService
-        self.app = app
-    }
-
-    public init(
-        cryptoAsset: CryptoAsset,
-        fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
-        app: AppProtocol = resolve()
-    ) {
-        self.account = .asset(cryptoAsset)
+        self.account = account
         self.fiatCurrencyService = fiatCurrencyService
         self.app = app
     }
 
     // MARK: - Setup
 
-    private func balancePair(fiatCurrency: FiatCurrency) -> AnyPublisher<MoneyValuePair, Error> {
-        switch account {
-        case .account(let account):
-            return account.balancePair(fiatCurrency: fiatCurrency)
-        case .asset(let cryptoAsset):
-            return app
-                .modePublisher()
-                .flatMap { appMode in
-                    cryptoAsset
-                        .accountGroup(filter: appMode.filter)
-                }
-                .compactMap { $0 }
-                .flatMap { accountGroup in
-                    accountGroup.balancePair(fiatCurrency: fiatCurrency)
-                }
-                .eraseToAnyPublisher()
-        }
-    }
-
-    private func mainBalanceToDisplayPair(fiatCurrency: FiatCurrency) -> AnyPublisher<MoneyValuePair, Error> {
-        switch account {
-        case .account(let account):
-            return account.mainBalanceToDisplayPair(fiatCurrency: fiatCurrency)
-        case .asset(let cryptoAsset):
-            return app
-                .modePublisher()
-                .flatMap { appMode in
-                    cryptoAsset
-                        .accountGroup(filter: appMode.filter)
-                }
-                .compactMap { $0 }
-                .flatMap { accountGroup in
-                    accountGroup.mainBalanceToDisplayPair(fiatCurrency: fiatCurrency)
-                }
-                .eraseToAnyPublisher()
-        }
-    }
-
-    private lazy var setup: Void = Observable
-        .combineLatest(
-            fiatCurrencyService.displayCurrencyPublisher.asObservable(),
-            refreshRelay.asObservable()
-        )
-        .map(\.0)
-        .flatMapLatest(weak: self) { [app] (self, fiatCurrency) -> Observable<MoneyValuePair> in
-            if app.remoteConfiguration.yes(
-                if: blockchain.app.configuration.ui.payments.improvements.assets.balances.is.enabled
-            ) {
-                return self.mainBalanceToDisplayPair(fiatCurrency: fiatCurrency).asObservable()
-            } else {
-                return self.balancePair(fiatCurrency: fiatCurrency).asObservable()
+    private var model: AnyPublisher<InteractionState, Never> {
+        fiatCurrencyService.displayCurrencyPublisher
+            .flatMap { [account] fiatCurrency -> AnyPublisher<(balance: MoneyValue?, quote: MoneyValue?), Never> in
+                account.safeBalancePair(fiatCurrency: fiatCurrency)
             }
-        }
-        .map { moneyValuePair -> InteractionState in
-            InteractionState.loaded(
-                next: AssetBalanceViewModel.Value.Interaction(
-                    primaryValue: moneyValuePair.quote,
-                    secondaryValue: moneyValuePair.base,
-                    pendingValue: nil
+            .map { balance, quote -> AssetBalanceViewModel.Value.Interaction in
+                AssetBalanceViewModel.Value.Interaction(
+                    primaryValue: quote,
+                    secondaryValue: balance
                 )
-            )
+            }
+            .map(InteractionState.loaded(next:))
+            .eraseToAnyPublisher()
+    }
+
+    private lazy var setup: Void = refreshRelay.asObservable()
+        .flatMapLatest(weak: self) { (self, _) -> Observable<InteractionState> in
+            self.model.asObservable()
         }
-        .subscribe(onNext: { [weak self] state in
-            self?.stateRelay.accept(state)
-        })
+        .subscribe(
+            onNext: { [weak self] state in
+                self?.stateRelay.accept(state)
+            }
+        )
         .disposed(by: disposeBag)
 
     public func refresh() {
