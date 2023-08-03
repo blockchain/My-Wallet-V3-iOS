@@ -449,7 +449,7 @@ extension DexMainView {
                 .padding(.horizontal, Spacing.padding2)
 
             PrimaryButton(title: L10n.Main.NoBalance.button, action: {
-                $app.post(event: blockchain.ux.frequent.action.receive)
+                $app.post(event: blockchain.ux.currency.exchange.dex.no.balance.show.receive.entry.paragraph.button.primary.tap)
             })
             .padding(.vertical, Spacing.padding3)
             .padding(.horizontal, Spacing.padding2)
@@ -458,6 +458,12 @@ extension DexMainView {
         .cornerRadius(Spacing.padding2)
         .padding(.horizontal, Spacing.padding3)
         .padding(.vertical, Spacing.padding3)
+        .batch {
+            set(
+                blockchain.ux.currency.exchange.dex.no.balance.show.receive.entry.paragraph.button.primary.tap.then.enter.into,
+                to: blockchain.ux.currency.receive.select.asset
+            )
+        }
     }
 
     @ViewBuilder

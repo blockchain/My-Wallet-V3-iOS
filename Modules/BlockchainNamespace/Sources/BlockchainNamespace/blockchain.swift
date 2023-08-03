@@ -8112,7 +8112,7 @@ public extension I_blockchain_ux_currency_exchange_dex_no_balance_show {
 public final class L_blockchain_ux_currency_exchange_dex_no_balance_show_receive: L, I_blockchain_ux_currency_exchange_dex_no_balance_show_receive {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no.balance.show.receive", comment: "") }
 }
-public protocol I_blockchain_ux_currency_exchange_dex_no_balance_show_receive: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_currency_exchange_dex_no_balance_show_receive: I_blockchain_ui_type_story, I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_currency_exchange_dex_no_balance_tap: L, I_blockchain_ux_currency_exchange_dex_no_balance_tap {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.no.balance.tap", comment: "") }
 }

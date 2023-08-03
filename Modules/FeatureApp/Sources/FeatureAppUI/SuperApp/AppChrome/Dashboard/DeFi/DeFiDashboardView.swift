@@ -191,8 +191,8 @@ struct DeFiDashboardToGetStartedView: View {
                 }
                 .batch {
                     set(
-                        blockchain.ux.dashboard.empty.receive.paragraph.row.event.select.then.emit,
-                        to: blockchain.ux.frequent.action.receive
+                        blockchain.ux.dashboard.empty.receive.paragraph.row.event.select.then.enter.into,
+                        to: blockchain.ux.currency.receive.select.asset
                     )
                 }
                 .bindings {

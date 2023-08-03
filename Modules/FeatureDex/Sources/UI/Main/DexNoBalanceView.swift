@@ -67,7 +67,7 @@ struct DexNoBalanceView: View {
             set(id.paragraph.row.tap.then.close, to: true)
             set(id.paragraph.row.tap.then.emit, to: blockchain.ux.currency.exchange.dex.no.balance.show.receive)
             set(
-                blockchain.ux.currency.exchange.dex.no.balance.show.receive.then.enter.into,
+                blockchain.ux.currency.exchange.dex.no.balance.show.receive.entry.paragraph.button.primary.tap.then.enter.into,
                 to: blockchain.ux.currency.receive.address
             )
         }

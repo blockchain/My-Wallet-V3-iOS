@@ -2155,7 +2155,8 @@ blockchain:
 								+ blockchain.db.type.string
 							show:
 								receive:
-								+ blockchain.ux.type.action
+								+ blockchain.ui.type.story
+								+ blockchain.ux.type.story
 							tap:
 							+ blockchain.ux.type.action
 					not:

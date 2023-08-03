@@ -66,13 +66,17 @@ public struct CoinView: View {
             subscribe($isRejected, to: blockchain.user.account.kyc.state, as: \Tag[is: blockchain.user.account.kyc.state.rejected])
         }
         .batch {
-            set(blockchain.ux.asset.receive.then.enter.into, to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more)
             if let accountId = viewStore.accounts.first?.id {
                 if app.currentMode == .trading {
                     set(blockchain.ux.asset.account[accountId].receive.then.enter.into, to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more)
                 } else {
                     set(blockchain.ux.asset.account[accountId].receive.then.enter.into, to: blockchain.ux.currency.receive.address)
                 }
+            }
+            if app.currentMode == .trading {
+                set(blockchain.ux.asset.receive.then.enter.into, to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more)
+            } else {
+                set(blockchain.ux.asset.receive.then.enter.into, to: blockchain.ux.currency.receive.address)
             }
         }
         .bottomSheet(
