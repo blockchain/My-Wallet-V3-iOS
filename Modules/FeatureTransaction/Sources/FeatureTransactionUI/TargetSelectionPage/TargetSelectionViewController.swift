@@ -210,7 +210,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
         return cell
     }
 
-    private func balanceCell(for indexPath: IndexPath, presenter: CurrentBalanceCellPresenting) -> UITableViewCell {
+    private func balanceCell(for indexPath: IndexPath, presenter: AccountCurrentBalanceCellPresenter) -> UITableViewCell {
         let cell = tableView.dequeue(CurrentBalanceTableViewCell.self, for: indexPath)
         cell.presenter = presenter
         return cell

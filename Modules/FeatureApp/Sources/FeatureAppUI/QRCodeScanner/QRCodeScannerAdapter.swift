@@ -35,7 +35,6 @@ final class QRCodeScannerAdapter {
         self.topMostViewControllerProvider = topMostViewControllerProvider
         self.navigationRouter = navigationRouter
         self.accountPickerAccountProvider = AccountPickerAccountProvider(
-            singleAccountsOnly: true,
             action: .send,
             failSequence: false
         )

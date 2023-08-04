@@ -2,12 +2,14 @@
 
 import BlockchainComponentLibrary
 import PlatformKit
+import PlatformUIKit
 import RxCocoa
 import RxSwift
+import UIKit
 
 public final class CurrentBalanceTableViewCell: UITableViewCell {
 
-    public var presenter: CurrentBalanceCellPresenting! {
+    public var presenter: AccountCurrentBalanceCellPresenter! {
         willSet {
             disposeBag = DisposeBag()
         }
@@ -77,19 +79,6 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
                 .drive(networkView.rx.isHidden)
                 .disposed(by: disposeBag)
 
-            presenter.pending
-                .map {
-                    LabelContent(
-                        text: $0,
-                        font: .main(.medium, 14.0),
-                        color: .semantic.muted,
-                        alignment: .left,
-                        accessibility: .id(presenter.pendingAccessibilitySuffix)
-                    )
-                }
-                .drive(labelStackView.bottomLabel.rx.content)
-                .disposed(by: disposeBag)
-
             presenter.description
                 .map(\.isEmpty)
                 .drive(labelStackView.middleLabel.rx.isHidden)
@@ -98,11 +87,6 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
             Driver.zip(presenter.networkTitle, presenter.description)
                 .map { $0 == nil && $1.isEmpty }
                 .drive(labelStackView.middleStackView.rx.isHidden)
-                .disposed(by: disposeBag)
-
-            presenter.pendingLabelVisibility
-                .map(\.isHidden)
-                .drive(labelStackView.bottomLabel.rx.isHidden)
                 .disposed(by: disposeBag)
 
             presenter.separatorVisibility
@@ -126,7 +110,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
 
     private let badgeImageView = BadgeImageView()
     private let thumbSideImageView = BadgeImageView()
-    private let labelStackView = ThreeLabelStackView()
+    private let labelStackView = TwoLabelStackView()
     private let assetBalanceView = AssetBalanceView()
     private let separatorView = UIView()
     private let multiBadgeView = MultiBadgeView()
@@ -150,7 +134,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
         presenter = nil
     }
 
-    private func displayBadges(visibility: Visibility) {
+    private func displayBadges(visibility: PlatformUIKit.Visibility) {
         multiBadgeView.isHidden = visibility.isHidden
         labelStackViewBottomSuperview.isActive = visibility.isHidden
         labelStackViewBottomMultiBadgeView.isActive = !visibility.isHidden

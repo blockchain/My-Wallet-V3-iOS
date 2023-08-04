@@ -35,7 +35,7 @@ public struct Accessibility {
         self.isAccessible = isAccessible
     }
 
-    func with(idSuffix: String) -> Accessibility {
+    public func with(idSuffix: String) -> Accessibility {
         Accessibility(
             id: id == nil ? nil : "\(id.printable)\(idSuffix)",
             label: label,

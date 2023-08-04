@@ -218,30 +218,3 @@ extension Publisher where Output == [SingleAccount] {
         .eraseToAnyPublisher()
     }
 }
-
-extension BlockchainAccount {
-
-    public func hasSmallBalance(app: AppProtocol = resolve()) -> AnyPublisher<Bool, Error> {
-        Task<Bool, Error>.Publisher { [account = self] in
-            try await account
-                .balancePair(
-                    fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)
-                )
-                .await().quote.isDust
-
-        }
-        .eraseToAnyPublisher()
-    }
-
-    public func hasSmallMainBalanceToDisplay(app: AppProtocol = resolve()) -> AnyPublisher<Bool, Error> {
-        Task<Bool, Error>.Publisher { [account = self] in
-            try await account.mainBalanceToDisplayPair(
-                fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)
-            )
-            .await()
-            .quote
-            .isDust
-        }
-        .eraseToAnyPublisher()
-    }
-}

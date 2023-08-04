@@ -32,7 +32,6 @@ public final class AccountPickerAccountProvider: AccountPickerAccountProviding {
 
     private let action: AssetAction
     private let coincore: CoincoreAPI
-    private let singleAccountsOnly: Bool
     private let failSequence: Bool
     private let errorRecorder: ErrorRecording
     private let app: AppProtocol
@@ -44,12 +43,7 @@ public final class AccountPickerAccountProvider: AccountPickerAccountProviding {
             .flatMap { [coincore] appMode in
                 coincore.allAccounts(filter: appMode.filter)
             }
-            .map { [singleAccountsOnly] allAccountsGroup -> [BlockchainAccount] in
-                if singleAccountsOnly {
-                    return allAccountsGroup.accounts
-                }
-                return [allAccountsGroup] + allAccountsGroup.accounts
-            }
+            .map { $0.accounts as [BlockchainAccount] }
             .eraseError()
             .flatMapFilter(
                 action: action,
@@ -70,13 +64,11 @@ public final class AccountPickerAccountProvider: AccountPickerAccountProviding {
 
     /// Default initializer.
     /// - Parameters:
-    ///   - singleAccountsOnly: If the return should be filtered to included only `SingleAccount`s. (opposed to `AccountGroup`s)
     ///   - coincore: A `Coincore` instance.
     ///   - errorRecorder: An `ErrorRecording` instance.
     ///   - action: The desired action. This account provider will only return accounts/account groups that can execute this action.
     ///   - failSequence: A flag indicating if, in the event of a wallet erring out, the whole `accounts: Single<[BlockchainAccount]>` sequence should err or if the offending element should be filtered out. Check `flatMapFilter`.
     public init(
-        singleAccountsOnly: Bool,
         coincore: CoincoreAPI = resolve(),
         errorRecorder: ErrorRecording = resolve(),
         action: AssetAction,
@@ -85,7 +77,6 @@ public final class AccountPickerAccountProvider: AccountPickerAccountProviding {
     ) {
         self.action = action
         self.coincore = coincore
-        self.singleAccountsOnly = singleAccountsOnly
         self.failSequence = failSequence
         self.errorRecorder = errorRecorder
         self.app = app

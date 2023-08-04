@@ -927,11 +927,14 @@ extension TransactionFlowRouter {
                     model.availableSources
                 },
                 flatMap: { accounts in
-                    if action == .buy { return .just(accounts) }
-                    return Task<[BlockchainAccount], Error>.Publisher {
-                        try await accounts.async.reduce(into: []) { accounts, account in
-                            guard try await !account.hasSmallBalance().await() else { return }
-                            accounts.append(account)
+                    if action == .buy {
+                        return .just(accounts)
+                    }
+                    return Task<[BlockchainAccount], Never>.Publisher {
+                        await accounts.async.reduce(into: []) { accounts, account in
+                            if await account.hasSmallBalance().isNo {
+                                accounts.append(account)
+                            }
                         }
                     }
                     .asObservable()
@@ -1057,4 +1060,20 @@ extension PaymentMethodAccount {
 extension CountryCode {
     var isArgentina: Bool { self == "AR" }
     var isAmerica: Bool { self == "US" }
+}
+
+extension BlockchainAccount {
+
+    fileprivate func hasSmallBalance(app: AppProtocol = resolve()) async -> Bool {
+        let safeBalancePair = try? await safeBalancePair(
+            fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)
+        ).await()
+        if let quote = safeBalancePair?.quote {
+            return quote.isDust
+        }
+        if let balance = safeBalancePair?.balance {
+            return balance.isZero
+        }
+        return false
+    }
 }

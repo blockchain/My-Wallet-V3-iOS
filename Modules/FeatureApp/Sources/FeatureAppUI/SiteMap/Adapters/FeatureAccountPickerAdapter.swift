@@ -9,6 +9,7 @@ import Errors
 import FeatureAccountPickerUI
 import FeatureWithdrawalLocksUI
 import Localization
+import MoneyKit
 import PlatformKit
 import PlatformUIKit
 import RxCocoa
@@ -57,48 +58,44 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         sections: { [sections] in sections.eraseToAnyPublisher() },
         updateSingleAccounts: { [weak self] ids in
             guard let self else { return .empty() }
-            let presenters = Dictionary(uniqueKeysWithValues: ids.map { ($0, self.presenter(for: $0)) })
+            let presenters = Dictionary<AnyHashable, AccountPickerCellItem.Presenter?>(
+                uniqueKeysWithValues: ids.map { ($0, self.presenter(for: $0)) }
+            )
+            let fiatCurrencyService: FiatCurrencyServiceAPI = DIKit.resolve()
             let publishers = presenters
                 .compactMap { id, presenter
                     -> AnyPublisher<(AnyHashable, AccountPickerRow.SingleAccount.Balances), Error>? in
 
-                    guard case .singleAccount(let item) = presenter else {
+                    guard case .singleAccount(let item, _, _) = presenter else {
                         return nil
                     }
-
-                    return item.assetBalanceViewPresenter.state
-                        .asPublisher()
-                        .map { value -> (AnyHashable, AccountPickerRow.SingleAccount.Balances) in
-                            switch value {
-                            case .loading:
-                                return (
-                                    id,
-                                    .init(
-                                        fiatBalance: .loading,
-                                        cryptoBalance: .loading
-                                    )
-                                )
-                            case .loaded(let balance):
-                                return (
-                                    id,
-                                    .init(
-                                        fiatBalance: .loaded(next: balance.primaryBalance?.text ?? ""),
-                                        cryptoBalance: .loaded(next: balance.secondaryBalance?.text ?? "")
-                                    )
-                                )
-                            }
+                    return fiatCurrencyService.displayCurrencyPublisher
+                        .flatMap { fiatCurrency in
+                            item.safeBalancePair(fiatCurrency: fiatCurrency)
                         }
+                        .map { (balance: MoneyValue?, quote: MoneyValue?) in
+                            return AccountPickerRow.SingleAccount.Balances(
+                                fiatBalance: quote?.displayString ?? "",
+                                cryptoBalance:  balance?.displayString ?? ""
+                            )
+                        }
+                        .prepend(.loading)
+                        .map { (id, $0) }
+                        .eraseError()
                         .eraseToAnyPublisher()
                 }
 
             return Publishers.MergeMany(publishers)
                 .collect(publishers.count)
-                .map { Dictionary($0) { _, right in right } } // Don't care which value we take, just no dupes
+                .map { Dictionary($0) { _, rhs in rhs } } // Don't care which value we take, just no dupes
                 .eraseToAnyPublisher()
         },
-        updateAccountGroups: { [weak self] ids in
+        updateAccountGroups: { [weak self] (ids: Set<AnyHashable>) -> AnyPublisher<[AnyHashable: AccountPickerRow.AccountGroup.Balances], Error> in
             guard let self else { return .empty() }
-            let presenters = Dictionary(uniqueKeysWithValues: ids.map { ($0, self.presenter(for: $0)) })
+            let presenters = Dictionary<AnyHashable, AccountPickerCellItem.Presenter?>(
+                uniqueKeysWithValues: ids.map { ($0, self.presenter(for: $0)) }
+            )
+            let fiatCurrencyService: FiatCurrencyServiceAPI = DIKit.resolve()
             let publishers = presenters
                 .compactMap { id, presenter
                     -> AnyPublisher<(AnyHashable, AccountPickerRow.AccountGroup.Balances), Error>? in
@@ -106,35 +103,28 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                     guard case .accountGroup(let item) = presenter else {
                         return nil
                     }
-
-                    return item.walletBalanceViewPresenter.state
-                        .asPublisher()
-                        .map { value -> (AnyHashable, AccountPickerRow.AccountGroup.Balances) in
-                            switch value {
-                            case .loading:
-                                return (
-                                    id,
-                                    .init(
-                                        fiatBalance: .loading,
-                                        currencyCode: .loading
-                                    )
-                                )
-                            case .loaded(let balance):
-                                return (
-                                    id,
-                                    .init(
-                                        fiatBalance: .loaded(next: balance.fiatBalance.text),
-                                        currencyCode: .loaded(next: balance.currencyCode.text)
-                                    )
-                                )
-                            }
+                    return fiatCurrencyService.displayCurrencyPublisher
+                        .flatMap { fiatCurrency in
+                            item.safeBalancePair(fiatCurrency: fiatCurrency)
                         }
+                        .map { (balance: MoneyValue?, quote: MoneyValue?) in
+                            guard let quote else {
+                                return .loading
+                            }
+                            return AccountPickerRow.AccountGroup.Balances(
+                                fiatBalance: quote.displayString,
+                                currencyCode: quote.currency.code
+                            )
+                        }
+                        .prepend(.loading)
+                        .map { (id, $0) }
+                        .eraseError()
                         .eraseToAnyPublisher()
                 }
 
             return Publishers.MergeMany(publishers)
                 .collect(publishers.count)
-                .map { Dictionary($0) { _, right in right } } // Don't care which value we take, just no dupes.
+                .map { Dictionary($0) { _, rhs in rhs } } // Don't care which value we take, just no dupes.
                 .eraseToAnyPublisher()
         },
         header: { [header] in header.eraseToAnyPublisher() },
@@ -235,14 +225,30 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
             .presenter
     }
 
-    @ViewBuilder func badgeView(for identity: AnyHashable) -> some View {
+    @ViewBuilder
+    func badgeView(for identity: AnyHashable) -> some View {
         switch presenter(for: identity) {
-        case .singleAccount(let presenter):
-            BadgeImageViewRepresentable(viewModel: presenter.badgeRelay.value, size: 24)
-        case .accountGroup(let presenter):
-            BadgeImageViewRepresentable(viewModel: presenter.badgeImageViewModel, size: 24)
-        case .linkedBankAccount(let data):
-            AsyncMedia(url: data.account.data.icon)
+        case .singleAccount(let account, _, _):
+            BadgeImageViewRepresentable(
+                viewModel: SingleAccountBadgeImageViewModel.badgeModel(account: account),
+                size: 24
+            )
+        case .accountGroup:
+            BadgeImageViewRepresentable(
+                viewModel: {
+                    let value: BadgeImageViewModel = .primary(
+                        image: .local(name: "icon-wallet", bundle: .platformUIKit),
+                        contentColor: .semantic.background,
+                        cornerRadius: .none,
+                        accessibilityIdSuffix: "walletBalance"
+                    )
+                    value.marginOffsetRelay.accept(0)
+                    return value
+                }(),
+                size: 24
+            )
+        case .linkedBankAccount(let account, _):
+            AsyncMedia(url: account.data.icon)
         default:
             EmptyView()
         }
@@ -265,13 +271,15 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         }
     }
 
-    @ViewBuilder func iconView(for identity: AnyHashable) -> some View {
+    @ViewBuilder
+    func iconView(for identity: AnyHashable) -> some View {
         let model = model(for: identity)
         let isTradingAccount = model?.account is CryptoTradingAccount
         switch model?.presenter {
-        case .singleAccount(let presenter) where !isTradingAccount:
+        case .singleAccount(let account, let action, _) where !isTradingAccount:
+            let model = SingleAccountBadgeImageViewModel.iconModel(account: account, action: action)
             BadgeImageViewRepresentable(
-                viewModel: presenter.iconImageViewContentRelay.value,
+                viewModel: model ?? .empty,
                 size: 16
             )
         default:
@@ -279,16 +287,13 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
         }
     }
 
-    @ViewBuilder func multiBadgeView(for identity: AnyHashable) -> some View {
+    @ViewBuilder
+    func multiBadgeView(for identity: AnyHashable) -> some View {
         switch presenter(for: identity) {
-        case .linkedBankAccount(let presenter):
-            MultiBadgeViewRepresentable(viewModel: presenter.multiBadgeViewModel)
-        case .singleAccount(let presenter):
-            if presenter.multiBadgeViewModel.isEmpty {
-                EmptyView()
-            } else {
-                MultiBadgeViewRepresentable(viewModel: .just(presenter.multiBadgeViewModel))
-            }
+        case .linkedBankAccount(_, let presenter):
+            MultiBadgeViewRepresentable(viewModel: presenter.model)
+        case .singleAccount(_, _, let presenter):
+            MultiBadgeViewRepresentable(viewModel: presenter.model)
         default:
             EmptyView()
         }
@@ -363,7 +368,6 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
             .drive(weak: self) { (self: FeatureAccountPickerControllableAdapter, sectionModels: [AccountPickerSectionViewModel]) in
                 self.models = sectionModels
                 var sections: [AccountPickerSection] = []
-                var accounts: [AccountPickerRow] = []
                 let items = sectionModels.flatMap(\.items)
 
                 let includesPaymentMethodAccount = items.contains { item -> Bool in
@@ -384,89 +388,7 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                     sections.append(.warning(warnings))
                 }
 
-                for item in items {
-                    switch item.presenter {
-                    case .emptyState(let labelContent):
-                        accounts.append(.label(
-                            .init(
-                                id: item.identity,
-                                text: labelContent.text
-                            )
-                        )
-                        )
-                    case .button(let viewModel):
-                        accounts.append(.button(
-                            .init(
-                                id: item.identity,
-                                text: viewModel.textRelay.value
-                            )
-                        )
-                        )
-
-                    case .linkedBankAccount(let presenter):
-                        accounts.append(.linkedBankAccount(
-                            .init(
-                                id: item.identity,
-                                title: presenter.account.label,
-                                description: LocalizationConstants.accountEndingIn + " \(presenter.account.accountNumber)",
-                                capabilities: presenter.account.data.capabilities
-                            )
-                        ))
-
-                    case .paymentMethodAccount(let presenter):
-                        accounts.append(.paymentMethodAccount(
-                            .init(
-                                id: item.identity,
-                                block: presenter
-                                    .account
-                                    .paymentMethodType
-                                    .block,
-                                ux: presenter
-                                    .account
-                                    .paymentMethodType
-                                    .ux,
-                                title: presenter.account.label,
-                                description: String(
-                                    format: LocalizationConstants.maxPurchaseArg,
-                                    presenter
-                                        .account
-                                        .paymentMethodType
-                                        .balance
-                                        .displayString
-                                ),
-                                badge: presenter.account.logoResource,
-                                badgeBackground: Color(presenter.account.logoBackgroundColor),
-                                capabilities: presenter.account.capabilities
-                            )
-                        ))
-
-                    case .accountGroup(let presenter):
-                        accounts.append(.accountGroup(
-                            .init(
-                                id: item.identity,
-                                title: presenter.account.label,
-                                description: LocalizationConstants.Dashboard.Portfolio.totalBalance
-                            )
-                        ))
-
-                    case .singleAccount(let presenter):
-                        accounts.append(.singleAccount(
-                            .init(
-                                id: item.identity,
-                                currency: presenter.account.currencyType.code,
-                                title: presenter.account.currencyType.name,
-                                description: presenter.account.currencyType.isFiatCurrency
-                                    ? presenter.account.currencyType.displayCode
-                                    : presenter.account.label
-                            )
-                        ))
-
-                    case .withdrawalLocks:
-                        accounts.append(.withdrawalLocks)
-                    }
-                }
-
-                sections.append(.accounts(accounts))
+                sections.append(.accounts(items.map(\.row)))
                 self.sections.send(sections)
             }
             .disposed(by: disposeBag)
@@ -510,5 +432,72 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
             searchEffect,
             accountFilterEffect
         )
+    }
+}
+
+extension AccountPickerCellItem {
+    var row: AccountPickerRow {
+        switch presenter {
+        case .emptyState(let labelContent):
+            let model = AccountPickerRow.Label(
+                id: identity,
+                text: labelContent.text
+            )
+            return .label(model)
+        case .button(let viewModel):
+            let model = AccountPickerRow.Button(
+                id: identity,
+                text: viewModel.textRelay.value
+            )
+            return .button(model)
+
+        case .linkedBankAccount(let account, _):
+            let model = AccountPickerRow.LinkedBankAccount(
+                id: identity,
+                title: account.label,
+                description: LocalizationConstants.accountEndingIn + " \(account.accountNumber)",
+                capabilities: account.data.capabilities
+            )
+            return .linkedBankAccount(model)
+
+        case .paymentMethodAccount(let account):
+            let method = account.paymentMethodType
+            let model = AccountPickerRow.PaymentMethod(
+                id: identity,
+                block: method.block,
+                ux: method.ux,
+                title: account.label,
+                description: String(
+                    format: LocalizationConstants.maxPurchaseArg,
+                    method.balance.displayString
+                ),
+                badge: account.logoResource,
+                badgeBackground: Color(account.logoBackgroundColor),
+                capabilities: account.capabilities
+            )
+            return .paymentMethodAccount(model)
+
+        case .accountGroup(let account):
+            let model = AccountPickerRow.AccountGroup(
+                id: identity,
+                title: account.label,
+                description: LocalizationConstants.Dashboard.Portfolio.totalBalance
+            )
+            return .accountGroup(model)
+
+        case .singleAccount(let account, _, _):
+            let model = AccountPickerRow.SingleAccount(
+                id: identity,
+                currency: account.currencyType.code,
+                title: account.currencyType.name,
+                description: account.currencyType.isFiatCurrency
+                    ? account.currencyType.displayCode
+                    : account.label
+            )
+            return .singleAccount(model)
+
+        case .withdrawalLocks:
+            return .withdrawalLocks
+        }
     }
 }

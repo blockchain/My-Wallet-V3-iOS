@@ -6,15 +6,15 @@ import Localization
 import PlatformKit
 import RxSwift
 
-final class SingleAccountBadgeFactory {
+public final class SingleAccountBadgeFactory {
 
     let withdrawalService: WithdrawalServiceAPI
 
-    init(withdrawalService: WithdrawalServiceAPI = resolve()) {
+    public init(withdrawalService: WithdrawalServiceAPI = resolve()) {
         self.withdrawalService = withdrawalService
     }
 
-    func badge(account: SingleAccount, action: AssetAction) -> Single<[BadgeAssetPresenting]> {
+    public func badge(account: SingleAccount, action: AssetAction) -> Single<[BadgeAssetPresenting]> {
         switch action {
         case .swap:
             return swapBadges(account: account)

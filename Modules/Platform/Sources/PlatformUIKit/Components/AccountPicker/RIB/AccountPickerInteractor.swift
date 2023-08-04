@@ -98,7 +98,7 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                 let isFiltering = searchString
                     .flatMap { !$0.isEmpty } ?? false
 
-                var interactors = accounts
+                var interactors: [AccountPickerCellItem.Interactor] = accounts
                     .filter { snapshot in
                         snapshot.account.currencyType.matchSearch(searchString)
                     }
@@ -110,7 +110,7 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                     }
                     .sorted(by: >)
                     .map(\.account)
-                    .map(\.accountPickerCellItemInteractor)
+                    .compactMap(\.accountPickerCellItemInteractor)
 
                 if interactors.isEmpty {
                     interactors.append(.emptyState)
@@ -185,30 +185,23 @@ extension AccountPickerInteractor {
 
 extension BlockchainAccount {
 
-    fileprivate var accountPickerCellItemInteractor: AccountPickerCellItem.Interactor {
+    fileprivate var accountPickerCellItemInteractor: AccountPickerCellItem.Interactor? {
         switch self {
-        case is PaymentMethodAccount:
-            return .paymentMethodAccount(self as! PaymentMethodAccount)
+        case let value as PaymentMethodAccount:
+            return .paymentMethodAccount(value)
 
-        case is LinkedBankAccount:
-            let account = self as! LinkedBankAccount
-            return .linkedBankAccount(account)
+        case let value as LinkedBankAccount:
+            return .linkedBankAccount(value)
 
-        case is SingleAccount:
-            let singleAccount = self as! SingleAccount
-            return .singleAccount(singleAccount, AccountAssetBalanceViewInteractor(account: singleAccount))
+        case let value as SingleAccount:
+            return .singleAccount(value)
 
-        case is AccountGroup:
-            let accountGroup = self as! AccountGroup
-            return .accountGroup(
-                accountGroup,
-                AccountGroupBalanceCellInteractor(
-                    balanceViewInteractor: WalletBalanceViewInteractor(account: accountGroup)
-                )
-            )
+        case let value as AccountGroup:
+            return .accountGroup(value)
 
         default:
-            impossible()
+            assertionFailure("Type not valid: \(type(of: self))")
+            return nil
         }
     }
 }

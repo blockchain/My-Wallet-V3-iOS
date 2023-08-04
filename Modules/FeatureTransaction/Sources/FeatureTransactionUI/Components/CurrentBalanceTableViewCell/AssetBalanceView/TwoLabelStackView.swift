@@ -3,11 +3,10 @@
 /// A simple UIStackView with three UILabel
 /// Hugging and Compression Resistance Priorities already set.
 /// Can be used as is, or may be sub-classed.
-public class ThreeLabelStackView: UIStackView {
+class TwoLabelStackView: UIStackView {
     let topLabel = UILabel()
     let middleLabel = UILabel()
     let middleStackView = UIStackView()
-    let bottomLabel = UILabel()
 
     convenience init() {
         self.init(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
@@ -25,7 +24,7 @@ public class ThreeLabelStackView: UIStackView {
 
     /// Clear all text labels and set them visible.
     func clear() {
-        [topLabel, middleLabel, bottomLabel].forEach { label in
+        [topLabel, middleLabel].forEach { label in
             label.text = ""
             label.isHidden = false
         }
@@ -41,7 +40,6 @@ public class ThreeLabelStackView: UIStackView {
         middleStackView.addArrangedSubview(middleLabel)
         addArrangedSubview(topLabel)
         addArrangedSubview(middleStackView)
-        addArrangedSubview(bottomLabel)
         topLabel.verticalContentHuggingPriority = UILayoutPriority(rawValue: 252)
         contentHuggingPriority = (.penultimateHigh, .penultimateHigh)
         contentCompressionResistancePriority = (.penultimateHigh, .penultimateHigh)

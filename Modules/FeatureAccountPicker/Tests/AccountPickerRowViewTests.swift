@@ -189,14 +189,14 @@ class AccountPickerRowViewTests: XCTestCase {
             MultiBadgeViewRepresentable(
                 viewModel: SingleAccountBadgeFactory(withdrawalService: MockWithdrawalServiceAPI())
                     .badge(account: linkedBankAccount, action: .withdraw)
+                    .asDriver(onErrorJustReturn: [])
                     .map {
                         MultiBadgeViewModel(
-                            layoutMargins: LinkedBankAccountCellPresenter.multiBadgeInsets,
+                            layoutMargins: SingleAccountMultiBadgePresenter.multiBadgeInsets,
                             height: 24.0,
                             badges: $0
                         )
                     }
-                    .asDriver(onErrorJustReturn: .init())
             )
         } else {
             EmptyView()

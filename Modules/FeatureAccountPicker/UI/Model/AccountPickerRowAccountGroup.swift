@@ -13,8 +13,8 @@ extension AccountPickerRow {
 
         // MARK: - Internal Properties
 
-        var title: String
-        var description: String
+        let title: String
+        let description: String
 
         // MARK: - Init
 
@@ -34,19 +34,29 @@ extension AccountPickerRow.AccountGroup {
 
     public struct Balances {
 
+        public static let loading: Self = Self(fiatBalance: .loading, currencyCode: .loading)
+
         // MARK: - Public Properties
 
-        public var fiatBalance: LoadingState<String>
-        public var currencyCode: LoadingState<String>
+        let fiatBalance: LoadingState<String>
+        let currencyCode: LoadingState<String>
 
         // MARK: - Init
 
-        public init(
+        init(
             fiatBalance: LoadingState<String>,
             currencyCode: LoadingState<String>
         ) {
             self.fiatBalance = fiatBalance
             self.currencyCode = currencyCode
+        }
+
+        public init(
+            fiatBalance: String,
+            currencyCode: String
+        ) {
+            self.fiatBalance = .loaded(next: fiatBalance)
+            self.currencyCode = .loaded(next: currencyCode)
         }
     }
 }

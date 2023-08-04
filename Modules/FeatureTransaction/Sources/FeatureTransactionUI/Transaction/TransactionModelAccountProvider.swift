@@ -10,7 +10,7 @@ public protocol SourceAndTargetAccountProviding: AccountPickerAccountProviding {
     var destinationAccount: Observable<TransactionTarget?> { get }
 }
 
-class TransactionModelAccountProvider: SourceAndTargetAccountProviding {
+final class TransactionModelAccountProvider: SourceAndTargetAccountProviding {
 
     private let transactionModel: TransactionModel
 

@@ -4,8 +4,6 @@ import BlockchainComponentLibrary
 import Extensions
 import SwiftUI
 
-// TODO: @paulo: move to FeatureOpenBankingUI
-
 public struct InfoView: View {
 
     public struct Model: Equatable, Codable {

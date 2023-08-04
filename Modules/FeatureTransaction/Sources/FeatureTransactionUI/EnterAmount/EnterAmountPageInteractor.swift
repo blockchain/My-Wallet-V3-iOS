@@ -614,8 +614,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
 
     private func handleTopAuxiliaryViewTapped(state: TransactionState) {
         switch state.action {
-        case .buy:
-            transactionModel.process(action: .showTargetSelection)
         case .withdraw:
             presenter.presentWithdrawalLocks(amountAvailable: state.maxSpendable.displayString)
         default:
@@ -661,13 +659,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
 
     private func topAuxiliaryView(for transactionState: TransactionState) -> AuxiliaryViewPresenting? {
         var presenter: AuxiliaryViewPresenting?
-        if transactionState.action.supportsTopAccountsView {
-            presenter = TargetAuxiliaryViewPresenter(
-                delegate: self,
-                transactionState: transactionState,
-                eventsRecorder: eventsRecorder
-            )
-        } else if transactionState.action.supportsInfoAuxiliaryView {
+        if transactionState.action.supportsInfoAuxiliaryView {
             presenter = InfoAuxiliaryViewPresenter(
                 transactionState: transactionState,
                 delegate: self
@@ -832,10 +824,6 @@ extension TransactionState {
 }
 
 extension AssetAction {
-
-    fileprivate var supportsTopAccountsView: Bool {
-        false
-    }
 
     fileprivate var supportsInfoAuxiliaryView: Bool {
         self == .buy ? false : true

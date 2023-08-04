@@ -511,12 +511,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     action: action
                 )
             case .buy:
-                router?.routeToDestinationAccountPicker(
-                    transitionType: newState.stepsBackStack.contains(.enterAmount) ? .modal : .replaceRoot,
-                    transactionModel: transactionModel,
-                    action: action,
-                    state: newState
-                )
+                // Unreacheable.
+                unimplemented("Action \(action) does not support 'selectTarget'")
             case .withdraw,
                     .interestWithdraw,
                     .stakingWithdraw,
@@ -542,8 +538,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     state: newState
                 )
             case .receive,
-                    .sign,
-                    .viewActivity:
+                  .sign,
+                  .viewActivity:
                 unimplemented("Action \(action) does not support 'selectTarget'")
             }
 
@@ -803,7 +799,7 @@ extension TransactionFlowInteractor {
             .take(1)
             .asSingle()
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe { [app, weak self] state in
+            .subscribe { [weak self] state in
                 guard let self else { return }
                 if state.canPresentKYCUpgradeFlowAfterClosingTxFlow {
                     presentKYCUpgradePrompt(completion: closeFlow)

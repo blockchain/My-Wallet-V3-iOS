@@ -1,9 +1,12 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import PlatformKit
+import PlatformUIKit
 import RxCocoa
 import RxSwift
+import UIKit
 
-final class AssetBalanceView: ThreeLabelStackView {
+final class AssetBalanceView: TwoLabelStackView {
 
     // MARK: - Injected
 
@@ -126,7 +129,6 @@ extension Reactive where Base: AssetBalanceView {
     var values: Binder<AssetBalanceViewModel.Value.Presentation> {
         Binder(base) { view, values in
             view.clear()
-            view.bottomLabel.isHidden = true
             if let primaryBalance = values.primaryBalance {
                 view.fiatBalanceLabel.content = primaryBalance
                 view.cryptoBalanceLabel.content = values.secondaryBalance ?? LabelContent.empty
