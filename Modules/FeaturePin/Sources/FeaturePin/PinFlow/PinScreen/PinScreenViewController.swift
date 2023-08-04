@@ -130,7 +130,11 @@ final class PinScreenViewController: BaseScreenViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        presenter.authenticateUsingBiometricsIfNeeded()
+
+        // Prevents the loop forcing the user to change their pin
+        if !presenter.flow.isChange {
+            presenter.authenticateUsingBiometricsIfNeeded()
+        }
 
         #if DEBUG
         becomeFirstResponder()
