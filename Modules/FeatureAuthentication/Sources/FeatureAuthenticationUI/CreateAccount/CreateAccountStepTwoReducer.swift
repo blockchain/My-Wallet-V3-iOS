@@ -111,6 +111,9 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
         || isCreatingWallet
         || fatalError != nil
         || !termsAccepted
+        || emailAddress.isEmpty
+        || password.isEmpty
+        || passwordConfirmation.isEmpty
     }
 
     public init(

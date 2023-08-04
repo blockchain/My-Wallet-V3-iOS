@@ -122,7 +122,12 @@ public struct CreateAccountStepOneState: Equatable, NavigationState {
     public var isGoingToNextStep = false
 
     var isNextStepButtonDisabled: Bool {
-        validatingInput || inputValidationState.isInvalid || isCreatingWallet || referralCodeValidationState.isInvalid
+        validatingInput
+        || inputValidationState.isInvalid
+        || isCreatingWallet
+        || referralCodeValidationState.isInvalid
+        || country == nil
+        || shouldDisplayCountryStateField && countryState == nil
     }
 
     var shouldDisplayCountryStateField: Bool {
