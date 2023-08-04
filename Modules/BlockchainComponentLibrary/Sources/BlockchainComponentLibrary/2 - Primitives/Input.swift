@@ -136,6 +136,7 @@ public struct Input<Trailing: View>: View {
                         SecureField(placeholder ?? "", text: $text.prefix(characterLimit ?? Int.max))
                     } else {
                         TextField(placeholder ?? "", text: $text.prefix(characterLimit ?? Int.max))
+                            .textCase(nil)
                     }
                 }
                 .onSubmit(onReturnTapped)
