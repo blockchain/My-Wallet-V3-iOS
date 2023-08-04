@@ -45,6 +45,16 @@ extension UIWindow: TopMostViewControllerProviding {
 }
 
 extension UIViewController {
+    enum ViewControllerError: LocalizedError {
+        case unableToFindTopViewController
+
+        var errorDescription: String? {
+            switch self {
+            case .unableToFindTopViewController:
+                return "Unable to find top view controller, hit max depth limit"
+            }
+        }
+    }
     private static var maxDepth = 10
 
     public func enter(into viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil, retries: Int = 0) {
@@ -62,7 +72,13 @@ extension UIViewController {
         } else if retries < UIViewController.maxDepth {
             UIApplication.shared.topMostViewController!.enter(into: viewController, animated: animated, completion: completion, retries: retries + 1)
         } else {
-            print("❗️ Unable to find top view controller, hit max depth of searching")
+            NotificationCenter.default.post(
+                name: NSNotification.Name("error.notification"),
+                object: self,
+                userInfo: [
+                    "error": ViewControllerError.unableToFindTopViewController,
+                ]
+            )
         }
     }
 }

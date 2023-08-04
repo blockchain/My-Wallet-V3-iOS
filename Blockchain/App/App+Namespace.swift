@@ -51,6 +51,7 @@ extension AppProtocol {
         clientObservers.insert(ApplicationStateObserver(app: self))
         clientObservers.insert(AppHapticObserver(app: self))
         clientObservers.insert(AppAnalyticsObserver(app: self))
+        clientObservers.insert(AppNotificationCenterObservation(app: self))
         clientObservers.insert(resolve() as AppAnalyticsTraitRepository)
         clientObservers.insert(KYCExtraQuestionsObserver(app: self))
         clientObservers.insert(NabuUserSessionObserver(app: self))
