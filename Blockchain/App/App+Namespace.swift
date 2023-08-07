@@ -135,7 +135,7 @@ extension FirebaseRemoteConfig.RemoteConfigSource: RemoteConfigurationSource_p {
 
 #if canImport(MobileIntelligence)
 import class MobileIntelligence.MobileIntelligence
-import struct MobileIntelligence.Options
+import class MobileIntelligence.Options
 import class MobileIntelligence.OptionsBuilder
 import struct MobileIntelligence.Response
 import struct MobileIntelligence.UpdateOptions
