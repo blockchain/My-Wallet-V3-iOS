@@ -118,7 +118,7 @@ public struct PrimarySegmentedControl<Selection: Hashable>: View {
                 x: xOffset(for: proxy[anchor], in: proxy),
                 y: proxy[anchor].minY
             )
-            .animation(.interactiveSpring())
+            .animation(.interactiveSpring(), value: xOffset(for: proxy[anchor], in: proxy))
     }
 
     private func xOffset(for rect: CGRect, in proxy: GeometryProxy) -> CGFloat {

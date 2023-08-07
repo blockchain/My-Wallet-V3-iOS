@@ -16,6 +16,6 @@ extension DependencyContainer {
 
         factory { EmailVerificationService(apiClient: DIKit.resolve()) as EmailVerificationServiceAPI }
 
-        factory { KYCAccountUsageService(apiClient: DIKit.resolve()) as KYCAccountUsageServiceAPI }
+        factory { KYCAccountUsageService(app: DIKit.resolve(), apiClient: DIKit.resolve()) as KYCAccountUsageServiceAPI }
     }
 }

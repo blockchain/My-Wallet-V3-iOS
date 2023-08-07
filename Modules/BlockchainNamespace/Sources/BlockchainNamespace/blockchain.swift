@@ -9496,11 +9496,23 @@ public final class L_blockchain_ux_kyc_extra_questions: L, I_blockchain_ux_kyc_e
 }
 public protocol I_blockchain_ux_kyc_extra_questions: I {}
 public extension I_blockchain_ux_kyc_extra_questions {
+	var `api`: L_blockchain_ux_kyc_extra_questions_api { .init("\(__).api") }
 	var `clear`: L_blockchain_ux_kyc_extra_questions_clear { .init("\(__).clear") }
 	var `context`: L_blockchain_ux_kyc_extra_questions_context { .init("\(__).context") }
 	var `default`: L_blockchain_ux_kyc_extra_questions_default { .init("\(__).default") }
 	var `form`: L_blockchain_ux_kyc_extra_questions_form { .init("\(__).form") }
 }
+public final class L_blockchain_ux_kyc_extra_questions_api: L, I_blockchain_ux_kyc_extra_questions_api {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.extra.questions.api", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_extra_questions_api: I {}
+public extension I_blockchain_ux_kyc_extra_questions_api {
+	var `version`: L_blockchain_ux_kyc_extra_questions_api_version { .init("\(__).version") }
+}
+public final class L_blockchain_ux_kyc_extra_questions_api_version: L, I_blockchain_ux_kyc_extra_questions_api_version {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.extra.questions.api.version", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_extra_questions_api_version: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_kyc_extra_questions_clear: L, I_blockchain_ux_kyc_extra_questions_clear {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.extra.questions.clear", comment: "") }
 }

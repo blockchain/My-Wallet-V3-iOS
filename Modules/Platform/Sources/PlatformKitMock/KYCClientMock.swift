@@ -115,11 +115,11 @@ final class KYCClientMock: KYCClientAPI {
         stubbedResults.fetchLimitsOverview
     }
 
-    func fetchExtraKYCQuestions(context: String) -> AnyPublisher<Form, NabuNetworkError> {
+    func fetchExtraKYCQuestions(context: String, version: [String] = []) -> AnyPublisher<Form, NabuNetworkError> {
         stubbedResults.fetchExtraKYCQuestions
     }
 
-    func submitExtraKYCQuestions(_ form: Form) -> AnyPublisher<Void, NabuNetworkError> {
+    func submitExtraKYCQuestions(_ form: Form, version: [String] = []) -> AnyPublisher<Void, NabuNetworkError> {
         stubbedResults.submitExtraKYCQuestions
     }
 

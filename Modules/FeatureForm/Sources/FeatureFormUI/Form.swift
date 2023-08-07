@@ -21,8 +21,9 @@ public let defaultFieldConfiguration: PrimaryFormFieldConfiguration = { _ in .in
 
 public struct PrimaryForm<Header: View>: View {
 
-    @Binding private var form: FeatureFormDomain.Form
-    @State private var showAnswersState: Bool = false
+    @TransactionBinding private var form: FeatureFormDomain.Form
+    private let my: FeatureFormDomain.Form
+
     private let submitActionTitle: String
     private let submitActionLoading: Bool
     private let submitAction: () -> Void
@@ -33,6 +34,76 @@ public struct PrimaryForm<Header: View>: View {
 
     public init(
         form: Binding<FeatureFormDomain.Form>,
+        submitActionTitle: String,
+        submitActionLoading: Bool,
+        submitAction: @escaping () -> Void,
+        submitButtonMode: PrimaryFormSubmitButtonMode = .onlyEnabledWhenAllAnswersValid,
+        submitButtonLocation: SubmitButtonLocation = .inTheEndOfTheForm,
+        fieldConfiguration: @escaping PrimaryFormFieldConfiguration = defaultFieldConfiguration,
+        @ViewBuilder headerIcon: @escaping () -> Header
+    ) {
+        my = form.wrappedValue
+        _form = form.transaction()
+        self.submitActionTitle = submitActionTitle
+        self.submitActionLoading = submitActionLoading
+        self.submitAction = submitAction
+        self.submitButtonMode = submitButtonMode
+        self.submitButtonLocation = submitButtonLocation
+        self.fieldConfiguration = fieldConfiguration
+        self.headerIcon = headerIcon
+    }
+
+    @State var page: Int = 0
+
+    public var body: some View {
+        TabView(selection: $page) {
+            ForEach(my.pages) { page in
+                let id = my.pages.firstIndex(of: page)!
+                let next = my.pages.index(after: id)
+                let isLastPage = next == my.pages.endIndex
+                PrimaryFormPage<Header>(
+                    form: $form.pages[id],
+                    submitActionTitle: isLastPage ? submitActionTitle : LocalizationConstants.next,
+                    submitActionLoading: submitActionLoading,
+                    submitAction: {
+                        if isLastPage {
+                            $form.commit()
+                            submitAction()
+                        } else {
+                            withAnimation { self.page = next }
+                        }
+                    },
+                    submitButtonMode: submitButtonMode,
+                    submitButtonLocation: submitButtonLocation,
+                    headerIcon: headerIcon
+                )
+                .tag(id)
+            }
+        }
+        .findScrollView { scrollView in
+            scrollView.isScrollEnabled = false
+        }
+        .background(Color.semantic.light)
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .onChange(of: my) { pages in form = pages }
+    }
+}
+
+public struct PrimaryFormPage<Header: View>: View {
+
+    @Binding private var form: FeatureFormDomain.FormPage
+    @State private var showAnswersState: Bool = false
+
+    private let submitActionTitle: String
+    private let submitActionLoading: Bool
+    private let submitAction: () -> Void
+    private let submitButtonMode: PrimaryFormSubmitButtonMode
+    private let submitButtonLocation: SubmitButtonLocation
+    private let headerIcon: () -> Header
+    private let fieldConfiguration: PrimaryFormFieldConfiguration
+
+    public init(
+        form: Binding<FeatureFormDomain.FormPage>,
         submitActionTitle: String,
         submitActionLoading: Bool,
         submitAction: @escaping () -> Void,
@@ -61,8 +132,7 @@ public struct PrimaryForm<Header: View>: View {
             }
         }()
         ScrollView {
-            LazyVStack(spacing: Spacing.padding4) {
-
+            VStack(spacing: Spacing.padding4) {
                 if let header = form.header {
                     VStack(spacing: Spacing.padding3) {
                         headerIcon()
@@ -83,7 +153,7 @@ public struct PrimaryForm<Header: View>: View {
                 ForEach($form.nodes) { question in
                     FormQuestionView(
                         question: question,
-                        showAnswersState: $showAnswersState,
+                        showAnswersState: .constant(false),
                         fieldConfiguration: fieldConfiguration
                     )
                 }
@@ -162,11 +232,18 @@ extension PrimaryForm where Header == EmptyView {
 
 struct PrimaryForm_Previews: PreviewProvider {
 
-    static var previews: some View {
+    static var form: FeatureFormDomain.Form {
         let jsonData = formPreviewJSON.data(using: .utf8)!
         // swiftlint:disable:next force_try
-        let formRawData = try! JSONDecoder().decode(FeatureFormDomain.Form.self, from: jsonData)
-        PreviewHelper(form: formRawData)
+        do {
+            return try JSONDecoder().decode(FeatureFormDomain.Form.self, from: jsonData)
+        } catch {
+            fatalError("\(error)")
+        }
+    }
+
+    static var previews: some View {
+        PreviewHelper(form: form)
     }
 
     struct PreviewHelper: View {
@@ -176,9 +253,9 @@ struct PrimaryForm_Previews: PreviewProvider {
         var body: some View {
             PrimaryForm(
                 form: $form,
-                submitActionTitle: "Next",
+                submitActionTitle: "Submit",
                 submitActionLoading: false,
-                submitAction: {},
+                submitAction: { print("Submit") },
                 headerIcon: {}
             )
         }

@@ -20,12 +20,8 @@ public struct Default<Default: DefaultValue>: Codable {
     }
 }
 
-extension Default: Equatable where Default.Value: Equatable {
-
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.wrappedValue == rhs.wrappedValue
-    }
-}
+extension Default: Equatable where Default.Value: Equatable { }
+extension Default: Hashable where Default.Value: Hashable { }
 
 extension KeyedDecodingContainer {
 

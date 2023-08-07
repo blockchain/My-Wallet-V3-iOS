@@ -40,6 +40,7 @@ let package = Package(
                 .product(name: "Localization", package: "Localization"),
                 .target(name: "FeatureFormDomain")
             ]
-        )
+        ),
+        .testTarget(name: "FeatureFormDomainTests", dependencies: ["FeatureFormDomain"])
     ]
 )

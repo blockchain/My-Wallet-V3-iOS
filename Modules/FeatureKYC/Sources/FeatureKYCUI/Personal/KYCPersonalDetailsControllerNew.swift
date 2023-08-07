@@ -57,7 +57,9 @@ final class KYCPersonalDetailsControllerNew: KYCBaseViewController {
                     onClose: dismiss,
                     onComplete: moveToNextStep,
                     loadForm: loadForm,
-                    submitForm: onSubmission,
+                    submitForm: { [onSubmission] form in
+                        onSubmission(form.pages.flatMap(\.nodes))
+                    },
                     analyticsRecorder: analyticsRecorder,
                     mainQueue: .main
                 )

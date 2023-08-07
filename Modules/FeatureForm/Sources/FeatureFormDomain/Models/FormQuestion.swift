@@ -1,10 +1,80 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Extensions
 import Foundation
 
-public struct Form: Codable, Equatable {
+public struct Form: Codable, Hashable {
 
-    public struct Header: Codable, Equatable {
+    public let context: String?
+    public var pages: [FormPage]
+    public var isLegacy: Bool = false
+    public let blocking: Bool?
+
+    public init(context: String? = nil, pages: [FormPage] = []) {
+        self.context = context
+        self.pages = pages
+        self.blocking = pages.any { page in page.blocking ?? false }
+    }
+
+    public init(
+        header: FormPage.Header? = nil,
+        context: String? = nil,
+        nodes: [FormQuestion],
+        blocking: Bool = true
+    ) {
+        self.context = context
+        self.pages = [.init(header: header, nodes: nodes, blocking: blocking)]
+        self.isLegacy = true
+        self.blocking = blocking
+    }
+
+    public var isEmpty: Bool {
+        pages.first?.isEmpty ?? true
+    }
+
+    public var isValidForm: Bool {
+        pages.allSatisfy(\.nodes.isValidForm)
+    }
+
+    public var isBlocking: Bool {
+        blocking ?? false
+    }
+}
+
+extension Form {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: AnyCodingKey.self)
+        if container.contains("pages") {
+            context = try container.decodeIfPresent(String.self, forKey: "context")
+            pages = try container.decode([FormPage].self, forKey: "pages")
+            blocking = try container.decodeIfPresent(Bool.self, forKey: "blocking")
+        } else {
+            let page = try FormPage(from: decoder)
+            context = page.context
+            pages = [page]
+            isLegacy = true
+            blocking = page.blocking
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if isLegacy, let page = pages.first {
+            try page.encode(to: encoder)
+        } else {
+            var container = encoder.container(keyedBy: AnyCodingKey.self)
+            try container.encode(context, forKey: "context")
+            try container.encode(pages, forKey: "pages")
+            try container.encode(blocking, forKey: "blocking")
+        }
+    }
+}
+
+public struct FormPage: Codable, Hashable, Identifiable {
+
+    public var id: some Hashable { self }
+
+    public struct Header: Codable, Hashable {
 
         public let title: String
         public let description: String
@@ -18,13 +88,13 @@ public struct Form: Codable, Equatable {
     public let header: Header?
     public let context: String?
     public var nodes: [FormQuestion]
-    public let blocking: Bool
+    public let blocking: Bool?
 
     public var isEmpty: Bool { nodes.isEmpty }
     public var isNotEmpty: Bool { !isEmpty }
 
     public init(
-        header: Form.Header? = nil,
+        header: FormPage.Header? = nil,
         context: String? = nil,
         nodes: [FormQuestion],
         blocking: Bool = true
@@ -36,7 +106,7 @@ public struct Form: Codable, Equatable {
     }
 }
 
-public struct FormQuestion: Codable, Identifiable, Equatable {
+public struct FormQuestion: Codable, Identifiable, Hashable {
 
     public enum QuestionType: String, Codable {
         case singleSelection = "SINGLE_SELECTION"

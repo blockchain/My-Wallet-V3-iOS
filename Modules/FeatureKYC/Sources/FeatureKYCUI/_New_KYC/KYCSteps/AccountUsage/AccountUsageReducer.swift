@@ -70,7 +70,7 @@ enum AccountUsage {
                                     action: .loadForm
                                 ),
                                 .destructive(
-                                    title: LocalizationConstants.NewKYC.GenericError.retryButtonTitle,
+                                    title: LocalizationConstants.NewKYC.GenericError.cancelButtonTitle,
                                     action: .dismiss
                                 )
                             ]

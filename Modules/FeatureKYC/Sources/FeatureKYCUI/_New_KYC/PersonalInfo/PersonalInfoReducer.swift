@@ -32,10 +32,7 @@ enum PersonalInfo {
         var formSubmissionState: LoadingState<Empty, FailureState<Action>> = .idle
 
         var isValidForm: Bool {
-            guard !form.nodes.isEmpty else {
-                return false
-            }
-            return form.nodes.isValidForm
+            !form.isEmpty && form.isValidForm
         }
     }
 
@@ -54,7 +51,7 @@ enum PersonalInfo {
         let onClose: () -> Void
         let onComplete: () -> Void
         let loadForm: () -> AnyPublisher<[FormQuestion], KYCFlowError>
-        let submitForm: ([FormQuestion]) -> AnyPublisher<Void, KYCFlowError>
+        let submitForm: (Form) -> AnyPublisher<Void, KYCFlowError>
         let analyticsRecorder: AnalyticsEventRecorderAPI // TODO: use me
         let mainQueue: AnySchedulerOf<DispatchQueue>
     }
@@ -96,7 +93,7 @@ enum PersonalInfo {
                 return .none
             }
             state.formSubmissionState = .loading
-            return environment.submitForm(state.form.nodes)
+            return environment.submitForm(state.form)
                 .map(Empty.init)
                 .catchToEffect()
                 .map(Action.submissionResultReceived)
@@ -133,7 +130,7 @@ enum PersonalInfo {
             state.formSubmissionState = .idle
             return .none
         case .onViewAppear:
-            guard state.form.nodes.isEmpty else {
+            guard state.form.isEmpty else {
                 return .none
             }
             return EffectTask(value: .loadForm)

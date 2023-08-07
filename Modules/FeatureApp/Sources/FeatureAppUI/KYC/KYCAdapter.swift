@@ -8,8 +8,6 @@ import FeatureAddressSearchDomain
 import FeatureKYCDomain
 import FeatureKYCUI
 import FeatureOnboardingUI
-import FeatureProveDomain
-import FeatureProveUI
 import FeatureSettingsUI
 import Localization
 import PlatformKit
@@ -197,63 +195,10 @@ extension KYCAdapter: FeatureOnboardingUI.KYCRouterAPI {
     }
 }
 
-final class FlowKYCInfoService: FeatureKYCDomain.FlowKYCInfoServiceAPI {
-
-    private let flowKYCInfoService: FeatureProveDomain.FlowKYCInfoServiceAPI
-
-    init(flowKYCInfoService: FeatureProveDomain.FlowKYCInfoServiceAPI = resolve()) {
-        self.flowKYCInfoService = flowKYCInfoService
-    }
-
-    func isProveFlow() async throws -> Bool? {
-        let flowKYCInfo = try await flowKYCInfoService.getFlowKYCInfo()
-        return flowKYCInfo?.nextFlow == .prove
-    }
-}
-
 extension KYCAdapter: FeatureSettingsUI.KYCRouterAPI {
 
     public func presentLimitsOverview(from presenter: UIViewController) {
         router.presentLimitsOverview(from: presenter)
-    }
-}
-
-final class KYCProveFlowPresenter: FeatureKYCUI.KYCProveFlowPresenterAPI {
-
-    private let router: FeatureProveDomain.ProveRouterAPI
-
-    init(
-        router: FeatureProveDomain.ProveRouterAPI
-    ) {
-        self.router = router
-    }
-
-    func presentFlow(
-        country: String,
-        state: String?
-    ) -> AnyPublisher<KYCProveResult, Never> {
-        router.presentFlow(
-            proveConfig: .init(
-                country: country,
-                state: state
-            )
-        )
-        .eraseToEffect()
-        .map { KYCProveResult(result: $0) }
-        .eraseToAnyPublisher()
-    }
-}
-
-extension KYCProveResult {
-    fileprivate init(result: VerificationResult) {
-        switch result {
-        case .success:
-            self = .success
-        case .abandoned:
-            self = .abandoned
-        case .failure(let errorCode):
-            self = .failure(errorCode)
-        }
     }
 }
 
