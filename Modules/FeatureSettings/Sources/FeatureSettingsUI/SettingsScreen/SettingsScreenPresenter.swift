@@ -78,7 +78,8 @@ final class SettingsScreenPresenter {
             biometryProvider: interactor.biometryProviding,
             settingsAuthenticater: interactor.settingsAuthenticating,
             recoveryPhraseStatusProvider: interactor.recoveryPhraseStatusProvider,
-            authenticationCoordinator: interactor.authenticationCoordinator
+            authenticationCoordinator: interactor.authenticationCoordinator,
+            tiersLimitsProvider: interactor.tiersProviding
         )
 
         self.cardsSectionPresenter = CardsSectionPresenter(

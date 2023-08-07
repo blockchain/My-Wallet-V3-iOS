@@ -211,7 +211,7 @@
         "Homebrew/homebrew-core": "api",
         "CLT": "",
         "Xcode": "14.3.1",
-        "macOS": "13.4.1"
+        "macOS": "13.5"
       }
     }
   }
