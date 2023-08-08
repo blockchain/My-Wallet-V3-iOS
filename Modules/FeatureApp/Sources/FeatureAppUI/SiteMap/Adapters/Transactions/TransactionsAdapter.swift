@@ -15,7 +15,7 @@ enum TransactionType: Equatable {
     /// Performs a sell. If `CrytoCurrency` is `nil`, the users will be presented with a crypto currency selector.
     case sell(CryptoAccount?)
     /// Performs a swap. If `CrytoCurrency` is `nil`, the users will be presented with a crypto currency selector.
-    case swap(CryptoAccount?)
+    case swap(source: CryptoAccount?, target: CryptoAccount?)
     /// Shows details to receive crypto.
     case receive(CryptoAccount?)
     /// Performs an interest transfer.
@@ -31,8 +31,8 @@ enum TransactionType: Equatable {
             return lhsAccount?.identifier == rhsAccount?.identifier
         case (.sell(let lhsAccount), .sell(let rhsAccount)):
             return lhsAccount?.identifier == rhsAccount?.identifier
-        case (.swap(let lhsAccount), .swap(let rhsAccount)):
-            return lhsAccount?.identifier == rhsAccount?.identifier
+        case (.swap(let lhsSourceAccount, let lhsTargetAccount), .swap(let rhsSourceAccount, let rhsTargetAccount)):
+            return (lhsSourceAccount?.identifier == rhsSourceAccount?.identifier) && (lhsTargetAccount?.identifier == rhsTargetAccount?.identifier)
         case (.receive(let lhsAccount), .receive(let rhsAccount)):
             return lhsAccount?.identifier == rhsAccount?.identifier
         case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)):
@@ -90,8 +90,8 @@ extension TransactionType {
             return .buy(cryptoAccount)
         case .sell(let cryptoAccount):
             return .sell(cryptoAccount)
-        case .swap(let cryptoAccount):
-            return .swap(cryptoAccount)
+        case .swap(let sourceCryptoAccount, let targetCryptoAccount):
+            return .swap(source: sourceCryptoAccount, target: targetCryptoAccount)
         case .receive(let cryptoAccount):
             return .receive(cryptoAccount)
         case .interestTransfer(let cryptoInterestAccount):

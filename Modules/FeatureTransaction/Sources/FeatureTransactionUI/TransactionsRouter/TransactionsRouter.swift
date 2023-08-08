@@ -374,7 +374,7 @@ extension TransactionsRouter {
             mimicRIBAttachment(router: router)
             return listener.publisher
 
-        case .swap(let cryptoAccount):
+        case .swap(let sourceAccount, let targetAccount):
             guard presenter.presentedViewController == nil else {
                 return .empty()
             }
@@ -382,8 +382,8 @@ extension TransactionsRouter {
             let router = transactionFlowBuilder.build(
                 withListener: interactor,
                 action: .swap,
-                sourceAccount: cryptoAccount,
-                target: nil
+                sourceAccount: sourceAccount,
+                target: targetAccount
             )
             presenter.present(router.viewControllable.uiviewController, animated: true)
             mimicRIBAttachment(router: router)

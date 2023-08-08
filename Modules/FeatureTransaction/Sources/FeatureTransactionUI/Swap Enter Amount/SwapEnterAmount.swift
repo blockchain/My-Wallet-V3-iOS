@@ -323,11 +323,14 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return EffectTask(value: .resetInput(newInput: max.toDisplayString(includeSymbol: false)))
 
             case .onSelectSourceTapped:
-                state.selectFromCryptoAccountState = SwapFromAccountSelect.State(appMode: app.currentMode)
+                state.selectFromCryptoAccountState = SwapFromAccountSelect.State(appMode: app.currentMode, selectedTargetAccountId: state.targetInformation?.accountId)
                 state.showAccountSelect.toggle()
                 return .none
 
             case .onSelectTargetTapped:
+                guard state.sourceInformation != nil else {
+                    return .none
+                }
                 state.selectToCryptoAccountState = SwapToAccountSelect.State(
                     selectedSourceCrypto: state.sourceInformation?.currency,
                     appMode: app.currentMode

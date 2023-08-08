@@ -214,7 +214,18 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
             .prefix(1)
             .receive(on: DispatchQueue.main)
             .flatMap { positiveBalance -> AnyPublisher<TransactionFlowResult, Never> in
-                transactionsRouter.presentTransactionFlow(to: .swap(account))
+                if !positiveBalance {
+                    guard let viewController = UIApplication.shared.topMostViewController else {
+                        fatalError("Top most view controller cannot be nil")
+                    }
+                    return onboardingRouter
+                        .presentRequiredCryptoBalanceView(from: viewController)
+                        .map(TransactionFlowResult.init)
+                        .eraseToAnyPublisher()
+                } else {
+                    return transactionsRouter.presentTransactionFlow(to: .swap(source: account,
+                                                                               target: nil))
+                }
             }
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")

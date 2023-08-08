@@ -16,6 +16,7 @@ public struct SwapFromAccountSelect: ReducerProtocol {
         var isLoading: Bool = false
         var appMode: AppMode?
         var swapAccountRows: IdentifiedArrayOf<SwapFromAccountRow.State> = []
+        var selectedTargetAccountId: String?
     }
 
     public enum Action: Equatable {
@@ -46,7 +47,8 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                 state.appMode = app.currentMode
                 state.isLoading = true
                 return .run { [
-                    appMode = state.appMode
+                    appMode = state.appMode,
+                    targetAccountId = state.selectedTargetAccountId
                 ] send in
                     do {
                         let tradableCurrencies = try await supportedPairsInteractorService
@@ -56,8 +58,10 @@ public struct SwapFromAccountSelect: ReducerProtocol {
 
                         if appMode == .pkw {
                             let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.with.balance, as: [String].self)
+
                             let filteredAccounts: [String] = try await availableAccounts
                                 .async
+                                .filter({ $0 != targetAccountId })
                                 .filter { accountId in
                                     let currency = try await app.get(blockchain.coin.core.account[accountId].currency, as: String.self)
                                     return tradableCurrencies.contains(currency)
@@ -71,6 +75,7 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                             let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.with.balance, as: [String].self)
                             let filteredAccounts = try await availableAccounts
                                 .async
+                                .filter({ $0 != targetAccountId })
                                 .filter { accountId in
                                     let currency = try await app.get(blockchain.coin.core.account[accountId].currency, as: String.self)
                                     return tradableCurrencies.contains(currency)
@@ -89,7 +94,6 @@ public struct SwapFromAccountSelect: ReducerProtocol {
             case .onAvailableAccountsFetched(let accounts):
                 state.isLoading = false
                 let elements = accounts
-                    .filter {$0 != "EVMCryptoAccount.ETH.0x83ef6855f276023100875d6DA4a9f9BABb988f59" }
                     .map {
                         SwapFromAccountRow.State(
                             isLastRow: $0 == accounts.last,
@@ -97,7 +101,6 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                         )
                     }
                 state.swapAccountRows = IdentifiedArrayOf(uniqueElements: elements)
-                print("💪 got elements \(elements)")
                 return .none
 
             case .onCloseTapped:
