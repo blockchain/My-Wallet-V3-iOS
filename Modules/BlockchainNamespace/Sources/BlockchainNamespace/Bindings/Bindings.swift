@@ -147,13 +147,15 @@ extension Bindings {
 
     @discardableResult
     public func subscribe<Property: Decodable & Equatable>(to event: Tag.Event, ofType: Property.Type) -> Self {
-        insert(Bindings.Binding(self, to: event.key(to: context), subscribed: true, as: Property.self))
+        let key = event.key()
+        insert(Bindings.Binding(self, to: key.ref(to: context + key.context, in: app), subscribed: true, as: Property.self))
         return self
     }
 
     @discardableResult
     public func set<Property: Decodable & Equatable>(to event: Tag.Event, ofType: Property.Type) -> Self {
-        insert(Bindings.Binding(self, to: event.key(to: context), subscribed: false, as: Property.self))
+        let key = event.key()
+        insert(Bindings.Binding(self, to: key.ref(to: context + key.context, in: app), subscribed: false, as: Property.self))
         return self
     }
 
@@ -170,11 +172,13 @@ extension Bindings {
     }
 
     func bind(_ binding: SwiftUI.Binding<some Decodable & Equatable>, to event: Tag.Event, subscribed: Bool) -> Bindings.Binding {
-        Bindings.Binding(self, binding: binding, to: event.key(to: context), subscribed: subscribed)
+        let key = event.key()
+        return Bindings.Binding(self, binding: binding, to: key.ref(to: context + key.context, in: app), subscribed: subscribed)
     }
 
     func bind<T: Decodable & Equatable, Property: Decodable & Equatable>(_ binding: SwiftUI.Binding<Property>, to event: Tag.Event, subscribed: Bool, map: @escaping (T) -> Property) -> Bindings.Binding {
-        Bindings.Binding(self, binding: binding, to: event.key(to: context), subscribed: subscribed, map: map)
+        let key = event.key()
+        return Bindings.Binding(self, binding: binding, to: key.ref(to: context + key.context, in: app), subscribed: subscribed, map: map)
     }
 
     @dynamicMemberLookup
@@ -241,15 +245,18 @@ extension Bindings.ToObject {
     }
 
     func bind(_ property: ReferenceWritableKeyPath<Object, some Decodable & Equatable>, to event: Tag.Event, subscribed: Bool) -> Bindings.Binding {
-        Bindings.Binding(_bindings, reference: event.key(to: _bindings.context), to: object, property)
+        let key = event.key()
+        return Bindings.Binding(_bindings, reference: key.ref(to: _bindings.context + key.context, in: _bindings.app), to: object, property)
     }
 
     func bind<T: Decodable & Equatable, Property: Decodable & Equatable>(_ property: ReferenceWritableKeyPath<Object, Property>, to event: Tag.Event, subscribed: Bool, as map: @escaping (T) throws -> Property) -> Bindings.Binding {
-        Bindings.Binding(_bindings, reference: event.key(to: _bindings.context), to: object, property, map: map)
+        let key = event.key()
+        return Bindings.Binding(_bindings, reference: key.ref(to: _bindings.context + key.context, in: _bindings.app), to: object, property, map: map)
     }
 
     func bind(_ property: ReferenceWritableKeyPath<Object, Any>, to event: Tag.Event, subscribed: Bool) -> Bindings.Binding {
-        Bindings.Binding(_bindings, reference: event.key(to: _bindings.context), to: object, property)
+        let key = event.key()
+        return Bindings.Binding(_bindings, reference: key.ref(to: _bindings.context + key.context, in: _bindings.app), to: object, property)
     }
 
     @discardableResult
