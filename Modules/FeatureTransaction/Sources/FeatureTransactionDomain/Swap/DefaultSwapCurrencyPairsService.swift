@@ -16,7 +16,7 @@ public struct SelectionInformation: Equatable {
 }
 
 public protocol DefaultSwapCurrencyPairsServiceAPI {
-    func getDefaultPairs(sourceInformation: SelectionInformation?) async -> (source: SelectionInformation, target: SelectionInformation)?
+    func getDefaultPairs(sourceInformation: SelectionInformation?, targetInformation: SelectionInformation?) async -> (source: SelectionInformation, target: SelectionInformation)?
 }
 
 public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI {
@@ -31,18 +31,22 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         self.supportedPairsInteractorService = supportedPairsInteractorService
     }
 
-    public func getDefaultPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
+    public func getDefaultPairs(sourceInformation: SelectionInformation?,
+                                targetInformation: SelectionInformation?) async -> (source: SelectionInformation, target: SelectionInformation)? {
         let appMode = await app.mode()
 
         switch appMode {
         case .trading:
-            return await getDefaultTradingPairs(sourceInformation: sourceInformation)
+            return await getDefaultTradingPairs(sourceInformation: sourceInformation,
+                                                targetInformation: targetInformation)
         case .pkw:
-            return await getDefaultNonCustodialPairs(sourceInformation: sourceInformation)
+            return await getDefaultNonCustodialPairs(sourceInformation: sourceInformation,
+                                                     targetInformation: targetInformation)
         }
     }
 
-    private func getDefaultTradingPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
+    private func getDefaultTradingPairs(sourceInformation: SelectionInformation? = nil,
+                                        targetInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
             let tradableCurrencies = try await supportedPairsInteractorService
                 .fetchSupportedTradingCryptoCurrencies()
@@ -72,18 +76,40 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
             let usdtAccountId = try? await app
                 .get(blockchain.coin.core.accounts.custodial.asset["USDT"], as: String.self)
 
-            return try pair(
-                with: sourceInformation?.currency.currencyType ?? balance.base.currency,
-                accountId: sourceInformation?.accountId ?? accountId,
-                usdtAccountId: usdtAccountId,
-                bitcoinAccountId: bitcoinAccountId
-            )
+            switch (sourceInformation, targetInformation) {
+            case (nil, nil):
+                return try pairForSource(
+                    with: balance.base.currency,
+                    accountId: accountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+            case (let source, nil):
+                return try pairForSource(
+                    with: sourceInformation?.currency.currencyType ?? balance.base.currency,
+                    accountId: source?.accountId ?? accountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+
+                case (nil, let target) :
+                return try pairForDestination(
+                    with: target?.currency.currencyType ?? balance.base.currency,
+                    accountId: target?.accountId ?? accountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+
+            default:
+                return nil
+            }
         } catch {
             return nil
         }
     }
 
-    private func getDefaultNonCustodialPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
+    private func getDefaultNonCustodialPairs(sourceInformation: SelectionInformation? = nil,
+                                             targetInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
             let tradingCurrencies = try await supportedPairsInteractorService
                 .fetchSupportedTradingCryptoCurrencies()
@@ -116,7 +142,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .get(blockchain.coin.core.accounts.DeFi.asset["USDT"], as: [String].self)
                 .first
 
-            return try pair(
+            return try pairForSource(
                 with: sourceInformation?.currency.currencyType ?? balance.base.currency,
                 accountId: sourceInformation?.accountId ?? accountId,
                 usdtAccountId: usdtAccountId,
@@ -127,7 +153,8 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         }
     }
 
-    private func pair(
+
+    private func pairForSource(
         with currency: CurrencyType,
         accountId: String?,
         usdtAccountId: String?,
@@ -158,6 +185,27 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
             let bitcoinAccountId = try bitcoinAccountId.or(throw: "No BTC account id found")
             destination = SelectionInformation(accountId: bitcoinAccountId, currency: bitcoin)
         }
+        return (source: source, target: destination)
+    }
+
+    private func pairForDestination(
+        with currency: CurrencyType,
+        accountId: String?,
+        usdtAccountId: String?,
+        bitcoinAccountId: String?,
+        currenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
+    ) throws -> (source: SelectionInformation, target: SelectionInformation) {
+        guard let cryptoCurrency = currency.cryptoCurrency else {
+            throw "Not a cryptocurrency"
+        }
+        guard let accountId else {
+            throw "No account id found"
+        }
+        let bitcoin = CryptoCurrency.bitcoin
+        let destination = SelectionInformation(accountId: accountId, currency: cryptoCurrency)
+        let bitcoinAccountId = try bitcoinAccountId.or(throw: "No BTC account id found")
+        let source: SelectionInformation = SelectionInformation(accountId: bitcoinAccountId, currency: bitcoin)
+
         return (source: source, target: destination)
     }
 }

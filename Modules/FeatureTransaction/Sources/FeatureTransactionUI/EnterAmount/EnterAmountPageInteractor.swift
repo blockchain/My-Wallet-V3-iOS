@@ -414,6 +414,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 guard let userKYCTier, action == .buy && userKYCTier < .verified else {
                     return !accounts.isEmpty
                 }
+
                 // users will have a set of suggested accounts they can link, so the button should be enabled.
                 let suggestedPaymentMethods: [Account] = accounts
                     .compactMap { $0 as? PaymentMethodAccount }

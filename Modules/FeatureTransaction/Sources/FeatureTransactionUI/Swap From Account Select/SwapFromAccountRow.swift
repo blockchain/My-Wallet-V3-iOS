@@ -54,10 +54,10 @@ public struct SwapFromAccountRow: ReducerProtocol {
 
         public init(
             isLastRow: Bool,
-            assetCode: String
+            accountId: String
         ) {
             self.isLastRow = isLastRow
-            self.accountId = assetCode
+            self.accountId = accountId
         }
     }
 
@@ -65,8 +65,6 @@ public struct SwapFromAccountRow: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .binding(\.$price):
-                return .none
             case .binding:
                 return .none
             case .onAppear:

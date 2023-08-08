@@ -362,7 +362,7 @@ public final class CoincoreNAPI {
             repository: { tag in
                 do {
                     return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in
-                        account.balance.map { balance in AnyJSON(try? balance.encode().json()) }
+                        account.balance.print("🎾 \(tag)").map { balance in AnyJSON(try? balance.encode().json()) }
                             .eraseToAnyPublisher()
                     }
                     .switchToLatest()

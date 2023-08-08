@@ -157,6 +157,7 @@ public struct SwapToAccountSelect: ReducerProtocol {
                             isCustodial: state.filterDefiAccountsOnly == false
                         )
                     }
+                debugPrint(accounts)
                 state.swapAccountRows = IdentifiedArrayOf(uniqueElements: elements)
                 return .none
 

@@ -14,7 +14,7 @@ public struct SwapFromAccountSelectView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }, content: { viewStore in
+//        WithViewStore(store, observe: { $0 }, content: { viewStore in
             VStack {
                 cryptoAssetsSection
             }
@@ -36,7 +36,7 @@ public struct SwapFromAccountSelectView: View {
                 },
                 scrollOffset: nil
             )
-        })
+//        })
     }
 
     private var cryptoAssetsSection: some View {
@@ -52,6 +52,7 @@ public struct SwapFromAccountSelectView: View {
                         )
                     ) { rowStore in
                         SwapFromAccountRowView(store: rowStore)
+//                            .context([blockchain.coin.core.account.id: ViewStore(rowStore).accountId])
                     }
                 }
             }

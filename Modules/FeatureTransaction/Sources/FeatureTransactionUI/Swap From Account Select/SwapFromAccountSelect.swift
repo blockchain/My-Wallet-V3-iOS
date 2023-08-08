@@ -15,7 +15,6 @@ public struct SwapFromAccountSelect: ReducerProtocol {
     public struct State: Equatable {
         var isLoading: Bool = false
         var appMode: AppMode?
-        var availableAccounts: [String] = []
         var swapAccountRows: IdentifiedArrayOf<SwapFromAccountRow.State> = []
     }
 
@@ -90,13 +89,15 @@ public struct SwapFromAccountSelect: ReducerProtocol {
             case .onAvailableAccountsFetched(let accounts):
                 state.isLoading = false
                 let elements = accounts
+                    .filter {$0 != "EVMCryptoAccount.ETH.0x83ef6855f276023100875d6DA4a9f9BABb988f59" }
                     .map {
                         SwapFromAccountRow.State(
                             isLastRow: $0 == accounts.last,
-                            assetCode: $0
+                            accountId: $0
                         )
                     }
                 state.swapAccountRows = IdentifiedArrayOf(uniqueElements: elements)
+                print("💪 got elements \(elements)")
                 return .none
 
             case .onCloseTapped:

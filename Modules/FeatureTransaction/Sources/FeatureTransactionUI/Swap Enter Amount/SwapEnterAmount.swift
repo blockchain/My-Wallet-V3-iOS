@@ -237,10 +237,13 @@ public struct SwapEnterAmount: ReducerProtocol {
                         .map(Action.onMinMaxAmountsFetched),
 
                         .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
-                            guard targetInformation == nil else {
+                            guard sourceInformation == nil && targetInformation == nil else {
+                                await send(.updateSourceBalance)
                                 return
                             }
-                            if let pairs = await defaultSwapPairsService.getDefaultPairs(sourceInformation: sourceInformation) {
+
+                            if let pairs = await defaultSwapPairsService.getDefaultPairs(sourceInformation: sourceInformation,
+                                                                                         targetInformation: targetInformation) {
                                 await send(.didFetchPairs(pairs.0, pairs.1))
                                 await send(.updateSourceBalance)
                             }
