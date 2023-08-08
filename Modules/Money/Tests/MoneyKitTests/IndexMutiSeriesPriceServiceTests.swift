@@ -42,6 +42,20 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
                                 "price": 28879,
                                 "timestamp": 1680192240
                             }
+                        ],
+                        "BUSD.MATIC-USD": [
+                            {
+                                "timestamp": 1689604660,
+                                "price": null,
+                                "volume24h": null,
+                                "marketCap": null
+                            },
+                            {
+                                "timestamp": 1691423820,
+                                "price": null,
+                                "volume24h": null,
+                                "marketCap": null
+                            }
                         ]
                     }
                     """.utf8
@@ -62,7 +76,8 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
                         "ETH-USD": {
                             "price": 1446.6,
                             "timestamp": \(now.timeIntervalSince1970.i)
-                        }
+                        },
+                        "BUSD.MATIC-USD": null
                     }
                     """.utf8
                 )
