@@ -24,9 +24,9 @@ public struct DashboardActivitySectionView: View {
             switch viewStore.viewState {
             case .idle:
                 ProgressView()
-                .onAppear {
-                    viewStore.send(.onAppear)
-                }
+                    .onAppear {
+                        viewStore.send(.onAppear)
+                    }
 
             case .empty:
                 EmptyView()
