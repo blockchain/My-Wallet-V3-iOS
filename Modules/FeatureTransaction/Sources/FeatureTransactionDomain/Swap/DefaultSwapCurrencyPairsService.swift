@@ -72,8 +72,8 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
 
 
             let firstBalance = try firstValidBalance(targetCurrency: targetInformation?.currency.currencyType,
-                                                      tradingPairs: tradingPairs,
-                                                      allBalances: allBalances)
+                                                     tradingPairs: tradingPairs,
+                                                     allBalances: allBalances)
                 .or(throw: "No matching pairs")
 
             let firstBalanceAccountId = try? await app
@@ -100,16 +100,14 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                     bitcoinAccountId: bitcoinAccountId
                 )
 
-                case (nil, let target) :
+            case (nil, let target) :
                 if let target  {
-                    return try pairForDestination(
-                        destinationCurrency: target.currency.currencyType,
-                        destinationAccountId: target.accountId,
-                        firstBalanceAccountId: firstBalanceAccountId,
-                        firstBalanceCurrency: firstBalance.base.currency.currencyType,
-                        usdtAccountId: usdtAccountId,
-                        bitcoinAccountId: bitcoinAccountId
-                    )
+                    if let firstBalanceAccountId,
+                       let firstBalanceCurrency = firstBalance.base.currency.cryptoCurrency {
+                        let source = SelectionInformation(accountId: firstBalanceAccountId,
+                                                          currency: firstBalanceCurrency)
+                        return (source: source, target: target)
+                    }
                 }
                 return nil
 
@@ -146,8 +144,8 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .sorted(by: { try $0.quote > $1.quote })
 
             let firstBalance = try firstValidBalance(targetCurrency: targetInformation?.currency.currencyType,
-                                                      tradingPairs: tradingPairs,
-                                                      allBalances: allBalances)
+                                                     tradingPairs: tradingPairs,
+                                                     allBalances: allBalances)
                 .or(throw: "No matching pairs")
 
             let firstBalanceAccountId: String? = try? await app
@@ -176,13 +174,14 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                     bitcoinAccountId: bitcoinAccountId
                 )
 
-                case (nil, let target) :
+            case (nil, let target) :
                 if let target  {
-                    return try pairForDestination(destinationCurrency: target.currency.currencyType, destinationAccountId: target.accountId,
-                                                  firstBalanceAccountId: firstBalanceAccountId,
-                                                  firstBalanceCurrency: firstBalance.base.currency.currencyType,
-                                                  usdtAccountId: usdtAccountId,
-                                                  bitcoinAccountId: bitcoinAccountId)
+                    if let firstBalanceAccountId,
+                       let firstBalanceCurrency = firstBalance.base.currency.cryptoCurrency {
+                        let source = SelectionInformation(accountId: firstBalanceAccountId,
+                                                          currency: firstBalanceCurrency)
+                        return (source: source, target: target)
+                    }
                 }
                 return nil
 
@@ -195,18 +194,18 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
     }
 
     private func firstValidBalance(targetCurrency: CurrencyType?,
-                                     tradingPairs: [TradingPair],
-                                     allBalances: [MoneyValuePair]
+                                   tradingPairs: [TradingPair],
+                                   allBalances: [MoneyValuePair]
     ) -> MoneyValuePair? {
         guard let targetCurrency else {
             return allBalances.first
         }
         let firstBalance = allBalances
             .first { balance in
-            tradingPairs.contains { pair in
-                pair.sourceCurrencyType == balance.base.currency && pair.destinationCurrencyType == targetCurrency
+                tradingPairs.contains { pair in
+                    pair.sourceCurrencyType == balance.base.currency && pair.destinationCurrencyType == targetCurrency
+                }
             }
-        }
         return firstBalance
     }
 
@@ -243,50 +242,5 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
             destination = SelectionInformation(accountId: bitcoinAccountId, currency: bitcoin)
         }
         return (source: source, target: destination)
-    }
-
-    private func pairForDestination(
-        destinationCurrency: CurrencyType,
-        destinationAccountId: String,
-        firstBalanceAccountId: String?,
-        firstBalanceCurrency: CurrencyType,
-        usdtAccountId: String?,
-        bitcoinAccountId: String?,
-        currenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
-    ) throws -> (source: SelectionInformation, target: SelectionInformation) {
-        guard let destinationCurrency = destinationCurrency.cryptoCurrency else {
-            throw "Not a cryptocurrency"
-        }
-
-        guard let firstBalanceCurrency = firstBalanceCurrency.cryptoCurrency else {
-            throw "Not a cryptocurrency"
-        }
-
-        guard let firstBalanceAccountId else {
-            throw "No account id found"
-        }
-
-        let bitcoin = CryptoCurrency.bitcoin
-        let usdt = try currenciesService
-            .allEnabledCryptoCurrencies
-            .first(where: { $0.code == "USDT" })
-            .or(throw: "No USDT found")
-
-        let destination = SelectionInformation(accountId: destinationAccountId,
-                                               currency: destinationCurrency)
-
-        // If destination is Bitcoin
-        if destinationCurrency == bitcoin {
-            // we select USDT as source
-            let usdtAccountId = try usdtAccountId.or(throw: "No USDT account id found")
-            let source: SelectionInformation = SelectionInformation(accountId: usdtAccountId, currency: usdt)
-            return (source: source, target: destination)
-        } else {
-            // else source is the first balance
-            let source = SelectionInformation(accountId: firstBalanceAccountId,
-                                              currency: firstBalanceCurrency)
-            return (source: source, target: destination)
-
-        }
     }
 }
