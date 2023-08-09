@@ -209,7 +209,6 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
 
     func handleSwapCrypto(account: CryptoAccount?) {
         let transactionsRouter = transactionsRouter
-        let _ = onboardingRouter
         coincore.hasPositiveDisplayableBalanceAccounts(for: .crypto)
             .prefix(1)
             .receive(on: DispatchQueue.main)
