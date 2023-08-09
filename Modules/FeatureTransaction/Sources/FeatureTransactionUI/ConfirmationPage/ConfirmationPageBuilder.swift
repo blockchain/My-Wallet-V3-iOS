@@ -413,11 +413,15 @@ extension TransactionState {
                     exchange: feeTotal.feeInFiat
                 )
                 let total: MoneyValue
-                let totalFiat: MoneyValue
+                let totalFiat: MoneyValue?
                 let totalPair: SendCheckout.Amount
                 if feeTotal.amount.currency == feeTotal.fee.currency {
                     total = try feeTotal.amount + feeTotal.fee
-                    totalFiat = try feeTotal.amountInFiat + feeTotal.feeInFiat
+                    if let amountInFiat = feeTotal.amountInFiat, let feeInFiat = feeTotal.feeInFiat {
+                        totalFiat = try amountInFiat + feeInFiat
+                    } else {
+                        totalFiat = nil
+                    }
                     totalPair = SendCheckout.Amount(value: total, fiatValue: totalFiat)
                 } else {
                     total = feeTotal.amount

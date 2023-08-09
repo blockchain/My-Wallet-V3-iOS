@@ -24,6 +24,8 @@ public protocol AmountViewInteracting {
     /// only used to show an alert.
     var effect: Observable<AmountInteractorEffect> { get }
 
+    func setCanTransactFiat(_ value: Bool)
+
     /// The state of the interactor
     var stateRelay: BehaviorRelay<AmountInteractorState> { get }
 

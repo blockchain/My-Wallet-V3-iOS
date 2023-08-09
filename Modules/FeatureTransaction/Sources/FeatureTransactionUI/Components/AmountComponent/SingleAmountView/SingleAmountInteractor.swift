@@ -39,6 +39,8 @@ public final class SingleAmountInteractor: AmountViewInteracting {
     /// This interactor does not support selecting a recurring buy frequency
     public var recurringBuyFrequencySelected: Observable<Void> = .never()
 
+    public func setCanTransactFiat(_ value: Bool) { /* NOOP */ }
+
     // MARK: - Private
 
     private let currencyService: CurrencyServiceAPI

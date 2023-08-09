@@ -58,7 +58,7 @@ public class MultiBadgeView: UIView {
 
     // MARK: Init
 
-    public override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
@@ -68,7 +68,7 @@ public class MultiBadgeView: UIView {
         setup()
     }
 
-    public override var intrinsicContentSize: CGSize {
+    override public var intrinsicContentSize: CGSize {
         let margins = verticalConstraints?.leading.constant ?? 0 + -(verticalConstraints?.trailing.constant ?? 0)
         return CGSize(width: UIView.noIntrinsicMetric, height: heightConstraint.constant + margins)
     }

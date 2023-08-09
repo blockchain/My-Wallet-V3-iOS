@@ -127,7 +127,6 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
 
     public var accountBalancePublisher: AnyPublisher<FiatValue, Never> {
         accountBalanceFiatValueRelay
-            .asObservable()
             .asPublisher()
             .ignoreFailure()
             .eraseToAnyPublisher()
@@ -135,7 +134,6 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
 
     public var transactionIsFeeLessPublisher: AnyPublisher<Bool, Never> {
         transactionIsFeeLessRelay
-            .asObservable()
             .asPublisher()
             .ignoreFailure()
             .eraseToAnyPublisher()
@@ -143,7 +141,6 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
 
     public var transactionFeePublisher: AnyPublisher<FiatValue, Never> {
         transactionFeeFiatValueRelay
-            .asObservable()
             .asPublisher()
             .ignoreFailure()
             .eraseToAnyPublisher()
@@ -151,7 +148,6 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
 
     public var maxLimitPublisher: AnyPublisher<FiatValue, Never> {
         maxActionableFiatAmountRelay
-            .asObservable()
             .asPublisher()
             .ignoreFailure()
             .eraseToAnyPublisher()
@@ -203,15 +199,30 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
     /// If the transaction FeeLevel is none
     private let transactionIsFeeLessRelay: BehaviorRelay<Bool>
 
+    private let canTransactFiatRelay: BehaviorRelay<Bool>
+    var canTransactFiat: Observable<Bool> {
+        canTransactFiatRelay.asObservable()
+    }
+
     /// A relay that streams an effect, such as a failure
     private let effectRelay = BehaviorRelay<AmountInteractorEffect>(value: .none)
 
     // MARK: - Injected
 
     private let app: AppProtocol
-    private let fiatCurrencyClosure: () -> Observable<FiatCurrency>
-    private let cryptoCurrencyService: CryptoCurrencyServiceAPI
+    private let fiatCurrencyClosure: () -> AnyPublisher<FiatCurrency, Never>
+    private let cryptoCurrency: CryptoCurrency
     private let priceProvider: AmountTranslationPriceProviding
+
+    public func setCanTransactFiat(_ value: Bool) {
+        guard value != canTransactFiatRelay.value else {
+            return
+        }
+        canTransactFiatRelay.accept(value)
+        if value.isNo {
+            activeInputRelay.accept(.crypto)
+        }
+    }
 
     // MARK: - Accessors
 
@@ -220,12 +231,11 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
     // MARK: - Setup
 
     public init(
-        fiatCurrencyClosure: @escaping () -> Observable<FiatCurrency>,
-        cryptoCurrencyService: CryptoCurrencyServiceAPI,
+        fiatCurrencyClosure: @escaping () -> AnyPublisher<FiatCurrency, Never>,
+        cryptoCurrency: CryptoCurrency,
         priceProvider: AmountTranslationPriceProviding,
-        defaultFiatCurrency: FiatCurrency = .default,
+        defaultFiatCurrency: FiatCurrency,
         app: AppProtocol,
-        defaultCryptoCurrency: CryptoCurrency,
         initialActiveInput: ActiveAmountInput
     ) {
         self.app = app
@@ -233,63 +243,42 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
         self.maxActionableFiatAmountRelay = BehaviorRelay(value: .zero(currency: defaultFiatCurrency))
         self.accountBalanceFiatValueRelay = BehaviorRelay(value: .zero(currency: defaultFiatCurrency))
         self.transactionFeeFiatValueRelay = BehaviorRelay(value: .zero(currency: defaultFiatCurrency))
-        self.cryptoAmountRelay = BehaviorRelay(value: .zero(currency: defaultCryptoCurrency))
+        self.cryptoAmountRelay = BehaviorRelay(value: .zero(currency: cryptoCurrency))
         self.fiatInteractor = InputAmountLabelInteractor(currency: defaultFiatCurrency)
-        self.cryptoInteractor = InputAmountLabelInteractor(currency: defaultCryptoCurrency)
+        self.cryptoInteractor = InputAmountLabelInteractor(currency: cryptoCurrency)
         self.transactionIsFeeLessRelay = BehaviorRelay(value: true)
+        self.canTransactFiatRelay = BehaviorRelay(value: true)
         self.fiatCurrencyClosure = fiatCurrencyClosure
-        self.cryptoCurrencyService = cryptoCurrencyService
+        self.cryptoCurrency = cryptoCurrency
         self.priceProvider = priceProvider
         self.fiatAmountRelay = BehaviorRelay<MoneyValue>(
             value: .zero(currency: defaultFiatCurrency)
         )
 
-        // Currency Change - upon selection of a new fiat or crypto currency,
+        // Currency Change - upon selection of a new fiat,
         // take the current input amount and based on that and the new currency
         // modify the fiat / crypto value
 
-        // Fiat changes affect crypto
-        let fallibleFiatCurrency = fiatCurrencyClosure()
+        let fiatCurrency = fiatCurrencyClosure()
             .map { $0 as Currency }
-
-        let fallibleCryptoCurrency = cryptoCurrencyService.cryptoCurrencyObservable
-            .map { $0 as Currency }
-
-        let fiatCurrency = fallibleFiatCurrency
-            .catch { _ -> Observable<Currency> in
-                .empty()
-            }
-            .share(replay: 1, scope: .whileConnected)
-
-        let cryptoCurrency = fallibleCryptoCurrency
-            .catch { _ -> Observable<Currency> in
-                .empty()
-            }
+            .asObservable()
+            .consumeErrorToEffect(on: self)
             .share(replay: 1, scope: .whileConnected)
 
         fiatCurrency
             .bindAndCatch(to: fiatInteractor.interactor.currencyRelay)
             .disposed(by: disposeBag)
 
-        cryptoCurrency
-            .bindAndCatch(to: cryptoInteractor.interactor.currencyRelay)
-            .disposed(by: disposeBag)
-
-        // We need to keep any currency selection changes up to date with the input values
-        // and eventually update the `cryptoAmountRelay` and `fiatAmountRelay`
-        let currenciesMerged = Observable.merge(fallibleFiatCurrency, fallibleCryptoCurrency)
-            .consumeErrorToEffect(on: self)
-            .share(replay: 1, scope: .whileConnected)
+        cryptoInteractor.interactor.currencyRelay.accept(cryptoCurrency)
 
         // Make fiat amount zero after any currency change
-        currenciesMerged
-            .mapToVoid()
-            .map { "" }
+        fiatCurrency
+            .map { _ in "" }
             .bindAndCatch(to: fiatInteractor.scanner.rawInputRelay, cryptoInteractor.scanner.rawInputRelay)
             .disposed(by: disposeBag)
 
         // Bind of the edit values to the scanner depending on the currently edited currency type
-        let pairFromFiatInput = currenciesMerged
+        let pairFromFiatInput = fiatCurrency
             .flatMap(weak: self) { (self, _) -> Observable<MoneyValueInputScanner.Input> in
                 self.fiatInteractor.scanner.input
             }
@@ -307,7 +296,7 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             }
             .consumeErrorToEffect(on: self)
 
-        let pairFromCryptoInput = currenciesMerged
+        let pairFromCryptoInput = fiatCurrency
             .flatMap(weak: self) { (self, _) -> Observable<MoneyValueInputScanner.Input> in
                 self.cryptoInteractor.scanner.input
             }
@@ -318,7 +307,7 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             }
             .filter { $0.activeInputType == .crypto }
             .map(\.input)
-            .flatMapLatest(weak: self) { (self, value) -> Observable<MoneyValuePair> in
+            .flatMapLatest(weak: self) { (self, value) -> Observable<(base: MoneyValue, quote: MoneyValue?)> in
                 self.pairFromCryptoInput(amount: value.amount).asObservable()
             }
             .consumeErrorToEffect(on: self)
@@ -336,9 +325,8 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             .disposed(by: disposeBag)
 
         pairFromCryptoInput
-            .map(\.quote)
-            .map(\.displayMajorValue)
-            .map { "\($0)" }
+            .map(\.quote?.displayMajorValue)
+            .map { "\($0 ?? 0)" }
             .withLatestFrom(activeInput) { ($0, $1) }
             .filter { _, active in active == .crypto }
             .map(\.0)
@@ -348,7 +336,9 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
         let anyPair = Observable
             .merge(
                 pairFromCryptoInput,
-                pairFromFiatInput
+                pairFromFiatInput.map { value -> (base: MoneyValue, quote: MoneyValue?) in
+                    (base: value.base, quote: value.quote)
+                }
             )
             .share(replay: 1)
 
@@ -357,10 +347,14 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
                 switch value.base.currency {
                 case .crypto:
                     self.cryptoAmountRelay.accept(value.base)
-                    self.fiatAmountRelay.accept(value.quote)
+                    if let quote = value.quote {
+                        self.fiatAmountRelay.accept(quote)
+                    }
                 case .fiat:
                     self.fiatAmountRelay.accept(value.base)
-                    self.cryptoAmountRelay.accept(value.quote)
+                    if let quote = value.quote {
+                        self.cryptoAmountRelay.accept(quote)
+                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -464,9 +458,10 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
                 amount: cryptoValue.displayString
             )
             .map(\.quote)
-            .subscribe { [maxActionableFiatAmountRelay] moneyValue in
-                guard let value = moneyValue.fiatValue else { return }
-                maxActionableFiatAmountRelay.accept(value)
+            .subscribe { [maxActionableFiatAmountRelay] value in
+                if let fiatValue = value?.fiatValue {
+                    maxActionableFiatAmountRelay.accept(fiatValue)
+                }
             }
             .disposed(by: disposeBag)
         }
@@ -481,9 +476,10 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
                 amount: cryptoValue.displayString
             )
             .map(\.quote)
-            .subscribe { [accountBalanceFiatValueRelay] moneyValue in
-                guard let value = moneyValue.fiatValue else { return }
-                accountBalanceFiatValueRelay.accept(value)
+            .subscribe { [accountBalanceFiatValueRelay] value in
+                if let fiatValue = value?.fiatValue {
+                    accountBalanceFiatValueRelay.accept(fiatValue)
+                }
             }
             .disposed(by: disposeBag)
         }
@@ -502,9 +498,10 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
                 amount: cryptoValue.displayString
             )
             .map(\.quote)
-            .subscribe { [transactionFeeFiatValueRelay] moneyValue in
-                guard let value = moneyValue.fiatValue else { return }
-                transactionFeeFiatValueRelay.accept(value)
+            .subscribe { [transactionFeeFiatValueRelay] value in
+                if let fiatValue = value?.fiatValue {
+                    transactionFeeFiatValueRelay.accept(fiatValue)
+                }
             }
             .disposed(by: disposeBag)
         }
@@ -601,16 +598,10 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
     }
 
     private func pairFromFiatInput(amount: String) -> Single<MoneyValuePair> {
-        Single
-            .zip(
-                cryptoCurrencyService.cryptoCurrency,
-                fiatCurrencyClosure()
-                    .take(1)
-                    .asSingle()
-            )
-            .flatMap(weak: self) { (self, currencies) -> Single<MoneyValuePair> in
-                let (cryptoCurrency, fiatCurrency) = currencies
-                return self.priceProvider
+        fiatCurrencyClosure()
+            .asSingle()
+            .flatMap { [priceProvider, cryptoCurrency] fiatCurrency -> Single<MoneyValuePair> in
+                priceProvider
                     .pairFromFiatInput(
                         cryptoCurrency: cryptoCurrency,
                         fiatCurrency: fiatCurrency,
@@ -619,17 +610,11 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             }
     }
 
-    private func pairFromCryptoInput(amount: String) -> Single<MoneyValuePair> {
-        Single
-            .zip(
-                cryptoCurrencyService.cryptoCurrency,
-                fiatCurrencyClosure()
-                    .take(1)
-                    .asSingle()
-            )
-            .flatMap(weak: self) { (self, currencies) -> Single<MoneyValuePair> in
-                let (cryptoCurrency, fiatCurrency) = currencies
-                return self.priceProvider
+    private func pairFromCryptoInput(amount: String) -> Single<(base: MoneyValue, quote: MoneyValue?)> {
+        fiatCurrencyClosure()
+            .asSingle()
+            .flatMap { [priceProvider, cryptoCurrency] fiatCurrency -> Single<(base: MoneyValue, quote: MoneyValue?)> in
+                priceProvider
                     .pairFromCryptoInput(
                         cryptoCurrency: cryptoCurrency,
                         fiatCurrency: fiatCurrency,
@@ -676,13 +661,11 @@ extension Observable {
 
     fileprivate func consumeErrorToEffect(on handler: AmountTranslationInteractor) -> Observable<Element> {
         self
-            .do(
-                onError: { [weak handler] error in
-                    handler?.handleCurrency(error: error)
-                }
-            )
-            .catch { _ in
+            .do(onError: { [weak handler] error in
+                handler?.handleCurrency(error: error)
+            })
+            .catch({ _ in
                 Observable<Element>.empty()
-            }
+            })
     }
 }
