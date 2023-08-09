@@ -71,7 +71,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .sorted(by: { try $0.quote > $1.quote })
 
 
-            let firstBalance = try firstValidAccountId(targetCurrency: targetInformation?.currency.currencyType,
+            let firstBalance = try firstValidBalance(targetCurrency: targetInformation?.currency.currencyType,
                                                       tradingPairs: tradingPairs,
                                                       allBalances: allBalances)
                 .or(throw: "No matching pairs")
@@ -143,8 +143,9 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .reduce(into: []) { balances, moneyValuePair in
                     balances.append(moneyValuePair)
                 }
+                .sorted(by: { try $0.quote > $1.quote })
 
-            let firstBalance = try firstValidAccountId(targetCurrency: targetInformation?.currency.currencyType,
+            let firstBalance = try firstValidBalance(targetCurrency: targetInformation?.currency.currencyType,
                                                       tradingPairs: tradingPairs,
                                                       allBalances: allBalances)
                 .or(throw: "No matching pairs")
@@ -193,7 +194,7 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         }
     }
 
-    private func firstValidAccountId(targetCurrency: CurrencyType?,
+    private func firstValidBalance(targetCurrency: CurrencyType?,
                                      tradingPairs: [TradingPair],
                                      allBalances: [MoneyValuePair]
     ) -> MoneyValuePair? {
@@ -206,8 +207,6 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 pair.sourceCurrencyType == balance.base.currency && pair.destinationCurrencyType == targetCurrency
             }
         }
-        print("🔥 \(allBalances)")
-        print("🔥 \(firstBalance?.base.toDisplayString(includeSymbol: true))")
         return firstBalance
     }
 
