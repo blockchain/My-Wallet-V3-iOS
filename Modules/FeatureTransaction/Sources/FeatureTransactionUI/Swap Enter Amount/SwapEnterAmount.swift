@@ -238,7 +238,6 @@ public struct SwapEnterAmount: ReducerProtocol {
 
                         .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
                             guard sourceInformation == nil && targetInformation == nil else {
-                                await send(.updateSourceBalance)
                                 return
                             }
 

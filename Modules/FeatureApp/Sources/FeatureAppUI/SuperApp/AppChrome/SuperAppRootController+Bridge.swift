@@ -209,23 +209,13 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
 
     func handleSwapCrypto(account: CryptoAccount?) {
         let transactionsRouter = transactionsRouter
-        let onboardingRouter = onboardingRouter
+        let _ = onboardingRouter
         coincore.hasPositiveDisplayableBalanceAccounts(for: .crypto)
             .prefix(1)
             .receive(on: DispatchQueue.main)
             .flatMap { positiveBalance -> AnyPublisher<TransactionFlowResult, Never> in
-                if !positiveBalance {
-                    guard let viewController = UIApplication.shared.topMostViewController else {
-                        fatalError("Top most view controller cannot be nil")
-                    }
-                    return onboardingRouter
-                        .presentRequiredCryptoBalanceView(from: viewController)
-                        .map(TransactionFlowResult.init)
-                        .eraseToAnyPublisher()
-                } else {
-                    return transactionsRouter.presentTransactionFlow(to: .swap(source: account,
-                                                                               target: nil))
-                }
+                transactionsRouter.presentTransactionFlow(to: .swap(source: account,
+                                                                    target: nil))
             }
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")

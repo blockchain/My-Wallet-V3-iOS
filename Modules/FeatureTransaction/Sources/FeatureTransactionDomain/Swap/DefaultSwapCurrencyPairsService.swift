@@ -142,12 +142,33 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .get(blockchain.coin.core.accounts.DeFi.asset["USDT"], as: [String].self)
                 .first
 
-            return try pairForSource(
-                with: sourceInformation?.currency.currencyType ?? balance.base.currency,
-                accountId: sourceInformation?.accountId ?? accountId,
-                usdtAccountId: usdtAccountId,
-                bitcoinAccountId: bitcoinAccountId
-            )
+            switch (sourceInformation, targetInformation) {
+            case (nil, nil):
+                return try pairForSource(
+                    with: balance.base.currency,
+                    accountId: accountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+            case (let source, nil):
+                return try pairForSource(
+                    with: sourceInformation?.currency.currencyType ?? balance.base.currency,
+                    accountId: source?.accountId ?? accountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+
+                case (nil, let target) :
+                return try pairForDestination(
+                    with: target?.currency.currencyType ?? balance.base.currency,
+                    accountId: target?.accountId ?? accountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+
+            default:
+                return nil
+            }
         } catch {
             return nil
         }
