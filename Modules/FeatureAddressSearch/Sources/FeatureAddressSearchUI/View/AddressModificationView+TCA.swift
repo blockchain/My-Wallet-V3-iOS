@@ -100,7 +100,7 @@ extension AddressModificationState {
     }
 }
 
-struct AddressModificationEnvironment {
+struct AddressModificationReducer: ReducerProtocol {
 
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let config: AddressSearchFeatureConfig.AddressEditScreenConfig
@@ -121,168 +121,165 @@ struct AddressModificationEnvironment {
         self.addressSearchService = addressSearchService
         self.onComplete = onComplete
     }
-}
 
-let addressModificationReducer = Reducer<
-    AddressModificationState,
-    AddressModificationAction,
-    AddressModificationEnvironment
-> { state, action, env in
+    typealias State = AddressModificationState
+    typealias Action = AddressModificationAction
 
-    switch action {
-    case .updateAddress:
-        state.loading = true
-        let address = Address(
-            line1: state.line1,
-            line2: state.line2.isEmpty ? nil : state.line2,
-            city: state.city,
-            postCode: state.postcode,
-            state: state.state,
-            country: state.country
-        )
-        if env.config.shouldSaveAddressOnCompletion {
-            return env
-                .addressService
-                .save(address: address)
-                .receive(on: env.mainQueue)
-                .catchToEffect(AddressModificationAction.updateAddressResponse)
-        } else {
-            return EffectTask(value: .updateAddressResponse(.success(address)))
-        }
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .updateAddress:
+                state.loading = true
+                let address = Address(
+                    line1: state.line1,
+                    line2: state.line2.isEmpty ? nil : state.line2,
+                    city: state.city,
+                    postCode: state.postcode,
+                    state: state.state,
+                    country: state.country
+                )
+                if config.shouldSaveAddressOnCompletion {
+                    return addressService
+                        .save(address: address)
+                        .receive(on: mainQueue)
+                        .catchToEffect(AddressModificationAction.updateAddressResponse)
+                } else {
+                    return EffectTask(value: .updateAddressResponse(.success(address)))
+                }
 
-    case .updateAddressResponse(let result):
-        state.loading = false
-        switch result {
-        case .success(let address):
-            state.updateAddressInputs(address: address)
-            return EffectTask(value: .complete(.saved(address)))
-        case .failure(let error):
-            state.error = error.nabuError
-            return EffectTask(value: .showGenericError)
-        }
+            case .updateAddressResponse(let result):
+                state.loading = false
+                switch result {
+                case .success(let address):
+                    state.updateAddressInputs(address: address)
+                    return EffectTask(value: .complete(.saved(address)))
+                case .failure(let error):
+                    state.error = error.nabuError
+                    return EffectTask(value: .showGenericError)
+                }
 
-    case .showGenericError:
-        return EffectTask(
-            value: .showAlert(
-                title: LocalizationConstants.Errors.error,
-                message: LocalizationConstants.AddressSearch.Form.Errors.genericError
-            )
-        )
+            case .showGenericError:
+                return EffectTask(
+                    value: .showAlert(
+                        title: LocalizationConstants.Errors.error,
+                        message: LocalizationConstants.AddressSearch.Form.Errors.genericError
+                    )
+                )
 
-    case .fetchAddressDetails(let addressId):
-        guard let addressId else {
-            return .none
-        }
-        state.loading = true
-        return env
-            .addressSearchService
-            .fetchAddress(addressId: addressId)
-            .receive(on: env.mainQueue)
-            .catchToEffect()
-            .map { result in
-                .didReceiveAdressDetailsResult(result)
-            }
+            case .fetchAddressDetails(let addressId):
+                guard let addressId else {
+                    return .none
+                }
+                state.loading = true
+                return addressSearchService
+                    .fetchAddress(addressId: addressId)
+                    .receive(on: mainQueue)
+                    .catchToEffect()
+                    .map { result in
+                        .didReceiveAdressDetailsResult(result)
+                    }
 
-    case .didReceiveAdressDetailsResult(let result):
-        state.loading = false
-        switch result {
-        case .success(let searchedAddress):
-            let address = Address(addressDetails: searchedAddress)
-            if state.country == "US",
-               let state = state.state,
-               state.isNotEmpty,
-               state != address.state
-            {
-                return EffectTask(value: .showStateDoesNotMatchAlert)
-            } else {
+            case .didReceiveAdressDetailsResult(let result):
+                state.loading = false
+                switch result {
+                case .success(let searchedAddress):
+                    let address = Address(addressDetails: searchedAddress)
+                    if state.country == "US",
+                       let state = state.state,
+                       state.isNotEmpty,
+                       state != address.state
+                    {
+                        return EffectTask(value: .showStateDoesNotMatchAlert)
+                    } else {
+                        state.updateAddressInputs(address: address)
+                        return .none
+                    }
+
+                case .failure(let error):
+                    state.error = error.nabuError
+                    return .none
+                }
+
+            case .onAppear:
+                state.screenTitle = config.title
+                state.screenSubtitle = config.subtitle
+                state.saveButtonTitle = config.saveAddressButtonTitle
+
+                guard let addressDetailsId = state.addressDetailsId else {
+                    if state.shouldFetchPrefilledAddress {
+                        return EffectTask(value: .fetchPrefilledAddress)
+                    } else {
+                        return .none
+                    }
+                }
+                return EffectTask(value: .fetchAddressDetails(addressId: addressDetailsId))
+
+            case .fetchPrefilledAddress:
+                state.loading = true
+                return addressService
+                    .fetchAddress()
+                    .receive(on: mainQueue)
+                    .catchToEffect(AddressModificationAction.didReceivePrefilledAddressResult)
+
+            case .didReceivePrefilledAddressResult(.success(let address)):
+                state.loading = false
+                guard let address else { return .none }
                 state.updateAddressInputs(address: address)
                 return .none
-            }
 
-        case .failure(let error):
-            state.error = error.nabuError
-            return .none
-        }
+            case .didReceivePrefilledAddressResult(.failure(let error)):
+                state.loading = false
+                state.error = error.nabuError
+                return .none
 
-    case .onAppear:
-        state.screenTitle = env.config.title
-        state.screenSubtitle = env.config.subtitle
-        state.saveButtonTitle = env.config.saveAddressButtonTitle
+            case .closeError:
+                state.error = nil
+                return .none
 
-        guard let addressDetailsId = state.addressDetailsId else {
-            if state.shouldFetchPrefilledAddress {
-                return EffectTask(value: .fetchPrefilledAddress)
-            } else {
+            case .cancelEdit:
+                return EffectTask(value: .complete(.abandoned))
+
+            case .complete(let addressResult):
+                return .fireAndForget {
+                    onComplete?(addressResult)
+                }
+
+            case .binding:
+                return .none
+
+            case .showAlert(let title, let message):
+                state.failureAlert = AlertState(
+                    title: TextState(verbatim: title),
+                    message: TextState(verbatim: message),
+                    dismissButton: .default(
+                        TextState(LocalizationConstants.okString),
+                        action: .send(.dismissAlert)
+                    )
+                )
+                return .none
+
+            case .dismissAlert:
+                state.failureAlert = nil
+                return .none
+
+            case .showStateDoesNotMatchAlert:
+                let loc = LocalizationConstants.AddressSearch.Form.Errors.self
+                state.failureAlert = AlertState(
+                    title: TextState(verbatim: loc.cannotEditStateTitle),
+                    message: TextState(verbatim: loc.cannotEditStateMessage),
+                    dismissButton: .default(
+                        TextState(LocalizationConstants.okString),
+                        action: .send(.stateDoesNotMatch)
+                    )
+                )
+                return .none
+            case .stateDoesNotMatch:
                 return .none
             }
         }
-        return EffectTask(value: .fetchAddressDetails(addressId: addressDetailsId))
-
-    case .fetchPrefilledAddress:
-        state.loading = true
-        return env
-            .addressService
-            .fetchAddress()
-            .receive(on: env.mainQueue)
-            .catchToEffect(AddressModificationAction.didReceivePrefilledAddressResult)
-
-    case .didReceivePrefilledAddressResult(.success(let address)):
-        state.loading = false
-        guard let address else { return .none }
-        state.updateAddressInputs(address: address)
-        return .none
-
-    case .didReceivePrefilledAddressResult(.failure(let error)):
-        state.loading = false
-        state.error = error.nabuError
-        return .none
-
-    case .closeError:
-        state.error = nil
-        return .none
-
-    case .cancelEdit:
-        return EffectTask(value: .complete(.abandoned))
-
-    case .complete(let addressResult):
-        return .fireAndForget {
-            env.onComplete?(addressResult)
-        }
-
-    case .binding:
-        return .none
-
-    case .showAlert(let title, let message):
-        state.failureAlert = AlertState(
-            title: TextState(verbatim: title),
-            message: TextState(verbatim: message),
-            dismissButton: .default(
-                TextState(LocalizationConstants.okString),
-                action: .send(.dismissAlert)
-            )
-        )
-        return .none
-
-    case .dismissAlert:
-        state.failureAlert = nil
-        return .none
-
-    case .showStateDoesNotMatchAlert:
-        let loc = LocalizationConstants.AddressSearch.Form.Errors.self
-        state.failureAlert = AlertState(
-            title: TextState(verbatim: loc.cannotEditStateTitle),
-            message: TextState(verbatim: loc.cannotEditStateMessage),
-            dismissButton: .default(
-                TextState(LocalizationConstants.okString),
-                action: .send(.stateDoesNotMatch)
-            )
-        )
-        return .none
-    case .stateDoesNotMatch:
-        return .none
     }
 }
-.binding()
 
 extension Address {
     init(addressDetails: AddressDetailsSearchResult) {

@@ -14,7 +14,7 @@ final class AddressSearchReducerTests: XCTestCase {
         AddressSearchAction,
         AddressSearchState,
         AddressSearchAction,
-        AddressSearchEnvironment
+        ()
     >
 
     private var testStore: TestStoreType!
@@ -39,6 +39,7 @@ final class AddressSearchReducerTests: XCTestCase {
         testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressEditScreenConfig.sample()
             $0.screenTitle = sample.title
+            $0.screenSubtitle = sample.subtitle ?? ""
         }
     }
 
@@ -52,6 +53,7 @@ final class AddressSearchReducerTests: XCTestCase {
         testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressSearchScreenConfig.sample()
             $0.screenTitle = sample.title
+            $0.screenSubtitle = sample.subtitle
         }
 
         testStore.receive(
@@ -84,6 +86,7 @@ final class AddressSearchReducerTests: XCTestCase {
         testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressSearchScreenConfig.sample()
             $0.screenTitle = sample.title
+            $0.screenSubtitle = sample.subtitle
         }
 
         let searchResult: AddressSearchResult = .sample(
@@ -122,6 +125,7 @@ final class AddressSearchReducerTests: XCTestCase {
         testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressSearchScreenConfig.sample()
             $0.screenTitle = sample.title
+            $0.screenSubtitle = sample.subtitle
         }
 
         testStore.receive(
@@ -191,8 +195,7 @@ extension TestStore {
                 address: address,
                 error: nil
             ),
-            reducer: addressSearchReducer,
-            environment: AddressSearchEnvironment(
+            reducer: AddressSearchReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 config: .sample(),
                 addressService: MockAddressService(),

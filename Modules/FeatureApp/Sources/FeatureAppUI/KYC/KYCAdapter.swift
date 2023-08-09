@@ -285,14 +285,16 @@ final class AddressSearchFlowPresenter: FeatureKYCUI.AddressSearchFlowPresenterA
         state: String?
     ) -> AnyPublisher<UserAddressSearchResult, Never> {
         typealias Localization = LocalizationConstants.NewKYC.AddressVerification
-        let title = Localization.title
         return addressSearchRouterRouter.presentSearchAddressFlow(
             prefill: Address(state: state, country: country),
             config: .init(
-                addressSearchScreen: .init(title: title),
+                addressSearchScreen: .init(
+                    title: Localization.title,
+                    subtitle: Localization.subtitle
+                ),
                 addressEditScreen: .init(
-                    title: title,
-                    saveAddressButtonTitle: Localization.saveButtonTitle
+                    title: Localization.title,
+                    saveAddressButtonTitle: Localization.nextButtonTitle
                 )
             )
         )

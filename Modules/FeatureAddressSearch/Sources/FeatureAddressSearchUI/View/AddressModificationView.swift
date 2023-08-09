@@ -49,8 +49,8 @@ struct AddressModificationView: View {
         WithViewStore(store) { viewStore in
             ScrollView {
                 form
-                .padding(.vertical, Spacing.padding3)
-                .primaryNavigation(title: viewStore.screenTitle)
+                .padding(.bottom, Spacing.padding3)
+                .primaryNavigation()
                 .trailingNavigationButton(.close, isVisible: !viewStore.isPresentedFromSearchView) {
                     viewStore.send(.cancelEdit)
                 }
@@ -62,13 +62,14 @@ struct AddressModificationView: View {
                     dismiss: .dismissAlert
                 )
             }
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 
     private var form: some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: Spacing.padding3) {
-                subtitle
+                header
                 VStack(spacing: Spacing.padding1) {
                     Input(
                         text: viewStore.binding(\.$line1),
@@ -154,7 +155,7 @@ struct AddressModificationView: View {
                     )
                     .disabled(true)
                 }
-                .padding(.horizontal, Spacing.padding3)
+                .padding(.horizontal, Spacing.padding2)
             }
         }
     }
@@ -183,13 +184,18 @@ struct AddressModificationView: View {
         }
     }
 
-    private var subtitle: some View {
+    private var header: some View {
         WithViewStore(store) { viewStore in
             if let subtitle = viewStore.screenSubtitle {
                 VStack(alignment: .leading, spacing: Spacing.padding1) {
+                    HStack {
+                        Text(viewStore.screenTitle)
+                            .typography(.title3)
+                        Spacer()
+                    }
                     Text(subtitle)
-                        .typography(.paragraph1)
-                        .foregroundColor(.WalletSemantic.body)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.body)
                         .multilineTextAlignment(.leading)
                 }
                 .padding(.horizontal, Spacing.padding2)
@@ -229,8 +235,7 @@ struct AddressModification_Previews: PreviewProvider {
                         addressDetailsId: MockServices.addressId,
                         isPresentedFromSearchView: false
                     ),
-                    reducer: addressModificationReducer,
-                    environment: .init(
+                    reducer: AddressModificationReducer(
                         mainQueue: .main,
                         config: .init(title: "Title", subtitle: "Subtitle"),
                         addressService: MockServices(),

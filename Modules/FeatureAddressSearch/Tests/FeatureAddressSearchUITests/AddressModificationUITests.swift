@@ -15,7 +15,7 @@ final class AddressModificationReducerTests: XCTestCase {
         AddressModificationAction,
         AddressModificationState,
         AddressModificationAction,
-        AddressModificationEnvironment
+        ()
     >
 
     private var testStore: TestStoreType!
@@ -207,8 +207,7 @@ extension TestStore {
                 isPresentedFromSearchView: isPresentedFromSearchView,
                 error: nil
             ),
-            reducer: addressModificationReducer,
-            environment: AddressModificationEnvironment(
+            reducer: AddressModificationReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 config: .sample(),
                 addressService: MockAddressService(),

@@ -18,7 +18,7 @@ extension AddressSearchFeatureConfig {
 extension AddressSearchFeatureConfig.AddressEditScreenConfig {
     static func sample(
         title: String = "title",
-        subtitle: String? = nil,
+        subtitle: String? = "subtitle",
         saveAddressButtonTitle: String? = nil
     ) -> Self {
         AddressSearchFeatureConfig.AddressEditScreenConfig(
@@ -31,10 +31,12 @@ extension AddressSearchFeatureConfig.AddressEditScreenConfig {
 
 extension AddressSearchFeatureConfig.AddressSearchScreenConfig {
     static func sample(
-        title: String = "title"
+        title: String = "title",
+        subtitle: String = "subtitle"
     ) -> Self {
         AddressSearchFeatureConfig.AddressSearchScreenConfig(
-            title: title
+            title: title,
+            subtitle: subtitle
         )
     }
 }
