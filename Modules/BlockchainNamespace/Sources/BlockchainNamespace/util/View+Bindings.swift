@@ -82,7 +82,6 @@ extension SetValueBinding {
 
     public init(_ binding: Binding<some Equatable & Decodable>, subscribed: Bool = true, event: Tag.Event, file: String, line: Int) {
         self.id = "\(event)@\(file):\(line)"
-        print("🧵 \(id)")
         self.binding = { bindings in
             bindings.bind(binding, to: event, subscribed: subscribed)
         }
@@ -91,7 +90,6 @@ extension SetValueBinding {
 
     public init<T: Equatable & Decodable, U: Equatable & Decodable>(_ binding: Binding<T>, subscribed: Bool = true, as map: @escaping (U) -> T, event: Tag.Event, file: String, line: Int) {
         self.id = "\(event)@\(file):\(line)"
-        print("🧵🧵 \(id)")
         self.binding = { bindings in
             bindings.bind(binding, to: event, subscribed: subscribed, map: map)
         }
