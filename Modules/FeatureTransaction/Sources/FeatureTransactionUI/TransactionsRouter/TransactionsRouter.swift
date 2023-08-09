@@ -452,35 +452,6 @@ extension TransactionsRouter {
         }
     }
 
-    private func presentTooManyPendingOrders(
-        count: Int,
-        from presenter: UIViewController
-    ) -> AnyPublisher<TransactionFlowResult, Never> {
-        let subject = PassthroughSubject<TransactionFlowResult, Never>()
-
-        func dismiss() {
-            presenter.dismiss(animated: true) {
-                subject.send(.abandoned)
-            }
-        }
-
-        presenter.present(
-            PrimaryNavigationView {
-                TooManyPendingOrdersView(
-                    count: count,
-                    viewActivityAction: { [tabSwapping] in
-                        tabSwapping.switchToActivity()
-                        dismiss()
-                    },
-                    okAction: dismiss
-                )
-                .whiteNavigationBarStyle()
-                .trailingNavigationButton(.close, action: dismiss)
-            }
-        )
-        return subject.eraseToAnyPublisher()
-    }
-
     /// Checks if the user has a valid trading currency set. If not, it presents a modal asking the user to select one.
     ///
     /// If presented, the modal allows the user to select a trading fiat currency to be the base of transactions. This currency can only be one of the currencies supported for any of our official trading pairs.

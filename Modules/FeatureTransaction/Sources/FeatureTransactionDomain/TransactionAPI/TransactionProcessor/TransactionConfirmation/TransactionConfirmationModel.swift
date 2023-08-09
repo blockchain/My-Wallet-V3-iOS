@@ -26,9 +26,9 @@ extension TransactionConfirmations {
     public struct FeedTotal: TransactionConfirmation {
         public let id = UUID()
         public let amount: MoneyValue
-        public let amountInFiat: MoneyValue
+        public let amountInFiat: MoneyValue?
         public let fee: MoneyValue
-        public let feeInFiat: MoneyValue
+        public let feeInFiat: MoneyValue?
         public let type: TransactionConfirmationKind = .readOnly
 
         public var formatted: (title: String, subtitle: String)? {
@@ -37,9 +37,9 @@ extension TransactionConfirmations {
 
         public init(
             amount: MoneyValue,
-            amountInFiat: MoneyValue,
+            amountInFiat: MoneyValue?,
             fee: MoneyValue,
-            feeInFiat: MoneyValue
+            feeInFiat: MoneyValue?
         ) {
             self.amount = amount
             self.amountInFiat = amountInFiat
@@ -59,14 +59,17 @@ extension TransactionConfirmations {
             guard let total = try? amount + fee else {
                 return ""
             }
+            guard let amountInFiat, let feeInFiat else {
+                return total.displayString
+            }
             guard let totalFiat = try? amountInFiat + feeInFiat else {
-                return ""
+                return total.displayString
             }
             return "\(total.displayString) (\(totalFiat.displayString))"
         }
 
         private var amountStringDifferentCurrencies: String {
-            "\(amount.displayString) (\(amountInFiat.displayString))\n\(fee.displayString) (\(feeInFiat.displayString))"
+            "\(amount.displayString) (\(amountInFiat?.displayString ?? ""))\n\(fee.displayString) (\(feeInFiat?.displayString ?? ""))"
         }
     }
 

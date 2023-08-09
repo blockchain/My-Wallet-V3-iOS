@@ -834,7 +834,7 @@ public final class TransactionModel {
     }
 
     private func onFirstUpdate(amount: MoneyValue) {
-        process(action: .pendingTransactionStarted(allowFiatInput: interactor.canTransactFiat))
+        process(action: .pendingTransactionStarted(engineCanTransactFiat: interactor.canTransactFiat))
         process(action: .fetchTransactionExchangeRates)
         process(action: .fetchUserKYCInfo)
         if amount.isPositive {

@@ -129,8 +129,7 @@ public final class AmountTranslationPresenter: AmountViewPresenting {
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         displayBundle: DisplayBundle,
         inputTypeToggleVisibility: Visibility,
-        app: AppProtocol,
-        maxLimitPublisher: AnyPublisher<FiatValue, Never> = .empty()
+        app: AppProtocol
     ) {
         self.interactor = interactor
         self.analyticsRecorder = analyticsRecorder
@@ -140,6 +139,12 @@ public final class AmountTranslationPresenter: AmountViewPresenting {
         swapButtonVisibilityRelay.accept(inputTypeToggleVisibility)
         self.fiatPresenter = .init(interactor: interactor.fiatInteractor, currencyCodeSide: .leading)
         self.cryptoPresenter = .init(interactor: interactor.cryptoInteractor, currencyCodeSide: .trailing)
+
+        interactor
+            .canTransactFiat
+            .map { $0 ? .visible : .hidden }
+            .bindAndCatch(to: swapButtonVisibilityRelay)
+            .disposed(by: disposeBag)
 
         swapButtonTapRelay
             .withLatestFrom(interactor.activeInput)

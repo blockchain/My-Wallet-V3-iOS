@@ -61,6 +61,7 @@ extension TransactionFlowViewControllable {
 
 typealias TransactionViewableRouter = ViewableRouter<TransactionFlowInteractable, TransactionFlowViewControllable>
 typealias TransactionFlowAnalyticsEvent = AnalyticsEvents.New.TransactionFlow
+private typealias L10n = LocalizationConstants.Transaction
 
 final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRouting {
     private var app: AppProtocol
@@ -247,7 +248,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             presentErrorViewForDialog(error, transactionModel: transactionModel)
         default:
             presentErrorRecoveryCallout(
-                title: errorState.recoveryWarningTitle(for: action).or(Localization.Error.unknownError),
+                title: errorState.recoveryWarningTitle(for: action).or(L10n.Error.unknownError),
                 message: errorState.recoveryWarningMessage(for: action),
                 callouts: errorState.recoveryWarningCallouts(for: action),
                 onClose: { [transactionModel] in
@@ -260,14 +261,14 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
 
     func showVerifyToUnlockMoreTransactionsPrompt(action: AssetAction) {
         presentErrorRecoveryCallout(
-            title: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeTitle,
-            message: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeMessage,
+            title: L10n.Notices.verifyToUnlockMoreTradingNoticeTitle,
+            message: L10n.Notices.verifyToUnlockMoreTradingNoticeMessage,
             callouts: [
                 .init(
                     image: .local(name: "icon-verified", bundle: .main),
-                    title: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutTitle,
-                    message: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutMessage,
-                    callToAction: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutCTA
+                    title: L10n.Notices.verifyToUnlockMoreTradingNoticeCalloutTitle,
+                    message: L10n.Notices.verifyToUnlockMoreTradingNoticeCalloutMessage,
+                    callToAction: L10n.Notices.verifyToUnlockMoreTradingNoticeCalloutCTA
                 )
             ],
             onClose: { [analyticsRecorder, presenter = topMostViewControllerProvider.topMostViewController] in
@@ -657,7 +658,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                     transactionModel.process(action: .bankAccountLinked(state.action))
                 }
                 .primaryNavigation(
-                    title: Localization.withdraw,
+                    title: L10n.withdraw,
                     trailing: {
                         IconButton(
                             icon: .close,
@@ -781,6 +782,12 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         presenter.push(viewController: viewController)
     }
 
+
+    private var newSellFlowIsEnabled: Bool {
+        app.remoteConfiguration
+            .yes(if: blockchain.app.configuration.new.sell.flow.is.enabled)
+    }
+
     func routeToPriceInput(
         source: BlockchainAccount,
         destination: TransactionTarget,
@@ -795,7 +802,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: action)
         var viewControllable: ViewControllable?
 
-        if app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled), action == .sell, let router = builder.buildNewSellEnterAmount() {
+        if action == .sell, newSellFlowIsEnabled, let router = builder.buildNewSellEnterAmount() {
             attachChild(router)
             viewControllable = router.viewControllable
         } else {
@@ -806,7 +813,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                 action: action,
                 navigationModel: ScreenNavigationModel.EnterAmount.navigation(
                     allowsBackButton: action.allowsBackButton
-                )
+                ),
+                defaultFiatCurrency: .default
             )
             attachChild(router)
             viewControllable = router.viewControllable
@@ -943,7 +951,7 @@ extension TransactionFlowRouter {
             action: action
         )
         let shouldAddMoreButton = canAddMoreSources && action.supportsAddingSourceAccounts
-        let button: ButtonViewModel? = shouldAddMoreButton ? .secondary(with: LocalizationConstants.addNew) : nil
+        let button: ButtonViewModel? = shouldAddMoreButton ? .secondary(with: L10n.addNew) : nil
         let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
         let isSearchEnabled = action == .swap && searchable
         return builder.build(
@@ -979,9 +987,9 @@ extension TransactionFlowRouter {
         let button: ButtonViewModel?
         if action == .withdraw, app.state.yes(if: blockchain.ux.payment.method.plaid.is.available) {
             let isDisabled = state.availableTargets.as([FiatAccountCapabilities].self)?.contains(where: { $0.capabilities?.withdrawal?.enabled == false }) ?? false
-            button = isDisabled ? nil : .secondary(with: LocalizationConstants.addNew)
+            button = isDisabled ? nil : .secondary(with: L10n.addNew)
         } else {
-            button = action == .withdraw ? .secondary(with: LocalizationConstants.addNew) : nil
+            button = action == .withdraw ? .secondary(with: L10n.addNew) : nil
         }
 
         let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
@@ -989,7 +997,7 @@ extension TransactionFlowRouter {
 
         let isSearchEnabled = (action == .swap || action == .buy) && searchable
         let isSwitchEnabled = action == .swap && app.currentMode == .pkw && switchable
-        let switchTitle = isSwitchEnabled ? Localization.Swap.tradingAccountsSwitchTitle : nil
+        let switchTitle = isSwitchEnabled ? L10n.Swap.tradingAccountsSwitchTitle : nil
         let initialAccountTypeFilter: AccountType? = app.currentMode == .pkw ? .nonCustodial : nil
 
         return builder.build(
@@ -1044,7 +1052,7 @@ extension PaymentMethodAccount {
                     partner: .unknown,
                     type: .unknown,
                     currency: method.fiatCurrency,
-                    label: LocalizationConstants.Transaction.Buy.applePay,
+                    label: L10n.Buy.applePay,
                     ownerName: "",
                     number: "",
                     month: "",

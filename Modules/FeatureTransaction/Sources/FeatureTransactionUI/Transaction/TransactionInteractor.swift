@@ -347,7 +347,7 @@ final class TransactionInteractor {
         transactionProcessor?.reset()
     }
 
-    var transactionExchangeRates: Observable<TransactionExchangeRates> {
+    var transactionExchangeRates: Observable<TransactionExchangeRates?> {
         guard let transactionProcessor else {
             fatalError("Tx Processor is nil")
         }

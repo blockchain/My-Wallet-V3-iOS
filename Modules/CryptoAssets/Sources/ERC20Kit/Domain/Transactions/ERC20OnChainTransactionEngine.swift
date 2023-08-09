@@ -22,6 +22,7 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
 
     var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
         sourceExchangeRatePair
+            .asSingle()
             .map { pair -> TransactionMoneyValuePairs in
                 TransactionMoneyValuePairs(
                     source: pair,
@@ -99,66 +100,65 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
     }
 
     func initializeTransaction() -> Single<PendingTransaction> {
-        Single.zip(
-            walletCurrencyService
-                .displayCurrency
-                .asSingle(),
-            actionableBalance
-        )
-        .map { [feeCryptoCurrency, cryptoCurrency, predefinedAmount] fiatCurrency, availableBalance -> PendingTransaction in
-            let amount: MoneyValue
-            if let predefinedAmount,
-               predefinedAmount.currency == cryptoCurrency
-            {
-                amount = predefinedAmount
-            } else {
-                amount = .zero(currency: cryptoCurrency)
+        sourceAccount.actionableBalance
+            .zip(walletCurrencyService.displayCurrency.eraseError())
+            .prefix(1)
+            .map { [feeCryptoCurrency, cryptoCurrency, predefinedAmount] availableBalance, fiatCurrency -> PendingTransaction in
+                let amount: MoneyValue
+                if let predefinedAmount,
+                   predefinedAmount.currency == cryptoCurrency
+                {
+                    amount = predefinedAmount
+                } else {
+                    amount = .zero(currency: cryptoCurrency)
+                }
+                return PendingTransaction(
+                    amount: amount,
+                    available: availableBalance,
+                    feeAmount: .zero(currency: feeCryptoCurrency),
+                    feeForFullAvailable: .zero(currency: feeCryptoCurrency),
+                    feeSelection: .init(
+                        selectedLevel: .regular,
+                        availableLevels: [.regular, .priority],
+                        asset: feeCryptoCurrency
+                    ),
+                    selectedFiatCurrency: fiatCurrency
+                )
             }
-            return PendingTransaction(
-                amount: amount,
-                available: availableBalance,
-                feeAmount: .zero(currency: feeCryptoCurrency),
-                feeForFullAvailable: .zero(currency: feeCryptoCurrency),
-                feeSelection: .init(
-                    selectedLevel: .regular,
-                    availableLevels: [.regular, .priority],
-                    asset: feeCryptoCurrency
-                ),
-                selectedFiatCurrency: fiatCurrency
-            )
-        }
+            .asSingle()
     }
 
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        Single
-            .zip(
-                fiatAmountAndFees(from: pendingTransaction),
-                makeFeeSelectionOption(pendingTransaction: pendingTransaction)
-            )
-            .map { fiatAmountAndFees, feeSelectionOption ->
-                (
-                    amountInFiat: MoneyValue,
-                    feesInFiat: MoneyValue,
-                    feeSelectionOption: TransactionConfirmations.FeeSelection
-                ) in
-                let (amountInFiat, feesInFiat) = fiatAmountAndFees
-                return (amountInFiat.moneyValue, feesInFiat.moneyValue, feeSelectionOption)
+        doBuildConfirmationsPublisher(pendingTransaction: pendingTransaction).asSingle()
+    }
+
+    private func doBuildConfirmationsPublisher(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
+        let fiatAmount = fiatAmount(from: pendingTransaction)
+            .optional()
+            .replaceError(with: nil)
+            .eraseError()
+        let fiatFeeAmount = fiatFeeAmount(from: pendingTransaction)
+            .optional()
+            .replaceError(with: nil)
+            .eraseError()
+        let feeOption = makeFeeSelectionOption(from: pendingTransaction)
+        return Publishers
+            .Zip3(fiatAmount, fiatFeeAmount, feeOption)
+            .map { [weak self] fiatAmount, fiatFeeAmount, feeOption -> [TransactionConfirmation] in
+                confirmations(
+                    pendingTransaction: pendingTransaction,
+                    sourceAccount: self?.sourceAccount,
+                    transactionTarget: self?.transactionTarget,
+                    fiatAmount: fiatAmount,
+                    fiatFees: fiatFeeAmount,
+                    feeOption: feeOption
+                )
             }
-            .map(weak: self) { (self, payload) -> [TransactionConfirmation] in
-                [
-                    TransactionConfirmations.SendDestinationValue(value: pendingTransaction.amount),
-                    TransactionConfirmations.Source(value: self.sourceAccount.label),
-                    TransactionConfirmations.Destination(value: self.transactionTarget.label),
-                    payload.feeSelectionOption,
-                    TransactionConfirmations.FeedTotal(
-                        amount: pendingTransaction.amount,
-                        amountInFiat: payload.amountInFiat,
-                        fee: pendingTransaction.feeAmount,
-                        feeInFiat: payload.feesInFiat
-                    )
-                ]
-            }
+            .prefix(1)
             .map { pendingTransaction.update(confirmations: $0) }
+            .eraseToAnyPublisher()
     }
 
     func update(amount: MoneyValue, pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
@@ -327,7 +327,7 @@ extension ERC20OnChainTransactionEngine {
     private func validateSufficientGas(pendingTransaction: PendingTransaction) -> Completable {
         Single
             .zip(
-                ethereumAccountBalance,
+                ethereumAccountBalance.asSingle(),
                 absoluteFee(with: pendingTransaction.feeLevel)
             )
             .map { balance, absoluteFee -> Void in
@@ -341,8 +341,8 @@ extension ERC20OnChainTransactionEngine {
     }
 
     private func makeFeeSelectionOption(
-        pendingTransaction: PendingTransaction
-    ) -> Single<TransactionConfirmations.FeeSelection> {
+        from pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<TransactionConfirmations.FeeSelection, Error> {
         getFeeState(pendingTransaction: pendingTransaction)
             .map { feeState -> TransactionConfirmations.FeeSelection in
                 TransactionConfirmations.FeeSelection(
@@ -351,25 +351,33 @@ extension ERC20OnChainTransactionEngine {
                     fee: pendingTransaction.feeAmount
                 )
             }
-            .asSingle()
+            .eraseToAnyPublisher()
     }
 
-    private func fiatAmountAndFees(
+    private func fiatAmount(
         from pendingTransaction: PendingTransaction
-    ) -> Single<(amount: FiatValue, fees: FiatValue)> {
-        Single.zip(
-            sourceExchangeRatePair,
-            ethereumExchangeRatePair,
-            .just(pendingTransaction.amount.cryptoValue ?? .zero(currency: cryptoCurrency)),
-            .just(pendingTransaction.feeAmount.cryptoValue ?? .zero(currency: cryptoCurrency))
-        )
-        .map { sourceExchange, ethereumExchange, amount, feeAmount -> (FiatValue, FiatValue) in
-            let erc20Quote = sourceExchange.quote.fiatValue!
-            let ethereumQuote = ethereumExchange.quote.fiatValue!
-            let fiatAmount = amount.convert(using: erc20Quote)
-            let fiatFees = feeAmount.convert(using: ethereumQuote)
-            return (fiatAmount, fiatFees)
-        }
+    ) -> AnyPublisher<FiatValue, PriceServiceError> {
+        sourceExchangeRatePair
+            .map { [cryptoCurrency] sourceExchange in
+                let amount = pendingTransaction.amount.cryptoValue ?? .zero(currency: cryptoCurrency)
+                let erc20Quote = sourceExchange.quote.fiatValue!
+                let result = amount.convert(using: erc20Quote)
+                return result
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private func fiatFeeAmount(
+        from pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<FiatValue, PriceServiceError> {
+        feeExchangeRatePair
+            .map { [cryptoCurrency] feeExchange in
+                let feeAmount = pendingTransaction.feeAmount.cryptoValue ?? .zero(currency: cryptoCurrency)
+                let feeQuote = feeExchange.quote.fiatValue!
+                let result = feeAmount.convert(using: feeQuote)
+                return result
+            }
+            .eraseToAnyPublisher()
     }
 
     /// Returns Ethereum CryptoValue of the maximum fee that the user may pay.
@@ -388,12 +396,12 @@ extension ERC20OnChainTransactionEngine {
             }
     }
 
-    private var ethereumAccountBalance: Single<CryptoValue> {
-        erc20CryptoAccount.nativeBalance.asSingle()
+    private var ethereumAccountBalance: AnyPublisher<CryptoValue, Error> {
+        erc20CryptoAccount.nativeBalance
     }
 
     /// Streams `MoneyValuePair` for the exchange rate of the source ERC20 Asset in the current fiat currency.
-    private var sourceExchangeRatePair: Single<MoneyValuePair> {
+    private var sourceExchangeRatePair: AnyPublisher<MoneyValuePair, PriceServiceError> {
         walletCurrencyService
             .displayCurrency
             .flatMap { [currencyConversionService, sourceAsset] fiatCurrency in
@@ -401,11 +409,11 @@ extension ERC20OnChainTransactionEngine {
                     .conversionRate(from: sourceAsset, to: fiatCurrency.currencyType)
                     .map { MoneyValuePair(base: .one(currency: sourceAsset), quote: $0) }
             }
-            .asSingle()
+            .eraseToAnyPublisher()
     }
 
     /// Streams `MoneyValuePair` for the exchange rate of Ethereum in the current fiat currency.
-    private var ethereumExchangeRatePair: Single<MoneyValuePair> {
+    private var feeExchangeRatePair: AnyPublisher<MoneyValuePair, PriceServiceError> {
         walletCurrencyService
             .displayCurrency
             .flatMap { [feeCryptoCurrency, currencyConversionService] fiatCurrency in
@@ -414,10 +422,35 @@ extension ERC20OnChainTransactionEngine {
                     .map { MoneyValuePair(base: .one(currency: feeCryptoCurrency), quote: $0) }
                     .eraseToAnyPublisher()
             }
-            .asSingle()
+            .eraseToAnyPublisher()
     }
 
     private var feeCryptoCurrency: CurrencyType {
         erc20CryptoAccount.network.nativeAsset.currencyType
     }
+}
+
+private func confirmations(
+    pendingTransaction: PendingTransaction,
+    sourceAccount: BlockchainAccount?,
+    transactionTarget: TransactionTarget?,
+    fiatAmount: FiatValue?,
+    fiatFees: FiatValue?,
+    feeOption: TransactionConfirmations.FeeSelection
+) -> [TransactionConfirmation] {
+    let sourceLabel = sourceAccount?.label
+    let targetLabel = transactionTarget?.label
+    let feedTotal = TransactionConfirmations.FeedTotal(
+        amount: pendingTransaction.amount,
+        amountInFiat: fiatAmount?.moneyValue,
+        fee: pendingTransaction.feeAmount,
+        feeInFiat: fiatFees?.moneyValue
+    )
+    return [
+        TransactionConfirmations.SendDestinationValue(value: pendingTransaction.amount),
+        TransactionConfirmations.Source(value: sourceLabel ?? ""),
+        TransactionConfirmations.Destination(value: targetLabel ?? ""),
+        feeOption,
+        feedTotal
+    ]
 }

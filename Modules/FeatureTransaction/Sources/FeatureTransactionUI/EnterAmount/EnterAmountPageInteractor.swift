@@ -213,18 +213,27 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             .debounce(.milliseconds(250), scheduler: MainScheduler.asyncInstance)
             .distinctUntilChanged()
             .flatMap { amount -> Observable<MoneyValue> in
-                transactionState
+                guard amount.isFiat else {
+                    // Amount is Crypto, use it.
+                    return .just(amount)
+                }
+                // Amount is Fiat, check if we can use Fiat first.
+                return transactionState
                     .take(1)
                     .asSingle()
                     .map { state in
-                        if let fiatValue = amount.fiatValue, !state.allowFiatInput {
-                            // Fiat Input but state does not allow fiat
-                            guard let exchangeRate = state.exchangeRates?.fiatTradingCurrencyToSourceRate else {
-                                return .zero(currency: state.asset)
-                            }
-                            return fiatValue.convert(using: exchangeRate)
+                        guard let fiatValue = amount.fiatValue, state.engineCanTransactFiat.isNo else {
+                            return amount
                         }
-                        return amount
+                        // Fiat Input but state does not allow fiat.
+                        if let exchangeRate = state.exchangeRates?.fiatTradingCurrencyToSourceRate {
+                            // Exchange Rate available.
+                            // Convert to crypto and use that instead.
+                            return fiatValue.convert(using: exchangeRate)
+                        } else {
+                            // Exchange Rate not available.
+                            return .zero(currency: state.asset)
+                        }
                     }
                     .asObservable()
             }
@@ -328,6 +337,14 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 )
             }
             .share(scope: .whileConnected)
+
+        transactionState
+            .map(\.allowFiatInput)
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] allowFiatInput in
+                self?.amountViewInteractor.setCanTransactFiat(allowFiatInput)
+            })
+            .disposeOnDeactivate(interactor: self)
 
         transactionState
             .distinctUntilChanged(\.feeSelection, comparer: { $0 == $1 })

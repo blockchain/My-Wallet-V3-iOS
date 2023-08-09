@@ -419,6 +419,7 @@ extension LocalizationConstants.Transaction {
     public static let swap = NSLocalizedString("Swap", comment: "Swap")
     public static let withdraw = NSLocalizedString("Withdraw", comment: "Withdraw")
     public static let buy = NSLocalizedString("Buy", comment: "Buy")
+    public static let addNew = NSLocalizedString("+Add New", comment: "+Add New")
 
     public static let max = NSLocalizedString("Max", comment: "Max")
 
