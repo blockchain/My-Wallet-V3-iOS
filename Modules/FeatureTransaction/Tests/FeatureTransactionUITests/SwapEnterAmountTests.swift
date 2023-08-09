@@ -239,7 +239,8 @@ class MockDefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI {
     var pairsToReturn: (source: FeatureTransactionDomain.SelectionInformation, target: FeatureTransactionDomain.SelectionInformation)?
 
     var getDefaultPairsCalled: Bool = false
-    func getDefaultPairs(sourceInformation: FeatureTransactionDomain.SelectionInformation?) async -> (source: FeatureTransactionDomain.SelectionInformation, target: FeatureTransactionDomain.SelectionInformation)? {
+    func getDefaultPairs(sourceInformation: FeatureTransactionDomain.SelectionInformation?,
+                         targetInformation: FeatureTransactionDomain.SelectionInformation?) async -> (source: FeatureTransactionDomain.SelectionInformation, target: FeatureTransactionDomain.SelectionInformation)? {
         getDefaultPairsCalled = true
         return pairsToReturn
     }
