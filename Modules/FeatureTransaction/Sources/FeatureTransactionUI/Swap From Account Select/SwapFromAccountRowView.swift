@@ -49,21 +49,4 @@ struct SwapFromAccountRowView: View {
             }
         }
     }
-
-    func update(_ update: Bindings.Update) {
-        switch update {
-        case .request(let binding):
-            print("💪 request \(viewStore.accountId) \(binding.description)")
-
-        case .updateError(_, let error):
-            print("💪 update error \(error.localizedDescription)")
-
-        case .update(let binding) :
-            print("💪 update binding \(viewStore.accountId) \(binding.reference) \(binding.result)")
-
-        case .didSynchronize(let binding):
-            print("💪 \(viewStore.accountId) \(binding.description)")
-
-        }
-    }
 }
