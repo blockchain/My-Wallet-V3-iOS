@@ -106,7 +106,6 @@ public final class AccountCurrentBalanceCellPresenter {
             .iconModel(account: account, action: assetAction)
         iconImageViewContentRelay.accept(iconImageModel ?? .empty)
 
-
         titleRelay.accept(account.assetName)
         if account is TradingAccount {
             descriptionRelay.accept("")

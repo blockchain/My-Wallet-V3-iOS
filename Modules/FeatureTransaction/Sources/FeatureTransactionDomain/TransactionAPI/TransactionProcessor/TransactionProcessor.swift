@@ -16,10 +16,12 @@ public final class TransactionProcessor {
         engine.canTransactFiat
     }
 
-    public lazy var transactionExchangeRates: Observable<TransactionExchangeRates> = pendingTxSubject
+    public lazy var transactionExchangeRates: Observable<TransactionExchangeRates?> = pendingTxSubject
         .asObservable()
-        .flatMap { [engine] pendingTransaction -> Observable<TransactionExchangeRates> in
+        .flatMap { [engine] pendingTransaction -> Observable<TransactionExchangeRates?> in
             engine.fetchExchangeRates(for: pendingTransaction)
+                .optional()
+                .replaceError(with: nil)
                 .asObservable()
         }
 
@@ -166,14 +168,20 @@ public final class TransactionProcessor {
         }
     }
 
+    private func validateFiatSupport(amount: MoneyValue) throws {
+        if !canTransactFiat, amount.isFiat {
+            throw PlatformKitError.illegalStateException(
+                message: "Engine.canTransactFiat \(canTransactFiat) but amount.isFiat: \(amount.isFiat)"
+            )
+        }
+    }
+
     public func updateAmount(amount: MoneyValue) -> Completable {
         Logger.shared.debug("!TRANSACTION!> in `updateAmount: \(amount.displayString)`")
-        if !canTransactFiat, amount.isFiat {
-            return .error(
-                PlatformKitError.illegalStateException(
-                    message: "Engine.canTransactFiat \(canTransactFiat) but amount.isFiat: \(amount.isFiat)"
-                )
-            )
+        do {
+            try validateFiatSupport(amount: amount)
+        } catch {
+            return .error(error)
         }
 
         let transaction: PendingTransaction

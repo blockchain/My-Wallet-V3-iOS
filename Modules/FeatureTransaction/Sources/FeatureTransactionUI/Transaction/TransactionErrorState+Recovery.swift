@@ -6,9 +6,9 @@ import FeatureTransactionDomain
 import Localization
 import MoneyKit
 import PlatformKit
+import SwiftUI
 import ToolKit
 import UIComponentsKit
-import SwiftUI
 
 extension TransactionErrorState {
 

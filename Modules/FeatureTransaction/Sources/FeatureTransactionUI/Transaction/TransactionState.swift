@@ -32,6 +32,7 @@ struct TransactionState: StateType {
     var source: BlockchainAccount?
     var destination: TransactionTarget?
 
+    var engineCanTransactFiat: Bool = false
     var exchangeRates: TransactionExchangeRates?
 
     // MARK: Execution Supporting Data
@@ -55,7 +56,8 @@ struct TransactionState: StateType {
     var order: TransactionOrder?
 
     var quote: BrokerageQuote?
-    var price: BrokerageQuote.Price?, priceInput: MoneyValue?
+    var price: BrokerageQuote.Price?
+    var priceInput: MoneyValue?
 
     var isStreamingQuotes: Bool {
         switch action {
@@ -71,7 +73,8 @@ struct TransactionState: StateType {
     }
 
     var isStreamingPrices: Bool {
-        step == .enterAmount || step == .selectSourceTargetAmount
+        step == .enterAmount
+            || step == .selectSourceTargetAmount
     }
 
     var dialog: UX.Dialog?
@@ -81,7 +84,7 @@ struct TransactionState: StateType {
 
     // MARK: UI Supporting Data
 
-    var allowFiatInput: Bool = false
+    var allowFiatInput: Bool = true
 
     // MARK: Navigation Supporting Data
 
@@ -133,6 +136,20 @@ struct TransactionState: StateType {
 }
 
 extension TransactionState {
+
+    var exchangeRate: MoneyValuePair? {
+        guard let source, let destination else { return nil }
+        guard let price else {
+            return .zero(baseCurrency: source.currencyType, quoteCurrency: destination.currencyType)
+        }
+        guard let amount = MoneyValue.create(minor: price.amount, currency: source.currencyType) else {
+            return nil
+        }
+        guard let result = MoneyValue.create(minor: price.result, currency: destination.currencyType) else {
+            return nil
+        }
+        return MoneyValuePair(base: amount, quote: result).exchangeRate
+    }
 
     var sourceToFiatPair: MoneyValuePair? {
         guard let sourceCurrency = source?.currencyType else {
@@ -195,7 +212,7 @@ extension TransactionState: Equatable {
 
     static func == (lhs: TransactionState, rhs: TransactionState) -> Bool {
         guard lhs.action == rhs.action else { return false }
-        guard lhs.allowFiatInput == rhs.allowFiatInput else { return false }
+        guard lhs.engineCanTransactFiat == rhs.engineCanTransactFiat else { return false }
         guard lhs.destination?.label == rhs.destination?.label else { return false }
         guard lhs.exchangeRates == rhs.exchangeRates else { return false }
         guard lhs.errorState == rhs.errorState else { return false }
@@ -441,7 +458,7 @@ extension TransactionState {
 extension TransactionState {
 
     var transactionErrorTitle: String {
-        errorState.recoveryWarningTitle(for: action).or(Localization.Error.unknownError)
+        errorState.recoveryWarningTitle(for: action).or(LocalizationConstants.Transaction.Error.unknownError)
     }
 
     var transactionErrorDescription: String {

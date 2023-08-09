@@ -7,7 +7,7 @@ import RxCocoa
 import RxSwift
 import ToolKit
 
-public struct SingleAccountBadgeImageViewModel {
+public enum SingleAccountBadgeImageViewModel {
 
     private typealias AccessibilityId = Accessibility.Identifier.AccountPicker.AccountCell
 
