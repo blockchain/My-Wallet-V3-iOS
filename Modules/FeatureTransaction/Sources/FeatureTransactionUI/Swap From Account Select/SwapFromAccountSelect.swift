@@ -16,7 +16,6 @@ public struct SwapFromAccountSelect: ReducerProtocol {
         var isLoading: Bool = false
         var appMode: AppMode?
         var swapAccountRows: IdentifiedArrayOf<SwapFromAccountRow.State> = []
-        var selectedTargetAccountId: String?
     }
 
     public enum Action: Equatable {
@@ -47,8 +46,7 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                 state.appMode = app.currentMode
                 state.isLoading = true
                 return .run { [
-                    appMode = state.appMode,
-                    targetAccountId = state.selectedTargetAccountId
+                    appMode = state.appMode
                 ] send in
                     do {
                         let tradableCurrencies = try await supportedPairsInteractorService
@@ -61,7 +59,6 @@ public struct SwapFromAccountSelect: ReducerProtocol {
 
                             let filteredAccounts: [String] = try await availableAccounts
                                 .async
-                                .filter({ $0 != targetAccountId })
                                 .filter { accountId in
                                     let currency = try await app.get(blockchain.coin.core.account[accountId].currency, as: String.self)
                                     return tradableCurrencies.contains(currency)
@@ -75,7 +72,6 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                             let availableAccounts = try await app.get(blockchain.coin.core.accounts.custodial.crypto.with.balance, as: [String].self)
                             let filteredAccounts = try await availableAccounts
                                 .async
-                                .filter({ $0 != targetAccountId })
                                 .filter { accountId in
                                     let currency = try await app.get(blockchain.coin.core.account[accountId].currency, as: String.self)
                                     return tradableCurrencies.contains(currency)

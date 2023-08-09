@@ -237,12 +237,14 @@ public struct SwapEnterAmount: ReducerProtocol {
                         .map(Action.onMinMaxAmountsFetched),
 
                         .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
-                            guard sourceInformation == nil && targetInformation == nil else {
+                            guard sourceInformation == nil || targetInformation == nil else {
                                 return
                             }
 
-                            if let pairs = await defaultSwapPairsService.getDefaultPairs(sourceInformation: sourceInformation,
-                                                                                         targetInformation: targetInformation) {
+                            if let pairs = await defaultSwapPairsService.getDefaultPairs(
+                                sourceInformation: sourceInformation,
+                                targetInformation: targetInformation
+                            ) {
                                 await send(.didFetchPairs(pairs.0, pairs.1))
                                 await send(.updateSourceBalance)
                             }
@@ -322,7 +324,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 return EffectTask(value: .resetInput(newInput: max.toDisplayString(includeSymbol: false)))
 
             case .onSelectSourceTapped:
-                state.selectFromCryptoAccountState = SwapFromAccountSelect.State(appMode: app.currentMode, selectedTargetAccountId: state.targetInformation?.accountId)
+                state.selectFromCryptoAccountState = SwapFromAccountSelect.State(appMode: app.currentMode)
                 state.showAccountSelect.toggle()
                 return .none
 
