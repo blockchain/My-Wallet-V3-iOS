@@ -15,24 +15,15 @@ struct AppLoaderView<Content: View>: View {
     }
 
     var body: some View {
-        VStack {
-            BlockchainProgressView()
-                .task {
-                    do {
-                        let result = try await loaderService.loadAppDependencies()
-                        withAnimation {
-                            didFinish = true
-                        }
-                    }
-                    catch {
-                        didFinish = true
-                        print(error.localizedDescription)
-                    }
-                }
-        }
-        .fullScreenCover(isPresented: $didFinish) {
-            content
-        }
+      if didFinish {
+        content
+      } else {
+        BlockchainProgressView()
+          .task {
+            _ = try? await loaderService.loadAppDependencies()
+            withAnimation { didFinish = true }
+          }
+      }
     }
 }
 

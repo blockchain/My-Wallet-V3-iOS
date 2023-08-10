@@ -14,8 +14,7 @@ public class AppLoaderService: ObservableObject {
     }
 
     public func loadAppDependencies() async throws -> Bool {
-        let products = try await productsService.fetchProducts().await()
-        print("🛠️ loaded products \(products)")
+        let _ = try await productsService.fetchProducts().await()
         return true
     }
 }
