@@ -131,11 +131,14 @@ struct TransactionView: UIViewControllerRepresentable {
                 // maybe we already have the source set
                 let transactionSourceAccount = (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
 
+                // maybe we already have the target set
+                let transactionTarget = (context[blockchain.ux.transaction.source.target] as? AnyJSON)?.value as? TransactionTarget
+
                 let router = builder.build(
                     withListener: interactor,
                     action: .swap,
                     sourceAccount: transactionSourceAccount,
-                    target: context[blockchain.ux.transaction.source.target] as? TransactionTarget
+                    target: transactionTarget
                 )
                 return (router.viewControllable.uiviewController, router, interactor)
             case .deposit:

@@ -93,7 +93,7 @@ public struct SwapEnterAmountView: View {
             )
         }
     }
-    
+
     @ViewBuilder
     func valuesContainer(
         _ viewStore: ViewStoreOf<SwapEnterAmount>

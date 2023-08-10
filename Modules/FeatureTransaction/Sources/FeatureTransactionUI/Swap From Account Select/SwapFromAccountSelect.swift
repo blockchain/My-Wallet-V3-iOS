@@ -15,7 +15,6 @@ public struct SwapFromAccountSelect: ReducerProtocol {
     public struct State: Equatable {
         var isLoading: Bool = false
         var appMode: AppMode?
-        var availableAccounts: [String] = []
         var swapAccountRows: IdentifiedArrayOf<SwapFromAccountRow.State> = []
     }
 
@@ -57,6 +56,7 @@ public struct SwapFromAccountSelect: ReducerProtocol {
 
                         if appMode == .pkw {
                             let availableAccounts = try await app.get(blockchain.coin.core.accounts.DeFi.with.balance, as: [String].self)
+
                             let filteredAccounts: [String] = try await availableAccounts
                                 .async
                                 .filter { accountId in
@@ -93,7 +93,7 @@ public struct SwapFromAccountSelect: ReducerProtocol {
                     .map {
                         SwapFromAccountRow.State(
                             isLastRow: $0 == accounts.last,
-                            assetCode: $0
+                            accountId: $0
                         )
                     }
                 state.swapAccountRows = IdentifiedArrayOf(uniqueElements: elements)

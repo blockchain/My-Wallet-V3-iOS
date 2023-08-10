@@ -16,7 +16,7 @@ public struct SelectionInformation: Equatable {
 }
 
 public protocol DefaultSwapCurrencyPairsServiceAPI {
-    func getDefaultPairs(sourceInformation: SelectionInformation?) async -> (source: SelectionInformation, target: SelectionInformation)?
+    func getDefaultPairs(sourceInformation: SelectionInformation?, targetInformation: SelectionInformation?) async -> (source: SelectionInformation, target: SelectionInformation)?
 }
 
 public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI {
@@ -31,26 +31,40 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
         self.supportedPairsInteractorService = supportedPairsInteractorService
     }
 
-    public func getDefaultPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
+    public func getDefaultPairs(
+        sourceInformation: SelectionInformation?,
+        targetInformation: SelectionInformation?
+    ) async -> (source: SelectionInformation, target: SelectionInformation)? {
         let appMode = await app.mode()
 
         switch appMode {
         case .trading:
-            return await getDefaultTradingPairs(sourceInformation: sourceInformation)
+            return await getDefaultTradingPairs(
+                sourceInformation: sourceInformation,
+                targetInformation: targetInformation
+            )
         case .pkw:
-            return await getDefaultNonCustodialPairs(sourceInformation: sourceInformation)
+            return await getDefaultNonCustodialPairs(
+                sourceInformation: sourceInformation,
+                targetInformation: targetInformation
+            )
         }
     }
 
-    private func getDefaultTradingPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
+    private func getDefaultTradingPairs(
+        sourceInformation: SelectionInformation? = nil,
+        targetInformation: SelectionInformation? = nil
+    ) async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
             let tradableCurrencies = try await supportedPairsInteractorService
                 .fetchSupportedTradingCryptoCurrencies()
                 .await()
                 .map(\.code)
 
+            let tradingPairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self)
+
             let custodialCurrencies = try await app.get(blockchain.user.trading.currencies, as: [String].self)
-            let balance = try await custodialCurrencies
+            let allBalances = try await custodialCurrencies
                 .async
                 .filter { tradableCurrencies.contains($0) }
                 .map { currency -> MoneyValuePair in
@@ -63,35 +77,73 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                     balances.append(moneyValuePair)
                 }
                 .sorted(by: { try $0.quote > $1.quote })
-                .first.or(throw: "No matching pairs")
 
-            let accountId = try? await app
-                .get(blockchain.coin.core.accounts.custodial.asset[balance.base.currency.code], as: String.self)
+            let firstBalance = try firstValidBalance(
+                targetCurrency: targetInformation?.currency.currencyType,
+                tradingPairs: tradingPairs,
+                allBalances: allBalances
+            )
+                .or(throw: "No matching pairs")
+
+            let firstBalanceAccountId = try? await app
+                .get(blockchain.coin.core.accounts.custodial.asset[firstBalance.base.currency.code], as: String.self)
+
             let bitcoinAccountId = try? await app
                 .get(blockchain.coin.core.accounts.custodial.asset[CryptoCurrency.bitcoin.code], as: String.self)
             let usdtAccountId = try? await app
                 .get(blockchain.coin.core.accounts.custodial.asset["USDT"], as: String.self)
 
-            return try pair(
-                with: sourceInformation?.currency.currencyType ?? balance.base.currency,
-                accountId: sourceInformation?.accountId ?? accountId,
-                usdtAccountId: usdtAccountId,
-                bitcoinAccountId: bitcoinAccountId
-            )
+            switch (sourceInformation, targetInformation) {
+            case (nil, nil):
+                return try pairForSource(
+                    with: firstBalance.base.currency,
+                    accountId: firstBalanceAccountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+            case (let source, nil):
+                return try pairForSource(
+                    with: sourceInformation?.currency.currencyType ?? firstBalance.base.currency,
+                    accountId: source?.accountId ?? firstBalanceAccountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+
+            case (nil, let target):
+                if let target {
+                    if let firstBalanceAccountId,
+                       let firstBalanceCurrency = firstBalance.base.currency.cryptoCurrency
+                    {
+                        let source = SelectionInformation(
+                            accountId: firstBalanceAccountId,
+                            currency: firstBalanceCurrency
+                        )
+                        return (source: source, target: target)
+                    }
+                }
+                return nil
+
+            default:
+                return nil
+            }
         } catch {
             return nil
         }
     }
 
-    private func getDefaultNonCustodialPairs(sourceInformation: SelectionInformation? = nil) async -> (source: SelectionInformation, target: SelectionInformation)? {
+    private func getDefaultNonCustodialPairs(
+        sourceInformation: SelectionInformation? = nil,
+        targetInformation: SelectionInformation? = nil
+    ) async -> (source: SelectionInformation, target: SelectionInformation)? {
         do {
             let tradingCurrencies = try await supportedPairsInteractorService
                 .fetchSupportedTradingCryptoCurrencies()
                 .await()
                 .map(\.code)
 
+            let tradingPairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self)
             let nonCustodialCurrencies = try await app.get(blockchain.user.pkw.currencies, as: [String].self)
-            let balance = try await nonCustodialCurrencies
+            let allBalances = try await nonCustodialCurrencies
                 .async
                 .filter { tradingCurrencies.contains($0) }
                 .map { currency -> MoneyValuePair in
@@ -104,10 +156,16 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                     balances.append(moneyValuePair)
                 }
                 .sorted(by: { try $0.quote > $1.quote })
-                .first.or(throw: "No matching pairs")
 
-            let accountId: String? = try? await app
-                .get(blockchain.coin.core.accounts.DeFi.asset[balance.base.currency.code], as: [String].self)
+            let firstBalance = try firstValidBalance(
+                targetCurrency: targetInformation?.currency.currencyType,
+                tradingPairs: tradingPairs,
+                allBalances: allBalances
+            )
+                .or(throw: "No matching pairs")
+
+            let firstBalanceAccountId: String? = try? await app
+                .get(blockchain.coin.core.accounts.DeFi.asset[firstBalance.base.currency.code], as: [String].self)
                 .first
             let bitcoinAccountId: String? = try? await app
                 .get(blockchain.coin.core.accounts.DeFi.asset[CryptoCurrency.bitcoin.code], as: [String].self)
@@ -116,18 +174,62 @@ public class DefaultSwapCurrencyPairsService: DefaultSwapCurrencyPairsServiceAPI
                 .get(blockchain.coin.core.accounts.DeFi.asset["USDT"], as: [String].self)
                 .first
 
-            return try pair(
-                with: sourceInformation?.currency.currencyType ?? balance.base.currency,
-                accountId: sourceInformation?.accountId ?? accountId,
-                usdtAccountId: usdtAccountId,
-                bitcoinAccountId: bitcoinAccountId
-            )
+            switch (sourceInformation, targetInformation) {
+            case (nil, nil):
+                return try pairForSource(
+                    with: firstBalance.base.currency,
+                    accountId: firstBalanceAccountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+            case (let source, nil):
+                return try pairForSource(
+                    with: sourceInformation?.currency.currencyType ?? firstBalance.base.currency,
+                    accountId: source?.accountId ?? firstBalanceAccountId,
+                    usdtAccountId: usdtAccountId,
+                    bitcoinAccountId: bitcoinAccountId
+                )
+
+            case (nil, let target):
+                if let target {
+                    if let firstBalanceAccountId,
+                       let firstBalanceCurrency = firstBalance.base.currency.cryptoCurrency
+                    {
+                        let source = SelectionInformation(
+                            accountId: firstBalanceAccountId,
+                            currency: firstBalanceCurrency
+                        )
+                        return (source: source, target: target)
+                    }
+                }
+                return nil
+
+            default:
+                return nil
+            }
         } catch {
             return nil
         }
     }
 
-    private func pair(
+    private func firstValidBalance(
+        targetCurrency: CurrencyType?,
+        tradingPairs: [TradingPair],
+        allBalances: [MoneyValuePair]
+    ) -> MoneyValuePair? {
+        guard let targetCurrency else {
+            return allBalances.first
+        }
+        let firstBalance = allBalances
+            .first { balance in
+                tradingPairs.contains { pair in
+                    pair.sourceCurrencyType == balance.base.currency && pair.destinationCurrencyType == targetCurrency
+                }
+            }
+        return firstBalance
+    }
+
+    private func pairForSource(
         with currency: CurrencyType,
         accountId: String?,
         usdtAccountId: String?,

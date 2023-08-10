@@ -209,12 +209,12 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
 
     func handleSwapCrypto(account: CryptoAccount?) {
         let transactionsRouter = transactionsRouter
-        let onboardingRouter = onboardingRouter
         coincore.hasPositiveDisplayableBalanceAccounts(for: .crypto)
             .prefix(1)
             .receive(on: DispatchQueue.main)
             .flatMap { positiveBalance -> AnyPublisher<TransactionFlowResult, Never> in
-                transactionsRouter.presentTransactionFlow(to: .swap(account))
+                transactionsRouter.presentTransactionFlow(to: .swap(source: account,
+                                                                    target: nil))
             }
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")

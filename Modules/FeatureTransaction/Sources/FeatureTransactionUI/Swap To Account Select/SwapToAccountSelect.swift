@@ -72,18 +72,18 @@ public struct SwapToAccountSelect: ReducerProtocol {
                 ] send in
                     do {
                         if appMode == .pkw {
-                            let pairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [String].self)
+                            let pairs = try await app.get(blockchain.api.nabu.gateway.trading.swap.pairs, as: [TradingPair].self)
 
                             let nonCustodialCurrencies = try await app.get(
                                 blockchain.coin.core.accounts.DeFi.all.currencies,
                                 as: [CryptoCurrency].self
                             )
                                 .sorted(like: [.ethereum, .bitcoinCash])
-                            await send(.onTradingPairsFetched(pairs.compactMap { TradingPair(rawValue: $0) }))
+                            await send(.onTradingPairsFetched(pairs))
                             let filteredCurrencies = await filter(
                                 sourceCurrency: sourceCurrency,
                                 availableCurrencies: nonCustodialCurrencies,
-                                pairs: (pairs.compactMap { TradingPair(rawValue: $0) })
+                                pairs: pairs
                             )
                             await send(.onAvailableCurrenciesFetched(filteredCurrencies))
                         } else {

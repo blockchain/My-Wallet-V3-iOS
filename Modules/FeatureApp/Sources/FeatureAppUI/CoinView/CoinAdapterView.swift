@@ -236,7 +236,7 @@ public final class CoinViewObserver: Client.Observer {
         case (true, false):
             app.post(event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select, context: event.context)
         case (false, true):
-            await transactionsRouter.presentTransactionFlow(to: .swap(account))
+            await transactionsRouter.presentTransactionFlow(to: .swap(source: account, target: nil))
         case (false, false):
             break
         }
@@ -248,7 +248,7 @@ public final class CoinViewObserver: Client.Observer {
         let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account.asset)
 
         if canBcdcSwap {
-            await transactionsRouter.presentTransactionFlow(to: .swap(account))
+            await transactionsRouter.presentTransactionFlow(to: .swap(source: nil, target: account))
             return
         }
 
