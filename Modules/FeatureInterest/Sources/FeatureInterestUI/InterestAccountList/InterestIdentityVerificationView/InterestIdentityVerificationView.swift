@@ -26,7 +26,7 @@ struct InterestIdentityVerificationView: View {
                         badgeImageViewWithViewModel(
                             .init(theme:
                                 .init(
-                                    backgroundColor: .defaultBadge,
+                                    backgroundColor: .primary,
                                     cornerRadius: .round,
                                     imageViewContent: .init(
                                         imageResource: .local(

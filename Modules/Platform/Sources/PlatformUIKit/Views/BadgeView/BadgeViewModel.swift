@@ -139,7 +139,7 @@ extension BadgeViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: UIColor(light: .badgeBackgroundWarning, dark: .tertiary),
+            backgroundColor: UIColor(light: .badgeBackgroundWarning, dark: .primaryMuted),
             contentColor: UIColor(light: .warningBadge, dark: .darkTitleText),
             text: text
         )
@@ -159,8 +159,8 @@ extension BadgeViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: UIColor(light: .defaultBadgeBackground, dark: .idleBorder), // idleBorder is blue400 :(
-            contentColor: UIColor(light: .defaultBadge, dark: .darkTitleText),
+            backgroundColor: UIColor(light: .defaultBadgeBackground, dark: .primaryMuted),
+            contentColor: UIColor(light: .primary, dark: .darkTitleText),
             text: text
         )
         return viewModel

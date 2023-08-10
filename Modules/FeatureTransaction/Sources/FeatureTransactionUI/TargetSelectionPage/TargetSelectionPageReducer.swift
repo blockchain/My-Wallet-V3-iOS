@@ -120,7 +120,9 @@ final class TargetSelectionPageReducer: TargetSelectionPageReducerAPI {
         let button = interactorState
             .map(\.actionButtonEnabled)
             .map { canContinue -> ButtonViewModel in
-                let viewModel: ButtonViewModel = .primary(with: LocalizationConstants.Transaction.next)
+                let viewModel: ButtonViewModel = .transactionPrimary(
+                    with: LocalizationConstants.Transaction.next
+                )
                 viewModel.isEnabledRelay.accept(canContinue)
                 return viewModel
             }

@@ -77,8 +77,8 @@ public final class CompositeStatusView: UIView {
             let edge = bounds.width * contentSizeRatio
             let loadingView = LoadingAnimatingView(
                 diameter: edge,
-                strokeColor: .secondary,
-                strokeBackgroundColor: UIColor.secondary.withAlphaComponent(0.3),
+                strokeColor: .primary,
+                strokeBackgroundColor: UIColor.primary.withAlphaComponent(0.3),
                 fillColor: .clear,
                 strokeWidth: 4
             )
@@ -225,8 +225,8 @@ public final class CompositeStatusView: UIView {
     private func setupLoadingView() {
         let loadingView = LoadingAnimatingView(
             diameter: mainContainerView.bounds.width,
-            strokeColor: .secondary,
-            strokeBackgroundColor: UIColor.secondary.withAlphaComponent(0.3),
+            strokeColor: .primary,
+            strokeBackgroundColor: UIColor.primary.withAlphaComponent(0.3),
             fillColor: .clear
         )
 

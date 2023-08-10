@@ -81,7 +81,7 @@ final class QRCodeScannerViewOverlay: UIView {
             .sink { [weak self] result in
                 switch result {
                 case .success(let success):
-                    self?.setScanningBorder(color: success ? .successBorder : .idleBorder)
+                    self?.setScanningBorder(color: success ? .successBorder : .primaryMuted)
                 case .failure:
                     self?.setScanningBorder(color: .errorBorder)
                 }
@@ -211,7 +211,7 @@ final class QRCodeScannerViewOverlay: UIView {
     }
 
     private func setupBorderView() {
-        targetImageView.tintColor = .idleBorder
+        targetImageView.tintColor = .primaryMuted
         targetImageView.frame.origin = scannableFrame.origin
     }
 

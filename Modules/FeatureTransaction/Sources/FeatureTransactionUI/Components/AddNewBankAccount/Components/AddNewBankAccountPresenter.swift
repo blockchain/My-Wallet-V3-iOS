@@ -183,7 +183,7 @@ extension AddNewBankAccountPagePresenter {
                         .text(string: FundsString.Notice.recipientNameARS)
                     ],
                     textStyle: .init(color: .descriptionText, font: font),
-                    linkStyle: .init(color: .linkableText, font: font)
+                    linkStyle: .init(color: .primary, font: font)
                 )
             case .BRL:
                 processingTimeNoticeDescription = FundsString.Notice.ProcessingTime.Description.BRL
@@ -192,7 +192,7 @@ extension AddNewBankAccountPagePresenter {
                         .text(string: FundsString.Notice.recipientNameBRL)
                     ],
                     textStyle: .init(color: .descriptionText, font: font),
-                    linkStyle: .init(color: .linkableText, font: font)
+                    linkStyle: .init(color: .primary, font: font)
                 )
             case .USD:
                 processingTimeNoticeDescription = FundsString.Notice.ProcessingTime.Description.USD
@@ -201,7 +201,7 @@ extension AddNewBankAccountPagePresenter {
                         .text(string: FundsString.Notice.recipientNameUSD)
                     ],
                     textStyle: .init(color: .descriptionText, font: font),
-                    linkStyle: .init(color: .linkableText, font: font)
+                    linkStyle: .init(color: .primary, font: font)
                 )
             case .GBP:
                 processingTimeNoticeDescription = FundsString.Notice.ProcessingTime.Description.GBP
@@ -212,14 +212,14 @@ extension AddNewBankAccountPagePresenter {
                         .text(string: FundsString.Notice.recipientNameGBPSuffix)
                     ],
                     textStyle: .init(color: .descriptionText, font: font),
-                    linkStyle: .init(color: .linkableText, font: font)
+                    linkStyle: .init(color: .primary, font: font)
                 )
             case .EUR:
                 processingTimeNoticeDescription = FundsString.Notice.ProcessingTime.Description.EUR
                 self.termsTextViewModel = InteractableTextViewModel(
                     inputs: [.text(string: FundsString.Notice.recipientNameEUR)],
                     textStyle: .init(color: .descriptionText, font: font),
-                    linkStyle: .init(color: .linkableText, font: font)
+                    linkStyle: .init(color: .primary, font: font)
                 )
             default:
                 processingTimeNoticeDescription = ""

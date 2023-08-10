@@ -64,7 +64,7 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
                         type: .image(.local(name: "v-success-icon", bundle: .platformUIKit)),
                         position: .radiusDistanceFromCenter
                     ),
-                    backgroundColor: .primaryButton,
+                    backgroundColor: .primary,
                     cornerRadiusRatio: 0.5
                 )
             ),
@@ -103,7 +103,7 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
                 .init(
                     baseViewType: coreBuyIcon,
                     sideViewAttributes: .init(type: .loader, position: .radiusDistanceFromCenter),
-                    backgroundColor: .primaryButton,
+                    backgroundColor: .primary,
                     cornerRadiusRatio: 0.5
                 )
             ),
@@ -122,7 +122,7 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
                         type: .image(.local(name: "clock-error-icon", bundle: .platformUIKit)),
                         position: .radiusDistanceFromCenter
                     ),
-                    backgroundColor: .primaryButton,
+                    backgroundColor: .primary,
                     cornerRadiusRatio: 0.5
                 )
             ),

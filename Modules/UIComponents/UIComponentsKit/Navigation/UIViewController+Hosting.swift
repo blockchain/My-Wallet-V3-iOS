@@ -40,7 +40,7 @@ extension UIViewController {
         let destination: UIViewController
         if inNavigationController {
             let navigationController = UINavigationController(rootViewController: hostViewController)
-            navigationController.navigationBar.tintColor = .linkableText
+            navigationController.navigationBar.tintColor = .primary
             destination = navigationController
         } else {
             destination = hostViewController

@@ -65,7 +65,7 @@ public final class PasswordTextFieldViewModel: TextFieldViewModel {
             case .normal:
                 return .normalPassword
             case .strong:
-                return .strongPassword
+                return .primary
             }
         }
 

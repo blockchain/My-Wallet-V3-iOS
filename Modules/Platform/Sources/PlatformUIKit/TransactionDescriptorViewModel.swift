@@ -36,7 +36,7 @@ public struct TransactionDescriptorViewModel {
         guard adjustActionIconColor else {
             return Driver.just(
                 provideBadgeImageViewModel(
-                    accentColor: .primaryButton,
+                    accentColor: .primary,
                     backgroundColor: .lightBlueBackground
                 )
             )

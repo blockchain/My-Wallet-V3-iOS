@@ -90,7 +90,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         self.withdrawalLocksCheckRepository = withdrawalLocksCheckRepository
         self.analyticsRecorder = analyticsRecorder
         self.cancelButtonViewModel = .cancel(with: LocalizedString.Confirmation.cancel)
-        self.continueButtonViewModel = .primary(with: "")
+        self.continueButtonViewModel = .transactionPrimary(with: "")
         self.memoModel = TextFieldViewModel(
             with: .memo,
             validator: TextValidationFactory.Send.memo,
@@ -464,7 +464,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         return ConfrimationQuoteRefreshHeaderBuilder(quoteExpirationTimer.expirationDate)
     }
 
-    static func screenTitle(state: TransactionState) -> String {
+    private static func screenTitle(state: TransactionState) -> String {
         switch state.action {
         case .sign:
             return LocalizedString.Confirmation.signatureRequest
@@ -475,7 +475,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         }
     }
 
-    static func confirmCtaText(state: TransactionState) -> String {
+    private static func confirmCtaText(state: TransactionState) -> String {
         switch state.action {
         case .swap:
             return LocalizedString.Swap.swapNow
@@ -506,14 +506,13 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         }
     }
 
-    static func confirmCtaBackgroundColor(state: TransactionState) -> UIColor {
-        guard case .buy = state.action,
-              let paymentMethod = state.source as? PaymentMethodAccount,
-              paymentMethod.paymentMethodType.method.isApplePay
-        else {
-            return .semantic.primary
+    private static func confirmCtaBackgroundColor(state: TransactionState) -> UIColor {
+        switch state.action {
+        case .buy:
+            return sourceIsApplePay(state: state) ? .semantic.title : .primary
+        default:
+            return .primary
         }
-        return .semantic.title
     }
 
     // MARK: - Private methods
@@ -523,6 +522,13 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
 
         presenter.imageWidthRelay.accept(bitPayLogo?.size.width ?? 0)
         presenter.imageRelay.accept(bitPayLogo)
+    }
+
+    private static func sourceIsApplePay(state: TransactionState) -> Bool {
+        guard let account = state.source as? PaymentMethodAccount else {
+            return false
+        }
+        return account.paymentMethodType.method.isApplePay
     }
 }
 

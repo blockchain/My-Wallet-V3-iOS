@@ -46,7 +46,7 @@ final class YodleeScreenContentReducer {
     )
 
     private let subtitleTextStyle = InteractableTextViewModel.Style(color: .descriptionText, font: .main(.regular, 14))
-    private let subtitleLinkTextStyle = InteractableTextViewModel.Style(color: .linkableText, font: .main(.regular, 14))
+    private let subtitleLinkTextStyle = InteractableTextViewModel.Style(color: .primary, font: .main(.regular, 14))
 
     private let supportUrl = "https://support.blockchain.com/hc/en-us/requests/new"
 

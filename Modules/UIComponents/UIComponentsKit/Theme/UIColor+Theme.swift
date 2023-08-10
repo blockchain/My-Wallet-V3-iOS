@@ -56,9 +56,8 @@ extension UIColor {
 
     // MARK: Primary
 
-    public static let primary = blue900
-    public static let secondary = blue600
-    public static let tertiary = blue400
+    public static let primary = blue600
+    public static let primaryMuted = blue400
 
     public convenience init?(hex: String) {
         let clean = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -114,7 +113,6 @@ extension UIColor {
     public static let lightBorder = grey000
     public static let mediumBorder = grey100
     public static let successBorder = green500
-    public static let idleBorder = blue400
     public static let errorBorder = red400
 
     public static let destructiveBackground = red100
@@ -133,13 +131,11 @@ extension UIColor {
 
     // MARK: Texts
 
-    public static let defaultBadge = blue600
     public static let warningBadge = orange600
     public static let affirmativeBadgeDark = green400
     public static let affirmativeBadgeText = green500
 
     public static let normalPassword = green600
-    public static let strongPassword = blue600
     public static let destructive = red500
     public static let warning = orange600
 
@@ -155,8 +151,6 @@ extension UIColor {
     // MARK: Buttons
 
     public static let destructiveButton = red600
-    public static let primaryButton = blue600
-    public static let linkableText = blue600
 
     public static let primaryButtonTitle = white
 

@@ -156,7 +156,7 @@ final class LinkBankSplashScreenContentReducer {
                 InteractableTextViewModel.Input.url(string: LocalizedStrings.learnMore, url: yodleeSecurityLink)
             ],
             textStyle: InteractableTextViewModel.Style(color: .descriptionText, font: .main(.regular, 12)),
-            linkStyle: InteractableTextViewModel.Style(color: .linkableText, font: .main(.medium, 12)),
+            linkStyle: InteractableTextViewModel.Style(color: .primary, font: .main(.medium, 12)),
             alignment: .center
         )
 

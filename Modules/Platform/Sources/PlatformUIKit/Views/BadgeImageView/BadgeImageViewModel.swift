@@ -158,7 +158,7 @@ extension BadgeImageViewModel {
     /// It has rounded corners, though you can apply a `cornerRadius`
     public static func primary(
         image: ImageResource,
-        contentColor: UIColor = .init(light: .defaultBadge, dark: .tertiary),
+        contentColor: UIColor = .init(light: .primary, dark: .primaryMuted),
         backgroundColor: UIColor = .lightBadgeBackground,
         cornerRadius: CornerRadius = .roundedHigh,
         accessibilityIdSuffix: String

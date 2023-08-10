@@ -83,7 +83,7 @@ public final class AnnouncementCardViewModel {
 
         public init(
             image: ImageResource,
-            contentColor: UIColor? = .defaultBadge,
+            contentColor: UIColor? = .primary,
             backgroundColor: UIColor = .lightBadgeBackground,
             cornerRadius: BadgeImageViewModel.CornerRadius = .roundedHigh,
             accessibilityID: String = AccessibilityId.badge,
