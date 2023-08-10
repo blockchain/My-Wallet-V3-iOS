@@ -110,6 +110,10 @@ final class FiatWithdrawalTransactionEngine: TransactionEngine {
         .just(pendingTransaction.update(amount: amount))
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateAmount(pendingTransaction: pendingTransaction)
             .updateTxValiditySingle(pendingTransaction: pendingTransaction)

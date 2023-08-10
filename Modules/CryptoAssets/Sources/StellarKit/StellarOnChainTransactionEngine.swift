@@ -230,6 +230,10 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
             }
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateTargetAddress()
             .andThen(validateSufficientFunds(pendingTransaction: pendingTransaction))

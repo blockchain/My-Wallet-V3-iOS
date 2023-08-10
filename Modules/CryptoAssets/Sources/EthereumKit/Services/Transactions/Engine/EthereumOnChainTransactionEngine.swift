@@ -235,17 +235,28 @@ final class EthereumOnChainTransactionEngine: OnChainTransactionEngine {
         }
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        validateSufficientFunds(pendingTransaction: pendingTransaction)
+            .updateTxValidityCompletable(pendingTransaction: pendingTransaction)
+    }
+
     func doValidateAll(
         pendingTransaction: PendingTransaction
     ) -> Single<PendingTransaction> {
+        validateSufficientFunds(pendingTransaction: pendingTransaction)
+            .andThen(validateNoPendingTransaction())
+            .updateTxValidityCompletable(pendingTransaction: pendingTransaction)
+    }
+
+    private func validateSufficientFunds(
+        pendingTransaction: PendingTransaction
+    ) -> Completable {
         actionableBalance
-            .flatMap(weak: self) { (self, actionableBalance) -> Single<PendingTransaction> in
+            .flatMapCompletable(weak: self) { (self, actionableBalance) in
                 self.validateSufficientFunds(
                     pendingTransaction: pendingTransaction,
                     actionableBalance: actionableBalance
                 )
-                .andThen(self.validateNoPendingTransaction())
-                .updateTxValidityCompletable(pendingTransaction: pendingTransaction)
             }
     }
 

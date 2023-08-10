@@ -52,6 +52,10 @@ final class DelegatedSelfCustodyTransactionEngine: TransactionEngine {
         precondition(sourceAsset == targetAsset)
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         delegatedCustodyTransactionOutput(pendingTransaction: pendingTransaction)
             .zip(sourceExchangeRatePair)

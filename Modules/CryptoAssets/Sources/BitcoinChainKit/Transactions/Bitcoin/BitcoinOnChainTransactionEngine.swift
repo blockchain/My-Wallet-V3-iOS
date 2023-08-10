@@ -197,6 +197,10 @@ extension BitcoinOnChainTransactionEngine: OnChainTransactionEngine {
         .asSingle()
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateAmounts(pendingTransaction: pendingTransaction)
             .andThen(validateSufficientFunds(pendingTransaction: pendingTransaction))

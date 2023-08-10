@@ -150,6 +150,10 @@ final class FiatDepositTransactionEngine: TransactionEngine {
         }
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateAmount(pendingTransaction: pendingTransaction)
             .flatMap(weak: self) { (self, pendingTransaction) in
