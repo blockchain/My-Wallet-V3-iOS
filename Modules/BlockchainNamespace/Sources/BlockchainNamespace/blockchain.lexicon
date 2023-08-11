@@ -3609,6 +3609,12 @@ blockchain:
 					quick:
 						action:
 						+ blockchain.ux.dashboard.quick.action
+				external:
+					brokerage:
+						dashboard:
+							quick:
+								action:
+								+ blockchain.ux.dashboard.quick.action
 				onboarding:
 					before:
 						you:

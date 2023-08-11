@@ -110,7 +110,7 @@ struct ExternalTradingDashboardView: View {
 
                 if !isRejected {
                     QuickActionsView(
-                        tag: blockchain.ux.user.custodial.dashboard.quick.action
+                        tag: blockchain.ux.user.custodial.external.brokerage.dashboard.quick.action
                     )
                 }
             }

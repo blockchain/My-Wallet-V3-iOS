@@ -8,7 +8,7 @@ import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureDashboardUI
 import FeatureDexUI
-
+import FeatureProductsDomain
 
 struct ExternalTradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.external.portfolio[].reference
@@ -118,7 +118,23 @@ struct DashboardContent: ReducerProtocol {
                 return .run { [state] send in
                     switch state.appMode {
                     case .trading:
-                        for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
+                        for await externalTradingEnabled in app.stream(blockchain.api.nabu.gateway.products[ProductIdentifier.useExternalTradingAccount].is.eligible, as: Bool.self) {
+
+                            if externalTradingEnabled.value == true {
+                                for await event in app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self) {
+                                    await send(DashboardContent.Action.tabs(event.value?.tabs))
+                                }
+
+                            } else {
+                                for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
+                                    await send(DashboardContent.Action.tabs(event.value?.tabs))
+                                }
+                            }
+                        }
+
+                        // else
+
+                        for await event in app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self) {
                             await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }
                     case .pkw:
