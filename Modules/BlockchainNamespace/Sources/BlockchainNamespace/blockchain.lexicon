@@ -547,6 +547,10 @@ blockchain:
 						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
+				external:
+					brokerage:
+						tabs:
+						+ blockchain.app.configuration.tabs
 			swap:
 				search:
 					is:
@@ -3609,6 +3613,12 @@ blockchain:
 					quick:
 						action:
 						+ blockchain.ux.dashboard.quick.action
+				external:
+					brokerage:
+						dashboard:
+							quick:
+								action:
+								+ blockchain.ux.dashboard.quick.action
 				onboarding:
 					before:
 						you:
@@ -3684,6 +3694,11 @@ blockchain:
 				is:
 					enabled:
 					+ blockchain.session.configuration.value
+			external:
+				portfolio:
+				+ blockchain.ux.type.story
+				prices:
+				+ blockchain.ux.type.story
 			nabu:
 				experiment:
 				+ blockchain.db.collection

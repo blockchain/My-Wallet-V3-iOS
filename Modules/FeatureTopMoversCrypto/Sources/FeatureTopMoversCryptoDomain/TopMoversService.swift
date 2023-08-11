@@ -49,7 +49,9 @@ public final class TopMoversService: TopMoversServiceAPI {
                                 group.addTask {
                                     let price = try await app.get(blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code].quote.value, as: MoneyValue.self)
                                     let delta = try await app.get(blockchain.api.nabu.gateway.price.crypto[pair.base.code].fiat[pair.quote.code].delta.since.yesterday, as: Double?.self)
-                                    return TopMoverInfo(currency: currency, delta: delta.map { Decimal($0) }, price: price)
+                                    return TopMoverInfo(currency: currency,
+                                                        delta: delta.map { Decimal($0) },
+                                                        price: price)
                                 }
                             }
                             var collected = [TopMoverInfo]()

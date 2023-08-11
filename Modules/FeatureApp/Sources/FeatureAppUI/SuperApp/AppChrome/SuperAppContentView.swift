@@ -17,6 +17,7 @@ struct SuperAppContentView: View {
     @Binding var contentOffset: ModalSheetContext
 
     @State private var isTradingEnabled = true
+    @State private var isExternalTradingEnabled = false
 
     @State private var selectedDetent: UISheetPresentationController.Detent.Identifier = AppChromeDetents.collapsed.identifier
     /// `True` when a pull to refresh is triggered, otherwise `false`
@@ -59,6 +60,8 @@ struct SuperAppContentView: View {
             .bindings {
                 subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
                 subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible)
+                subscribe($isExternalTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useExternalTradingAccount].is.eligible)
+
             }
             .onChange(of: isTradingEnabled) { newValue in
                 if currentModeSelection == .trading, newValue == false {
@@ -82,6 +85,7 @@ struct SuperAppContentView: View {
                 SuperAppDashboardContentView(
                     currentModeSelection: $currentModeSelection,
                     isTradingEnabled: viewStore.state.tradingEnabled,
+                    isExternalTradingEnabled: isExternalTradingEnabled,
                     store: store
                 )
                 .background(

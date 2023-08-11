@@ -8,6 +8,15 @@ import DelegatedSelfCustodyDomain
 import DIKit
 import FeatureDashboardUI
 import FeatureDexUI
+import FeatureProductsDomain
+
+struct ExternalTradingTabsState: Equatable {
+    var selectedTab: Tag.Reference = blockchain.ux.user.external.portfolio[].reference
+    var home: ExternalTradingDashboard.State = .init()
+    var prices: PricesScene.State = .init(appMode: .trading,
+                                          topMoversState: nil)
+
+}
 
 struct TradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
@@ -41,6 +50,7 @@ struct DashboardContent: ReducerProtocol {
 
         // Tabs
         var tradingState: TradingTabsState = .init()
+        var externalTradingState: ExternalTradingTabsState = .init()
         var defiState: DefiTabsState = .init()
     }
 
@@ -49,14 +59,27 @@ struct DashboardContent: ReducerProtocol {
         case tabs(OrderedSet<Tab>?)
         case select(Tag.Reference)
         // Tabs
+        case externalTradingHome(ExternalTradingDashboard.Action)
         case tradingHome(TradingDashboard.Action)
         case defiHome(DeFiDashboard.Action)
         case tradingPrices(PricesScene.Action)
         case defiPrices(PricesScene.Action)
+        case externalTradingPrices(PricesScene.Action)
+
         case defiDex(DexDashboard.Action)
     }
 
     var body: some ReducerProtocol<State, Action> {
+        Scope(state: \State.externalTradingState.home, action: /Action.externalTradingHome) { () -> ExternalTradingDashboard in
+            ExternalTradingDashboard(
+                app: app,
+                assetBalanceInfoRepository: DIKit.resolve(),
+                activityRepository: DIKit.resolve(),
+                custodialActivityRepository: DIKit.resolve(),
+                withdrawalLocksRepository: DIKit.resolve()
+            )
+        }
+
         Scope(state: \State.tradingState.home, action: /Action.tradingHome) { () -> TradingDashboard in
             // TODO: DO NOT rely on DIKit...
             TradingDashboard(
@@ -83,6 +106,16 @@ struct DashboardContent: ReducerProtocol {
                 watchlistService: DIKit.resolve()
             )
         }
+
+        Scope(state: \.externalTradingState.prices, action: /Action.externalTradingPrices) { () -> PricesScene in
+            PricesScene(
+                app: app,
+                enabledCurrencies: DIKit.resolve(),
+                topMoversService: DIKit.resolve(),
+                watchlistService: DIKit.resolve()
+            )
+        }
+
         Scope(state: \.defiState.prices, action: /Action.defiPrices) { () -> PricesScene in
             PricesScene(
                 app: app,
@@ -100,7 +133,23 @@ struct DashboardContent: ReducerProtocol {
                 return .run { [state] send in
                     switch state.appMode {
                     case .trading:
-                        for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
+                        for await externalTradingEnabled in app.stream(blockchain.api.nabu.gateway.products[ProductIdentifier.useExternalTradingAccount].is.eligible, as: Bool.self) {
+
+                            if externalTradingEnabled.value == true {
+                                for await event in app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self) {
+                                    await send(DashboardContent.Action.tabs(event.value?.tabs))
+                                }
+
+                            } else {
+                                for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
+                                    await send(DashboardContent.Action.tabs(event.value?.tabs))
+                                }
+                            }
+                        }
+
+                        // else
+
+                        for await event in app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self) {
                             await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }
                     case .pkw:
@@ -120,9 +169,9 @@ struct DashboardContent: ReducerProtocol {
                     state.defiState.selectedTab = tag
                 }
                 return .none
-            case .tradingHome, .defiHome:
+            case .tradingHome, .defiHome, .externalTradingHome:
                 return .none
-            case .tradingPrices, .defiPrices:
+            case .tradingPrices, .defiPrices, .externalTradingPrices:
                 return .none
             case .defiDex:
                 return .none

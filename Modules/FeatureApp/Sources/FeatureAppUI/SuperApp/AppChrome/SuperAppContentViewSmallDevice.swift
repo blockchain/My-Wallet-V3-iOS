@@ -19,6 +19,7 @@ struct SuperAppContentViewSmallDevice: View {
     @Binding var contentOffset: ModalSheetContext
 
     @State private var isTradingEnabled = true
+    @State private var isExternalTradingEnabled = false
 
     /// `True` when a pull to refresh is triggered, otherwise `false`
     @Binding var isRefreshing: Bool
@@ -61,6 +62,7 @@ struct SuperAppContentViewSmallDevice: View {
                 SuperAppDashboardContentView(
                     currentModeSelection: $currentModeSelection,
                     isTradingEnabled: viewStore.state.tradingEnabled,
+                    isExternalTradingEnabled: isExternalTradingEnabled,
                     store: store
                 )
                 .cornerRadius(Spacing.padding3, corners: [.topLeft, .topRight])
