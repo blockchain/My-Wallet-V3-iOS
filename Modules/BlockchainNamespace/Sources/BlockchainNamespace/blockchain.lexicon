@@ -3684,6 +3684,9 @@ blockchain:
 				is:
 					enabled:
 					+ blockchain.session.configuration.value
+			external:
+				portfolio:
+				+ blockchain.ux.type.story
 			nabu:
 				experiment:
 				+ blockchain.db.collection

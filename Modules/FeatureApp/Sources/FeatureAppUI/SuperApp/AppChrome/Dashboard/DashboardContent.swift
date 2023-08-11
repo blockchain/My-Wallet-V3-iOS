@@ -9,6 +9,12 @@ import DIKit
 import FeatureDashboardUI
 import FeatureDexUI
 
+
+struct ExternalTradingTabsState: Equatable {
+    var selectedTab: Tag.Reference = blockchain.ux.user.external.portfolio[].reference
+    var home: ExternalTradingDashboard.State = .init()
+}
+
 struct TradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.portfolio[].reference
 
@@ -41,6 +47,7 @@ struct DashboardContent: ReducerProtocol {
 
         // Tabs
         var tradingState: TradingTabsState = .init()
+        var externalTradingState: ExternalTradingTabsState = .init()
         var defiState: DefiTabsState = .init()
     }
 
@@ -49,6 +56,7 @@ struct DashboardContent: ReducerProtocol {
         case tabs(OrderedSet<Tab>?)
         case select(Tag.Reference)
         // Tabs
+        case externalTradingHome(ExternalTradingDashboard.Action)
         case tradingHome(TradingDashboard.Action)
         case defiHome(DeFiDashboard.Action)
         case tradingPrices(PricesScene.Action)
@@ -57,6 +65,16 @@ struct DashboardContent: ReducerProtocol {
     }
 
     var body: some ReducerProtocol<State, Action> {
+        Scope(state: \State.externalTradingState.home, action: /Action.externalTradingHome) { () -> ExternalTradingDashboard in
+            ExternalTradingDashboard(
+                app: app,
+                assetBalanceInfoRepository: DIKit.resolve(),
+                activityRepository: DIKit.resolve(),
+                custodialActivityRepository: DIKit.resolve(),
+                withdrawalLocksRepository: DIKit.resolve()
+            )
+        }
+
         Scope(state: \State.tradingState.home, action: /Action.tradingHome) { () -> TradingDashboard in
             // TODO: DO NOT rely on DIKit...
             TradingDashboard(
@@ -120,7 +138,7 @@ struct DashboardContent: ReducerProtocol {
                     state.defiState.selectedTab = tag
                 }
                 return .none
-            case .tradingHome, .defiHome:
+            case .tradingHome, .defiHome, .externalTradingHome:
                 return .none
             case .tradingPrices, .defiPrices:
                 return .none

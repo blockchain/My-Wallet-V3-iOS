@@ -12997,6 +12997,7 @@ public extension I_blockchain_ux_user {
 	var `event`: L_blockchain_ux_user_event { .init("\(__).event") }
 	var `experiment`: L_blockchain_ux_user_experiment { .init("\(__).experiment") }
 	var `experiments`: L_blockchain_ux_user_experiments { .init("\(__).experiments") }
+	var `external`: L_blockchain_ux_user_external { .init("\(__).external") }
 	var `KYC`: L_blockchain_ux_user_KYC { .init("\(__).KYC") }
 	var `nabu`: L_blockchain_ux_user_nabu { .init("\(__).nabu") }
 	var `portfolio`: L_blockchain_ux_user_portfolio { .init("\(__).portfolio") }
@@ -13862,6 +13863,17 @@ public final class L_blockchain_ux_user_experiments_is_enabled: L, I_blockchain_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.experiments.is.enabled", comment: "") }
 }
 public protocol I_blockchain_ux_user_experiments_is_enabled: I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_user_external: L, I_blockchain_ux_user_external {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.external", comment: "") }
+}
+public protocol I_blockchain_ux_user_external: I {}
+public extension I_blockchain_ux_user_external {
+	var `portfolio`: L_blockchain_ux_user_external_portfolio { .init("\(__).portfolio") }
+}
+public final class L_blockchain_ux_user_external_portfolio: L, I_blockchain_ux_user_external_portfolio {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.external.portfolio", comment: "") }
+}
+public protocol I_blockchain_ux_user_external_portfolio: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_user_KYC: L, I_blockchain_ux_user_KYC {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.KYC", comment: "") }
 }

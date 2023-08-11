@@ -18,6 +18,7 @@ struct SuperAppContent: ReducerProtocol {
 
     struct State: Equatable {
         var headerState: SuperAppHeader.State = .init()
+        var externalTrading: DashboardContent.State = .init(appMode: .trading)
         var trading: DashboardContent.State = .init(appMode: .trading)
         var defi: DashboardContent.State = .init(appMode: .pkw)
     }
@@ -30,6 +31,7 @@ struct SuperAppContent: ReducerProtocol {
         case onTradingModeEnabledFetched(Bool)
         case header(SuperAppHeader.Action)
         case trading(DashboardContent.Action)
+        case externalTrading(DashboardContent.Action)
         case defi(DashboardContent.Action)
     }
 
@@ -38,6 +40,10 @@ struct SuperAppContent: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \State.headerState, action: /Action.header) { () -> SuperAppHeader in
             SuperAppHeader()
+        }
+
+        Scope(state: \.externalTrading, action: /Action.externalTrading) { () -> DashboardContent in
+            DashboardContent()
         }
 
         Scope(state: \.trading, action: /Action.trading) { () -> DashboardContent in
@@ -89,6 +95,8 @@ struct SuperAppContent: ReducerProtocol {
             case .trading:
                 return .none
             case .defi:
+                return .none
+            case .externalTrading:
                 return .none
 
             case .onTradingModeEnabledFetched(let enabled):
