@@ -91,6 +91,7 @@ public struct WireTransferView: View {
             }
         )
         .listStyle(.insetGrouped)
+        .post(lifecycleOf: story.article.plain)
         .background(Color.semantic.light.ignoresSafeArea())
         .bindings {
             subscribe($error, to: blockchain.api.nabu.gateway.payments.accounts.simple.buy)

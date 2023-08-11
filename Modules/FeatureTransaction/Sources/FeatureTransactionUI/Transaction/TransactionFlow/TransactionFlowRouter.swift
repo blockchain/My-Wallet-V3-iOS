@@ -725,9 +725,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let presenter = viewController.uiviewController.topMostViewController ?? viewController.uiviewController
         // NOTE: using [weak presenter] to avoid a memory leak
         bankWireLinker.presentBankWireInstructions(from: presenter) { [weak presenter] in
-            presenter?.dismiss(animated: true) {
-                transactionModel.process(action: .returnToPreviousStep)
-            }
+            transactionModel.process(action: .returnToPreviousStep)
         }
     }
 

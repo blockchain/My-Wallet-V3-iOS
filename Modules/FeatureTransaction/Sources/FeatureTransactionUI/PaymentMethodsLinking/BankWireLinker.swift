@@ -57,6 +57,10 @@ final class BankWireLinker: BankWireLinkerAPI {
                     action: blockchain.ux.payment.method.wire.transfer.entry.paragraph.row.tap.then.enter.into,
                     value: blockchain.ux.payment.method.wire.transfer
                 )
+                do {
+                    try await app.on(blockchain.ux.payment.method.wire.transfer.article.plain.lifecycle.event.did.exit).await()
+                    await MainActor.run { completion() }
+                }
             }
             return
         }
