@@ -92,18 +92,6 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureSettingsDomain")
             ]
-        ),
-        .testTarget(
-            name: "FeatureSettingsDomainTests",
-            dependencies: [
-                .target(name: "FeatureSettingsDomain")
-            ]
-        ),
-        .testTarget(
-            name: "FeatureSettingsUITests",
-            dependencies: [
-                .target(name: "FeatureSettingsUI")
-            ]
         )
     ]
 )

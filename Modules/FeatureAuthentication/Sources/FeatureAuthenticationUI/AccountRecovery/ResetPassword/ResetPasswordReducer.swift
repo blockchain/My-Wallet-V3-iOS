@@ -21,9 +21,7 @@ public enum ResetPasswordAction: Equatable {
 
     case didChangeNewPassword(String)
     case didChangeConfirmNewPassword(String)
-    case didChangePasswordStrength(PasswordValidationScore)
     case reset(password: String)
-    case validatePasswordStrength
     case open(urlContent: URLContent)
     case resetAccountFailure(ResetAccountFailureAction)
     case setResetAccountFailureVisible(Bool)
@@ -35,15 +33,14 @@ public enum ResetPasswordAction: Equatable {
 struct ResetPasswordState: Equatable {
     var newPassword: String
     var confirmNewPassword: String
-    var passwordStrength: PasswordValidationScore
     var isResetAccountFailureVisible: Bool
     var resetAccountFailureState: ResetAccountFailureState?
     var isLoading: Bool
+    var passwordRulesBreached: [PasswordValidationRule] = []
 
     init() {
         self.newPassword = ""
         self.confirmNewPassword = ""
-        self.passwordStrength = .none
         self.isResetAccountFailureVisible = false
         self.isLoading = false
     }
@@ -85,28 +82,12 @@ let resetPasswordReducer = Reducer.combine(
 
         case .didChangeNewPassword(let password):
             state.newPassword = password
-            return EffectTask(value: .validatePasswordStrength)
+            state.passwordRulesBreached = environment.passwordValidator.validate(password: password)
+            return .none
 
         case .didChangeConfirmNewPassword(let password):
             state.confirmNewPassword = password
             return .none
-
-        case .didChangePasswordStrength(let score):
-            state.passwordStrength = score
-            return .none
-
-        case .validatePasswordStrength:
-            return environment
-                .passwordValidator
-                .validate(password: state.newPassword)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .map { result -> ResetPasswordAction in
-                    guard case .success(let score) = result else {
-                        return .none
-                    }
-                    return .didChangePasswordStrength(score)
-                }
 
         case .open(let urlContent):
             guard let url = urlContent.url else {

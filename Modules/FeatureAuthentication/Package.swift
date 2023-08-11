@@ -34,10 +34,6 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/oliveratkinson-bc/zxcvbn-ios.git",
-            branch: "swift-package-manager"
-        ),
-        .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
@@ -65,7 +61,6 @@ let package = Package(
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "Errors", package: "Errors"),
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "Zxcvbn", package: "zxcvbn-ios"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload")
             ]
         ),

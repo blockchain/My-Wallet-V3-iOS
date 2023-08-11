@@ -9,16 +9,6 @@ public enum TextValidationFactory {
 
     private typealias LocalizedString = LocalizationConstants.TextField.Gesture
 
-    public enum Password {
-        public static var login: TextValidating {
-            General.notEmpty
-        }
-
-        public static var new: NewPasswordValidating {
-            NewPasswordTextValidator()
-        }
-    }
-
     public enum Card {
         public static var number: CardNumberValidator {
             CardNumberValidator()

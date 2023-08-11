@@ -78,9 +78,23 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         // THEN: The form is validated
         mainScheduler.advance() // let the validation complete
         // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.invalid(.weakPassword))) {
+        testStore.receive(
+            .didUpdateInputValidation(
+                .invalid(
+                    .weakPassword(
+                        [
+                            .lowercaseLetter,
+                            .uppercaseLetter,
+                            .number,
+                            .specialCharacter,
+                            .length
+                        ]
+                    )
+                )
+            )
+        ) {
             $0.validatingInput = false
-            $0.inputValidationState = .invalid(.weakPassword)
+            $0.inputValidationState = .invalid(.weakPassword([.lowercaseLetter, .uppercaseLetter, .number, .specialCharacter, .length]))
             $0.inputConfirmationValidationState = .valid
         }
         testStore.receive(.didValidateAfterFormSubmission)
@@ -176,8 +190,8 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
     }
 
     private func fillFormPasswordField(
-        password: String = "MyPass124)",
-        expectedScore: PasswordValidationScore = .normal
+        password: String = "MyPass124(",
+        expectedScore: [PasswordValidationRule] = []
     ) {
         testStore.send(.binding(.set(\.$password, password))) {
             $0.password = password
@@ -185,8 +199,13 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         testStore.receive(.didUpdateInputValidation(.unknown))
         testStore.receive(.validatePasswordStrength)
         mainScheduler.advance()
-        testStore.receive(.didUpdatePasswordStrenght(expectedScore)) {
-            $0.passwordStrength = expectedScore
+
+        if expectedScore.isEmpty {
+            testStore.receive(.didUpdatePasswordRules(expectedScore))
+        } else {
+            testStore.receive(.didUpdatePasswordRules(expectedScore)) {
+                $0.passwordRulesBreached = expectedScore
+            }
         }
     }
 

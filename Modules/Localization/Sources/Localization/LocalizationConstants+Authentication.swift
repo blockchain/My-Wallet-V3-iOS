@@ -902,3 +902,68 @@ extension LocalizationConstants.FeatureAuthentication {
         }
     }
 }
+
+extension LocalizationConstants.FeatureAuthentication.CreateAccount {
+
+    public enum Password {
+
+        public enum Rules {
+
+            public static let secure = NSLocalizedString(
+                "Secure",
+                comment: "Password is secure"
+            )
+
+            public static let insecure = NSLocalizedString(
+                "Insecure",
+                comment: "Password is insecure"
+            )
+
+            public static let prefix = NSLocalizedString(
+                "Your password must contain at least ",
+                comment: "Password validation prefix"
+            )
+
+            public enum Lowercase {
+                public static let display = NSLocalizedString(
+                    "one lowercase letter",
+                    comment: "Password validation rule: one lowercase letter"
+                )
+            }
+
+            public enum Uppercase {
+                public static let display = NSLocalizedString(
+                    "one uppercase letter",
+                    comment: "Password validation rule: one uppercase letter"
+                )
+            }
+
+            public enum Number {
+                public static let display = NSLocalizedString(
+                    "one number",
+                    comment: "Password validation rule: one number"
+                )
+            }
+
+            public enum SpecialCharacter {
+                public static let display = NSLocalizedString(
+                    "one special character",
+                    comment: "Password validation rule: one special character"
+                )
+            }
+
+            public enum Length {
+
+                public static let display = NSLocalizedString(
+                    "and be at least 8 characters long.",
+                    comment: "Password validation rule: at least 8 characters long"
+                )
+
+                public static let accent = NSLocalizedString(
+                    "8 characters long",
+                    comment: "Password validation rule: accent for 8 characters long"
+                )
+            }
+        }
+    }
+}

@@ -34,7 +34,7 @@ struct ResetPasswordView: View {
     private var continueDisabled: Bool {
         viewStore.newPassword.isEmpty
             || viewStore.newPassword != viewStore.confirmNewPassword
-            || viewStore.passwordStrength == .weak
+            || viewStore.passwordRulesBreached.isNotEmpty
     }
 
     init(
@@ -52,13 +52,16 @@ struct ResetPasswordView: View {
             passwordInstruction
                 .accessibility(identifier: AccessibilityIdentifiers.ResetPasswordScreen.passwordInstructionText)
 
-            PasswordStrengthIndicatorView(
-                passwordStrength: viewStore.binding(
-                    get: \.passwordStrength,
-                    send: .none
-                )
-            )
-            .accessibility(identifier: AccessibilityIdentifiers.ResetPasswordScreen.passwordStrengthIndicatorGroup)
+            Text(PasswordValidationRule.displayString) { string in
+                string.foregroundColor = .semantic.body
+
+                for rule in viewStore.passwordRulesBreached {
+                    if let range = string.range(of: rule.accent) {
+                        string[range].foregroundColor = .semantic.error
+                    }
+                }
+            }
+            .typography(.caption1)
 
             confirmNewPasswordField
                 .padding(.top, Layout.textFieldSpacing)
