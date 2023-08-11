@@ -148,6 +148,12 @@ func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, ap
                 store: store
             )
 
+        case blockchain.ux.user.external.prices:
+            provideExternalTradingPricesTab(
+                tab: tab,
+                store: store
+            )
+
         case blockchain.ux.user.portfolio where appMode == .trading:
             provideTradingDashboard(
                 tab: tab,

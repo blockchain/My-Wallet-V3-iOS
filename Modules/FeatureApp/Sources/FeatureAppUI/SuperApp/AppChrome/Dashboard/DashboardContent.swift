@@ -13,6 +13,9 @@ import FeatureProductsDomain
 struct ExternalTradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.external.portfolio[].reference
     var home: ExternalTradingDashboard.State = .init()
+    var prices: PricesScene.State = .init(appMode: .trading,
+                                          topMoversState: nil)
+
 }
 
 struct TradingTabsState: Equatable {
@@ -61,6 +64,8 @@ struct DashboardContent: ReducerProtocol {
         case defiHome(DeFiDashboard.Action)
         case tradingPrices(PricesScene.Action)
         case defiPrices(PricesScene.Action)
+        case externalTradingPrices(PricesScene.Action)
+
         case defiDex(DexDashboard.Action)
     }
 
@@ -101,6 +106,16 @@ struct DashboardContent: ReducerProtocol {
                 watchlistService: DIKit.resolve()
             )
         }
+
+        Scope(state: \.externalTradingState.prices, action: /Action.externalTradingPrices) { () -> PricesScene in
+            PricesScene(
+                app: app,
+                enabledCurrencies: DIKit.resolve(),
+                topMoversService: DIKit.resolve(),
+                watchlistService: DIKit.resolve()
+            )
+        }
+
         Scope(state: \.defiState.prices, action: /Action.defiPrices) { () -> PricesScene in
             PricesScene(
                 app: app,
@@ -156,7 +171,7 @@ struct DashboardContent: ReducerProtocol {
                 return .none
             case .tradingHome, .defiHome, .externalTradingHome:
                 return .none
-            case .tradingPrices, .defiPrices:
+            case .tradingPrices, .defiPrices, .externalTradingPrices:
                 return .none
             case .defiDex:
                 return .none

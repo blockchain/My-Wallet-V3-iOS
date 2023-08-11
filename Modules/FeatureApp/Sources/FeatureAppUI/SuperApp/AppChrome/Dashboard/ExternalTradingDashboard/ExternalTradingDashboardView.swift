@@ -208,7 +208,7 @@ struct ExternalTradingDashboardView: View {
             set(blockchain.ux.dashboard.kyc.is.rejected.go.to.DeFi.paragraph.button.small.secondary.tap.then.set.session.state, to: [
                 [
                     "key": blockchain.app.mode[],
-                    "value": "PKW"
+                    "value": "TRADING"
                 ]
             ])
             if let supportURL {
@@ -228,6 +228,22 @@ func provideExternalTradingDashboard(
         store: store.scope(
             state: \.externalTradingState.home,
             action: DashboardContent.Action.externalTradingHome
+        )
+    )
+    .tag(tab.ref)
+    .id(tab.ref.description)
+    .accessibilityIdentifier(tab.ref.description)
+}
+
+
+func provideExternalTradingPricesTab(
+    tab: Tab,
+    store: StoreOf<DashboardContent>
+) -> some View {
+    PricesSceneView(
+        store: store.scope(
+            state: \.externalTradingState.prices,
+            action: DashboardContent.Action.externalTradingPrices
         )
     )
     .tag(tab.ref)

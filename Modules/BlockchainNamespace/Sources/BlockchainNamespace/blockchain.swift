@@ -2136,6 +2136,7 @@ public extension I_blockchain_app_configuration_superapp {
 	var `brokerage`: L_blockchain_app_configuration_superapp_brokerage { .init("\(__).brokerage") }
 	var `dashboard`: L_blockchain_app_configuration_superapp_dashboard { .init("\(__).dashboard") }
 	var `defi`: L_blockchain_app_configuration_superapp_defi { .init("\(__).defi") }
+	var `external`: L_blockchain_app_configuration_superapp_external { .init("\(__).external") }
 }
 public final class L_blockchain_app_configuration_superapp_brokerage: L, I_blockchain_app_configuration_superapp_brokerage {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.brokerage", comment: "") }
@@ -2208,6 +2209,24 @@ public final class L_blockchain_app_configuration_superapp_defi_tabs: L, I_block
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.defi.tabs", comment: "") }
 }
 public protocol I_blockchain_app_configuration_superapp_defi_tabs: I_blockchain_app_configuration_tabs {}
+public final class L_blockchain_app_configuration_superapp_external: L, I_blockchain_app_configuration_superapp_external {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.external", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_external: I {}
+public extension I_blockchain_app_configuration_superapp_external {
+	var `brokerage`: L_blockchain_app_configuration_superapp_external_brokerage { .init("\(__).brokerage") }
+}
+public final class L_blockchain_app_configuration_superapp_external_brokerage: L, I_blockchain_app_configuration_superapp_external_brokerage {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.external.brokerage", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_external_brokerage: I {}
+public extension I_blockchain_app_configuration_superapp_external_brokerage {
+	var `tabs`: L_blockchain_app_configuration_superapp_external_brokerage_tabs { .init("\(__).tabs") }
+}
+public final class L_blockchain_app_configuration_superapp_external_brokerage_tabs: L, I_blockchain_app_configuration_superapp_external_brokerage_tabs {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp.external.brokerage.tabs", comment: "") }
+}
+public protocol I_blockchain_app_configuration_superapp_external_brokerage_tabs: I_blockchain_app_configuration_tabs {}
 public final class L_blockchain_app_configuration_swap: L, I_blockchain_app_configuration_swap {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.swap", comment: "") }
 }
@@ -13902,11 +13921,16 @@ public final class L_blockchain_ux_user_external: L, I_blockchain_ux_user_extern
 public protocol I_blockchain_ux_user_external: I {}
 public extension I_blockchain_ux_user_external {
 	var `portfolio`: L_blockchain_ux_user_external_portfolio { .init("\(__).portfolio") }
+	var `prices`: L_blockchain_ux_user_external_prices { .init("\(__).prices") }
 }
 public final class L_blockchain_ux_user_external_portfolio: L, I_blockchain_ux_user_external_portfolio {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.external.portfolio", comment: "") }
 }
 public protocol I_blockchain_ux_user_external_portfolio: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_user_external_prices: L, I_blockchain_ux_user_external_prices {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.external.prices", comment: "") }
+}
+public protocol I_blockchain_ux_user_external_prices: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_user_KYC: L, I_blockchain_ux_user_KYC {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.KYC", comment: "") }
 }
