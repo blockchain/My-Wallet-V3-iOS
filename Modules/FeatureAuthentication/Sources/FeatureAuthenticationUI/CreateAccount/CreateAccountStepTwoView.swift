@@ -153,27 +153,40 @@ extension CreateAccountViewStepTwo {
     }
 
     private var passwordField: some View {
-        let shouldShowError = viewStore.inputValidationState == .invalid(.weakPassword)
-        return Input(
-            text: viewStore.binding(\.$password),
-            isFirstResponder: $focusedPassword,
-            shouldResignFirstResponderOnReturn: true,
-            label: LocalizedString.TextFieldTitle.password,
-            subText: viewStore.passwordStrength.displayString,
-            subTextStyle: viewStore.passwordStrength.inputSubTextStyle,
-            placeholder: LocalizedString.TextFieldPlaceholder.password,
-            state: shouldShowError ? .error : .default,
-            isSecure: !viewStore.passwordFieldTextVisible,
-            trailing: {
-                PasswordEyeSymbolButton(
-                    isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
-                )
+        let shouldShowError = viewStore.passwordRulesBreached.isNotEmpty
+        return VStack {
+            Input(
+                text: viewStore.binding(\.$password),
+                isFirstResponder: $focusedPassword,
+                shouldResignFirstResponderOnReturn: true,
+                label: LocalizedString.TextFieldTitle.password,
+                subText: viewStore.password.isEmpty ? nil : viewStore.passwordRulesBreached.hint,
+                subTextStyle: viewStore.password.isEmpty ? .primary : viewStore.passwordRulesBreached.inputSubTextStyle,
+                placeholder: LocalizedString.TextFieldPlaceholder.password,
+                state: shouldShowError ? .error : .default,
+                isSecure: !viewStore.passwordFieldTextVisible,
+                trailing: {
+                    PasswordEyeSymbolButton(
+                        isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
+                    )
+                }
+            )
+            .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .textContentType(.newPassword)
+
+            Text(PasswordValidationRule.displayString) { string in
+                string.foregroundColor = .semantic.body
+
+                for rule in viewStore.passwordRulesBreached {
+                    if let range = string.range(of: rule.accent) {
+                        string[range].foregroundColor = .semantic.error
+                    }
+                }
             }
-        )
-        .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
-        .textInputAutocapitalization(.never)
-        .autocorrectionDisabled()
-        .textContentType(.newPassword)
+            .typography(.caption1)
+        }
     }
 
     private var passwordConfirmationField: some View {
@@ -254,29 +267,59 @@ extension CreateAccountViewStepTwo {
     }
 }
 
-extension PasswordValidationScore {
-    fileprivate var displayString: String? {
+extension PasswordValidationRule {
+    public var displayString: String {
         switch self {
-        case .none:
-            return nil
-        case .normal:
-            return LocalizedString.PasswordStrengthIndicator.regularPassword
-        case .strong:
-            return LocalizedString.PasswordStrengthIndicator.strongPassword
-        case .weak:
-            return LocalizedString.PasswordStrengthIndicator.weakPassword
+        case .lowercaseLetter:
+            return LocalizedString.Password.Rules.Lowercase.display
+        case .uppercaseLetter:
+            return LocalizedString.Password.Rules.Uppercase.display
+        case .number:
+            return LocalizedString.Password.Rules.Number.display
+        case .specialCharacter:
+            return LocalizedString.Password.Rules.SpecialCharacter.display
+        case .length:
+            return LocalizedString.Password.Rules.Length.display
         }
     }
 
-    fileprivate var inputSubTextStyle: InputSubTextStyle {
+    public var accent: String {
         switch self {
-        case .none, .normal:
-            return .primary
-        case .strong:
-            return .success
-        case .weak:
-            return .error
+        case .lowercaseLetter:
+            return LocalizedString.Password.Rules.Lowercase.display
+        case .uppercaseLetter:
+            return LocalizedString.Password.Rules.Uppercase.display
+        case .number:
+            return LocalizedString.Password.Rules.Number.display
+        case .specialCharacter:
+            return LocalizedString.Password.Rules.SpecialCharacter.display
+        case .length:
+            return LocalizedString.Password.Rules.Length.accent
         }
+    }
+
+    static public let displayString: String = {
+        let rules = PasswordValidationRule.all.map(\.displayString).joined(separator: ", ")
+        return LocalizedString.Password.Rules.prefix + rules
+    }()
+}
+
+extension Text {
+    public init(_ string: String, configure: ((inout AttributedString) -> Void)) {
+        var attributedString = AttributedString(string) /// create an `AttributedString`
+        configure(&attributedString) /// configure using the closure
+        self.init(attributedString) /// initialize a `Text`
+    }
+}
+
+extension Collection where Element == PasswordValidationRule {
+
+    public var hint: String {
+        isEmpty ? LocalizedString.Password.Rules.secure : LocalizedString.Password.Rules.insecure
+    }
+
+    public var inputSubTextStyle: InputSubTextStyle {
+        return isEmpty ? .success : .error
     }
 }
 

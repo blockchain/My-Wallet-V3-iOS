@@ -1,40 +1,48 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
-import Zxcvbn
+import Foundation
 
 public protocol PasswordValidatorAPI {
-    func validate(password: String) -> AnyPublisher<PasswordValidationScore, Never>
+    func validate(password: String) -> [PasswordValidationRule]
 }
 
 public final class PasswordValidator: PasswordValidatorAPI {
 
-    // MARK: - Properties
-
-    private let validationProvider: DBZxcvbn
-
     // MARK: - Setup
 
-    public init(validationProvider: DBZxcvbn = DBZxcvbn()) {
-        self.validationProvider = validationProvider
-    }
+    public init() {}
 
     // MARK: - API
 
-    public func validate(password: String) -> AnyPublisher<PasswordValidationScore, Never> {
-        let validationProvider = validationProvider
-        return Deferred {
-            Future { [validationProvider] promise in
-                validationProvider.passwordStrength(password)
-                    .map { result in
-                        promise(.success(PasswordValidationScore(
-                            zxcvbnScore: result.score,
-                            password: password
-                        )))
-                    }
+    /// Returns a list of missing rules if any
+    public func validate(password: String) -> [PasswordValidationRule] {
+        PasswordValidationRule
+            .all
+            .filter {
+                !$0.isMatch(for: password)
             }
+    }
+}
+
+extension PasswordValidationRule {
+
+    func isMatch(for password: String) -> Bool {
+        let characterSet: CharacterSet
+        switch self {
+        case .lowercaseLetter:
+            characterSet = .lowercaseLetters
+        case .uppercaseLetter:
+            characterSet = .uppercaseLetters
+        case .number:
+            characterSet = .decimalDigits
+        case .specialCharacter:
+            characterSet = .punctuationCharacters.union(.symbols)
+        case .length:
+            return password.count > 7
         }
-        .eraseToAnyPublisher()
+
+        return password.rangeOfCharacter(from: characterSet) != nil
     }
 }
 
@@ -45,7 +53,7 @@ public final class NoOpPasswordValidator: PasswordValidatorAPI {
 
     public func validate(
         password: String
-    ) -> AnyPublisher<PasswordValidationScore, Never> {
-        .just(.normal)
+    ) -> [PasswordValidationRule] {
+        []
     }
 }

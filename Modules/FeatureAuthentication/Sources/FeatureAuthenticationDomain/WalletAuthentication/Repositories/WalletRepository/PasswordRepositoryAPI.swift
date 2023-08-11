@@ -2,9 +2,10 @@
 
 import Combine
 
-public enum PasswordRepositoryError: Error {
+public enum PasswordRepositoryError: Error, Equatable {
     case unavailable
     case syncFailed
+    case invalidPassword
 }
 
 public protocol PasswordRepositoryAPI: AnyObject {

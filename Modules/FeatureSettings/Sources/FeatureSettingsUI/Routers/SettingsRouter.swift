@@ -184,10 +184,7 @@ final class SettingsRouter: SettingsRouterAPI {
                 .navigationControllerAPI?
                 .present(SFSafariViewController(url: url), animated: true, completion: nil)
         case .launchChangePassword:
-            let interactor = ChangePasswordScreenInteractor(passwordAPI: passwordRepository)
-            let presenter = ChangePasswordScreenPresenter(previousAPI: self, interactor: interactor)
-            let controller = ChangePasswordViewController(presenter: presenter)
-            navigationRouter.present(viewController: controller)
+            showPasswordChangeScreen()
         case .showRemoveCardScreen(let data):
             let viewController = builder.removeCardPaymentMethodViewController(cardData: data)
             viewController.transitioningDelegate = sheetPresenter
@@ -375,6 +372,23 @@ final class SettingsRouter: SettingsRouterAPI {
             )
         ))
         presenter.present(referralView)
+    }
+
+    private func showPasswordChangeScreen() {
+        let changePasswordView = ChangePasswordView(
+            store: .init(
+                initialState: .init(),
+                reducer: ChangePasswordReducer(
+                    mainQueue: .main,
+                    coordinator: resolve(),
+                    passwordRepository: passwordRepository,
+                    passwordValidator: PasswordValidator(),
+                    previousAPI: self,
+                    analyticsRecorder: resolve()
+                )
+            )
+        )
+        navigationRouter.present(viewController: UIHostingController(rootView: changePasswordView))
     }
 
     private func showUserDeletionScreen() {

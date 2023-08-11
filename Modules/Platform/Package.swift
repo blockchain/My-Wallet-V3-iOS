@@ -47,10 +47,6 @@ let package = Package(
             from: "3.5.6"
         ),
         .package(
-            url: "https://github.com/oliveratkinson-bc/zxcvbn-ios.git",
-            branch: "swift-package-manager"
-        ),
-        .package(
             url: "https://github.com/apple/swift-algorithms.git",
             from: "1.0.0"
         ),
@@ -133,7 +129,6 @@ let package = Package(
                 .product(name: "Charts", package: "Charts"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "PhoneNumberKit", package: "PhoneNumberKit"),
-                .product(name: "Zxcvbn", package: "zxcvbn-ios"),
                 .product(name: "FeatureOpenBankingUI", package: "FeatureOpenBanking"),
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),

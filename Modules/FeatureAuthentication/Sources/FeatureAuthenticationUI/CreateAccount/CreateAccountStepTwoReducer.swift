@@ -47,7 +47,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
 
     public enum InputValidationError: Equatable {
         case invalidEmail
-        case weakPassword
+        case weakPassword([PasswordValidationRule])
         case termsNotAccepted
         case passwordsDontMatch
     }
@@ -97,7 +97,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
 
     // Validation
     public var validatingInput: Bool = false
-    public var passwordStrength: PasswordValidationScore
+    public var passwordRulesBreached: [PasswordValidationRule]
     public var inputValidationState: InputValidationState
     public var inputConfirmationValidationState: InputValidationState
     public var failureAlert: AlertState<CreateAccountStepTwoAction>?
@@ -129,7 +129,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
         self.emailAddress = ""
         self.password = ""
         self.passwordConfirmation = ""
-        self.passwordStrength = .none
+        self.passwordRulesBreached = []
         self.inputValidationState = .unknown
         self.inputConfirmationValidationState = .unknown
     }
@@ -150,7 +150,7 @@ public enum CreateAccountStepTwoAction: Equatable, NavigationAction, BindableAct
     case importAccount(_ mnemonic: String)
     case createButtonTapped
     case didValidateAfterFormSubmission
-    case didUpdatePasswordStrenght(PasswordValidationScore)
+    case didUpdatePasswordRules([PasswordValidationRule])
     case didUpdateInputValidation(CreateAccountStepTwoState.InputValidationState)
     case openExternalLink(URL)
     case onWillDisappear
@@ -383,12 +383,7 @@ let createAccountStepTwoReducer = Reducer<
         state.validatingInput = true
 
         return .concatenate(
-            environment
-                .validateInputs(state: state)
-                .map(CreateAccountStepTwoAction.didUpdateInputValidation)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect(),
-
+            EffectTask(value: .didUpdateInputValidation(environment.validateInputs(state: state))),
             EffectTask(value: .didValidateAfterFormSubmission)
         )
 
@@ -400,8 +395,8 @@ let createAccountStepTwoReducer = Reducer<
 
         return EffectTask(value: .createOrImportWallet(state.context))
 
-    case .didUpdatePasswordStrenght(let score):
-        state.passwordStrength = score
+    case .didUpdatePasswordRules(let rules):
+        state.passwordRulesBreached = rules
         return .none
 
     case .didUpdateInputValidation(let validationState):
@@ -422,12 +417,13 @@ let createAccountStepTwoReducer = Reducer<
         return .none
 
     case .validatePasswordStrength:
-        return environment
-            .passwordValidator
-            .validate(password: state.password)
-            .map(CreateAccountStepTwoAction.didUpdatePasswordStrenght)
-            .receive(on: environment.mainQueue)
-            .eraseToEffect()
+        return EffectTask(
+            value:  CreateAccountStepTwoAction.didUpdatePasswordRules(
+                environment
+                    .passwordValidator
+                    .validate(password: state.password)
+            )
+        )
 
     case .accountRecoveryFailed(let error):
         state.isCreatingWallet = false
@@ -462,23 +458,18 @@ extension CreateAccountStepTwoEnvironment {
 
     fileprivate func validateInputs(
         state: CreateAccountStepTwoState
-    ) -> AnyPublisher<CreateAccountStepTwoState.InputValidationState, Never> {
+    ) -> CreateAccountStepTwoState.InputValidationState {
         guard state.emailAddress.isEmail else {
-            return .just(.invalid(.invalidEmail))
+            return .invalid(.invalidEmail)
         }
         let didAcceptTerm = state.termsAccepted
-        return passwordValidator
-            .validate(password: state.password)
-            .map { passwordStrength -> CreateAccountStepTwoState.InputValidationState in
-                guard passwordStrength.isValid else {
-                    return .invalid(.weakPassword)
-                }
-                guard didAcceptTerm else {
-                    return .invalid(.termsNotAccepted)
-                }
-                return .valid
-            }
-            .eraseToAnyPublisher()
+        let errors = passwordValidator.validate(password: state.password)
+
+        guard errors.isEmpty else {
+            return .invalid(.weakPassword(errors))
+        }
+
+        return didAcceptTerm ? .valid : .invalid(.termsNotAccepted)
     }
 
     func saveReferral(with code: String) -> EffectTask<Void> {
