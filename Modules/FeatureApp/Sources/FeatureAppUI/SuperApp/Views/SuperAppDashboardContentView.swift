@@ -10,26 +10,26 @@ import UIKit
 struct SuperAppDashboardContentView: View {
     @Binding var currentModeSelection: AppMode
     var isTradingEnabled: Bool
-    var isExternalTrading: Bool
+    var isExternalTradingEnabled: Bool
 
     let store: StoreOf<SuperAppContent>
 
     init(
         currentModeSelection: Binding<AppMode>,
         isTradingEnabled: Bool,
-        isExternalTrading: Bool,
+        isExternalTradingEnabled: Bool,
         store: StoreOf<SuperAppContent>
     ) {
         self._currentModeSelection = currentModeSelection
         self.isTradingEnabled = isTradingEnabled
-        self.isExternalTrading = isExternalTrading
+        self.isExternalTradingEnabled = isExternalTradingEnabled
         self.store = store
     }
 
     var body: some View {
         ZStack {
             if isTradingEnabled {
-                if isExternalTrading {
+                if isExternalTradingEnabled {
                     DashboardContentView(
                         store: store.scope(
                             state: \.externalTrading,

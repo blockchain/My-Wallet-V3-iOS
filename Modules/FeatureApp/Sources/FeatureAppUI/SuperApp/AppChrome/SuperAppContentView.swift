@@ -85,7 +85,7 @@ struct SuperAppContentView: View {
                 SuperAppDashboardContentView(
                     currentModeSelection: $currentModeSelection,
                     isTradingEnabled: viewStore.state.tradingEnabled,
-                    isExternalTrading: isExternalTradingEnabled,
+                    isExternalTradingEnabled: isExternalTradingEnabled,
                     store: store
                 )
                 .background(
