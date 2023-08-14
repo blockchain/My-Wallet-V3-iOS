@@ -128,4 +128,12 @@ final class KYCClientMock: KYCClientAPI {
     ) -> AnyPublisher<Void, Nabu.Error> {
         .just(())
     }
+
+    func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error> {
+        .empty()
+    }
+
+    func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error> {
+        .just(())
+    }
 }

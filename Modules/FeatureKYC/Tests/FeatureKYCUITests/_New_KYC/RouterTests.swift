@@ -24,14 +24,16 @@ final class RouterTests: XCTestCase {
     private var mockKYCTiersService: MockKYCTiersService!
     private var mockLegacyKYCRouter: MockLegacyKYCRouter!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
         mockExternalAppOpener = MockExternalAppOpener()
         mockEmailVerificationService = MockEmailVerificationService()
         mockKYCTiersService = MockKYCTiersService()
         mockLegacyKYCRouter = MockLegacyKYCRouter()
+
+        let app = App.test
         router = .init(
-            app: App.test,
+            app: app,
             analyticsRecorder: MockAnalyticsRecorder(),
             loadingViewPresenter: MockLoadingViewPresenter(),
             legacyRouter: mockLegacyKYCRouter,
@@ -40,6 +42,12 @@ final class RouterTests: XCTestCase {
             openMailApp: mockExternalAppOpener.openMailApp,
             openURL: mockExternalAppOpener.open
         )
+
+        try await app.register(napi: blockchain.api.nabu.gateway.onboarding, domain: blockchain.api.nabu.gateway.onboarding.SSN, repository: { _ in
+            AnyJSON(
+                ["is": ["mandatory": false]]
+            )
+        })
     }
 
     override func tearDownWithError() throws {

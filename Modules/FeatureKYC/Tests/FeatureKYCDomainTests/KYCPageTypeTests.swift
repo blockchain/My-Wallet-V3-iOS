@@ -30,7 +30,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -40,7 +41,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -50,7 +52,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -60,7 +63,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -70,7 +74,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: true
+                isNewProfile: true,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -84,7 +89,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -98,7 +104,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: true
+                isNewProfile: true,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -113,7 +120,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -127,7 +135,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: pendingVerifiedResponse,
                 hasQuestions: false,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -142,7 +151,8 @@ class KYCPageTypeTests: XCTestCase {
                 requiredTier: .verified,
                 tiersResponse: noTiersResponse,
                 hasQuestions: false,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
     }
@@ -155,7 +165,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -165,7 +176,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -175,7 +187,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: createKycCountry(hasStates: true),
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -185,7 +198,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: createKycCountry(hasStates: false),
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -195,7 +209,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: createKycCountry(hasStates: false),
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: true
+                isNewProfile: true,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -205,7 +220,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -215,7 +231,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: true
+                isNewProfile: true,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -225,7 +242,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -235,7 +253,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -245,7 +264,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -255,7 +275,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
         XCTAssertEqual(
@@ -265,7 +286,8 @@ class KYCPageTypeTests: XCTestCase {
                 user: nil,
                 country: nil,
                 tiersResponse: pendingVerifiedResponse,
-                isNewProfile: false
+                isNewProfile: false,
+                isSSNRequired: false
             )
         )
     }

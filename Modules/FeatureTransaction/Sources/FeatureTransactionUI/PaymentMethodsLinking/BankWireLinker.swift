@@ -57,6 +57,10 @@ final class BankWireLinker: BankWireLinkerAPI {
                     action: blockchain.ux.payment.method.wire.transfer.entry.paragraph.row.tap.then.enter.into,
                     value: blockchain.ux.payment.method.wire.transfer
                 )
+                do {
+                    try await app.on(blockchain.ux.payment.method.wire.transfer.article.plain.lifecycle.event.did.exit).await()
+                    await MainActor.run { completion() }
+                }
             }
             return
         }
@@ -117,6 +121,7 @@ final class BankWireLinker: BankWireLinkerAPI {
                 app.post(event: blockchain.ux.payment.method.wire.transfer.failed, context: [blockchain.ux.error: error])
             }
         )
+
         presenter.backRelay
             .bind(onNext: completion)
             .disposed(by: disposeBag)

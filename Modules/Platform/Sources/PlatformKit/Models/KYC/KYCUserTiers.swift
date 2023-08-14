@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
+import Errors
 import Foundation
 
 extension KYC {
@@ -55,6 +57,39 @@ extension KYC {
             })
         }
     }
+
+    public struct SSN: Codable, Hashable {
+
+        public struct Requirements: Codable, Hashable {
+            public let isMandatory: Bool
+            public let validationRegex: String
+        }
+
+        public struct Verification: Codable, Hashable {
+
+            public struct State: NewTypeString {
+                public var value: String
+                public init(_ value: String) { self.value = value }
+            }
+
+            public let state: State
+            public let message: String?
+            public let isAllowedToRetry: Bool
+        }
+
+        public let requirements: Requirements
+        public let verification: Verification?
+    }
+}
+
+extension KYC.SSN.Verification.State {
+
+    public static let submissionRequired = Self("SUBMISSION_REQUIRED")
+    public static let verificationPending = Self("VERIFICATION_PENDING")
+    public static let verificationRejected = Self("VERIFICATION_REJECTED")
+    public static let verificationSuccessful = Self("VERIFICATION_SUCCESSFUL")
+
+    public var isFinal: Bool { self == .verificationRejected || self == .verificationSuccessful }
 }
 
 extension KYC.UserTiers {

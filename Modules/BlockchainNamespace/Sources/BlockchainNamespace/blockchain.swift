@@ -87,6 +87,7 @@ public protocol I_blockchain_api_nabu_gateway: I {}
 public extension I_blockchain_api_nabu_gateway {
 	var `generate`: L_blockchain_api_nabu_gateway_generate { .init("\(__).generate") }
 	var `kyc`: L_blockchain_api_nabu_gateway_kyc { .init("\(__).kyc") }
+	var `onboarding`: L_blockchain_api_nabu_gateway_onboarding { .init("\(__).onboarding") }
 	var `payments`: L_blockchain_api_nabu_gateway_payments { .init("\(__).payments") }
 	var `price`: L_blockchain_api_nabu_gateway_price { .init("\(__).price") }
 	var `simple`: L_blockchain_api_nabu_gateway_simple { .init("\(__).simple") }
@@ -135,6 +136,115 @@ public final class L_blockchain_api_nabu_gateway_kyc_tiers: L, I_blockchain_api_
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.kyc.tiers", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_kyc_tiers: I {}
+public final class L_blockchain_api_nabu_gateway_onboarding: L, I_blockchain_api_nabu_gateway_onboarding {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding: I_blockchain_namespace_napi {}
+public extension I_blockchain_api_nabu_gateway_onboarding {
+	var `SSN`: L_blockchain_api_nabu_gateway_onboarding_SSN { .init("\(__).SSN") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN: L, I_blockchain_api_nabu_gateway_onboarding_SSN {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN: I {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN {
+	var `is`: L_blockchain_api_nabu_gateway_onboarding_SSN_is { .init("\(__).is") }
+	var `regex`: L_blockchain_api_nabu_gateway_onboarding_SSN_regex { .init("\(__).regex") }
+	var `state`: L_blockchain_api_nabu_gateway_onboarding_SSN_state { .init("\(__).state") }
+	var `verification`: L_blockchain_api_nabu_gateway_onboarding_SSN_verification { .init("\(__).verification") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_is: L, I_blockchain_api_nabu_gateway_onboarding_SSN_is {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.is", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_is: I {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN_is {
+	var `allowed`: L_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed { .init("\(__).allowed") }
+	var `mandatory`: L_blockchain_api_nabu_gateway_onboarding_SSN_is_mandatory { .init("\(__).mandatory") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed: L, I_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.is.allowed", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed: I {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed {
+	var `to`: L_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to { .init("\(__).to") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to: L, I_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.is.allowed.to", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to: I {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to {
+	var `retry`: L_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to_retry { .init("\(__).retry") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to_retry: L, I_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to_retry {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.is.allowed.to.retry", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_is_allowed_to_retry: I_blockchain_db_type_boolean {}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_is_mandatory: L, I_blockchain_api_nabu_gateway_onboarding_SSN_is_mandatory {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_is_mandatory: I_blockchain_db_type_boolean {}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_regex: L, I_blockchain_api_nabu_gateway_onboarding_SSN_regex {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.regex", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_regex: I {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN_regex {
+	var `validation`: L_blockchain_api_nabu_gateway_onboarding_SSN_regex_validation { .init("\(__).validation") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_regex_validation: L, I_blockchain_api_nabu_gateway_onboarding_SSN_regex_validation {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.regex.validation", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_regex_validation: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_state: L, I_blockchain_api_nabu_gateway_onboarding_SSN_state {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.state", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_state: I_blockchain_db_type_enum {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN_state {
+	var `submission`: L_blockchain_api_nabu_gateway_onboarding_SSN_state_submission { .init("\(__).submission") }
+	var `verification`: L_blockchain_api_nabu_gateway_onboarding_SSN_state_verification { .init("\(__).verification") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_state_submission: L, I_blockchain_api_nabu_gateway_onboarding_SSN_state_submission {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.state.submission", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_state_submission: I {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN_state_submission {
+	var `required`: L_blockchain_api_nabu_gateway_onboarding_SSN_state_submission_required { .init("\(__).required") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_state_submission_required: L, I_blockchain_api_nabu_gateway_onboarding_SSN_state_submission_required {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.state.submission.required", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_state_submission_required: I {}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_state_verification: L, I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.state.verification", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification: I {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification {
+	var `pending`: L_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_pending { .init("\(__).pending") }
+	var `rejected`: L_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_rejected { .init("\(__).rejected") }
+	var `successful`: L_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_successful { .init("\(__).successful") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_pending: L, I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_pending {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.state.verification.pending", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_pending: I {}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_rejected: L, I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_rejected {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.state.verification.rejected", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_rejected: I {}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_successful: L, I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_successful {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.state.verification.successful", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_state_verification_successful: I {}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_verification: L, I_blockchain_api_nabu_gateway_onboarding_SSN_verification {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.verification", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_verification: I {}
+public extension I_blockchain_api_nabu_gateway_onboarding_SSN_verification {
+	var `message`: L_blockchain_api_nabu_gateway_onboarding_SSN_verification_message { .init("\(__).message") }
+}
+public final class L_blockchain_api_nabu_gateway_onboarding_SSN_verification_message: L, I_blockchain_api_nabu_gateway_onboarding_SSN_verification_message {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.onboarding.SSN.verification.message", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_onboarding_SSN_verification_message: I_blockchain_db_type_string {}
 public final class L_blockchain_api_nabu_gateway_payments: L, I_blockchain_api_nabu_gateway_payments {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.payments", comment: "") }
 }
@@ -9392,6 +9502,7 @@ public extension I_blockchain_ux_kyc {
 	var `extra`: L_blockchain_ux_kyc_extra { .init("\(__).extra") }
 	var `is`: L_blockchain_ux_kyc_is { .init("\(__).is") }
 	var `launch`: L_blockchain_ux_kyc_launch { .init("\(__).launch") }
+	var `SSN`: L_blockchain_ux_kyc_SSN { .init("\(__).SSN") }
 	var `tier`: L_blockchain_ux_kyc_tier { .init("\(__).tier") }
 	var `trading`: L_blockchain_ux_kyc_trading { .init("\(__).trading") }
 	var `type`: L_blockchain_ux_kyc_type { .init("\(__).type") }
@@ -9617,6 +9728,50 @@ public final class L_blockchain_ux_kyc_launch_verification: L, I_blockchain_ux_k
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.launch.verification", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_launch_verification: I {}
+public final class L_blockchain_ux_kyc_SSN: L, I_blockchain_ux_kyc_SSN {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.SSN", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_SSN: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_kyc_SSN {
+	var `is`: L_blockchain_ux_kyc_SSN_is { .init("\(__).is") }
+	var `why`: L_blockchain_ux_kyc_SSN_why { .init("\(__).why") }
+}
+public final class L_blockchain_ux_kyc_SSN_is: L, I_blockchain_ux_kyc_SSN_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.SSN.is", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_SSN_is: I {}
+public extension I_blockchain_ux_kyc_SSN_is {
+	var `enabled`: L_blockchain_ux_kyc_SSN_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_ux_kyc_SSN_is_enabled: L, I_blockchain_ux_kyc_SSN_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.SSN.is.enabled", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_SSN_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_kyc_SSN_why: L, I_blockchain_ux_kyc_SSN_why {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.SSN.why", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_SSN_why: I {}
+public extension I_blockchain_ux_kyc_SSN_why {
+	var `learn`: L_blockchain_ux_kyc_SSN_why_learn { .init("\(__).learn") }
+}
+public final class L_blockchain_ux_kyc_SSN_why_learn: L, I_blockchain_ux_kyc_SSN_why_learn {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.SSN.why.learn", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_SSN_why_learn: I {}
+public extension I_blockchain_ux_kyc_SSN_why_learn {
+	var `more`: L_blockchain_ux_kyc_SSN_why_learn_more { .init("\(__).more") }
+}
+public final class L_blockchain_ux_kyc_SSN_why_learn_more: L, I_blockchain_ux_kyc_SSN_why_learn_more {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.SSN.why.learn.more", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_SSN_why_learn_more: I {}
+public extension I_blockchain_ux_kyc_SSN_why_learn_more {
+	var `url`: L_blockchain_ux_kyc_SSN_why_learn_more_url { .init("\(__).url") }
+}
+public final class L_blockchain_ux_kyc_SSN_why_learn_more_url: L, I_blockchain_ux_kyc_SSN_why_learn_more_url {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.SSN.why.learn.more.url", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_SSN_why_learn_more_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_kyc_tier: L, I_blockchain_ux_kyc_tier {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.tier", comment: "") }
 }
@@ -9695,6 +9850,7 @@ public extension I_blockchain_ux_kyc_type_state {
 	var `force_gold`: L_blockchain_ux_kyc_type_state_force__gold { .init("\(__).force_gold") }
 	var `profile`: L_blockchain_ux_kyc_type_state_profile { .init("\(__).profile") }
 	var `resubmit`: L_blockchain_ux_kyc_type_state_resubmit { .init("\(__).resubmit") }
+	var `ssn`: L_blockchain_ux_kyc_type_state_ssn { .init("\(__).ssn") }
 	var `states`: L_blockchain_ux_kyc_type_state_states { .init("\(__).states") }
 	var `verify`: L_blockchain_ux_kyc_type_state_verify { .init("\(__).verify") }
 	var `welcome`: L_blockchain_ux_kyc_type_state_welcome { .init("\(__).welcome") }
@@ -9789,6 +9945,10 @@ public final class L_blockchain_ux_kyc_type_state_resubmit_identity: L, I_blockc
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.resubmit.identity", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_type_state_resubmit_identity: I_blockchain_ux_type_analytics_event {}
+public final class L_blockchain_ux_kyc_type_state_ssn: L, I_blockchain_ux_kyc_type_state_ssn {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.ssn", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_type_state_ssn: I_blockchain_ux_type_analytics_event {}
 public final class L_blockchain_ux_kyc_type_state_states: L, I_blockchain_ux_kyc_type_state_states {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.type.state.states", comment: "") }
 }

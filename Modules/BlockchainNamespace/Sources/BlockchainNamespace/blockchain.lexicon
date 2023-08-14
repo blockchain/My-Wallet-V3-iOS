@@ -14,6 +14,30 @@ blockchain:
 				kyc:
 				+ blockchain.namespace.napi
 					tiers:
+				onboarding:
+				+ blockchain.namespace.napi
+					SSN:
+						is:
+							allowed:
+								to:
+									retry:
+									+ blockchain.db.type.boolean
+							mandatory:
+							+ blockchain.db.type.boolean
+						regex:
+							validation:
+							+ blockchain.db.type.string
+						state:
+						+ blockchain.db.type.enum
+							submission:
+								required:
+							verification:
+								pending:
+								rejected:
+								successful:
+						verification:
+							message:
+							+ blockchain.db.type.string
 				payments:
 					accounts:
 					+ blockchain.namespace.napi
@@ -2511,6 +2535,18 @@ blockchain:
 				+ blockchain.ui.device.haptic.feedback.impact.soft
 				+ blockchain.ux.type.action
 		kyc:
+			SSN:
+			+ blockchain.ux.type.story
+				is:
+					enabled:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.configuration.value
+				why:
+					learn:
+						more:
+							url:
+							+ blockchain.db.type.url
+							+ blockchain.session.configuration.value
 			current:
 				state:
 				+ blockchain.ux.kyc.type.state
@@ -2617,6 +2653,8 @@ blockchain:
 					resubmit:
 						identity:
 						+ blockchain.ux.type.analytics.event
+					ssn:
+					+ blockchain.ux.type.analytics.event
 					states:
 					+ blockchain.ux.type.analytics.event
 					verify:

@@ -90,6 +90,7 @@ public struct WireTransferView: View {
                 )
             }
         )
+        .post(lifecycleOf: story.article.plain)
         .listStyle(.insetGrouped)
         .background(Color.semantic.light.ignoresSafeArea())
         .bindings {

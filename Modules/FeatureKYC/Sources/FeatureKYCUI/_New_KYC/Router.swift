@@ -270,7 +270,15 @@ public final class Router: Routing {
             .fetchTiers()
             .receive(on: DispatchQueue.main)
             .mapError { _ in RouterError.kycStepFailed }
-            .flatMap { [app, routeToKYC] userTiers -> AnyPublisher<FlowResult, RouterError> in
+            .combineLatest(
+                app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
+                    .replaceError(with: false)
+                    .combineLatest(app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self).replaceError(with: false))
+                    .map { $0 && $1 }
+                    .prefix(1)
+                    .setFailureType(to: RouterError.self)
+            )
+            .flatMap { [app, routeToKYC] userTiers, isSSNMandatory -> AnyPublisher<FlowResult, RouterError> in
 
                 let presentKYC = Deferred {
                     Future<FlowResult, RouterError> { futureCompletion in
@@ -280,6 +288,10 @@ public final class Router: Routing {
                     }
                 }
                 .eraseToAnyPublisher()
+
+                if isSSNMandatory {
+                    return presentKYC
+                }
 
                 // step 2a: if the current user has extra questions to answer, present kyc
                 do {

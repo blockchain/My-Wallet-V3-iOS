@@ -52,23 +52,37 @@ public final class KYCPager: KYCPagerAPI {
                 break
             }
         }
-        return nabuUserService.user.asSingle()
-            .flatMapMaybe { [weak self] user -> Maybe<KYCPageType> in
-                guard let strongSelf = self else { return Maybe.empty() }
-                if let nextPage = page.nextPage(
-                    forTier: strongSelf.tier,
-                    user: user,
-                    country: kycCountry,
-                    tiersResponse: strongSelf.tiersResponse,
-                    isNewProfile: strongSelf.isNewProfile
-                ) {
-                    return Maybe.just(nextPage)
-                } else if hasQuestions {
-                    return Maybe.just(.accountUsageForm)
-                } else {
-                    return Maybe.empty()
-                }
+
+
+        return Observable.combineLatest(
+            nabuUserService.user.asObservable(),
+            app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self)
+                .replaceError(with: false)
+                .prefix(1)
+                .asObservable(),
+            app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
+                .replaceError(with: false)
+                .prefix(1)
+                .asObservable()
+        )
+        .asSingle()
+        .flatMapMaybe { [weak self] (user, isSSNEnabled, isSSNRequired) -> Maybe<KYCPageType> in
+            guard let strongSelf = self else { return Maybe.empty() }
+            if let nextPage = page.nextPage(
+                forTier: strongSelf.tier,
+                user: user,
+                country: kycCountry,
+                tiersResponse: strongSelf.tiersResponse,
+                isNewProfile: strongSelf.isNewProfile,
+                isSSNRequired: isSSNEnabled && isSSNRequired
+            ) {
+                return Maybe.just(nextPage)
+            } else if hasQuestions {
+                return Maybe.just(.accountUsageForm)
+            } else {
+                return Maybe.empty()
             }
+        }
     }
 }
 
@@ -81,7 +95,8 @@ extension KYCPageType {
         requiredTier: KYC.Tier,
         tiersResponse: KYC.UserTiers,
         hasQuestions: Bool,
-        isNewProfile: Bool
+        isNewProfile: Bool,
+        isSSNRequired: Bool
     ) -> KYCPageType {
         guard user.email.verified else {
             return .enterEmail
@@ -113,6 +128,10 @@ extension KYCPageType {
             return .accountUsageForm
         }
 
+        if isSSNRequired, user.isVerified {
+            return .ssn
+        }
+
         guard tiersResponse.canCompleteVerified else {
             return .accountStatus
         }
@@ -129,7 +148,8 @@ extension KYCPageType {
         user: NabuUser?,
         country: CountryData?,
         tiersResponse: KYC.UserTiers,
-        isNewProfile: Bool
+        isNewProfile: Bool,
+        isSSNRequired: Bool
     ) -> KYCPageType? {
         switch tier {
         case .unverified:
@@ -138,14 +158,16 @@ extension KYCPageType {
                 country: country,
                 requiredTier: .verified,
                 tiersResponse: tiersResponse,
-                isNewProfile: isNewProfile
+                isNewProfile: isNewProfile,
+                isSSNRequired: isSSNRequired
             )
         case .verified:
             return nextPageVerified(
                 user: user,
                 country: country,
                 tiersResponse: tiersResponse,
-                isNewProfile: isNewProfile
+                isNewProfile: isNewProfile,
+                isSSNRequired: isSSNRequired
             )
         }
     }
@@ -155,7 +177,8 @@ extension KYCPageType {
         country: CountryData?,
         requiredTier: KYC.Tier,
         tiersResponse: KYC.UserTiers,
-        isNewProfile: Bool
+        isNewProfile: Bool,
+        isSSNRequired: Bool
     ) -> KYCPageType? {
         switch self {
         case .finish:
@@ -168,7 +191,8 @@ extension KYCPageType {
                     requiredTier: requiredTier,
                     tiersResponse: tiersResponse,
                     hasQuestions: false,
-                    isNewProfile: isNewProfile
+                    isNewProfile: isNewProfile,
+                    isSSNRequired: isSSNRequired
                 )
             }
             return .enterEmail
@@ -201,7 +225,8 @@ extension KYCPageType {
                 .verifyIdentity,
                 .resubmitIdentity,
                 .applicationComplete,
-                .accountStatus:
+                .accountStatus,
+                .ssn:
             // All other pages don't have a next page for tier 1
             return nil
         }
@@ -211,7 +236,8 @@ extension KYCPageType {
         user: NabuUser?,
         country: CountryData?,
         tiersResponse: KYC.UserTiers,
-        isNewProfile: Bool
+        isNewProfile: Bool,
+        isSSNRequired: Bool
     ) -> KYCPageType? {
         switch self {
         case .enterPhone:
@@ -220,8 +246,9 @@ extension KYCPageType {
             return .accountUsageForm
         case .accountUsageForm:
             return user?.needsDocumentResubmission == nil ? .verifyIdentity : .resubmitIdentity
-        case .verifyIdentity,
-             .resubmitIdentity:
+        case .verifyIdentity, .resubmitIdentity:
+            return isSSNRequired ? .ssn : .accountStatus
+        case .ssn:
             return .accountStatus
         case .applicationComplete:
             // Not used
@@ -241,7 +268,8 @@ extension KYCPageType {
                 country: country,
                 requiredTier: .verified,
                 tiersResponse: tiersResponse,
-                isNewProfile: isNewProfile
+                isNewProfile: isNewProfile,
+                isSSNRequired: isSSNRequired
             )
         }
     }

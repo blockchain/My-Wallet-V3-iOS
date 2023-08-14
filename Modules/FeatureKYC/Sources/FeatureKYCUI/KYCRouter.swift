@@ -209,12 +209,18 @@ final class KYCRouter: KYCRouterAPI {
         let disposable = Observable
             .zip(
                 nabuUserService.fetchUser().asObservable(),
-                postTierObservable
+                postTierObservable,
+                app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
+                    .replaceError(with: false)
+                    .combineLatest(app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self).replaceError(with: false))
+                    .map { $0 && $1 }
+                    .prefix(1)
+                    .asObservable()
             )
             .subscribe(on: MainScheduler.asyncInstance)
             .observe(on: MainScheduler.instance)
             .hideLoaderOnDisposal(loader: loadingViewPresenter)
-            .subscribe(onNext: { [weak self] user, tiersResponse in
+            .subscribe(onNext: { [weak self] user, tiersResponse, isSSNRequired in
                 self?.isNewProfileEnabled { isNewProfileEnabled in
                     self?.pager = KYCPager(isNewProfile: isNewProfileEnabled, tier: tier, tiersResponse: tiersResponse)
                     Logger.shared.debug("Got user with ID: \(user.personalDetails.identifier ?? "")")
@@ -229,7 +235,8 @@ final class KYCRouter: KYCRouterAPI {
                         requiredTier: tier,
                         tiersResponse: tiersResponse,
                         hasQuestions: strongSelf.hasQuestions,
-                        isNewProfile: isNewProfileEnabled
+                        isNewProfile: isNewProfileEnabled,
+                        isSSNRequired: isSSNRequired
                     )
 
                     if startingPage == .finish {
@@ -246,11 +253,13 @@ final class KYCRouter: KYCRouterAPI {
                         viewController,
                         user: user,
                         tier: tier,
-                        isNewProfile: isNewProfileEnabled
+                        isNewProfile: isNewProfileEnabled,
+                        isSSNRequired: isSSNRequired
                     )
                     strongSelf.restoreToMostRecentPageIfNeeded(
                         tier: tier,
-                        isNewProfile: isNewProfileEnabled
+                        isNewProfile: isNewProfileEnabled,
+                        isSSNRequired: isSSNRequired
                     )
                 }
             }, onError: { [alertPresenter, errorRecorder] error in
@@ -339,14 +348,6 @@ final class KYCRouter: KYCRouterAPI {
                 .subscribe(onSuccess: { [weak self] nextPage in
                     guard let self else {
                         return
-                    }
-
-                    switch (parentFlow, nextPage) {
-                    case (.simpleBuy, .accountStatus):
-                        finish()
-                        return
-                    default:
-                        break
                     }
 
                     let controller = pageFactory.createFrom(
@@ -585,7 +586,8 @@ final class KYCRouter: KYCRouterAPI {
     /// Restores the user to the most recent page if they dropped off mid-flow while KYC'ing
     private func restoreToMostRecentPageIfNeeded(
         tier: KYC.Tier,
-        isNewProfile: Bool
+        isNewProfile: Bool,
+        isSSNRequired: Bool
     ) {
         guard let currentUser = user else {
             return
@@ -599,7 +601,8 @@ final class KYCRouter: KYCRouterAPI {
             requiredTier: tier,
             tiersResponse: response,
             hasQuestions: hasQuestions,
-            isNewProfile: isNewProfile
+            isNewProfile: isNewProfile,
+            isSSNRequired: isSSNRequired
         )
 
         if startingPage == .finish {
@@ -629,7 +632,8 @@ final class KYCRouter: KYCRouterAPI {
                 user: user,
                 country: country,
                 tiersResponse: response,
-                isNewProfile: isNewProfile
+                isNewProfile: isNewProfile,
+                isSSNRequired: isSSNRequired
             ) else { return }
 
             currentPage = nextPage
@@ -668,6 +672,7 @@ final class KYCRouter: KYCRouterAPI {
              .verifyIdentity,
              .resubmitIdentity,
              .applicationComplete,
+             .ssn,
              .finish:
             return nil
         }
@@ -677,7 +682,8 @@ final class KYCRouter: KYCRouterAPI {
         _ viewController: UIViewController,
         user: NabuUser,
         tier: KYC.Tier,
-        isNewProfile: Bool
+        isNewProfile: Bool,
+        isSSNRequired: Bool
     ) {
         guard let response = userTiersResponse else { return }
         let startingPage = KYCPageType.startingPage(
@@ -685,7 +691,8 @@ final class KYCRouter: KYCRouterAPI {
             requiredTier: tier,
             tiersResponse: response,
             hasQuestions: hasQuestions,
-            isNewProfile: isNewProfile
+            isNewProfile: isNewProfile,
+            isSSNRequired: isSSNRequired
         )
         if startingPage == .finish {
             return
@@ -797,6 +804,7 @@ final class KYCRouter: KYCRouterAPI {
              .accountUsageForm,
              .applicationComplete,
              .resubmitIdentity,
+             .ssn,
              .finish:
             break
         case .enterEmail:

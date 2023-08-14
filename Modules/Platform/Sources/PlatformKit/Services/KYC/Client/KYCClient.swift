@@ -70,6 +70,9 @@ public protocol KYCClientAPI: AnyObject {
     func fetchExtraKYCQuestions(context: String, version: [String]) -> AnyPublisher<Form, NabuNetworkError>
 
     func submitExtraKYCQuestions(_ form: Form, version: [String]) -> AnyPublisher<Void, NabuNetworkError>
+
+    func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error>
+    func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error>
 }
 
 final class KYCClient: KYCClientAPI {
@@ -335,6 +338,25 @@ final class KYCClient: KYCClientAPI {
             request: requestBuilder.put(
                 path: version + ["kyc", "extra-questions"],
                 body: try? form.encode(),
+                authenticated: true
+            )!
+        )
+    }
+
+    func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error> {
+        networkAdapter.perform(
+            request: requestBuilder.get(
+                path: ["onboarding", "collect", "ssn"],
+                authenticated: true
+            )!
+        )
+    }
+
+    func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error> {
+        networkAdapter.perform(
+            request: requestBuilder.post(
+                path: ["onboarding", "collect", "ssn"],
+                body: try? ["ssn": ssn].encode(),
                 authenticated: true
             )!
         )
