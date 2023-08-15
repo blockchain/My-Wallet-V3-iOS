@@ -47,34 +47,6 @@ final class CardsSectionPresenter: SettingsSectionPresenting {
         self.addPaymentMethodCellPresenter = AddPaymentMethodCellPresenter(
             interactor: interactor.addPaymentMethodInteractor
         )
-
-//        self.state =
-//            interactor
-//            .state
-//                .map(weak: self) { (self, state) -> SettingsSectionLoadingState in
-//                    switch state {
-//                    case .invalid:
-//                        /// Do not show the `Linked Cards` section
-//                        return .loaded(next: .empty)
-//                    case .calculating:
-//                        /// Show a loading cell should cards be enabled but we are
-//                        /// still waiting on CardData.
-//                        let cells: [SettingsCellViewModel] = [SettingsCellViewModel(cellType: .cards(.skeleton(0)))]
-//                        return .loaded(next: .some(.init(sectionType: .cards, items: cells)))
-//                    case .value(let cards):
-//                        let presenters = Array(cards)
-//                        let addCardCellViewModel = SettingsCellViewModel(
-//                            cellType: .cards(.add(self.addPaymentMethodCellPresenter))
-//                        )
-//                        let cells = presenters.viewModels + [addCardCellViewModel]
-//                        let viewModel = SettingsSectionViewModel(
-//                            sectionType: self.sectionType,
-//                            items: cells
-//                        )
-//
-//                        return .loaded(next: .some(viewModel))
-//                    }
-//                }
     }
 }
 
