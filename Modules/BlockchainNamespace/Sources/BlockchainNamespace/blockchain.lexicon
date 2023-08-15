@@ -3651,6 +3651,14 @@ blockchain:
 							+ blockchain.ux.type.analytics.event
 			custodial:
 				dashboard:
+					no:
+						fiat:
+							balance:
+							+ blockchain.ux.type.story
+								deposit:
+								+ blockchain.ux.type.task
+									action:
+									+ blockchain.ux.type.action
 					quick:
 						action:
 						+ blockchain.ux.dashboard.quick.action
