@@ -741,8 +741,7 @@ blockchain:
 		dynamic:
 		+ blockchain.db.collection
 			session:
-				state:
-				+ blockchain.session.state
+			+ blockchain.session
 			ux:
 				action:
 				+ blockchain.session.configuration.value
@@ -1818,6 +1817,9 @@ blockchain:
 				fan:
 				+ blockchain.db.type.boolean
 				+ blockchain.session.state.value
+			external:
+				brokerage:
+				+ blockchain.db.type.boolean
 			superapp:
 				user:
 				+ blockchain.session.state.value

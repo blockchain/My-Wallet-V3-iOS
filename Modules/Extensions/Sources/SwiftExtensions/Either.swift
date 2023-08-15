@@ -1,7 +1,20 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+@dynamicMemberLookup
 public enum Either<A, B> {
     case left(A), right(B)
+}
+
+extension Either where A == B {
+
+    @inlinable public subscript<V>(dynamicMember keyPath: KeyPath<A, V>) -> V {
+        get {
+            switch self {
+            case .left(let a): return a[keyPath: keyPath]
+            case .right(let b): return b[keyPath: keyPath]
+            }
+        }
+    }
 }
 
 extension Either {
@@ -135,6 +148,8 @@ extension Either: CustomDebugStringConvertible {
 
     public var debugDescription: String { description }
 }
+
+extension Either: Sendable where A: Sendable, B: Sendable {}
 
 extension Either {
 

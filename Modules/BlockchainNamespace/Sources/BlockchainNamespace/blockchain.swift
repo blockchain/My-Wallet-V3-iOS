@@ -3011,14 +3011,7 @@ public extension I_blockchain_app_dynamic {
 public final class L_blockchain_app_dynamic_session: L, I_blockchain_app_dynamic_session {
 	public override class var localized: String { NSLocalizedString("blockchain.app.dynamic.session", comment: "") }
 }
-public protocol I_blockchain_app_dynamic_session: I {}
-public extension I_blockchain_app_dynamic_session {
-	var `state`: L_blockchain_app_dynamic_session_state { .init("\(__).state") }
-}
-public final class L_blockchain_app_dynamic_session_state: L, I_blockchain_app_dynamic_session_state {
-	public override class var localized: String { NSLocalizedString("blockchain.app.dynamic.session.state", comment: "") }
-}
-public protocol I_blockchain_app_dynamic_session_state: I_blockchain_session_state {}
+public protocol I_blockchain_app_dynamic_session: I_blockchain_session {}
 public final class L_blockchain_app_dynamic_ux: L, I_blockchain_app_dynamic_ux {
 	public override class var localized: String { NSLocalizedString("blockchain.app.dynamic.ux", comment: "") }
 }
@@ -6909,6 +6902,7 @@ public extension I_blockchain_user_is {
 	var `blocked`: L_blockchain_user_is_blocked { .init("\(__).blocked") }
 	var `cassy`: L_blockchain_user_is_cassy { .init("\(__).cassy") }
 	var `cowboy`: L_blockchain_user_is_cowboy { .init("\(__).cowboy") }
+	var `external`: L_blockchain_user_is_external { .init("\(__).external") }
 	var `superapp`: L_blockchain_user_is_superapp { .init("\(__).superapp") }
 	var `verified`: L_blockchain_user_is_verified { .init("\(__).verified") }
 }
@@ -6945,6 +6939,17 @@ public final class L_blockchain_user_is_cowboy_fan: L, I_blockchain_user_is_cowb
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.cowboy.fan", comment: "") }
 }
 public protocol I_blockchain_user_is_cowboy_fan: I_blockchain_session_state_value, I_blockchain_db_type_boolean {}
+public final class L_blockchain_user_is_external: L, I_blockchain_user_is_external {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.external", comment: "") }
+}
+public protocol I_blockchain_user_is_external: I {}
+public extension I_blockchain_user_is_external {
+	var `brokerage`: L_blockchain_user_is_external_brokerage { .init("\(__).brokerage") }
+}
+public final class L_blockchain_user_is_external_brokerage: L, I_blockchain_user_is_external_brokerage {
+	public override class var localized: String { NSLocalizedString("blockchain.user.is.external.brokerage", comment: "") }
+}
+public protocol I_blockchain_user_is_external_brokerage: I_blockchain_db_type_boolean {}
 public final class L_blockchain_user_is_superapp: L, I_blockchain_user_is_superapp {
 	public override class var localized: String { NSLocalizedString("blockchain.user.is.superapp", comment: "") }
 }

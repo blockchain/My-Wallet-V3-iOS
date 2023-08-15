@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
+import Blockchain
 import DIKit
+import Dependencies
 import Errors
 import MoneyKit
 import NetworkKit
@@ -9,6 +11,7 @@ import ToolKit
 
 public protocol TradingBalanceClientAPI: AnyObject {
     var balance: AnyPublisher<CustodialBalanceResponse?, NabuNetworkError> { get }
+    var externalBrokerageBalance: AnyPublisher<CustodialBalanceResponse?, NabuNetworkError> { get }
 
     func balance(
         for currencyType: CurrencyType
@@ -20,18 +23,34 @@ final class CustodialClient: TradingBalanceClientAPI,
     CustodialPendingDepositClientAPI
 {
 
+    @Dependency(\.app) var app
+
     // MARK: - Types
 
     private enum Path {
         static let withdrawal = ["payments", "withdrawals"]
         static let paymentAccount = ["payments", "accounts", "simplebuy"]
         static let custodialBalance = ["accounts", "simplebuy"]
+        static let externalBalance = ["accounts", "external_brokerage"]
     }
 
     // MARK: - Properties
 
     var balance: AnyPublisher<CustodialBalanceResponse?, NabuNetworkError> {
         let path = Path.custodialBalance
+        let request = requestBuilder.get(
+            path: path,
+            authenticated: true
+        )!
+        return networkAdapter
+            .performOptional(
+                request: request,
+                responseType: CustodialBalanceResponse.self
+            )
+    }
+
+    var externalBrokerageBalance: AnyPublisher<CustodialBalanceResponse?, NabuNetworkError> {
+        let path = Path.externalBalance
         let request = requestBuilder.get(
             path: path,
             authenticated: true

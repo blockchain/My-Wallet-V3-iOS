@@ -38,3 +38,14 @@ extension FiatCurrency {
         name
     }
 }
+
+extension CurrencyType {
+    public var defaultWalletName: String {
+        switch self {
+        case .fiat(let fiatCurrency):
+            return fiatCurrency.defaultWalletName
+        case .crypto(let cryptoCurrency):
+            return cryptoCurrency.defaultWalletName
+        }
+    }
+}

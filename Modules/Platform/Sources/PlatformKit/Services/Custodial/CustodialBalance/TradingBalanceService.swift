@@ -15,14 +15,31 @@ public protocol TradingBalanceServiceAPI: AnyObject {
     func fetchBalances() -> AnyPublisher<CustodialAccountBalanceStates, Never>
 }
 
+public let useExternalTradingAccount = "USE_EXTERNAL_TRADING_ACCOUNT"
+
 class TradingBalanceService: TradingBalanceServiceAPI {
 
-    private struct Key: Hashable {}
+    enum Key {
+        case custodial, external
+    }
 
     // MARK: - Properties
 
     var balances: AnyPublisher<CustodialAccountBalanceStates, Never> {
-        cachedValue.stream(key: Key())
+        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+            .replaceError(with: false)
+            .flatMap { [streamBalances] useExternalTradingAccount -> AnyPublisher<CustodialAccountBalanceStates, Never> in
+                if useExternalTradingAccount {
+                    return streamBalances(.external)
+                } else {
+                    return streamBalances(.custodial)
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+
+    func streamBalances(_ key: Key) -> AnyPublisher<CustodialAccountBalanceStates, Never> {
+        cachedValue.stream(key: key)
             .map { result -> CustodialAccountBalanceStates in
                 do {
                     return try result.get()
@@ -56,43 +73,44 @@ class TradingBalanceService: TradingBalanceServiceAPI {
 
         self.cachedValue = CachedValueNew(
             cache: cache,
-            fetch: { [client] _ in
-                client
-                    .balance
-                    .map { response in
-                        guard let response else {
-                            return .absent
-                        }
-                        return CustodialAccountBalanceStates(response: response)
-                    }
-                    .handleEvents(receiveOutput: { [app] states in
-                        Task {
-                            try await app.set(blockchain.user.trading.currencies, to: Array(states.balances.keys.map(\.code)))
-                            for (currency, state) in states.balances {
-                                switch state {
-                                case .absent:
-                                    try await app.set(blockchain.user.trading.account[currency.code].balance, to: nil)
-                                case .present(let value):
-                                    try await app.batch(
-                                        updates: [
-                                            (blockchain.user.trading.account[currency.code].balance.available.amount, value.available.storeAmount),
-                                            (blockchain.user.trading.account[currency.code].balance.available.currency, value.available.currency.code),
+            fetch: { [client] key in
+                let publisher: AnyPublisher<CustodialBalanceResponse?, NabuNetworkError>
+                switch key {
+                case .custodial: publisher = client.balance
+                case .external: publisher = client.externalBrokerageBalance
+                }
+                return publisher.map { response in
+                    guard let response else { return .absent }
+                    return CustodialAccountBalanceStates(response: response)
+                }
+                .handleEvents(receiveOutput: { [app] states in
+                    Task {
+                        try await app.set(blockchain.user.trading.currencies, to: Array(states.balances.keys.map(\.code)))
+                        for (currency, state) in states.balances {
+                            switch state {
+                            case .absent:
+                                try await app.set(blockchain.user.trading.account[currency.code].balance, to: nil)
+                            case .present(let value):
+                                try await app.batch(
+                                    updates: [
+                                        (blockchain.user.trading.account[currency.code].balance.available.amount, value.available.storeAmount),
+                                        (blockchain.user.trading.account[currency.code].balance.available.currency, value.available.currency.code),
 
-                                            (blockchain.user.trading.account[currency.code].balance.pending.amount, value.pending.storeAmount),
-                                            (blockchain.user.trading.account[currency.code].balance.pending.currency, value.pending.currency.code),
+                                        (blockchain.user.trading.account[currency.code].balance.pending.amount, value.pending.storeAmount),
+                                        (blockchain.user.trading.account[currency.code].balance.pending.currency, value.pending.currency.code),
 
-                                            (blockchain.user.trading.account[currency.code].balance.withdrawable.amount, value.withdrawable.storeAmount),
-                                            (blockchain.user.trading.account[currency.code].balance.withdrawable.currency, value.available.currency.code),
+                                        (blockchain.user.trading.account[currency.code].balance.withdrawable.amount, value.withdrawable.storeAmount),
+                                        (blockchain.user.trading.account[currency.code].balance.withdrawable.currency, value.available.currency.code),
 
-                                            (blockchain.user.trading.account[currency.code].balance.display.amount, value.mainBalanceToDisplay.storeAmount),
-                                            (blockchain.user.trading.account[currency.code].balance.display.currency, value.mainBalanceToDisplay.currency.code)
-                                        ]
-                                    )
-                                }
+                                        (blockchain.user.trading.account[currency.code].balance.display.amount, value.mainBalanceToDisplay.storeAmount),
+                                        (blockchain.user.trading.account[currency.code].balance.display.currency, value.mainBalanceToDisplay.currency.code)
+                                    ]
+                                )
                             }
                         }
-                    })
-                    .eraseError()
+                    }
+                })
+                .eraseError()
             }
         )
     }
@@ -100,21 +118,20 @@ class TradingBalanceService: TradingBalanceServiceAPI {
     // MARK: - Methods
 
     func invalidateTradingAccountBalances() {
-        cachedValue
-            .invalidateCacheWithKey(Key())
+        cachedValue.invalidateCacheWithKey(.custodial)
+        cachedValue.invalidateCacheWithKey(.external)
     }
 
     func balance(for currencyType: CurrencyType) -> AnyPublisher<CustodialAccountBalanceState, Never> {
-        balances
-            .map { response -> CustodialAccountBalanceState in
-                response[currencyType]
-            }
-            .eraseToAnyPublisher()
+        balances.map { response -> CustodialAccountBalanceState in
+            response[currencyType]
+        }
+        .eraseToAnyPublisher()
     }
 
     func fetchBalances() -> AnyPublisher<CustodialAccountBalanceStates, Never> {
         cachedValue
-            .get(key: Key(), forceFetch: true)
+            .get(key: .custodial, forceFetch: true)
             .replaceError(with: .absent)
             .eraseToAnyPublisher()
     }

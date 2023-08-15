@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DelegatedSelfCustodyDomain
 import MoneyKit
@@ -9,8 +10,23 @@ public protocol SubscriptionEntriesAsset {
 }
 
 struct FiatCustodialAccountFactory: FiatCustodialAccountFactoryAPI {
+
+    @Dependency(\.app) var app
+
     func fiatCustodialAccount(fiatCurrency: FiatCurrency) -> FiatAccount {
-        FiatCustodialAccount(fiatCurrency: fiatCurrency)
+        LazyFiatAccount(
+            account: app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible)
+            .replaceError(with: false)
+            .map { useExternalTradingAccount -> FiatAccountWithCapabilities in
+                if useExternalTradingAccount {
+                    return ExternalBrokerageFiatAccount(currency: fiatCurrency)
+                } else {
+                    return FiatCustodialAccount(fiatCurrency: fiatCurrency)
+                }
+            }
+            .eraseToAnyPublisher(),
+            currency: fiatCurrency
+        )
     }
 }
 

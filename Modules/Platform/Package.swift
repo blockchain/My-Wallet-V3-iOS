@@ -52,6 +52,7 @@ let package = Package(
         ),
         .package(path: "../Analytics"),
         .package(path: "../AnyCoding"),
+        .package(path: "../Blockchain"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../CommonCrypto"),
@@ -80,6 +81,7 @@ let package = Package(
             dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "Blockchain", package: "Blockchain"),
                 .product(name: "AnyCoding", package: "AnyCoding"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "RxCocoa", package: "RxSwift"),

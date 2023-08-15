@@ -528,6 +528,11 @@ extension AppProtocol {
             case blockchain.session.configuration.value:
                 return remoteConfiguration.publisher(for: ref).computed(in: self)
             case _ where ref.tag.isNAPI:
+                #if DEBUG
+                if remoteConfiguration.contains(ref) {
+                    return remoteConfiguration.publisher(for: ref)
+                }
+                #endif
                 return napis.publisher(for: ref)
             default:
                 return local.nonisolated_publisher(for: ref, app: self).eraseToAnyPublisher()
@@ -658,6 +663,7 @@ extension AppProtocol {
             }
         case _ where reference.tag.isNAPI:
             if BuildFlag.isInternal {
+                remoteConfiguration.override(reference, with: value)
                 try await napis.data.set(reference.route(app: self), to: value)
             } else {
                 assertionFailure("Cannot set NAPI directly, please define a repository. If this error is unexpected, and you require it's behaviour please ask in #ios-engineers")

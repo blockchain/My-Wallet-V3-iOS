@@ -164,7 +164,8 @@ final class APIClient: SimpleBuyClientAPI {
         }
         let request = requestBuilder.get(
             path: Path.supportedPairs,
-            parameters: queryParameters
+            parameters: queryParameters,
+            authenticated: true
         )!
         return networkAdapter.perform(request: request)
     }

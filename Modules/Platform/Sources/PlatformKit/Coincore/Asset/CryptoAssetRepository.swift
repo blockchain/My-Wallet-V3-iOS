@@ -68,40 +68,52 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
 
     /// For each option in the `filter: AssetFilter` option set, we will gather the correct accounts and add to the result AllAccountsGroup.
     public func accountGroup(filter: AssetFilter) -> AnyPublisher<AccountGroup?, Never> {
+        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+            .replaceError(with: false)
+            .flatMap { [self, asset] useExternalTradingAccount -> AnyPublisher<AccountGroup?, Never> in
 
-        var stream: [AnyPublisher<[SingleAccount], Never>] = []
+                var stream: [AnyPublisher<[SingleAccount], Never>] = []
 
-        if filter.contains(.custodial) {
-            stream.append(custodialAccounts)
-        }
+                if filter.contains(.nonCustodial) {
+                    let publisher: AnyPublisher<[SingleAccount], Never> = nonCustodialAccountsProvider()
+                        .recordErrors(on: errorRecorder)
+                        .replaceError(with: [])
+                        .eraseToAnyPublisher()
+                    stream.append(publisher)
+                }
 
-        if filter.contains(.interest) {
-            stream.append(interestAccounts)
-        }
+                if useExternalTradingAccount {
+                    if filter.contains(.custodial) {
+                        stream.append(.just([ExternalBrokerageCryptoAccount(asset: asset)]))
+                    }
+                } else {
 
-        if filter.contains(.nonCustodial) {
-            let publisher: AnyPublisher<[SingleAccount], Never> = nonCustodialAccountsProvider()
-                .recordErrors(on: errorRecorder)
-                .replaceError(with: [])
-                .eraseToAnyPublisher()
-            stream.append(publisher)
-        }
+                    if filter.contains(.custodial) {
+                        stream.append(custodialAccounts)
+                    }
 
-        if filter.contains(.staking) {
-            stream.append(stakingAccounts)
-        }
+                    if filter.contains(.interest) {
+                        stream.append(interestAccounts)
+                    }
 
-        if filter.contains(.exchange) {
-            stream.append(exchangeAccounts)
-        }
+                    if filter.contains(.staking) {
+                        stream.append(stakingAccounts)
+                    }
 
-        if filter.contains(.activeRewards) {
-            stream.append(activeRewardsAccounts)
-        }
+                    if filter.contains(.exchange) {
+                        stream.append(exchangeAccounts)
+                    }
 
-        return stream
-            .combineLatest()
-            .map { accounts in AllAccountsGroup(accounts: accounts.flatMap { $0 }) }
+                    if filter.contains(.activeRewards) {
+                        stream.append(activeRewardsAccounts)
+                    }
+                }
+
+                return stream
+                    .combineLatest()
+                    .map { accounts in AllAccountsGroup(accounts: accounts.flatMap { $0 }) }
+                    .eraseToAnyPublisher()
+            }
             .eraseToAnyPublisher()
     }
 
@@ -192,13 +204,6 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         guard asset.supports(product: .custodialWalletBalance) else {
             return .just([])
         }
-        return .just(
-            [
-                CryptoTradingAccount(
-                    asset: asset,
-                    cryptoReceiveAddressFactory: addressFactory
-                )
-            ]
-        )
+        return .just([CryptoTradingAccount(asset: asset, cryptoReceiveAddressFactory: addressFactory)])
     }
 }
