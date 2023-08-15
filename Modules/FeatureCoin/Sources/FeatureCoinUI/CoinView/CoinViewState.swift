@@ -18,7 +18,6 @@ public struct CoinViewState: Equatable {
     public var error: CoinViewError?
     public var assetInformation: AssetInformation?
     public var isRecurringBuyEnabled: Bool
-    public var isDexEnabled: Bool
     public var earnRates: EarnRates?
     public var kycStatus: KYCStatus?
     public var isFavorite: Bool?
@@ -33,16 +32,24 @@ public struct CoinViewState: Equatable {
         return appMode.isRecurringBuyViewSupported && isRecurringBuyEnabled
     }
 
+    @BindingState public var isDexEnabled: Bool
+    @BindingState public var isExternalBrokerageEnabled: Bool
     @BindingState public var recurringBuy: RecurringBuy?
     @BindingState public var account: Account.Snapshot?
     @BindingState public var explainer: Account.Snapshot?
 
     var allActions: [ButtonAction] {
-        appMode == .pkw ? allDeFiModeCoinActions() : allTradingModeCoinActions()
+        guard isExternalBrokerageEnabled == false else {
+            return []
+        }
+        return appMode == .pkw ? allDeFiModeCoinActions() : allTradingModeCoinActions()
     }
 
     var primaryActions: [ButtonAction] {
-        appMode == .pkw ? primaryDefiModeCoinActions() : primaryTradingModeCoinActions()
+        guard isExternalBrokerageEnabled == false else {
+            return appMode == .pkw ? primaryDefiModeCoinActionsForExternalBrokerage() : primaryTradingModeCoinActionsForExternalBrokerage()
+        }
+        return appMode == .pkw ? primaryDefiModeCoinActions() : primaryTradingModeCoinActions()
     }
 
     private func allTradingModeCoinActions() -> [ButtonAction] {
@@ -106,6 +113,27 @@ public struct CoinViewState: Equatable {
         return actions
     }
 
+    private func primaryDefiModeCoinActionsForExternalBrokerage() -> [ButtonAction] {
+        return [ButtonAction.receive()]
+    }
+
+    private func primaryTradingModeCoinActionsForExternalBrokerage() -> [ButtonAction] {
+        let canSell = (kycStatus?.canSellCrypto ?? false) && accounts.canSell
+        // if the token has no balance
+        guard accounts.hasPositiveBalanceForSelling else {
+            return [ButtonAction.buy()]
+        }
+
+        let actions = [
+            ButtonAction.buy(),
+            canSell ? ButtonAction.sell() : nil
+        ]
+        .compactMap { $0 }
+        return actions
+    }
+
+
+
     private func action(_ action: ButtonAction, whenAccountCan accountAction: Account.Action) -> ButtonAction? {
         accounts.contains(where: { account in account.actions.contains(accountAction) }) ? action : nil
     }
@@ -116,6 +144,7 @@ public struct CoinViewState: Equatable {
         accounts: [Account.Snapshot] = [],
         recurringBuys: [RecurringBuy]? = nil,
         isDexEnabled: Bool = false,
+        isExternalBrokerageEnabled: Bool = false,
         isRecurringBuyEnabled: Bool = false,
         assetInformation: AssetInformation? = nil,
         earnRates: EarnRates? = nil,
@@ -134,6 +163,7 @@ public struct CoinViewState: Equatable {
         self.recurringBuys = recurringBuys
         self.isRecurringBuyEnabled = isRecurringBuyEnabled
         self.isDexEnabled = isDexEnabled
+        self.isExternalBrokerageEnabled = isExternalBrokerageEnabled
     }
 }
 
