@@ -123,7 +123,7 @@ public struct CoinViewState: Equatable {
 
     private func primaryTradingModeCoinActionsForExternalBrokerage() -> [ButtonAction] {
         let canSell = (kycStatus?.canSellCrypto ?? false) && accounts.canSell
-        // if the token has no balance
+
         guard accounts.hasPositiveBalanceForSelling else {
             return [ButtonAction.buy()]
         }
