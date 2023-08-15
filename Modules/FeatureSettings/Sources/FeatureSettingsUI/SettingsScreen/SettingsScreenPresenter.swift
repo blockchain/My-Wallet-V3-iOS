@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainNamespace
+import DIKit
 import PlatformKit
 import PlatformUIKit
 import RxRelay
@@ -70,7 +71,7 @@ final class SettingsScreenPresenter {
 
         self.helpSectionPresenter = HelpSectionPresenter()
 
-        self.connectPresenter = ConnectSectionPresenter()
+        self.connectPresenter = ConnectSectionPresenter(app: resolve())
 
         self.securitySectionPresenter = .init(
             smsTwoFactorService: interactor.smsTwoFactorService,
