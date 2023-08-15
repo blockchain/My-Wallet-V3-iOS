@@ -117,7 +117,7 @@ public struct GraphView: View {
                     )
                     .typography(.caption2)
                     .foregroundColor(.semantic.light)
-                    .animation(.easeInOut, value: viewStore.selected)
+                    .animation(.easeInOut)
                     .onChange(of: viewStore.selected) { [old = viewStore.selected] new in
 #if canImport(UIKit)
                         switch (new, old) {
