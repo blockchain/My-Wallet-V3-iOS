@@ -1,6 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
 import FeatureCardPaymentDomain
+import FeatureProductsDomain
 import FeatureSettingsDomain
 import PlatformKit
 import RxRelay
@@ -10,7 +12,7 @@ import ToolKit
 final class CardSettingsSectionInteractor {
 
     typealias State = ValueCalculationState<[CardData]>
-
+    var app: AppProtocol
     var state: Observable<State> {
         _ = setup
         return stateRelay
@@ -27,9 +29,31 @@ final class CardSettingsSectionInteractor {
     private let disposeBag = DisposeBag()
 
     private var cardsState: Observable<State> {
-        cards.map { values -> State in
-            .value(values)
-        }
+        Observable
+            .combineLatest(cards, externalBrokerageActive, tradingAccountEnabled)
+            .map { values, externalBrokerageActive, tradingAccountEnabled -> State in
+                guard externalBrokerageActive == false else {
+                    return .invalid(.empty)
+                }
+
+                guard tradingAccountEnabled == true else {
+                    return .invalid(.empty)
+                }
+
+            return .value(values)
+            }
+    }
+
+    private var tradingAccountEnabled: Observable<Bool> {
+        app.publisher(for: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible, as: Bool.self)
+                    .replaceError(with: false)
+                    .asObservable()
+    }
+
+    private var externalBrokerageActive: Observable<Bool> {
+        app.publisher(for: blockchain.api.nabu.gateway.products[ProductIdentifier.useExternalTradingAccount].is.eligible, as: Bool.self)
+                    .replaceError(with: false)
+                    .asObservable()
     }
 
     private var cards: Observable<[CardData]> {
@@ -47,10 +71,12 @@ final class CardSettingsSectionInteractor {
 
     init(
         paymentMethodTypesService: PaymentMethodTypesServiceAPI,
-        tierLimitsProvider: TierLimitsProviding
+        tierLimitsProvider: TierLimitsProviding,
+        app: AppProtocol
     ) {
         self.paymentMethodTypesService = paymentMethodTypesService
         self.tierLimitsProvider = tierLimitsProvider
+        self.app = app
 
         self.addPaymentMethodInteractor = AddPaymentMethodInteractor(
             paymentMethod: .card,

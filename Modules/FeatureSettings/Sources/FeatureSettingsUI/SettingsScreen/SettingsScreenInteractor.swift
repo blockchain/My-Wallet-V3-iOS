@@ -61,7 +61,8 @@ final class SettingsScreenInteractor {
 
         self.cardSectionInteractor = CardSettingsSectionInteractor(
             paymentMethodTypesService: paymentMethodTypesService,
-            tierLimitsProvider: tiersProviding
+            tierLimitsProvider: tiersProviding,
+            app: resolve()
         )
 
         self.bankSectionInteractor = BanksSettingsSectionInteractor(

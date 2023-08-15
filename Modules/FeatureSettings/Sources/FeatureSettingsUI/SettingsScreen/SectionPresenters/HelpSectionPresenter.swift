@@ -5,8 +5,10 @@ import RxSwift
 
 final class HelpSectionPresenter: SettingsSectionPresenting {
     let sectionType: SettingsSectionType = .help
-    var state: Observable<SettingsSectionLoadingState> {
-        .just(
+    var state: Observable<SettingsSectionLoadingState>
+
+    init() {
+        self.state = .just(
             .loaded(next:
                 .some(
                     .init(

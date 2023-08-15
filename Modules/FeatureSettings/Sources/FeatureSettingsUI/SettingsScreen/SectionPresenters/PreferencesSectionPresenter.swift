@@ -3,6 +3,7 @@
 import BlockchainNamespace
 import Combine
 import DIKit
+import FeatureProductsDomain
 import Localization
 import PlatformKit
 import PlatformUIKit
@@ -15,7 +16,7 @@ final class PreferencesSectionPresenter: SettingsSectionPresenting {
 
     let app: AppProtocol
 
-    let sectionType: SettingsSectionType = .preferences
+    lazy var sectionType: SettingsSectionType = .preferences
 
     var state: Observable<SettingsSectionLoadingState>
 
@@ -30,30 +31,44 @@ final class PreferencesSectionPresenter: SettingsSectionPresenting {
         preferredTradingCurrencyBadgeInteractor: PreferredTradingCurrencyBadgeInteractor
     ) {
         self.app = app
-        self.preferredCurrencyCellPresenter = DefaultBadgeCellPresenter(
+        let preferredCurrencyCellPresenter = DefaultBadgeCellPresenter(
             accessibility: .id(Accessibility.Identifier.Settings.SettingsCell.Currency.title),
             interactor: preferredCurrencyBadgeInteractor,
             title: LocalizationConstants.Settings.Badge.walletDisplayCurrency
         )
-        self.preferredTradingCurrencyCellPresenter = DefaultBadgeCellPresenter(
+
+        self.preferredCurrencyCellPresenter = preferredCurrencyCellPresenter
+
+        let preferredTradingCurrencyCellPresenter = DefaultBadgeCellPresenter(
             accessibility: .id(Accessibility.Identifier.Settings.SettingsCell.Currency.title),
             interactor: preferredTradingCurrencyBadgeInteractor,
             title: LocalizationConstants.Settings.Badge.tradingCurrency
         )
+        self.preferredTradingCurrencyCellPresenter = preferredTradingCurrencyCellPresenter
 
-        self.themePresenter = ThemeCommonCellPresenter(app: app)
+        let themePresenter = ThemeCommonCellPresenter(app: app)
+        self.themePresenter = themePresenter
+        let externalBrokerageActivePublisher = app.publisher(for: blockchain.api.nabu.gateway.products[ProductIdentifier.useExternalTradingAccount].is.eligible, as: Bool.self)
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
 
-        let items: [SettingsCellViewModel] = [
-            .init(cellType: .badge(.currencyPreference, preferredCurrencyCellPresenter)),
-            .init(cellType: .badge(.tradingCurrencyPreference, preferredTradingCurrencyCellPresenter)),
-            .init(cellType: .common(.theme, themePresenter)),
-            .init(cellType: .common(.notifications))
-        ]
-        let viewModel = SettingsSectionViewModel(
-            sectionType: sectionType,
-            items: items
-        )
+        self.state = externalBrokerageActivePublisher
+            .map { externalBrokerageActive in
+                let items: [SettingsCellViewModel] = [
+                    externalBrokerageActive ? nil : .init(cellType: .badge(.currencyPreference, preferredCurrencyCellPresenter)),
+                    externalBrokerageActive ? nil : .init(cellType: .badge(.tradingCurrencyPreference, preferredTradingCurrencyCellPresenter)),
+                    .init(cellType: .common(.theme, themePresenter)),
+                    .init(cellType: .common(.notifications))
+                ]
+                    .compactMap { $0 }
 
-        self.state = .just(.loaded(next: .some(viewModel)))
+                let viewModel = SettingsSectionViewModel(
+                    sectionType: .preferences,
+                    items: items
+                )
+
+                return .loaded(next: .some(viewModel))
+            }
+            .asObservable()
     }
 }
