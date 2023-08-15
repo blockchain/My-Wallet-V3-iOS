@@ -30,7 +30,7 @@ public let coinViewReducer = Reducer<
             return .merge(
                 EffectTask(value: .observation(.start)),
 
-                EffectTask(value: .refresh),
+                EffectTask(value: .setRefresh),
 
                 environment.assetInformationService
                     .fetch()
@@ -54,7 +54,20 @@ public let coinViewReducer = Reducer<
                 .compactMap(\.value)
                 .receive(on: environment.mainQueue)
                 .eraseToEffect()
-                .map(CoinViewAction.isDexEnabled),
+                .map{
+                    .binding(.set(\.$isDexEnabled, $0))
+                },
+
+                environment.app.publisher(
+                    for: blockchain.api.nabu.gateway.products["USE_EXTERNAL_TRADING_ACCOUNT"].is.eligible,
+                    as: Bool.self
+                )
+                .compactMap(\.value)
+                .receive(on: environment.mainQueue)
+                .eraseToEffect()
+                .map{
+                    .binding(.set(\.$isExternalBrokerageEnabled, $0))
+                },
 
                 environment.app.publisher(
                     for: blockchain.ux.asset[state.currency.code].watchlist.is.on,
@@ -63,7 +76,12 @@ public let coinViewReducer = Reducer<
                 .compactMap(\.value)
                 .receive(on: environment.mainQueue)
                 .eraseToEffect()
-                .map(CoinViewAction.isOnWatchlist),
+                .map(CoinViewAction.isOnWatchlist)
+            )
+
+        case .setRefresh:
+            return .merge(
+                EffectTask(value: .refresh),
 
                 NotificationCenter.default
                     .publisher(for: .transaction)
@@ -97,10 +115,6 @@ public let coinViewReducer = Reducer<
                 .receive(on: environment.mainQueue)
                 .catchToEffect()
                 .map(CoinViewAction.fetchedRecurringBuys)
-
-        case .isDexEnabled(let enabled):
-            state.isDexEnabled = enabled
-            return .none
 
         case .fetchedRecurringBuys(let result):
             state.recurringBuys = try? result.get()
