@@ -13,9 +13,10 @@ import FeatureProductsDomain
 struct ExternalTradingTabsState: Equatable {
     var selectedTab: Tag.Reference = blockchain.ux.user.external.portfolio[].reference
     var home: ExternalTradingDashboard.State = .init()
-    var prices: PricesScene.State = .init(appMode: .trading,
-                                          topMoversState: nil)
-
+    var prices: PricesScene.State = .init(
+        appMode: .trading,
+        topMoversState: nil
+    )
 }
 
 struct TradingTabsState: Equatable {
@@ -139,18 +140,11 @@ struct DashboardContent: ReducerProtocol {
                                 for await event in app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self) {
                                     await send(DashboardContent.Action.tabs(event.value?.tabs))
                                 }
-
                             } else {
                                 for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
                                     await send(DashboardContent.Action.tabs(event.value?.tabs))
                                 }
                             }
-                        }
-
-                        // else
-
-                        for await event in app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self) {
-                            await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }
                     case .pkw:
                         for await event in app.stream(blockchain.app.configuration.superapp.defi.tabs, as: TabConfig.self) {
