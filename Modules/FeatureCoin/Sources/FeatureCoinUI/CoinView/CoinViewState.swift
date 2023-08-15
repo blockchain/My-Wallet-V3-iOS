@@ -109,12 +109,16 @@ public struct CoinViewState: Equatable {
             canSwapOnBcdc || canSwapOnDex ? ButtonAction.swap() : nil,
             canSell ? ButtonAction.sell() : nil
         ]
-            .compactMap { $0 }
+        .compactMap { $0 }
         return actions
     }
 
     private func primaryDefiModeCoinActionsForExternalBrokerage() -> [ButtonAction] {
-        return [ButtonAction.receive()]
+        guard accounts.hasPositiveBalanceForSelling else {
+            return [ButtonAction.receive()]
+        }
+
+        return [ButtonAction.send(), ButtonAction.receive()]
     }
 
     private func primaryTradingModeCoinActionsForExternalBrokerage() -> [ButtonAction] {
@@ -131,8 +135,6 @@ public struct CoinViewState: Equatable {
         .compactMap { $0 }
         return actions
     }
-
-
 
     private func action(_ action: ButtonAction, whenAccountCan accountAction: Account.Action) -> ButtonAction? {
         accounts.contains(where: { account in account.actions.contains(accountAction) }) ? action : nil
