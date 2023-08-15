@@ -142,9 +142,27 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.custodial.fiat,
+            domain: blockchain.coin.core.accounts.custodial.fiat.all,
             repository: { _ in
                 filter(.custodial) { $0 is FiatAccount }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.fiat.with.balance,
+            repository: { [coincore] _ in
+                coincore.accounts(filter: .custodial, where: \.currencyType.isFiatCurrency)
+                    .replaceError(with: [])
+                    .flatMap { accounts in
+                        accounts.map { account in
+                            account.balance.replaceError(with: .zero(currency: account.currencyType)).map { (account, $0) }
+                        }.combineLatest()
+                    }
+                    .map { accounts in
+                        AnyJSON(accounts.filter { _, money in money.isPositive }.map(\.0.identifier))
+                    }
+                    .eraseToAnyPublisher()
             }
         )
 

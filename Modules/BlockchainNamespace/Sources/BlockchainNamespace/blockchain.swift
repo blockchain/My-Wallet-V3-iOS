@@ -3664,7 +3664,6 @@ public extension I_blockchain_coin_core_accounts_custodial {
 	var `asset`: L_blockchain_coin_core_accounts_custodial_asset { .init("\(__).asset") }
 	var `crypto`: L_blockchain_coin_core_accounts_custodial_crypto { .init("\(__).crypto") }
 	var `fiat`: L_blockchain_coin_core_accounts_custodial_fiat { .init("\(__).fiat") }
-	var `with`: L_blockchain_coin_core_accounts_custodial_with { .init("\(__).with") }
 }
 public final class L_blockchain_coin_core_accounts_custodial_all: L, I_blockchain_coin_core_accounts_custodial_all {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.all", comment: "") }
@@ -3712,18 +3711,26 @@ public protocol I_blockchain_coin_core_accounts_custodial_crypto_with_balance: I
 public final class L_blockchain_coin_core_accounts_custodial_fiat: L, I_blockchain_coin_core_accounts_custodial_fiat {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.fiat", comment: "") }
 }
-public protocol I_blockchain_coin_core_accounts_custodial_fiat: I_blockchain_db_type_array_of_strings {}
-public final class L_blockchain_coin_core_accounts_custodial_with: L, I_blockchain_coin_core_accounts_custodial_with {
-	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.with", comment: "") }
+public protocol I_blockchain_coin_core_accounts_custodial_fiat: I {}
+public extension I_blockchain_coin_core_accounts_custodial_fiat {
+	var `all`: L_blockchain_coin_core_accounts_custodial_fiat_all { .init("\(__).all") }
+	var `with`: L_blockchain_coin_core_accounts_custodial_fiat_with { .init("\(__).with") }
 }
-public protocol I_blockchain_coin_core_accounts_custodial_with: I {}
-public extension I_blockchain_coin_core_accounts_custodial_with {
-	var `balance`: L_blockchain_coin_core_accounts_custodial_with_balance { .init("\(__).balance") }
+public final class L_blockchain_coin_core_accounts_custodial_fiat_all: L, I_blockchain_coin_core_accounts_custodial_fiat_all {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.fiat.all", comment: "") }
 }
-public final class L_blockchain_coin_core_accounts_custodial_with_balance: L, I_blockchain_coin_core_accounts_custodial_with_balance {
-	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.with.balance", comment: "") }
+public protocol I_blockchain_coin_core_accounts_custodial_fiat_all: I_blockchain_db_type_array_of_strings {}
+public final class L_blockchain_coin_core_accounts_custodial_fiat_with: L, I_blockchain_coin_core_accounts_custodial_fiat_with {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.fiat.with", comment: "") }
 }
-public protocol I_blockchain_coin_core_accounts_custodial_with_balance: I_blockchain_db_type_array_of_strings {}
+public protocol I_blockchain_coin_core_accounts_custodial_fiat_with: I {}
+public extension I_blockchain_coin_core_accounts_custodial_fiat_with {
+	var `balance`: L_blockchain_coin_core_accounts_custodial_fiat_with_balance { .init("\(__).balance") }
+}
+public final class L_blockchain_coin_core_accounts_custodial_fiat_with_balance: L, I_blockchain_coin_core_accounts_custodial_fiat_with_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.custodial.fiat.with.balance", comment: "") }
+}
+public protocol I_blockchain_coin_core_accounts_custodial_fiat_with_balance: I_blockchain_db_type_array_of_strings {}
 public final class L_blockchain_coin_core_accounts_DeFi: L, I_blockchain_coin_core_accounts_DeFi {
 	public override class var localized: String { NSLocalizedString("blockchain.coin.core.accounts.DeFi", comment: "") }
 }

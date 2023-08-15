@@ -55,11 +55,6 @@ extension AppProtocol {
         }
         return setup { app in
             try await app.register(
-                napi: blockchain.coin.core,
-                domain: blockchain.coin.core.accounts.custodial.with.balance,
-                repository: { _ async in AnyJSON([String]()) }
-            )
-            try await app.register(
                 napi: blockchain.api.nabu.gateway.price,
                 domain: blockchain.api.nabu.gateway.price.crypto.fiat,
                 repository: { tag -> AnyJSON in
