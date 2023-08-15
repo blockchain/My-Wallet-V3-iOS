@@ -271,11 +271,19 @@ public final class Router: Routing {
             .receive(on: DispatchQueue.main)
             .mapError { _ in RouterError.kycStepFailed }
             .combineLatest(
-                app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
+                app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self)
                     .replaceError(with: false)
-                    .combineLatest(app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self).replaceError(with: false))
-                    .map { $0 && $1 }
                     .prefix(1)
+                    .flatMap { [app] isEnabled -> AnyPublisher<Bool, Never> in
+                        if isEnabled {
+                            return app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
+                                .replaceError(with: false)
+                                .prefix(1)
+                                .eraseToAnyPublisher()
+                        } else {
+                            return .just(false)
+                        }
+                    }
                     .setFailureType(to: RouterError.self)
             )
             .flatMap { [app, routeToKYC] userTiers, isSSNMandatory -> AnyPublisher<FlowResult, RouterError> in

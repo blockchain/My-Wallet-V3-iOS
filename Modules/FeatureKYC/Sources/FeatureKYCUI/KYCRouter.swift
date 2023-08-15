@@ -210,11 +210,19 @@ final class KYCRouter: KYCRouterAPI {
             .zip(
                 nabuUserService.fetchUser().asObservable(),
                 postTierObservable,
-                app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
+                app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self)
                     .replaceError(with: false)
-                    .combineLatest(app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self).replaceError(with: false))
-                    .map { $0 && $1 }
                     .prefix(1)
+                    .flatMap { [app] isEnabled -> AnyPublisher<Bool, Never> in
+                        if isEnabled {
+                            return app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
+                                .replaceError(with: false)
+                                .prefix(1)
+                                .eraseToAnyPublisher()
+                        } else {
+                            return .just(false)
+                        }
+                    }
                     .asObservable()
             )
             .subscribe(on: MainScheduler.asyncInstance)

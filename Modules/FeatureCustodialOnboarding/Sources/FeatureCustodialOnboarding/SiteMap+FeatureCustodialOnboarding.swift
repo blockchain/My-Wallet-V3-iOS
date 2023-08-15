@@ -15,6 +15,8 @@ public struct SiteMap {
             BeforeYouContinuePleaseVerifyView()
         case blockchain.ux.user.custodial.onboarding.verification.is.in.progress:
             VerificationInProgressView()
+        case blockchain.ux.user.custodial.dashboard.no.fiat.balance:
+            YouDontHaveAnyBalanceView()
         default:
             throw "Unhandled \(tag)".error()
         }

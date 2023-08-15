@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
+import Blockchain
 import DIKit
 import Errors
 import FeatureFormDomain
@@ -59,14 +59,20 @@ public final class KYCPager: KYCPagerAPI {
             app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self)
                 .replaceError(with: false)
                 .prefix(1)
-                .asObservable(),
-            app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
-                .replaceError(with: false)
-                .prefix(1)
+                .flatMap { [app] isEnabled -> AnyPublisher<Bool, Never> in
+                    if isEnabled {
+                        return app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
+                            .replaceError(with: false)
+                            .prefix(1)
+                            .eraseToAnyPublisher()
+                    } else {
+                        return .just(false)
+                    }
+                }
                 .asObservable()
         )
         .asSingle()
-        .flatMapMaybe { [weak self] (user, isSSNEnabled, isSSNRequired) -> Maybe<KYCPageType> in
+        .flatMapMaybe { [weak self] (user, isSSNRequired) -> Maybe<KYCPageType> in
             guard let strongSelf = self else { return Maybe.empty() }
             if let nextPage = page.nextPage(
                 forTier: strongSelf.tier,
@@ -74,7 +80,7 @@ public final class KYCPager: KYCPagerAPI {
                 country: kycCountry,
                 tiersResponse: strongSelf.tiersResponse,
                 isNewProfile: strongSelf.isNewProfile,
-                isSSNRequired: isSSNEnabled && isSSNRequired
+                isSSNRequired: isSSNRequired
             ) {
                 return Maybe.just(nextPage)
             } else if hasQuestions {

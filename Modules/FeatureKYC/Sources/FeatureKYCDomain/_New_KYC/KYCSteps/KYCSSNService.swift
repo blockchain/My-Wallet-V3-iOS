@@ -39,26 +39,35 @@ public final class KYCSSNRepository {
         try await app.register(
             napi: blockchain.api.nabu.gateway.onboarding,
             domain: blockchain.api.nabu.gateway.onboarding.SSN,
-            repository: { [cache] _ in
-                cache.stream(key: CodableVoid()).map { ssn -> AnyJSON in
-                    switch ssn {
-                    case let .success(ssn):
-                        var json = L_blockchain_api_nabu_gateway_onboarding_SSN.JSON()
-                        json.is.mandatory = ssn.requirements.isMandatory
-                        if let message = ssn.verification?.message {
-                            json.verification.message = message
+            repository: { [app, cache] _ in
+                app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self)
+                    .replaceError(with: false)
+                    .flatMap { isEnabled -> AnyPublisher<AnyJSON, Never> in
+                        if isEnabled {
+                            return cache.stream(key: CodableVoid()).map { ssn -> AnyJSON in
+                                switch ssn {
+                                case let .success(ssn):
+                                    var json = L_blockchain_api_nabu_gateway_onboarding_SSN.JSON()
+                                    json.is.mandatory = ssn.requirements.isMandatory
+                                    if let message = ssn.verification?.message {
+                                        json.verification.message = message
+                                    }
+                                    json.regex.validation = ssn.requirements.validationRegex
+                                    if let verification = ssn.verification {
+                                        json.is.allowed.to.retry = verification.isAllowedToRetry
+                                        json.state = blockchain.api.nabu.gateway.onboarding.SSN.state(\.id) + verification.state.value.lowercased().replacingOccurrences(of: "_", with: ".")
+                                    }
+                                    return json.toJSON()
+                                case let .failure(error):
+                                    return AnyJSON(error)
+                                }
+                            }
+                            .eraseToAnyPublisher()
+                        } else {
+                            return .just(.empty)
                         }
-                        json.regex.validation = ssn.requirements.validationRegex
-                        if let verification = ssn.verification {
-                            json.is.allowed.to.retry = verification.isAllowedToRetry
-                            json.state = blockchain.api.nabu.gateway.onboarding.SSN.state(\.id) + verification.state.value.lowercased().replacingOccurrences(of: "_", with: ".")
-                        }
-                        return json.toJSON()
-                    case let .failure(error):
-                        return AnyJSON(["error": error])
                     }
-                }
-                .eraseToAnyPublisher()
+                    .eraseToAnyPublisher()
             }
         )
     }

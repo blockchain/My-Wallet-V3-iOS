@@ -13736,8 +13736,41 @@ public final class L_blockchain_ux_user_custodial_dashboard: L, I_blockchain_ux_
 }
 public protocol I_blockchain_ux_user_custodial_dashboard: I {}
 public extension I_blockchain_ux_user_custodial_dashboard {
+	var `no`: L_blockchain_ux_user_custodial_dashboard_no { .init("\(__).no") }
 	var `quick`: L_blockchain_ux_user_custodial_dashboard_quick { .init("\(__).quick") }
 }
+public final class L_blockchain_ux_user_custodial_dashboard_no: L, I_blockchain_ux_user_custodial_dashboard_no {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard.no", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_dashboard_no: I {}
+public extension I_blockchain_ux_user_custodial_dashboard_no {
+	var `fiat`: L_blockchain_ux_user_custodial_dashboard_no_fiat { .init("\(__).fiat") }
+}
+public final class L_blockchain_ux_user_custodial_dashboard_no_fiat: L, I_blockchain_ux_user_custodial_dashboard_no_fiat {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard.no.fiat", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_dashboard_no_fiat: I {}
+public extension I_blockchain_ux_user_custodial_dashboard_no_fiat {
+	var `balance`: L_blockchain_ux_user_custodial_dashboard_no_fiat_balance { .init("\(__).balance") }
+}
+public final class L_blockchain_ux_user_custodial_dashboard_no_fiat_balance: L, I_blockchain_ux_user_custodial_dashboard_no_fiat_balance {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard.no.fiat.balance", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_dashboard_no_fiat_balance: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_user_custodial_dashboard_no_fiat_balance {
+	var `deposit`: L_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit { .init("\(__).deposit") }
+}
+public final class L_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit: L, I_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard.no.fiat.balance.deposit", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit: I_blockchain_ux_type_task {}
+public extension I_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit {
+	var `action`: L_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit_action { .init("\(__).action") }
+}
+public final class L_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit_action: L, I_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard.no.fiat.balance.deposit.action", comment: "") }
+}
+public protocol I_blockchain_ux_user_custodial_dashboard_no_fiat_balance_deposit_action: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_user_custodial_dashboard_quick: L, I_blockchain_ux_user_custodial_dashboard_quick {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial.dashboard.quick", comment: "") }
 }
