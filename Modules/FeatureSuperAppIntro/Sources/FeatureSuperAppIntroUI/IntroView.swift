@@ -8,12 +8,12 @@ import Localization
 import SwiftUI
 
 private typealias L10n = LocalizationConstants.SuperAppIntro.V2
+private let useExternalTradingAccount = "USE_EXTERNAL_TRADING_ACCOUNT"
 
 public struct IntroView: View {
-
+    @State private var isExternalTradingEnabled = false
     @Environment(\.dismiss) var dismiss
     @Environment(\.openURL) var openURL
-
     @ObservedObject private var motionManager: MotionManager
     private let actionTitle: String
     private let span: Double = 150
@@ -33,7 +33,7 @@ public struct IntroView: View {
         GeometryReader { proxy in
             ScrollView {
                 VStack(spacing: 0) {
-                    VStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 8) {
                         TagView(
                             text: appMode.tag,
                             foregroundColor: appMode.tagColor
@@ -43,11 +43,11 @@ public struct IntroView: View {
                         Text(appMode.title)
                             .typography(.title1)
                             .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
+                            .multilineTextAlignment(.leading)
                         Text(LocalizedStringKey(appMode.byline))
                             .typography(.body1)
                             .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
+                            .multilineTextAlignment(.leading)
                     }
                     .padding(16)
                     VStack {
@@ -56,7 +56,7 @@ public struct IntroView: View {
                         Text(appMode.footer)
                             .typography(.caption1)
                             .foregroundColor(.semantic.text)
-                            .multilineTextAlignment(.center)
+                            .multilineTextAlignment(.leading)
                             .padding(.bottom, Spacing.padding1)
                         buttons
                     }
@@ -101,6 +101,9 @@ public struct IntroView: View {
                 .ignoresSafeArea()
             )
         }
+        .bindings {
+            subscribe($isExternalTradingEnabled, to: blockchain.api.nabu.gateway.products[useExternalTradingAccount].is.eligible)
+        }
     }
 
     @ViewBuilder var rows: some View {
@@ -119,7 +122,9 @@ public struct IntroView: View {
             VStack {
                 row(icon: Icon.cart, title: L10n.Trading.row1)
                 row(icon: Icon.bank, title: L10n.Trading.row2)
-                row(icon: Icon.interest, title: L10n.Trading.row3)
+                if isExternalTradingEnabled == false {
+                    row(icon: Icon.interest, title: L10n.Trading.row3)
+                }
             }
         }
     }

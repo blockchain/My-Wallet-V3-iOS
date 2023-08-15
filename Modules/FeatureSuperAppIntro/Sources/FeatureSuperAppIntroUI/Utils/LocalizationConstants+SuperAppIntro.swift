@@ -37,7 +37,7 @@ extension LocalizationConstants.SuperAppIntro {
                 comment: "SuperApp Intro V2: Footer"
             )
             static let button = NSLocalizedString(
-                "Get started",
+                "View my account",
                 comment: "SuperApp Intro V2: Button"
             )
         }
