@@ -954,6 +954,7 @@ public extension I_blockchain_app_configuration {
 	var `dynamicselfcustody`: L_blockchain_app_configuration_dynamicselfcustody { .init("\(__).dynamicselfcustody") }
 	var `evm`: L_blockchain_app_configuration_evm { .init("\(__).evm") }
 	var `exchange`: L_blockchain_app_configuration_exchange { .init("\(__).exchange") }
+	var `external`: L_blockchain_app_configuration_external { .init("\(__).external") }
 	var `firebase`: L_blockchain_app_configuration_firebase { .init("\(__).firebase") }
 	var `frequent`: L_blockchain_app_configuration_frequent { .init("\(__).frequent") }
 	var `hot`: L_blockchain_app_configuration_hot { .init("\(__).hot") }
@@ -1609,6 +1610,24 @@ public final class L_blockchain_app_configuration_exchange_walletawareness_promp
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.exchange.walletawareness.prompt.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_exchange_walletawareness_prompt_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_external: L, I_blockchain_app_configuration_external {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.external", comment: "") }
+}
+public protocol I_blockchain_app_configuration_external: I {}
+public extension I_blockchain_app_configuration_external {
+	var `trading`: L_blockchain_app_configuration_external_trading { .init("\(__).trading") }
+}
+public final class L_blockchain_app_configuration_external_trading: L, I_blockchain_app_configuration_external_trading {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.external.trading", comment: "") }
+}
+public protocol I_blockchain_app_configuration_external_trading: I {}
+public extension I_blockchain_app_configuration_external_trading {
+	var `areas`: L_blockchain_app_configuration_external_trading_areas { .init("\(__).areas") }
+}
+public final class L_blockchain_app_configuration_external_trading_areas: L, I_blockchain_app_configuration_external_trading_areas {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.external.trading.areas", comment: "") }
+}
+public protocol I_blockchain_app_configuration_external_trading_areas: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_firebase: L, I_blockchain_app_configuration_firebase {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.firebase", comment: "") }
 }

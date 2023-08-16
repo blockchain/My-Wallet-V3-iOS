@@ -500,6 +500,12 @@ extension LocalizationConstants.FeatureAuthentication {
             "I certify I am 18 years of age or older and I agree to Blockchain.com’s",
             comment: "Create Account screen: I agree to Blockchain.com’s Terms of Service & Privacy Policy."
         )
+
+        public static let bakktAgreementPrompt = NSLocalizedString(
+            "By checking this box, I hereby authorize Apex Clearing Corporation to provide all information provided to Apex Clearing Corporation in my new account application to Bakkt Crypto Solutions, LLC for purposes of opening and maintaining an Bakkt Crypto Solutions, LLC account.",
+            comment: "Create Account screen: By checking this box, I hereby authorize Apex Clearing Corporation to provide all information provided to Apex Clearing Corporation in my new account application to Bakkt Crypto Solutions, LLC for purposes of opening and maintaining an Bakkt Crypto Solutions, LLC account."
+        )
+
         public static let recoveryPhrase = NSLocalizedString(
             "Secret Private Key Recovery Phrase",
             comment: "Create Account screen: 'Secret Private Key Recovery Phrase' text, split to add emphasis"
@@ -508,6 +514,12 @@ extension LocalizationConstants.FeatureAuthentication {
             "Terms of Services",
             comment: "Create Account screen: terms of service link"
         )
+
+        public static let bakktUserAgreementLink = NSLocalizedString(
+            "Bakkt's User Agreement",
+            comment: "Create Account screen: bakkt user agreement link"
+        )
+
         public static let and = NSLocalizedString(
             "and",
             comment: "Create Account screen: and (connective)"

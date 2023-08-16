@@ -84,14 +84,14 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
     public var country: SearchableItem<String>
     public var countryState: SearchableItem<String>?
     public var referralCode: String
-
     // User Input
     @BindingState public var emailAddress: String
     @BindingState public var password: String
     @BindingState public var passwordConfirmation: String
     @BindingState public var termsAccepted: Bool = false
+    @BindingState public var bakktTermsAccepted: Bool = false
     @BindingState public var fatalError: UX.Error?
-
+    @BindingState public var shouldDisplayBakktTermsAndConditions: Bool = false
     // Form interaction
     @BindingState public var passwordFieldTextVisible: Bool = false
 
@@ -111,6 +111,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
         || isCreatingWallet
         || fatalError != nil
         || !termsAccepted
+        || !bakktTermsAccepted && shouldDisplayBakktTermsAndConditions
         || emailAddress.isEmpty
         || password.isEmpty
         || passwordConfirmation.isEmpty
@@ -229,6 +230,9 @@ let createAccountStepTwoReducer = Reducer<
         return .none
 
     case .binding(\.$termsAccepted):
+        return EffectTask(value: .didUpdateInputValidation(.unknown))
+
+    case .binding(\.$bakktTermsAccepted):
         return EffectTask(value: .didUpdateInputValidation(.unknown))
 
     case .createAccount(.success(let recaptchaToken)):
@@ -418,7 +422,7 @@ let createAccountStepTwoReducer = Reducer<
 
     case .validatePasswordStrength:
         return EffectTask(
-            value:  CreateAccountStepTwoAction.didUpdatePasswordRules(
+            value: CreateAccountStepTwoAction.didUpdatePasswordRules(
                 environment
                     .passwordValidator
                     .validate(password: state.password)
@@ -445,10 +449,28 @@ let createAccountStepTwoReducer = Reducer<
         return .none
 
     case .onAppear:
-        return .fireAndForget { [country = state.country, countryState = state.countryState] in
-            environment.app?.state.set(blockchain.user.address.country.code, to: country.id)
-            environment.app?.state.set(blockchain.user.address.country.state, to: countryState)
-        }
+        return .merge(
+            environment.app?.publisher(
+                for: blockchain.app.configuration.external.trading.areas,
+                as: [String].self
+            )
+            .compactMap { [countryState = state.countryState] element -> Bool? in
+                guard let listOfStates = element.value, let stateId = countryState?.id else {
+                    return nil
+                }
+                return listOfStates.contains(stateId)
+            }
+            .receive(on: environment.mainQueue)
+            .eraseToEffect()
+            .map {
+                .binding(.set(\.$shouldDisplayBakktTermsAndConditions, $0))
+            } ?? .none,
+
+            .fireAndForget { [country = state.country, countryState = state.countryState] in
+                environment.app?.state.set(blockchain.user.address.country.code, to: country.id)
+                environment.app?.state.set(blockchain.user.address.country.state, to: countryState)
+            }
+        )
     }
 }
 .binding()
@@ -463,13 +485,14 @@ extension CreateAccountStepTwoEnvironment {
             return .invalid(.invalidEmail)
         }
         let didAcceptTerm = state.termsAccepted
+        let didAcceptBakktTerms = state.termsAccepted || state.shouldDisplayBakktTermsAndConditions == false
         let errors = passwordValidator.validate(password: state.password)
 
         guard errors.isEmpty else {
             return .invalid(.weakPassword(errors))
         }
 
-        return didAcceptTerm ? .valid : .invalid(.termsNotAccepted)
+        return didAcceptTerm && didAcceptBakktTerms ? .valid : .invalid(.termsNotAccepted)
     }
 
     func saveReferral(with code: String) -> EffectTask<Void> {

@@ -130,6 +130,9 @@ extension CreateAccountViewStepTwo {
             passwordConfirmationField
             Spacer()
             termsAgreementView
+            if viewStore.shouldDisplayBakktTermsAndConditions {
+                bakktTermsAgreementView
+            }
         }
     }
 
@@ -226,6 +229,19 @@ extension CreateAccountViewStepTwo {
         .fixedSize(horizontal: false, vertical: true)
     }
 
+    private var bakktTermsAgreementView: some View {
+        HStack(spacing: Spacing.baseline) {
+            Toggle(isOn: viewStore.binding(\.$bakktTermsAccepted)) {}
+                .labelsHidden()
+                .accessibility(identifier: AccessibilityIdentifier.bakktTermsOfServiceButton)
+            bakktAgreementText
+                .typography(.micro)
+                .accessibility(identifier: AccessibilityIdentifier.bakktAgreementPromptText)
+        }
+        // fixing the size prevents the view from collapsing when the keyboard is on screen
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
     private var agreementText: some View {
         HStack {
             VStack(alignment: .leading, spacing: .zero) {
@@ -265,6 +281,30 @@ extension CreateAccountViewStepTwo {
             Spacer()
         }
     }
+
+    private var bakktAgreementText: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: .zero) {
+                let promptText = Text(
+                    rich: LocalizedString.bakktAgreementPrompt
+                )
+                promptText
+                    .foregroundColor(.semantic.body)
+                    .accessibility(identifier: AccessibilityIdentifier.agreementPromptText)
+
+                HStack(alignment: .firstTextBaseline, spacing: .zero) {
+                    Text(LocalizedString.bakktUserAgreementLink)
+                        .foregroundColor(.semantic.primary)
+                        .onTapGesture {
+                            guard let url = URL(string: Constants.HostURL.bakktUserAgreement) else { return }
+                            viewStore.send(.openExternalLink(url))
+                        }
+                        .accessibility(identifier: AccessibilityIdentifier.termsOfServiceButton)
+                }
+            }
+            Spacer()
+        }
+    }
 }
 
 extension PasswordValidationRule {
@@ -298,28 +338,28 @@ extension PasswordValidationRule {
         }
     }
 
-    static public let displayString: String = {
+    public static let displayString: String = {
         let rules = PasswordValidationRule.all.map(\.displayString).joined(separator: ", ")
         return LocalizedString.Password.Rules.prefix + rules
     }()
 }
 
 extension Text {
-    public init(_ string: String, configure: ((inout AttributedString) -> Void)) {
+    public init(_ string: String, configure: (inout AttributedString) -> Void) {
         var attributedString = AttributedString(string) /// create an `AttributedString`
         configure(&attributedString) /// configure using the closure
         self.init(attributedString) /// initialize a `Text`
     }
 }
 
-extension Collection where Element == PasswordValidationRule {
+extension Collection<PasswordValidationRule> {
 
     public var hint: String {
         isEmpty ? LocalizedString.Password.Rules.secure : LocalizedString.Password.Rules.insecure
     }
 
     public var inputSubTextStyle: InputSubTextStyle {
-        return isEmpty ? .success : .error
+        isEmpty ? .success : .error
     }
 }
 

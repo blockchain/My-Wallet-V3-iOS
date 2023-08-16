@@ -6,6 +6,7 @@ import ToolKit
 public enum Constants {
 
     private static let blockchainHost: String = InfoDictionaryHelper.value(for: .blockchainUrl)
+
     private static let loginHost: String = InfoDictionaryHelper.value(for: .loginUrl)
 
     // blockchain host with fallback
@@ -37,6 +38,10 @@ public enum Constants {
 
         public static var privacyPolicy: String {
             "https://\(normalizedBlockchainHost)/legal/privacy"
+        }
+
+        public static var bakktUserAgreement: String {
+            "https://bakkt.com/user-agreement"
         }
     }
 
