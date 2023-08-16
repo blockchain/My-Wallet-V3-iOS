@@ -727,6 +727,7 @@ extension Tag {
 }
 
 extension Tag.KeyTo: Tag.Event, CustomStringConvertible {
+
     public var description: String {
         let context = __context.mapKeys(\.[])
         return __id[].lineage
@@ -742,7 +743,7 @@ extension Tag.KeyTo: Tag.Event, CustomStringConvertible {
             }
             .joined(separator: ".")
     }
-    
+
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
         __id[].ref(to: Tag.Context(__context) + context)
     }
