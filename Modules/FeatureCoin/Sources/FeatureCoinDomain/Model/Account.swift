@@ -34,7 +34,7 @@ public struct Account: Identifiable {
     public let actionsPublisher: () -> AnyPublisher<OrderedSet<Account.Action>, Error>
     public let cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>
     public let fiatBalancePublisher: AnyPublisher<MoneyValue?, Never>
-    public let receiveAddressPublisher: AnyPublisher<String, Never>
+    public let receiveAddressPublisher: AnyPublisher<String?, Never>
 
     /// `true` if the accountType is not fully supported
     public var isComingSoon: Bool {
@@ -51,7 +51,7 @@ public struct Account: Identifiable {
         actionsPublisher: @escaping () -> AnyPublisher<OrderedSet<Account.Action>, Error>,
         cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>,
         fiatBalancePublisher: AnyPublisher<MoneyValue?, Never>,
-        receiveAddressPublisher: AnyPublisher<String, Never>
+        receiveAddressPublisher: AnyPublisher<String?, Never>
     ) {
         self.id = id
         self.name = name

@@ -21,7 +21,7 @@ public final class ExternalBrokerageCryptoAccount: CryptoAccount {
     @Dependency(\.app) var app
 
     init(asset: CryptoCurrency) {
-        self.label = asset.defaultWalletName
+        self.label = asset.defaultTradingWalletName
         self.assetName = asset.name
         self.asset = asset
     }
