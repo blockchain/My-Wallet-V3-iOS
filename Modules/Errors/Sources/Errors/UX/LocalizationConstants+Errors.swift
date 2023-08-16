@@ -26,6 +26,11 @@ extension LocalizationConstants {
                 title: NSLocalizedString("Oops! Something Went Wrong.", comment: "Error Screen: Oops! Title"),
                 message: NSLocalizedString("Don’t worry. Your crypto is safe. Please try again or contact our Support Team for help.", comment: "Error Screen: Oops! Message")
             )
+
+            public static let notSupported = (
+                title: NSLocalizedString("Not Supported", comment: "Error Screen: Not Supported Title"),
+                message: NSLocalizedString("There is a problem with this product, it's not supported.", comment: "Error Screen: Not Supported Message")
+            )
         }
     }
 }

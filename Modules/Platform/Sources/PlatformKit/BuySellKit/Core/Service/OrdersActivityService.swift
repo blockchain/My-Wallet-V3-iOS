@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
 import Errors
@@ -30,6 +31,7 @@ final class OrdersActivityService: OrdersActivityServiceAPI {
     >
 
     init(
+        app: AppProtocol,
         client: OrdersActivityClientAPI,
         fiatCurrencyService: FiatCurrencyServiceAPI,
         priceService: PriceServiceAPI,
@@ -47,9 +49,13 @@ final class OrdersActivityService: OrdersActivityServiceAPI {
         .eraseToAnyCache()
         self.cachedValue = CachedValueNew(
             cache: cache,
-            fetch: { key in
-                client
-                    .activityResponse(currency: key)
+            fetch: { [app] key in
+                app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+                    .replaceError(with: false)
+                    .flatMap { isEligible in
+                        client.activityResponse(currency: key, product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
+                            .eraseToAnyPublisher()
+                    }
                     .eraseToAnyPublisher()
             }
         )

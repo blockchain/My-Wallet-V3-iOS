@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
 import Errors
@@ -11,11 +12,13 @@ final class FiatWithdrawRepository: FiatWithdrawRepositoryAPI {
 
     // MARK: - Properties
 
+    private let app: AppProtocol
     private let client: BankTransferClientAPI
 
     // MARK: - Setup
 
-    init(client: BankTransferClientAPI = resolve()) {
+    init(app: AppProtocol = resolve(), client: BankTransferClientAPI = resolve()) {
+        self.app = app
         self.client = client
     }
 
@@ -25,6 +28,11 @@ final class FiatWithdrawRepository: FiatWithdrawRepositoryAPI {
         id: String,
         amount: MoneyValue
     ) -> AnyPublisher<Void, NabuNetworkError> {
-        client.createWithdrawOrder(id: id, amount: amount)
+        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+            .replaceError(with: false)
+            .flatMap { [client] isEligible in
+                client.createWithdrawOrder(id: id, amount: amount, product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
+            }
+            .eraseToAnyPublisher()
     }
 }

@@ -33,7 +33,7 @@ public final class EarnObserver: Client.Observer {
             .flatMap { [app] _ in
                 app.publisher(for: blockchain.ux.earn.supported.products, as: [EarnProduct].self)
             }
-            .replaceError(with: [.staking, .savings])
+            .replaceError(with: [.staking, .savings, .active])
             .sink(to: My.fetched, on: self)
 
         signOut = app.on(blockchain.session.event.did.sign.out)
@@ -45,6 +45,10 @@ public final class EarnObserver: Client.Observer {
     }
 
     func fetched(_ products: [EarnProduct]) {
+        for product in [EarnProduct.savings, EarnProduct.staking, EarnProduct.active] {
+            let service = resolve(tag: product) as EarnAccountService
+            service.isEnabled = products.contains(product)
+        }
         subscription = products.map { product in resolve(tag: product) as EarnAccountService } // TODO: Do not rely on DIKit
             .map { service in
                 [
@@ -99,6 +103,8 @@ public final class EarnAccountService {
     private let app: AppProtocol
     private let repository: EarnRepositoryAPI
 
+    fileprivate var isEnabled = false
+
     public var product: EarnProduct {
         EarnProduct(repository.product)
     }
@@ -121,7 +127,8 @@ public final class EarnAccountService {
     }
 
     public func balances() -> AnyPublisher<EarnAccounts, UX.Error> {
-        repository.balances()
+        guard isEnabled else { return .just([:]) }
+        return repository.balances()
             .handleEvents(
                 receiveOutput: { [app, context] balances in
                     Task {
@@ -170,7 +177,8 @@ public final class EarnAccountService {
     }
 
     public func eligibility() -> AnyPublisher<EarnEligibility, UX.Error> {
-        repository.eligibility()
+        guard isEnabled else { return .just([:]) }
+        return repository.eligibility()
             .handleEvents(
                 receiveOutput: { [app, context] eligibility in
                     Task {
@@ -188,6 +196,7 @@ public final class EarnAccountService {
     }
 
     public func userRates() -> AnyPublisher<EarnUserRates, UX.Error> {
+        guard isEnabled else { return .failure(.notSupported) }
         let usdQuotePublisher: AnyPublisher<MoneyValue?, Nabu.Error> = app
             .publisher(for: blockchain.api.nabu.gateway.price.crypto["USD"].fiat.quote.value, as: MoneyValue.self)
             .map(\.value)
@@ -231,7 +240,8 @@ public final class EarnAccountService {
     }
 
     public func limits() -> AnyPublisher<EarnLimits, UX.Error> {
-        app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+        guard isEnabled else { return .failure(.notSupported) }
+        return app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
             .compactMap(\.value)
             .flatMap { [app, context, repository] currency -> AnyPublisher<EarnLimits, UX.Error> in
                 repository.limits(currency: currency)
@@ -260,7 +270,8 @@ public final class EarnAccountService {
     }
 
     public func address(currency: CryptoCurrency) -> AnyPublisher<EarnAddress, UX.Error> {
-        repository.address(currency: currency)
+        guard isEnabled else { return .failure(.notSupported) }
+        return repository.address(currency: currency)
             .handleEvents(
                 receiveOutput: { [app, context] address in
                     Task {
@@ -273,7 +284,8 @@ public final class EarnAccountService {
     }
 
     public func activity(currency: CryptoCurrency) -> AnyPublisher<[EarnActivity], UX.Error> {
-        repository.activity(currency: currency)
+        guard isEnabled else { return .just([]) }
+        return repository.activity(currency: currency)
             .handleEvents(
                 receiveOutput: { [app, context] activity in
                     Task {
@@ -286,19 +298,23 @@ public final class EarnAccountService {
     }
 
     public func deposit(amount: MoneyValue) -> AnyPublisher<Void, UX.Error> {
-        repository.deposit(amount: amount).mapError(UX.Error.init).eraseToAnyPublisher()
+        guard isEnabled else { return .failure(.notSupported) }
+        return repository.deposit(amount: amount).mapError(UX.Error.init).eraseToAnyPublisher()
     }
 
     public func withdraw(amount: MoneyValue) -> AnyPublisher<Void, UX.Error> {
-        repository.withdraw(amount: amount).mapError(UX.Error.init).eraseToAnyPublisher()
+        guard isEnabled else { return .failure(.notSupported) }
+        return repository.withdraw(amount: amount).mapError(UX.Error.init).eraseToAnyPublisher()
     }
 
     public func pendingWithdrawalRequests(currency: CryptoCurrency) -> AnyPublisher<[EarnWithdrawalPendingRequest], UX.Error> {
-        repository.pendingWithdrawalRequests(currencyCode: currency.code).mapError(UX.Error.init).eraseToAnyPublisher()
+        guard isEnabled else { return .failure(.notSupported) }
+        return repository.pendingWithdrawalRequests(currencyCode: currency.code).mapError(UX.Error.init).eraseToAnyPublisher()
     }
 
     public func bondingTxs(currency: CryptoCurrency) -> AnyPublisher<EarnBondingTxsRequest, UX.Error> {
-        repository.bondingStakingTxs(currencyCode: currency.code).mapError(UX.Error.init).eraseToAnyPublisher()
+        guard isEnabled else { return .failure(.notSupported) }
+        return repository.bondingStakingTxs(currencyCode: currency.code).mapError(UX.Error.init).eraseToAnyPublisher()
     }
 }
 

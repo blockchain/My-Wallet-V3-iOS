@@ -4,14 +4,14 @@ import SwiftUI
 public struct YouDontHaveAnyBalanceView: View {
 
     @BlockchainApp var app
-    @State private var currency: FiatCurrency?
+    @State private var currency: FiatCurrency = .USD
 
     public init() {}
 
     public var body: some View {
         VStack(spacing: 16.pt) {
             VStack(spacing: 24.pt) {
-                (currency ?? FiatCurrency.USD).logo(size: 88.pt)
+                currency.logo(size: 88.pt)
                 VStack(spacing: 8.pt) {
                     Text(L10n.youDontHaveAnyBalance)
                         .typography(.title3)
@@ -23,7 +23,7 @@ public struct YouDontHaveAnyBalanceView: View {
                 .multilineTextAlignment(.center)
             }
             PrimaryButton(
-                title: L10n.deposit,
+                title: L10n.deposit.interpolating(currency.displayCode),
                 action: {
                     $app.post(event: blockchain.ux.user.custodial.dashboard.no.fiat.balance.deposit.paragraph.button.primary.tap)
                 }
@@ -33,7 +33,7 @@ public struct YouDontHaveAnyBalanceView: View {
         .padding(.top, 40.pt)
         .overlay(
             IconButton(
-                icon: .close.small().color(.semantic.muted).circle(backgroundColor: .semantic.light),
+                icon: .navigationCloseButton(),
                 action: { $app.post(event: blockchain.ux.user.custodial.dashboard.no.fiat.balance.article.plain.navigation.bar.button.close.tap) }
             ),
             alignment: .topTrailing

@@ -11,7 +11,8 @@ public protocol WithdrawalClientAPI: AnyObject {
     /// - Returns: A `Single<MoneyValue>` object with the fetched fee value
     func withdrawFee(
         currency: FiatCurrency,
-        paymentMethodType: PaymentMethodPayloadType
+        paymentMethodType: PaymentMethodPayloadType,
+        product: String
     ) -> AnyPublisher<WithdrawFeesResponse, NabuNetworkError>
 
     /// Requests the withdrawal for the requested checkout data
@@ -19,6 +20,7 @@ public protocol WithdrawalClientAPI: AnyObject {
     /// - Parameter data: A `WithdrawalCheckoutData` object reprenting the details of the withdrawal
     /// - Returns: A `Single<WithdrawalCheckoutResponse>` object with the fetched response
     func withdraw(
-        data: WithdrawalCheckoutData
+        data: WithdrawalCheckoutData,
+        product: String
     ) -> AnyPublisher<WithdrawalCheckoutResponse, NabuNetworkError>
 }

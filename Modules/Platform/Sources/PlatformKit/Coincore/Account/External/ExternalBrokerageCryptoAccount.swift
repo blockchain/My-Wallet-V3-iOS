@@ -5,7 +5,7 @@ import Combine
 import DIKit
 import Dependencies
 
-public final class ExternalBrokerageCryptoAccount: CryptoAccount {
+public final class ExternalBrokerageCryptoAccount: CryptoAccount, TradingAccount {
 
     public private(set) lazy var identifier: String = "ExternalBrokerageCryptoAccount." + asset.code
 

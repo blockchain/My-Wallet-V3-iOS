@@ -35,4 +35,5 @@ public enum HttpHeaderValue {
     public static let formEncoded = "application/x-www-form-urlencoded"
     public static let clientTypeApp = "APP"
     public static let simpleBuy = "simplebuy"
+    public static let externalBrokerage = "EXTERNAL_BROKERAGE"
 }

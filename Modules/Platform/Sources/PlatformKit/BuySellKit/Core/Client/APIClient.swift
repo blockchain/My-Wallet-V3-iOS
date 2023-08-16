@@ -183,7 +183,8 @@ final class APIClient: SimpleBuyClientAPI {
     // MARK: - OrdersActivityClientAPI
 
     func activityResponse(
-        currency: Currency
+        currency: Currency,
+        product: String
     ) -> AnyPublisher<OrdersActivityResponse, NabuNetworkError> {
         let path = Path.transactions
         let parameters = [
@@ -193,7 +194,7 @@ final class APIClient: SimpleBuyClientAPI {
             ),
             URLQueryItem(
                 name: Parameter.product,
-                value: Constants.simpleBuyProduct
+                value: product
             )
         ]
         let request = requestBuilder.get(
@@ -206,7 +207,7 @@ final class APIClient: SimpleBuyClientAPI {
 
     // MARK: - OrderDetailsClientAPI
 
-    func fetchAccumulatedTradeAmounts() -> AnyPublisher<[AccumulatedTradeDetails], NabuNetworkError> {
+    func fetchAccumulatedTradeAmounts(products: String) -> AnyPublisher<[AccumulatedTradeDetails], NabuNetworkError> {
 
         struct Response: Decodable {
 
@@ -244,7 +245,7 @@ final class APIClient: SimpleBuyClientAPI {
         let parameters = [
             URLQueryItem(
                 name: "products",
-                value: "SIMPLEBUY"
+                value: products
             )
         ]
         let request = requestBuilder.get(
@@ -465,7 +466,8 @@ final class APIClient: SimpleBuyClientAPI {
 
     func withdrawFee(
         currency: FiatCurrency,
-        paymentMethodType: PaymentMethodPayloadType
+        paymentMethodType: PaymentMethodPayloadType,
+        product: String
     ) -> AnyPublisher<WithdrawFeesResponse, NabuNetworkError> {
         let queryParameters = [
             URLQueryItem(
@@ -474,7 +476,7 @@ final class APIClient: SimpleBuyClientAPI {
             ),
             URLQueryItem(
                 name: Parameter.product,
-                value: Constants.simpleBuyProduct
+                value: product
             ),
             URLQueryItem(
                 name: Parameter.paymentMethod,
@@ -490,10 +492,11 @@ final class APIClient: SimpleBuyClientAPI {
     }
 
     func withdraw(
-        data: WithdrawalCheckoutData
+        data: WithdrawalCheckoutData,
+        product: String
     ) -> AnyPublisher<WithdrawalCheckoutResponse, NabuNetworkError> {
         let payload = WithdrawalPayload(data: data)
-        let headers = [HttpHeaderField.blockchainOrigin: HttpHeaderValue.simpleBuy]
+        let headers = [HttpHeaderField.blockchainOrigin: product]
         let request = requestBuilder.post(
             path: Path.withdrawal,
             body: try? payload.encode(),

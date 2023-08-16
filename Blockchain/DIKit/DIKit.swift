@@ -369,7 +369,7 @@ extension DependencyContainer {
                 networkAdapter: adapter,
                 requestBuilder: builder
             )
-            return PlaidRepository(client: client)
+            return PlaidRepository(app: DIKit.resolve(), client: client)
         }
 
         factory { () -> VGSClientAPI in

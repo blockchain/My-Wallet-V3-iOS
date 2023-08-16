@@ -112,6 +112,7 @@ final class NabuUserSessionObserver: Client.Observer {
             state.set(blockchain.user.address.country.code, to: user.address?.countryCode)
             state.set(blockchain.user.account.tier, to: (user.tiers?.current).tag)
             state.set(blockchain.user.is.verified, to: user.isVerified)
+            state.set(blockchain.user.is.external.brokerage, to: user.isExternalBrokerage)
         }
         task = Task {
             try await app.transaction { app in
@@ -129,6 +130,7 @@ final class NabuUserSessionObserver: Client.Observer {
                 try await app.set(blockchain.user.address.country.state, to: user.address?.state)
                 try await app.set(blockchain.user.account.tier, to: (user.tiers?.current).tag)
                 try await app.set(blockchain.user.account.state, to: blockchain.user.account.state[][user.state.string.lowercased()])
+                try await app.set(blockchain.user.is.external.brokerage, to: user.isExternalBrokerage)
             }
             app.post(event: blockchain.user.event.did.update)
         }

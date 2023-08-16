@@ -20,7 +20,7 @@ struct AccumulatedTradeDetails: Equatable, Decodable {
 
 protocol OrderDetailsClientAPI: AnyObject {
 
-    func fetchAccumulatedTradeAmounts() -> AnyPublisher<[AccumulatedTradeDetails], NabuNetworkError>
+    func fetchAccumulatedTradeAmounts(products: String) -> AnyPublisher<[AccumulatedTradeDetails], NabuNetworkError>
 
     /// Fetch all Buy/Sell orders
     func orderDetails(
