@@ -91,6 +91,7 @@ public struct CoinAdapterView: View {
                         .replaceError(with: false)
                         .flatMap { [recurringBuyProviderRepository] isRecurringBuyEnabled -> AnyPublisher<[FeatureCoinDomain.RecurringBuy], Error> in
                             guard isRecurringBuyEnabled else { return .just([]) }
+
                             return recurringBuyProviderRepository
                                 .fetchRecurringBuysForCryptoCurrency(cryptoCurrency)
                                 .map { $0.map(RecurringBuy.init) }
@@ -554,7 +555,9 @@ extension FeatureCoinDomain.Account {
                 .eraseToAnyPublisher(),
             receiveAddressPublisher: account.receiveAddress
                 .map(\.address)
-                .ignoreFailure()
+                .optional()
+                .replaceError(with: nil)
+                .eraseToAnyPublisher()
         )
     }
 }

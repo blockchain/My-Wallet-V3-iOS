@@ -29,7 +29,7 @@ public struct CoinViewState: Equatable {
     var shouldShowRecurringBuy: Bool {
         guard currency.supports(product: .custodialWalletBalance) else { return false }
         guard let appMode else { return false }
-        return appMode.isRecurringBuyViewSupported && isRecurringBuyEnabled
+        return appMode.isRecurringBuyViewSupported && isRecurringBuyEnabled && isExternalBrokerageEnabled == false
     }
 
     @BindingState public var isDexEnabled: Bool
