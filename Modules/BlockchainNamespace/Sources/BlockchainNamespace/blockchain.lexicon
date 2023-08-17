@@ -3022,6 +3022,11 @@ blockchain:
 								url:
 								+ blockchain.db.type.url
 								+ blockchain.session.configuration.value
+					view:
+						disclosures:
+						+ blockchain.ux.type.action
+							url:
+							+ blockchain.db.type.url
 				confirmed:
 				+ blockchain.ux.type.analytics.event
 				exchange:

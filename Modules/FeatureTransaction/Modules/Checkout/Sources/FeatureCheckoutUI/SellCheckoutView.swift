@@ -75,6 +75,7 @@ public struct SellCheckoutLoadedView: View {
 
     @State private var quote: MoneyValue?
     @State private var remainingTime: TimeInterval = .hour
+    @State private var isExternalTradingEnabled: Bool = false
 
     public init(checkout: SellCheckout, confirm: (() -> Void)? = nil) {
         self.checkout = checkout
@@ -90,14 +91,20 @@ extension SellCheckoutView.Loaded {
                 sell()
                 rows()
                 quoteExpiry()
-//                disclaimer()
-                bakktBottomView()
+                if isExternalTradingEnabled {
+                    disclaimer()
+                } else {
+                    bakktBottomView()
+                }
             }
             .padding(.horizontal)
             Spacer()
             footer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .bindings {
+            subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
+        }
         .batch {
             set(blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.tooltip)
         }
@@ -249,8 +256,8 @@ extension SellCheckoutView.Loaded {
         VStack{
             VStack(alignment: .leading) {
                 bakktDisclaimer()
-                SmallMinimalButton(title: "View disclosures") {
-
+                SmallMinimalButton(title: L10n.Button.viewDisclosures) {
+                    $app.post(event: blockchain.ux.transaction.checkout.bakkt.view.disclosures)
                 }
             }
 
@@ -277,6 +284,8 @@ extension SellCheckoutView.Loaded {
                 $app.post(event: blockchain.ux.transaction.checkout.bakkt.refund.policy.disclaimer)
             }
             .batch {
+                set(blockchain.ux.transaction.checkout.bakkt.view.disclosures.then.launch.url, to: { blockchain.ux.transaction.checkout.bakkt.view.disclosures.url })
+
                 set(blockchain.ux.transaction.checkout.bakkt.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.bakkt.refund.policy.disclaimer.url })
             }
     }

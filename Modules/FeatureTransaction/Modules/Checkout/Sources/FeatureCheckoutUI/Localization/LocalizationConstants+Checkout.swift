@@ -106,9 +106,16 @@ extension LocalizationConstants {
                 comment: "Refund disclaimer"
             )
 
+            static func buyDisclaimerBakkt(amount: String, asset: String) -> String {
+                NSLocalizedString(
+                    "You authorize Apex Clearing to move sufficient funds from your brokerage account held at Apex Clearing to Bakkt Crypto Solutions, LLC (\\\"Bakkt\\\") to pay for you purchase of %@. The actual value purchased may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt. Cryptocurrency transactions are not FDIC or SIPC insured.",
+                    comment: "Bakkt disclaimer"
+                ).interpolating(amount, asset)
+            }
+
             static func sellDisclaimerBakkt(amount: String, asset: String) -> String {
                 NSLocalizedString(
-                    "You [authorize]() Apex Clearing to accept the transfer of funds from Bakkt Crypto Solutions, LLC \("(Bakkt)") to your account held at Apex Clearing to complete your sell of %@, The actual value of coins sold may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt. Cryptocurrency transactions are not FDIC or SIPC insured.",
+                    "You [authorize]() Apex Clearing to accept the transfer of funds from Bakkt Crypto Solutions, LLC  LLC (\\\"Bakkt\\\") to your account held at Apex Clearing to complete your sell of %@, The actual value of coins sold may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt. Cryptocurrency transactions are not FDIC or SIPC insured.",
                     comment: "Bakkt disclaimer"
                 ).interpolating(amount, asset)
             }
@@ -203,6 +210,11 @@ extension LocalizationConstants {
             static let learnMore = NSLocalizedString("Learn More", comment: "Learn More")
 
             static let gotIt = NSLocalizedString("Got it", comment: "Got it")
+            
+            static let viewDisclosures = NSLocalizedString(
+                "View disclosures",
+                comment: "View disclosures"
+            )
         }
 
         enum Tooltip {

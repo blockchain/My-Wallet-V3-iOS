@@ -91,6 +91,8 @@ extension LocalizationConstants.Activity.Details {
     public static let myWallet = NSLocalizedString("My %@ Wallet", comment: "My [Currency Code] Wallet")
     public static let wallet = NSLocalizedString("Wallet", comment: "Wallet")
 
+    public static let bakktDisclaimer = NSLocalizedString("You are trading cryptocurrencies through your Bakkt account. Cryptocurrencies are not transacted through a registered broker-dealer or FINRA member, and your cryptocurrency holdings are not FDIC or SIPC insured.", comment: "Bakkt disclaimer")
+
     public enum Title {
         public static let buy = NSLocalizedString("Buy", comment: "Buy")
         public static let buying = NSLocalizedString("Buying", comment: "Buying")
@@ -131,6 +133,10 @@ extension LocalizationConstants.Activity.Details {
         public static let viewOnStellarChainIO = NSLocalizedString(
             "View on StellarChain.io",
             comment: "Button title, button takes user to StellarChain webpage"
+        )
+        public static let viewDisclosures = NSLocalizedString(
+            "View disclosures",
+            comment: "Bakkt: View disclosures"
         )
     }
 }
