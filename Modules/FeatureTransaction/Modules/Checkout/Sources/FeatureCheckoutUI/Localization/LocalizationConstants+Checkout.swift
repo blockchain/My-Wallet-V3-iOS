@@ -105,6 +105,14 @@ extension LocalizationConstants {
                 "Final amount may change due to market activity. By approving this Sell you agree to Blockchain.com’s [Refund Policy]().",
                 comment: "Refund disclaimer"
             )
+
+            static func sellDisclaimerBakkt(amount: String, asset: String) -> String {
+                NSLocalizedString(
+                    "You [authorize]() Apex Clearing to accept the transfer of funds from Bakkt Crypto Solutions, LLC \("(Bakkt)") to your account held at Apex Clearing to complete your sell of %@, The actual value of coins sold may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt. Cryptocurrency transactions are not FDIC or SIPC insured.",
+                    comment: "Bakkt disclaimer"
+                ).interpolating(amount, asset)
+            }
+
             static let indicativeDisclaimer = NSLocalizedString(
                 "Final amount may change due to market activity.",
                 comment: "Final amount may change due to market activity."

@@ -3014,6 +3014,14 @@ blockchain:
 							instructions:
 			checkout:
 			+ blockchain.ux.type.story
+				bakkt:
+					refund:
+						policy:
+							disclaimer:
+							+ blockchain.ux.type.action
+								url:
+								+ blockchain.db.type.url
+								+ blockchain.session.configuration.value
 				confirmed:
 				+ blockchain.ux.type.analytics.event
 				exchange:

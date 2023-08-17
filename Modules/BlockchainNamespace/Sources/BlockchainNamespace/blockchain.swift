@@ -11320,6 +11320,7 @@ public final class L_blockchain_ux_transaction_checkout: L, I_blockchain_ux_tran
 }
 public protocol I_blockchain_ux_transaction_checkout: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_transaction_checkout {
+	var `bakkt`: L_blockchain_ux_transaction_checkout_bakkt { .init("\(__).bakkt") }
 	var `confirmed`: L_blockchain_ux_transaction_checkout_confirmed { .init("\(__).confirmed") }
 	var `exchange`: L_blockchain_ux_transaction_checkout_exchange { .init("\(__).exchange") }
 	var `fee`: L_blockchain_ux_transaction_checkout_fee { .init("\(__).fee") }
@@ -11330,6 +11331,38 @@ public extension I_blockchain_ux_transaction_checkout {
 	var `refund`: L_blockchain_ux_transaction_checkout_refund { .init("\(__).refund") }
 	var `terms`: L_blockchain_ux_transaction_checkout_terms { .init("\(__).terms") }
 }
+public final class L_blockchain_ux_transaction_checkout_bakkt: L, I_blockchain_ux_transaction_checkout_bakkt {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.bakkt", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_bakkt: I {}
+public extension I_blockchain_ux_transaction_checkout_bakkt {
+	var `refund`: L_blockchain_ux_transaction_checkout_bakkt_refund { .init("\(__).refund") }
+}
+public final class L_blockchain_ux_transaction_checkout_bakkt_refund: L, I_blockchain_ux_transaction_checkout_bakkt_refund {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.bakkt.refund", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_bakkt_refund: I {}
+public extension I_blockchain_ux_transaction_checkout_bakkt_refund {
+	var `policy`: L_blockchain_ux_transaction_checkout_bakkt_refund_policy { .init("\(__).policy") }
+}
+public final class L_blockchain_ux_transaction_checkout_bakkt_refund_policy: L, I_blockchain_ux_transaction_checkout_bakkt_refund_policy {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.bakkt.refund.policy", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_bakkt_refund_policy: I {}
+public extension I_blockchain_ux_transaction_checkout_bakkt_refund_policy {
+	var `disclaimer`: L_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer { .init("\(__).disclaimer") }
+}
+public final class L_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer: L, I_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.bakkt.refund.policy.disclaimer", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer: I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer {
+	var `url`: L_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer_url { .init("\(__).url") }
+}
+public final class L_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer_url: L, I_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer_url {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.bakkt.refund.policy.disclaimer.url", comment: "") }
+}
+public protocol I_blockchain_ux_transaction_checkout_bakkt_refund_policy_disclaimer_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_transaction_checkout_confirmed: L, I_blockchain_ux_transaction_checkout_confirmed {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.transaction.checkout.confirmed", comment: "") }
 }
