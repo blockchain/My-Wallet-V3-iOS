@@ -14,19 +14,7 @@ struct FiatCustodialAccountFactory: FiatCustodialAccountFactoryAPI {
     @Dependency(\.app) var app
 
     func fiatCustodialAccount(fiatCurrency: FiatCurrency) -> FiatAccount {
-        LazyFiatAccount(
-            account: app.publisher(for: blockchain.app.is.external.brokerage)
-            .replaceError(with: false)
-            .map { useExternalTradingAccount -> FiatAccountWithCapabilities in
-                if useExternalTradingAccount {
-                    return ExternalBrokerageFiatAccount(currency: fiatCurrency)
-                } else {
-                    return FiatCustodialAccount(fiatCurrency: fiatCurrency)
-                }
-            }
-            .eraseToAnyPublisher(),
-            currency: fiatCurrency
-        )
+        FiatCustodialAccount(fiatCurrency: fiatCurrency)
     }
 }
 
