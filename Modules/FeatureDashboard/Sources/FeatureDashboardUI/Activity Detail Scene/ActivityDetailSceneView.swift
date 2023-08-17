@@ -141,18 +141,19 @@ public struct ActivityDetailSceneView: View {
             VStack(alignment: .leading) {
                 bakktDisclaimer()
                 SmallMinimalButton(title: LocalizationConstants.Activity.Details.Button.viewDisclosures) {
-                    $app.post(event: blockchain.ux.transaction.checkout.bakkt.view.disclosures)
+                    $app.post(event: blockchain.ux.bakkt.view.disclosures)
+                }
+                .batch {
+                    set(blockchain.ux.bakkt.view.disclosures.then.launch.url, to: "https://bakkt.com/disclosures")
                 }
             }
+            
 
             Image("bakkt-logo", bundle: .componentLibrary)
                 .foregroundColor(.semantic.title)
                 .padding(.top, Spacing.padding2)
         }
         .padding(.horizontal, Spacing.padding2)
-        .batch {
-            set(blockchain.ux.transaction.checkout.bakkt.view.disclosures.then.launch.url, to: { blockchain.ux.transaction.checkout.bakkt.view.disclosures.url })
-        }
     }
 
     @ViewBuilder

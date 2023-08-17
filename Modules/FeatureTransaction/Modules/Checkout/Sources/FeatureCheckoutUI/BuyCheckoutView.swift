@@ -99,11 +99,11 @@ extension BuyCheckoutView.Loaded {
                     header()
                     rows()
                     quoteExpiry()
-//                    if isExternalTradingEnabled {
+                    if isExternalTradingEnabled {
                         bakktBottomView()
-//                    } else {
-//                        disclaimer()
-//                    }
+                    } else {
+                        disclaimer()
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -371,7 +371,10 @@ extension BuyCheckoutView.Loaded {
             VStack(alignment: .leading) {
                 bakktDisclaimer()
                 SmallMinimalButton(title: L10n.Button.viewDisclosures) {
-                    $app.post(event: blockchain.ux.transaction.checkout.bakkt.view.disclosures)
+                    $app.post(event: blockchain.ux.bakkt.view.disclosures)
+                }
+                .batch {
+                    set(blockchain.ux.bakkt.view.disclosures.then.launch.url, to: "https://bakkt.com/disclosures")
                 }
             }
 
@@ -395,12 +398,10 @@ extension BuyCheckoutView.Loaded {
             .padding(.horizontal, Spacing.padding1)
             .padding(.top, Spacing.padding3)
             .onTapGesture {
-                $app.post(event: blockchain.ux.transaction.checkout.bakkt.refund.policy.disclaimer)
+                $app.post(event: blockchain.ux.bakkt.refund.policy.disclaimer)
             }
             .batch {
-                set(blockchain.ux.transaction.checkout.bakkt.view.disclosures.then.launch.url, to: { blockchain.ux.transaction.checkout.bakkt.view.disclosures.url })
-
-                set(blockchain.ux.transaction.checkout.bakkt.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.bakkt.refund.policy.disclaimer.url })
+                set(blockchain.ux.bakkt.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.bakkt.refund.policy.disclaimer.url })
             }
     }
 

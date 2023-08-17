@@ -108,7 +108,7 @@ extension LocalizationConstants {
 
             static func buyDisclaimerBakkt(amount: String, asset: String) -> String {
                 NSLocalizedString(
-                    "You authorize Apex Clearing to move sufficient funds from your brokerage account held at Apex Clearing to Bakkt Crypto Solutions, LLC (\\\"Bakkt\\\") to pay for you purchase of %@. The actual value purchased may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt. Cryptocurrency transactions are not FDIC or SIPC insured.",
+                    "You [authorize]() Apex Clearing to move sufficient funds from your brokerage account held at Apex Clearing to Bakkt Crypto Solutions, LLC (\\\"Bakkt\\\") to pay for you purchase of %@. The actual value purchased may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt. Cryptocurrency transactions are not FDIC or SIPC insured.",
                     comment: "Bakkt disclaimer"
                 ).interpolating(amount, asset)
             }
