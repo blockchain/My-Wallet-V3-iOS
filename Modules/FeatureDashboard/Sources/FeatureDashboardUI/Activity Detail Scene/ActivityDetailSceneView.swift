@@ -57,7 +57,6 @@ public struct ActivityDetailSceneView: View {
 
                     if viewStore.isExternalTradingEnabled {
                         bakktBottomView()
-                            .padding(.horizontal, Spacing.padding2)
                     }
 
                     if let floatingActions = viewStore.items?.floatingActions {
@@ -73,9 +72,6 @@ public struct ActivityDetailSceneView: View {
                 .scrollOffset($scrollOffset)
                 .padding(.top, Spacing.padding3)
                 .frame(maxHeight: .infinity)
-                .batch {
-                    set(blockchain.ux.transaction.checkout.bakkt.view.disclosures.then.launch.url, to: { blockchain.ux.transaction.checkout.bakkt.view.disclosures.url })
-                }
                 .onAppear {
                     viewStore.send(.onAppear)
                 }
@@ -153,6 +149,10 @@ public struct ActivityDetailSceneView: View {
                 .foregroundColor(.semantic.title)
                 .padding(.top, Spacing.padding2)
         }
+        .padding(.horizontal, Spacing.padding2)
+        .batch {
+            set(blockchain.ux.transaction.checkout.bakkt.view.disclosures.then.launch.url, to: { blockchain.ux.transaction.checkout.bakkt.view.disclosures.url })
+        }
     }
 
     @ViewBuilder
@@ -162,9 +162,6 @@ public struct ActivityDetailSceneView: View {
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.leading)
-            .padding(.horizontal, Spacing.padding1)
-            .padding(.top, Spacing.padding3)
-        
     }
 
 
