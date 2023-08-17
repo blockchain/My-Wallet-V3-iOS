@@ -134,7 +134,7 @@ struct DashboardContent: ReducerProtocol {
                 return .run { [state] send in
                     switch state.appMode {
                     case .trading:
-                        for await externalTradingEnabled in app.stream(blockchain.api.nabu.gateway.products[ProductIdentifier.useExternalTradingAccount].is.eligible, as: Bool.self) {
+                        for await externalTradingEnabled in app.stream(blockchain.app.is.external.brokerage, as: Bool.self) {
 
                             if externalTradingEnabled.value == true {
                                 for await event in app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self) {

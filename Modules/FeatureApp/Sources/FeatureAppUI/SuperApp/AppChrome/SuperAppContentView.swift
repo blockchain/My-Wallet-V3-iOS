@@ -60,7 +60,7 @@ struct SuperAppContentView: View {
             .bindings {
                 subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
                 subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible)
-                subscribe($isExternalTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useExternalTradingAccount].is.eligible)
+                subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
 
             }
             .onChange(of: isTradingEnabled) { newValue in

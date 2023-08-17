@@ -114,7 +114,7 @@ final class OrdersService: OrdersServiceAPI {
             cache: cacheAccumulatedTrades,
             fetch: { _ in
                 app.publisher(
-                    for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible,
+                    for: blockchain.app.is.external.brokerage,
                     as: Bool.self
                 )
                 .replaceError(with: false)

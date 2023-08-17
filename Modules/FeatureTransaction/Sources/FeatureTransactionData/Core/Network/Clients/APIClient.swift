@@ -437,7 +437,7 @@ extension APIClient {
         currency: CurrencyType,
         product: TransactionLimitsProduct
     ) -> AnyPublisher<TradeLimitsResponse, NabuNetworkError> {
-        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .flatMap { [retailNetworkAdapter, retailRequestBuilder] isEligible -> AnyPublisher<TradeLimitsResponse, NabuNetworkError> in
                 var parameters: [URLQueryItem] = [
                     URLQueryItem(

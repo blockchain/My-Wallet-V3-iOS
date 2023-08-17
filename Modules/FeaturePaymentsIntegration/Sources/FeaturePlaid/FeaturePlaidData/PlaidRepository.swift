@@ -117,7 +117,7 @@ public struct PlaidRepository: PlaidRepositoryAPI {
         accountId: String,
         amount: MoneyValue
     ) -> AnyPublisher<SettlementInfo, NabuError> {
-        app.publisher(for: blockchain.api.nabu.gateway.user.products.product["USE_EXTERNAL_TRADING_ACCOUNT"].is.eligible, as: Bool.self)
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
             .flatMap { isEligible in
                 client

@@ -68,7 +68,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
 
     /// For each option in the `filter: AssetFilter` option set, we will gather the correct accounts and add to the result AllAccountsGroup.
     public func accountGroup(filter: AssetFilter) -> AnyPublisher<AccountGroup?, Never> {
-        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
             .flatMap { [self, asset] useExternalTradingAccount -> AnyPublisher<AccountGroup?, Never> in
 

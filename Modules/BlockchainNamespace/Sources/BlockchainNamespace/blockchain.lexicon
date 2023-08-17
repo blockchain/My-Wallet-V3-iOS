@@ -793,6 +793,10 @@ blockchain:
 					+ blockchain.db.type.string
 					+ blockchain.session.state.value
 		is:
+			external:
+				brokerage:
+				+ blockchain.db.type.boolean
+				+ blockchain.session.configuration.value
 			first:
 				install:
 				+ blockchain.db.type.boolean

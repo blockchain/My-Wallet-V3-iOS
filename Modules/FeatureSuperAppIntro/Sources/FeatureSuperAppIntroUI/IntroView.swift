@@ -8,7 +8,6 @@ import Localization
 import SwiftUI
 
 private typealias L10n = LocalizationConstants.SuperAppIntro.V2
-private let useExternalTradingAccount = "USE_EXTERNAL_TRADING_ACCOUNT"
 
 public struct IntroView: View {
     @State private var isExternalTradingEnabled = false
@@ -102,7 +101,7 @@ public struct IntroView: View {
             )
         }
         .bindings {
-            subscribe($isExternalTradingEnabled, to: blockchain.api.nabu.gateway.products[useExternalTradingAccount].is.eligible)
+            subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
         }
     }
 

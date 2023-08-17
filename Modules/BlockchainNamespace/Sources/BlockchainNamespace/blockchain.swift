@@ -3172,11 +3172,23 @@ public final class L_blockchain_app_is: L, I_blockchain_app_is {
 }
 public protocol I_blockchain_app_is: I {}
 public extension I_blockchain_app_is {
+	var `external`: L_blockchain_app_is_external { .init("\(__).external") }
 	var `first`: L_blockchain_app_is_first { .init("\(__).first") }
 	var `in`: L_blockchain_app_is_in { .init("\(__).in") }
 	var `mode`: L_blockchain_app_is_mode { .init("\(__).mode") }
 	var `ready`: L_blockchain_app_is_ready { .init("\(__).ready") }
 }
+public final class L_blockchain_app_is_external: L, I_blockchain_app_is_external {
+	public override class var localized: String { NSLocalizedString("blockchain.app.is.external", comment: "") }
+}
+public protocol I_blockchain_app_is_external: I {}
+public extension I_blockchain_app_is_external {
+	var `brokerage`: L_blockchain_app_is_external_brokerage { .init("\(__).brokerage") }
+}
+public final class L_blockchain_app_is_external_brokerage: L, I_blockchain_app_is_external_brokerage {
+	public override class var localized: String { NSLocalizedString("blockchain.app.is.external.brokerage", comment: "") }
+}
+public protocol I_blockchain_app_is_external_brokerage: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_is_first: L, I_blockchain_app_is_first {
 	public override class var localized: String { NSLocalizedString("blockchain.app.is.first", comment: "") }
 }

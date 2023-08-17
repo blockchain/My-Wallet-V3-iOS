@@ -15,8 +15,6 @@ public protocol TradingBalanceServiceAPI: AnyObject {
     func fetchBalances() -> AnyPublisher<CustodialAccountBalanceStates, Never>
 }
 
-public let useExternalTradingAccount = "USE_EXTERNAL_TRADING_ACCOUNT"
-
 class TradingBalanceService: TradingBalanceServiceAPI {
 
     enum Key {
@@ -26,7 +24,7 @@ class TradingBalanceService: TradingBalanceServiceAPI {
     // MARK: - Properties
 
     var balances: AnyPublisher<CustodialAccountBalanceStates, Never> {
-        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
             .flatMap { [streamBalances] useExternalTradingAccount -> AnyPublisher<CustodialAccountBalanceStates, Never> in
                 if useExternalTradingAccount {

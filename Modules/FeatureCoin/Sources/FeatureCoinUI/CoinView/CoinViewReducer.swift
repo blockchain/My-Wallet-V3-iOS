@@ -59,7 +59,7 @@ public let coinViewReducer = Reducer<
                 },
 
                 environment.app.publisher(
-                    for: blockchain.api.nabu.gateway.products["USE_EXTERNAL_TRADING_ACCOUNT"].is.eligible,
+                    for: blockchain.app.is.external.brokerage,
                     as: Bool.self
                 )
                 .compactMap(\.value)

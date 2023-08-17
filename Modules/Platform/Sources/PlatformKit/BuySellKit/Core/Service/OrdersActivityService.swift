@@ -50,7 +50,7 @@ final class OrdersActivityService: OrdersActivityServiceAPI {
         self.cachedValue = CachedValueNew(
             cache: cache,
             fetch: { [app] key in
-                app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+                app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
                     .replaceError(with: false)
                     .flatMap { isEligible in
                         client.activityResponse(currency: key, product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")

@@ -26,7 +26,7 @@ final class WithdrawalService: WithdrawalServiceAPI {
         for currency: FiatCurrency,
         paymentMethodType: PaymentMethodPayloadType
     ) -> Single<WithdrawalFeeAndLimit> {
-        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
             .asSingle()
             .flatMap { [client, transactionLimitsService] isEligible -> Single<WithdrawalFeeAndLimit> in
@@ -84,7 +84,7 @@ final class WithdrawalService: WithdrawalServiceAPI {
     }
 
     func withdrawal(for checkout: WithdrawalCheckoutData) -> Single<Result<FiatValue, Error>> {
-        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
             .asSingle()
             .flatMap { [client] isEligible -> Single<Result<FiatValue, Error>> in

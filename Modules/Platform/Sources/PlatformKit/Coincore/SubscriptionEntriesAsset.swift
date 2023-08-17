@@ -15,7 +15,7 @@ struct FiatCustodialAccountFactory: FiatCustodialAccountFactoryAPI {
 
     func fiatCustodialAccount(fiatCurrency: FiatCurrency) -> FiatAccount {
         LazyFiatAccount(
-            account: app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible)
+            account: app.publisher(for: blockchain.app.is.external.brokerage)
             .replaceError(with: false)
             .map { useExternalTradingAccount -> FiatAccountWithCapabilities in
                 if useExternalTradingAccount {

@@ -28,7 +28,7 @@ final class BankTransferRepository: BankTransferRepositoryAPI {
         id: String,
         amount: MoneyValue
     ) -> AnyPublisher<BankTranferPayment, NabuNetworkError> {
-        app.publisher(for: blockchain.api.nabu.gateway.user.products.product[useExternalTradingAccount].is.eligible, as: Bool.self)
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
             .flatMap { [client] isEligible in
                 client.startBankTransfer(id: id, amount: amount, product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")

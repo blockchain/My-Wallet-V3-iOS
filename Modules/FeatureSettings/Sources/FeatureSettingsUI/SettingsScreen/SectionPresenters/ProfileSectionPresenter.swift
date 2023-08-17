@@ -48,7 +48,7 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
             title: LocalizationConstants.Settings.Badge.mobileNumber
         )
 
-        let externalBrokerageActivePublisher = app.publisher(for: blockchain.api.nabu.gateway.products[ProductIdentifier.useExternalTradingAccount].is.eligible, as: Bool.self)
+        let externalBrokerageActivePublisher = app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
             .eraseToAnyPublisher()
 
