@@ -3172,12 +3172,24 @@ public final class L_blockchain_app_is: L, I_blockchain_app_is {
 }
 public protocol I_blockchain_app_is: I {}
 public extension I_blockchain_app_is {
+	var `DeFi`: L_blockchain_app_is_DeFi { .init("\(__).DeFi") }
 	var `external`: L_blockchain_app_is_external { .init("\(__).external") }
 	var `first`: L_blockchain_app_is_first { .init("\(__).first") }
 	var `in`: L_blockchain_app_is_in { .init("\(__).in") }
 	var `mode`: L_blockchain_app_is_mode { .init("\(__).mode") }
 	var `ready`: L_blockchain_app_is_ready { .init("\(__).ready") }
 }
+public final class L_blockchain_app_is_DeFi: L, I_blockchain_app_is_DeFi {
+	public override class var localized: String { NSLocalizedString("blockchain.app.is.DeFi", comment: "") }
+}
+public protocol I_blockchain_app_is_DeFi: I {}
+public extension I_blockchain_app_is_DeFi {
+	var `only`: L_blockchain_app_is_DeFi_only { .init("\(__).only") }
+}
+public final class L_blockchain_app_is_DeFi_only: L, I_blockchain_app_is_DeFi_only {
+	public override class var localized: String { NSLocalizedString("blockchain.app.is.DeFi.only", comment: "") }
+}
+public protocol I_blockchain_app_is_DeFi_only: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_is_external: L, I_blockchain_app_is_external {
 	public override class var localized: String { NSLocalizedString("blockchain.app.is.external", comment: "") }
 }

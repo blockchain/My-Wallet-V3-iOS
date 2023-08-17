@@ -23,7 +23,9 @@ struct DeFiDashboardView: View {
     @State var scrollOffset: CGPoint = .zero
     @State var isBlocked: Bool = false
     @State var showsWalletConnect: Bool = false
-    @State var isTradingEnabled = true
+    @State var isDeFiOnly = true
+
+    var isTradingEnabled: Bool { !isDeFiOnly }
 
     struct ViewState: Equatable {
         let balance: BalanceInfo?
@@ -128,7 +130,7 @@ struct DeFiDashboardView: View {
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
             subscribe($showsWalletConnect, to: blockchain.app.configuration.wallet.connect.is.enabled)
-            subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
+            subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
         }
     }
 
@@ -164,7 +166,9 @@ struct DeFiDashboardView: View {
 struct DeFiDashboardToGetStartedView: View {
     private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw
     @BlockchainApp var app
-    @State var isTradingEnabled = true
+    @State var isDeFiOnly = true
+
+    var isTradingEnabled: Bool { !isDeFiOnly }
 
     var body: some View {
         VStack {
@@ -196,7 +200,7 @@ struct DeFiDashboardToGetStartedView: View {
                     )
                 }
                 .bindings {
-                    subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
+                    subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
                 }
                 .padding([.vertical], Spacing.padding3)
                 .padding([.horizontal], Spacing.padding2)

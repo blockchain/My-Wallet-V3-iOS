@@ -16,8 +16,9 @@ struct SuperAppContentView: View {
     /// The content offset for the modal sheet
     @Binding var contentOffset: ModalSheetContext
 
-    @State private var isTradingEnabled = true
+    @State private var isDeFiOnly = true
     @State private var isExternalTradingEnabled = false
+    private var isTradingEnabled: Bool { !isDeFiOnly }
 
     @State private var selectedDetent: UISheetPresentationController.Detent.Identifier = AppChromeDetents.collapsed.identifier
     /// `True` when a pull to refresh is triggered, otherwise `false`
@@ -59,7 +60,7 @@ struct SuperAppContentView: View {
             }
             .bindings {
                 subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
-                subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible)
+                subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
                 subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
 
             }

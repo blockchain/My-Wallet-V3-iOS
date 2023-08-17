@@ -793,6 +793,10 @@ blockchain:
 					+ blockchain.db.type.string
 					+ blockchain.session.state.value
 		is:
+			DeFi:
+				only:
+				+ blockchain.db.type.boolean
+				+ blockchain.session.configuration.value
 			external:
 				brokerage:
 				+ blockchain.db.type.boolean
