@@ -2128,6 +2128,19 @@ blockchain:
 								+ blockchain.ux.type.action
 						skip:
 						+ blockchain.ux.type.action
+		bakkt:
+			refund:
+				policy:
+					disclaimer:
+					+ blockchain.ux.type.action
+						url:
+						+ blockchain.db.type.url
+						+ blockchain.session.configuration.value
+			view:
+				disclosures:
+				+ blockchain.ux.type.action
+					url:
+					+ blockchain.db.type.url
 		buy:
 			another:
 				asset:

@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import BlockchainUI
 import BlockchainNamespace
 import Combine
 import ComposableArchitecture
@@ -44,6 +44,10 @@ public struct CoinView: View {
                     }
                     about()
                     news()
+
+                    if viewStore.shouldDisplayBakktLogo {
+                        bakktLogo()
+                    }
                 }
                 .scrollOffset($scrollOffset)
                 Color.clear
@@ -219,6 +223,14 @@ public struct CoinView: View {
             }
         }
         .background(Color.semantic.light)
+    }
+
+    @ViewBuilder func bakktLogo() -> some View {
+        HStack(alignment: .center, content: {
+            Image("bakkt-logo", bundle: .componentLibrary)
+        }
+      )
+        .frame(maxWidth: .infinity)
     }
 
     @ViewBuilder func news() -> some View {

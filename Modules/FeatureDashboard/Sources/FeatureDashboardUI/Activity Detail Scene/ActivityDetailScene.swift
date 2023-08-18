@@ -25,13 +25,14 @@ public struct ActivityDetailScene: ReducerProtocol {
         case onAppear
         case onCloseTapped
         case onActivityDetailsFetched(TaskResult<ActivityDetail.GroupedItems?>)
+        case onExternalTradingEnabled(Bool)
     }
 
     public struct State: Equatable {
         var items: ActivityDetail.GroupedItems?
         var activityEntry: ActivityEntry
-
         let placeholderItems: ActivityDetail.GroupedItems
+        var isExternalTradingEnabled: Bool = false
 
         public init(activityEntry: ActivityEntry) {
             self.activityEntry = activityEntry
@@ -44,16 +45,24 @@ public struct ActivityDetailScene: ReducerProtocol {
             switch action {
             case .onAppear:
                 state.items = state.placeholderItems
-                return .task { [activityEntry = state.activityEntry, app] in
-                    await .onActivityDetailsFetched(TaskResult {
+                return .run { [activityEntry = state.activityEntry, app] send in
+                    let isExternalTradingEnabled = (try? await app.get(blockchain.app.is.external.brokerage, as: Bool.self)) ?? false
+                    await send(.onExternalTradingEnabled(isExternalTradingEnabled))
+
+                    let activityDetails = await TaskResult {
                         await app.mode() == .trading ?
                         try await custodialActivityDetailsService.getActivityDetails(for: activityEntry) :
                         try await nonCustodialActivityDetailsService.getActivityDetails(activity: activityEntry)
-                    })
+                    }
+                    await send(.onActivityDetailsFetched(activityDetails))
                 }
 
             case .onActivityDetailsFetched(.success(let details)):
                 state.items = details
+                return .none
+
+            case .onExternalTradingEnabled(let active):
+                state.isExternalTradingEnabled = active
                 return .none
 
             case .onCloseTapped:

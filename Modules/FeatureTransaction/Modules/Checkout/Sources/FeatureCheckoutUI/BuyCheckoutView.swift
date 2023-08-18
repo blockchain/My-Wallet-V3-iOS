@@ -68,7 +68,7 @@ extension BuyCheckoutView {
         @State var isAvailableToTradeInfoPresented = false
         @State var isACHTermsInfoPresented = false
         @State var isInvestWeeklySelected = false
-
+        @State private var isExternalTradingEnabled: Bool = false
         @State private var isRecurringBuyEnabled: Bool = true
 
         let checkout: BuyCheckout
@@ -99,7 +99,11 @@ extension BuyCheckoutView.Loaded {
                     header()
                     rows()
                     quoteExpiry()
-                    disclaimer()
+                    if isExternalTradingEnabled {
+                        bakktBottomView()
+                    } else {
+                        disclaimer()
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -115,6 +119,7 @@ extension BuyCheckoutView.Loaded {
             achTermsInfoSheet
         }
         .bindings {
+            subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
             subscribe($isRecurringBuyEnabled, to: blockchain.app.configuration.recurring.buy.is.enabled)
         }
     }
@@ -359,6 +364,45 @@ extension BuyCheckoutView.Loaded {
                 isAvailableToTradeInfoPresented.toggle()
             }
         }
+    }
+
+    @ViewBuilder func bakktBottomView() -> some View {
+        VStack{
+            VStack(alignment: .leading) {
+                bakktDisclaimer()
+                SmallMinimalButton(title: L10n.Button.viewDisclosures) {
+                    $app.post(event: blockchain.ux.bakkt.view.disclosures)
+                }
+                .batch {
+                    set(blockchain.ux.bakkt.view.disclosures.then.launch.url, to: "https://bakkt.com/disclosures")
+                }
+            }
+
+            Image("bakkt-logo", bundle: .componentLibrary)
+                .foregroundColor(.semantic.title)
+                .padding(.top, Spacing.padding2)
+        }
+    }
+
+    @ViewBuilder
+    func bakktDisclaimer() -> some View {
+        let label = L10n.Label.buyDisclaimerBakkt(
+            amount: checkout.crypto.displayString,
+            asset: checkout.crypto.currency.code
+        )
+
+        Text(rich:label)
+            .typography(.caption1)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.leading)
+            .padding(.horizontal, Spacing.padding1)
+            .padding(.top, Spacing.padding3)
+            .onTapGesture {
+                $app.post(event: blockchain.ux.bakkt.refund.policy.disclaimer)
+            }
+            .batch {
+                set(blockchain.ux.bakkt.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.bakkt.refund.policy.disclaimer.url })
+            }
     }
 
     @ViewBuilder

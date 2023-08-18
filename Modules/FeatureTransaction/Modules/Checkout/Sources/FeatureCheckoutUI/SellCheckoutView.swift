@@ -75,6 +75,7 @@ public struct SellCheckoutLoadedView: View {
 
     @State private var quote: MoneyValue?
     @State private var remainingTime: TimeInterval = .hour
+    @State private var isExternalTradingEnabled: Bool = false
 
     public init(checkout: SellCheckout, confirm: (() -> Void)? = nil) {
         self.checkout = checkout
@@ -90,13 +91,20 @@ extension SellCheckoutView.Loaded {
                 sell()
                 rows()
                 quoteExpiry()
-                disclaimer()
+                if isExternalTradingEnabled {
+                    disclaimer()
+                } else {
+                    bakktBottomView()
+                }
             }
             .padding(.horizontal)
             Spacer()
             footer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .bindings {
+            subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
+        }
         .batch {
             set(blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.tooltip)
         }
@@ -242,6 +250,44 @@ extension SellCheckoutView.Loaded {
                 set(blockchain.ux.transaction.checkout.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.refund.policy.disclaimer.url })
             }
     }
+
+
+    @ViewBuilder func bakktBottomView() -> some View {
+        VStack{
+            VStack(alignment: .leading) {
+                bakktDisclaimer()
+                SmallMinimalButton(title: L10n.Button.viewDisclosures) {
+                    $app.post(event: blockchain.ux.bakkt.view.disclosures)
+                }
+                .batch {
+                    set(blockchain.ux.bakkt.view.disclosures.then.launch.url, to: "https://bakkt.com/disclosures")
+                }
+            }
+
+            Image("bakkt-logo", bundle: .componentLibrary)
+                .foregroundColor(.semantic.title)
+                .padding(.top, Spacing.padding2)
+        }
+    }
+
+    @ViewBuilder
+    func bakktDisclaimer() -> some View {
+        let label = L10n.Label.sellDisclaimerBakkt(
+            amount: checkout.value.toDisplayString(includeSymbol: true),
+            asset: checkout.value.currencyType.displayCode
+        )
+
+        Text(rich:label)
+            .typography(.caption1)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.leading)
+            .padding(.horizontal, Spacing.padding1)
+            .padding(.top, Spacing.padding3)
+            .onTapGesture {
+                $app.post(event: blockchain.ux.bakkt.refund.policy.disclaimer)
+            }
+    }
+
 
     func footer() -> some View {
         VStack(spacing: 0) {
