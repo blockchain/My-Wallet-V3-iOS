@@ -454,11 +454,11 @@ let createAccountStepTwoReducer = Reducer<
                 for: blockchain.app.configuration.external.trading.areas,
                 as: [String].self
             )
-            .compactMap { [countryState = state.countryState] element -> Bool? in
+            .compactMap { [country = state.country, countryState = state.countryState] element -> Bool? in
                 guard let listOfStates = element.value, let stateId = countryState?.id else {
                     return nil
                 }
-                return listOfStates.contains(stateId)
+                return listOfStates.contains("\(country.id)-\(stateId)")
             }
             .receive(on: environment.mainQueue)
             .eraseToEffect()

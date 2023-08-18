@@ -77,7 +77,9 @@ public final class BrokerageQuoteService {
 
                     do {
                         let max = try await Date().addingTimeInterval(app.get(blockchain.ux.transaction.checkout.quote.refresh.max.duration))
-                        quote.expiresAt = min(quote.expiresAt, BrokerageQuote.Response.formatter.string(from: max))
+                        if let expiresAt = quote.expiresAt {
+                            quote.expiresAt = min(expiresAt, BrokerageQuote.Response.formatter.string(from: max))
+                        }
                     } catch { /* ignored */ }
 
                     try Task.checkCancellation()
