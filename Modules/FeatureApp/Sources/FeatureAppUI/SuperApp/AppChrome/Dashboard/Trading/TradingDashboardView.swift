@@ -80,6 +80,7 @@ struct TradingDashboardView: View {
             subscribe($kycState, to: blockchain.user.account.kyc.state)
         }
         .onAppear {
+            $app.post(event: blockchain.ux.home.dashboard)
             onboarding.request()
         }
     }

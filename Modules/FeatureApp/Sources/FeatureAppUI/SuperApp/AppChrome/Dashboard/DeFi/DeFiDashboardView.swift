@@ -132,6 +132,9 @@ struct DeFiDashboardView: View {
             subscribe($showsWalletConnect, to: blockchain.app.configuration.wallet.connect.is.enabled)
             subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
         }
+        .onAppear {
+            $app.post(event: blockchain.ux.home.dashboard)
+        }
     }
 
     private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading

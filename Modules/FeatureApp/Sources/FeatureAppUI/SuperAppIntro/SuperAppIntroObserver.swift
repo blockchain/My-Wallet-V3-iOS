@@ -44,11 +44,20 @@ public final class SuperAppIntroObserver: Client.Observer {
         cancellables = []
     }
 
-    lazy var userDidSignIn = Publishers.Merge3(
-        app.on(blockchain.session.event.did.sign.in),
-        app.on(blockchain.ux.onboarding.intro.event.show.sign.up),
-        app.on(blockchain.ux.onboarding.intro.event.show.sign.in)
-    )
+    lazy var userDidSignIn = Publishers
+        .Zip(
+            app
+                .on(blockchain.ux.home.dashboard)
+                .first(),
+            Publishers.Merge3(
+                app.on(blockchain.ux.dashboard),
+                app.on(blockchain.ux.onboarding.intro.event.show.sign.up),
+                app.on(blockchain.ux.onboarding.intro.event.show.sign.in)
+            )
+        )
+        .map {
+            $1
+        }
         .receive(on: DispatchQueue.main)
         .sink(to: SuperAppIntroObserver.showSuperAppIntro(_:), on: self)
 

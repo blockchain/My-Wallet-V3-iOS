@@ -157,9 +157,15 @@ extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequestin
 
     private var tokenUpdateIfNeeded: AnyPublisher<Void, RemoteNotificationAuthorizerError> {
         app
-            .publisher(for: blockchain.user.id)
-            .filter(\.value.isNotNil)
+            .on(blockchain.ux.home.dashboard)
             .first()
+            .flatMap { [app] _ -> AnyPublisher<FetchResult, Never> in
+                app
+                    .publisher(for: blockchain.user.id)
+                    .filter(\.value.isNotNil)
+                    .first()
+                    .eraseToAnyPublisher()
+            }
             .flatMap { [isNotDetermined, unregistered] _ -> AnyPublisher<(Bool, Bool), Never> in
                 isNotDetermined.withLatestFrom(unregistered) { ($0, $1) }
             }
