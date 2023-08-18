@@ -97,11 +97,12 @@ extension BuyCheckoutView.Loaded {
             ScrollView {
                 Group {
                     header()
-                    rows()
-                    quoteExpiry()
                     if isExternalTradingEnabled {
+                        bakktRows()
                         bakktBottomView()
                     } else {
+                        rows()
+                        quoteExpiry()
                         disclaimer()
                     }
                 }
@@ -141,6 +142,21 @@ extension BuyCheckoutView.Loaded {
             Spacer()
         }
         .padding(.vertical)
+    }
+
+    // views to display for bakkt buy checkout view
+    @ViewBuilder func bakktRows() -> some View {
+        DividedVStack {
+            price()
+            paymentMethod()
+            bakktPurchaseAmount()
+            availableDates()
+        }
+        .padding(.vertical, 8.pt)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.semantic.background)
+        )
     }
 
     @ViewBuilder func rows() -> some View {
@@ -191,6 +207,17 @@ extension BuyCheckoutView.Loaded {
                 VStack(alignment: .trailing, spacing: .zero) {
                     TableRowTitle(checkout.fiat.displayString)
                     TableRowByline(checkout.crypto.displayString)
+                }
+            }
+        )
+    }
+
+    @ViewBuilder func bakktPurchaseAmount() -> some View {
+        TableRow(
+            title: TableRowTitle(L10n.Label.purchase).foregroundColor(.semantic.body),
+            trailing: {
+                VStack(alignment: .trailing, spacing: .zero) {
+                    TableRowTitle("~\(checkout.crypto.displayString)")
                 }
             }
         )

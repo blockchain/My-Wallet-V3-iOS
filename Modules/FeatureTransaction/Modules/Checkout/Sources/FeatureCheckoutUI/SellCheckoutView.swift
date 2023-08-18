@@ -89,12 +89,13 @@ extension SellCheckoutView.Loaded {
         VStack(alignment: .center) {
             ScrollView {
                 sell()
-                rows()
-                quoteExpiry()
                 if isExternalTradingEnabled {
-                    disclaimer()
-                } else {
+                    bakktRows()
                     bakktBottomView()
+                } else {
+                    rows()
+                    quoteExpiry()
+                    disclaimer()
                 }
             }
             .padding(.horizontal)
@@ -225,6 +226,55 @@ extension SellCheckoutView.Loaded {
                 .fill(Color.semantic.background)
         )
     }
+
+
+    @ViewBuilder func bakktRows() -> some View {
+        DividedVStack(spacing: 0) {
+            TableRow(
+                title: {
+                    HStack {
+                        TableRowTitle(L10n.Label.price(checkout.exchangeRate.base.code)).foregroundColor(.semantic.body)
+                        Icon.questionFilled
+                            .micro().color(.semantic.muted)
+                    }
+                },
+                trailing: {
+                    TableRowTitle("~\(checkout.exchangeRate.quote.displayString)")
+                }
+            )
+            .background(Color.semantic.background)
+            .onTapGesture {
+                showTooltip(
+                    title: L10n.Label.exchangeRate,
+                    message: L10n.Label.exchangeRateDisclaimer.interpolating(checkout.exchangeRate.quote.code, checkout.exchangeRate.base.code)
+                )
+            }
+            TableRow(
+                title: {
+                    TableRowTitle(L10n.Label.from)
+                        .foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    TableRowTitle(checkout.value.currency.name)
+                }
+            )
+
+            TableRow(
+                title: {
+                    TableRowTitle(L10n.Label.to).foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    TableRowTitle(checkout.quote.currency.name)
+                }
+            )
+        }
+        .padding(.vertical, 6.pt)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.semantic.background)
+        )
+    }
+
 
     @ViewBuilder func quoteExpiry() -> some View {
         if let expiration = checkout.expiresAt {
