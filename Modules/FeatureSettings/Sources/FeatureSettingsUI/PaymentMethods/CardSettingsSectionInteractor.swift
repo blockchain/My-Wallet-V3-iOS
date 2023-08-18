@@ -45,9 +45,10 @@ final class CardSettingsSectionInteractor {
     }
 
     private var tradingAccountEnabled: Observable<Bool> {
-        app.publisher(for: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible, as: Bool.self)
-                    .replaceError(with: false)
-                    .asObservable()
+        app.publisher(for: blockchain.app.is.DeFi.only, as: Bool.self)
+            .replaceError(with: true)
+            .map(\.not)
+            .asObservable()
     }
 
     private var externalBrokerageActive: Observable<Bool> {

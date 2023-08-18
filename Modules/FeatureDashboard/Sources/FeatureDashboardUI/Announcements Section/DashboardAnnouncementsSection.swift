@@ -58,22 +58,22 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
                     .combineLatest(
                         app
                             .publisher(
-                                for: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible,
+                                for: blockchain.app.is.DeFi.only,
                                 as: Bool.self
                             )
                             .compactMap(\.value)
                     )
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
-                    .map { backedUp, tradingEnabled in
+                    .map { backedUp, isDeFiOnly in
                         if backedUp == false {
                             let tag = blockchain.ux.home.dashboard.announcement.backup.seed.phrase
                             let result = Result<[DashboardAnnouncement], Never>.success(
                                 [
                                     DashboardAnnouncement(
                                         id: UUID().uuidString,
-                                        title: tradingEnabled ? L10n.recoveryPhraseBackupTitle : L10n.DeFiOnly.title,
-                                        message: tradingEnabled ? L10n.recoveryPhraseBackupMessage : L10n.DeFiOnly.message,
+                                        title: isDeFiOnly ? L10n.DeFiOnly.title : L10n.recoveryPhraseBackupTitle,
+                                        message: isDeFiOnly ? L10n.DeFiOnly.message : L10n.recoveryPhraseBackupMessage,
                                         action: tag
                                     )
                                 ]

@@ -13,7 +13,9 @@ public struct PricesSceneView: View {
     @ObservedObject var viewStore: ViewStoreOf<PricesScene>
     let store: StoreOf<PricesScene>
     @BlockchainApp var app
-    @State var isTradingEnabled = true
+    @State var isDeFiOnly = true
+
+    var isTradingEnabled: Bool { !isDeFiOnly }
 
     public init(store: StoreOf<PricesScene>) {
         self.store = store
@@ -46,7 +48,7 @@ public struct PricesSceneView: View {
                 await viewStore.send(.onAppear).finish()
             }
             .bindings {
-                subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
+                subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
             }
         })
     }

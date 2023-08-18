@@ -940,11 +940,18 @@ extension TransactionState {
     var profile: BrokerageQuote.Profile? {
         switch action {
         case .buy:
-            return .buy
+            switch destination {
+            case is ExternalBrokerageCryptoAccount:
+                return .externalBuy
+            default:
+                return .buy
+            }
         case .sell:
             switch source {
             case is NonCustodialAccount:
                 return .swapPKWToTrading
+            case is ExternalBrokerageCryptoAccount:
+                return .externalTradingToTrading
             case is TradingAccount:
                 return .swapTradingToTrading
             default:

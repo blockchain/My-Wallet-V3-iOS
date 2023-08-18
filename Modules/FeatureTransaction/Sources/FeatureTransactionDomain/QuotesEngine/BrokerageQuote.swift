@@ -167,6 +167,8 @@ extension BrokerageQuote {
         public init(_ value: String) { self.value = value }
 
         public static let buy: Self = "SIMPLEBUY"
+        public static let externalBuy: Self = "EXTERNAL_BROKERAGE_BUY"
+        public static let externalTradingToTrading: Self = "EXTERNAL_BROKERAGE_SWAP_INTERNAL"
         public static let swapTradingToTrading: Self = "SWAP_INTERNAL"
         public static let swapPKWToPKW: Self = "SWAP_ON_CHAIN"
         public static let swapPKWToTrading: Self = "SWAP_FROM_USERKEY"

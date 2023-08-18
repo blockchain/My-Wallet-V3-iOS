@@ -62,8 +62,8 @@ struct SuperAppContent: ReducerProtocol {
                         app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
                     },
                     .run { send in
-                        for await tradingEnabled in app.stream(blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible, as: Bool.self) {
-                            await send(.onTradingModeEnabledFetched(tradingEnabled.value ?? true))
+                        for await isDeFiOnly in app.stream(blockchain.app.is.DeFi.only, as: Bool.self) {
+                            await send(.onTradingModeEnabledFetched(isDeFiOnly.value?.not ?? true))
                         }
                     }
                 )
