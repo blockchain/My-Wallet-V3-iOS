@@ -97,7 +97,7 @@ extension BrokerageQuote {
             id: String,
             marginPercent: Double,
             createdAt: String,
-            expiresAt: String,
+            expiresAt: String?,
             price: String,
             resultAmount: String,
             networkFee: String? = nil,
@@ -123,7 +123,7 @@ extension BrokerageQuote {
 
         public var id: String
         public var marginPercent: Double
-        public var createdAt, expiresAt: String
+        public var createdAt, expiresAt: String?
         public var price: String
         public var resultAmount: String
         public var networkFee, staticFee: String?
@@ -141,9 +141,19 @@ extension BrokerageQuote.Response {
     }
 
     public var date: (createdAt: Date?, expiresAt: Date?) {
-        (
-            My.formatter.date(from: createdAt),
-            My.formatter.date(from: expiresAt)
+        var formattedCreatedAt, formattedExpiresAt: Date?
+
+        if let createdAt {
+            formattedCreatedAt =  My.formatter.date(from: createdAt)
+        }
+
+        if let expiresAt {
+            formattedExpiresAt = My.formatter.date(from: expiresAt)
+        }
+
+        return (
+            formattedCreatedAt,
+            formattedExpiresAt
         )
     }
 }
