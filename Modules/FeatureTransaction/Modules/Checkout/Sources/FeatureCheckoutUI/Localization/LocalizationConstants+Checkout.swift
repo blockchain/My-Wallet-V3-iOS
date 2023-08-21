@@ -65,6 +65,22 @@ extension LocalizationConstants {
                 "Network Fee",
                 comment: "Network fee title label"
             )
+            static let fundsWillArrive = NSLocalizedString(
+                "Funds will arrive",
+                comment: "Funds will arrive title label"
+            )
+            static let availableToWithdraw = NSLocalizedString(
+                "Available to withdraw",
+                comment: "Available to withdraw title label"
+            )
+            static let depositDisclaimer = NSLocalizedString(
+                "By placing this order, you authorize Blockchain.com, Inc. to debit %@ from your bank account.",
+                comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $100 from your bank account."
+            )
+            static let withdrawDisclaimer = NSLocalizedString(
+                "By placing this order, you authorize Blockchain.com, Inc. to debit %@ to your bank account.",
+                comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $10.00 to your bank account."
+            )
             static let networkFeeDescription = NSLocalizedString(
                 "A fee paid to process your transaction. This must be paid in %@.",
                 comment: "Network fee description label"
@@ -143,7 +159,13 @@ extension LocalizationConstants {
             static func price(_ code: String) -> String {
                 NSLocalizedString("%@ Price", comment: "").interpolating(code)
             }
-
+            static func deposit(_ code: String) -> String {
+                NSLocalizedString("Deposit %@", comment: "").interpolating(code)
+            }
+            static let withdraw = NSLocalizedString(
+                "Withdraw",
+                comment: "Withdraw title label"
+            )
             static let priceDisclaimer = NSLocalizedString(
                 "Blockchain.com provides the best market price we receive and applies a spread.",
                 comment: ""

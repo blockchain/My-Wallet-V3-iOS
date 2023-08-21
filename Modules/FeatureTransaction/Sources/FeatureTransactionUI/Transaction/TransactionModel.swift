@@ -820,10 +820,14 @@ public final class TransactionModel {
             .subscribe(
                 onNext: { [weak self] transaction in
                     guard let self else { return }
-                    Task {
-                        try await self.app.set(blockchain.ux.transaction.source.account.id, to: sourceAccount.identifier)
-                        try await self.app.set(blockchain.ux.transaction.source.target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
-                        self.process(action: .pendingTransactionUpdated(transaction))
+                    Task { [app] in
+                        do {
+                            try await self.app.set(blockchain.ux.transaction.source[sourceAccount.currencyType.code].account.id, to: sourceAccount.identifier)
+                            try await self.app.set(blockchain.ux.transaction.source[sourceAccount.currencyType.code].target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
+                            self.process(action: .pendingTransactionUpdated(transaction))
+                        } catch {
+                            app.post(error: error)
+                        }
                     }
                 },
                 onError: { [weak self] error in

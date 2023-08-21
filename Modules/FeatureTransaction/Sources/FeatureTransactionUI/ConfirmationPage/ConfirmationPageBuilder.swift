@@ -32,19 +32,23 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
     private let app: AppProtocol
     private let priceService: PriceServiceAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
+    private let isNewCheckoutEnabled: Bool
 
     init(
         transactionModel: TransactionModel,
         action: AssetAction,
         priceService: PriceServiceAPI = resolve(),
         fiatCurrencyService: FiatCurrencyServiceAPI = resolve(),
-        app: AppProtocol = DIKit.resolve()
+        app: AppProtocol = DIKit.resolve(),
+        isNewCheckoutEnabled: Bool
     ) {
         self.transactionModel = transactionModel
         self.action = action
         self.priceService = priceService
         self.fiatCurrencyService = fiatCurrencyService
         self.app = app
+        self.isNewCheckoutEnabled = isNewCheckoutEnabled
+
     }
 
     func build(listener: ConfirmationPageListener) -> ViewableRouter<Interactable, ViewControllable> {
@@ -57,10 +61,7 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
     }
 
     var newCheckout: ViewableRouter<Interactable, ViewControllable>? {
-        guard app.remoteConfiguration.yes(
-            if: blockchain.ux.transaction.checkout.is.enabled
-        ) else { return nil }
-
+        guard isNewCheckoutEnabled else { return nil }
         let viewController: UIViewController
         switch action {
         case .swap:
@@ -71,6 +72,10 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
             viewController = buildSendCheckout(for: transactionModel)
         case .sell:
             viewController = buildSellCheckout(for: transactionModel)
+        case .deposit:
+            viewController = buildDepositCheckout(for: transactionModel)
+        case .withdraw:
+            viewController = buildWithdrawCheckout(for: transactionModel)
         default:
             return nil
         }
@@ -85,6 +90,84 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
 // MARK: - Swap
 
 extension ConfirmationPageBuilder {
+
+    private func buildDepositCheckout(for transactionModel: TransactionModel) -> UIViewController {
+        let publisher = transactionModel.state.publisher
+            .ignoreFailure(setFailureType: Never.self)
+            .compactMap(\.depositCheckout)
+            .removeDuplicates()
+
+        let viewController = CheckoutHostingController(
+            rootView: AsyncCheckoutView(
+                publisher: publisher,
+                checkout: { checkout in
+                    DepositCheckoutView(
+                        checkout: checkout,
+                        confirm: { transactionModel.process(action: .executeTransaction) }
+                    )
+                }
+            )
+            .onAppear { transactionModel.process(action: .validateTransaction) }
+                .navigationTitle(LocalizationConstants.Checkout.deposit)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(
+                    leading: IconButton(
+                        icon: .chevronLeft,
+                        action: { [app] in
+                            transactionModel.process(action: .returnToPreviousStep)
+                            app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
+                        }
+                    )
+                )
+                .app(app)
+        )
+
+        viewController.title = " "
+        viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
+        viewController.isModalInPresentation = true
+
+        return viewController
+    }
+
+    private func buildWithdrawCheckout(for transactionModel: TransactionModel) -> UIViewController {
+        let publisher = transactionModel.state.publisher
+            .ignoreFailure(setFailureType: Never.self)
+            .compactMap(\.withdrawCheckout)
+            .removeDuplicates()
+
+        let viewController = CheckoutHostingController(
+            rootView: AsyncCheckoutView(
+                publisher: publisher,
+                checkout: { checkout in
+                    WithdrawCheckoutView(
+                        checkout: checkout,
+                        confirm: { transactionModel.process(action: .executeTransaction) }
+                    )
+                }
+            )
+            .onAppear { transactionModel.process(action: .validateTransaction) }
+                .navigationTitle(LocalizationConstants.Checkout.withdraw)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(
+                    leading: IconButton(
+                        icon: .chevronLeft,
+                        action: { [app] in
+                            transactionModel.process(action: .returnToPreviousStep)
+                            app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
+                        }
+                    )
+                )
+                .app(app)
+        )
+
+        viewController.title = " "
+        viewController.navigationItem.leftBarButtonItem = .init(customView: UIView())
+        viewController.isModalInPresentation = true
+
+        return viewController
+    }
 
     private func buildSendCheckout(for transactionModel: TransactionModel) -> UIViewController {
         let publisher = transactionModel.state.publisher
@@ -323,7 +406,36 @@ extension PendingTransaction {
     }
 }
 
+extension Date {
+    fileprivate static let in5Days = Calendar.current.date(byAdding: .day, value: 5, to: Date())!
+}
+
 extension TransactionState {
+
+    var depositCheckout: DepositCheckout? {
+        guard let source, let destination, let pendingTransaction else { return nil }
+        return DepositCheckout(
+            from: source.label,
+            to: destination.label,
+            fee: pendingTransaction.feeAmount,
+            settlementDate: .in5Days,
+            availableToWithdraw: pendingTransaction.paymentsDepositTerms?.formattedAvailableToWithdraw,
+            total: pendingTransaction.amount
+        )
+    }
+
+    var withdrawCheckout: WithdrawCheckout? {
+        guard let source, let destination, let pendingTransaction else { return nil }
+        let days_5 = Calendar.current.date(byAdding: .day, value: 5, to: Date())!
+        return WithdrawCheckout(
+            from: source.label,
+            to: destination.label,
+            fee: pendingTransaction.feeAmount,
+            settlementDate: .in5Days,
+            total: pendingTransaction.amount
+        )
+    }
+
     var sellCheckout: SellCheckout? {
         guard let quote, let result = quote.result else { return nil }
         do {

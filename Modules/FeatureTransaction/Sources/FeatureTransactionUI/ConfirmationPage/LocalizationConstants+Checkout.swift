@@ -33,5 +33,13 @@ extension LocalizationConstants {
             "Sell",
             comment: "Method: Sell"
         )
+        static let deposit = NSLocalizedString(
+            "Deposit",
+            comment: "Method: Deposit"
+        )
+        static let withdraw = NSLocalizedString(
+            "Withdraw",
+            comment: "Method: Withdraw"
+        )
     }
 }

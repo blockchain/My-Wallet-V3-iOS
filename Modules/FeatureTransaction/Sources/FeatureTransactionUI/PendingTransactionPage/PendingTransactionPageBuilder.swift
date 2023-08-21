@@ -43,7 +43,7 @@ final class PendingTransactionPageBuilder: PendingTransactionPageBuildable {
                     }
                 )
                 .background(Color.semantic.light)
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: .top)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(

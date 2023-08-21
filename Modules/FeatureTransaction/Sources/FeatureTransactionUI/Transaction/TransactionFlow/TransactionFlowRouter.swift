@@ -89,6 +89,11 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         viewController.uiviewController.presentedViewController == nil
     }
 
+    private var isNewCheckoutEnabled: Bool = false
+    private lazy var bindings = app.binding(self, .async)
+        .subscribe(\.isNewCheckoutEnabled, to: blockchain.ux.transaction.checkout.is.enabled)
+        .bindings()
+
     init(
         app: AppProtocol = resolve(),
         interactor: TransactionFlowInteractable,
@@ -121,10 +126,12 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         self.coincore = coincore
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self
+        bindings.request()
     }
 
     func routeToConfirmation(transactionModel: TransactionModel, action: AssetAction) {
-        let builder = ConfirmationPageBuilder(transactionModel: transactionModel, action: action)
+        guard bindings.isSynchronized else { return }
+        let builder = ConfirmationPageBuilder(transactionModel: transactionModel, action: action, isNewCheckoutEnabled: isNewCheckoutEnabled)
         let router = builder.build(listener: interactor)
         let viewControllable = router.viewControllable
         attachChild(router)
