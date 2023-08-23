@@ -89,9 +89,12 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         viewController.uiviewController.presentedViewController == nil
     }
 
-    private var isNewCheckoutEnabled: Bool = false
+    private var _checkoutIsEnabledSync: Bool {
+        app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.is.enabled)
+    }
+    private var _checkoutIsEnabledAsync: Bool = false
     private lazy var bindings = app.binding(self, .async)
-        .subscribe(\.isNewCheckoutEnabled, to: blockchain.ux.transaction.checkout.is.enabled)
+        .subscribe(\._checkoutIsEnabledAsync, to: blockchain.ux.transaction.checkout.is.enabled)
         .bindings()
 
     init(
@@ -129,9 +132,27 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         bindings.request()
     }
 
+    private func isNewCheckoutEnabled(action: AssetAction) -> Bool? {
+        switch action {
+        case .withdraw, .deposit:
+            guard bindings.isSynchronized else {
+                return nil
+            }
+            return _checkoutIsEnabledAsync
+        default:
+            return _checkoutIsEnabledSync
+        }
+    }
+
     func routeToConfirmation(transactionModel: TransactionModel, action: AssetAction) {
-        guard bindings.isSynchronized else { return }
-        let builder = ConfirmationPageBuilder(transactionModel: transactionModel, action: action, isNewCheckoutEnabled: isNewCheckoutEnabled)
+        guard let isNewCheckoutEnabled = isNewCheckoutEnabled(action: action) else {
+            return
+        }
+        let builder = ConfirmationPageBuilder(
+            transactionModel: transactionModel,
+            action: action,
+            isNewCheckoutEnabled: isNewCheckoutEnabled
+        )
         let router = builder.build(listener: interactor)
         let viewControllable = router.viewControllable
         attachChild(router)

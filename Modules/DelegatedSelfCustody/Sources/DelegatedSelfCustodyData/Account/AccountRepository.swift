@@ -38,22 +38,22 @@ final class AccountRepository: AccountRepositoryAPI {
             cache: cache,
             fetch: { _ in
                 assetSupportService
-                    .supportedDerivations()
-                    .flatMap { supportedAssets -> AnyPublisher<[Account], Error> in
-                        supportedAssets
-                            .compactMap { asset -> AnyPublisher<Account, Error>? in
+                    .configurations
+                    .flatMap { configurations -> AnyPublisher<[Account], Error> in
+                        configurations
+                            .compactMap { config -> AnyPublisher<Account, Error>? in
                                 guard let cryptoCurrency = CryptoCurrency(
-                                    code: asset.currencyCode,
+                                    code: config.nativeAsset,
                                     service: enabledCurrenciesService
                                 ) else {
                                     return nil
                                 }
-                                return derivationService.getKeys(path: asset.derivationPath)
+                                return derivationService.getKeys(path: config.derivation.path)
                                     .map { keys in
                                         Account(
                                             coin: cryptoCurrency,
-                                            derivationPath: asset.derivationPath,
-                                            style: asset.style,
+                                            derivationPath: config.derivation.path,
+                                            style: config.derivation.style,
                                             publicKey: keys.publicKey,
                                             privateKey: keys.privateKey
                                         )

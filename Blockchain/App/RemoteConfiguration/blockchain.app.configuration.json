@@ -69,8 +69,6 @@
     "blockchain.app.configuration.profile.kyc.is.enabled": false,
     "blockchain.app.configuration.request.console.logging": false,
     "blockchain.app.configuration.SSL.pinning.is.enabled": true,
-    "blockchain.app.configuration.stx.airdrop.users.is.enabled": false,
-    "blockchain.app.configuration.stx.all.users.is.enabled": false,
     "blockchain.app.configuration.tabs": [
         {
             "tag": "blockchain.ux.user.portfolio",

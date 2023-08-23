@@ -13,7 +13,6 @@ final class Client {
         static let pushTx = "/wallet-pubkey/pushTx"
         static let subscribe = "/wallet-pubkey/subscribe"
         static let subscriptions = "/wallet-pubkey/subscriptions"
-        static let txHistory = "/wallet-pubkey/tx-history"
         static let unsubscribe = "/wallet-pubkey/unsubscribe"
     }
 

@@ -376,7 +376,7 @@ blockchain:
 				+ blockchain.db.type.array.of.tags
 				+ blockchain.session.configuration.value
 			dynamicselfcustody:
-				assets:
+				networks:
 				+ blockchain.db.array
 				+ blockchain.session.configuration.value
 				static:
@@ -384,12 +384,6 @@ blockchain:
 					+ blockchain.db.type.map
 					+ blockchain.session.configuration.value
 			evm:
-				name:
-					sanitize:
-						is:
-							enabled:
-							+ blockchain.db.type.boolean
-							+ blockchain.session.configuration.value
 				supported:
 				+ blockchain.db.array
 				+ blockchain.session.configuration.value
@@ -543,19 +537,6 @@ blockchain:
 					enabled:
 					+ blockchain.db.type.boolean
 					+ blockchain.session.configuration.value
-			stx:
-				airdrop:
-					users:
-						is:
-							enabled:
-							+ blockchain.db.type.boolean
-							+ blockchain.session.configuration.value
-				all:
-					users:
-						is:
-							enabled:
-							+ blockchain.db.type.boolean
-							+ blockchain.session.configuration.value
 			superapp:
 				brokerage:
 					frequent:

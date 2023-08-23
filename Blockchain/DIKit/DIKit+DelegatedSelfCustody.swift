@@ -27,12 +27,6 @@ extension DependencyContainer {
         factory { () -> DelegatedCustodySharedKeyServiceAPI in
             DelegatedCustodySharedKeyService(service: DIKit.resolve())
         }
-        factory { () -> DelegatedCustodyStacksSupportServiceAPI in
-            DelegatedCustodyStacksSupportService(
-                app: DIKit.resolve(),
-                nabuUserService: DIKit.resolve()
-            )
-        }
         factory { () -> DelegatedCustodySigningServiceAPI in
             DelegatedCustodySigningService()
         }
@@ -75,59 +69,6 @@ final class DelegatedCustodySharedKeyService: DelegatedCustodySharedKeyServiceAP
 
     var sharedKey: AnyPublisher<String?, Never> {
         service.sharedKey
-    }
-}
-
-final class DelegatedCustodyStacksSupportService: DelegatedCustodyStacksSupportServiceAPI {
-
-    private let app: AppProtocol
-    private let nabuUserService: NabuUserServiceAPI
-
-    init(
-        app: AppProtocol,
-        nabuUserService: NabuUserServiceAPI
-    ) {
-        self.app = app
-        self.nabuUserService = nabuUserService
-    }
-
-    var isEnabled: AnyPublisher<Bool, Never> {
-        allUsersIsEnabled
-            .zip(airdropUsersIsEnabled)
-            .flatMap { [nabuUserService] allUsersIsEnabled, airdropUsersIsEnabled -> AnyPublisher<Bool, Never> in
-                if allUsersIsEnabled {
-                    return .just(true)
-                }
-                if airdropUsersIsEnabled {
-                    return nabuUserService
-                        .user
-                        .map(\.isBlockstackAirdropRegistered)
-                        .replaceError(with: false)
-                        .eraseToAnyPublisher()
-                }
-                return .just(false)
-            }
-            .eraseToAnyPublisher()
-    }
-
-    private var allUsersIsEnabled: AnyPublisher<Bool, Never> {
-        app.publisher(
-            for: blockchain.app.configuration.stx.all.users.is.enabled,
-            as: Bool.self
-        )
-        .map(\.value)
-        .replaceNil(with: false)
-        .eraseToAnyPublisher()
-    }
-
-    private var airdropUsersIsEnabled: AnyPublisher<Bool, Never> {
-        app.publisher(
-            for: blockchain.app.configuration.stx.airdrop.users.is.enabled,
-            as: Bool.self
-        )
-        .map(\.value)
-        .replaceNil(with: false)
-        .eraseToAnyPublisher()
     }
 }
 

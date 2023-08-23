@@ -8,9 +8,22 @@ protocol AssetsRepositoryAPI {
     var ethereumERC20Assets: [AssetModel] { get }
     var otherERC20Assets: [AssetModel] { get }
     var enabledEVMs: [EVMNetworkConfig] { get }
+    var enabledDSCNetworks: [DSCNetworkConfig] { get }
 }
 
 struct AssetsRepository: AssetsRepositoryAPI {
+
+    static var `default`: Self {
+        let fileLoader: FileLoaderAPI = FileLoader(
+            filePathProvider: FilePathProvider(
+                fileManager: .default
+            ),
+            jsonDecoder: .init()
+        )
+        return AssetsRepository(
+            fileLoader: fileLoader
+        )
+    }
 
     var coinAssets: [AssetModel] {
         supportedAssets(fileName: .remoteCoin, fallBack: .localCoin)
@@ -45,10 +58,21 @@ struct AssetsRepository: AssetsRepositoryAPI {
         } catch {
             return []
         }
-        return response
-            .networks
-            .filter { $0.type == .evm }
-            .compactMap(EVMNetworkConfig.init(response:))
+        return EVMNetworkConfig.from(response: response)
+    }
+
+    var enabledDSCNetworks: [DSCNetworkConfig] {
+        let response: NetworkConfigResponse
+        do {
+            try response = fileLoader.load(
+                fileName: .remoteNetworkConfig,
+                fallBack: .localNetworkConfig,
+                as: NetworkConfigResponse.self
+            ).get()
+        } catch {
+            return []
+        }
+        return DSCNetworkConfig.from(response: response)
     }
 
     private func supportedAssets(fileName: FileName, fallBack fallBackFileName: FileName) -> [AssetModel] {
@@ -73,36 +97,8 @@ struct AssetsRepository: AssetsRepositoryAPI {
     }
 
     private let fileLoader: FileLoaderAPI
-    private let evmSupport: EVMSupportAPI
 
-    init(
-        fileLoader: FileLoaderAPI,
-        evmSupport: EVMSupportAPI
-    ) {
+    init(fileLoader: FileLoaderAPI) {
         self.fileLoader = fileLoader
-        self.evmSupport = evmSupport
-    }
-}
-
-extension EVMNetworkConfig {
-    init?(response: NetworkConfigResponse.Network) {
-        guard response.type == .evm else {
-            return nil
-        }
-        guard case .dictionary(let identifiers) = response.identifiers else {
-            return nil
-        }
-        guard case .number(let chainID) = identifiers["chainId"] else {
-            return nil
-        }
-        self.init(
-            name: response.name,
-            chainID: BigUInt(chainID),
-            nativeAsset: response.nativeAsset,
-            explorerUrl: response.explorerUrl,
-            networkTicker: response.networkTicker,
-            nodeURL: response.nodeUrls?.first,
-            shortName: response.shortName
-        )
     }
 }

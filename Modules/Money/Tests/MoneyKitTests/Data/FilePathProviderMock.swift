@@ -15,11 +15,3 @@ final class FilePathProviderMock: FilePathProviderAPI {
         underlyingURLs[Key(fileName: fileName, origin: origin)]
     }
 }
-
-final class EVMSupportMock: EVMSupportAPI {
-
-    var underlyingIsEnabled = false
-    func isEnabled(network: String) -> Bool {
-        underlyingIsEnabled
-    }
-}

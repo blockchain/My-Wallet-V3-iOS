@@ -49,7 +49,7 @@ extension DependencyContainer {
 
         factory {
             AssetSupportService(
-                app: DIKit.resolve()
+                repository: DIKit.resolve()
             )
         }
 
@@ -104,13 +104,6 @@ extension DependencyContainer {
 
         single { () -> DelegatedCustodyAddressesRepositoryAPI in
             AddressesRepository(
-                client: DIKit.resolve(),
-                authenticationDataRepository: DIKit.resolve()
-            )
-        }
-
-        single { () -> DelegatedCustodyActivityRepositoryAPI in
-            ActivityRepository(
                 client: DIKit.resolve(),
                 authenticationDataRepository: DIKit.resolve()
             )

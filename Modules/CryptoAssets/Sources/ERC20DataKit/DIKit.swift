@@ -31,10 +31,5 @@ extension DependencyContainer {
                 enabledCurrenciesService: DIKit.resolve()
             ) as ERC20BalancesRepositoryAPI
         }
-        single {
-            ERC20ActivityRepository(
-                client: DIKit.resolve()
-            ) as ERC20ActivityRepositoryAPI
-        }
     }
 }

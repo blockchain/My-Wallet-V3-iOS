@@ -976,7 +976,6 @@ public extension I_blockchain_app_configuration {
 	var `sift`: L_blockchain_app_configuration_sift { .init("\(__).sift") }
 	var `SSL`: L_blockchain_app_configuration_SSL { .init("\(__).SSL") }
 	var `staking`: L_blockchain_app_configuration_staking { .init("\(__).staking") }
-	var `stx`: L_blockchain_app_configuration_stx { .init("\(__).stx") }
 	var `superapp`: L_blockchain_app_configuration_superapp { .init("\(__).superapp") }
 	var `swap`: L_blockchain_app_configuration_swap { .init("\(__).swap") }
 	var `tabs`: L_blockchain_app_configuration_tabs { .init("\(__).tabs") }
@@ -1523,13 +1522,13 @@ public final class L_blockchain_app_configuration_dynamicselfcustody: L, I_block
 }
 public protocol I_blockchain_app_configuration_dynamicselfcustody: I {}
 public extension I_blockchain_app_configuration_dynamicselfcustody {
-	var `assets`: L_blockchain_app_configuration_dynamicselfcustody_assets { .init("\(__).assets") }
+	var `networks`: L_blockchain_app_configuration_dynamicselfcustody_networks { .init("\(__).networks") }
 	var `static`: L_blockchain_app_configuration_dynamicselfcustody_static { .init("\(__).static") }
 }
-public final class L_blockchain_app_configuration_dynamicselfcustody_assets: L, I_blockchain_app_configuration_dynamicselfcustody_assets {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dynamicselfcustody.assets", comment: "") }
+public final class L_blockchain_app_configuration_dynamicselfcustody_networks: L, I_blockchain_app_configuration_dynamicselfcustody_networks {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dynamicselfcustody.networks", comment: "") }
 }
-public protocol I_blockchain_app_configuration_dynamicselfcustody_assets: I_blockchain_db_array, I_blockchain_session_configuration_value {}
+public protocol I_blockchain_app_configuration_dynamicselfcustody_networks: I_blockchain_db_array, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_dynamicselfcustody_static: L, I_blockchain_app_configuration_dynamicselfcustody_static {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.dynamicselfcustody.static", comment: "") }
 }
@@ -1546,34 +1545,8 @@ public final class L_blockchain_app_configuration_evm: L, I_blockchain_app_confi
 }
 public protocol I_blockchain_app_configuration_evm: I {}
 public extension I_blockchain_app_configuration_evm {
-	var `name`: L_blockchain_app_configuration_evm_name { .init("\(__).name") }
 	var `supported`: L_blockchain_app_configuration_evm_supported { .init("\(__).supported") }
 }
-public final class L_blockchain_app_configuration_evm_name: L, I_blockchain_app_configuration_evm_name {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.evm.name", comment: "") }
-}
-public protocol I_blockchain_app_configuration_evm_name: I {}
-public extension I_blockchain_app_configuration_evm_name {
-	var `sanitize`: L_blockchain_app_configuration_evm_name_sanitize { .init("\(__).sanitize") }
-}
-public final class L_blockchain_app_configuration_evm_name_sanitize: L, I_blockchain_app_configuration_evm_name_sanitize {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.evm.name.sanitize", comment: "") }
-}
-public protocol I_blockchain_app_configuration_evm_name_sanitize: I {}
-public extension I_blockchain_app_configuration_evm_name_sanitize {
-	var `is`: L_blockchain_app_configuration_evm_name_sanitize_is { .init("\(__).is") }
-}
-public final class L_blockchain_app_configuration_evm_name_sanitize_is: L, I_blockchain_app_configuration_evm_name_sanitize_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.evm.name.sanitize.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_evm_name_sanitize_is: I {}
-public extension I_blockchain_app_configuration_evm_name_sanitize_is {
-	var `enabled`: L_blockchain_app_configuration_evm_name_sanitize_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_evm_name_sanitize_is_enabled: L, I_blockchain_app_configuration_evm_name_sanitize_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.evm.name.sanitize.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_evm_name_sanitize_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_evm_supported: L, I_blockchain_app_configuration_evm_supported {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.evm.supported", comment: "") }
 }
@@ -2199,64 +2172,6 @@ public final class L_blockchain_app_configuration_staking_is_enabled: L, I_block
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.staking.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_staking_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_stx: L, I_blockchain_app_configuration_stx {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx: I {}
-public extension I_blockchain_app_configuration_stx {
-	var `airdrop`: L_blockchain_app_configuration_stx_airdrop { .init("\(__).airdrop") }
-	var `all`: L_blockchain_app_configuration_stx_all { .init("\(__).all") }
-}
-public final class L_blockchain_app_configuration_stx_airdrop: L, I_blockchain_app_configuration_stx_airdrop {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx.airdrop", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx_airdrop: I {}
-public extension I_blockchain_app_configuration_stx_airdrop {
-	var `users`: L_blockchain_app_configuration_stx_airdrop_users { .init("\(__).users") }
-}
-public final class L_blockchain_app_configuration_stx_airdrop_users: L, I_blockchain_app_configuration_stx_airdrop_users {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx.airdrop.users", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx_airdrop_users: I {}
-public extension I_blockchain_app_configuration_stx_airdrop_users {
-	var `is`: L_blockchain_app_configuration_stx_airdrop_users_is { .init("\(__).is") }
-}
-public final class L_blockchain_app_configuration_stx_airdrop_users_is: L, I_blockchain_app_configuration_stx_airdrop_users_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx.airdrop.users.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx_airdrop_users_is: I {}
-public extension I_blockchain_app_configuration_stx_airdrop_users_is {
-	var `enabled`: L_blockchain_app_configuration_stx_airdrop_users_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_stx_airdrop_users_is_enabled: L, I_blockchain_app_configuration_stx_airdrop_users_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx.airdrop.users.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx_airdrop_users_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
-public final class L_blockchain_app_configuration_stx_all: L, I_blockchain_app_configuration_stx_all {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx.all", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx_all: I {}
-public extension I_blockchain_app_configuration_stx_all {
-	var `users`: L_blockchain_app_configuration_stx_all_users { .init("\(__).users") }
-}
-public final class L_blockchain_app_configuration_stx_all_users: L, I_blockchain_app_configuration_stx_all_users {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx.all.users", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx_all_users: I {}
-public extension I_blockchain_app_configuration_stx_all_users {
-	var `is`: L_blockchain_app_configuration_stx_all_users_is { .init("\(__).is") }
-}
-public final class L_blockchain_app_configuration_stx_all_users_is: L, I_blockchain_app_configuration_stx_all_users_is {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx.all.users.is", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx_all_users_is: I {}
-public extension I_blockchain_app_configuration_stx_all_users_is {
-	var `enabled`: L_blockchain_app_configuration_stx_all_users_is_enabled { .init("\(__).enabled") }
-}
-public final class L_blockchain_app_configuration_stx_all_users_is_enabled: L, I_blockchain_app_configuration_stx_all_users_is_enabled {
-	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.stx.all.users.is.enabled", comment: "") }
-}
-public protocol I_blockchain_app_configuration_stx_all_users_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_superapp: L, I_blockchain_app_configuration_superapp {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.superapp", comment: "") }
 }
