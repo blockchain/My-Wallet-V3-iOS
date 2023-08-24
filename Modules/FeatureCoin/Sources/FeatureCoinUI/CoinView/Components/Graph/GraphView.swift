@@ -155,7 +155,7 @@ public struct GraphView: View {
                 ],
                 selection: Binding(
                     get: { viewStore.interval },
-                    set: { newValue in viewStore.send(.request(newValue)) }
+                    set: { newValue in viewStore.send(.request(newValue, force: false)) }
                 ),
                 backgroundColor: .WalletSemantic.light
             )
@@ -189,7 +189,11 @@ public struct GraphView: View {
     }
 
     private var shouldHide: Bool {
-        viewStore.result?.isFailure == true && viewStore.hideOnFailure
+        guard viewStore.hideOnFailure else {
+            return false
+        }
+        return viewStore.result?.isFailure == true
+        || viewStore.result?.success?.series.isEmpty == true
     }
 
     @ViewBuilder

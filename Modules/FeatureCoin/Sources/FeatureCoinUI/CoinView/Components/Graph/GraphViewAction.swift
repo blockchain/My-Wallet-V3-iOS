@@ -8,6 +8,6 @@ import FeatureCoinDomain
 public enum GraphViewAction: BindableAction {
     case onAppear(Tag.Context)
     case binding(_ action: BindingAction<GraphViewState>)
-    case request(Series, force: Bool = false)
+    case request(Series, force: Bool)
     case fetched(Result<GraphData, NetworkError>)
 }

@@ -10,32 +10,23 @@ public let graphViewReducer = Reducer<
     GraphViewAction,
     CoinViewEnvironment
 > { state, action, environment in
-    struct FetchID: Hashable {}
     switch action {
     case .onAppear(let context):
-        let series = (
-            environment.app.state
-                .result(for: blockchain.ux.asset.chart.interval[].ref(to: context))
-                .value as? Series
-        ) ?? state.interval
-        return EffectTask(value: .request(series, force: true))
+        let interval: Series = defaultInterval(environment.app, context) ?? state.interval
+        return EffectTask(value: .request(interval, force: true))
     case .request(let interval, let force):
         guard force || interval != state.interval else {
             return .none
         }
         state.isFetching = true
         state.interval = interval
-        return .merge(
-            .cancel(id: FetchID()),
-            environment.historicalPriceService.fetch(
-                series: interval,
-                relativeTo: state.date
-            )
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map(GraphViewAction.fetched)
-            .cancellable(id: FetchID())
+        return environment.historicalPriceService.fetch(
+            series: interval,
+            relativeTo: state.date
         )
+        .receive(on: environment.mainQueue)
+        .catchToEffect(GraphViewAction.fetched)
+        .cancellable(id: GraphViewCancellable.fetch)
     case .fetched(let data):
         state.result = data
         state.isFetching = false
@@ -45,3 +36,13 @@ public let graphViewReducer = Reducer<
     }
 }
 .binding()
+
+private enum GraphViewCancellable {
+    case fetch
+}
+
+private func defaultInterval(_ app: AppProtocol, _ context: Tag.Context) -> Series? {
+    app.state
+        .result(for: blockchain.ux.asset.chart.interval[].ref(to: context))
+        .value as? Series
+}
