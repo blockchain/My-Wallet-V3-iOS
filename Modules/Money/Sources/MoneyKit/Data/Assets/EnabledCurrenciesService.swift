@@ -93,7 +93,7 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
     }
 
     private var otherERC20Currencies: [CryptoCurrency] {
-        let enabledEVMs = networkConfigRepository.evmConfigs.map(\.nativeAsset)
+        let enabledEVMs = networkConfigRepository.evmConfigs.map(\.networkTicker)
         return repository.otherERC20Assets
             .filter { model in
                 model.kind.erc20ParentChain.flatMap(enabledEVMs.contains) ?? false
