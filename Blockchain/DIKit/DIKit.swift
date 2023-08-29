@@ -422,6 +422,7 @@ extension DependencyContainer {
 
         single { () -> ProductsRepositoryAPI in
             ProductsRepository(
+                app: DIKit.resolve(),
                 client: ProductsAPIClient(
                     networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
                     requestBuilder: DIKit.resolve(tag: DIKitContext.retail)

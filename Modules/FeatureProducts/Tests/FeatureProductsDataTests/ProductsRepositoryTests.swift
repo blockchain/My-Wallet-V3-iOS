@@ -1,4 +1,5 @@
 import AnyCoding
+import Blockchain
 import Errors
 @testable import FeatureProductsData
 import FeatureProductsDomain
@@ -11,10 +12,13 @@ final class ProductsRepositoryTests: XCTestCase {
     private var repository: ProductsRepository!
     private var mockClient: ProductsClientMock!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
+        let app = App.test
+        app.signIn(userId: "test")
+        try await app.set(blockchain.user.is.external.brokerage, to: false)
         mockClient = ProductsClientMock()
-        repository = ProductsRepository(client: mockClient)
+        repository = ProductsRepository(app: app, client: mockClient)
     }
 
     override func tearDownWithError() throws {
@@ -30,48 +34,48 @@ final class ProductsRepositoryTests: XCTestCase {
         XCTAssertPublisherError(publisher, error)
     }
 
-    func test_returnsProducts() throws {
+    func test_returnsProducts() async throws {
         let expectedProducts = try stubClientWithDefaultProducts()
-        let publisher = repository.fetchProducts()
-        XCTAssertPublisherValues(publisher, expectedProducts)
+        let products = try await repository.fetchProducts().await()
+        XCTAssertEqual(products, expectedProducts)
     }
 
-    func test_cache_validCache() throws {
+    func test_cache_validCache() async throws {
         // GIVEN: A first request is fired, thus caching the response
         let expectedProducts = try stubClientWithDefaultProducts()
-        let firstRequestPublisher = repository.fetchProducts()
-        XCTAssertPublisherValues(firstRequestPublisher, expectedProducts)
+        let firstProducts = try await repository.fetchProducts().await()
+        XCTAssertEqual(firstProducts, expectedProducts)
         // WHEN: A second request is fired
-        let secondRequestPublisher = repository.fetchProducts()
-        XCTAssertPublisherValues(secondRequestPublisher, expectedProducts)
+        let secondProducts = try await repository.fetchProducts().await()
+        XCTAssertEqual(secondProducts, expectedProducts)
         // THEN: The repository has used the cache to serve the response
         XCTAssertEqual(mockClient.recordedInvocations.fetchProductsData.count, 1)
     }
 
-    func test_cache_invalidatesCacheOn_transactionNotification() throws {
+    func test_cache_invalidatesCacheOn_transactionNotification() async throws {
         // GIVEN: A first request is fired, thus caching the response
         let expectedProducts = try stubClientWithDefaultProducts()
-        let firstRequestPublisher = repository.fetchProducts()
-        XCTAssertPublisherValues(firstRequestPublisher, expectedProducts)
+        let firstProducts = try await repository.fetchProducts().await()
+        XCTAssertEqual(firstProducts, expectedProducts)
         // WHEN: The cache should be invalidated
         NotificationCenter.default.post(name: .transaction, object: nil)
         // AND: A second request is fired
-        let secondRequestPublisher = repository.fetchProducts()
-        XCTAssertPublisherValues(secondRequestPublisher, expectedProducts)
+        let secondProducts = try await repository.fetchProducts().await()
+        XCTAssertEqual(secondProducts, expectedProducts)
         // THEN: The repository has NOT used the cache to serve the response
         XCTAssertEqual(mockClient.recordedInvocations.fetchProductsData.count, 2)
     }
 
-    func test_cache_invalidatesCacheOn_kycStatusChangedNotification() throws {
+    func test_cache_invalidatesCacheOn_kycStatusChangedNotification() async throws {
         // GIVEN: A first request is fired, thus caching the response
         let expectedProducts = try stubClientWithDefaultProducts()
-        let firstRequestPublisher = repository.fetchProducts()
-        XCTAssertPublisherValues(firstRequestPublisher, expectedProducts)
+        let firstProducts = try await repository.fetchProducts().await()
+        XCTAssertEqual(firstProducts, expectedProducts)
         // WHEN: The cache should be invalidated
         NotificationCenter.default.post(name: .kycStatusChanged, object: nil)
         // AND: A second request is fired
-        let secondRequestPublisher = repository.fetchProducts()
-        XCTAssertPublisherValues(secondRequestPublisher, expectedProducts)
+        let secondProducts = try await repository.fetchProducts().await()
+        XCTAssertEqual(secondProducts, expectedProducts)
         // THEN: The repository has NOT used the cache to serve the response
         XCTAssertEqual(mockClient.recordedInvocations.fetchProductsData.count, 2)
     }
