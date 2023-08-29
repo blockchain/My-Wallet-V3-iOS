@@ -586,6 +586,62 @@ final class AppActionTests: XCTestCase {
         XCTAssertEqual(count, 1)
         XCTAssertEqual(events.last?.context[blockchain.db.type.string], "f")
     }
+
+    func test_post_action_in_context() async throws {
+
+        try await app.set(blockchain.ux.activity.entry, to: [
+            "then": [
+                "emit": blockchain.db.type.tag.none(\.id)
+            ],
+            "context": [
+                blockchain.db.type.string(\.id): "Dorothy"
+            ]
+        ])
+
+        let promise = expectation(description: "emits action")
+        var event: Session.Event!
+        app.on(blockchain.db.type.tag.none) {
+            event = $0
+            promise.fulfill()
+        }
+        .subscribe()
+        .tearDown(after: self)
+
+        await app.post(event: blockchain.ux.activity.entry)
+        await fulfillment(of: [promise])
+
+        let actual = try event?.context[blockchain.db.type.string].decode(String.self)
+        let expected = "Dorothy"
+
+        XCTAssertEqual(event.context.count, 4)
+        XCTAssertEqual(actual, expected)
+    }
+
+    func test_post_action_with_unknown_context_is_ignored() async throws {
+
+        try await app.set(blockchain.ux.activity.entry, to: [
+            "then": [
+                "emit": blockchain.db.type.tag.none(\.id)
+            ],
+            "context": [
+                "abcdef": "Dorothy"
+            ]
+        ])
+
+        let promise = expectation(description: "emits action")
+        var event: Session.Event!
+        app.on(blockchain.db.type.tag.none) {
+            event = $0
+            promise.fulfill()
+        }
+        .subscribe()
+        .tearDown(after: self)
+
+        await app.post(event: blockchain.ux.activity.entry)
+        await fulfillment(of: [promise])
+
+        XCTAssertEqual(event.context.count, 3)
+    }
 }
 
 extension App {

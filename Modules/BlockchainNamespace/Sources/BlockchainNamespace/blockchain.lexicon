@@ -1274,6 +1274,8 @@ blockchain:
 						frequently:
 			action:
 			+ blockchain.ux.type.analytics.action
+				context:
+				+ blockchain.db.type.map
 				policy:
 					discard:
 						if:

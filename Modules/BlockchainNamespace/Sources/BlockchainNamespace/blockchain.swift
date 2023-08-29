@@ -5059,10 +5059,15 @@ public final class L_blockchain_ui_type_action: L, I_blockchain_ui_type_action {
 }
 public protocol I_blockchain_ui_type_action: I_blockchain_ux_type_analytics_action {}
 public extension I_blockchain_ui_type_action {
+	var `context`: L_blockchain_ui_type_action_context { .init("\(__).context") }
 	var `policy`: L_blockchain_ui_type_action_policy { .init("\(__).policy") }
 	var `then`: L_blockchain_ui_type_action_then { .init("\(__).then") }
 	var `was`: L_blockchain_ui_type_action_was { .init("\(__).was") }
 }
+public final class L_blockchain_ui_type_action_context: L, I_blockchain_ui_type_action_context {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.context", comment: "") }
+}
+public protocol I_blockchain_ui_type_action_context: I_blockchain_db_type_map {}
 public final class L_blockchain_ui_type_action_policy: L, I_blockchain_ui_type_action_policy {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type.action.policy", comment: "") }
 }
