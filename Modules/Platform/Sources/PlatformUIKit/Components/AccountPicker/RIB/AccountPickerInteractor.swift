@@ -112,10 +112,6 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                     .map(\.account)
                     .compactMap(\.accountPickerCellItemInteractor)
 
-                if interactors.isEmpty {
-                    interactors.append(.emptyState)
-                }
-
                 let action = try app.state.get(blockchain.ux.transaction.id, as: AssetAction.self)
 
                 if
@@ -124,6 +120,8 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                     paymentMethods.contains(where: { method in action != .withdraw || method.capabilities?.contains(.withdrawal) != false })
                 {
                     interactors.append(.button(button))
+                } else if interactors.isEmpty {
+                     interactors.append(.emptyState)
                 }
 
                 return State(
