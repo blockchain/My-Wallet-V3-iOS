@@ -114,7 +114,8 @@ extension AppProtocol {
                 try await WireTransferNAPI(self).register()
                 try await TradingPairsNAPI().register()
                 try await UserProductsRepository(app: self).register()
-                try await KYCSSNRepository(app: self, client: resolve()).register()
+                let kycRepository: KYCSSNRepository = DIKit.resolve()
+                try await kycRepository.register()
             } catch {
                 post(error: error)
                 #if DEBUG
