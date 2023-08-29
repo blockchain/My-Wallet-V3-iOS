@@ -8,6 +8,7 @@ import FeatureAttributionDomain
 import FeatureCoinUI
 import FeatureCustomerSupportUI
 import FeatureDashboardDomain
+import FeatureKYCDomain
 import FeatureKYCUI
 import FeatureProductsDomain
 import FeatureReferralDomain
@@ -113,6 +114,7 @@ extension AppProtocol {
                 try await WireTransferNAPI(self).register()
                 try await TradingPairsNAPI().register()
                 try await UserProductsRepository(app: self).register()
+                try await KYCSSNRepository(app: self, client: resolve()).register()
             } catch {
                 post(error: error)
                 #if DEBUG
