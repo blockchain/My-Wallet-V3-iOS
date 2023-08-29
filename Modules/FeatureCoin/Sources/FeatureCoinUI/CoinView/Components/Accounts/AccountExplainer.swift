@@ -26,8 +26,7 @@ struct AccountExplainer: View {
                 let explainer = account.accountType.explainer
 
                 account
-                    .icon(color: .semantic.primary)
-                    .frame(width: 48.pt, height: 48.pt)
+                    .icon(color: .semantic.primary, size: 48.pt)
                 VStack(spacing: 8) {
                     Text(explainer.title)
                         .typography(.title3)

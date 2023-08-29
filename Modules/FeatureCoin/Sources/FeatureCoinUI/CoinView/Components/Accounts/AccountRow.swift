@@ -52,7 +52,7 @@ struct AccountRow: View {
         TableRow(
             leading: {
                 account
-                    .icon(color: .white)
+                    .icon(color: .semantic.muted)
                     .frame(width: 24, height: 24)
             },
             title: {
@@ -145,28 +145,33 @@ struct AccountRow: View {
 
 extension Account.Snapshot {
     @ViewBuilder
-    func icon(color: Color) -> some View {
+    func icon(color: Color, size: Length = 24.pt) -> some View {
         switch accountType {
         case .exchange:
             Icon
                 .walletExchange
-                .color(color)
+                .color(.white)
+                .circle(backgroundColor: color)
+                .frame(width: size, height: size)
         case .interest:
             Icon.interest
-                .circle(backgroundColor: .semantic.muted)
-                .color(color)
+                .color(.white)
+                .circle(backgroundColor: color)
+                .frame(width: size, height: size)
         case .trading, .privateKey:
             cryptoCurrency
-                .logo()
+                .logo(size: size)
         case .staking:
             Icon.lockClosed
-                .circle(backgroundColor: .semantic.muted)
-                .color(color)
+                .color(.white)
+                .circle(backgroundColor: color)
+                .frame(width: size, height: size)
         case .activeRewards:
             Icon
                 .prices
-                .circle(backgroundColor: .semantic.muted)
-                .color(color)
+                .color(.white)
+                .circle(backgroundColor: color)
+                .frame(width: size, height: size)
         }
     }
 
