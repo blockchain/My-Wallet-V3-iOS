@@ -21,7 +21,7 @@ extension Bindings {
 
         public private(set) var isUpToDate: Bool = true
         public private(set) var hasTransactionChanges: Bool = false
-        public var isInTransaction: Bool { app?.isInTransaction ?? false }
+        public var isInTransaction: Bool { app?.state.data.isInTransaction ?? false }
 
         public private(set) var result: Result = .idle {
             didSet {

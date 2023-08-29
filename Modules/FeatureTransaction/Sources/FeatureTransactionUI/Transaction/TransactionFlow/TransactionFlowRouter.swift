@@ -89,14 +89,6 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         viewController.uiviewController.presentedViewController == nil
     }
 
-    private var _checkoutIsEnabledSync: Bool {
-        app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.is.enabled)
-    }
-    private var _checkoutIsEnabledAsync: Bool = false
-    private lazy var bindings = app.binding(self, .async)
-        .subscribe(\._checkoutIsEnabledAsync, to: blockchain.ux.transaction.checkout.is.enabled)
-        .bindings()
-
     init(
         app: AppProtocol = resolve(),
         interactor: TransactionFlowInteractable,
@@ -129,34 +121,20 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         self.coincore = coincore
         super.init(interactor: interactor, viewController: viewController)
         interactor.router = self
-        bindings.request()
-    }
-
-    private func isNewCheckoutEnabled(action: AssetAction) -> Bool? {
-        switch action {
-        case .withdraw, .deposit:
-            guard bindings.isSynchronized else {
-                return nil
-            }
-            return _checkoutIsEnabledAsync
-        default:
-            return _checkoutIsEnabledSync
-        }
     }
 
     func routeToConfirmation(transactionModel: TransactionModel, action: AssetAction) {
-        guard let isNewCheckoutEnabled = isNewCheckoutEnabled(action: action) else {
-            return
+        Task { @MainActor in
+            let builder = await ConfirmationPageBuilder(
+                transactionModel: transactionModel,
+                action: action,
+                isNewCheckoutEnabled: app.get(blockchain.ux.transaction.checkout.is.enabled, or: false)
+            )
+            let router = builder.build(listener: interactor)
+            let viewControllable = router.viewControllable
+            attachChild(router)
+            viewController.push(viewController: viewControllable)
         }
-        let builder = ConfirmationPageBuilder(
-            transactionModel: transactionModel,
-            action: action,
-            isNewCheckoutEnabled: isNewCheckoutEnabled
-        )
-        let router = builder.build(listener: interactor)
-        let viewControllable = router.viewControllable
-        attachChild(router)
-        viewController.push(viewController: viewControllable)
     }
 
     func routeToInProgress(transactionModel: TransactionModel, action: AssetAction) {
