@@ -18,13 +18,6 @@ public final class KYCSSNRepository {
             cache: InMemoryCache(configuration: .onUserStateChanged(), refreshControl: PerpetualCacheRefreshControl()).eraseToAnyCache(),
             fetch: { [client] _ in client.checkSSN().mapError(UX.Error.init(nabu:)).eraseToAnyPublisher() }
         )
-        Task {
-            do {
-                try await setupNAPI()
-            } catch {
-                app.post(error: error)
-            }
-        }
     }
 
     public func checkSSN() -> AnyPublisher<KYC.SSN, UX.Error> {
@@ -35,7 +28,7 @@ public final class KYCSSNRepository {
         client.submitSSN(ssn).mapError(UX.Error.init(nabu:)).eraseToAnyPublisher()
     }
 
-    func setupNAPI() async throws {
+    public func register() async throws {
         try await app.register(
             napi: blockchain.api.nabu.gateway.onboarding,
             domain: blockchain.api.nabu.gateway.onboarding.SSN,
