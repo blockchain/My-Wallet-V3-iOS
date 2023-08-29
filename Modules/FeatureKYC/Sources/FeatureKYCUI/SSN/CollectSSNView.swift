@@ -182,9 +182,20 @@ class SubmitSSNService: ObservableObject {
         defer { isLoading = false }
         try await repository.submitSSN(SSN).await()
         do {
-            try await repository.checkSSN()
-                .poll(max: 10, until: { SSN in SSN.verification?.state.isFinal ?? false }, delay: .seconds(3), scheduler: DispatchQueue.main)
+            let SSN = try await repository.checkSSN()
+                .poll(
+                    max: 20,
+                    until: { SSN in SSN.verification?.state.isFinal ?? false },
+                    delay: .seconds(3),
+                    scheduler: DispatchQueue.main
+                )
                 .await()
+            if let message = SSN.verification?.errorMessage {
+                throw UX.Error(
+                    title: LocalizationConstants.SSN.timedOutTitle,
+                    message: message
+                )
+            }
         } catch PublisherTimeoutError.timeout {
             throw UX.Error(
                 title: LocalizationConstants.SSN.timedOutTitle,

@@ -38,11 +38,11 @@ extension LocalizationConstants.SSN {
         comment: "Got It"
     )
     static let timedOutTitle = NSLocalizedString(
-        "Timed out",
-        comment: "Timed out"
+        "Waiting for verification",
+        comment: "Timed out title"
     )
     static let timedOutBody = NSLocalizedString(
-        "Timed out",
-        comment: "We are having troubles with the connection - please check back soon."
+        "We are still waiting for your account to be verified. Please check back soon.",
+        comment: "Timed out body"
     )
 }

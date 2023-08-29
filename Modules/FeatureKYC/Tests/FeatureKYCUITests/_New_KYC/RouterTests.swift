@@ -43,11 +43,7 @@ final class RouterTests: XCTestCase {
             openURL: mockExternalAppOpener.open
         )
 
-        try await app.register(napi: blockchain.api.nabu.gateway.onboarding, domain: blockchain.api.nabu.gateway.onboarding.SSN, repository: { _ in
-            AnyJSON(
-                ["is": ["mandatory": false]]
-            )
-        })
+        try await app.set(blockchain.ux.kyc.SSN.should.be.collected, to: false)
     }
 
     override func tearDownWithError() throws {

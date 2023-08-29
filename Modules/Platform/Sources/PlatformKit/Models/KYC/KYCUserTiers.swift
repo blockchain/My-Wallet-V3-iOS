@@ -73,8 +73,7 @@ extension KYC {
             }
 
             public let state: State
-            public let message: String?
-            public let isAllowedToRetry: Bool
+            public let errorMessage: String?
         }
 
         public let requirements: Requirements
@@ -84,12 +83,12 @@ extension KYC {
 
 extension KYC.SSN.Verification.State {
 
-    public static let submissionRequired = Self("SUBMISSION_REQUIRED")
-    public static let verificationPending = Self("VERIFICATION_PENDING")
-    public static let verificationRejected = Self("VERIFICATION_REJECTED")
-    public static let verificationSuccessful = Self("VERIFICATION_SUCCESSFUL")
+    public static let required = Self("REQUIRED")
+    public static let pending = Self("PENDING")
+    public static let rejected = Self("REJECTED")
+    public static let verified = Self("VERIFIED")
 
-    public var isFinal: Bool { self == .verificationRejected || self == .verificationSuccessful }
+    public var isFinal: Bool { self != .pending }
 }
 
 extension KYC.UserTiers {

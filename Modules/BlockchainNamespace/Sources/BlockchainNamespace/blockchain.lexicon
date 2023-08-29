@@ -29,12 +29,10 @@ blockchain:
 							+ blockchain.db.type.string
 						state:
 						+ blockchain.db.type.enum
-							submission:
-								required:
-							verification:
-								pending:
-								rejected:
-								successful:
+							pending:
+							rejected:
+							required:
+							verified:
 						verification:
 							message:
 							+ blockchain.db.type.string
@@ -2553,6 +2551,11 @@ blockchain:
 					enabled:
 					+ blockchain.db.type.boolean
 					+ blockchain.session.configuration.value
+				should:
+					be:
+						collected:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
 				why:
 					learn:
 						more:

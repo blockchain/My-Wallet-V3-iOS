@@ -271,7 +271,7 @@ public final class Router: Routing {
             .receive(on: DispatchQueue.main)
             .mapError { _ in RouterError.kycStepFailed }
             .combineLatest(
-                app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self)
+                app.publisher(for:  blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
                     .replaceError(with: false)
                     .prefix(1)
                     .flatMap { [app] isEnabled -> AnyPublisher<Bool, Never> in

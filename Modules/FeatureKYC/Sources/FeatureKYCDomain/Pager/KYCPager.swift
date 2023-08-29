@@ -56,19 +56,9 @@ public final class KYCPager: KYCPagerAPI {
 
         return Observable.combineLatest(
             nabuUserService.user.asObservable(),
-            app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self)
+            app.publisher(for: blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
                 .replaceError(with: false)
                 .prefix(1)
-                .flatMap { [app] isEnabled -> AnyPublisher<Bool, Never> in
-                    if isEnabled {
-                        return app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
-                            .replaceError(with: false)
-                            .prefix(1)
-                            .eraseToAnyPublisher()
-                    } else {
-                        return .just(false)
-                    }
-                }
                 .asObservable()
         )
         .asSingle()

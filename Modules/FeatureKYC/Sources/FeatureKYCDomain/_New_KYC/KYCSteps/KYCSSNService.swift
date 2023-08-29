@@ -42,13 +42,12 @@ public final class KYCSSNRepository {
                                 case let .success(ssn):
                                     var json = L_blockchain_api_nabu_gateway_onboarding_SSN.JSON()
                                     json.is.mandatory = ssn.requirements.isMandatory
-                                    if let message = ssn.verification?.message {
+                                    if let message = ssn.verification?.errorMessage {
                                         json.verification.message = message
                                     }
                                     json.regex.validation = ssn.requirements.validationRegex
                                     if let verification = ssn.verification {
-                                        json.is.allowed.to.retry = verification.isAllowedToRetry
-                                        json.state = blockchain.api.nabu.gateway.onboarding.SSN.state(\.id) + verification.state.value.lowercased().replacingOccurrences(of: "_", with: ".")
+                                        json.state = blockchain.api.nabu.gateway.onboarding.SSN.state(\.id) + verification.state.value.lowercased()
                                     }
                                     return json.toJSON()
                                 case let .failure(error):
