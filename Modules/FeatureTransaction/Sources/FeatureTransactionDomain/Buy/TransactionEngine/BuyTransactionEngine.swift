@@ -297,16 +297,26 @@ final class BuyTransactionEngine: TransactionEngine {
         quoteId: String,
         amount: MoneyValue
     ) -> Single<TransactionOrder?> {
-        isRecurringBuyEnabled
+
+        func targetCryptoCurrency() -> CryptoCurrency? {
+            if let destinationAccount = self.transactionTarget as? CryptoTradingAccount {
+                return destinationAccount.currencyType.cryptoCurrency
+            }
+
+            if let destinationAccount = self.transactionTarget as? ExternalBrokerageCryptoAccount {
+                return destinationAccount.currencyType.cryptoCurrency
+            }
+
+            return nil
+        }
+
+        return isRecurringBuyEnabled
             .asSingle()
             .flatMap(weak: self) { (self, isRecurringBuyEnabled) -> Single<TransactionOrder?> in
                 guard let sourceAccount = self.sourceAccount as? PaymentMethodAccount else {
                     return .error(TransactionValidationFailure(state: .optionInvalid))
                 }
-                guard let destinationAccount = self.transactionTarget as? CryptoTradingAccount else {
-                    return .error(TransactionValidationFailure(state: .optionInvalid))
-                }
-                guard let crypto = destinationAccount.currencyType.cryptoCurrency else {
+                guard let crypto = targetCryptoCurrency() else {
                     return .error(TransactionValidationFailure(state: .optionInvalid))
                 }
                 guard let fiatValue = amount.fiatValue else {
