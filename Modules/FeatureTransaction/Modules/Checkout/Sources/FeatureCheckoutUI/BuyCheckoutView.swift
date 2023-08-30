@@ -440,7 +440,8 @@ extension BuyCheckoutView.Loaded {
             title: L10n.Label.bakktAlertTitle,
             message: L10n.Label.bakktAlertSubTitle,
             variant: .warning,
-            isBordered: true
+            isBordered: false,
+            backgroundColor: .semantic.background
         )
     }
 
