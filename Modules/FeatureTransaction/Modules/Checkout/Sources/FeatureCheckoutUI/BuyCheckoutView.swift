@@ -438,7 +438,7 @@ extension BuyCheckoutView.Loaded {
     func bakktAlertCard() -> some View {
         AlertCard(
             title: L10n.Label.bakktAlertTitle,
-            message: L10n.Label.bakktAlertTitle,
+            message: L10n.Label.bakktAlertSubTitle,
             variant: .warning,
             isBordered: true
         )
