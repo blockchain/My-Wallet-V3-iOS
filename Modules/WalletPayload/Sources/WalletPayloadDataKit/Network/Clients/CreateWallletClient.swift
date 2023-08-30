@@ -55,10 +55,12 @@ final class CreateWalletClient: CreateWalletClientAPI {
             )
         }
         var headers: [String: String] = [:]
+
         if BuildFlag.isInternal,
            let bypass = InfoDictionaryHelper.valueIfExists(for: .recaptchaBypass, prefix: "https://")
         {
-            headers[HttpHeaderField.origin] = bypass
+// Augustin: Commenting out this field to restore staging user testing. Strangely enough, when this is present, user creation fails.
+//            headers[HttpHeaderField.origin] = bypass
         }
         let wrapperParameters = provideWrapperParameters(from: payload)
         let body = RequestBuilder.body(from: parameters + wrapperParameters)
