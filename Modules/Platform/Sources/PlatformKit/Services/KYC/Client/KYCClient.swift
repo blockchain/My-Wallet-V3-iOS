@@ -346,7 +346,7 @@ final class KYCClient: KYCClientAPI {
     func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error> {
         networkAdapter.perform(
             request: requestBuilder.get(
-                path: ["onboarding", "collect", "ssn"],
+                path: ["onboarding", "ssn"],
                 authenticated: true
             )!
         )
@@ -355,7 +355,7 @@ final class KYCClient: KYCClientAPI {
     func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error> {
         networkAdapter.perform(
             request: requestBuilder.post(
-                path: ["onboarding", "collect", "ssn"],
+                path: ["onboarding", "ssn"],
                 body: try? ["ssn": ssn].encode(),
                 authenticated: true
             )!
