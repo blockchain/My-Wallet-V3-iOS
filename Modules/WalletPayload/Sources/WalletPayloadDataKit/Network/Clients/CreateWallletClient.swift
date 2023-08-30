@@ -55,7 +55,8 @@ final class CreateWalletClient: CreateWalletClientAPI {
             )
         }
         var headers: [String: String] = [:]
-        if BuildFlag.isInternal,
+
+        if BuildFlag.isAlpha,
            let bypass = InfoDictionaryHelper.valueIfExists(for: .recaptchaBypass, prefix: "https://")
         {
             headers[HttpHeaderField.origin] = bypass

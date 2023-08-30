@@ -405,9 +405,11 @@ extension BuyCheckoutView.Loaded {
                 }
             }
 
+            bakktAlertCard()
+                .padding(.vertical, Spacing.padding2)
+
             Image("bakkt-logo", bundle: .componentLibrary)
                 .foregroundColor(.semantic.title)
-                .padding(.top, Spacing.padding2)
         }
     }
 
@@ -430,6 +432,17 @@ extension BuyCheckoutView.Loaded {
             .batch {
                 set(blockchain.ux.bakkt.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.bakkt.refund.policy.disclaimer.url })
             }
+    }
+
+    @ViewBuilder
+    func bakktAlertCard() -> some View {
+        AlertCard(
+            title: L10n.Label.bakktAlertTitle,
+            message: L10n.Label.bakktAlertSubTitle,
+            variant: .warning,
+            isBordered: false,
+            backgroundColor: .semantic.background
+        )
     }
 
     @ViewBuilder
