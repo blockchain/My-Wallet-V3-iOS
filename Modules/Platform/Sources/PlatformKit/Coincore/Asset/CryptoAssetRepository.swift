@@ -70,7 +70,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     public func accountGroup(filter: AssetFilter) -> AnyPublisher<AccountGroup?, Never> {
         app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
-            .flatMap { [self, asset] useExternalTradingAccount -> AnyPublisher<AccountGroup?, Never> in
+            .flatMap { [self] useExternalTradingAccount -> AnyPublisher<AccountGroup?, Never> in
 
                 var stream: [AnyPublisher<[SingleAccount], Never>] = []
 
@@ -84,7 +84,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
 
                 if useExternalTradingAccount {
                     if filter.contains(.custodial) {
-                        stream.append(.just([ExternalBrokerageCryptoAccount(asset: asset)]))
+                        stream.append(custodialAccounts)
                     }
                 } else {
 

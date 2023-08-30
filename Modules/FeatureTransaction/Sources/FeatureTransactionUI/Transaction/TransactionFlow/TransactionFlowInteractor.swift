@@ -852,8 +852,8 @@ extension TransactionFlowInteractor {
     func onInit() {
 
         app.state.transaction { state in
-            state.set(blockchain.app.configuration.transaction.id, to: action.rawValue)
-            state.set(blockchain.ux.transaction.id, to: action.rawValue)
+            state.set(blockchain.app.configuration.transaction.id, to: action.string)
+            state.set(blockchain.ux.transaction.id, to: action.string)
             state.set(blockchain.ux.transaction.source.id, to: sourceAccount?.currencyType.code)
             state.set(blockchain.ux.transaction.source.target.id, to: target?.currencyType.code)
             state.set(blockchain.ux.buy.last.bought.asset, to: target?.currencyType.code)
@@ -871,8 +871,6 @@ extension TransactionFlowInteractor {
                     case .initial:
                         state.set(blockchain.ux.transaction.source.id, to: tx.source?.currencyType.code)
                         state.set(blockchain.ux.transaction.source.target.id, to: tx.destination?.currencyType.code)
-                    case .closed:
-                        state.clear(blockchain.ux.transaction.id)
                     default:
                         break
                     }

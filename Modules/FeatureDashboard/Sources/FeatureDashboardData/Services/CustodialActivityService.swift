@@ -97,13 +97,7 @@ class CustodialActivityService: CustodialActivityServiceAPI {
         }
 
         return combineLatest(
-            streams.map { name, stream in
-                stream.setFailureType(to: String.self)
-                    .timeout(.seconds(10), scheduler: DispatchQueue.main, customError: { "\(name) - timed out" })
-                    .recordFailure(to: app)
-                    .replaceError(with: [])
-                    .values
-            },
+            streams.map { name, stream in stream.values },
             bufferingPolicy: .unbounded)
         .map { items in
             items.flatMap { $0 }.sorted(by: { $0.timestamp > $1.timestamp })

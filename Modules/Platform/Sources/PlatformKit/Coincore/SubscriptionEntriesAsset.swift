@@ -11,8 +11,6 @@ public protocol SubscriptionEntriesAsset {
 
 struct FiatCustodialAccountFactory: FiatCustodialAccountFactoryAPI {
 
-    @Dependency(\.app) var app
-
     func fiatCustodialAccount(fiatCurrency: FiatCurrency) -> FiatAccount {
         FiatCustodialAccount(fiatCurrency: fiatCurrency)
     }
@@ -25,6 +23,7 @@ struct CustodialCryptoAssetFactory: CustodialCryptoAssetFactoryAPI {
 }
 
 struct CryptoTradingAccountFactory: CryptoTradingAccountFactoryAPI {
+
     func cryptoTradingAccount(
         cryptoCurrency: CryptoCurrency,
         addressFactory: ExternalAssetAddressFactory

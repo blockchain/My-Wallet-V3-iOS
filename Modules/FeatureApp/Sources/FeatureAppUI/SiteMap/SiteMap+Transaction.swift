@@ -19,6 +19,9 @@ extension SiteMap {
         switch ref {
         case blockchain.ux.transaction:
             IfEligible { TransactionView() }
+                .onAppear {
+                    app.state.set(blockchain.ux.transaction.id, to: ref[blockchain.ux.transaction.id])
+                }
                 .ignoresSafeArea()
                 .navigationBarHidden(true)
         case blockchain.ux.transaction.disclaimer:

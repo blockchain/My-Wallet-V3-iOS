@@ -274,16 +274,6 @@ public final class Router: Routing {
                 app.publisher(for:  blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
                     .replaceError(with: false)
                     .prefix(1)
-                    .flatMap { [app] isEnabled -> AnyPublisher<Bool, Never> in
-                        if isEnabled {
-                            return app.publisher(for: blockchain.api.nabu.gateway.onboarding.SSN.is.mandatory, as: Bool.self)
-                                .replaceError(with: false)
-                                .prefix(1)
-                                .eraseToAnyPublisher()
-                        } else {
-                            return .just(false)
-                        }
-                    }
                     .setFailureType(to: RouterError.self)
             )
             .flatMap { [app, routeToKYC] userTiers, isSSNMandatory -> AnyPublisher<FlowResult, RouterError> in
