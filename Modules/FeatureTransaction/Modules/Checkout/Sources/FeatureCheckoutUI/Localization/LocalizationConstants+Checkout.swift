@@ -207,6 +207,16 @@ extension LocalizationConstants {
                 "Network fees are set by the two networks. In order to swap between them, you need to pay fees on each network.",
                 comment: "Network fees are set by the two networks. In order to swap between them, you need to pay fees on each network."
             )
+
+            static let bakktAlertTitle = NSLocalizedString(
+                "Important information",
+                comment: "Important information"
+            )
+
+            static let bakktAlertSubTitle = NSLocalizedString(
+                "Withdrawals for crypto are currently unavailable, but you can still sell your assets for fiat.",
+                comment: "Withdrawals for crypto are currently unavailable, but you can still sell your assets for fiat."
+            )
         }
 
         enum Button {
