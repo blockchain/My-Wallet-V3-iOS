@@ -822,8 +822,8 @@ public final class TransactionModel {
                     guard let self else { return }
                     Task { [app] in
                         do {
-                            try await self.app.set(blockchain.ux.transaction.source[sourceAccount.currencyType.code].account.id, to: sourceAccount.identifier)
-                            try await self.app.set(blockchain.ux.transaction.source[sourceAccount.currencyType.code].target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
+                            try await self.app.set(blockchain.ux.transaction[action.string].source[sourceAccount.currencyType.code].account.id, to: sourceAccount.identifier)
+                            try await self.app.set(blockchain.ux.transaction[action.string].source[sourceAccount.currencyType.code].target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
                             self.process(action: .pendingTransactionUpdated(transaction))
                         } catch {
                             app.post(error: error)
@@ -945,7 +945,7 @@ extension TransactionState {
         switch action {
         case .buy:
             switch destination {
-            case is ExternalBrokerageCryptoAccount:
+            case let tradingAccount as CryptoTradingAccount where tradingAccount.isExternalTradingAccount:
                 return .externalBuy
             default:
                 return .buy
@@ -954,7 +954,7 @@ extension TransactionState {
             switch source {
             case is NonCustodialAccount:
                 return .swapPKWToTrading
-            case is ExternalBrokerageCryptoAccount:
+            case let tradingAccount as CryptoTradingAccount where tradingAccount.isExternalTradingAccount:
                 return .externalTradingToTrading
             case is TradingAccount:
                 return .swapTradingToTrading

@@ -128,7 +128,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             let builder = await ConfirmationPageBuilder(
                 transactionModel: transactionModel,
                 action: action,
-                isNewCheckoutEnabled: app.get(blockchain.ux.transaction.checkout.is.enabled, or: false)
+                isNewCheckoutEnabled: app.get(blockchain.ux.transaction[action.string].checkout.is.enabled, or: false)
             )
             let router = builder.build(listener: interactor)
             let viewControllable = router.viewControllable

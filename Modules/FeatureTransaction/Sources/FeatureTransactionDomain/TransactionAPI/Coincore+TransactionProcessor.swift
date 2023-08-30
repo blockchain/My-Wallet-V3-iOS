@@ -28,13 +28,13 @@ extension CoincoreAPI {
             )
         case let account as CryptoActiveRewardsAccount where action == .activeRewardsWithdraw:
             return createActiveRewardsWithdrawTradingProcessor(with: account, target: target)
-        case let account as CryptoTradingAccount:
-            return createTradingProcessor(
+        case let account as CryptoTradingAccount where account.isExternalTradingAccount:
+            return createExternalTradingProcessor(
                 with: account,
                 target: target,
                 action: action
             )
-        case let account as ExternalBrokerageCryptoAccount:
+        case let account as CryptoTradingAccount:
             return createTradingProcessor(
                 with: account,
                 target: target,
@@ -207,8 +207,8 @@ extension CoincoreAPI {
         }
     }
 
-    private func createTradingProcessor(
-        with account: ExternalBrokerageCryptoAccount,
+    private func createExternalTradingProcessor(
+        with account: CryptoTradingAccount,
         target: TransactionTarget,
         action: AssetAction
     ) -> Single<TransactionProcessor> {

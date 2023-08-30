@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
 import FeatureStakingDomain
@@ -8,6 +9,8 @@ import ToolKit
 
 /// Named `CustodialTradingAccount` on Android
 public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
+
+    @Dependency(\.app) var app
 
     private enum CryptoTradingAccountError: LocalizedError {
         case loadingFailed(asset: String, label: String, action: AssetAction, error: String)
@@ -28,8 +31,16 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
     public let isDefault: Bool = false
     public var accountType: AccountType = .trading
 
+    private(set) public var isExternalTradingAccount: Bool = false
+
+    lazy var bindings = app.binding(self)
+        .subscribe(\.isExternalTradingAccount, to: blockchain.app.is.external.brokerage)
+        .bindings()
+
     public var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
-        custodialAddressService
+        guard bindings.isSynchronized else { return .failure(ReceiveAddressError.notSupported) }
+        guard !isExternalTradingAccount else { return .failure(ReceiveAddressError.notSupported) }
+        return custodialAddressService
             .receiveAddress(for: asset)
             .eraseError()
             .flatMap { [cryptoReceiveAddressFactory, label, onTxCompleted] address in
@@ -125,7 +136,7 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
                         value: amount,
                         destination: receiveAddress.address,
                         transactionHash: hash,
-                        product: "SIMPLEBUY"
+                        product: self.isExternalTradingAccount ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY"
                     )
                     .eraseError()
                     .eraseToAnyPublisher()
@@ -135,7 +146,9 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
     }
 
     public var disabledReason: AnyPublisher<InterestAccountIneligibilityReason, Error> {
-        interestEligibilityRepository
+        guard bindings.isSynchronized else { return .failure("Not Supported") }
+        guard !isExternalTradingAccount else { return .failure("Not Supported") }
+        return interestEligibilityRepository
             .fetchInterestAccountEligibilityForCurrencyCode(currencyType)
             .map(\.ineligibilityReason)
             .eraseError()
@@ -188,6 +201,7 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
         self.kycTiersService = kycTiersService
         self.errorRecorder = errorRecorder
         self.supportedPairsInteractorService = supportedPairsInteractorService
+        bindings.request()
     }
 
     private var isPairToFiatAvailable: AnyPublisher<Bool, Never> {
