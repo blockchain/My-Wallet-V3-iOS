@@ -104,7 +104,9 @@ struct BuyEntryListView: View {
 
     var body: some View {
         List {
-            if !isSearching, isTopMoversEnabled == nil || isTopMoversEnabled == true {
+            if !isSearching,
+                isTopMoversEnabled == nil || isTopMoversEnabled == true,
+                isExternalTradingEnabled == false {
                 Section {
                     topMoversView
                         .transition(.opacity)
@@ -128,6 +130,7 @@ struct BuyEntryListView: View {
                 .textCase(nil)
                 .bindings {
                     subscribe($mostPopular, to: blockchain.app.configuration.buy.most.popular.assets)
+                    subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
                 }
             }
             Section(
@@ -149,6 +152,8 @@ struct BuyEntryListView: View {
     }
 
     @State private var isTopMoversEnabled: Bool?
+    @State private var isExternalTradingEnabled: Bool = false
+
     @State private var topMovers: StoreOf<TopMoversSection>
 
     var topMoversView: some View {
