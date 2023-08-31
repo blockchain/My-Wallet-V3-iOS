@@ -15,6 +15,7 @@ public struct AccountListView: View {
 
     @BlockchainApp var app
     @Environment(\.context) var context
+    @State private var isExternalTradingEnabled: Bool = false
 
     let accounts: [Account.Snapshot]
     let currency: CryptoCurrency
@@ -35,6 +36,7 @@ public struct AccountListView: View {
         accounts.count == 1 && accounts.first?.accountType == .privateKey
     }
 
+
     public var body: some View {
         VStack(spacing: 0) {
             if accounts.isEmpty {
@@ -44,7 +46,8 @@ public struct AccountListView: View {
                     AccountRow(
                         account: account,
                         assetColor: currency.color,
-                        interestRate: earnRates?.rate(accountType: account.accountType)
+                        interestRate: earnRates?.rate(accountType: account.accountType),
+                        actionEnabled: !isExternalTradingEnabled
                     )
                     .context(
                         [
@@ -66,6 +69,10 @@ public struct AccountListView: View {
                 }
             }
         }
+        .bindings {
+            subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
+        }
+
         .cornerRadius(16)
         .padding(.horizontal, Spacing.padding2)
     }
