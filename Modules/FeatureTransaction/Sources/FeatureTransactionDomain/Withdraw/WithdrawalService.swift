@@ -31,15 +31,16 @@ final class WithdrawalService: WithdrawalServiceAPI {
             .asSingle()
             .flatMap { [client, transactionLimitsService] isEligible -> Single<WithdrawalFeeAndLimit> in
                 client.withdrawFee(currency: currency, paymentMethodType: paymentMethodType, product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
-                    .map { response -> (CurrencyFeeResponse, CurrencyFeeResponse) in
+                    .map { response -> (CurrencyFeeResponse, CurrencyFeeResponse)? in
                         guard let fees = response.fees.first(where: { $0.symbol == currency.code }) else {
-                            fatalError("Expected fees for currency: \(currency)")
+                            return nil
                         }
                         guard let mins = response.minAmounts.first(where: { $0.symbol == currency.code }) else {
-                            fatalError("Expected minimum values for currency: \(currency)")
+                            return nil
                         }
                         return (fees, mins)
                     }
+                    .compactMap{$0}
                     .mapError(TransactionLimitsServiceError.network)
                     .zip(
                         transactionLimitsService.fetchLimits(
