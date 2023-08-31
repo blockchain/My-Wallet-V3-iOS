@@ -121,6 +121,9 @@ final class BeneficiariesService: BeneficiariesServiceAPI {
         guard case .beneficiary(let accountType) = data.type else {
             return .just(event: .completed)
         }
+
+        invalidate()
+
         return deleteBank(by: data.id, for: accountType)
             .andThen(fetch().take(1))
             .do(onNext: { [weak self] _ in
