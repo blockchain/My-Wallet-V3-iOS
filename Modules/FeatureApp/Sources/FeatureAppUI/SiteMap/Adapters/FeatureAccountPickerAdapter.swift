@@ -248,7 +248,11 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                 size: 24
             )
         case .linkedBankAccount(let account, _):
-            AsyncMedia(url: account.data.icon)
+            if let icon = account.data.icon {
+                AsyncMedia(url: icon)
+            } else {
+                ImageResource.local(name: "icon-bank", bundle: .platformUIKit).image
+            }
         default:
             EmptyView()
         }

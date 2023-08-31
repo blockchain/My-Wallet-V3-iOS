@@ -143,8 +143,9 @@ extension TransactionAction {
                 return oldState.stateForMovingOneStepBack()
 
             case .deposit, .withdraw:
+                // To modify
                 var newState = oldState
-                newState.step = .selectTarget
+                newState.step = .selectSource
                 return newState.withUpdatedBackstack(oldState: oldState)
 
             default:
