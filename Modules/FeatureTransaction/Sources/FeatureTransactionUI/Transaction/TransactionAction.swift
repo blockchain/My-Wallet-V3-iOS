@@ -144,7 +144,7 @@ extension TransactionAction {
 
             case .deposit, .withdraw:
                 var newState = oldState
-                newState.step = .selectTarget
+                newState.step = .selectSource
                 return newState.withUpdatedBackstack(oldState: oldState)
 
             default:
