@@ -72,11 +72,13 @@ extension Bindings {
 
     func didUpdate(_ binding: Bindings.Binding) {
         lock.lock()
-        defer { lock.unlock() }
+        let isSynchronized = isSynchronized
+        let bindings = bindings
+        lock.unlock()
         if depth < 0, binding.hasTransactionChanges { return }
         if case .failure(let error, _) = binding.result { handle?(.updateError(binding, error)) }
         if isSynchronized, binding.result.isSynchronized { apply(binding) }
-        if !isSynchronized, bindings.allSatisfy(\.result.isSynchronized) { applyAll() }
+        if !isSynchronized, bindings.allSatisfy(\.result.isSynchronized) { apply(bindings) }
     }
 
     func insert(_ binding: Bindings.Binding?) {
@@ -95,19 +97,15 @@ extension Bindings {
         bindings.remove(binding)
     }
 
-    func apply(_ binding: Bindings.Binding) {
-        lock.lock()
+    private func apply(_ binding: Bindings.Binding) {
         binding.apply(asynchronously: tempo == .async)
-        lock.unlock()
         handle?(.update(binding))
     }
 
-    func applyAll() {
+    private func apply(_ bindings: Set<Binding>) {
         func apply() {
-            lock.lock()
             for binding in bindings { binding.apply(asynchronously: false) }
-            isSynchronized = true
-            lock.unlock()
+            lock.withLock { isSynchronized = true }
             handle?(.didSynchronize(bindings))
             onSynchronization.continuation.yield()
         }
