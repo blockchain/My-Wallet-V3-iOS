@@ -254,9 +254,17 @@ extension EarnDashboardView {
                 .eraseToAnyPublisher()
             }
 
-            let products = app.publisher(for: blockchain.ux.earn.supported.products, as: OrderedSet<EarnProduct>.self)
-                .replaceError(with: [.savings, .staking])
-                .removeDuplicates()
+            let products: AnyPublisher<OrderedSet<EarnProduct>, Never> = app.publisher(
+                for: blockchain.ux.earn.supported.products,
+                as: [EarnProduct].self
+            )
+            .replaceError(with: [.savings, .staking])
+            .map { products in
+                OrderedSet<EarnProduct>(products)
+            }
+            .removeDuplicates()
+            .share()
+            .eraseToAnyPublisher()
 
             products.flatMap { products -> AnyPublisher<[Model], Never> in
                 products.map { product -> AnyPublisher<[Model?], Never> in
