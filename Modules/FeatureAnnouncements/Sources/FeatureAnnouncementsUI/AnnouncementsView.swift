@@ -1,15 +1,15 @@
-import BlockchainComponentLibrary
-import BlockchainNamespace
+import Blockchain
+import BlockchainUI
 import ComposableArchitecture
 import FeatureAnnouncementsDomain
 import Localization
 import SwiftUI
 
 @MainActor
-public struct FeatureAnnouncementsView: View {
-    let store: StoreOf<FeatureAnnouncements>
+public struct AnnouncementsView: View {
+    let store: StoreOf<Announcements>
 
-    public init(store: StoreOf<FeatureAnnouncements>) {
+    public init(store: StoreOf<Announcements>) {
         self.store = store
     }
 

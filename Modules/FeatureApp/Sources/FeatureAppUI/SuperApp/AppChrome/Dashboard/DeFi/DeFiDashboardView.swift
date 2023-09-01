@@ -58,7 +58,7 @@ struct DeFiDashboardView: View {
                         tag: blockchain.ux.user.defi.dashboard.quick.action
                     )
 
-                    FeatureAnnouncementsView(
+                    AnnouncementsView(
                         store: store.scope(
                             state: \.announcementsState,
                             action: DeFiDashboard.Action.announcementsAction

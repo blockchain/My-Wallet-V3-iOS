@@ -1,11 +1,11 @@
-import BlockchainNamespace
+import Blockchain
 import Combine
 import ComposableArchitecture
 import Errors
 import FeatureAnnouncementsDomain
 import Foundation
 
-public struct FeatureAnnouncements: ReducerProtocol {
+public struct Announcements: ReducerProtocol {
 
     public enum LoadingStatus: Equatable {
         case idle
@@ -38,7 +38,7 @@ public struct FeatureAnnouncements: ReducerProtocol {
     // MARK: - Properties
 
     private let app: AppProtocol
-    private let service: AnnouncementsServiceAPI
+    private let services: [AnnouncementsServiceAPI]
     private let mainQueue: AnySchedulerOf<DispatchQueue>
     private let mode: Announcement.AppMode
 
@@ -48,11 +48,11 @@ public struct FeatureAnnouncements: ReducerProtocol {
         app: AppProtocol,
         mainQueue: AnySchedulerOf<DispatchQueue>,
         mode: Announcement.AppMode,
-        service: AnnouncementsServiceAPI
+        services: [AnnouncementsServiceAPI]
     ) {
         self.app = app
         self.mainQueue = mainQueue
-        self.service = service
+        self.services = services
         self.mode = mode
     }
 
@@ -78,39 +78,40 @@ public struct FeatureAnnouncements: ReducerProtocol {
             }
             state.status = .loading
             return .run { send in
-                let announcements = await (try? service.fetchMessages(for: [mode, .universal], force: force)) ?? []
+                let announcements = try await withThrowingTaskGroup(of: [Announcement].self) { group in
+                    services.forEach { service in
+                        group.addTask {
+                            await (try? service.fetchMessages(for: [mode, .universal], force: force)) ?? []
+                        }
+                    }
+
+                    var collected = [Announcement]()
+                    for try await value in group {
+                        collected.append(contentsOf: value)
+                    }
+                    return collected
+                }
                 await send(.onAnnouncementsFetched(announcements))
             }
         case .open(let announcement):
-            return .merge(
-                service
-                    .setTapped(announcement: announcement)
-                    .receive(on: mainQueue)
-                    .eraseToEffect()
-                    .fireAndForget(),
-                .fireAndForget {
-                    app.post(
-                        event: blockchain.ux.dashboard.announcements.open.paragraph.button.primary.tap.then.launch.url,
-                        context: [
-                            blockchain.ui.type.action.then.launch.url: announcement.content.actionUrl
-                        ]
-                    )
-                },
-                EffectTask(value: .dismiss(announcement, .open))
-            )
+            return Publishers.MergeMany(services.map { service in service.handle(announcement) })
+                .collect()
+                .map { _ in Action.dismiss(announcement, .open) }
+                .receive(on: mainQueue)
+                .eraseToEffect()
         case .read(let announcement):
             guard let announcement, !announcement.read else {
                 return .none
             }
-            return service
-                .setRead(announcement: announcement)
+            return Publishers.MergeMany(services.map { service in service.setRead(announcement: announcement) })
+                .collect()
                 .receive(on: mainQueue)
                 .eraseToEffect()
                 .fireAndForget()
         case .dismiss(let announcement, let action):
             return .merge(
-                service
-                    .setDismissed(announcement, with: action)
+                Publishers.MergeMany(services.map { service in service.setDismissed(announcement, with: action) })
+                    .collect()
                     .receive(on: mainQueue)
                     .eraseToEffect()
                     .fireAndForget(),

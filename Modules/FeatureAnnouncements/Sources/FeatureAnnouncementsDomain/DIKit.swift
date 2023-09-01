@@ -11,6 +11,7 @@ extension DependencyContainer {
 
         single {
             AnnouncementsService(
+                app: DIKit.resolve(),
                 repository: DIKit.resolve()
             ) as AnnouncementsServiceAPI
         }

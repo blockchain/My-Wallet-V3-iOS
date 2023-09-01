@@ -32,7 +32,7 @@ public struct DeFiDashboard: ReducerProtocol {
         case allAssetsAction(AllAssetsScene.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
-        case announcementsAction(FeatureAnnouncements.Action)
+        case announcementsAction(Announcements.Action)
     }
 
     public struct State: Equatable {
@@ -42,7 +42,7 @@ public struct DeFiDashboard: ReducerProtocol {
         public var allActivityState: AllActivityScene.State = .init(with: .nonCustodial)
         public var activityState: DashboardActivitySection.State = .init(with: .nonCustodial)
         public var announcementState: DashboardAnnouncementsSection.State = .init()
-        public var announcementsState: FeatureAnnouncements.State = .init()
+        public var announcementsState: Announcements.State = .init()
     }
 
     struct FetchBalanceId: Hashable {}
@@ -86,12 +86,14 @@ public struct DeFiDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.announcementsState, action: /Action.announcementsAction) { () -> FeatureAnnouncements in
-            FeatureAnnouncements(
+        Scope(state: \.announcementsState, action: /Action.announcementsAction) { () -> Announcements in
+            let iterable: AnnouncementsServiceAPI = resolve()
+            let apns = RemoteNotificationAnnouncementService()
+            return Announcements(
                 app: app,
                 mainQueue: mainQueue,
                 mode: .defi,
-                service: resolve()
+                services: [iterable, apns]
             )
         }
 

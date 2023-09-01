@@ -117,7 +117,7 @@ struct TradingDashboardView: View {
                 }
             }
 
-            FeatureAnnouncementsView(
+            AnnouncementsView(
                 store: store.scope(
                     state: \.announcementsState,
                     action: TradingDashboard.Action.announcementsAction
