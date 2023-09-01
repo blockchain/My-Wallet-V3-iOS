@@ -32,11 +32,11 @@ final class WithdrawalService: WithdrawalServiceAPI {
             .flatMap { [client, transactionLimitsService] isEligible -> Single<WithdrawalFeeAndLimit> in
                 client.withdrawFee(currency: currency, paymentMethodType: paymentMethodType, product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
                     .map { response -> (CurrencyFeeResponse, CurrencyFeeResponse) in
-                        guard let fees = response.fees.first(where: { $0.symbol == currency.code }) else {
-                            fatalError("Expected fees for currency: \(currency)")
-                        }
-                        guard let mins = response.minAmounts.first(where: { $0.symbol == currency.code }) else {
-                            fatalError("Expected minimum values for currency: \(currency)")
+                        guard
+                            let fees = response.fees.first(where: { $0.symbol == currency.code }),
+                            let mins = response.minAmounts.first(where: { $0.symbol == currency.code })
+                        else {
+                            return (.zero(currency: currency), .zero(currency: currency))
                         }
                         return (fees, mins)
                     }
