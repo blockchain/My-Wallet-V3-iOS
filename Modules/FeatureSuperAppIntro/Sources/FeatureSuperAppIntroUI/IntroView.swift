@@ -32,30 +32,33 @@ public struct IntroView: View {
         GeometryReader { proxy in
             ScrollView {
                 VStack(spacing: 0) {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .center, spacing: 8) {
                         TagView(
                             text: appMode.tag,
                             foregroundColor: appMode.tagColor
                         )
                         .padding(.bottom, 12)
                         .shadow(color: Color.black.opacity(0.12), radius: 8, y: 3)
-                        Text(appMode.title)
+                        Text(title)
                             .typography(.title1)
                             .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
-                        Text(LocalizedStringKey(appMode.byline))
-                            .typography(.body1)
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.leading)
+                            .multilineTextAlignment(.center)
+                        if let byline = byline {
+                            Text(LocalizedStringKey(byline))
+                                .typography(.body1)
+                                .foregroundColor(.white)
+                                .multilineTextAlignment(.center)
+                        }
                     }
                     .padding(16)
+                    .padding(.vertical, byline.isNil ? Spacing.padding4 : 0)
                     VStack {
                         rows
                         Spacer()
-                        Text(appMode.footer)
+                        Text(footer)
                             .typography(.caption1)
                             .foregroundColor(.semantic.text)
-                            .multilineTextAlignment(.leading)
+                            .multilineTextAlignment(.center)
                             .padding(.bottom, Spacing.padding1)
                         buttons
                     }
@@ -117,13 +120,17 @@ public struct IntroView: View {
                 )
                 row(icon: Icon.link, title: L10n.DeFi.row3)
             }
+        case .trading where isExternalTradingEnabled:
+            VStack {
+                row(icon: Icon.security, title: L10n.External.row1)
+                row(icon: Icon.cart, title: L10n.External.row2)
+                row(icon: Icon.bank, title: L10n.External.row3)
+            }
         default:
             VStack {
                 row(icon: Icon.cart, title: L10n.Trading.row1)
                 row(icon: Icon.bank, title: L10n.Trading.row2)
-                if isExternalTradingEnabled == false {
-                    row(icon: Icon.interest, title: L10n.Trading.row3)
-                }
+                row(icon: Icon.interest, title: L10n.Trading.row3)
             }
         }
     }
@@ -176,11 +183,42 @@ public struct IntroView: View {
         )
         .shadow(color: Color.black.opacity(0.12), radius: 8, y: 3)
     }
+
+    private var title: String {
+        switch appMode {
+        case .pkw:
+            return L10n.DeFi.title
+        case .trading where isExternalTradingEnabled:
+            return L10n.External.title
+        default:
+            return L10n.Trading.title
+        }
+    }
+
+    private var byline: String? {
+        switch appMode {
+        case .trading where !isExternalTradingEnabled:
+            return L10n.Trading.byline
+        default:
+            return nil
+        }
+    }
+
+    private var footer: String {
+        switch appMode {
+        case .pkw where isExternalTradingEnabled:
+            return L10n.DeFi.externalFooter
+        case .pkw:
+            return L10n.DeFi.footer
+        default:
+            return L10n.Trading.footer
+        }
+    }
 }
 
 struct IntroView_Previews: PreviewProvider {
     static var previews: some View {
-        IntroView(.pkw)
+        IntroView(.trading)
     }
 }
 
@@ -216,33 +254,6 @@ extension AppMode {
             return L10n.DeFi.tag
         default:
             return L10n.Trading.tag
-        }
-    }
-
-    fileprivate var title: String {
-        switch self {
-        case .pkw:
-            return L10n.DeFi.title
-        default:
-            return L10n.Trading.title
-        }
-    }
-
-    fileprivate var byline: String {
-        switch self {
-        case .pkw:
-            return L10n.DeFi.byline
-        default:
-            return L10n.Trading.byline
-        }
-    }
-
-    fileprivate var footer: String {
-        switch self {
-        case .pkw:
-            return L10n.DeFi.footer
-        default:
-            return L10n.Trading.footer
         }
     }
 
