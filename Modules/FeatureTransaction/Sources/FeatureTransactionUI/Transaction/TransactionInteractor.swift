@@ -180,34 +180,52 @@ final class TransactionInteractor {
             guard let account = transactionTarget as? BlockchainAccount else {
                 impossible("A target account is required for this.")
             }
+            guard let cryptoCurrency = account.currencyType.cryptoCurrency else {
+                impossible("A crypto target account is required for this.")
+            }
             return coincore
-                .cryptoAccounts(supporting: .interestTransfer)
-                .asSingle()
+                .cryptoAccounts(
+                    for: cryptoCurrency,
+                    supporting: .interestTransfer
+                )
                 .map { accounts in
-                    accounts.filter { $0.currencyType == account.currencyType }
+                    accounts as [SingleAccount]
                 }
+                .asSingle()
 
         case .stakingDeposit:
             guard let account = transactionTarget as? BlockchainAccount else {
                 impossible("A target account is required for this.")
             }
+            guard let cryptoCurrency = account.currencyType.cryptoCurrency else {
+                impossible("A crypto target account is required for this.")
+            }
             return coincore
-                .cryptoAccounts(supporting: .stakingDeposit)
-                .asSingle()
+                .cryptoAccounts(
+                    for: cryptoCurrency,
+                    supporting: .stakingDeposit
+                )
                 .map { accounts in
-                    accounts.filter { $0.currencyType == account.currencyType }
+                    accounts as [SingleAccount]
                 }
+                .asSingle()
 
         case .activeRewardsDeposit:
             guard let account = transactionTarget as? BlockchainAccount else {
                 impossible("A target account is required for this.")
             }
+            guard let cryptoCurrency = account.currencyType.cryptoCurrency else {
+                impossible("A crypto target account is required for this.")
+            }
             return coincore
-                .cryptoAccounts(supporting: .activeRewardsDeposit)
-                .asSingle()
+                .cryptoAccounts(
+                    for: cryptoCurrency,
+                    supporting: .activeRewardsDeposit
+                )
                 .map { accounts in
-                    accounts.filter { $0.currencyType == account.currencyType }
+                    accounts as [SingleAccount]
                 }
+                .asSingle()
 
         case .buy:
             // TODO: the new limits API will require an amount
