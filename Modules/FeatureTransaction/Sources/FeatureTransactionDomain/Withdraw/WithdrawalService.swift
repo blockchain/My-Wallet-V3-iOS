@@ -40,7 +40,6 @@ final class WithdrawalService: WithdrawalServiceAPI {
                         }
                         return (fees, mins)
                     }
-                    .compactMap{$0}
                     .mapError(TransactionLimitsServiceError.network)
                     .zip(
                         transactionLimitsService.fetchLimits(
