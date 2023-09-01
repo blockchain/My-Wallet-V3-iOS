@@ -29,14 +29,18 @@ import PlatformKit
 import ToolKit
 import UIKit
 
-let app: AppProtocol = try! App(
+let app: AppProtocol = App(
     remoteConfiguration: Session.RemoteConfiguration(
         remote: FirebaseRemoteConfig.RemoteConfig.remoteConfig(),
-        default: .init(blockchain.app.configuration.json(in: .main) as Any) + [
+        default: embbedAppConfiguration + [
             blockchain.app.configuration.manual.login.is.enabled: BuildFlag.isInternal
         ]
     )
 )
+
+private var embbedAppConfiguration: Session.RemoteConfiguration.Default {
+    try! Session.RemoteConfiguration.Default(blockchain.app.configuration.json(in: .main) as Any)
+}
 
 extension AppProtocol {
 

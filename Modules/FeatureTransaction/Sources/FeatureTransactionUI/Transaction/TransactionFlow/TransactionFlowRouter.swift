@@ -955,8 +955,7 @@ extension TransactionFlowRouter {
         )
         let shouldAddMoreButton = canAddMoreSources && action.supportsAddingSourceAccounts
         let button: ButtonViewModel? = shouldAddMoreButton ? .secondary(with: L10n.addNew) : nil
-        let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
-        let isSearchEnabled = action == .swap && searchable
+        let isSearchEnabled = action == .swap
         return builder.build(
             listener: .listener(interactor),
             navigationModel: ScreenNavigationModel.AccountPicker.modal(
@@ -995,10 +994,9 @@ extension TransactionFlowRouter {
             button = action == .withdraw ? .secondary(with: L10n.addNew) : nil
         }
 
-        let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
         let switchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.switch.pkw.is.enabled)
 
-        let isSearchEnabled = (action == .swap || action == .buy) && searchable
+        let isSearchEnabled = (action == .swap || action == .buy)
         let isSwitchEnabled = action == .swap && app.currentMode == .pkw && switchable
         let switchTitle = isSwitchEnabled ? L10n.Swap.tradingAccountsSwitchTitle : nil
         let initialAccountTypeFilter: AccountType? = app.currentMode == .pkw ? .nonCustodial : nil

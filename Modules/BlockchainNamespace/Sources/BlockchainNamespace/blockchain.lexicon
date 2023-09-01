@@ -259,8 +259,6 @@ blockchain:
 						enabled:
 						+ blockchain.db.type.boolean
 						+ blockchain.session.configuration.value
-			announcements:
-			+ blockchain.session.configuration.value
 			app:
 				maintenance:
 				+ blockchain.db.type.any
@@ -369,10 +367,6 @@ blockchain:
 			deep_link:
 				rules:
 				+ blockchain.session.configuration.value
-			defi:
-				tabs:
-				+ blockchain.db.type.array.of.tags
-				+ blockchain.session.configuration.value
 			dynamicselfcustody:
 				networks:
 				+ blockchain.db.array
@@ -402,16 +396,6 @@ blockchain:
 					id:
 					+ blockchain.db.type.string
 					+ blockchain.session.state.shared.value
-			frequent:
-				action:
-				+ blockchain.db.type.any
-				+ blockchain.session.configuration.value
-					pkw:
-					+ blockchain.db.type.any
-					+ blockchain.session.configuration.value
-					trading:
-					+ blockchain.db.type.any
-					+ blockchain.session.configuration.value
 			hot:
 				wallet:
 					address:
@@ -475,11 +459,6 @@ blockchain:
 			performance:
 				tracing:
 				+ blockchain.session.configuration.value
-			prefill:
-				is:
-					enabled:
-					+ blockchain.db.type.boolean
-					+ blockchain.session.configuration.value
 			prices:
 				rising:
 					fast:
@@ -537,10 +516,6 @@ blockchain:
 					+ blockchain.session.configuration.value
 			superapp:
 				brokerage:
-					frequent:
-						actions:
-						+ blockchain.db.type.any
-						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
 				dashboard:
@@ -549,10 +524,6 @@ blockchain:
 							amounts:
 							+ blockchain.session.configuration.value
 				defi:
-					frequent:
-						actions:
-						+ blockchain.db.type.any
-						+ blockchain.session.configuration.value
 					tabs:
 					+ blockchain.app.configuration.tabs
 				external:
@@ -560,11 +531,6 @@ blockchain:
 						tabs:
 						+ blockchain.app.configuration.tabs
 			swap:
-				search:
-					is:
-						enabled:
-						+ blockchain.db.type.boolean
-						+ blockchain.session.configuration.value
 				switch:
 					pkw:
 						is:
