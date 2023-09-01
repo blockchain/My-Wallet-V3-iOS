@@ -447,10 +447,19 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             )
             .disposeOnDeactivate(interactor: self)
 
+        let combinedStateWithExternalBrokerage = Observable.combineLatest(
+            app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+                .map(\.value).asObservable(),
+            transactionState
+        )
+
         accountAuxiliaryViewInteractor
             .auxiliaryViewTapped
-            .withLatestFrom(transactionState)
-            .subscribe(onNext: { [weak self] state in
+            .withLatestFrom(combinedStateWithExternalBrokerage)
+            .subscribe(onNext: { [weak self] isExternalBrokerage, state  in
+                guard isExternalBrokerage == false else {
+                    return
+                }
                 self?.handleBottomAuxiliaryViewTapped(state: state)
             })
             .disposeOnDeactivate(interactor: self)
