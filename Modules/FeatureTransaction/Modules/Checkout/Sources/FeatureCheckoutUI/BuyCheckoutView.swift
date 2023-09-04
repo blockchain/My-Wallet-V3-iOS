@@ -147,7 +147,7 @@ extension BuyCheckoutView.Loaded {
     // views to display for bakkt buy checkout view
     @ViewBuilder func bakktRows() -> some View {
         DividedVStack {
-            price()
+            price(toolTipInfoEnabled: false)
             paymentMethod()
             bakktPurchaseAmount()
             availableDates()
@@ -161,7 +161,7 @@ extension BuyCheckoutView.Loaded {
 
     @ViewBuilder func rows() -> some View {
         DividedVStack {
-            price()
+            price(toolTipInfoEnabled: true)
             paymentMethod()
             purchaseAmount()
             fees()
@@ -279,14 +279,16 @@ extension BuyCheckoutView.Loaded {
         }
     }
 
-    @ViewBuilder func price() -> some View {
+    @ViewBuilder func price(toolTipInfoEnabled: Bool) -> some View {
         VStack {
             TableRow(
                 title: {
                     HStack {
                         TableRowTitle(L10n.Label.price(checkout.crypto.code)).foregroundColor(.semantic.body)
-                        Icon.questionFilled
-                            .micro().color(.semantic.muted)
+                        if toolTipInfoEnabled {
+                            Icon.questionFilled
+                                .micro().color(.semantic.muted)
+                        }
                     }
                 },
                 trailing: {
@@ -295,7 +297,11 @@ extension BuyCheckoutView.Loaded {
             )
             .background(Color.semantic.background)
             .onTapGesture {
-                withAnimation { information.price.toggle() }
+                withAnimation {
+                    if toolTipInfoEnabled {
+                        information.price.toggle()
+                    }
+                }
             }
             if information.price {
                 explain(L10n.Label.priceDisclaimer)

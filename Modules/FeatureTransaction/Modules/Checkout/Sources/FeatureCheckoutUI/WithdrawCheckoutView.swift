@@ -135,7 +135,9 @@ public struct WithdrawCheckoutView: View {
 
     @ViewBuilder func disclaimer() -> some View {
         VStack(alignment: .leading) {
-            Text(rich: L10n.Label.withdrawDisclaimer.interpolating(checkout.total.displayString))
+            Text(rich: isExternalTradingEnabled ?
+                 L10n.Label.withdrawDisclaimerBakkt.interpolating(checkout.total.displayString) :
+                    L10n.Label.withdrawDisclaimer.interpolating(checkout.total.displayString))
                 .typography(.caption1)
                 .foregroundColor(.semantic.text)
             if isExternalTradingEnabled {

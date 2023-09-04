@@ -962,6 +962,12 @@ extension LocalizationConstants.Transaction.Deposit.Confirmation.DepositACHTerms
         "By placing this order, you authorize Blockchain.com, Inc. to debit %@ from your bank account.",
         comment: "Terms located in the bottom of the deposit confirmation screen"
     )
+
+    public static let descriptionBakkt = NSLocalizedString(
+        "By placing this order, you authorize Bakkt to debit %@ from your bank account.",
+        comment: "Terms located in the bottom of the deposit confirmation screen"
+    )
+
     public static let readMoreButton = NSLocalizedString(
         "Read more",
         comment: "Read More Button to open details of terms and conditions from Deposit Screen"
@@ -1183,10 +1189,22 @@ extension LocalizationConstants.Transaction.Buy.Completion.Success {
         "Success! 🚀",
         comment: "Success! 🚀"
     )
-    public static let description = NSLocalizedString(
-        "Your %@ is now available in your Blockchain.com Account.",
-        comment: "Your %@ is now available in your Blockchain.com Account."
+
+    public static func description(externalTradingAccount: Bool) -> String {
+        if externalTradingAccount {
+            return  NSLocalizedString("Your %@ is now available in your account.",
+                                      comment: "Your %@ is now available in your account.")
+        } else {
+            return  NSLocalizedString("Your %@ is now available in your Blockchain.com Account.",
+                                      comment: "Your %@ is now available in your Blockchain.com Account.")
+        }
+    }
+
+    public static let descriptionBakkt = NSLocalizedString(
+        "Your %@ is now available in your account.",
+        comment: "Your %@ is now available in your account."
     )
+
     public static let action = NSLocalizedString(
         "OK",
         comment: "OK"

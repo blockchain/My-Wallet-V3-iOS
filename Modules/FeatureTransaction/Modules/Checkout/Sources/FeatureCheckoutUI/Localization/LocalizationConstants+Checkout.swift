@@ -77,10 +77,22 @@ extension LocalizationConstants {
                 "By placing this order, you authorize Blockchain.com, Inc. to debit %@ from your bank account.",
                 comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $100 from your bank account."
             )
+
+            static let depositDisclaimerBakkt = NSLocalizedString(
+                "By placing this order, you authorize Bakkt to debit %@ from your bank account.",
+                comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $100 from your bank account."
+            )
+
             static let withdrawDisclaimer = NSLocalizedString(
                 "By placing this order, you authorize Blockchain.com, Inc. to debit %@ to your bank account.",
                 comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $10.00 to your bank account."
             )
+
+            static let withdrawDisclaimerBakkt = NSLocalizedString(
+                "By placing this order, you authorize Bakkt to debit %@ to your bank account.",
+                comment: "By placing this order, you authorize Bakkt to debit $10.00 to your bank account."
+            )
+
             static let networkFeeDescription = NSLocalizedString(
                 "A fee paid to process your transaction. This must be paid in %@.",
                 comment: "Network fee description label"
