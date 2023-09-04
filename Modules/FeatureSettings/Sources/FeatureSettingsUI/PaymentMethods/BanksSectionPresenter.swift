@@ -1,10 +1,13 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
+import DIKit
 import PlatformKit
 import PlatformUIKit
 import RxSwift
 
 final class BanksSectionPresenter: SettingsSectionPresenting {
+
     let sectionType: SettingsSectionType = .banks
 
     let state: Observable<SettingsSectionLoadingState>
@@ -16,7 +19,7 @@ final class BanksSectionPresenter: SettingsSectionPresenting {
 
     // MARK: - Setup
 
-    init(interactor: BanksSettingsSectionInteractor) {
+    init(interactor: BanksSettingsSectionInteractor, app: AppProtocol = resolve()) {
         self.interactor = interactor
         let addPaymentMethodCellPresenters = interactor.addPaymentMethodInteractors
             .map {
@@ -27,7 +30,7 @@ final class BanksSectionPresenter: SettingsSectionPresenting {
 
         let sectionType = sectionType
         self.state = interactor.state
-            .flatMap { state -> Observable<SettingsSectionLoadingState> in
+            .flatMap { [app] state -> Observable<SettingsSectionLoadingState> in
                 switch state {
                 case .invalid:
                     return .just(.loaded(next: .empty))
@@ -36,26 +39,32 @@ final class BanksSectionPresenter: SettingsSectionPresenting {
                     return .just(.loaded(next: .some(.init(sectionType: sectionType, items: cells))))
                 case .value(let data):
                     let isAbleToAddNew = addPaymentMethodCellPresenters.map(\.isAbleToAddNew)
-                    return Observable
-                        .zip(isAbleToAddNew)
-                        .take(1)
-                        .map { isAbleToAddNew -> [SettingsCellViewModel] in
-                            let presenters = zip(isAbleToAddNew, addPaymentMethodCellPresenters)
-                                .filter(\.0)
-                                .map(\.1)
+                    return Observable.zip(
+                        Observable.zip(isAbleToAddNew),
+                        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self).replaceError(with: false).asObservable()
+                    )
+                    .take(1)
+                    .map { isAbleToAddNew, isExternalBrokerage -> [SettingsCellViewModel] in
+                        let presenters = zip(isAbleToAddNew, addPaymentMethodCellPresenters)
+                            .filter(\.0)
+                            .map(\.1)
 
+                        if !data.isEmpty, isExternalBrokerage {
+                            return Array(data)
+                        } else {
                             return Array(data) + Array(presenters)
                         }
-                        .map { viewModels in
-                            guard !viewModels.isEmpty else {
-                                return .loaded(next: .empty)
-                            }
-                            let sectionViewModel = SettingsSectionViewModel(
-                                sectionType: sectionType,
-                                items: viewModels
-                            )
-                            return .loaded(next: .some(sectionViewModel))
+                    }
+                    .map { viewModels in
+                        guard !viewModels.isEmpty else {
+                            return .loaded(next: .empty)
                         }
+                        let sectionViewModel = SettingsSectionViewModel(
+                            sectionType: sectionType,
+                            items: viewModels
+                        )
+                        return .loaded(next: .some(sectionViewModel))
+                    }
                 }
             }
             .share(replay: 1, scope: .whileConnected)

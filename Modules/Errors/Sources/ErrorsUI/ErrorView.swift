@@ -30,44 +30,42 @@ public struct ErrorView<Fallback: View>: View {
     let overlay = 7.5
 
     public var body: some View {
-        PrimaryNavigationView {
-            VStack {
-                VStack(spacing: .none) {
-                    Spacer()
-                    icon
-                    content.layoutPriority(1)
-                    Spacer()
-                    metadata
-                }
-                .multilineTextAlignment(.center)
-                actions
+        VStack {
+            VStack(spacing: .none) {
+                Spacer()
+                icon
+                content.layoutPriority(1)
+                Spacer()
+                metadata
             }
-            .foregroundTexture(ux.dialog?.style?.foreground)
-            .backgroundTexture(ux.dialog?.style?.background)
-            .padding()
-            .onAppear {
-                app.state.transaction { state in
-                    state.set(blockchain.ux.error, to: ux)
-                }
-                app.post(
-                    event: blockchain.ux.error,
-                    context: context + ux.context(in: app)
-                )
-            }
-            .post(lifecycleOf: blockchain.ux.error.article.plain)
-            #if os(iOS)
-            .navigationBarBackButtonHidden(true)
-            .navigationBarItems(
-                leading: EmptyView(),
-                trailing: Group {
-                    if navigationBarClose {
-                         trailingNavigationBarItem
-                     }
-                 }
-            )
-            #endif
-            .background(Color.semantic.background)
+            .multilineTextAlignment(.center)
+            actions
         }
+        .foregroundTexture(ux.dialog?.style?.foreground)
+        .backgroundTexture(ux.dialog?.style?.background)
+        .padding()
+        .onAppear {
+            app.state.transaction { state in
+                state.set(blockchain.ux.error, to: ux)
+            }
+            app.post(
+                event: blockchain.ux.error,
+                context: context + ux.context(in: app)
+            )
+        }
+        .post(lifecycleOf: blockchain.ux.error.article.plain)
+#if os(iOS)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarItems(
+            leading: EmptyView(),
+            trailing: Group {
+                if navigationBarClose {
+                    trailingNavigationBarItem
+                }
+            }
+        )
+#endif
+        .background(Color.semantic.background)
     }
 
     @ViewBuilder var trailingNavigationBarItem: some View {

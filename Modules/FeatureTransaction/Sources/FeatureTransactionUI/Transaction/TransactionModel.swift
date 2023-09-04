@@ -496,7 +496,7 @@ public final class TransactionModel {
                     if action == .buy, let first = sourceAccounts.first(
                         where: { ($0 as? PaymentMethodAccount)?.paymentMethodType.method.rawType == preferredMethod }
                     ) ?? sourceAccounts.first(
-                        where: { account in (account.identifier as? String) == previousMethod }
+                        where: { account in account.identifier == previousMethod }
                     ) ?? sourceAccounts.first {
                         // For buy, we don't want to display the list of possible sources straight away.
                         // Instead, we want to select the default payment method returned by the API.
