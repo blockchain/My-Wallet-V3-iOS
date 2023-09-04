@@ -366,6 +366,7 @@ extension Icon {
     public static let `scanner` = Icon(name: "Scanner")
     public static let `scannerFilled` = Icon(name: "Scanner-filled")
     public static let `search` = Icon(name: "Search")
+    public static let `security` = Icon(name: "Security")
     public static let `sell` = Icon(name: "Sell")
     public static let `send` = Icon(name: "Send")
     public static let `settings` = Icon(name: "settings")
