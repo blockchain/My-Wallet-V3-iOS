@@ -462,6 +462,7 @@ extension TransactionState {
                 fee: fee.withoutPromotion.map {
                     try .init(value: $0.fiatValue.or(throw: "Buy fee is expected in fiat"), promotion: fee.value?.fiatValue)
                 },
+                exchangeRate: quote.exchangeRate.or(throw: "Expected exchange rate").fiatValue.or(throw: "Exchange Rate is expected in fiat"),
                 total: quote.amount.fiatValue.or(throw: "Expected fiat"),
                 paymentMethod: source.checkoutPaymentMethod(),
                 quoteExpiration: quote.date.expiresAt,
@@ -573,73 +574,6 @@ extension TransactionState {
             } else {
                 return nil
             }
-        } catch {
-            return nil
-        }
-    }
-
-    var pendingTransactionBuyCheckout: BuyCheckout? {
-        guard let pendingTransaction, let source else { return nil }
-        do {
-            let value = try pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.BuyCryptoValue.self).first.or(throw: "No value confirmation")
-            let purchase = try (pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.Purchase.self).first?.purchase).or(throw: "No purchase confirmation")
-            let exchangeRate = try pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.BuyExchangeRateValue.self).first.or(throw: "No exchangeRate")
-            let paymentMethod = try pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.BuyPaymentMethodValue.self).first.or(throw: "No paymentMethod")
-            let total = try (pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.Total.self).first?.total).or(throw: "No total confirmation")
-            let fee = try pendingTransaction.confirmations.lazy
-                .filter(TransactionConfirmations.FiatTransactionFee.self).first.or(throw: "No fee")
-
-            let paymentMethodAccount = source as? PaymentMethodAccount
-            let name: String
-            let detail: String?
-
-            switch paymentMethodAccount?.paymentMethodType {
-            case .card(let card):
-                name = card.type.name
-                detail = card.displaySuffix
-            case .applePay(let apple):
-                name = LocalizationConstants.Checkout.applePay
-                detail = apple.displaySuffix
-            case .account:
-                name = LocalizationConstants.Checkout.funds
-                detail = nil
-            case .linkedBank(let bank):
-                name = bank.account?.bankName ?? LocalizationConstants.Checkout.bank
-                detail = bank.account?.number
-            case _:
-                name = paymentMethod.name
-                detail = nil
-            }
-
-            return try BuyCheckout(
-                buyType: pendingTransaction.recurringBuyFrequency == .once ? .simpleBuy : .recurringBuy,
-                input: value.baseValue,
-                purchase: MoneyValuePair(
-                    fiatValue: purchase.fiatValue.or(throw: "Amount is not fiat"),
-                    exchangeRate: exchangeRate.baseValue.fiatValue.or(throw: "No exchange rate"),
-                    cryptoCurrency: CryptoCurrency(code: value.baseValue.code).or(throw: "Input is not a crypto value"),
-                    usesFiatAsBase: true
-                ),
-                fee: .init(
-                    value: fee.fee.fiatValue.or(throw: "Fee is not in fiat"),
-                    promotion: nil
-                ),
-                total: total.fiatValue.or(throw: "No total value"),
-                paymentMethod: .init(
-                    name: name,
-                    detail: detail,
-                    isApplePay: paymentMethodAccount?.paymentMethod.type.isApplePay == true,
-                    isACH: paymentMethodAccount?.paymentMethod.type.isACH == true
-                ),
-                quoteExpiration: pendingTransaction.confirmations.lazy
-                    .filter(TransactionConfirmations.QuoteExpirationTimer.self).first?.expirationDate,
-                recurringBuyDetails: pendingTransaction.recurringBuyDetails
-            )
         } catch {
             return nil
         }

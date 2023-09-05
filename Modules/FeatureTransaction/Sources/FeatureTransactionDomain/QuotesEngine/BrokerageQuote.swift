@@ -54,6 +54,18 @@ public struct BrokerageQuote: Hashable {
         }
     }
 
+    public var exchangeRate: MoneyValue? {
+        do {
+            let exchangeRate = try MoneyValuePair(
+                base: .one(currency: request.amount.currency),
+                quote: .create(minor: response.price, currency: request.quote).or(throw: "Bad quote price")
+            )
+            return exchangeRate.inverseExchangeRate.quote
+        } catch {
+            return nil
+        }
+    }
+
     public var source: CurrencyType {
         request.base
     }
@@ -144,7 +156,7 @@ extension BrokerageQuote.Response {
         var formattedCreatedAt, formattedExpiresAt: Date?
 
         if let createdAt {
-            formattedCreatedAt =  My.formatter.date(from: createdAt)
+            formattedCreatedAt = My.formatter.date(from: createdAt)
         }
 
         if let expiresAt {

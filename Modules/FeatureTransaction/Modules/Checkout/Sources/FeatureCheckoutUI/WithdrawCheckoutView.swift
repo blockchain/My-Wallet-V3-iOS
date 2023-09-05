@@ -39,7 +39,9 @@ public struct WithdrawCheckoutView: View {
         DividedVStack(spacing: .zero) {
             from()
             to()
-            fee()
+            if !isExternalTradingEnabled {
+                fee()
+            }
             settlement()
             total()
         }

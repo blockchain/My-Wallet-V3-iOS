@@ -17,7 +17,7 @@ public struct SimplifiedDueDiligenceVerificationResponse: Codable, Equatable {
     let taskComplete: Bool
 }
 
-public protocol KYCClientAPI: AnyObject {
+public protocol KYCClientAPI: AnyObject, KYCSSNClientAPI {
 
     func tiers() -> AnyPublisher<KYC.UserTiers, NabuNetworkError>
 
@@ -70,7 +70,9 @@ public protocol KYCClientAPI: AnyObject {
     func fetchExtraKYCQuestions(context: String, version: [String]) -> AnyPublisher<Form, NabuNetworkError>
 
     func submitExtraKYCQuestions(_ form: Form, version: [String]) -> AnyPublisher<Void, NabuNetworkError>
+}
 
+public protocol KYCSSNClientAPI {
     func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error>
     func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error>
 }

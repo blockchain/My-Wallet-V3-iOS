@@ -2,9 +2,10 @@
 
 import Combine
 import Errors
+import Extensions
 import Foundation
 
-public enum DeviceVerificationServiceError: Error, Equatable {
+public enum DeviceVerificationServiceError: Error, Equatable, TimeoutFailure {
     // email request error
     case recaptchaError(GoogleRecaptchaError)
 
@@ -17,6 +18,7 @@ public enum DeviceVerificationServiceError: Error, Equatable {
 
     // other network errors
     case networkError(NetworkError)
+    case timeout
 
     public static func == (lhs: DeviceVerificationServiceError, rhs: DeviceVerificationServiceError) -> Bool {
         String(describing: lhs) == String(describing: rhs)
