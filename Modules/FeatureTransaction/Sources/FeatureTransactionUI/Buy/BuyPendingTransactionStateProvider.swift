@@ -42,8 +42,10 @@ final class BuyPendingTransactionStateProvider: PendingTransactionStateProviding
         guard let destinationCurrency = state.destination?.currencyType else {
             impossible("Expected a destination to there for a transaction that has succeeded")
         }
+        let isExternalTradingAccount = (state.destination as? CryptoTradingAccount)?.isExternalTradingAccount == true
+
         var subtitle = String(
-            format: LocalizationIds.Success.description,
+            format: LocalizationIds.Success.description(externalTradingAccount: isExternalTradingAccount),
             destinationCurrency.name
         )
         if let frequency = state.pendingTransaction?.recurringBuyFrequency, frequency.isValidRecurringBuyFrequency {
