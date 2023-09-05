@@ -705,7 +705,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         viewController.transitioningDelegate = bottomSheetPresenter
         viewController.modalPresentationStyle = .custom
         let presenter = topMostViewControllerProvider.topMostViewController
-        presenter?.present(viewController, animated: true, completion: nil)
+        presenter?.present(PrimaryNavigationViewController(rootViewController: viewController), animated: true, completion: nil)
     }
 
     private func presentErrorViewForDialog(

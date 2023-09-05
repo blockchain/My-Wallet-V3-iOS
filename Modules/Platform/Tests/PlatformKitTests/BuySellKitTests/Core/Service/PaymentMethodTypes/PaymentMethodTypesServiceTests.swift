@@ -38,7 +38,8 @@ final class PaymentMethodTypesServiceTests: XCTestCase {
             .filterValidForBuy(
                 currentWalletCurrency: .GBP,
                 accountForEligibility: false,
-                isOpenBankingEnabled: false
+                isOpenBankingEnabled: false,
+                isExternalBrokerage: false
             )
 
         XCTAssertEqual(filtered.count, 0)
@@ -76,7 +77,8 @@ final class PaymentMethodTypesServiceTests: XCTestCase {
             .filterValidForBuy(
                 currentWalletCurrency: .GBP,
                 accountForEligibility: false,
-                isOpenBankingEnabled: true
+                isOpenBankingEnabled: true,
+                isExternalBrokerage: false
             )
 
         XCTAssertEqual(filtered.count, 1)
@@ -111,7 +113,8 @@ final class PaymentMethodTypesServiceTests: XCTestCase {
             .filterValidForBuy(
                 currentWalletCurrency: .USD,
                 accountForEligibility: false,
-                isOpenBankingEnabled: false
+                isOpenBankingEnabled: false,
+                isExternalBrokerage: false
             )
 
         XCTAssertEqual(filtered.count, 1)

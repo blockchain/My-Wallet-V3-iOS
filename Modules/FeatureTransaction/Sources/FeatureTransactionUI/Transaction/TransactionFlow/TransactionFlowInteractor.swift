@@ -608,15 +608,18 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 )
 
             case .deposit:
-                // `Deposit` can only be reached if the user has been
-                // tier two approved. If the user has been tier two approved
-                // then they can add more sources.
-                router?.routeToSourceAccountPicker(
-                    transitionType: .replaceRoot,
-                    transactionModel: transactionModel,
-                    action: action,
-                    canAddMoreSources: true
-                )
+                Task { @MainActor in
+                    let isExternalBrokerage = await app.get(blockchain.app.is.external.brokerage, or: false)
+                    // `Deposit` can only be reached if the user has been
+                    // tier two approved. If the user has been tier two approved
+                    // then they can add more sources.
+                    router?.routeToSourceAccountPicker(
+                        transitionType: .replaceRoot,
+                        transactionModel: transactionModel,
+                        action: action,
+                        canAddMoreSources: !(isExternalBrokerage && newState.availableTargets.or([]).isEmpty)
+                    )
+                }
 
             case .interestTransfer,
                     .stakingDeposit,

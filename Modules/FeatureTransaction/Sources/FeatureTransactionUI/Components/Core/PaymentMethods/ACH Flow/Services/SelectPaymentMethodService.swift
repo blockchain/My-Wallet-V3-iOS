@@ -25,15 +25,19 @@ public final class SelectPaymentMethodService {
                     .asSingle(),
                 app.publisher(for: blockchain.ux.payment.method.open.banking.is.enabled, as: Bool.self)
                     .replaceError(with: true)
+                    .asSingle(),
+                app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+                    .replaceError(with: false)
                     .asSingle()
             )
             .map { payload in
-                let (isUserEligibleForFunds, methods, fiatCurrency, isOpenBankingEnabled) = payload
+                let (isUserEligibleForFunds, methods, fiatCurrency, isOpenBankingEnabled, isExternalBrokerage) = payload
                 return methods
                     .filterValidForBuy(
                         currentWalletCurrency: fiatCurrency,
                         accountForEligibility: isUserEligibleForFunds,
-                        isOpenBankingEnabled: isOpenBankingEnabled
+                        isOpenBankingEnabled: isOpenBankingEnabled,
+                        isExternalBrokerage: isExternalBrokerage
                     )
             }
     }

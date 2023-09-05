@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import BlockchainUI
 import FeatureAnnouncementsDomain
 import SwiftUI
 
@@ -27,8 +27,12 @@ struct CardView: View {
                 AsyncMedia(url: url)
                     .frame(width: 40, height: 40)
                     .padding(.leading, Spacing.padding2)
+            } else if let icon = announcement.content.icon {
+                icon
+                    .medium()
+                    .padding(.leading, Spacing.padding2)
             }
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(announcement.content.title)
                     .typography(.caption1.bold())
                     .foregroundColor(.semantic.muted)

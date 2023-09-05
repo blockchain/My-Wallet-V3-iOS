@@ -60,4 +60,11 @@ extension MockRemoteNotificationAuthorizer: RemoteNotificationAuthorizationReque
             .publisher
             .eraseToAnyPublisher()
     }
+
+    func requestAuthorization() -> AnyPublisher<
+        Void,
+        RemoteNotificationAuthorizerError
+    > {
+        .just(())
+    }
 }

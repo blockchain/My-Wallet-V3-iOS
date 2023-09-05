@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
 import Foundation
 
 public struct Announcement: Decodable, Identifiable, Equatable, Comparable {
@@ -36,6 +37,7 @@ public struct Announcement: Decodable, Identifiable, Equatable, Comparable {
         public let title: String
         public let description: String
         public let imageUrl: URL?
+        public let icon: Icon?
         public let actionUrl: String
         public let appMode: AppMode
 
@@ -43,11 +45,13 @@ public struct Announcement: Decodable, Identifiable, Equatable, Comparable {
             title: String,
             description: String,
             imageUrl: URL? = nil,
+            icon: Icon? = nil,
             actionUrl: String,
             appMode: Announcement.AppMode
         ) {
             self.title = title
             self.description = description
+            self.icon = icon
             self.imageUrl = imageUrl
             self.actionUrl = actionUrl
             self.appMode = appMode

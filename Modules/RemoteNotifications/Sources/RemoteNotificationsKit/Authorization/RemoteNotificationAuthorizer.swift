@@ -40,7 +40,7 @@ final class RemoteNotificationAuthorizer {
 
     // MARK: - Private Accessors
 
-    private func requestAuthorization() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
+    func requestAuthorization() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
         Deferred { [analyticsRecorder, userNotificationCenter, options] ()
             -> AnyPublisher<Void, RemoteNotificationAuthorizerError> in
             AnyPublisher<Void, RemoteNotificationAuthorizerError>
@@ -148,13 +148,6 @@ extension RemoteNotificationAuthorizer: RemoteNotificationRegistering {
 
 extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequesting {
 
-    private var preauthorizedNotifications: AnyPublisher<Void, RemoteNotificationAuthorizerError> {
-        app.on(blockchain.ux.onboarding.notification.authorization.accept.paragraph.button.primary.tap)
-            .mapToVoid()
-            .setFailureType(to: RemoteNotificationAuthorizerError.self)
-            .eraseToAnyPublisher()
-    }
-
     private var tokenUpdateIfNeeded: AnyPublisher<Void, RemoteNotificationAuthorizerError> {
         app
             .on(blockchain.ux.home.dashboard)
@@ -177,17 +170,8 @@ extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequestin
             }
             .delay(for: .seconds(1), scheduler: DispatchQueue.main)
             .receive(on: DispatchQueue.main)
-            .flatMap { [app] unregistered -> AnyPublisher<Void, RemoteNotificationAuthorizerError> in
+            .flatMap { unregistered -> AnyPublisher<Void, RemoteNotificationAuthorizerError> in
                 guard unregistered else {
-                    app.post(
-                        action: blockchain.ux.onboarding.notification.authorization.display.then.enter.into,
-                        value: blockchain.ux.onboarding.notification.authorization.display,
-                        context: [
-                            blockchain.ui.type.action.then.enter.into.detents: [
-                                blockchain.ui.type.action.then.enter.into.detents.large
-                            ]
-                        ]
-                    )
                     return .empty()
                 }
                 return .just(())
@@ -197,7 +181,7 @@ extension RemoteNotificationAuthorizer: RemoteNotificationAuthorizationRequestin
 
     // TODO: Handle a `.denied` case
     func requestAuthorizationIfNeeded() -> AnyPublisher<Void, RemoteNotificationAuthorizerError> {
-        Publishers.Merge(preauthorizedNotifications, tokenUpdateIfNeeded)
+        tokenUpdateIfNeeded
             .flatMap { [requestAuthorization] _ in
                 requestAuthorization()
             }

@@ -1012,3 +1012,7 @@ public enum LocalizationConstants {
 extension LocalizationConstants {
     public struct Accessibility {}
 }
+
+extension LocalizationConstants {
+    public struct Announcements {}
+}

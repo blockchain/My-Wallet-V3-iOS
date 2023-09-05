@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
+import Blockchain
 import Errors
 import FeatureAnnouncementsDomain
 import Foundation
