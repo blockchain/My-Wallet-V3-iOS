@@ -71,7 +71,9 @@ import DIKit
 public struct KYCSSNRepositoryDependencyKey: DependencyKey {
     public static var liveValue: KYCSSNRepository = DIKit.resolve()
     public static let previewValue: KYCSSNRepository = KYCSSNRepository(app: App.preview, client: PreviewKYCSSNClient())
+    #if DEBUG
     public static let testValue: KYCSSNRepository = KYCSSNRepository(app: App.test, client: PreviewKYCSSNClient())
+    #endif
 }
 
 extension DependencyValues {
