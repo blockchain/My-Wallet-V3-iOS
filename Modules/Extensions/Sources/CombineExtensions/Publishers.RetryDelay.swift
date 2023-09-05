@@ -3,7 +3,7 @@
 import Combine
 import Foundation
 
-extension Publisher {
+extension Publisher where Failure: TimeoutFailure {
 
     /// Attempts to recreate a failed subscription with the upstream publisher up to the number of times you specify with
     /// each retry delayed by constant time `delay`
@@ -11,9 +11,10 @@ extension Publisher {
         max: Int = Int.max,
         delay interval: DispatchTimeInterval,
         if condition: @escaping (Failure) -> Bool = { _ in true },
-        scheduler: S
+        scheduler: S,
+        timeout: Failure = Failure.timeout
     ) -> Publishers.RetryDelay<Self, S> {
-        retry(max: max, delay: .init(interval), if: condition, scheduler: scheduler)
+        retry(max: max, delay: .init(interval), if: condition, scheduler: scheduler, timeout: timeout)
     }
 
     /// Attempts to recreate a failed subscription with the upstream publisher up to the number of times you specify with
@@ -22,9 +23,64 @@ extension Publisher {
         max: Int = Int.max,
         delay: IntervalDuration,
         if condition: @escaping (Failure) -> Bool = { _ in true },
-        scheduler: S
+        scheduler: S,
+        timeout: Failure = Failure.timeout
     ) -> Publishers.RetryDelay<Self, S> {
-        .init(upstream: self, max: max, delay: delay, condition: condition, scheduler: scheduler)
+        .init(upstream: self, max: max, delay: delay, condition: condition, scheduler: scheduler, timeout: timeout)
+    }
+}
+
+extension Publisher where Failure == Error {
+
+    /// Attempts to recreate a failed subscription with the upstream publisher up to the number of times you specify with
+    /// each retry delayed by constant time `delay`
+    public func retry<S: Scheduler>(
+        max: Int = Int.max,
+        delay interval: DispatchTimeInterval,
+        if condition: @escaping (Failure) -> Bool = { _ in true },
+        scheduler: S,
+        timeout: Failure = PublisherTimeoutError.timeout
+    ) -> Publishers.RetryDelay<Self, S> {
+        retry(max: max, delay: .init(interval), if: condition, scheduler: scheduler, timeout: timeout)
+    }
+
+    /// Attempts to recreate a failed subscription with the upstream publisher up to the number of times you specify with
+    /// each retry delayed by ƒ(x) defined by `delay` IntervalDuration
+    public func retry<S: Scheduler>(
+        max: Int = Int.max,
+        delay: IntervalDuration,
+        if condition: @escaping (Failure) -> Bool = { _ in true },
+        scheduler: S,
+        timeout: Failure = PublisherTimeoutError.timeout
+    ) -> Publishers.RetryDelay<Self, S> {
+        .init(upstream: self, max: max, delay: delay, condition: condition, scheduler: scheduler, timeout: timeout)
+    }
+}
+
+extension Publisher {
+
+    /// Attempts to recreate a failed subscription with the upstream publisher up to the number of times you specify with
+    /// each retry delayed by constant time `delay`
+    public func retry<S: Scheduler>(
+        max: Int = Int.max,
+        delay interval: DispatchTimeInterval,
+        if condition: @escaping (Failure) -> Bool = { _ in true },
+        scheduler: S,
+        timeout: Failure
+    ) -> Publishers.RetryDelay<Self, S> {
+        retry(max: max, delay: .init(interval), if: condition, scheduler: scheduler, timeout: timeout)
+    }
+
+    /// Attempts to recreate a failed subscription with the upstream publisher up to the number of times you specify with
+    /// each retry delayed by ƒ(x) defined by `delay` IntervalDuration
+    public func retry<S: Scheduler>(
+        max: Int = Int.max,
+        delay: IntervalDuration,
+        if condition: @escaping (Failure) -> Bool = { _ in true },
+        scheduler: S,
+        timeout: Failure
+    ) -> Publishers.RetryDelay<Self, S> {
+        .init(upstream: self, max: max, delay: delay, condition: condition, scheduler: scheduler, timeout: timeout)
     }
 }
 
@@ -65,10 +121,12 @@ extension Publisher where Failure: TimeoutFailure {
         scheduler: some Scheduler
     ) -> AnyPublisher<Output, Failure> {
         flatMap { output -> AnyPublisher<Output, Failure> in
-            guard until(output) else { return Fail(error: Failure.timeout).eraseToAnyPublisher() }
+            guard until(output) else {
+                return Fail(error: Failure.timeout).eraseToAnyPublisher()
+            }
             return Just(output).setFailureType(to: Failure.self).eraseToAnyPublisher()
         }
-        .retry(max: attempts, delay: delay, scheduler: scheduler)
+        .retry(max: attempts, delay: delay, scheduler: scheduler, timeout: Failure.timeout)
         .eraseToAnyPublisher()
     }
 }
@@ -106,7 +164,7 @@ extension Publisher {
                 guard until(output) else { return Fail(error: PublisherTimeoutError.timeout).eraseToAnyPublisher() }
                 return Just(output).setFailureType(to: Error.self).eraseToAnyPublisher()
             }
-            .retry(max: attempts, delay: delay, scheduler: scheduler)
+            .retry(max: attempts, delay: delay, scheduler: scheduler, timeout: PublisherTimeoutError.timeout)
             .eraseToAnyPublisher()
     }
 }
@@ -125,6 +183,7 @@ extension Publishers {
         public let delay: IntervalDuration
         public let scheduler: S
         public let condition: (Failure) -> Bool
+        public let timeout: Failure
 
         public init(
             upstream: Upstream,
@@ -132,7 +191,8 @@ extension Publishers {
             max: Int,
             delay: IntervalDuration,
             condition: @escaping (Failure) -> Bool,
-            scheduler: S
+            scheduler: S,
+            timeout: Failure
         ) {
             self.upstream = upstream
             self.retries = retries
@@ -140,13 +200,15 @@ extension Publishers {
             self.delay = delay
             self.scheduler = scheduler
             self.condition = condition
+            self.timeout = timeout
         }
 
         public func receive<S: Subscriber>(
             subscriber: S
         ) where Upstream.Failure == S.Failure, Upstream.Output == S.Input {
             upstream.catch { e -> AnyPublisher<Output, Failure> in
-                guard condition(e), retries < max else { return Fail(error: e).eraseToAnyPublisher() }
+                guard retries < max else { return Fail(error: timeout).eraseToAnyPublisher() }
+                guard condition(e) else { return Fail(error: e).eraseToAnyPublisher() }
                 return Fail(error: e)
                     .delay(for: .seconds(delay(retries + 1)), scheduler: scheduler)
                     .catch { _ in
@@ -156,7 +218,8 @@ extension Publishers {
                             max: max,
                             delay: delay,
                             condition: condition,
-                            scheduler: scheduler
+                            scheduler: scheduler,
+                            timeout: timeout
                         )
                     }
                     .eraseToAnyPublisher()

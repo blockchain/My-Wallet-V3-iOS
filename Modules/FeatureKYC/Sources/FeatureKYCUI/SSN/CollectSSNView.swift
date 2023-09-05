@@ -1,6 +1,7 @@
 import BlockchainUI
 import FeatureKYCDomain
 import SwiftUI
+import FeatureCustodialOnboarding
 
 struct SSNInputView: View {
 
@@ -68,62 +69,69 @@ struct SSNCollectionView: View {
     var action: (String) -> Void
 
     var body: some View {
-        VStack {
-            VStack(alignment: .leading, spacing: 24.pt) {
-                VStack(alignment: .leading, spacing: 8.pt) {
-                    Text(LocalizationConstants.SSN.title)
-                        .typography(.title3)
-                        .foregroundColor(.semantic.title)
-                    Text(LocalizationConstants.SSN.subtitle)
-                        .typography(.body1)
-                        .foregroundColor(.semantic.text)
-                }
-                VStack(alignment: .leading, spacing: 4.pt) {
-                    SSNInputView(SSN: $SSN.didSet { _ in error = nil }, isValid: isValid)
-                    if let error {
-                        Text(error.message)
-                            .typography(.caption1)
-                            .foregroundColor(.semantic.error)
-                    } else {
-                        Button(
-                            action: {
-                                withAnimation { isWhyPresented = true }
-                            },
-                            label: {
-                                Text(LocalizationConstants.SSN.why)
-                                    .typography(.caption1)
-                                    .foregroundColor(.semantic.primary)
-                            }
-                        )
+        if service.isTimeout {
+            VerificationInProgressView()
+                .transition(.move(edge: .trailing))
+        } else {
+
+            VStack {
+                VStack(alignment: .leading, spacing: 24.pt) {
+                    VStack(alignment: .leading, spacing: 8.pt) {
+                        Text(LocalizationConstants.SSN.title)
+                            .typography(.title3)
+                            .foregroundColor(.semantic.title)
+                        Text(LocalizationConstants.SSN.subtitle)
+                            .typography(.body1)
+                            .foregroundColor(.semantic.text)
                     }
-                }
-            }
-            .frame(maxHeight: .infinity, alignment: .top)
-            PrimaryButton(
-                title: LocalizationConstants.SSN.next,
-                isLoading: service.isLoading,
-                action: {
-                    Task {
-                        self.error = nil
-                        do {
-                            try await service.submit(SSN: SSN)
-                            action(SSN)
-                        } catch {
-                            self.error = UX.Error(error: error)
+                    VStack(alignment: .leading, spacing: 4.pt) {
+                        SSNInputView(SSN: $SSN.didSet { _ in error = nil }, isValid: isValid)
+                        if let error {
+                            Text(error.message)
+                                .typography(.caption1)
+                                .foregroundColor(.semantic.error)
+                        } else {
+                            Button(
+                                action: {
+                                    withAnimation { isWhyPresented = true }
+                                },
+                                label: {
+                                    Text(LocalizationConstants.SSN.why)
+                                        .typography(.caption1)
+                                        .foregroundColor(.semantic.primary)
+                                }
+                            )
                         }
                     }
                 }
-            )
-            .disabled(!isValid)
-        }
-        .frame(maxHeight: .infinity, alignment: .bottom)
-        .padding()
-        .background(Color.semantic.light.ignoresSafeArea())
-        .bottomSheet(isPresented: $isWhyPresented.animation()) {
-            WhySheet(isPresented: $isWhyPresented)
-        }
-        .bindings {
-            subscribe($pattern, to: blockchain.api.nabu.gateway.onboarding.SSN.regex.validation)
+                .frame(maxHeight: .infinity, alignment: .top)
+                PrimaryButton(
+                    title: LocalizationConstants.SSN.next,
+                    isLoading: service.isLoading,
+                    action: {
+                        Task {
+                            self.error = nil
+                            do {
+                                try await service.submit(SSN: SSN)
+                                action(SSN)
+                            } catch {
+                                print(error)
+                                self.error = UX.Error(error: error)
+                            }
+                        }
+                    }
+                )
+                .disabled(!isValid)
+            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .padding()
+            .background(Color.semantic.light.ignoresSafeArea())
+            .bottomSheet(isPresented: $isWhyPresented.animation()) {
+                WhySheet(isPresented: $isWhyPresented)
+            }
+            .bindings {
+                subscribe($pattern, to: blockchain.api.nabu.gateway.onboarding.SSN.regex.validation)
+            }
         }
     }
 
@@ -172,8 +180,10 @@ struct SSNCollectionView: View {
 class SubmitSSNService: ObservableObject {
 
     @Dependency(\.KYCSSNRepository) private var repository: KYCSSNRepository
+    @Dependency(\.scheduler) private var scheduler: AnySchedulerOf<DispatchQueue>
 
     @Published var isLoading: Bool = false
+    @Published var isTimeout: Bool = false
 
     init() { }
 
@@ -187,7 +197,7 @@ class SubmitSSNService: ObservableObject {
                     max: 20,
                     until: { SSN in SSN.verification?.state.isFinal ?? false },
                     delay: .seconds(3),
-                    scheduler: DispatchQueue.main
+                    scheduler: scheduler
                 )
                 .await()
             if let message = SSN.verification?.errorMessage {
@@ -197,16 +207,51 @@ class SubmitSSNService: ObservableObject {
                 )
             }
         } catch PublisherTimeoutError.timeout {
-            throw UX.Error(
-                title: LocalizationConstants.SSN.timedOutTitle,
-                message: LocalizationConstants.SSN.timedOutBody
-            )
+            withAnimation { isTimeout = true }
+        } catch let error as UX.Error where error == .timeout {
+            withAnimation { isTimeout = true }
         }
     }
 }
 
 struct SSNCollectionView_Previews: PreviewProvider {
     static var previews: some View {
-        SSNCollectionView(action: { SSN in print(SSN) })
+        SSNCollectionView(
+            service: withDependencies { dependencies in
+                dependencies.KYCSSNRepository = KYCSSNRepository(
+                    app: App.preview,
+                    client: PreviewKYCSSNClient(
+                        submit: .success(()),
+                        check: { _ in
+                            return .failure(
+                                Nabu.Error(
+                                    id: "abcdef",
+                                    code: .unknownUser,
+                                    type: .forbidden
+                                )
+                            )
+                        }
+                    )
+                )
+                dependencies.scheduler = .immediate
+            } operation: {
+                SubmitSSNService()
+            },
+            action: { ssn in print(ssn) }
+        )
+    }
+}
+
+public struct SchedulerDependencyKey: DependencyKey {
+    public static var liveValue: AnySchedulerOf<DispatchQueue> = DispatchQueue.main.eraseToAnyScheduler()
+    public static let previewValue: AnySchedulerOf<DispatchQueue> = DispatchQueue.main.eraseToAnyScheduler()
+    public static let testValue: AnySchedulerOf<DispatchQueue> = DispatchQueue.test.eraseToAnyScheduler()
+}
+
+extension DependencyValues {
+
+    public var scheduler: AnySchedulerOf<DispatchQueue> {
+        get { self[SchedulerDependencyKey.self] }
+        set { self[SchedulerDependencyKey.self] = newValue }
     }
 }

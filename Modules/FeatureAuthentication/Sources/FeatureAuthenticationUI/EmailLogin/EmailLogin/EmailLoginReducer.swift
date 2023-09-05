@@ -252,7 +252,7 @@ let emailLoginReducer = Reducer.combine(
                             )
                         )
                     )
-                case .networkError:
+                case .networkError, .timeout:
                     // still go to verify device screen if there is network error
                     break
                 case .expiredEmailCode, .missingWalletInfo:

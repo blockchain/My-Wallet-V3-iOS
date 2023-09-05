@@ -52,6 +52,7 @@ let package = Package(
         ),
         .package(path: "../Analytics"),
         .package(path: "../FeatureAuthentication"),
+        .package(path: "../FeatureCustodialOnboarding"),
         .package(path: "../FeatureForm"),
         .package(path: "../Blockchain"),
         .package(path: "../Localization"),
@@ -98,7 +99,8 @@ let package = Package(
                 .product(name: "Blockchain", package: "Blockchain"),
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "UIComponents", package: "UIComponents"),
-                .product(name: "Veriff", package: "veriff-ios-spm")
+                .product(name: "Veriff", package: "veriff-ios-spm"),
+                .product(name: "FeatureCustodialOnboarding", package: "FeatureCustodialOnboarding")
             ],
             resources: [
                 .copy("Media.xcassets")

@@ -31,6 +31,11 @@ extension LocalizationConstants {
                 title: NSLocalizedString("Not Supported", comment: "Error Screen: Not Supported Title"),
                 message: NSLocalizedString("There is a problem with this product, it's not supported.", comment: "Error Screen: Not Supported Message")
             )
+
+            public static let timeout = (
+                title: NSLocalizedString("Timeout", comment: "Error Screen: Timeout"),
+                message: NSLocalizedString("We timed out waiting for an answer, please try again.", comment: "Error Screen: Timeout")
+            )
         }
     }
 }

@@ -153,7 +153,7 @@ private func approveEmailAuthorization(
                 switch error {
                 case .expiredEmailCode:
                     return .needsEmailAuthorization
-                case .missingSessionToken, .networkError, .recaptchaError, .missingWalletInfo:
+                case .missingSessionToken, .networkError, .recaptchaError, .missingWalletInfo, .timeout:
                     break
                 }
             }

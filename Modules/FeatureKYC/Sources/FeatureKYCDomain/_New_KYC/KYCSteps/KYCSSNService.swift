@@ -7,11 +7,11 @@ import ToolKit
 public final class KYCSSNRepository {
 
     private let app: AppProtocol
-    private let client: KYCClientAPI
+    private let client: KYCSSNClientAPI
 
     private let cache: CachedValueNew<CodableVoid, KYC.SSN, UX.Error>
 
-    public init(app: AppProtocol, client: KYCClientAPI) {
+    public init(app: AppProtocol, client: KYCSSNClientAPI) {
         self.app = app
         self.client = client
         self.cache = .init(
@@ -70,6 +70,8 @@ import DIKit
 
 public struct KYCSSNRepositoryDependencyKey: DependencyKey {
     public static var liveValue: KYCSSNRepository = DIKit.resolve()
+    public static let previewValue: KYCSSNRepository = KYCSSNRepository(app: App.preview, client: PreviewKYCSSNClient())
+    public static let testValue: KYCSSNRepository = KYCSSNRepository(app: App.test, client: PreviewKYCSSNClient())
 }
 
 extension DependencyValues {
@@ -77,5 +79,31 @@ extension DependencyValues {
     public var KYCSSNRepository: KYCSSNRepository {
         get { self[KYCSSNRepositoryDependencyKey.self] }
         set { self[KYCSSNRepositoryDependencyKey.self] = newValue }
+    }
+}
+
+public class PreviewKYCSSNClient: KYCSSNClientAPI {
+
+    private let then: (
+        submit: Result<Void, Nabu.Error>,
+        check: (Int) -> Result<KYC.SSN, Nabu.Error>
+    )
+
+    public init(
+        submit: Result<Void, Nabu.Error> = .failure(.unknown),
+        check: @escaping (Int) -> Result<KYC.SSN, Nabu.Error> = { _ in .failure(.unknown) }
+    ) {
+        self.then = (submit, check)
+    }
+
+    private var count: Int = 0
+
+    public func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error> {
+        defer { count += 1 }
+        return then.check(count).publisher.eraseToAnyPublisher()
+    }
+
+    public func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error> {
+        then.submit.publisher.eraseToAnyPublisher()
     }
 }
