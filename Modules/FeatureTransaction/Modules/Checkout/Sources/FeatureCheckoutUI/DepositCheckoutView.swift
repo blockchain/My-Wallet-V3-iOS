@@ -39,7 +39,9 @@ public struct DepositCheckoutView: View {
         DividedVStack(spacing: .zero) {
             from()
             to()
-            fee()
+            if !isExternalTradingEnabled {
+                fee()
+            }
             settlement()
             hold()
             total()
