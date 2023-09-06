@@ -2169,6 +2169,13 @@ blockchain:
 								more:
 									tap:
 									+ blockchain.ui.type.action
+					quote:
+						by:
+							output:
+								is:
+									enabled:
+									+ blockchain.db.type.boolean
+									+ blockchain.session.configuration.value
 					settings:
 						sheet:
 						+ blockchain.ux.type.story

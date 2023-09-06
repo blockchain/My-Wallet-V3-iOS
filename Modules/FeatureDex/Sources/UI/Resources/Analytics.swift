@@ -67,6 +67,5 @@ extension AnalyticsEvents.New.Dex {
         var blockchainFeeCurrency: String
         var inputNetwork: String?
         var outputNetwork: String?
-        var venue: String?
     }
 }

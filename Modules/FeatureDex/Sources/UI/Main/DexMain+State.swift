@@ -52,6 +52,7 @@ extension DexMain {
         @BindingState var isEligible: Bool = true
         @BindingState var inegibilityReason: String?
         @BindingState var currentSelectedNetworkTicker: String?
+        @BindingState var quoteByOutputEnabled: Bool = false
 
         init(
             availableBalances: [DexBalance]? = nil,

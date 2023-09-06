@@ -26,20 +26,17 @@ public struct DexQuoteRequest: Encodable, Equatable {
         }
     }
 
-    private var venue: DexQuoteVenue
     public var fromCurrency: CurrencyParams
     public var toCurrency: CurrencyParams
     private var takerAddress: String
     public var params: Params
 
     public init(
-        venue: DexQuoteVenue,
         fromCurrency: CurrencyParams,
         toCurrency: CurrencyParams,
         takerAddress: String,
         params: Params
     ) {
-        self.venue = venue
         self.fromCurrency = fromCurrency
         self.toCurrency = toCurrency
         self.takerAddress = takerAddress

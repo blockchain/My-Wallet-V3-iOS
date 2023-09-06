@@ -44,10 +44,14 @@ public struct DexMainView: View {
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
+        }
+        .bindings {
             subscribe(
                 viewStore.binding(\.$isEligible),
                 to: blockchain.api.nabu.gateway.user.products.product["DEX"].is.eligible
             )
+        }
+        .bindings {
             subscribe(
                 viewStore.binding(\.$inegibilityReason),
                 to: blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.message
@@ -57,6 +61,12 @@ public struct DexMainView: View {
             subscribe(
                 viewStore.binding(\.$slippage),
                 to: blockchain.ux.currency.exchange.dex.settings.slippage
+            )
+        }
+        .bindings {
+            subscribe(
+                viewStore.binding(\.$quoteByOutputEnabled),
+                to: blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled
             )
         }
         .bindings {
@@ -395,7 +405,11 @@ extension DexMainView {
                 )
             }
             Button(
-                action: { viewStore.send(.didTapFlip) },
+                action: {
+                    if viewStore.quoteByOutputEnabled {
+                        viewStore.send(.didTapFlip)
+                    }
+                },
                 label: {
                     ZStack {
                         Circle()

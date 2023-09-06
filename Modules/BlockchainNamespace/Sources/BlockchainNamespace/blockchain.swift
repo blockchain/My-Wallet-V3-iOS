@@ -8006,6 +8006,7 @@ public extension I_blockchain_ux_currency_exchange_dex {
 	var `network`: L_blockchain_ux_currency_exchange_dex_network { .init("\(__).network") }
 	var `no`: L_blockchain_ux_currency_exchange_dex_no { .init("\(__).no") }
 	var `not`: L_blockchain_ux_currency_exchange_dex_not { .init("\(__).not") }
+	var `quote`: L_blockchain_ux_currency_exchange_dex_quote { .init("\(__).quote") }
 	var `settings`: L_blockchain_ux_currency_exchange_dex_settings { .init("\(__).settings") }
 }
 public final class L_blockchain_ux_currency_exchange_dex_allowance: L, I_blockchain_ux_currency_exchange_dex_allowance {
@@ -8188,6 +8189,38 @@ public final class L_blockchain_ux_currency_exchange_dex_not_eligible_learn_more
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap", comment: "") }
 }
 public protocol I_blockchain_ux_currency_exchange_dex_not_eligible_learn_more_tap: I_blockchain_ui_type_action {}
+public final class L_blockchain_ux_currency_exchange_dex_quote: L, I_blockchain_ux_currency_exchange_dex_quote {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.quote", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_quote: I {}
+public extension I_blockchain_ux_currency_exchange_dex_quote {
+	var `by`: L_blockchain_ux_currency_exchange_dex_quote_by { .init("\(__).by") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_quote_by: L, I_blockchain_ux_currency_exchange_dex_quote_by {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.quote.by", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_quote_by: I {}
+public extension I_blockchain_ux_currency_exchange_dex_quote_by {
+	var `output`: L_blockchain_ux_currency_exchange_dex_quote_by_output { .init("\(__).output") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_quote_by_output: L, I_blockchain_ux_currency_exchange_dex_quote_by_output {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.quote.by.output", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_quote_by_output: I {}
+public extension I_blockchain_ux_currency_exchange_dex_quote_by_output {
+	var `is`: L_blockchain_ux_currency_exchange_dex_quote_by_output_is { .init("\(__).is") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_quote_by_output_is: L, I_blockchain_ux_currency_exchange_dex_quote_by_output_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.quote.by.output.is", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_quote_by_output_is: I {}
+public extension I_blockchain_ux_currency_exchange_dex_quote_by_output_is {
+	var `enabled`: L_blockchain_ux_currency_exchange_dex_quote_by_output_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_ux_currency_exchange_dex_quote_by_output_is_enabled: L, I_blockchain_ux_currency_exchange_dex_quote_by_output_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled", comment: "") }
+}
+public protocol I_blockchain_ux_currency_exchange_dex_quote_by_output_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_currency_exchange_dex_settings: L, I_blockchain_ux_currency_exchange_dex_settings {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency.exchange.dex.settings", comment: "") }
 }

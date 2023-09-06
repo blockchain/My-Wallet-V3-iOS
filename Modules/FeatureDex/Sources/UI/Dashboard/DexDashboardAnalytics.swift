@@ -130,8 +130,7 @@ enum QuotePayloadFactory {
             blockchainFeeAmountUsd: nil,
             blockchainFeeCurrency: quote.productFee.code,
             inputNetwork: network?.networkConfig.networkTicker,
-            outputNetwork: network?.networkConfig.networkTicker,
-            venue: DexQuoteVenue.zeroX.rawValue
+            outputNetwork: network?.networkConfig.networkTicker
         )
     }
 }

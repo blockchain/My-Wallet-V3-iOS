@@ -43,6 +43,12 @@ public struct DexCellView: View {
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
         }
+        .bindings {
+            subscribe(
+                viewStore.binding(\.$quoteByOutputEnabled),
+                to: blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled
+            )
+        }
         .sheet(isPresented: viewStore.binding(\.$showAssetPicker), content: { assetPickerView })
     }
 }
@@ -69,6 +75,7 @@ extension DexCellView {
             .focused($textFieldIsFocused)
             .textInputAutocapitalization(.never)
             .synchronize(viewStore.binding(\.$textFieldIsFocused), $textFieldIsFocused)
+            .disabled(viewStore.textFieldDisabled)
     }
 
     private var amountViewText: Binding<String> {
@@ -111,7 +118,7 @@ extension DexCellView {
         if let balance = viewStore.balance {
             balanceBodyLabel(balance.value)
         } else if viewStore.amount == nil {
-            Text(" ")
+            Text(" ").typography(.micro)
         } else {
             ProgressView()
         }

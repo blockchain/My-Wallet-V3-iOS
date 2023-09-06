@@ -129,7 +129,6 @@ private func dexQuoteRequest(
         skipValidation: input.skipValidation
     )
     return DexQuoteRequest(
-        venue: .zeroX,
         fromCurrency: fromCurrency,
         toCurrency: toCurrency,
         takerAddress: input.takerAddress,

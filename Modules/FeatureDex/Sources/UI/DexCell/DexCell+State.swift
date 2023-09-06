@@ -29,6 +29,11 @@ extension DexCell {
         var balance: DexBalance?
         @BindingState var textFieldIsFocused: Bool = false
         @BindingState var isCurrentInput: Bool = false
+        @BindingState var quoteByOutputEnabled: Bool = false
+
+        var textFieldDisabled: Bool {
+            style.isDestination && quoteByOutputEnabled.isNo
+        }
 
         var availableBalances: [DexBalance]
         var filteredBalances: [DexBalance] {
