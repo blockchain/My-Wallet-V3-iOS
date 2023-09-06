@@ -40,7 +40,9 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
                             addressService: addressService,
                             addressSearchService: resolve(),
                             onComplete: { address in
-                                presenter?.dismiss(animated: true) {
+                                self.topMostViewControllerProvider
+                                    .topMostViewController?
+                                    .dismiss(animated: true) {
                                     promise(.success(address))
                                 }
                             }
