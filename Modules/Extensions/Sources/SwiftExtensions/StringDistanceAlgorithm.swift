@@ -26,15 +26,12 @@ public struct FuzzyAlgorithm: StringDistanceAlgorithm {
 
     public func distance(between a: String, and b: String) -> Double {
         guard a != b else { return 0 }
-        var (a, b) = (
-            min(a, b, by: \.count),
-            max(a, b, by: \.count)
-        )
+        var (a, b) = (a, b)
         if caseInsensitive {
             (a, b) = (a.lowercased(), b.lowercased())
         }
 
-        if !a.isEmpty, b.starts(with: a[...a.index(a.startIndex, offsetBy: floor(a.count.d / 1.5).i)]) {
+        if !b.isEmpty, a.starts(with: b[...b.index(b.startIndex, offsetBy: floor(b.count.d / 1.5).i)]) {
             return 0
         }
 

@@ -18,6 +18,9 @@ final class StringDistanceAlgorithmTests: XCTestCase {
 
         XCTAssertEqual("kitten".distance(between: "sitting", using: algorithm), 0.254, accuracy: 0.01)
         XCTAssertEqual("君子和而不同".distance(between: "小人同而不和", using: algorithm), 0.445, accuracy: 0.01)
+
+        XCTAssertEqual("0x".distance(between: "0xdeadbeef", using: algorithm), 0.32, accuracy: 0.01)
+        XCTAssertEqual("0xdeadbeef".distance(between: "0x", using: algorithm), 0.32, accuracy: 0.01)
     }
 
     func test_distance_Fuzzy() {
@@ -33,6 +36,9 @@ final class StringDistanceAlgorithmTests: XCTestCase {
         XCTAssertEqual("YBS".distance(between: "Yorkshire Building Society", using: algorithm), 0.1)
 
         XCTAssertEqual("君子和而不同".distance(between: "小人同而不和", using: algorithm), 1)
+
+        XCTAssertEqual("0x".distance(between: "0xdeadbeef", using: algorithm), 0.1)
+        XCTAssertEqual("0xdeadbeef".distance(between: "0x", using: algorithm), 0)
     }
 
     func test_distance_Contains() {
@@ -48,5 +54,8 @@ final class StringDistanceAlgorithmTests: XCTestCase {
         XCTAssertEqual("YBS".distance(between: "Yorkshire Building Society", using: algorithm), 1)
 
         XCTAssertEqual("君子和而不同".distance(between: "小人同而不和", using: algorithm), 1)
+
+        XCTAssertEqual("0x".distance(between: "0xdeadbeef", using: algorithm), 0)
+        XCTAssertEqual("0xdeadbeef".distance(between: "0x", using: algorithm), 0)
     }
 }
