@@ -30,12 +30,12 @@ final class BankTransferRepository: BankTransferRepositoryAPI {
     ) -> AnyPublisher<BankTranferPayment, NabuNetworkError> {
         app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
             .replaceError(with: false)
+            .prefix(1)
             .flatMap { [client] isEligible in
                 client.startBankTransfer(id: id, amount: amount, product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
                     .map(BankTranferPayment.init)
                     .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
-
     }
 }

@@ -3618,6 +3618,17 @@ blockchain:
 									+ blockchain.ux.type.story
 					up:
 					+ blockchain.ux.type.story
+						address:
+							country:
+								code:
+								+ blockchain.db.type.string
+								+ blockchain.session.state.preference.value
+								+ blockchain.session.state.shared.value
+								state:
+								+ blockchain.db.type.string
+								+ blockchain.session.state.preference.value
+								+ blockchain.session.state.shared.value
+							submit:
 						create:
 						+ blockchain.ui.type.button.primary
 						did:

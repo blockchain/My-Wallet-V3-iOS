@@ -331,6 +331,9 @@ let createAccountStepTwoReducer = Reducer<
     case .accountCreation(.success(let context)),
          .accountImported(.success(.left(let context))):
 
+        let country = state.country.id
+        let countryState = state.countryState?.id
+
         return .concatenate(
             EffectTask(value: .triggerAuthenticate),
             environment
@@ -339,12 +342,6 @@ let createAccountStepTwoReducer = Reducer<
             .merge(
                 .cancel(id: CreateAccountStepTwoIds.CreationId()),
                 .cancel(id: CreateAccountStepTwoIds.ImportId()),
-                environment
-                    .walletCreationService
-                    .setResidentialInfo(state.country.id, state.countryState?.id)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-                    .fireAndForget(),
                 environment.walletCreationService
                     .updateCurrencyForNewWallets(state.country.id, context.guid, context.sharedKey)
                     .receive(on: environment.mainQueue)
@@ -377,7 +374,9 @@ let createAccountStepTwoReducer = Reducer<
         return .none
 
     case .informWalletFetched:
-        return .none
+        return .fireAndForget {
+            environment.app?.post(event: blockchain.ux.user.authentication.sign.up.address.submit)
+        }
 
     case .accountImported(.success(.right(.noValue))):
         // this will only be true in case of legacy wallet

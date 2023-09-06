@@ -280,7 +280,17 @@ let createAccountStepOneReducer = Reducer.combine(
             guard state.inputValidationState == .valid else {
                 return .none
             }
-            return EffectTask(value: .navigate(to: .createWalletStepTwo))
+            let country = state.country?.id
+            let countryState = state.countryState?.id
+            return .merge(
+                .fireAndForget {
+                    environment.app?.state.transaction { state in
+                        state.set(blockchain.ux.user.authentication.sign.up.address.country.code, to: country)
+                        state.set(blockchain.ux.user.authentication.sign.up.address.country.state, to: countryState)
+                    }
+                },
+                EffectTask(value: .navigate(to: .createWalletStepTwo))
+            )
 
         case .validateReferralCode:
             return environment

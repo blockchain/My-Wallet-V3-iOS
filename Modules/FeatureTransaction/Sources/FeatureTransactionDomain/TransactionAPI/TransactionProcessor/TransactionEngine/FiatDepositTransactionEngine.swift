@@ -174,10 +174,11 @@ final class FiatDepositTransactionEngine: TransactionEngine {
                         amount: pendingTransaction.amount
                     )
                     .map(\.paymentId)
-                    .asObservable()
                     .asSingle()
             }
-            .map { TransactionResult.hashed(txHash: $0, amount: pendingTransaction.amount) }
+            .map { hash in
+                TransactionResult.hashed(txHash: hash, amount: pendingTransaction.amount)
+            }
     }
 
     func doUpdateFeeLevel(

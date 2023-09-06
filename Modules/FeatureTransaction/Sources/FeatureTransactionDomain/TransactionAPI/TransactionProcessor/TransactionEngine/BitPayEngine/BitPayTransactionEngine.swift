@@ -203,7 +203,6 @@ final class BitPayTransactionEngine: TransactionEngine {
                         transactionHex: transaction.txHash,
                         transactionSize: transaction.msgSize
                     )
-                    .asObservable()
                     .asSingle()
             )
             .map(\.memo)

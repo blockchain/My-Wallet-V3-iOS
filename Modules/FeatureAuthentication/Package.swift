@@ -42,6 +42,7 @@ let package = Package(
             exact: "0.56.0"
         ),
         .package(path: "../Analytics"),
+        .package(path: "../Blockchain"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../Localization"),
@@ -57,6 +58,7 @@ let package = Package(
         .target(
             name: "FeatureAuthenticationDomain",
             dependencies: [
+                .product(name: "Blockchain", package: "Blockchain"),
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "Errors", package: "Errors"),

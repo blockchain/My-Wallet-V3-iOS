@@ -13609,9 +13609,38 @@ public final class L_blockchain_ux_user_authentication_sign_up: L, I_blockchain_
 }
 public protocol I_blockchain_ux_user_authentication_sign_up: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_user_authentication_sign_up {
+	var `address`: L_blockchain_ux_user_authentication_sign_up_address { .init("\(__).address") }
 	var `create`: L_blockchain_ux_user_authentication_sign_up_create { .init("\(__).create") }
 	var `did`: L_blockchain_ux_user_authentication_sign_up_did { .init("\(__).did") }
 }
+public final class L_blockchain_ux_user_authentication_sign_up_address: L, I_blockchain_ux_user_authentication_sign_up_address {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.address", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_address: I {}
+public extension I_blockchain_ux_user_authentication_sign_up_address {
+	var `country`: L_blockchain_ux_user_authentication_sign_up_address_country { .init("\(__).country") }
+	var `submit`: L_blockchain_ux_user_authentication_sign_up_address_submit { .init("\(__).submit") }
+}
+public final class L_blockchain_ux_user_authentication_sign_up_address_country: L, I_blockchain_ux_user_authentication_sign_up_address_country {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.address.country", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_address_country: I {}
+public extension I_blockchain_ux_user_authentication_sign_up_address_country {
+	var `code`: L_blockchain_ux_user_authentication_sign_up_address_country_code { .init("\(__).code") }
+	var `state`: L_blockchain_ux_user_authentication_sign_up_address_country_state { .init("\(__).state") }
+}
+public final class L_blockchain_ux_user_authentication_sign_up_address_country_code: L, I_blockchain_ux_user_authentication_sign_up_address_country_code {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.address.country.code", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_address_country_code: I_blockchain_db_type_string, I_blockchain_session_state_preference_value, I_blockchain_session_state_shared_value {}
+public final class L_blockchain_ux_user_authentication_sign_up_address_country_state: L, I_blockchain_ux_user_authentication_sign_up_address_country_state {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.address.country.state", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_address_country_state: I_blockchain_db_type_string, I_blockchain_session_state_preference_value, I_blockchain_session_state_shared_value {}
+public final class L_blockchain_ux_user_authentication_sign_up_address_submit: L, I_blockchain_ux_user_authentication_sign_up_address_submit {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.address.submit", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_address_submit: I {}
 public final class L_blockchain_ux_user_authentication_sign_up_create: L, I_blockchain_ux_user_authentication_sign_up_create {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.create", comment: "") }
 }

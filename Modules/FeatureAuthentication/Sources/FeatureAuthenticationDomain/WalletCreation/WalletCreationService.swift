@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import ToolKit
 import WalletPayloadKit
@@ -27,7 +28,7 @@ public typealias ImportWalletMethod = (
 public typealias SetResidentialInfoMethod = (
     _ country: String,
     _ state: String?
-) -> AnyPublisher<Void, Never>
+) -> AnyPublisher<Void, Error>
 
 public typealias UpdateCurrencyForNewWallets = (
     _ country: String,
@@ -76,21 +77,26 @@ extension WalletCreationService {
                     accountName: accountName,
                     language: "en"
                 )
-                    .mapError(WalletCreationServiceError.creationFailure)
-                    .map { model -> Either<WalletCreatedContext, EmptyValue> in
-                        .left(WalletCreatedContext.from(model: model))
-                    }
-                    .eraseToAnyPublisher()
+                .mapError(WalletCreationServiceError.creationFailure)
+                .map { model -> Either<WalletCreatedContext, EmptyValue> in
+                    .left(WalletCreatedContext.from(model: model))
+                }
+                .eraseToAnyPublisher()
             },
-            setResidentialInfo: { country, state -> AnyPublisher<Void, Never> in
+            setResidentialInfo: { country, state -> AnyPublisher<Void, Error> in
+                var rng = SystemRandomNumberGenerator()
                 // we fire the request but we ignore the error,
                 // even if this fails the user will still have to submit their details
                 // as part of the KYC flow
-                nabuRepository.setInitialResidentialInfo(
-                    country: country,
-                    state: state
-                )
-                .ignoreFailure()
+                return Deferred {
+                    nabuRepository.setInitialResidentialInfo(
+                        country: country,
+                        state: state
+                    )
+                }
+                .retry(max: 30, delay: .exponential(using: &rng), scheduler: DispatchQueue.main)
+                .eraseError()
+                .eraseToAnyPublisher()
             },
             updateCurrencyForNewWallets: { country, guid, sharedKey -> AnyPublisher<Void, Never> in
                 // we ignore the failure since this is kind of a side effect for new wallets :(
@@ -109,7 +115,7 @@ extension WalletCreationService {
             importWallet: { _, _, _, _ -> AnyPublisher<Either<WalletCreatedContext, EmptyValue>, WalletCreationServiceError> in
                 .empty()
             },
-            setResidentialInfo: { _, _ -> AnyPublisher<Void, Never> in
+            setResidentialInfo: { _, _ -> AnyPublisher<Void, Error> in
                 .empty()
             },
             updateCurrencyForNewWallets: { _, _, _ -> AnyPublisher<Void, Never> in

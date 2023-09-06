@@ -5,6 +5,7 @@ import ErrorsUI
 import FeatureAppDomain
 import FeatureAppUI
 import FeatureAttributionDomain
+import FeatureAuthenticationDomain
 import FeatureCoinUI
 import FeatureCustomerSupportUI
 import FeatureDashboardDomain
@@ -82,6 +83,7 @@ extension AppProtocol {
         clientObservers.insert(SimpleBuyPairsNAPIRepository(self))
         clientObservers.insert(WalletConnectPairingsObserver(app: self))
         clientObservers.insert(LaunchKYCClientObserver())
+        clientObservers.insert(ResubmitResidentialInformation())
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,
