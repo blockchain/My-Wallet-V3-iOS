@@ -11,6 +11,7 @@ enum PriceRequest {
     enum IndexMultiSeries {}
     enum IndexSeries {}
     enum Symbols {}
+    enum TopMovers {}
 }
 
 // MARK: - IndexSeries
@@ -132,6 +133,36 @@ extension PriceRequest.Symbols {
     ) -> NetworkRequest? {
         requestBuilder.get(
             path: "/price/symbols"
+        )
+    }
+}
+
+
+// MARK: - Top Movers
+extension PriceRequest.TopMovers {
+
+    struct Key: Hashable, CustomStringConvertible {
+        let currency: FiatCurrency
+        var description: String { "id-\(currency)" }
+    }
+
+    /// Aggregated call for multiple price quotes.
+    /// - parameter base: Base fiat currency code. Must be supported in https://api.blockchain.info/price/top-movers-24h
+    /// - parameter quote: Currencies to quote, fiat or crypto.
+    /// - parameter time: The epoch seconds used to locate a time in the past.
+    static func request(
+        requestBuilder: RequestBuilder,
+        fiatBase: String,
+        topN: String,
+        custodialOnly: String
+    ) -> NetworkRequest? {
+        requestBuilder.get(
+            path: "/price/top-movers-24h",
+            parameters: [
+                URLQueryItem(name: "fiatBase", value: fiatBase),
+                URLQueryItem(name: "topN", value: topN),
+                URLQueryItem(name: "custodialOnly", value: custodialOnly)
+            ]
         )
     }
 }

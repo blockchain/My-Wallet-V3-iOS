@@ -8,6 +8,7 @@ public enum PriceResponse {
     public enum IndexMulti {}
     public enum IndexMultiSeries {}
     public enum Symbols {}
+    public enum TopMovers {}
 }
 
 // MARK: - IndexMulti
@@ -80,3 +81,24 @@ public struct Price: Decodable, Equatable {
     public let volume24h: Double?
     public let marketCap: Double?
 }
+
+// MARK: - Top Movers
+
+extension PriceResponse.TopMovers {
+    public struct Response: Decodable, Equatable {
+        public let topMoversDescending: [TopMoverData]
+
+        public struct TopMoverData: Decodable, Equatable {
+            public let currency: String
+            public let fiatDelta: Double
+            public let percentageDelta: Double
+            public let lastPrice: Double
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            self.topMoversDescending = try container.decode([TopMoverData].self)
+        }
+    }
+}
+

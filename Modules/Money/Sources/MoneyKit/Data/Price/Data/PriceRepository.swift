@@ -28,6 +28,13 @@ final class PriceRepository: PriceRepositoryAPI {
         NetworkError
     >
 
+    private let topMoversCachedValue: CachedValueNew<
+        PriceRequest.TopMovers.Key,
+        [TopMoverInfo],
+        NetworkError
+    >
+
+
     // MARK: - Setup
 
     init(
@@ -39,7 +46,14 @@ final class PriceRepository: PriceRepositoryAPI {
             configuration: .default(),
             refreshControl: refreshControl
         )
-        .eraseToAnyCache()
+            .eraseToAnyCache()
+
+        let topMoversCache = InMemoryCache<PriceRequest.TopMovers.Key, [TopMoverInfo]>(
+            configuration: .default(),
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+        )
+            .eraseToAnyCache()
+
         self.indexMultiCachedValue = CachedValueNew(
             cache: indexMultiCache,
             fetch: { key in
@@ -64,7 +78,7 @@ final class PriceRepository: PriceRepositoryAPI {
             configuration: .default(),
             refreshControl: PerpetualCacheRefreshControl()
         )
-        .eraseToAnyCache()
+            .eraseToAnyCache()
         self.symbolsCachedValue = CachedValueNew(
             cache: symbolsCache,
             fetch: { _ in
@@ -92,6 +106,22 @@ final class PriceRepository: PriceRepositoryAPI {
                     .map { response in
                         HistoricalPriceSeries(baseCurrency: key.base, quoteCurrency: key.quote, prices: response)
                     }
+                    .eraseToAnyPublisher()
+            }
+        )
+
+        self.topMoversCachedValue = CachedValueNew(
+            cache: topMoversCache,
+            fetch: { [client] key in
+                client
+                    .topMovers(with: key.currency,
+                               topFirst: 5,
+                               custodialOnly: true)
+                    .map({ response in
+                        response.topMoversDescending.map { item in
+                            TopMoverInfo(currency: item.currency, lastPrice: .zero(currency: .ADP))
+                        }
+                    })
                     .eraseToAnyPublisher()
             }
         )

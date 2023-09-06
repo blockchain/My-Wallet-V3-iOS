@@ -50,4 +50,5 @@ protocol PriceRepositoryAPI {
         at time: PriceTime,
         skipStale: Bool
     ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
+    
 }
