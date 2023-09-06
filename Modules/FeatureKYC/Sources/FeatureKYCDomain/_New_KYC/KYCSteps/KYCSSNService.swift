@@ -47,7 +47,7 @@ public final class KYCSSNRepository {
                                     }
                                     json.regex.validation = ssn.requirements.validationRegex
                                     if let verification = ssn.verification {
-                                        json.state = blockchain.api.nabu.gateway.onboarding.SSN.state(\.id) + verification.state.value.lowercased()
+                                        json.state = blockchain.api.nabu.gateway.onboarding.SSN.state[][verification.state.value.lowercased()]
                                     }
                                     return json.toJSON()
                                 case let .failure(error):
