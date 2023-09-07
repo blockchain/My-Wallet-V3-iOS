@@ -334,7 +334,10 @@ extension SellCheckoutView.Loaded {
             .padding(.horizontal, Spacing.padding1)
             .padding(.top, Spacing.padding3)
             .onTapGesture {
-                $app.post(event: blockchain.ux.bakkt.refund.policy.disclaimer)
+                showTooltip(
+                    title: L10n.Label.authorizeTitle,
+                    message: L10n.Label.authorizeBody
+                )
             }
     }
 
