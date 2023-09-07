@@ -15,7 +15,10 @@ public final class KYCSSNRepository {
         self.app = app
         self.client = client
         self.cache = .init(
-            cache: InMemoryCache(configuration: .onUserStateChanged(), refreshControl: PerpetualCacheRefreshControl()).eraseToAnyCache(),
+            cache: InMemoryCache(
+                configuration: .onUserStateChanged(),
+                refreshControl: PerpetualCacheRefreshControl()
+            ).eraseToAnyCache(),
             fetch: { [client] _ in client.checkSSN().mapError(UX.Error.init(nabu:)).eraseToAnyPublisher() }
         )
     }
