@@ -556,17 +556,14 @@ final class KYCRouter: KYCRouterAPI {
                     )
                     controller.primaryButtonAction = { _ in
                         switch status {
-                        case .approved:
-                            self.finish()
-                        case .pending:
-                            break
                         case .failed, .expired:
                             if let blockchainSupportURL = URL(string: Constants.Url.blockchainSupport) {
                                 UIApplication.shared.open(blockchainSupportURL)
                             }
-                        case .none, .underReview:
-                            return
+                        default:
+                            break
                         }
+                        self.finish()
                     }
 
                     safePushInNavController(controller)

@@ -20,8 +20,8 @@ public final class KYCSSNRepository {
         )
     }
 
-    public func checkSSN() -> AnyPublisher<KYC.SSN, UX.Error> {
-        cache.get(key: CodableVoid())
+    public func checkSSN(forceFetch: Bool = true) -> AnyPublisher<KYC.SSN, UX.Error> {
+        cache.get(key: CodableVoid(), forceFetch: forceFetch)
     }
 
     public func submitSSN(_ ssn: String) -> AnyPublisher<Void, UX.Error> {
@@ -32,34 +32,25 @@ public final class KYCSSNRepository {
         try await app.register(
             napi: blockchain.api.nabu.gateway.onboarding,
             domain: blockchain.api.nabu.gateway.onboarding.SSN,
-            repository: { [app, cache] _ in
-                app.publisher(for: blockchain.ux.kyc.SSN.is.enabled, as: Bool.self)
-                    .replaceError(with: false)
-                    .flatMap { isEnabled -> AnyPublisher<AnyJSON, Never> in
-                        if isEnabled {
-                            return cache.stream(key: CodableVoid()).map { ssn -> AnyJSON in
-                                switch ssn {
-                                case let .success(ssn):
-                                    var json = L_blockchain_api_nabu_gateway_onboarding_SSN.JSON()
-                                    json.is.mandatory = ssn.requirements.isMandatory
-                                    if let message = ssn.verification?.errorMessage {
-                                        json.verification.message = message
-                                    }
-                                    json.regex.validation = ssn.requirements.validationRegex
-                                    if let verification = ssn.verification {
-                                        json.state = blockchain.api.nabu.gateway.onboarding.SSN.state[][verification.state.value.lowercased()]
-                                    }
-                                    return json.toJSON()
-                                case let .failure(error):
-                                    return AnyJSON(error)
-                                }
-                            }
-                            .eraseToAnyPublisher()
-                        } else {
-                            return .just(.empty)
+            repository: { [cache] _ in
+                cache.stream(key: CodableVoid()).map { ssn -> AnyJSON in
+                    switch ssn {
+                    case let .success(ssn):
+                        var json = L_blockchain_api_nabu_gateway_onboarding_SSN.JSON()
+                        json.is.mandatory = ssn.requirements.isMandatory
+                        if let message = ssn.verification?.errorMessage {
+                            json.verification.message = message
                         }
+                        json.regex.validation = ssn.requirements.validationRegex
+                        if let verification = ssn.verification {
+                            json.state = blockchain.api.nabu.gateway.onboarding.SSN.state[][verification.state.value.lowercased()]
+                        }
+                        return json.toJSON()
+                    case let .failure(error):
+                        return AnyJSON(error)
                     }
-                    .eraseToAnyPublisher()
+                }
+                .eraseToAnyPublisher()
             }
         )
     }

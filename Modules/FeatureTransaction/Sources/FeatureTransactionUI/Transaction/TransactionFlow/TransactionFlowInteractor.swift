@@ -614,7 +614,7 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                         transitionType: .replaceRoot,
                         transactionModel: transactionModel,
                         action: action,
-                        canAddMoreSources: !(isExternalBrokerage && newState.availableTargets.or([]).isEmpty)
+                        canAddMoreSources: !isExternalBrokerage || newState.availableTargets.or([]).isEmpty
                     )
                 }
 

@@ -40,7 +40,8 @@ extension Compute.From {
                     for: from.reference.ref(
                         to: context + (from.context ?? [:]),
                         in: app
-                    ).validated()
+                    ).validated(),
+                    computeConfiguration: false
                 )
                 .sink { result in
                     do {

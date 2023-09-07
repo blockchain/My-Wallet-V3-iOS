@@ -520,13 +520,19 @@ extension AppProtocol {
     }
 
     public func publisher(for event: Tag.Event) -> AnyPublisher<FetchResult, Never> {
+        publisher(for: event, computeConfiguration: true)
+    }
+
+    func publisher(for event: Tag.Event, computeConfiguration: Bool) -> AnyPublisher<FetchResult, Never> {
 
         func makePublisher(_ ref: Tag.Reference) -> AnyPublisher<FetchResult, Never> {
             switch ref.tag {
             case blockchain.session.state.value, blockchain.db.collection.id:
                 return state.publisher(for: ref)
-            case blockchain.session.configuration.value:
+            case blockchain.session.configuration.value where computeConfiguration:
                 return remoteConfiguration.publisher(for: ref).computed(in: self)
+            case blockchain.session.configuration.value:
+                return remoteConfiguration.publisher(for: ref)
             case _ where ref.tag.isNAPI:
                 return napis.publisher(for: ref)
             default:

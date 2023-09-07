@@ -69,7 +69,19 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
 
     func decode(with computes: Set<Compute.JSON>) throws {
         state.lock.lock(); defer { state.lock.unlock() }
-        guard state.depth < 20 else { throw AnyJSON.Error("Reached compute depth of \(state.depth) with result \(result). Check for infinite recursion.") }
+        guard state.depth < 20 else {
+            let error = AnyJSON.Error(
+                """
+                Reached compute depth of \(state.depth)
+                Check for infinite recursion
+
+                \(result)
+                
+                """
+            )
+            defer { app?.post(error: error) }
+            throw error
+        }
         guard let app else { return }
         let bindings = Bindings(app: app, context: context, handle: on(update:))
         state.append(bindings, by: binding, with: computes)
