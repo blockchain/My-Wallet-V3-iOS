@@ -69,6 +69,11 @@ struct SuperAppContentView: View {
                     currentModeSelection = .pkw
                 }
             }
+            .onAppear {
+                if currentModeSelection == .trading, isTradingEnabled == false {
+                    currentModeSelection = .pkw
+                }
+            }
             .task(id: hideBalanceAfterRefresh) {
                 // run initial "animation" and select `semiCollapsed` detent after 3 second
                 do {
