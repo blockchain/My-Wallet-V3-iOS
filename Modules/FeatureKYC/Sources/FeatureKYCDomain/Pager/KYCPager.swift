@@ -214,6 +214,8 @@ extension KYCPageType {
             return isNewProfile ? .profileNew : .profile
         case .profile, .profileNew:
             return .address
+        case .verifyIdentity where isSSNRequired:
+            return .ssn
         case .address,
                 .enterPhone,
                 .confirmPhone,

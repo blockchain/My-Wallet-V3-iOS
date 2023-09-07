@@ -873,15 +873,19 @@ extension TransactionFlowInteractor {
                     switch tx.step {
                     case .initial:
                         state.set(blockchain.ux.transaction.source.id, to: tx.source?.currencyType.code)
+                        state.set(blockchain.ux.transaction.source.account.id, to: tx.source?.identifier)
                         state.set(blockchain.ux.transaction.source.target.id, to: tx.destination?.currencyType.code)
+                        state.set(blockchain.ux.transaction.source.target.account.id, to: (tx.destination as? BlockchainAccount)?.identifier)
                     default:
                         break
                     }
                     switch action {
                     case .sourceAccountSelected(let source):
                         state.set(blockchain.ux.transaction.source.id, to: source.currencyType.code)
+                        state.set(blockchain.ux.transaction.source.account.id, to: tx.source?.identifier)
                     case .targetAccountSelected(let target):
                         state.set(blockchain.ux.transaction.source.target.id, to: target.currencyType.code)
+                        state.set(blockchain.ux.transaction.source.target.account.id, to: (tx.destination as? BlockchainAccount)?.identifier)
                     default:
                         break
                     }
