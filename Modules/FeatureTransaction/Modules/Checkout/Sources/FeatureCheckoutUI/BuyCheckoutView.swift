@@ -434,10 +434,10 @@ extension BuyCheckoutView.Loaded {
             .padding(.horizontal, Spacing.padding1)
             .padding(.top, Spacing.padding3)
             .onTapGesture {
-                showTooltip(
-                    title: L10n.Label.authorizeTitle,
-                    message: L10n.Label.authorizeBody
-                )
+                $app.post(event: blockchain.ux.bakkt.refund.policy.disclaimer)
+            }
+            .batch {
+                set(blockchain.ux.bakkt.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.bakkt.refund.policy.disclaimer.url })
             }
     }
 
@@ -559,19 +559,6 @@ extension BuyCheckoutView.Loaded {
         }
         .padding()
         .background(Rectangle().fill(Color.semantic.background).ignoresSafeArea())
-    }
-
-    func showTooltip(title: String, message: String) {
-        $app.post(
-            event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
-            context: [
-                blockchain.ux.tooltip.title: title,
-                blockchain.ux.tooltip.body: message,
-                blockchain.ui.type.action.then.enter.into.detents: [
-                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
-                ]
-            ]
-        )
     }
 }
 
