@@ -124,7 +124,7 @@ extension KYCPageType {
             return .accountUsageForm
         }
 
-        if isSSNRequired, user.isVerified {
+        if isSSNRequired {
             return .ssn
         }
 
