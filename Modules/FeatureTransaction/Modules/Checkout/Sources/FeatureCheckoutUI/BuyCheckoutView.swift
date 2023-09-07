@@ -422,7 +422,7 @@ extension BuyCheckoutView.Loaded {
     @ViewBuilder
     func bakktDisclaimer() -> some View {
         let label = L10n.Label.buyDisclaimerBakkt(
-            fiatAmount: checkout.input.displayString,
+            fiatAmount: checkout.fiat.displayString,
             amount: checkout.crypto.displayString,
             asset: checkout.crypto.currency.code
         )
