@@ -2076,13 +2076,16 @@ blockchain:
 						skip:
 						+ blockchain.ux.type.action
 		bakkt:
-			refund:
-				policy:
-					disclaimer:
-					+ blockchain.ux.type.action
-						url:
-						+ blockchain.db.type.url
-						+ blockchain.session.configuration.value
+			authorization:
+			+ blockchain.ux.type.action
+				url:
+				+ blockchain.db.type.url
+				+ blockchain.session.configuration.value
+			terms:
+			+ blockchain.ux.type.action
+				url:
+				+ blockchain.db.type.url
+				+ blockchain.session.configuration.value
 			view:
 				disclosures:
 				+ blockchain.ux.type.action

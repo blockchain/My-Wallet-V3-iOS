@@ -148,9 +148,9 @@ extension LocalizationConstants {
 
             static func sellDisclaimerBakkt(amount: String, asset: String) -> String {
                 NSLocalizedString(
-                    "You [authorize]() Bakkt Marketplace, LLC to accept the transfer of funds from Bakkt Crypto Solutions, LLC to your account held at Bakkt Marketplace, LLC to complete your sale of %@.  The actual value sold may change due to volatility in the price of asset, but your order will be executed based on the best price available to Bakkt Crypto Solutions, LLC.  Cryptocurrency transactions are not FDIC or SIPC insured and cryptocurrencies are not securities.",
+                    "You [authorize]() Bakkt Marketplace, LLC to accept the transfer of funds from Bakkt Crypto Solutions, LLC to your account held at Bakkt Marketplace, LLC to complete your sale of %@.  The actual value sold may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt Crypto Solutions, LLC.  Cryptocurrency transactions are not FDIC or SIPC insured and cryptocurrencies are not securities.",
                     comment: "Bakkt disclaimer"
-                ).interpolating(amount, asset)
+                ).interpolating(amount, asset, asset)
             }
 
 
@@ -272,8 +272,8 @@ extension LocalizationConstants {
             static let gotIt = NSLocalizedString("Got it", comment: "Got it")
             
             static let viewDisclosures = NSLocalizedString(
-                "View disclosures",
-                comment: "View disclosures"
+                "Risk Disclosures",
+                comment: "Risk Disclosures"
             )
         }
 
