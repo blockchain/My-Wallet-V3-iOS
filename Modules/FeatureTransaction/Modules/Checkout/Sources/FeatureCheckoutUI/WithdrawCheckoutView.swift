@@ -136,9 +136,11 @@ public struct WithdrawCheckoutView: View {
     }
 
     @ViewBuilder func disclaimer() -> some View {
+        let date = DateFormatter.birthday.string(from: Date.now)
+
         VStack(alignment: .leading) {
             Text(rich: isExternalTradingEnabled ?
-                 L10n.Label.withdrawDisclaimerBakkt.interpolating(checkout.total.displayString) :
+                 L10n.Label.withdrawDisclaimerBakkt(date: date) :
                     L10n.Label.withdrawDisclaimer.interpolating(checkout.total.displayString))
                 .typography(.caption1)
                 .foregroundColor(.semantic.text)

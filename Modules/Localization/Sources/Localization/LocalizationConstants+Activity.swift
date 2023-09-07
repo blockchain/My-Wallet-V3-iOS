@@ -135,8 +135,8 @@ extension LocalizationConstants.Activity.Details {
             comment: "Button title, button takes user to StellarChain webpage"
         )
         public static let viewDisclosures = NSLocalizedString(
-            "View disclosures",
-            comment: "Bakkt: View disclosures"
+            "Risk Disclosures",
+            comment: "Bakkt: Risk Disclosures"
         )
     }
 }

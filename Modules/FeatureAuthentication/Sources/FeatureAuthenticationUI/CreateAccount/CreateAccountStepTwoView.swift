@@ -2,6 +2,7 @@
 
 import BlockchainComponentLibrary
 import ComposableArchitecture
+import BlockchainUI
 import ComposableNavigation
 import ErrorsUI
 import FeatureAuthenticationDomain
@@ -16,7 +17,7 @@ struct CreateAccountViewStepTwo: View {
 
     private let store: Store<CreateAccountStepTwoState, CreateAccountStepTwoAction>
     @ObservedObject private var viewStore: ViewStore<CreateAccountStepTwoState, CreateAccountStepTwoAction>
-
+    @BlockchainApp var app
     @State private var focusedEmail = false
     @State private var focusedPassword = false
     @State private var focusedPasswordConfirmation = false
@@ -296,10 +297,12 @@ extension CreateAccountViewStepTwo {
                     Text(LocalizedString.bakktUserAgreementLink)
                         .foregroundColor(.semantic.primary)
                         .onTapGesture {
-                            guard let url = URL(string: Constants.HostURL.bakktUserAgreement) else { return }
-                            viewStore.send(.openExternalLink(url))
+                            $app.post(event: blockchain.ux.bakkt.terms)
                         }
                         .accessibility(identifier: AccessibilityIdentifier.termsOfServiceButton)
+                        .batch {
+                            set(blockchain.ux.bakkt.terms.then.launch.url, to: { blockchain.ux.bakkt.terms.url })
+                        }
                 }
             }
             Spacer()
