@@ -460,13 +460,17 @@ extension LocalizationConstants.Transaction {
         "To",
         comment: "To"
     )
+    public static let memo = NSLocalizedString(
+        "Memo",
+        comment: "Memo"
+    )
     public static let selectAWallet = NSLocalizedString(
         "Select a Wallet",
         comment: "Select a Wallet"
     )
-    public static let orSelectAWallet = NSLocalizedString(
-        "or Select a Wallet",
-        comment: "Select a Wallet"
+    public static let accountsAndWallets = NSLocalizedString(
+        "Accounts and wallets",
+        comment: "Accounts and wallets"
     )
     public static let wireTransferEmptyTitle = NSLocalizedString(
         "Oops! Something Went Wrong.",

@@ -72,8 +72,6 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
     let showACHDepositTermsTapped = PublishRelay<String>()
     let availableToWithdrawDateInfoTapped = PublishRelay<Void>()
     let hyperlinkTapped = PublishRelay<TitledLink>()
-    let memoUpdated = PublishRelay<(String, TransactionConfirmations.Memo)>()
-    let memoModel: TextFieldViewModel
     private var disposeBag = DisposeBag()
     private var cancellables = Set<AnyCancellable>()
     private let withdrawalLocksCheckRepository: WithdrawalLocksCheckRepositoryAPI
@@ -91,11 +89,6 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         self.analyticsRecorder = analyticsRecorder
         self.cancelButtonViewModel = .cancel(with: LocalizedString.Confirmation.cancel)
         self.continueButtonViewModel = .transactionPrimary(with: "")
-        self.memoModel = TextFieldViewModel(
-            with: .memo,
-            validator: TextValidationFactory.Send.memo,
-            messageRecorder: messageRecorder
-        )
     }
 
     func setup(for state: TransactionState) {
@@ -365,20 +358,12 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
 
         var memoModels: [DetailsScreen.CellType] = []
         if let memo {
-            let subtitle = memo.formatted?.subtitle ?? ""
-            memoModel.originalTextRelay.accept(subtitle)
-            memoModel
-                .focusRelay
-                .filter { $0 == .off(.endEditing) }
-                .mapToVoid()
-                .withLatestFrom(memoModel.textRelay)
-                .distinctUntilChanged()
-                .map { text in
-                    (text: text, oldModel: memo)
-                }
-                .bind(to: memoUpdated)
-                .disposed(by: disposeBag)
-            memoModels.append(.textField(memoModel))
+            let interactor = DefaultLineItemCellInteractor(
+                title: DefaultLabelContentInteractor(knownValue: memo.formatted?.0 ?? ""),
+                description: DefaultLabelContentInteractor(knownValue: memo.formatted?.1 ?? "")
+            )
+            let presenter = DefaultLineItemCellPresenter(interactor: interactor, accessibilityIdPrefix: "memo")
+            memoModels.append(.lineItem(presenter))
         }
 
         var checkboxModels: [DetailsScreen.CellType] = []

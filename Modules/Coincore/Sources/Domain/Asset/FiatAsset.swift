@@ -35,7 +35,7 @@ public final class FiatAsset: Asset {
         return .just(group)
     }
 
-    public func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never> {
+    public func parse(address: String, memo: String?) -> AnyPublisher<ReceiveAddress?, Never> {
         .just(nil)
     }
 

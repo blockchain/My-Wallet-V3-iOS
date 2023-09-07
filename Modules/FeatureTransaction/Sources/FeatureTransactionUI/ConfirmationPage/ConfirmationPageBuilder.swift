@@ -175,13 +175,8 @@ extension ConfirmationPageBuilder {
             .compactMap(\.sendCheckout)
             .removeDuplicates()
 
-        let onMemoUpdated: (SendCheckout.Memo) -> Void = { memo in
-            let model = TransactionConfirmations.Memo(textMemo: memo.value, required: memo.required)
-            transactionModel.process(action: .modifyTransactionConfirmation(model))
-        }
-
         let viewController = CheckoutHostingController(
-            rootView: SendCheckoutView(publisher: publisher, onMemoUpdated: onMemoUpdated, confirm: { transactionModel.process(action: .executeTransaction) })
+            rootView: SendCheckoutView(publisher: publisher, confirm: { transactionModel.process(action: .executeTransaction) })
                 .onAppear { transactionModel.process(action: .validateTransaction) }
                 .navigationTitle(LocalizationConstants.Checkout.send)
                 .navigationBarBackButtonHidden(true)
@@ -426,7 +421,6 @@ extension TransactionState {
 
     var withdrawCheckout: WithdrawCheckout? {
         guard let source, let destination, let pendingTransaction else { return nil }
-        let days_5 = Calendar.current.date(byAdding: .day, value: 5, to: Date())!
         return WithdrawCheckout(
             from: source.label,
             to: destination.label,
@@ -500,7 +494,7 @@ extension TransactionState {
             if let memoValue = pendingTransaction.confirmations.lazy
                 .filter(TransactionConfirmations.Memo.self).first
             {
-                memo = SendCheckout.Memo(value: memoValue.value?.string, required: memoValue.required)
+                memo = SendCheckout.Memo(value: memoValue.value?.string)
             }
 
             let amountPair: SendCheckout.Amount

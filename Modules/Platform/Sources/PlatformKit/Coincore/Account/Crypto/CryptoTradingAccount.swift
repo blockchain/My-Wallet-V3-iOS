@@ -43,6 +43,7 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
             .flatMap { [cryptoReceiveAddressFactory, label, onTxCompleted] address in
                 cryptoReceiveAddressFactory.makeExternalAssetAddress(
                     address: address,
+                    memo: nil,
                     label: label,
                     onTxCompleted: onTxCompleted
                 )

@@ -455,13 +455,13 @@ final class AppTests: XCTestCase {
 
         XCTAssertEqual(count, 0)
 
-        app.post(event: blockchain.ux.home["test"].tab["paulo"].select)
+        app.post(event: blockchain.ux.home["test"].tab["tab-1"].select)
         XCTAssertEqual(count, 1)
 
-        app.post(event: blockchain.ux.home["ignore"].tab["paulo"].select)
+        app.post(event: blockchain.ux.home["ignore"].tab["tab-1"].select)
         XCTAssertEqual(count, 1)
 
-        app.post(event: blockchain.ux.home["test"].tab["dimitris"].select)
+        app.post(event: blockchain.ux.home["test"].tab["tab-2"].select)
         XCTAssertEqual(count, 2)
     }
 

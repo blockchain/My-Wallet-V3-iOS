@@ -206,27 +206,8 @@ enum TransactionFlowDescriptor {
     }
 
     enum TargetSelection {
-        static func navigationTitle(action: AssetAction) -> String {
-            switch action {
-            case .swap:
-                return LocalizedString.newSwap
-            case .send:
-                return LocalizedString.Send.send
-            case .withdraw,
-                 .interestWithdraw,
-                 .stakingWithdraw,
-                 .activeRewardsWithdraw:
-                return LocalizedString.Withdraw.withdraw
-            case .interestTransfer, .stakingDeposit, .activeRewardsDeposit:
-                return LocalizedString.transfer
-            case .sign,
-                 .deposit,
-                 .receive,
-                 .buy,
-                 .sell,
-                 .viewActivity:
-                unimplemented()
-            }
+        static var navigationTitle: String {
+            LocalizedString.Send.send
         }
     }
 

@@ -11,12 +11,10 @@ public struct SendCheckoutView<Object: LoadableObject>: View where Object.Output
 
     @ObservedObject var viewModel: Object
 
-    var onMemoUpdated: (SendCheckout.Memo) -> Void
     var confirm: (() -> Void)?
 
-    public init(viewModel: Object, onMemoUpdated: @escaping (SendCheckout.Memo) -> Void, confirm: (() -> Void)? = nil) {
+    public init(viewModel: Object, confirm: (() -> Void)? = nil) {
         _viewModel = .init(wrappedValue: viewModel)
-        self.onMemoUpdated = onMemoUpdated
         self.confirm = confirm
     }
 
@@ -24,7 +22,7 @@ public struct SendCheckoutView<Object: LoadableObject>: View where Object.Output
         AsyncContentView(
             source: viewModel,
             loadingView: Loading(),
-            content: { [onMemoUpdated] in Loaded(checkout: $0, onMemoUpdated: onMemoUpdated, confirm: confirm) }
+            content: { Loaded(checkout: $0, confirm: confirm) }
         )
         .onAppear {
             app.post(
@@ -39,19 +37,16 @@ extension SendCheckoutView {
 
     public init<P>(
         publisher: P,
-        onMemoUpdated: @escaping (SendCheckout.Memo) -> Void,
         confirm: (() -> Void)? = nil
     ) where P: Publisher, P.Output == SendCheckout, P.Failure == Never, Object == PublishedObject<P, DispatchQueue> {
         self.viewModel = PublishedObject(publisher: publisher)
-        self.onMemoUpdated = onMemoUpdated
         self.confirm = confirm
     }
 
     public init(
-        _ checkout: Object.Output,
-        onMemoUpdated: @escaping (SendCheckout.Memo) -> Void
+        _ checkout: Object.Output
     ) where Object == PublishedObject<Just<SendCheckout>, DispatchQueue> {
-        self.init(publisher: Just(checkout), onMemoUpdated: onMemoUpdated)
+        self.init(publisher: Just(checkout))
     }
 }
 
@@ -61,7 +56,7 @@ extension SendCheckoutView {
 
         public var body: some View {
             ZStack {
-                SendCheckoutView.Loaded(checkout: .preview, onMemoUpdated: { _ in })
+                SendCheckoutView.Loaded(checkout: .preview)
                     .redacted(reason: .placeholder)
                 ProgressView()
             }
@@ -72,23 +67,14 @@ extension SendCheckoutView {
 
         @BlockchainApp var app
         @Environment(\.context) var context
-
-        @StateObject private var memoState: InternalMemoState
         @State private var isFirstResponder: Bool = false
-        private var onMemoUpdated: (SendCheckout.Memo) -> Void
 
         let checkout: SendCheckout
         let confirm: (() -> Void)?
 
-        public init(checkout: SendCheckout, onMemoUpdated: @escaping (SendCheckout.Memo) -> Void, confirm: (() -> Void)? = nil) {
+        public init(checkout: SendCheckout, confirm: (() -> Void)? = nil) {
             self.checkout = checkout
-            self.onMemoUpdated = onMemoUpdated
             self.confirm = confirm
-            let memoValue = checkout.memo?.value ?? ""
-            let memoRequired = checkout.memo?.required ?? false
-            self._memoState = StateObject(
-                wrappedValue: InternalMemoState(text: memoValue, required: memoRequired)
-            )
         }
     }
 }
@@ -233,22 +219,10 @@ extension SendCheckoutView.Loaded {
     @ViewBuilder
     func memoRow(memo: SendCheckout.Memo) -> some View {
         TableRow(
-            title: L10n.Label.memo + memo.suffixIfRequired,
+            title: L10n.Label.memo,
             footer: {
                 VStack(alignment: .leading, spacing: Spacing.textSpacing) {
-                    memoTextfield(memo: memo)
-                        .onReceive(
-                            memoState.$memo,
-                            perform: { memo in
-                                let memo = SendCheckout.Memo(value: memo.value, required: memo.required)
-                                onMemoUpdated(memo)
-                            }
-                        )
-                    if memo.required {
-                        Text(L10n.Label.memoRequiredCaption.interpolating(checkout.amount.value.currency.name))
-                            .typography(.caption1)
-                            .foregroundColor(.semantic.text)
-                    }
+                    Text(memo.value ?? "")
                 }
             }
         )
@@ -271,42 +245,6 @@ extension SendCheckoutView.Loaded {
         }
         .padding()
         .background(Color.semantic.light)
-    }
-
-    @ViewBuilder
-    private func memoTextfield(memo: SendCheckout.Memo) -> some View {
-        if #available(iOS 15, *) {
-            TextField(L10n.Label.memoPlaceholder, text: $memoState.inputText)
-                .textInputAutocapitalization(.never)
-                .disableAutocorrection(true)
-                .textFieldStyle(RoundedTextFieldStyle())
-                .typography(.body1)
-        } else {
-            Input(
-                text: $memoState.inputText,
-                isFirstResponder: $isFirstResponder,
-                shouldResignFirstResponderOnReturn: true,
-                placeholder: L10n.Label.memoPlaceholder
-            )
-            .autocorrectionDisabled()
-            .textInputAutocapitalization(.none)
-        }
-    }
-}
-
-class InternalMemoState: ObservableObject {
-    @Published var inputText: String
-    @Published var memo: SendCheckout.Memo
-
-    init(text: String, required: Bool) {
-        self.inputText = text
-        self.memo = .init(value: text, required: required)
-
-        $inputText
-            .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
-            .removeDuplicates()
-            .map { SendCheckout.Memo(value: $0, required: required) }
-            .assign(to: &$memo)
     }
 }
 

@@ -15,10 +15,14 @@ public protocol CryptoAssetRepositoryAPI {
         filter: AssetFilter
     ) -> AnyPublisher<AccountGroup?, Never>
 
-    func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never>
+    func parse(
+        address: String,
+        memo: String?
+    ) -> AnyPublisher<ReceiveAddress?, Never>
 
     func parse(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError>

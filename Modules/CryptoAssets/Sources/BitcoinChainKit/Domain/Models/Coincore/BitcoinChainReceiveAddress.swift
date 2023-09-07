@@ -4,15 +4,14 @@ import FeatureTransactionDomain
 import MoneyKit
 import PlatformKit
 
-public struct BitcoinChainReceiveAddress<Token: BitcoinChainToken>: CryptoReceiveAddress,
-    QRCodeMetadataProvider
-{
+public struct BitcoinChainReceiveAddress<Token: BitcoinChainToken>: CryptoReceiveAddress, QRCodeMetadataProvider {
 
     public let address: String
     public let asset: CryptoCurrency
     public let bip21URI: BIP21URI<Token>
     public let label: String
     public let onTxCompleted: TxCompleted
+    public let memo: String? = nil
 
     public var assetName: String {
         asset.name

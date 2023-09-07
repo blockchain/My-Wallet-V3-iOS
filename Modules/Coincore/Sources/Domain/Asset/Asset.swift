@@ -13,5 +13,5 @@ public protocol Asset: AnyObject {
 
     /// Validates the given address
     /// - Parameter address: A `String` value of the address to be parse
-    func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never>
+    func parse(address: String, memo: String?) -> AnyPublisher<ReceiveAddress?, Never>
 }

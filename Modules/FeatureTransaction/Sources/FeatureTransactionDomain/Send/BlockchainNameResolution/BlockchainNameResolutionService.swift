@@ -9,6 +9,7 @@ public protocol BlockchainNameResolutionServiceAPI {
 
     func validate(
         domainName: String,
+        memo: String?,
         currency: CryptoCurrency
     ) -> AnyPublisher<ReceiveAddress?, Never>
 
@@ -53,6 +54,7 @@ final class BlockchainNameResolutionService: BlockchainNameResolutionServiceAPI 
 
     func validate(
         domainName: String,
+        memo: String?,
         currency: CryptoCurrency
     ) -> AnyPublisher<ReceiveAddress?, Never> {
         guard preValidate(domainName: domainName) else {
@@ -69,6 +71,7 @@ final class BlockchainNameResolutionService: BlockchainNameResolutionServiceAPI 
                     .makeExternalAssetAddress(
                         asset: currency,
                         address: response.address,
+                        memo: memo,
                         label: Self.label(address: response.address, domain: domainName),
                         onTxCompleted: { _ in AnyPublisher.just(()) }
                     )

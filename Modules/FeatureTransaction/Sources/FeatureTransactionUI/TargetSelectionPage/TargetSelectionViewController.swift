@@ -24,7 +24,6 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
     // MARK: - Private Properties
 
     private var disposeBag = DisposeBag()
-    private let shouldOverrideNavigationEffects: Bool
     private let actionButton = ButtonView()
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let headerRelay = BehaviorRelay<HeaderBuilder?>(value: nil)
@@ -52,7 +51,10 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
                 case .singleAccount(let presenter):
                     cell = self.balanceCell(for: indexPath, presenter: presenter)
                 case .walletInputField(let viewModel):
-                    cell = self.walletTextfieldCell(for: indexPath, viewModel: viewModel)
+                    cell = self.textFieldCell(for: indexPath, viewModel: viewModel)
+                    cell.backgroundColor = .clear
+                case .memo(let viewModel):
+                    cell = self.textFieldCell(for: indexPath, viewModel: viewModel)
                     cell.backgroundColor = .clear
                 }
                 cell.selectionStyle = .none
@@ -61,8 +63,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
         )
     }()
 
-    init(shouldOverrideNavigationEffects: Bool) {
-        self.shouldOverrideNavigationEffects = shouldOverrideNavigationEffects
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -78,10 +79,6 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
     }
 
     override func navigationBarLeadingButtonPressed() {
-        guard shouldOverrideNavigationEffects else {
-            super.navigationBarLeadingButtonPressed()
-            return
-        }
         switch leadingButtonStyle {
         case .close:
             closeButtonRelay.accept(())
@@ -93,10 +90,6 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
     }
 
     override func navigationBarTrailingButtonPressed() {
-        guard shouldOverrideNavigationEffects else {
-            super.navigationBarTrailingButtonPressed()
-            return
-        }
         switch trailingButtonStyle {
         case .close:
             closeButtonRelay.accept(())
@@ -192,7 +185,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
         actionButton.layout(dimension: .height, to: ButtonSize.Standard.height)
     }
 
-    private func walletTextfieldCell(for indexPath: IndexPath, viewModel: TextFieldViewModel) -> UITableViewCell {
+    private func textFieldCell(for indexPath: IndexPath, viewModel: TextFieldViewModel) -> UITableViewCell {
         let cell = tableView.dequeue(TextFieldTableViewCell.self, for: indexPath)
         cell.setup(
             viewModel: viewModel,
@@ -237,7 +230,7 @@ final class TargetSelectionViewController: BaseScreenViewController, TargetSelec
 
 extension TargetSelectionViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        dataSource[section].header.view(fittingWidth: view.bounds.width, customHeight: nil)
+        dataSource[section].header.view(fittingWidth: view.bounds.width)
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -248,6 +241,8 @@ extension TargetSelectionViewController: UITableViewDelegate {
         switch dataSource[indexPath.section].items[indexPath.row].presenter {
         case .cardView:
             return UITableView.automaticDimension
+        case .memo:
+            return 48
         case .radioSelection,
              .singleAccount,
              .walletInputField:
@@ -259,6 +254,8 @@ extension TargetSelectionViewController: UITableViewDelegate {
         switch dataSource[indexPath.section].items[indexPath.row].presenter {
         case .cardView:
             return UITableView.automaticDimension
+        case .memo:
+            return 48
         case .radioSelection,
              .singleAccount,
              .walletInputField:

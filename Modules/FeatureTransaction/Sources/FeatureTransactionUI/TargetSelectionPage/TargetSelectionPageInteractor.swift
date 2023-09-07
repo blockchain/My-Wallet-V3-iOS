@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import DIKit
+import FeatureTransactionDomain
 import Localization
 import MoneyKit
 import PlatformKit
@@ -33,9 +34,7 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
 
     private let accountProvider: SourceAndTargetAccountProviding
     private let targetSelectionPageModel: TargetSelectionPageModel
-    private let action: AssetAction
     private let messageRecorder: MessageRecording
-    private let didSelect: AccountPickerDidSelect?
     private let backButtonInterceptor: BackButtonInterceptor
     private let radioSelectionHandler: RadioSelectionHandling
     private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
@@ -47,36 +46,31 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
         targetSelectionPageModel: TargetSelectionPageModel,
         presenter: TargetSelectionPagePresentable,
         accountProvider: SourceAndTargetAccountProviding,
-        listener: TargetSelectionListenerBridge,
-        action: AssetAction,
+        listener: TargetSelectionPageListener,
         radioSelectionHandler: RadioSelectionHandling,
         backButtonInterceptor: @escaping BackButtonInterceptor,
         enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve(),
         messageRecorder: MessageRecording = resolve()
     ) {
-        self.action = action
         self.targetSelectionPageModel = targetSelectionPageModel
         self.accountProvider = accountProvider
         self.messageRecorder = messageRecorder
         self.backButtonInterceptor = backButtonInterceptor
         self.radioSelectionHandler = radioSelectionHandler
         self.enabledCurrenciesService = enabledCurrenciesService
-        switch listener {
-        case .simple(let didSelect):
-            self.didSelect = didSelect
-            self.listener = nil
-        case .listener(let listener):
-            self.didSelect = nil
-            self.listener = listener
-        }
+        self.listener = listener
         super.init(presenter: presenter)
     }
 
     override func didBecomeActive() {
         super.didBecomeActive()
 
-        let cryptoAddressViewModel = CryptoAddressTextFieldViewModel(
+        let inputFieldViewModel = CryptoAddressTextFieldViewModel.create(
             validator: CryptoAddressValidator(model: targetSelectionPageModel),
+            messageRecorder: messageRecorder
+        )
+
+        let memoFieldViewModel = MemoTextFieldViewModel.create(
             messageRecorder: messageRecorder
         )
 
@@ -99,62 +93,71 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
         /// Fetch the source account provided.
         let sourceAccount = accountProvider.sourceAccount
             .map { account -> BlockchainAccount in
-                guard let crypto = account else {
+                guard let account else {
                     fatalError("Expected a source account")
                 }
-                return crypto
+                return account
             }
             .asObservable()
             .share(replay: 1, scope: .whileConnected)
 
         /// Any text coming from the `State` we want to bind
-        /// to the `cryptoAddressViewModel` textRelay.
+        /// to the `inputFieldViewModel` textRelay.
         transactionState
-            .map(\.inputValidated)
-            .map(\.text)
-            .bind(to: cryptoAddressViewModel.originalTextRelay)
+            .map(\.inputValidated.text)
+            .bind(to: inputFieldViewModel.originalTextRelay)
             .disposeOnDeactivate(interactor: self)
 
-        let requiredValidationAction = transactionState
-            .map(\.inputValidated)
-            /// Only the QR scanner requires validation. The textfield
-            /// validates itself so long as it's in focus.
-            .filter(\.requiresValidation)
-            /// We get the text from the `State` and not the textField.
-            /// This is **only** for the QR scanner. This is to prevent
-            /// conflating text entry with QR scanning or deep linking.
-            .map(\.text)
-            .distinctUntilChanged()
-
-        requiredValidationAction
-            .withLatestFrom(sourceAccount) { ($0, $1) }
-            .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { [weak self] text, account in
-                self?.targetSelectionPageModel.process(action: .validateAddress(text, account))
-            })
+        /// Any memo coming from the `State` we want to bind
+        /// to the `memoFieldViewModel` textRelay.
+        transactionState
+            .map(\.inputValidated.memoText)
+            .bind(to: memoFieldViewModel.originalTextRelay)
             .disposeOnDeactivate(interactor: self)
 
-        /// The text the user has entered into the textField
-        let text = cryptoAddressViewModel
+        // MARK: Memo Text
+
+        // The text the user has entered into the textField
+        let memoText = memoFieldViewModel
             .text
             .distinctUntilChanged()
 
-        /// Whether or not the textField is in focus
-        let isFocused = cryptoAddressViewModel
+        // Whether or not the inputFieldViewModel is in focus
+        let memoIsFocused = memoFieldViewModel
             .focusRelay
-            /// We only want to update the `State` with a text entry value
-            /// when the text field is not in focus.
-            .map { $0 == .on }
+            .map(\.isOn)
 
-        // `textWhileTyping` stream the text field text while it has focus.
-        let textWhileTyping: Observable<String> = text
-            .withLatestFrom(isFocused) { ($0, $1) }
+        // `memoTextWhileTyping` stream the text field text while it has focus.
+        let memoTextWhileTyping: Observable<String> = memoText
+            .withLatestFrom(memoIsFocused) { ($0, $1) }
             .filter(\.1)
             .map(\.0)
             .share(replay: 1, scope: .whileConnected)
 
+        // MARK: Input Text
+
+        // The text the user has entered into the textField
+        let inputText = inputFieldViewModel
+            .text
+            .distinctUntilChanged()
+
+        // Whether or not the inputFieldViewModel is in focus
+        let inputIsFocused = inputFieldViewModel
+            .focusRelay
+            .map(\.isOn)
+
+        // `textWhileTyping` stream the text field text while it has focus.
+        let inputTextWhileTyping: Observable<String> = inputText
+            .withLatestFrom(inputIsFocused) { ($0, $1) }
+            .filter(\.1)
+            .map(\.0)
+            .share(replay: 1, scope: .whileConnected)
+
+        // MARK: Memo And Text
+
         // As soon as something is inputted, we want to disable the 'next' action.
-        textWhileTyping
+        Observable
+            .merge(inputTextWhileTyping.mapToVoid(), memoTextWhileTyping.mapToVoid())
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { [weak self] _ in
                 self?.targetSelectionPageModel.process(action: .destinationDeselected)
@@ -162,17 +165,31 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
             .disposeOnDeactivate(interactor: self)
 
         // The stream is debounced and we then process the validation.
-        textWhileTyping
+        memoTextWhileTyping
             .debounce(.milliseconds(500), scheduler: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .withLatestFrom(sourceAccount) { ($0, $1) }
+            .withLatestFrom(Observable.combineLatest(inputText, sourceAccount)) { (memo, values) in
+                (memo, values.0, values.1)
+            }
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { [weak self] text, account in
-                self?.targetSelectionPageModel.process(action: .validateAddress(text, account))
+            .subscribe(onNext: { [weak self] memo, inputText, account in
+                self?.targetSelectionPageModel.process(action: .validate(address: inputText, memo: memo, sourceAccount: account))
             })
             .disposeOnDeactivate(interactor: self)
 
-        /// Launch the QR scanner should the button be tapped
-        cryptoAddressViewModel
+        // The stream is debounced and we then process the validation.
+        inputTextWhileTyping
+            .debounce(.milliseconds(500), scheduler: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
+            .withLatestFrom(Observable.combineLatest(memoText, sourceAccount)) { (text, values) in
+                (text, values.0, values.1)
+            }
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] text, memo, account in
+                self?.targetSelectionPageModel.process(action: .validate(address: text, memo: memo, sourceAccount: account))
+            })
+            .disposeOnDeactivate(interactor: self)
+
+        // Launch the QR scanner should the button be tapped
+        inputFieldViewModel
             .tapRelay
             .bindAndCatch(weak: self) { (self) in
                 self.targetSelectionPageModel.process(action: .qrScannerButtonTapped)
@@ -186,7 +203,7 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
             .distinctUntilChanged()
             .map(RadioSelectionAction.initialValues)
 
-        let deselectAction = Observable.merge(textWhileTyping, requiredValidationAction)
+        let deselectAction = Observable.merge(inputTextWhileTyping, memoTextWhileTyping)
             .map { _ in RadioSelectionAction.deselectAll }
 
         let radioSelectionAction = transactionState
@@ -219,13 +236,13 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
             .map { [enabledCurrenciesService] currency -> String in
                 Self.addressFieldWarning(enabledCurrenciesService: enabledCurrenciesService, currency: currency)
             }
-            .bind(to: cryptoAddressViewModel.subtitleRelay)
+            .bind(to: inputFieldViewModel.subtitleRelay)
             .disposeOnDeactivate(interactor: self)
 
         sourceAccount
             .subscribe(onNext: { [weak self] account in
                 guard let self else { return }
-                targetSelectionPageModel.process(action: .sourceAccountSelected(account, action))
+                targetSelectionPageModel.process(action: .sourceAccountSelected(account, .send))
             })
             .disposeOnDeactivate(interactor: self)
 
@@ -235,15 +252,11 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
                 guard let self else {
                     return state
                 }
-                guard updater.sourceAccount != nil else {
-                    /// We cannot proceed to the calculation step without a `sourceAccount`
-                    Logger.shared.debug("No sourceAccount: \(updater)")
-                    return state
-                }
                 return calculateNextState(
                     with: state,
                     updater: updater,
-                    cryptoAddressViewModel: cryptoAddressViewModel
+                    inputFieldViewModel: inputFieldViewModel,
+                    memoFieldViewModel: memoFieldViewModel
                 )
             }
             .asDriverCatchError()
@@ -258,10 +271,16 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
     private func calculateNextState(
         with state: State,
         updater: TargetSelectionPageState,
-        cryptoAddressViewModel: CryptoAddressTextFieldViewModel
+        inputFieldViewModel: TextFieldViewModel,
+        memoFieldViewModel: TextFieldViewModel
     ) -> State {
-        guard let sourceAccount = updater.sourceAccount as? SingleAccount else {
-            fatalError("You should have a source account.")
+        guard let sourceAccount = updater.sourceAccount else {
+            /// We cannot proceed to the calculation step without a `sourceAccount`
+            Logger.shared.debug("No sourceAccount: \(updater)")
+            return state
+        }
+        guard let sourceAccount = sourceAccount as? SingleAccount else {
+            fatalError("sourceAccount not a `SingleAccount`")
         }
         var state = state
 
@@ -275,9 +294,9 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
 
         if state.destinationInteractors.isEmpty {
             let targets = updater.availableTargets.compactMap { $0 as? SingleAccount }
-            let destinations: [TargetSelectionPageCellItem.Interactor] = targets.map { account in
+            let destinations: [TargetSelectionPageCellItem.Interactor] = targets.map { [radioSelectionHandler] account in
                 .singleAccountAvailableTarget(
-                    RadioAccountCellInteractor(account: account, radioSelectionHandler: self.radioSelectionHandler)
+                    RadioAccountCellInteractor(account: account, radioSelectionHandler: radioSelectionHandler)
                 )
             }
             .sorted { $0.account.label < $1.account.label }
@@ -289,7 +308,14 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
             state = state
                 .update(
                     keyPath: \.inputFieldInteractor,
-                    value: .walletInputField(sourceAccount, cryptoAddressViewModel)
+                    value: .walletInputField(sourceAccount, inputFieldViewModel)
+                )
+        }
+        if state.memoFieldInteractor == nil, TransactionMemoSupport.supportsMemo(sourceAccount.currencyType) {
+            state = state
+                .update(
+                    keyPath: \.memoFieldInteractor,
+                    value: .memo(sourceAccount, memoFieldViewModel)
                 )
         }
 
@@ -315,20 +341,12 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
     private var initialStep: Bool = true
 
     private func handleStateChange(newState: TargetSelectionPageState) {
-        if !initialStep, newState.step == TargetSelectionPageStep.initial {
+        if initialStep.isNo, newState.step == TargetSelectionPageStep.initial {
             // no-op
-        } else {
-            initialStep = false
-            showFlowStep(newState: newState)
+            return
         }
-    }
-
-    private func finishFlow() {
-        targetSelectionPageModel.process(action: .resetFlow)
-    }
-
-    private func showFlowStep(newState: TargetSelectionPageState) {
-        guard !newState.isGoingBack else {
+        initialStep = false
+        guard newState.isGoingBack.isNo else {
             listener?.didTapBack()
             return
         }
@@ -342,7 +360,6 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
             guard let account = newState.destination else {
                 fatalError("Expected a destination acount.")
             }
-            didSelect?(account as! SingleAccount)
             listener?.didSelect(target: account)
         case .qrScanner:
             guard let sourceAccount = newState.sourceAccount else {
@@ -366,40 +383,21 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
         enabledCurrenciesService: EnabledCurrenciesServiceAPI,
         currency: CurrencyType
     ) -> String {
-        func defaultWarning() -> String {
+        var defaultWarning: String {
             LocalizationConstants.TextField.Title.sendToCryptoWallet(
                 displayCode: currency.displaySymbol,
                 networkName: currency.name
             )
         }
-        return addressFieldERC20Warning(
-            enabledCurrenciesService: enabledCurrenciesService,
-            currency: currency
-        )
-        ?? defaultWarning()
-    }
-
-    private static func addressFieldERC20Warning(
-        enabledCurrenciesService: EnabledCurrenciesServiceAPI,
-        currency: CurrencyType
-    ) -> String? {
-
-        guard let erc20ParentChain: String = currency
-            .cryptoCurrency?
-            .assetModel
-            .kind
-            .erc20ParentChain
-        else {
-            return nil
+        guard let cryptoCurrency = currency.cryptoCurrency else {
+            return defaultWarning
         }
-        let networkName: String? = enabledCurrenciesService.allEnabledEVMNetworks
-            .first(where: { $0.networkConfig.networkTicker == erc20ParentChain })?
-            .networkConfig
-            .name
-
+        guard let network = enabledCurrenciesService.network(for: cryptoCurrency) else {
+            return defaultWarning
+        }
         return LocalizationConstants.TextField.Title.sendToCryptoWallet(
             displayCode: currency.displaySymbol,
-            networkName: networkName ?? erc20ParentChain
+            networkName: network.networkConfig.shortName
         )
     }
 }
@@ -409,14 +407,13 @@ extension TargetSelectionPageInteractor {
         static let empty = State(actionButtonEnabled: false)
         var sourceInteractor: TargetSelectionPageCellItem.Interactor?
         var inputFieldInteractor: TargetSelectionPageCellItem.Interactor?
+        var memoFieldInteractor: TargetSelectionPageCellItem.Interactor?
         var destinationInteractors: [TargetSelectionPageCellItem.Interactor]
 
         var actionButtonEnabled: Bool
 
         private init(actionButtonEnabled: Bool) {
             self.actionButtonEnabled = actionButtonEnabled
-            self.sourceInteractor = nil
-            self.inputFieldInteractor = nil
             self.destinationInteractors = []
         }
     }

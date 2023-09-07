@@ -60,15 +60,6 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
             }
     }
 
-    private var isMemoRequired: Single<Bool> {
-        receiveAddress
-            .flatMap { [transactionDispatcher] receiveAddress in
-                transactionDispatcher.isExchangeAddresses(
-                    address: receiveAddress.address
-                )
-            }
-    }
-
     private var absoluteFee: Single<CryptoValue> {
         feeRepository.fees
             .map(\.regular)
@@ -102,38 +93,14 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
         precondition(sourceCryptoCurrency == .stellar)
     }
 
-    func restart(
-        transactionTarget: TransactionTarget,
-        pendingTransaction: PendingTransaction
-    ) -> Single<PendingTransaction> {
-        defaultRestart(
-            transactionTarget: transactionTarget,
-            pendingTransaction: pendingTransaction
-        )
-        .flatMap(weak: self) { (self, pendingTransaction) -> Single<PendingTransaction> in
-            Single.zip(self.receiveAddress, self.isMemoRequired)
-                .map { receiveAddress, isMemoRequired -> PendingTransaction in
-                    guard let stellarReceive = receiveAddress as? StellarReceiveAddress else {
-                        return pendingTransaction
-                    }
-                    var pendingTransaction = pendingTransaction
-                    let memoModel = TransactionConfirmations.Memo(
-                        textMemo: stellarReceive.memo,
-                        required: isMemoRequired
-                    )
-                    pendingTransaction.setMemo(memo: memoModel)
-                    return pendingTransaction
-                }
-        }
-    }
-
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        sourceExchangeRatePair
-            .map(weak: self) { (self, exchangeRate) -> [TransactionConfirmation] in
-                let from = TransactionConfirmations.Source(value: self.sourceAccount.label)
-                let to = TransactionConfirmations.Destination(value: self.transactionTarget.label)
+        Single
+            .zip(sourceExchangeRatePair, receiveAddress)
+            .map { [sourceAccount] (exchangeRate, receiveAddress) -> [TransactionConfirmation] in
+                let from = TransactionConfirmations.Source(value: sourceAccount?.label ?? "")
+                let to = TransactionConfirmations.Destination(value: receiveAddress.label)
                 let feesFiat = pendingTransaction.feeAmount.convert(using: exchangeRate.quote)
-                let fee = self.makeFeeSelectionOption(
+                let fee = Self.makeFeeSelectionOption(
                     pendingTransaction: pendingTransaction,
                     feesFiat: feesFiat
                 )
@@ -146,14 +113,16 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
                 let sendDestination = TransactionConfirmations.SendDestinationValue(
                     value: pendingTransaction.amount
                 )
-                return [
+                let memo = TransactionConfirmations.Memo(textMemo: receiveAddress.memo)
+                let confirmations: [TransactionConfirmation] = [
                     sendDestination,
                     from,
                     to,
                     fee,
                     feedTotal,
-                    pendingTransaction.memo
+                    memo
                 ]
+                return confirmations
             }
             .map { confirmations in
                 pendingTransaction.update(confirmations: confirmations)
@@ -164,20 +133,11 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
         Single.zip(
             receiveAddress,
             userFiatCurrency,
-            isMemoRequired,
             actionableBalance
         )
-        .map { receiveAddress, fiatCurrency, isMemoRequired, availableBalance -> PendingTransaction in
-            var memo: String?
-            if let stellarReceive = receiveAddress as? StellarReceiveAddress {
-                memo = stellarReceive.memo
-            }
-            let memoModel = TransactionConfirmations.Memo(
-                textMemo: memo,
-                required: isMemoRequired
-            )
+        .map { receiveAddress, fiatCurrency, availableBalance -> PendingTransaction in
             let zeroStellar: MoneyValue = .zero(currency: .stellar)
-            var transaction = PendingTransaction(
+            let transaction = PendingTransaction(
                 amount: zeroStellar,
                 available: availableBalance,
                 feeAmount: zeroStellar,
@@ -190,7 +150,6 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
                 selectedFiatCurrency: fiatCurrency,
                 limits: nil
             )
-            transaction.setMemo(memo: memoModel)
             return transaction
         }
     }
@@ -216,20 +175,6 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
             }
     }
 
-    func doOptionUpdateRequest(
-        pendingTransaction: PendingTransaction,
-        newConfirmation: TransactionConfirmation
-    ) -> Single<PendingTransaction> {
-        defaultDoOptionUpdateRequest(pendingTransaction: pendingTransaction, newConfirmation: newConfirmation)
-            .map { pendingTransaction -> PendingTransaction in
-                var pendingTransaction = pendingTransaction
-                if let memo = newConfirmation as? TransactionConfirmations.Memo {
-                    pendingTransaction.setMemo(memo: memo)
-                }
-                return pendingTransaction
-            }
-    }
-
     func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         defaultValidateAmount(pendingTransaction: pendingTransaction)
     }
@@ -237,7 +182,6 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateTargetAddress()
             .andThen(validateSufficientFunds(pendingTransaction: pendingTransaction))
-            .andThen(validateOptions(pendingTransaction: pendingTransaction))
             .andThen(validateDryRun(pendingTransaction: pendingTransaction))
             .updateTxValidityCompletable(pendingTransaction: pendingTransaction)
     }
@@ -287,33 +231,8 @@ extension StellarOnChainTransactionEngine {
                     toLabel: "",
                     value: pendingTransaction.amount.cryptoValue!,
                     fee: pendingTransaction.feeAmount.cryptoValue!,
-                    memo: pendingTransaction.memo.stellarMemo
+                    memo: receiveAddress.memo
                 )
-            }
-    }
-
-    private func isMemoValid(memo: TransactionConfirmations.Memo?) -> Single<Bool> {
-        func validText(memo: TransactionConfirmations.Memo) -> Bool {
-            guard case .text(let text) = memo.value else {
-                return false
-            }
-            return 1...28 ~= text.count
-        }
-        func validIdentifier(memo: TransactionConfirmations.Memo) -> Bool {
-            guard case .identifier = memo.value else {
-                return false
-            }
-            return true
-        }
-        return isMemoRequired
-            .map { isMemoRequired -> Bool in
-                guard isMemoRequired else {
-                    return true
-                }
-                guard let memo else {
-                    return false
-                }
-                return validText(memo: memo) || validIdentifier(memo: memo)
             }
     }
 
@@ -323,16 +242,6 @@ extension StellarOnChainTransactionEngine {
                 self.transactionDispatcher.dryRunTransaction(sendDetails: sendDetails)
             }
             .mapErrorToTransactionValidationFailure()
-    }
-
-    private func validateOptions(pendingTransaction: PendingTransaction) -> Completable {
-        isMemoValid(memo: pendingTransaction.memo)
-            .map { isMemoValid -> Void in
-                guard isMemoValid else {
-                    throw TransactionValidationFailure(state: .optionInvalid)
-                }
-            }
-            .asCompletable()
     }
 
     private func validateTargetAddress() -> Completable {
@@ -345,7 +254,7 @@ extension StellarOnChainTransactionEngine {
             .asCompletable()
     }
 
-    private func makeFeeSelectionOption(
+    private static func makeFeeSelectionOption(
         pendingTransaction: PendingTransaction,
         feesFiat: MoneyValue
     ) -> TransactionConfirmations.FeeSelection {
@@ -354,31 +263,6 @@ extension StellarOnChainTransactionEngine {
             selectedLevel: pendingTransaction.feeLevel,
             fee: pendingTransaction.feeAmount
         )
-    }
-}
-
-extension PendingTransaction {
-
-    fileprivate var memo: TransactionConfirmations.Memo {
-        engineState.value[.memo] as! TransactionConfirmations.Memo
-    }
-
-    fileprivate mutating func setMemo(memo: TransactionConfirmations.Memo) {
-        engineState.mutate { $0[.memo] = memo }
-    }
-}
-
-extension TransactionConfirmations.Memo {
-
-    fileprivate var stellarMemo: StellarMemo? {
-        switch value {
-        case .none:
-            return nil
-        case .text(let text):
-            return text.isEmpty ? nil : StellarMemo.text(text)
-        case .identifier(let identifier):
-            return StellarMemo.id(UInt64(identifier))
-        }
     }
 }
 

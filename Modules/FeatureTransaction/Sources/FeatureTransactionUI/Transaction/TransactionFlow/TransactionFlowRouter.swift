@@ -32,12 +32,8 @@ protocol TransactionFlowInteractable: Interactable,
     PendingTransactionPageListener,
     TargetSelectionPageListener
 {
-
     var router: TransactionFlowRouting? { get set }
     var listener: TransactionFlowListener? { get set }
-
-    func didSelectSourceAccount(account: BlockchainAccount)
-    func didSelectDestinationAccount(target: TransactionTarget)
 }
 
 public protocol TransactionFlowViewControllable: ViewControllable {
@@ -415,25 +411,27 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         attachAndPresent(router, transitionType: transitionType)
     }
 
-    func routeToTargetSelectionPicker(transactionModel: TransactionModel, action: AssetAction) {
-        let builder = TargetSelectionPageBuilder(
-            accountProvider: TransactionModelAccountProvider(
-                transactionModel: transactionModel,
-                transform: { $0.availableTargets as? [BlockchainAccount] ?? [] }
-            ),
-            action: action,
+    func routeToSendTargetSelection(transactionModel: TransactionModel) {
+        let accountProvider = TransactionModelAccountProvider(
+            transactionModel: transactionModel,
+            transform: { $0.availableTargets as? [BlockchainAccount] ?? [] }
+        )
+        let builder: TargetSelectionBuildable = TargetSelectionPageBuilder(
+            accountProvider: accountProvider,
             cacheSuite: cacheSuite
         )
-        let router = builder.build(
-            listener: .listener(interactor),
-            navigationModel: ScreenNavigationModel.TargetSelection.navigation(
-                title: TransactionFlowDescriptor.TargetSelection.navigationTitle(action: action)
-            ),
-            backButtonInterceptor: {
-                transactionModel.state.map {
-                    ($0.step, $0.stepsBackStack, $0.isGoingBack)
-                }
+        let navigationModel: ScreenNavigationModel = .TargetSelection.navigation(
+            title: TransactionFlowDescriptor.TargetSelection.navigationTitle
+        )
+        let backButtonInterceptor: BackButtonInterceptor = {
+            transactionModel.state.map {
+                ($0.step, $0.stepsBackStack, $0.isGoingBack)
             }
+        }
+        let router = builder.build(
+            listener: interactor,
+            navigationModel: navigationModel,
+            backButtonInterceptor: backButtonInterceptor
         )
         attachAndPresent(router, transitionType: .replaceRoot)
     }

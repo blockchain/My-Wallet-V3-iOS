@@ -26,6 +26,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: "1234567890",
+                    memo: nil,
                     label: StellarTestData.label,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -38,6 +39,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: StellarTestData.address,
+                    memo: nil,
                     label: StellarTestData.label,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -54,6 +56,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: StellarTestData.addressColonMemo,
+                    memo: nil,
                     label: StellarTestData.label,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -70,6 +73,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: StellarTestData.addressColonMemo,
+                    memo: nil,
                     label: StellarTestData.addressColonMemo,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -86,6 +90,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlString,
+                    memo: nil,
                     label: StellarTestData.label,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -102,6 +107,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlStringWithMemo,
+                    memo: nil,
                     label: StellarTestData.urlStringWithMemo,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -118,6 +124,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlStringWithMemo,
+                    memo: nil,
                     label: StellarTestData.label,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -134,6 +141,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlStringWithMemoType,
+                    memo: nil,
                     label: StellarTestData.label,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -150,6 +158,7 @@ class StellarCryptoReceiveAddressFactoryTests: XCTestCase {
             address = try sut
                 .makeExternalAssetAddress(
                     address: StellarTestData.urlStringWithMemoAndAmount,
+                    memo: nil,
                     label: StellarTestData.label,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )

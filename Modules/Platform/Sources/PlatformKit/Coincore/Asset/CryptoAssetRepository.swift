@@ -117,23 +117,29 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
             .eraseToAnyPublisher()
     }
 
-    public func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never> {
+    public func parse(
+        address: String,
+        memo: String?
+    ) -> AnyPublisher<ReceiveAddress?, Never> {
         let receiveAddress = try? parse(
             address: address,
+            memo: memo,
             label: address,
             onTxCompleted: { _ in AnyPublisher.just(()) }
         )
-            .get()
+        .get()
         return .just(receiveAddress)
     }
 
     public func parse(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         addressFactory.makeExternalAssetAddress(
             address: address,
+            memo: memo,
             label: label,
             onTxCompleted: onTxCompleted
         )

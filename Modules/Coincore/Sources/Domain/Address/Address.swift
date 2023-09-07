@@ -10,10 +10,6 @@ public protocol ReceiveAddress: TransactionTarget {
 }
 
 extension ReceiveAddress {
-    public var memo: String? {
-        nil
-    }
-
     public var predefinedAmount: MoneyValue? {
         nil
     }

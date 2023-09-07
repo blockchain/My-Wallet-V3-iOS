@@ -17,6 +17,7 @@ struct ERC20ReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
 
     let asset: CryptoCurrency
     let label: String
+    let memo: String? = nil
     let onTxCompleted: TxCompleted
     let eip681URI: EIP681URI
 

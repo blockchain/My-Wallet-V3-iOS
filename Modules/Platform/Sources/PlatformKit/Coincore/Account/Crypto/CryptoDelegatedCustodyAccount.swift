@@ -28,6 +28,7 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
                 addressFactory
                     .makeExternalAssetAddress(
                         address: match.address,
+                        memo: nil,
                         label: match.address,
                         onTxCompleted: { _ in AnyPublisher.just(()) }
                     )

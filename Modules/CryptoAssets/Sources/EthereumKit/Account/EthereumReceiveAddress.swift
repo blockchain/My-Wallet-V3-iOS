@@ -18,6 +18,7 @@ struct EthereumReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
     }
 
     let label: String
+    let memo: String? = nil
     let onTxCompleted: TxCompleted
     let eip681URI: EIP681URI
     let assetName: String = ""

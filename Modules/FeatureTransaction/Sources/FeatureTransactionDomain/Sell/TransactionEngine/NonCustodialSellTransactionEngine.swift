@@ -103,6 +103,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                     .makeExternalAssetAddress(
                         asset: sourceAsset,
                         address: depositAddress,
+                        memo: nil,
                         label: depositAddress,
                         onTxCompleted: { _ in AnyPublisher.just(()) }
                     )
@@ -155,6 +156,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
         let depositAddress = receiveAddressFactory.makeExternalAssetAddress(
             asset: sourceAsset,
             address: sellOrderDepositAddress,
+            memo: nil,
             label: sellOrderDepositAddress,
             onTxCompleted: { _ in AnyPublisher.just(()) }
         )
@@ -187,6 +189,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                 return receiveAddressFactory.makeExternalAssetAddress(
                     asset: sourceAsset,
                     address: hotWalletAddress,
+                    memo: nil,
                     label: hotWalletAddress,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )

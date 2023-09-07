@@ -121,7 +121,7 @@ extension SendDetails {
             toLabel: "To Label",
             value: value,
             fee: .create(majorBigInt: 1, currency: .stellar),
-            memo: .text("1234567890")
+            memo: "1234567890"
         )
     }
 }

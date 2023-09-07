@@ -36,7 +36,7 @@ public class TextFieldViewModel {
         case on
         case off(OffSource)
 
-        var isOn: Bool {
+        public var isOn: Bool {
             switch self {
             case .on:
                 return true
@@ -179,7 +179,7 @@ public class TextFieldViewModel {
     }
 
     /// A relay for accessory content type
-    let accessoryContentTypeRelay = BehaviorRelay<AccessoryContentType>(value: .empty)
+    let accessoryContentTypeRelay: BehaviorRelay<AccessoryContentType>
     var accessoryContentType: Observable<AccessoryContentType> {
         accessoryContentTypeRelay
             .distinctUntilChanged()
@@ -251,6 +251,7 @@ public class TextFieldViewModel {
         formatter: TextFormatting = TextFormatterFactory.alwaysCorrect,
         textMatcher: TextMatchValidatorAPI? = nil,
         backgroundColor: UIColor = .clear,
+        accessoryContent: AccessoryContentType = .empty,
         messageRecorder: MessageRecording
     ) {
         self.messageRecorder = messageRecorder
@@ -274,6 +275,7 @@ public class TextFieldViewModel {
         self.subtitleRelay = BehaviorRelay(value: "")
         self.contentTypeRelay = BehaviorRelay(value: type.contentType)
         self.keyboardTypeRelay = BehaviorRelay(value: type.keyboardType)
+        self.accessoryContentTypeRelay = BehaviorRelay<AccessoryContentType>(value: accessoryContent)
         isSecureRelay.accept(type.isSecure)
 
         if let suffix = accessibilitySuffix {

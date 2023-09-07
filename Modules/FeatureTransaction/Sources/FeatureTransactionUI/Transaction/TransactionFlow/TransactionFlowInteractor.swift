@@ -61,9 +61,8 @@ protocol TransactionFlowRouting: Routing {
         canAddMoreSources: Bool
     )
 
-    /// Show the target selection screen (currently only used in `Send`).
-    /// This pushes onto the prior screen.
-    func routeToTargetSelectionPicker(transactionModel: TransactionModel, action: AssetAction)
+    /// Show the target selection screen, this pushes onto the prior screen.
+    func routeToSendTargetSelection(transactionModel: TransactionModel)
 
     /// Route to the destination account picker from the target selection screen
     func routeToDestinationAccountPicker(
@@ -164,8 +163,7 @@ public protocol TransactionFlowListener: AnyObject {
 final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPresentable>,
                                        TransactionFlowInteractable,
                                        AccountPickerListener,
-                                       TransactionFlowPresentableListener,
-                                       TargetSelectionPageListener
+                                       TransactionFlowPresentableListener
 {
 
     weak var router: TransactionFlowRouting?
@@ -510,9 +508,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             case .send:
                 // `Send` supports the target selection screen rather than a
                 // destination selection screen.
-                router?.routeToTargetSelectionPicker(
-                    transactionModel: transactionModel,
-                    action: action
+                router?.routeToSendTargetSelection(
+                    transactionModel: transactionModel
                 )
             case .buy:
                 // Unreacheable.

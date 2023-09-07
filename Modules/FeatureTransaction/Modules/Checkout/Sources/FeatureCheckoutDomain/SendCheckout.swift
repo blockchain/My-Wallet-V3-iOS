@@ -90,15 +90,9 @@ extension SendCheckout {
 
     public struct Memo: Equatable {
         public var value: String?
-        public var required: Bool
 
-        public var suffixIfRequired: String {
-            required ? "*" : ""
-        }
-
-        public init(value: String?, required: Bool) {
+        public init(value: String?) {
             self.value = value
-            self.required = required
         }
     }
 }

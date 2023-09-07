@@ -9,14 +9,16 @@ struct PlainCryptoReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
     let asset: CryptoCurrency
     let label: String
     let assetName: String
+    let memo: String?
+    let accountType: AccountType = .external
+
     var qrCodeMetadata: QRCodeMetadata {
         QRCodeMetadata(content: address, title: address)
     }
 
-    let accountType: AccountType = .external
-
-    init(address: String, asset: CryptoCurrency, label: String) {
+    init(address: String, memo: String?, asset: CryptoCurrency, label: String) {
         self.address = address
+        self.memo = memo
         self.asset = asset
         self.assetName = asset.name
         self.label = label

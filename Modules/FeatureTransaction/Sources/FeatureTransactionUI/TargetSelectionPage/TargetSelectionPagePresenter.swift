@@ -14,17 +14,14 @@ final class TargetSelectionPagePresenter: Presenter<TargetSelectionPageViewContr
 
     // MARK: - Private Properties
 
-    private let action: AssetAction
     private let selectionPageReducer: TargetSelectionPageReducerAPI
 
     // MARK: - Init
 
     init(
         viewController: TargetSelectionPageViewControllable,
-        action: AssetAction,
         selectionPageReducer: TargetSelectionPageReducerAPI
     ) {
-        self.action = action
         self.selectionPageReducer = selectionPageReducer
         super.init(viewController: viewController)
     }
@@ -39,8 +36,8 @@ final class TargetSelectionPagePresenter: Presenter<TargetSelectionPageViewContr
 
 extension TargetSelectionPagePresenter {
     struct State {
-        var actionButtonModel: ButtonViewModel
-        var navigationModel: ScreenNavigationModel
-        var sections: [TargetSelectionPageSectionModel]
+        let actionButtonModel: ButtonViewModel
+        let navigationModel: ScreenNavigationModel
+        let sections: [TargetSelectionPageSectionModel]
     }
 }

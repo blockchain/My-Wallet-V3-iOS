@@ -10,6 +10,7 @@ class AssetMock: CryptoAsset {
 
         func makeExternalAssetAddress(
             address: String,
+            memo: String?,
             label: String,
             onTxCompleted: @escaping TxCompleted
         ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
@@ -42,6 +43,7 @@ class AssetMock: CryptoAsset {
 
     func parse(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
@@ -56,7 +58,7 @@ class AssetMock: CryptoAsset {
         .just(accountGroup.accounts)
     }
 
-    func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never> {
+    func parse(address: String, memo: String?) -> AnyPublisher<ReceiveAddress?, Never> {
         .just(nil)
     }
 }

@@ -5,26 +5,22 @@ import Localization
 import RxSwift
 import ToolKit
 
-public final class CryptoAddressTextFieldViewModel: TextFieldViewModel {
+enum CryptoAddressTextFieldViewModel {
 
-    // MARK: - Setup
-
-    public init(
+    static func create(
         validator: TextValidating,
         messageRecorder: MessageRecording
-    ) {
-        super.init(
+    ) -> TextFieldViewModel {
+        TextFieldViewModel(
             with: .cryptoAddress,
             validator: validator,
             backgroundColor: .semantic.background,
+            accessoryContent: .badgeImageView(badgeImageViewModel),
             messageRecorder: messageRecorder
         )
-
-        // BadgeImageViewModel
-        accessoryContentTypeRelay.accept(.badgeImageView(badgeImageViewModel))
     }
 
-    private var badgeImageViewModel: BadgeImageViewModel {
+    private static var badgeImageViewModel: BadgeImageViewModel {
         let content = ImageViewContent(
             imageResource: .local(
                 name: Icon.qrCodev2.name,

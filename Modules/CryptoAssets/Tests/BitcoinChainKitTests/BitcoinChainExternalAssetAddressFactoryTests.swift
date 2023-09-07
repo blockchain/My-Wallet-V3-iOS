@@ -28,6 +28,7 @@ final class BitcoinChainExternalAssetAddressFactoryTests: XCTestCase {
         for testcase in Self.validTestCases {
             let result = sut.makeExternalAssetAddress(
                 address: testcase,
+                memo: nil,
                 label: "",
                 onTxCompleted: { _ in AnyPublisher.just(()) }
             )
@@ -50,6 +51,7 @@ final class BitcoinChainExternalAssetAddressFactoryTests: XCTestCase {
         for testcase in Self.invalidTestCases {
             let result = sut.makeExternalAssetAddress(
                 address: testcase,
+                memo: nil,
                 label: "",
                 onTxCompleted: { _ in AnyPublisher.just(()) }
             )
@@ -70,6 +72,7 @@ final class BitcoinChainExternalAssetAddressFactoryTests: XCTestCase {
         for testCase in Self.bip21TestCases {
             let result = sut.makeExternalAssetAddress(
                 address: testCase,
+                memo: nil,
                 label: "Test",
                 onTxCompleted: { _ in AnyPublisher.just(()) }
             )

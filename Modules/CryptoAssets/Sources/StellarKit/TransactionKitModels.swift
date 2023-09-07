@@ -2,11 +2,6 @@
 
 import MoneyKit
 
-enum StellarMemo {
-    case id(UInt64)
-    case text(String)
-}
-
 struct SendDetails {
     let fromAddress: String
     let fromLabel: String
@@ -14,7 +9,7 @@ struct SendDetails {
     let toLabel: String
     let value: CryptoValue
     let fee: CryptoValue
-    let memo: StellarMemo?
+    let memo: String?
 }
 
 enum SendFailureReason: Error {

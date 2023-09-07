@@ -173,6 +173,7 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
         let depositAddress = receiveAddressFactory.makeExternalAssetAddress(
             asset: sourceAsset,
             address: swapOrderDepositAddress,
+            memo: nil,
             label: swapOrderDepositAddress,
             onTxCompleted: { _ in AnyPublisher.just(()) }
         )
@@ -205,6 +206,7 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
                 return receiveAddressFactory.makeExternalAssetAddress(
                     asset: sourceAsset,
                     address: hotWalletAddress,
+                    memo: nil,
                     label: hotWalletAddress,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )

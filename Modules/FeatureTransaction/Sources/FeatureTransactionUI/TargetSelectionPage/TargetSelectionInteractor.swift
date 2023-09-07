@@ -74,41 +74,51 @@ final class TargetSelectionInteractor {
 
     func validateCrypto(
         address: String,
+        memo: String?,
         account: BlockchainAccount
     ) -> Single<Result<ReceiveAddress, Error>> {
         guard let crypto = account as? CryptoAccount, let asset = coincore[crypto.asset] else {
             fatalError("You cannot validate an address using this account type: \(account)")
         }
-
         return asset
-            .parse(address: address)
-            .flatMap { [validate] validatedAddress
+            .parse(address: address, memo: memo)
+            .flatMap { [nameResolutionService, analyticsRecorder] validatedAddress
                 -> AnyPublisher<Result<ReceiveAddress, Error>, Never> in
                 guard let validatedAddress else {
-                    return validate(address, crypto.asset)
+                    return validateDomain(
+                        service: nameResolutionService,
+                        analyticsRecorder: analyticsRecorder,
+                        domainName: address,
+                        memo: memo,
+                        currency: crypto.asset
+                    )
                 }
                 return .just(.success(validatedAddress))
             }
             .asSingle()
     }
-
-    private func validate(
-        domainName: String,
-        currency: CryptoCurrency
-    ) -> AnyPublisher<Result<ReceiveAddress, Error>, Never> {
-        nameResolutionService
-            .validate(domainName: domainName, currency: currency)
-            .map { receiveAddress -> Result<ReceiveAddress, Error> in
-                switch receiveAddress {
-                case .some(let receiveAddress):
-                    return .success(receiveAddress)
-                case .none:
-                    return .failure(CryptoAssetError.addressParseFailure)
-                }
-            }
-            .handleEvents(receiveOutput: { [analyticsRecorder] _ in
-                analyticsRecorder.record(event: AnalyticsEvents.New.Send.sendDomainResolved)
-            })
-            .eraseToAnyPublisher()
-    }
 }
+
+
+private func validateDomain(
+    service: BlockchainNameResolutionServiceAPI,
+    analyticsRecorder: AnalyticsEventRecorderAPI,
+    domainName: String,
+    memo: String?,
+    currency: CryptoCurrency
+) -> AnyPublisher<Result<ReceiveAddress, Error>, Never> {
+    service
+        .validate(domainName: domainName, memo: memo, currency: currency)
+        .map { receiveAddress -> Result<ReceiveAddress, Error> in
+            switch receiveAddress {
+            case .some(let receiveAddress):
+                return .success(receiveAddress)
+            case .none:
+                return .failure(CryptoAssetError.addressParseFailure)
+            }
+        }
+        .handleEvents(receiveOutput: { [analyticsRecorder] _ in
+            analyticsRecorder.record(event: AnalyticsEvents.New.Send.sendDomainResolved)
+        })
+        .eraseToAnyPublisher()
+    }

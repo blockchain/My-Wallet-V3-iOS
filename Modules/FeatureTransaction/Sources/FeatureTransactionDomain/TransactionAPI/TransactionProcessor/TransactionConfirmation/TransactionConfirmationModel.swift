@@ -396,42 +396,15 @@ extension TransactionConfirmations {
 
     public struct Memo: TransactionConfirmation, Equatable {
         public let id = UUID()
-        public enum Value: Equatable {
-            case text(String)
-            case identifier(Int)
-
-            public static func == (lhs: Value, rhs: Value) -> Bool {
-                switch (lhs, rhs) {
-                case (.text(let lhs), .text(let rhs)):
-                    return lhs == rhs
-                case (.identifier(let lhs), .identifier(let rhs)):
-                    return lhs == rhs
-                default:
-                    return false
-                }
-            }
-
-            public var string: String {
-                switch self {
-                case .text(let string):
-                    return string
-                case .identifier(let identifier):
-                    return String(identifier)
-                }
-            }
-        }
-
-        public let value: Value?
-        public let required: Bool
+        public let value: String?
         public let type: TransactionConfirmationKind = .memo
 
         public var formatted: (title: String, subtitle: String)? {
             (LocalizedString.memo, value?.string ?? "")
         }
 
-        public init(textMemo: String?, required: Bool) {
-            self.value = textMemo.flatMap { Value.text($0) }
-            self.required = required
+        public init(textMemo: String?) {
+            self.value = textMemo
         }
     }
 
