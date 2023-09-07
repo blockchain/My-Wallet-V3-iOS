@@ -61,7 +61,7 @@ struct SSNInputView: View {
 struct SSNCollectionView: View {
 
     @State private var SSN: String = ""
-    @State private var error: UX.Error?
+    @State private var error: String?
     @State private var isWhyPresented: Bool = false
 
     @StateObject var service = SubmitSSNService()
@@ -87,7 +87,7 @@ struct SSNCollectionView: View {
                     VStack(alignment: .leading, spacing: 4.pt) {
                         SSNInputView(SSN: $SSN.didSet { _ in error = nil }, isValid: isValid)
                         if let error {
-                            Text(error.message)
+                            Text(error)
                                 .typography(.caption1)
                                 .foregroundColor(.semantic.error)
                         } else {
@@ -115,8 +115,7 @@ struct SSNCollectionView: View {
                                 try await service.submit(SSN: SSN)
                                 action(SSN)
                             } catch {
-                                print(error)
-                                self.error = UX.Error(error: error)
+                                self.error = UX.Error(error: error).message
                             }
                         }
                     }
@@ -131,6 +130,7 @@ struct SSNCollectionView: View {
             }
             .bindings {
                 subscribe($pattern, to: blockchain.api.nabu.gateway.onboarding.SSN.regex.validation)
+                subscribe($error, to: blockchain.api.nabu.gateway.onboarding.SSN.verification.message)
             }
         }
     }
@@ -192,7 +192,7 @@ class SubmitSSNService: ObservableObject {
         defer { isLoading = false }
         try await repository.submitSSN(SSN).await()
         do {
-            let SSN = try await repository.checkSSN()
+            let SSN = try await Deferred { [repository] in repository.checkSSN() }
                 .poll(
                     max: 20,
                     until: { SSN in SSN.verification?.state.isFinal ?? false },
@@ -223,7 +223,7 @@ struct SSNCollectionView_Previews: PreviewProvider {
                     client: PreviewKYCSSNClient(
                         submit: .success(()),
                         check: { _ in
-                            return .failure(
+                            .failure(
                                 Nabu.Error(
                                     id: "abcdef",
                                     code: .unknownUser,

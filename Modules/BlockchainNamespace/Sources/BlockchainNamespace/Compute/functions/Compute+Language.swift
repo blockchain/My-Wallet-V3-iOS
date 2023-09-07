@@ -8,7 +8,7 @@ extension Compute {
 extension Compute.Language {
 
     public func compute() throws -> Any? {
-        try AnyJSON(Tag.Reference(id: id, in: .root.language))
+        try Tag.Reference(id: id, in: .root.language)
     }
 }
 

@@ -37,7 +37,6 @@ struct SuperAppDashboardContentView: View {
                         )
                     )
                     .opacity(currentModeSelection.isTrading ? 1.0 : 0.0)
-
                 } else {
                     DashboardContentView(
                         store: store.scope(
