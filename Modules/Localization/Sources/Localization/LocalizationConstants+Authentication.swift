@@ -502,8 +502,8 @@ extension LocalizationConstants.FeatureAuthentication {
         )
 
         public static let bakktAgreementPrompt = NSLocalizedString(
-            "By checking this box, I hereby authorize Apex Clearing Corporation to provide all information provided to Apex Clearing Corporation in my new account application to Bakkt Crypto Solutions, LLC for purposes of opening and maintaining an Bakkt Crypto Solutions, LLC account.",
-            comment: "Create Account screen: By checking this box, I hereby authorize Apex Clearing Corporation to provide all information provided to Apex Clearing Corporation in my new account application to Bakkt Crypto Solutions, LLC for purposes of opening and maintaining an Bakkt Crypto Solutions, LLC account."
+            "By checking this box, I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided below. By so agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account.",
+            comment: "Create Account screen: By checking this box, I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided [below/above]. By so agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account."
         )
 
         public static let recoveryPhrase = NSLocalizedString(

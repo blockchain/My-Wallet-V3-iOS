@@ -73,25 +73,30 @@ extension LocalizationConstants {
                 "Available to withdraw",
                 comment: "Available to withdraw title label"
             )
+
             static let depositDisclaimer = NSLocalizedString(
                 "By placing this order, you authorize Blockchain.com, Inc. to debit %@ from your bank account.",
                 comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $100 from your bank account."
             )
 
-            static let depositDisclaimerBakkt = NSLocalizedString(
-                "By placing this order, you authorize Bakkt to debit %@ from your bank account.",
-                comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $100 from your bank account."
-            )
+            static func depositDisclaimerBakkt(date: String) -> String {
+                NSLocalizedString(
+                    "I authorize Bakkt Marketplace, LLC (“Bakkt”) to debit my bank account provided herein on %@, in the amount I entered via ACH, and, if necessary, to make adjustments for any debits made in error to my bank account on this transaction. If I am a customer residing in one of the following states (HI, PR, UT), I grant such authorization to Bakkt Crypto Solutions, LLC. I understand this authorization will remain in full force and effect until I notify Bakkt/Bakkt Crypto Solutions, LLC in writing that I wish to revoke this authorization. I understand that Bakkt/Bakkt Crypto Solutions, LLC requires at least 1 day prior notice in order to cancel this authorization. Terms of the User Agreement apply.",
+                    comment: "Bakkt disclaimer"
+                ).interpolating(date)
+            }
 
             static let withdrawDisclaimer = NSLocalizedString(
-                "By placing this order, you authorize Blockchain.com, Inc. to debit %@ to your bank account.",
-                comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $10.00 to your bank account."
+                "By placing this order, you authorize Blockchain.com, Inc. to credit %@ to your bank account.",
+                comment: "By placing this order, you authorize Blockchain.com, Inc. to credit $10.00 to your bank account."
             )
 
-            static let withdrawDisclaimerBakkt = NSLocalizedString(
-                "By placing this order, you authorize Bakkt to debit %@ to your bank account.",
-                comment: "By placing this order, you authorize Bakkt to debit $10.00 to your bank account."
-            )
+            static func withdrawDisclaimerBakkt(date: String) -> String {
+                NSLocalizedString(
+                    "I authorize Bakkt Marketplace, LLC (“Bakkt”) to credit my bank account provided herein on %@, in the amount I entered via ACH, and, if necessary, to make adjustments for any debits made in error to my bank account on this transaction. If I am a customer residing in one of the following states (HI, PR, UT), I grant such authorization to Bakkt Crypto Solutions, LLC. I understand this authorization will remain in full force and effect until I notify Bakkt/Bakkt Crypto Solutions, LLC in writing that I wish to revoke this authorization. I understand that Bakkt/Bakkt Crypto Solutions, LLC requires at least 1 day prior notice in order to cancel this authorization. Terms of the User Agreement apply.",
+                    comment: "Bakkt disclaimer"
+                ).interpolating(date)
+            }
 
             static let networkFeeDescription = NSLocalizedString(
                 "A fee paid to process your transaction. This must be paid in %@.",
@@ -134,19 +139,30 @@ extension LocalizationConstants {
                 comment: "Refund disclaimer"
             )
 
-            static func buyDisclaimerBakkt(amount: String, asset: String) -> String {
+            static func buyDisclaimerBakkt(fiatAmount: String, amount: String, asset: String) -> String {
                 NSLocalizedString(
-                    "You [authorize]() Apex Clearing to move sufficient funds from your brokerage account held at Apex Clearing to Bakkt Crypto Solutions, LLC (\\\"Bakkt\\\") to pay for you purchase of %@. The actual value purchased may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt. Cryptocurrency transactions are not FDIC or SIPC insured.",
+                    "You [authorize]() Bakkt Marketplace, LLC to transfer %@ from your account held at Bakkt Marketplace, LLC to Bakkt Crypto Solutions, LLC to pay for your purchase of %@. The actual quantity of coins purchased may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt Crypto Solutions, LLC.  Cryptocurrency transactions are not FDIC or SIPC insured and cryptocurrencies are not securities.",
                     comment: "Bakkt disclaimer"
-                ).interpolating(amount, asset)
+                ).interpolating(fiatAmount, amount, asset)
             }
 
             static func sellDisclaimerBakkt(amount: String, asset: String) -> String {
                 NSLocalizedString(
-                    "You [authorize]() Apex Clearing to accept the transfer of funds from Bakkt Crypto Solutions, LLC  LLC (\\\"Bakkt\\\") to your account held at Apex Clearing to complete your sell of %@, The actual value of coins sold may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt. Cryptocurrency transactions are not FDIC or SIPC insured.",
+                    "You [authorize]() Bakkt Marketplace, LLC to accept the transfer of funds from Bakkt Crypto Solutions, LLC to your account held at Bakkt Marketplace, LLC to complete your sale of %@.  The actual value sold may change due to volatility in the price of %@, but your order will be executed based on the best price available to Bakkt Crypto Solutions, LLC.  Cryptocurrency transactions are not FDIC or SIPC insured and cryptocurrencies are not securities.",
                     comment: "Bakkt disclaimer"
-                ).interpolating(amount, asset)
+                ).interpolating(amount, asset, asset)
             }
+
+
+            static let authorizeTitle = NSLocalizedString(
+                "AUTHORIZATION AND LIMITED POWER OF ATTORNEY",
+                comment: "Title: AUTHORIZATION AND LIMITED POWER OF ATTORNEY"
+            )
+
+            static let authorizeBody = NSLocalizedString(
+                "Customer hereby authorizes and instructs Bakkt Marketplace, LLC to accept instructions from Customer to transfer funds from Customer’s account in the specified amount to pay for Customer’s cryptocurrency purchase(s) to an account in the name of Bakkt Crypto Solutions, LLC. These funds will be wired to a Bakkt Crypto Solutions, LLC bank account outside of Blockchain.com and Bakkt Marketplace, LLC’s possession and control, which Customer hereby authorizes. Customer acknowledges that Blockchain.com and Bakkt Marketplace, LLC do not have the ability to monitor or recall the funds after the funds have been wired to the Bakkt Crypto Solutions, LLC bank account. Customer hereby authorizes and instructs Bakkt Marketplace, LLC to accept all instructions to deposit funds into Customer’s account from the Bakkt Crypto Solutions, LLC account at the instruction of Bakkt Crypto Solutions, LLC. Customer agrees to hold Blockchain.com and Bakkt Marketplace, LLC harmless in accepting and following instructions from Customer for the transfer of funds from Customer’s account to the Bakkt Crypto Solutions, LLC account and instructions from Bakkt Crypto Solutions, LLC for the transfer of funds into Customer’s account from the Bakkt Crypto Solutions, LLC account. This authorization and limited power of attorney will remain in force for a period of ten year(s) and shall be deemed renewed with each request to transfer money out of or into Customer’s account at Blockchain.com.  Customer may revoke this power of attorney prospectively at any time.",
+                comment: "Body: Customer hereby authorizes and instructs Bakkt Marketplace, LLC to accept instructions from Customer to transfer funds from Customer’s account in the specified amount to pay for Customer’s cryptocurrency purchase(s) to an account in the name of Bakkt Crypto Solutions, LLC. These funds will be wired to a Bakkt Crypto Solutions, LLC bank account outside of Blockchain.com and Bakkt Marketplace, LLC’s possession and control, which Customer hereby authorizes. Customer acknowledges that Blockchain.com and Bakkt Marketplace, LLC do not have the ability to monitor or recall the funds after the funds have been wired to the Bakkt Crypto Solutions, LLC bank account. Customer hereby authorizes and instructs Bakkt Marketplace, LLC to accept all instructions to deposit funds into Customer’s account from the Bakkt Crypto Solutions, LLC account at the instruction of Bakkt Crypto Solutions, LLC. Customer agrees to hold Blockchain.com and Bakkt Marketplace, LLC harmless in accepting and following instructions from Customer for the transfer of funds from Customer’s account to the Bakkt Crypto Solutions, LLC account and instructions from Bakkt Crypto Solutions, LLC for the transfer of funds into Customer’s account from the Bakkt Crypto Solutions, LLC account. This authorization and limited power of attorney will remain in force for a period of ten year(s) and shall be deemed renewed with each request to transfer money out of or into Customer’s account at Blockchain.com.  Customer may revoke this power of attorney prospectively at any time."
+            )
 
             static let indicativeDisclaimer = NSLocalizedString(
                 "Final amount may change due to market activity.",
@@ -256,8 +272,8 @@ extension LocalizationConstants {
             static let gotIt = NSLocalizedString("Got it", comment: "Got it")
             
             static let viewDisclosures = NSLocalizedString(
-                "View disclosures",
-                comment: "View disclosures"
+                "Risk Disclosures",
+                comment: "Risk Disclosures"
             )
         }
 

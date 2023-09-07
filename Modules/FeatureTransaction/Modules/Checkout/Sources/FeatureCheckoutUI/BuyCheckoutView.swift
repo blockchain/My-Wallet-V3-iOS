@@ -422,6 +422,7 @@ extension BuyCheckoutView.Loaded {
     @ViewBuilder
     func bakktDisclaimer() -> some View {
         let label = L10n.Label.buyDisclaimerBakkt(
+            fiatAmount: checkout.fiat.displayString,
             amount: checkout.crypto.displayString,
             asset: checkout.crypto.currency.code
         )
@@ -433,10 +434,10 @@ extension BuyCheckoutView.Loaded {
             .padding(.horizontal, Spacing.padding1)
             .padding(.top, Spacing.padding3)
             .onTapGesture {
-                $app.post(event: blockchain.ux.bakkt.refund.policy.disclaimer)
+                $app.post(event: blockchain.ux.bakkt.authorization)
             }
             .batch {
-                set(blockchain.ux.bakkt.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.bakkt.refund.policy.disclaimer.url })
+                set(blockchain.ux.bakkt.authorization.then.launch.url, to: { blockchain.ux.bakkt.authorization.url })
             }
     }
 

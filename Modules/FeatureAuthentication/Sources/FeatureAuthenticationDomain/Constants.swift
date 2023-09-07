@@ -41,7 +41,11 @@ public enum Constants {
         }
 
         public static var bakktUserAgreement: String {
-            "https://bakkt.com/user-agreement"
+            "https://\(normalizedBlockchainHost)/legal/bakkt/terms"
+        }
+
+        public static var bakktAuthorization: String {
+            "https://\(normalizedBlockchainHost)/legal/bakkt/authorization"
         }
     }
 

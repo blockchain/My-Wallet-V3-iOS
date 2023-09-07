@@ -7833,34 +7833,32 @@ public final class L_blockchain_ux_bakkt: L, I_blockchain_ux_bakkt {
 }
 public protocol I_blockchain_ux_bakkt: I {}
 public extension I_blockchain_ux_bakkt {
-	var `refund`: L_blockchain_ux_bakkt_refund { .init("\(__).refund") }
+	var `authorization`: L_blockchain_ux_bakkt_authorization { .init("\(__).authorization") }
+	var `terms`: L_blockchain_ux_bakkt_terms { .init("\(__).terms") }
 	var `view`: L_blockchain_ux_bakkt_view { .init("\(__).view") }
 }
-public final class L_blockchain_ux_bakkt_refund: L, I_blockchain_ux_bakkt_refund {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.refund", comment: "") }
+public final class L_blockchain_ux_bakkt_authorization: L, I_blockchain_ux_bakkt_authorization {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.authorization", comment: "") }
 }
-public protocol I_blockchain_ux_bakkt_refund: I {}
-public extension I_blockchain_ux_bakkt_refund {
-	var `policy`: L_blockchain_ux_bakkt_refund_policy { .init("\(__).policy") }
+public protocol I_blockchain_ux_bakkt_authorization: I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_bakkt_authorization {
+	var `url`: L_blockchain_ux_bakkt_authorization_url { .init("\(__).url") }
 }
-public final class L_blockchain_ux_bakkt_refund_policy: L, I_blockchain_ux_bakkt_refund_policy {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.refund.policy", comment: "") }
+public final class L_blockchain_ux_bakkt_authorization_url: L, I_blockchain_ux_bakkt_authorization_url {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.authorization.url", comment: "") }
 }
-public protocol I_blockchain_ux_bakkt_refund_policy: I {}
-public extension I_blockchain_ux_bakkt_refund_policy {
-	var `disclaimer`: L_blockchain_ux_bakkt_refund_policy_disclaimer { .init("\(__).disclaimer") }
+public protocol I_blockchain_ux_bakkt_authorization_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_bakkt_terms: L, I_blockchain_ux_bakkt_terms {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.terms", comment: "") }
 }
-public final class L_blockchain_ux_bakkt_refund_policy_disclaimer: L, I_blockchain_ux_bakkt_refund_policy_disclaimer {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.refund.policy.disclaimer", comment: "") }
+public protocol I_blockchain_ux_bakkt_terms: I_blockchain_ux_type_action {}
+public extension I_blockchain_ux_bakkt_terms {
+	var `url`: L_blockchain_ux_bakkt_terms_url { .init("\(__).url") }
 }
-public protocol I_blockchain_ux_bakkt_refund_policy_disclaimer: I_blockchain_ux_type_action {}
-public extension I_blockchain_ux_bakkt_refund_policy_disclaimer {
-	var `url`: L_blockchain_ux_bakkt_refund_policy_disclaimer_url { .init("\(__).url") }
+public final class L_blockchain_ux_bakkt_terms_url: L, I_blockchain_ux_bakkt_terms_url {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.terms.url", comment: "") }
 }
-public final class L_blockchain_ux_bakkt_refund_policy_disclaimer_url: L, I_blockchain_ux_bakkt_refund_policy_disclaimer_url {
-	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.refund.policy.disclaimer.url", comment: "") }
-}
-public protocol I_blockchain_ux_bakkt_refund_policy_disclaimer_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
+public protocol I_blockchain_ux_bakkt_terms_url: I_blockchain_db_type_url, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_bakkt_view: L, I_blockchain_ux_bakkt_view {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.bakkt.view", comment: "") }
 }
