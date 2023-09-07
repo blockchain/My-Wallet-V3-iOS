@@ -73,25 +73,30 @@ extension LocalizationConstants {
                 "Available to withdraw",
                 comment: "Available to withdraw title label"
             )
+
             static let depositDisclaimer = NSLocalizedString(
                 "By placing this order, you authorize Blockchain.com, Inc. to debit %@ from your bank account.",
                 comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $100 from your bank account."
             )
 
-            static let depositDisclaimerBakkt = NSLocalizedString(
-                "By placing this order, you authorize Bakkt to debit %@ from your bank account.",
-                comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $100 from your bank account."
-            )
+            static func depositDisclaimerBakkt(date: String) -> String {
+                NSLocalizedString(
+                    "I authorize Bakkt Marketplace, LLC (“Bakkt”) to debit my bank account provided herein on %@, in the amount I entered via ACH, and, if necessary, to make adjustments for any debits made in error to my bank account on this transaction. If I am a customer residing in one of the following states (HI, PR, UT), I grant such authorization to Bakkt Crypto Solutions, LLC. I understand this authorization will remain in full force and effect until I notify Bakkt/Bakkt Crypto Solutions, LLC in writing that I wish to revoke this authorization. I understand that Bakkt/Bakkt Crypto Solutions, LLC requires at least 1 day prior notice in order to cancel this authorization. Terms of the User Agreement apply.",
+                    comment: "Bakkt disclaimer"
+                ).interpolating(date)
+            }
 
             static let withdrawDisclaimer = NSLocalizedString(
-                "By placing this order, you authorize Blockchain.com, Inc. to debit %@ to your bank account.",
-                comment: "By placing this order, you authorize Blockchain.com, Inc. to debit $10.00 to your bank account."
+                "By placing this order, you authorize Blockchain.com, Inc. to credit %@ to your bank account.",
+                comment: "By placing this order, you authorize Blockchain.com, Inc. to credit $10.00 to your bank account."
             )
 
-            static let withdrawDisclaimerBakkt = NSLocalizedString(
-                "By placing this order, you authorize Bakkt to debit %@ to your bank account.",
-                comment: "By placing this order, you authorize Bakkt to debit $10.00 to your bank account."
-            )
+            static func withdrawDisclaimerBakkt(date: String) -> String {
+                NSLocalizedString(
+                    "I authorize Bakkt Marketplace, LLC (“Bakkt”) to credit my bank account provided herein on %@, in the amount I entered via ACH, and, if necessary, to make adjustments for any debits made in error to my bank account on this transaction. If I am a customer residing in one of the following states (HI, PR, UT), I grant such authorization to Bakkt Crypto Solutions, LLC. I understand this authorization will remain in full force and effect until I notify Bakkt/Bakkt Crypto Solutions, LLC in writing that I wish to revoke this authorization. I understand that Bakkt/Bakkt Crypto Solutions, LLC requires at least 1 day prior notice in order to cancel this authorization. Terms of the User Agreement apply.",
+                    comment: "Bakkt disclaimer"
+                ).interpolating(date)
+            }
 
             static let networkFeeDescription = NSLocalizedString(
                 "A fee paid to process your transaction. This must be paid in %@.",

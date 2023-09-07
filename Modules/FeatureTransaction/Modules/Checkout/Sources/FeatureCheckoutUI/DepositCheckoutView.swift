@@ -158,10 +158,13 @@ public struct DepositCheckoutView: View {
         )
     }
 
+    @ViewBuilder
     func disclaimer() -> some View {
+        let date = DateFormatter.birthday.string(from: Date.now)
+
         VStack(alignment: .leading) {
             Text(rich:
-                    isExternalTradingEnabled ?  L10n.Label.depositDisclaimerBakkt.interpolating(checkout.total.displayString) :
+                    isExternalTradingEnabled ?  L10n.Label.depositDisclaimerBakkt(date: date) :
                     L10n.Label.depositDisclaimer.interpolating(checkout.total.displayString)
             )
                 .typography(.caption1)
