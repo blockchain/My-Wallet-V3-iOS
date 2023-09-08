@@ -754,8 +754,8 @@ extension LocalizationConstants.Transaction.InterestWithdraw {
 extension LocalizationConstants.Transaction.InterestWithdraw.Completion.Pending {
     public static let title = NSLocalizedString("Withdrawing %@", comment: "Withdrawing %@")
     public static let description = NSLocalizedString(
-        "We're completing your withdraw now.",
-        comment: "We're completing your withdraw now."
+        "We're completing your withdrawal now.",
+        comment: "We're completing your withdrawal now."
     )
 }
 
