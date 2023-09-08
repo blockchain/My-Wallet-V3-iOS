@@ -50,8 +50,8 @@ extension LocalizationConstants.SuperApp.AppChrome {
 
 extension LocalizationConstants.SuperApp.AllAssets {
     public static let title = NSLocalizedString(
-        "All assets",
-        comment: "All assets"
+        "Assets",
+        comment: "Assets"
     )
 
     public static let searchPlaceholder = NSLocalizedString(

@@ -8,7 +8,7 @@ import SwiftUI
 
 public struct AllAssetsSceneView: View {
 
-    typealias L10n = LocalizationConstants.SuperApp.AllAssets
+    private typealias L10n = LocalizationConstants.SuperApp.AllAssets
 
     @BlockchainApp var app
     @Environment(\.context) var context
@@ -26,7 +26,7 @@ public struct AllAssetsSceneView: View {
             searchBarSection
             allAssetsSection
         }
-        .background(Color.WalletSemantic.light.ignoresSafeArea())
+        .background(Color.semantic.light.ignoresSafeArea())
         .navigationBarHidden(true)
         .superAppNavigationBar(
             leading: {
@@ -35,7 +35,7 @@ public struct AllAssetsSceneView: View {
                 } label: {
                     Icon
                         .filterv2
-                        .color(.WalletSemantic.title)
+                        .color(.semantic.text)
                         .small()
                 }
                 .if(viewStore.showSmallBalances) { $0.highlighted() }
@@ -67,6 +67,7 @@ public struct AllAssetsSceneView: View {
         }
     }
 
+    @ViewBuilder
     private var searchBarSection: some View {
         SearchBar(
             text: viewStore.binding(\.$searchText),
@@ -79,32 +80,46 @@ public struct AllAssetsSceneView: View {
         .padding(.vertical, Spacing.padding3)
     }
 
+    @ViewBuilder
     private var allAssetsSection: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                if let searchResults = viewStore.searchResults {
-                    if searchResults.isEmpty {
-                        noResultsView
-                    } else {
-                        ForEach(searchResults) { info in
-                            if let balance = info.balance {
-                                balance.rowView(viewStore.presentedAssetType == .custodial ? .delta : .quote)
-                                    .onTapGesture {
-                                        viewStore.send(.set(\.$isSearching, false))
-                                        viewStore.send(.onAssetTapped(info))
-                                    }
-                                if info.id != viewStore.searchResults?.last?.id {
-                                    PrimaryDivider()
-                                }
-                            }
-                        }
+                switch viewStore.searchResults {
+                case .some(let value) where value.isNotEmpty:
+                    let lastId = value.last?.id
+                    let isCustodial = viewStore.presentedAssetType.isCustodial
+                    ForEach(value) { item in
+                        rowView(item, isLast: item.id == lastId, isCustodial: isCustodial)
                     }
-                } else {
+                case .some:
+                    noResultsView
+                case nil:
                     loadingSection
                 }
             }
             .cornerRadius(16, corners: .allCorners)
             .padding(.horizontal, Spacing.padding2)
+        }
+    }
+
+    @ViewBuilder
+    private func rowView(
+        _ value: AssetBalanceInfo,
+        isLast: Bool,
+        isCustodial: Bool
+    ) -> some View {
+        if let balance = value.balance {
+            balance.rowView(
+                isCustodial ? .delta : .quote,
+                byline: { if isCustodial.isNo { MoneyValueCodeNetworkView(balance.currencyType) } }
+            )
+            .onTapGesture {
+                viewStore.send(.set(\.$isSearching, false))
+                viewStore.send(.onAssetTapped(value))
+            }
+            if isLast.isNo {
+                PrimaryDivider()
+            }
         }
     }
 
@@ -173,10 +188,10 @@ public struct AllAssetsSceneView: View {
 
     @ViewBuilder
     private var noResultsView: some View {
-        HStack(alignment: .center, content: {
+        HStack(alignment: .center) {
             Text(L10n.noResults)
                 .padding(.vertical, Spacing.padding2)
-        })
+        }
         .frame(maxWidth: .infinity)
         .background(Color.semantic.background)
     }

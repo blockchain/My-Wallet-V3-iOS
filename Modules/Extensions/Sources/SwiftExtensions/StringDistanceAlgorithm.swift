@@ -18,7 +18,7 @@ public protocol StringDistanceAlgorithm {
 
 public struct FuzzyAlgorithm: StringDistanceAlgorithm {
 
-    var caseInsensitive: Bool
+    let caseInsensitive: Bool
 
     public init(caseInsensitive: Bool) {
         self.caseInsensitive = caseInsensitive

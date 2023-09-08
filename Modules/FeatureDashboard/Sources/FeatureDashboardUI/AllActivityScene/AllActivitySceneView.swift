@@ -26,7 +26,7 @@ public struct AllActivitySceneView: View {
                 allActivitySection(viewStore: viewStore)
                     .redacted(reason: viewStore.isLoading ? .placeholder : [])
             }
-            .background(Color.WalletSemantic.light.ignoresSafeArea())
+            .background(Color.semantic.light.ignoresSafeArea())
             .onAppear {
                 viewStore.send(.onAppear)
             }

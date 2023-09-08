@@ -111,11 +111,11 @@ public struct VerifyRecoveryPhraseView: View {
         .frame(height: 200)
         .frame(maxWidth: .infinity)
         .border(
-            viewStore.backupPhraseStatus == .failed ? Color.WalletSemantic.error
+            viewStore.backupPhraseStatus == .failed ? Color.semantic.error
             : .WalletSemantic.medium,
             width: 1
         )
-        .background(Color.WalletSemantic.light)
+        .background(Color.semantic.light)
         .alert(isPresented: viewStore.binding(\.$backupRemoteFailed)) {
             Alert(
                 title: Text(Localization.backupFailedAlertTitle),
@@ -133,14 +133,14 @@ public struct VerifyRecoveryPhraseView: View {
                 Text("\(index)")
                     .foregroundColor(.WalletSemantic.muted)
                 Text("\(word.label)")
-                    .foregroundColor(Color.WalletSemantic.title)
+                    .foregroundColor(Color.semantic.title)
             }
         })
         .padding(.horizontal, 6)
         .padding(.vertical, 12)
         .typography(.paragraph2)
         .cornerRadius(4)
-        .border(Color.WalletSemantic.medium, width: 1)
+        .border(Color.semantic.medium, width: 1)
         .background(Color.semantic.background)
     }
 
@@ -153,9 +153,9 @@ public struct VerifyRecoveryPhraseView: View {
         .padding(.horizontal, 6)
         .padding(.vertical, 12)
         .typography(.paragraph2)
-        .foregroundColor(Color.WalletSemantic.title)
+        .foregroundColor(Color.semantic.title)
         .cornerRadius(4)
-        .border(Color.WalletSemantic.medium, width: 1)
+        .border(Color.semantic.medium, width: 1)
         .opacity(viewStore.selectedWords.contains(word) ? 0 : 1)
         .background(Color.semantic.background)
     }

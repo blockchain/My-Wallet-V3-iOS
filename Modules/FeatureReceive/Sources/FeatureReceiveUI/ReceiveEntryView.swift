@@ -306,7 +306,7 @@ struct ReceiveEntryRow: View {
         ZStack(alignment: .bottomTrailing) {
             AsyncMedia(url: info.currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
                 .frame(width: 24.pt, height: 24.pt)
-                .background(Color.WalletSemantic.light, in: Circle())
+                .background(Color.semantic.light, in: Circle())
 
             if let network = info.network,
                 info.currency.code != network.nativeAsset.code
@@ -314,9 +314,9 @@ struct ReceiveEntryRow: View {
                 ZStack(alignment: .center) {
                     AsyncMedia(url: network.nativeAsset.assetModel.logoPngUrl, placeholder: { EmptyView() })
                         .frame(width: 12.pt, height: 12.pt)
-                        .background(Color.WalletSemantic.background, in: Circle())
+                        .background(Color.semantic.background, in: Circle())
                     Circle()
-                        .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                        .strokeBorder(Color.semantic.background, lineWidth: 1)
                         .frame(width: 13, height: 13)
                 }
                 .offset(x: 4, y: 4)

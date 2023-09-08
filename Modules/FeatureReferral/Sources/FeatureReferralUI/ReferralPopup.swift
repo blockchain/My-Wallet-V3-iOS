@@ -29,7 +29,7 @@ public struct ReferralPopup: View {
             }
             .frame(maxHeight: .infinity)
         }
-        .background(Color.WalletSemantic.primary)
+        .background(Color.semantic.primary)
         .onAppear(perform: {
             viewStore.send(.onAppear)
         })

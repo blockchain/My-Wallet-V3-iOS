@@ -71,12 +71,13 @@ public struct SiteMap {
             )
         case blockchain.ux.user.assets.all:
             let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
-            AllAssetsSceneView(store: .init(
+            let reducer = AllAssetsScene(
+                assetBalanceInfoRepository: resolve(),
+                app: app
+            )
+            AllAssetsSceneView(store: Store(
                 initialState: initialState,
-                reducer: AllAssetsScene(
-                    assetBalanceInfoRepository: resolve(),
-                    app: app
-                )
+                reducer: reducer
             ))
         case blockchain.ux.activity.detail:
             let initialState = try ActivityDetailScene.State(activityEntry: context.decode(blockchain.ux.activity.detail.model))

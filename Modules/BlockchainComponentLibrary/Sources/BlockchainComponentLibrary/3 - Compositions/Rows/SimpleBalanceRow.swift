@@ -92,7 +92,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
         self.leadingDescription = leadingDescription
         self.trailingTitle = trailingTitle
         self.trailingDescription = trailingDescription
-        self.trailingDescriptionColor = trailingDescriptionColor ?? Color.WalletSemantic.body
+        self.trailingDescriptionColor = trailingDescriptionColor ?? Color.semantic.body
         self.inlineTagView = inlineTagView
         self.tags = tags
         self.isSelectable = isSelected != nil
@@ -129,7 +129,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
         HStack {
             Text(leadingTitle)
                 .typography(.paragraph2)
-                .foregroundColor(Color.WalletSemantic.title)
+                .foregroundColor(Color.semantic.title)
             if let inlineIconAndColor {
                 inlineIconAndColor.0
                     .micro()
@@ -143,7 +143,7 @@ public struct SimpleBalanceRow<Leading: View>: View {
             HStack(spacing: 8) {
                 Text(leadingDescription)
                     .typography(.caption1)
-                    .foregroundColor(Color.WalletSemantic.body)
+                    .foregroundColor(Color.semantic.body)
 
                 if let tag = inlineTagView {
                     tag

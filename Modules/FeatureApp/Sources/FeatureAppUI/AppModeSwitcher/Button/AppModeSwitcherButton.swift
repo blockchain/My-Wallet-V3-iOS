@@ -32,7 +32,7 @@ public struct AppModeSwitcherButton: View {
 
             Text(appMode.displayName)
                 .typography(.body1)
-                .foregroundColor(Color.WalletSemantic.title)
+                .foregroundColor(Color.semantic.title)
 
             Icon
                 .chevronDown
@@ -41,7 +41,7 @@ public struct AppModeSwitcherButton: View {
         }
         .padding(.horizontal, Spacing.padding1)
         .frame(height: 32)
-        .background(Color.WalletSemantic.light)
+        .background(Color.semantic.light)
         .cornerRadius(100)
         .onTapGesture {
             action()

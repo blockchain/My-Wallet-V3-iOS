@@ -17,7 +17,7 @@ struct SwapProductRouterView: View {
         ScrollView {
             rows
         }
-        .background(Color.WalletSemantic.light.ignoresSafeArea())
+        .background(Color.semantic.light.ignoresSafeArea())
         .navigationTitle(L10n.ProductRouter.title)
         .navigationBarTitleDisplayMode(.inline)
     }
