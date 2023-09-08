@@ -58,19 +58,20 @@ struct SuperAppContentView: View {
                     hideBalanceAfterRefresh.toggle()
                 }
             }
-            .bindings {
-                subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
-                subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
-                subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
-
-            }
+            .bindings(
+                managing: { update in
+                    if case .didSynchronize = update, isDeFiOnly {
+                        currentModeSelection = .pkw
+                    }
+                },
+                {
+                    subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
+                    subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
+                    subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
+                }
+            )
             .onChange(of: isTradingEnabled) { newValue in
                 if currentModeSelection == .trading, newValue == false {
-                    currentModeSelection = .pkw
-                }
-            }
-            .onAppear {
-                if currentModeSelection == .trading, isTradingEnabled == false {
                     currentModeSelection = .pkw
                 }
             }

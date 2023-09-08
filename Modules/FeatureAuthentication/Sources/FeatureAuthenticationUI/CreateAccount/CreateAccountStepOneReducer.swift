@@ -285,8 +285,12 @@ let createAccountStepOneReducer = Reducer.combine(
             return .merge(
                 .fireAndForget {
                     environment.app?.state.transaction { state in
-                        state.set(blockchain.ux.user.authentication.sign.up.address.country.code, to: country)
-                        state.set(blockchain.ux.user.authentication.sign.up.address.country.state, to: countryState)
+                        state.set(blockchain.ux.user.authentication.sign.up.address.country.code, to: country ?? "N/A")
+                        if let countryState {
+                            state.set(blockchain.ux.user.authentication.sign.up.address.country.state, to: countryState)
+                        } else {
+                            state.clear(blockchain.ux.user.authentication.sign.up.address.country.state)
+                        }
                     }
                 },
                 EffectTask(value: .navigate(to: .createWalletStepTwo))
