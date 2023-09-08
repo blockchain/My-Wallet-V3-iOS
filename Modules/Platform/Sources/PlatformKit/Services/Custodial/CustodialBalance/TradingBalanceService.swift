@@ -65,8 +65,12 @@ class TradingBalanceService: TradingBalanceServiceAPI {
         self.client = client
 
         let cache: AnyCache<Key, CustodialAccountBalanceStates> = InMemoryCache(
-            configuration: .onLoginLogoutTransactionAndDashboardRefresh(),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+            configuration: .on(
+                blockchain.session.event.did.sign.in,
+                blockchain.ux.transaction.event.did.finish,
+                blockchain.ux.home.event.did.pull.to.refresh
+            ),
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 15)
         ).eraseToAnyCache()
 
         self.cachedValue = CachedValueNew(

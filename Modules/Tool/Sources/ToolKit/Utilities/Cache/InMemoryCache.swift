@@ -46,23 +46,12 @@ public final class InMemoryCache<Key: Hashable, Value: Equatable>: CacheAPI {
         refreshControl: CacheRefreshControl,
         notificationCenter: NotificationCenter = .default
     ) {
-        var isInTest: Bool { NSClassFromString("XCTestCase") != nil }
-        if isInTest {
-            self.init(
-                configuration: configuration,
-                refreshControl: refreshControl,
-                notificationCenter: notificationCenter,
-                app: App.preview
-            )
-        } else {
-            let app: AppProtocol = runningApp ?? resolve()
-            self.init(
-                configuration: configuration,
-                refreshControl: refreshControl,
-                notificationCenter: notificationCenter,
-                app: app
-            )
-        }
+        self.init(
+            configuration: configuration,
+            refreshControl: refreshControl,
+            notificationCenter: notificationCenter,
+            app: runningApp
+        )
     }
 
     /// Creates an in-memory cache.

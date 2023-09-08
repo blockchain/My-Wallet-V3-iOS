@@ -89,11 +89,14 @@ extension Session {
                     remote.activate { [self] _, error in
                         guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
                         let keys = remote.allKeys(from: .remote)
-                        #if DEBUG
-                        app.post(error: "remote configuration keys is empty! ‼️‼️‼️‼️")
-                        #else
-                        if keys.isEmpty { return errored() }
-                        #endif
+                        if keys.isEmpty {
+                            #if DEBUG
+                            app.post(error: "remote configuration keys is empty! ‼️‼️‼️‼️")
+                            if !isInTest { return errored() }
+                            #else
+                            return errored()
+                            #endif
+                        }
                         for key in keys {
                             do {
                                 configuration[key] = try JSONSerialization.jsonObject(

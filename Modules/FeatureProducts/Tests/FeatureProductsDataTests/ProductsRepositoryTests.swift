@@ -9,12 +9,13 @@ import XCTest
 
 final class ProductsRepositoryTests: XCTestCase {
 
+    private var app: AppProtocol!
     private var repository: ProductsRepository!
     private var mockClient: ProductsClientMock!
 
     override func setUp() async throws {
         try await super.setUp()
-        let app = App.test
+        app = App.test
         app.signIn(userId: "test")
         try await app.set(blockchain.user.is.external.brokerage, to: false)
         mockClient = ProductsClientMock()
@@ -58,7 +59,7 @@ final class ProductsRepositoryTests: XCTestCase {
         let firstProducts = try await repository.fetchProducts().await()
         XCTAssertEqual(firstProducts, expectedProducts)
         // WHEN: The cache should be invalidated
-        NotificationCenter.default.post(name: .transaction, object: nil)
+        app.post(event: blockchain.ux.transaction.event.did.finish)
         // AND: A second request is fired
         let secondProducts = try await repository.fetchProducts().await()
         XCTAssertEqual(secondProducts, expectedProducts)
@@ -72,7 +73,7 @@ final class ProductsRepositoryTests: XCTestCase {
         let firstProducts = try await repository.fetchProducts().await()
         XCTAssertEqual(firstProducts, expectedProducts)
         // WHEN: The cache should be invalidated
-        NotificationCenter.default.post(name: .kycStatusChanged, object: nil)
+        app.post(event: blockchain.ux.kyc.event.status.did.change)
         // AND: A second request is fired
         let secondProducts = try await repository.fetchProducts().await()
         XCTAssertEqual(secondProducts, expectedProducts)
@@ -86,7 +87,7 @@ final class ProductsRepositoryTests: XCTestCase {
         let publisher = repository.streamProducts()
         XCTAssertPublisherValues(publisher, .success(expectedProducts), expectCompletion: false)
         // WHEN: The cache is invalidated
-        NotificationCenter.default.post(name: .kycStatusChanged, object: nil)
+        app.post(event: blockchain.ux.transaction.event.did.finish)
         // AND: The data is refreashed
         XCTAssertPublisherValues(publisher, .success(expectedProducts), expectCompletion: false)
         XCTAssertEqual(mockClient.recordedInvocations.fetchProductsData.count, 2)
@@ -101,7 +102,7 @@ final class ProductsRepositoryTests: XCTestCase {
         // THEN: The failure is returned
         XCTAssertPublisherValues(publisher, .failure(error), expectCompletion: false)
         // WHEN: The cache is invalidated
-        NotificationCenter.default.post(name: .kycStatusChanged, object: nil)
+        app.post(event: blockchain.ux.transaction.event.did.finish)
         // AND: Valid data is available
         let expectedProducts = try stubClientWithDefaultProducts()
         // THEN: The data is refreashed

@@ -23,6 +23,12 @@ public final class CoincoreNAPI {
 
     public func register() async throws {
 
+        var refresh = L_blockchain_namespace_napi_napi_policy.JSON()
+        refresh.invalidate.on = [
+            blockchain.ux.home.event.did.pull.to.refresh[],
+            blockchain.ux.transaction.event.execution.status.completed[]
+        ]
+
         func filter(
             _ filter: AssetFilter,
             predicate: ((SingleAccount) -> Bool)? = nil
@@ -62,6 +68,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.all,
+            policy: refresh,
             repository: { _ in filter(.custodial) }
         )
 
@@ -103,24 +110,28 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.interest.all,
+            policy: refresh,
             repository: { _ in filter(.interest) }
         )
 
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.staking.all,
+            policy: refresh,
             repository: { _ in filter(.staking) }
         )
 
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.active.rewards.all,
+            policy: refresh,
             repository: { _ in filter(.activeRewards) }
         )
 
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.crypto.all.identifiers,
+            policy: refresh,
             repository: { _ in
                 filter(.custodial) { $0 is CryptoAccount }
             }
@@ -129,6 +140,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.crypto.all.currencies,
+            policy: refresh,
             repository: { [coincore] _ in
                 coincore.allAccounts(filter: .custodial)
                     .map(\.accounts)
@@ -143,6 +155,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.fiat.all,
+            policy: refresh,
             repository: { _ in
                 filter(.custodial) { $0 is FiatAccount }
             }
@@ -151,6 +164,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.fiat.with.balance,
+            policy: refresh,
             repository: { [coincore] _ in
                 coincore.accounts(filter: .custodial, where: \.currencyType.isFiatCurrency)
                     .replaceError(with: [])
@@ -179,6 +193,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.asset,
+            policy: refresh,
             repository: { tag in
                 filter(.custodial, tag[blockchain.coin.core.accounts.custodial.asset.id])
                     .map { json in AnyJSON(json.array()?.first) } // custodial only have a single associated acount per asset
@@ -221,6 +236,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.crypto.with.balance,
+            policy: refresh,
             repository: { [app, coincore] _ -> AnyPublisher<AnyJSON, Never> in
                 coincore.allAccounts(filter: .custodial)
                     .combineLatest(
@@ -365,13 +381,6 @@ public final class CoincoreNAPI {
                 }
             }
         )
-
-        var refresh = L_blockchain_namespace_napi_napi_policy.JSON()
-
-        refresh.invalidate.on = [
-            blockchain.ux.home.event.did.pull.to.refresh[],
-            blockchain.ux.transaction.event.execution.status.completed[]
-        ]
 
         try await app.register(
             napi: blockchain.coin.core,
