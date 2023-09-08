@@ -9,7 +9,6 @@ import ToolKit
 final class AssetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI {
 
     private typealias ThisCachedValue = CachedValueNew<Key, [AssetBalanceInfo], Never>
-    private static let inDiskCacheID = "AssetBalanceInfoRepository"
 
     struct Key: Hashable, CustomStringConvertible {
         enum BalanceType: String {
@@ -36,17 +35,16 @@ final class AssetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI {
     init(service: AssetBalanceInfoServiceAPI) {
         self.service = service
 
-        let cache = InDiskCache<Key, [AssetBalanceInfo]>(
-            id: Self.inDiskCacheID,
+        let cache = InMemoryCache<Key, [AssetBalanceInfo]>(
             configuration: .on(
                 blockchain.ux.transaction.event.did.finish,
                 blockchain.session.event.did.sign.in,
                 blockchain.ux.kyc.event.status.did.change,
                 blockchain.ux.home.event.did.pull.to.refresh
             ),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60),
-            enableAsyncWrites: true
-        ).eraseToAnyCache()
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+        )
+        .eraseToAnyCache()
 
         self.cachedValue = ThisCachedValue(
             cache: cache,
