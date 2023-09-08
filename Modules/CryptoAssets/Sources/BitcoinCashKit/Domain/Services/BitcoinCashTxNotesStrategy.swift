@@ -47,6 +47,7 @@ final class BitcoinCashTxNotesStrategy: BitcoinCashTxNotesStrategyAPI {
                 return BitcoinCashEntry(
                     payload: entry.payload,
                     accounts: entry.accounts,
+                    importedAddress: entry.importedAddress,
                     txNotes: updatedNotes
                 )
             }

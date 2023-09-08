@@ -33,6 +33,7 @@ final class BitcoinCashWalletAccountRepository {
     let defaultAccount: AnyPublisher<BitcoinCashWalletAccount, BitcoinCashWalletRepositoryError>
     let accounts: AnyPublisher<[BitcoinCashWalletAccount], BitcoinCashWalletRepositoryError>
     let activeAccounts: AnyPublisher<[BitcoinCashWalletAccount], BitcoinCashWalletRepositoryError>
+    let importedAccounts: AnyPublisher<[BitcoinCashWalletAccount], BitcoinCashWalletRepositoryError>
     let bitcoinCashEntry: AnyPublisher<BitcoinCashEntry?, BitcoinCashWalletRepositoryError>
 
     private let bitcoinCashFetcher: BitcoinCashEntryFetcherAPI
@@ -61,7 +62,7 @@ final class BitcoinCashWalletAccountRepository {
                     .mapError { _ in .missingWallet }
                     .map { entry in
                         let defaultAccount = bchWalletAccount(from: entry.defaultAccount)
-                        let accounts = entry.accounts.map(bchWalletAccount(from:))
+                        let accounts = entry.accounts.map(bchWalletAccount(from:)) + entry.importedAddress.map(bchWalletAccount(from:))
                         return BCHAccounts(defaultAccount: defaultAccount, accounts: accounts, entry: entry)
                     }
                     .eraseToAnyPublisher()
@@ -78,7 +79,13 @@ final class BitcoinCashWalletAccountRepository {
 
         self.activeAccounts = accounts
             .map { accounts in
-                accounts.filter(\.isActive)
+                accounts.filter { $0.isActive && !$0.imported }
+            }
+            .eraseToAnyPublisher()
+
+        self.importedAccounts = accounts
+            .map { accounts in
+                accounts.filter { $0.isActive && $0.imported }
             }
             .eraseToAnyPublisher()
 
@@ -104,7 +111,13 @@ final class BitcoinCashWalletAccountRepository {
                 if let updatedAccount = account?.updateLabel(label) {
                     var accounts = entry.accounts
                     accounts[accountIndex] = updatedAccount
-                    let updatedEntry = BitcoinCashEntry(payload: entry.payload, accounts: accounts, txNotes: entry.txNotes)
+                    // we don't store importedAddress back to metadata ¯\_(ツ)_/¯
+                    let updatedEntry = BitcoinCashEntry(
+                        payload: entry.payload,
+                        accounts: accounts,
+                        importedAddress: [],
+                        txNotes: entry.txNotes
+                    )
                     return bitcoinCashFetcher.update(entry: updatedEntry)
                         .catch { _ in .noValue }
                         .mapError(to: Never.self)
@@ -141,7 +154,13 @@ final class BitcoinCashWalletAccountRepository {
                         return entry
                     }
                 }
-                let updatedEntry = BitcoinCashEntry(payload: entry.payload, accounts: updatedAccounts, txNotes: entry.txNotes)
+                // we don't store importedAddress back to metadata ¯\_(ツ)_/¯
+                let updatedEntry = BitcoinCashEntry(
+                    payload: entry.payload,
+                    accounts: updatedAccounts,
+                    importedAddress: [],
+                    txNotes: entry.txNotes
+                )
                 return bitcoinCashFetcher.update(entry: updatedEntry)
                     .catch { _ in .noValue }
                     .mapError(to: Never.self)
@@ -166,6 +185,20 @@ private func bchWalletAccount(
         label: entry.label ?? defaultLabel(using: entry.index),
         derivationType: derivationType(from: entry.derivationType),
         archived: entry.archived
+    )
+}
+
+private func bchWalletAccount(
+    from imported: BitcoinCashEntry.ImportedAddress
+) -> BitcoinCashWalletAccount {
+    BitcoinCashWalletAccount(
+        index: 0,
+        publicKey: imported.addr,
+        label: imported.label,
+        derivationType: .legacy,
+        archived: imported.archived,
+        importedPrivateKey: imported.priv,
+        imported: true
     )
 }
 

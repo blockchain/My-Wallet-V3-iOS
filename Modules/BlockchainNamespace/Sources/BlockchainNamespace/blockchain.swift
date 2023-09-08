@@ -960,6 +960,7 @@ public extension I_blockchain_app_configuration {
 	var `staking`: L_blockchain_app_configuration_staking { .init("\(__).staking") }
 	var `superapp`: L_blockchain_app_configuration_superapp { .init("\(__).superapp") }
 	var `swap`: L_blockchain_app_configuration_swap { .init("\(__).swap") }
+	var `sweep`: L_blockchain_app_configuration_sweep { .init("\(__).sweep") }
 	var `tabs`: L_blockchain_app_configuration_tabs { .init("\(__).tabs") }
 	var `test`: L_blockchain_app_configuration_test { .init("\(__).test") }
 	var `transaction`: L_blockchain_app_configuration_transaction { .init("\(__).transaction") }
@@ -2205,6 +2206,24 @@ public final class L_blockchain_app_configuration_swap_switch_pkw_is_enabled: L,
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.swap.switch.pkw.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_swap_switch_pkw_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_sweep: L, I_blockchain_app_configuration_sweep {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.sweep", comment: "") }
+}
+public protocol I_blockchain_app_configuration_sweep: I {}
+public extension I_blockchain_app_configuration_sweep {
+	var `is`: L_blockchain_app_configuration_sweep_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_sweep_is: L, I_blockchain_app_configuration_sweep_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.sweep.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_sweep_is: I {}
+public extension I_blockchain_app_configuration_sweep_is {
+	var `enabled`: L_blockchain_app_configuration_sweep_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_sweep_is_enabled: L, I_blockchain_app_configuration_sweep_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.sweep.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_sweep_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_tabs: L, I_blockchain_app_configuration_tabs {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.tabs", comment: "") }
 }
@@ -4571,6 +4590,7 @@ public extension I_blockchain_ui_device {
 	var `locale`: L_blockchain_ui_device_locale { .init("\(__).locale") }
 	var `os`: L_blockchain_ui_device_os { .init("\(__).os") }
 	var `settings`: L_blockchain_ui_device_settings { .init("\(__).settings") }
+	var `sweep`: L_blockchain_ui_device_sweep { .init("\(__).sweep") }
 }
 public final class L_blockchain_ui_device_apns: L, I_blockchain_ui_device_apns {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.device.apns", comment: "") }
@@ -4800,6 +4820,31 @@ public final class L_blockchain_ui_device_settings_interface_style_light: L, I_b
 	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.interface.style.light", comment: "") }
 }
 public protocol I_blockchain_ui_device_settings_interface_style_light: I {}
+public final class L_blockchain_ui_device_sweep: L, I_blockchain_ui_device_sweep {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.sweep", comment: "") }
+}
+public protocol I_blockchain_ui_device_sweep: I {}
+public extension I_blockchain_ui_device_sweep {
+	var `did`: L_blockchain_ui_device_sweep_did { .init("\(__).did") }
+}
+public final class L_blockchain_ui_device_sweep_did: L, I_blockchain_ui_device_sweep_did {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.sweep.did", comment: "") }
+}
+public protocol I_blockchain_ui_device_sweep_did: I {}
+public extension I_blockchain_ui_device_sweep_did {
+	var `show`: L_blockchain_ui_device_sweep_did_show { .init("\(__).show") }
+}
+public final class L_blockchain_ui_device_sweep_did_show: L, I_blockchain_ui_device_sweep_did_show {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.sweep.did.show", comment: "") }
+}
+public protocol I_blockchain_ui_device_sweep_did_show: I {}
+public extension I_blockchain_ui_device_sweep_did_show {
+	var `message`: L_blockchain_ui_device_sweep_did_show_message { .init("\(__).message") }
+}
+public final class L_blockchain_ui_device_sweep_did_show_message: L, I_blockchain_ui_device_sweep_did_show_message {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.sweep.did.show.message", comment: "") }
+}
+public protocol I_blockchain_ui_device_sweep_did_show_message: I_blockchain_db_type_boolean, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ui_type: L, I_blockchain_ui_type {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.type", comment: "") }
 }
@@ -7052,6 +7097,7 @@ public extension I_blockchain_ux {
 	var `referral`: L_blockchain_ux_referral { .init("\(__).referral") }
 	var `scan`: L_blockchain_ux_scan { .init("\(__).scan") }
 	var `settings`: L_blockchain_ux_settings { .init("\(__).settings") }
+	var `sweep`: L_blockchain_ux_sweep { .init("\(__).sweep") }
 	var `switcher`: L_blockchain_ux_switcher { .init("\(__).switcher") }
 	var `tooltip`: L_blockchain_ux_tooltip { .init("\(__).tooltip") }
 	var `top`: L_blockchain_ux_top { .init("\(__).top") }
@@ -10958,6 +11004,98 @@ public final class L_blockchain_ux_settings_theme_settings: L, I_blockchain_ux_s
 	public override class var localized: String { NSLocalizedString("blockchain.ux.settings.theme.settings", comment: "") }
 }
 public protocol I_blockchain_ux_settings_theme_settings: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_sweep: L, I_blockchain_ux_sweep {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep", comment: "") }
+}
+public protocol I_blockchain_ux_sweep: I {}
+public extension I_blockchain_ux_sweep {
+	var `imported`: L_blockchain_ux_sweep_imported { .init("\(__).imported") }
+}
+public final class L_blockchain_ux_sweep_imported: L, I_blockchain_ux_sweep_imported {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported: I {}
+public extension I_blockchain_ux_sweep_imported {
+	var `addresses`: L_blockchain_ux_sweep_imported_addresses { .init("\(__).addresses") }
+}
+public final class L_blockchain_ux_sweep_imported_addresses: L, I_blockchain_ux_sweep_imported_addresses {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses: I {}
+public extension I_blockchain_ux_sweep_imported_addresses {
+	var `no`: L_blockchain_ux_sweep_imported_addresses_no { .init("\(__).no") }
+	var `swept`: L_blockchain_ux_sweep_imported_addresses_swept { .init("\(__).swept") }
+	var `transfer`: L_blockchain_ux_sweep_imported_addresses_transfer { .init("\(__).transfer") }
+}
+public final class L_blockchain_ux_sweep_imported_addresses_no: L, I_blockchain_ux_sweep_imported_addresses_no {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.no", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_no: I {}
+public extension I_blockchain_ux_sweep_imported_addresses_no {
+	var `action`: L_blockchain_ux_sweep_imported_addresses_no_action { .init("\(__).action") }
+}
+public final class L_blockchain_ux_sweep_imported_addresses_no_action: L, I_blockchain_ux_sweep_imported_addresses_no_action {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.no.action", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_no_action: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_sweep_imported_addresses_no_action {
+	var `has`: L_blockchain_ux_sweep_imported_addresses_no_action_has { .init("\(__).has") }
+}
+public final class L_blockchain_ux_sweep_imported_addresses_no_action_has: L, I_blockchain_ux_sweep_imported_addresses_no_action_has {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.no.action.has", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_no_action_has: I {}
+public extension I_blockchain_ux_sweep_imported_addresses_no_action_has {
+	var `seen`: L_blockchain_ux_sweep_imported_addresses_no_action_has_seen { .init("\(__).seen") }
+}
+public final class L_blockchain_ux_sweep_imported_addresses_no_action_has_seen: L, I_blockchain_ux_sweep_imported_addresses_no_action_has_seen {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.no.action.has.seen", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_no_action_has_seen: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
+public final class L_blockchain_ux_sweep_imported_addresses_swept: L, I_blockchain_ux_sweep_imported_addresses_swept {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.swept", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_swept: I {}
+public extension I_blockchain_ux_sweep_imported_addresses_swept {
+	var `addresses`: L_blockchain_ux_sweep_imported_addresses_swept_addresses { .init("\(__).addresses") }
+	var `last`: L_blockchain_ux_sweep_imported_addresses_swept_last { .init("\(__).last") }
+}
+public final class L_blockchain_ux_sweep_imported_addresses_swept_addresses: L, I_blockchain_ux_sweep_imported_addresses_swept_addresses {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.swept.addresses", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_swept_addresses: I_blockchain_db_type_array_of_strings, I_blockchain_session_state_preference_value {}
+public final class L_blockchain_ux_sweep_imported_addresses_swept_last: L, I_blockchain_ux_sweep_imported_addresses_swept_last {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.swept.last", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_swept_last: I {}
+public extension I_blockchain_ux_sweep_imported_addresses_swept_last {
+	var `update`: L_blockchain_ux_sweep_imported_addresses_swept_last_update { .init("\(__).update") }
+}
+public final class L_blockchain_ux_sweep_imported_addresses_swept_last_update: L, I_blockchain_ux_sweep_imported_addresses_swept_last_update {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.swept.last.update", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_swept_last_update: I_blockchain_db_type_date, I_blockchain_session_state_preference_value {}
+public final class L_blockchain_ux_sweep_imported_addresses_transfer: L, I_blockchain_ux_sweep_imported_addresses_transfer {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.transfer", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_transfer: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_sweep_imported_addresses_transfer {
+	var `failure`: L_blockchain_ux_sweep_imported_addresses_transfer_failure { .init("\(__).failure") }
+	var `perform`: L_blockchain_ux_sweep_imported_addresses_transfer_perform { .init("\(__).perform") }
+	var `success`: L_blockchain_ux_sweep_imported_addresses_transfer_success { .init("\(__).success") }
+}
+public final class L_blockchain_ux_sweep_imported_addresses_transfer_failure: L, I_blockchain_ux_sweep_imported_addresses_transfer_failure {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.transfer.failure", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_transfer_failure: I {}
+public final class L_blockchain_ux_sweep_imported_addresses_transfer_perform: L, I_blockchain_ux_sweep_imported_addresses_transfer_perform {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.transfer.perform", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_transfer_perform: I {}
+public final class L_blockchain_ux_sweep_imported_addresses_transfer_success: L, I_blockchain_ux_sweep_imported_addresses_transfer_success {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.transfer.success", comment: "") }
+}
+public protocol I_blockchain_ux_sweep_imported_addresses_transfer_success: I {}
 public final class L_blockchain_ux_switcher: L, I_blockchain_ux_switcher {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.switcher", comment: "") }
 }

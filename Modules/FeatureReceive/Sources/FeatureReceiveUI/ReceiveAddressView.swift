@@ -293,7 +293,7 @@ extension ReceiveAddressView {
         func prepare(app: AppProtocol, context: Tag.Context) {
 
             app.publisher(
-                for: blockchain.coin.core.account.receive.address[].ref(to: context, in: app),
+                for: blockchain.coin.core.account.receive[].ref(to: context, in: app),
                 as: L_blockchain_coin_core_account_receive.JSON.self
             )
             .zip(app.publisher(for: blockchain.coin.core.account[].ref(to: context, in: app), as: L_blockchain_coin_core_account.JSON.self))
@@ -314,7 +314,7 @@ extension ReceiveAddressView {
             .assign(to: &$domain)
 
             app.publisher(
-                for: blockchain.coin.core.account.receive.address[].ref(to: context, in: app),
+                for: blockchain.coin.core.account.receive[].ref(to: context, in: app),
                 as: L_blockchain_coin_core_account_receive.JSON.self
             )
             .map(\.value)
@@ -328,7 +328,7 @@ extension ReceiveAddressView {
             .assign(to: &$qrCode)
 
             app.publisher(
-                for: blockchain.coin.core.account.receive.address[].ref(to: context, in: app),
+                for: blockchain.coin.core.account.receive[].ref(to: context, in: app),
                 as: L_blockchain_coin_core_account_receive.JSON.self
             )
             .map(\.value)

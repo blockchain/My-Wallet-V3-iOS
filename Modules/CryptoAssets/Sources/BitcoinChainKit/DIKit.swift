@@ -129,6 +129,36 @@ extension DependencyContainer {
                 fetchMultiAddressFor: DIKit.resolve(tag: BitcoinChainCoin.bitcoin)
             )
         }
+
+        // MARK: - Sweep Imported Addresses
+
+        single { () -> SweepImportedAddressesRepositoryAPI in
+            SweepImportedAddressesRepository(app: DIKit.resolve())
+        }
+
+        single { () -> SweepImportedAddressesServiceAPI in
+            let coincore: CoincoreAPI = DIKit.resolve()
+            let btcCandidateProvider = TransactionCandidateProvider<BitcoinToken>(buildService: DIKit.resolve(tag: BitcoinChainCoin.bitcoin))
+            let bchCandidateProvider = TransactionCandidateProvider<BitcoinCashToken>(buildService: DIKit.resolve(tag: BitcoinChainCoin.bitcoinCash))
+            let defaultAccountProvider = defaultAccountProvider(coincore: coincore)
+            let importedAddressesProvider = importedAddressesProvider(
+                coincore: coincore,
+                btcCandidateProvider: btcCandidateProvider,
+                bchCandidateProvider: bchCandidateProvider,
+                dispatchQueue: DispatchQueue(label: "addresses.provider", qos: .default),
+                defaultAccountProvider: defaultAccountProvider
+            )
+            return SweepImportedAddressesService(
+                sweptBalancesRepository: DIKit.resolve(),
+                btcAddressProvider: DIKit.resolve(tag: BitcoinChainCoin.bitcoin),
+                bchAddressProvider: DIKit.resolve(tag: BitcoinChainCoin.bitcoinCash),
+                btcFetchMultiAddrFor: DIKit.resolve(tag: BitcoinChainCoin.bitcoin),
+                bchFetchMultiAddrFor: DIKit.resolve(tag: BitcoinChainCoin.bitcoinCash),
+                importedAddresses: importedAddressesProvider,
+                defaultAccount: defaultAccountProvider,
+                doPerformSweep: doPerformSweep
+            )
+        }
     }
 }
 

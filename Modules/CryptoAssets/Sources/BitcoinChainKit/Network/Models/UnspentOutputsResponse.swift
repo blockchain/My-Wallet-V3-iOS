@@ -18,7 +18,7 @@ public struct UnspentOutputResponse: Codable {
         public let path: String
     }
 
-    public let confirmations: UInt
+    public let confirmations: UInt?
     public let replayable: Bool?
     public let script: String
     public let tx_hash: String
@@ -27,5 +27,5 @@ public struct UnspentOutputResponse: Codable {
     public let tx_output_n: Int
     public let value: Int
     public let value_hex: String
-    public let xpub: XPub
+    public let xpub: XPub?
 }

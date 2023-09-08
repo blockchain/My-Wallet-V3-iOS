@@ -13,7 +13,7 @@ struct ReceiveAddressContext {
 func receiveAddressContext(
     for addresses: [AddressItem],
     coin: BitcoinChainCoin,
-    context: AccountKeyContext
+    context: AccountKeyContextProtocol
 ) -> ReceiveAddressContext {
     let receiveIndex: UInt32 = {
         let defaultAddress = addresses.first(where: {
@@ -37,7 +37,7 @@ func receiveAddressContext(
 }
 
 func deriveReceiveAddress(
-    context: AccountKeyContext,
+    context: AccountKeyContextProtocol,
     coin: BitcoinChainCoin,
     receiveIndex: UInt32
 ) -> String {

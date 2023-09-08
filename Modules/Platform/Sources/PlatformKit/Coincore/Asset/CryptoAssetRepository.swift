@@ -13,6 +13,8 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
 
     public typealias NonCustodialAccountsProvider = () -> AnyPublisher<[SingleAccount], CryptoAssetError>
 
+    public typealias ImportedAddressesAccountsProvider = () -> AnyPublisher<[SingleAccount], CryptoAssetError>
+
     public typealias ExchangeAccountProvider = () -> AnyPublisher<CryptoExchangeAccount?, Never>
 
     // MARK: - Properties
@@ -41,6 +43,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     private let errorRecorder: ErrorRecording
     private let kycTiersService: KYCTiersServiceAPI
     private let nonCustodialAccountsProvider: NonCustodialAccountsProvider
+    private let importedAddressesAccountsProvider: ImportedAddressesAccountsProvider?
     private let exchangeAccountsProvider: ExchangeAccountsProviderAPI
     private let addressFactory: ExternalAssetAddressFactory
 
@@ -52,6 +55,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         errorRecorder: ErrorRecording,
         kycTiersService: KYCTiersServiceAPI,
         nonCustodialAccountsProvider: @escaping NonCustodialAccountsProvider,
+        importedAddressesAccountsProvider: ImportedAddressesAccountsProvider? = nil,
         exchangeAccountsProvider: ExchangeAccountsProviderAPI,
         addressFactory: ExternalAssetAddressFactory
     ) {
@@ -60,6 +64,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         self.errorRecorder = errorRecorder
         self.kycTiersService = kycTiersService
         self.nonCustodialAccountsProvider = nonCustodialAccountsProvider
+        self.importedAddressesAccountsProvider = importedAddressesAccountsProvider
         self.exchangeAccountsProvider = exchangeAccountsProvider
         self.addressFactory = addressFactory
     }
@@ -76,6 +81,14 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
 
                 if filter.contains(.nonCustodial) {
                     let publisher: AnyPublisher<[SingleAccount], Never> = nonCustodialAccountsProvider()
+                        .recordErrors(on: errorRecorder)
+                        .replaceError(with: [])
+                        .eraseToAnyPublisher()
+                    stream.append(publisher)
+                }
+
+                if filter.contains(.nonCustodialImported), let importedAddressesAccountsProvider {
+                    let publisher: AnyPublisher<[SingleAccount], Never> = importedAddressesAccountsProvider()
                         .recordErrors(on: errorRecorder)
                         .replaceError(with: [])
                         .eraseToAnyPublisher()

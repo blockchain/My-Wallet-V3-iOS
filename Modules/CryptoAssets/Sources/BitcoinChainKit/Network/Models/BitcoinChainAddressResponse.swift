@@ -3,9 +3,9 @@
 import Foundation
 
 public struct BitcoinChainAddressResponse: Decodable, Equatable {
-    public let accountIndex: Int
+    public let accountIndex: Int?
     public let address: String
-    public let changeIndex: Int
+    public let changeIndex: Int?
     public let finalBalance: Int
     public let nTx: Int
     public let totalReceived: Int

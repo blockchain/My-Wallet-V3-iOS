@@ -83,6 +83,7 @@ extension AppProtocol {
         clientObservers.insert(SimpleBuyPairsNAPIRepository(self))
         clientObservers.insert(WalletConnectPairingsObserver(app: self))
         clientObservers.insert(LaunchKYCClientObserver())
+        clientObservers.insert(SweepAddressesObserver(app: self))
         clientObservers.insert(ResubmitResidentialInformation())
 
         let intercom = (

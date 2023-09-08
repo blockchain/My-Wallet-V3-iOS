@@ -26,6 +26,7 @@ struct SettingsResponse {
     let authenticator: Int
     let countryCode: String
     let invited: [Feature: Bool]
+    let recommendImportedSweep: Bool
 }
 
 extension SettingsResponse: Decodable {
@@ -43,6 +44,7 @@ extension SettingsResponse: Decodable {
         case authenticator = "auth_type"
         case countryCode = "country_code"
         case notifications = "notifications_type"
+        case recommendImportedSweep = "recommend_imported_sweep"
         case invited
     }
 
@@ -61,6 +63,7 @@ extension SettingsResponse: Decodable {
         self.countryCode = try values.decode(String.self, forKey: .countryCode)
         let notifications = try values.decode([Int].self, forKey: .notifications)
         self.emailNotificationsEnabled = notifications.contains(1)
+        self.recommendImportedSweep = try values.decodeIfPresent(Bool.self, forKey: .recommendImportedSweep) ?? false
         self.invited = try values
             .decode([String: Bool].self, forKey: .invited)
             .reduce(into: [Feature: Bool]()) { result, this in

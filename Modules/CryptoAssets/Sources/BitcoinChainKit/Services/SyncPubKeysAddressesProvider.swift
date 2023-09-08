@@ -55,7 +55,7 @@ final class SyncPubKeysAddressesProvider: SyncPubKeysAddressesProviderAPI {
                     mnemonicProvider: mnemonicProvider(mnemonic: mnemonic),
                     fetchMultiAddressFor: fetchMultiAddressFor
                 )
-                .map { context, receivedIndex -> (AccountKeyContext, Range<UInt32>) in
+                .map { context, receivedIndex -> (AccountKeyContextProtocol, Range<UInt32>) in
                     let receiveIndexRange: Range<UInt32> = receivedIndex..<(receivedIndex + lookupAheadCount)
                     return (context, receiveIndexRange)
                 }
@@ -95,14 +95,13 @@ private func receiveIndex(
     coin: BitcoinChainCoin,
     mnemonicProvider: @escaping WalletMnemonicProvider,
     fetchMultiAddressFor: @escaping FetchMultiAddressFor
-) -> AnyPublisher<(AccountKeyContext, UInt32), SyncPubKeysAddressesProviderError> {
+) -> AnyPublisher<(AccountKeyContextProtocol, UInt32), SyncPubKeysAddressesProviderError> {
     let bitcoinChainAccount = BitcoinChainAccount(index: Int32(account.index), coin: coin)
     return getAccountKeys(
         for: bitcoinChainAccount,
         walletMnemonicProvider: mnemonicProvider
     )
-    .flatMap { [fetchMultiAddressFor] context
-        -> AnyPublisher<(AccountKeyContext, UInt32), Error> in
+    .flatMap { [fetchMultiAddressFor] context -> AnyPublisher<(AccountKeyContextProtocol, UInt32), Error> in
         let xpubs = context.xpubs
         let multiAddressPublisher = getMultiAddress(
             xpubs: xpubs,

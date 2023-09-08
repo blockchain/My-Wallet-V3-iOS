@@ -491,7 +491,7 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.account.receive.address,
+            domain: blockchain.coin.core.account.receive,
             repository: { tag in
                 do {
                     return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in

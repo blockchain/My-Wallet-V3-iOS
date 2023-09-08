@@ -38,6 +38,9 @@ final class BitcoinAsset: CryptoAsset, SubscriptionEntriesAsset {
         nonCustodialAccountsProvider: { [nonCustodialAccounts] in
             nonCustodialAccounts
         },
+        importedAddressesAccountsProvider: { [importedAddresses] in
+            importedAddresses
+        },
         exchangeAccountsProvider: exchangeAccountProvider,
         addressFactory: addressFactory
     )
@@ -102,7 +105,7 @@ final class BitcoinAsset: CryptoAsset, SubscriptionEntriesAsset {
                             name: account.label
                         ),
                         currency: asset.code,
-                        pubKeys: account.publicKeys.xpubs.map { xpub -> SubscriptionEntry.PubKey in
+                        pubKeys: account.xpubs.map { xpub -> SubscriptionEntry.PubKey in
                             SubscriptionEntry.PubKey(
                                 pubKey: xpub.address,
                                 style: "EXTENDED",
@@ -139,7 +142,22 @@ final class BitcoinAsset: CryptoAsset, SubscriptionEntriesAsset {
                 activeAccounts.map { account in
                     BitcoinCryptoAccount(
                         walletAccount: account,
-                        isDefault: account.publicKeys.default == defaultAccount.publicKeys.default
+                        isDefault: account.defaultXPub == defaultAccount.defaultXPub
+                    )
+                }
+            }
+            .recordErrors(on: errorRecorder)
+            .replaceError(with: CryptoAssetError.noDefaultAccount)
+            .eraseToAnyPublisher()
+    }
+
+    private var importedAddresses: AnyPublisher<[SingleAccount], CryptoAssetError> {
+        repository.importedAccounts
+            .map { accounts -> [SingleAccount] in
+                accounts.map { account in
+                    BitcoinCryptoAccount(
+                        walletAccount: account,
+                        isDefault: false
                     )
                 }
             }

@@ -51,7 +51,7 @@ final class BitcoinChainReceiveAddressProvider<Token: BitcoinChainToken>: Bitcoi
             .receive(on: operationQueue)
             .flatMap { [mnemonicProvider, unspentOutputRepository, fetchMultiAddressFor] _ in
                 getTransactionContext(
-                    for: BitcoinChainAccount(index: Int32(accountIndex), coin: Token.coin),
+                    for: BitcoinChainAccount(index: Int32(accountIndex), coin: Token.coin, isImported: false),
                     transactionContextFor: getTransactionContextProvider(
                         walletMnemonicProvider: mnemonicProvider,
                         fetchUnspentOutputsFor: unspentOutputRepository.unspentOutputs(for:),
@@ -78,7 +78,7 @@ final class BitcoinChainReceiveAddressProvider<Token: BitcoinChainToken>: Bitcoi
             .receive(on: operationQueue)
             .flatMap { [mnemonicProvider] in
                 getAccountKeys(
-                    for: BitcoinChainAccount(index: Int32(accountIndex), coin: Token.coin),
+                    for: BitcoinChainAccount(index: Int32(accountIndex), coin: Token.coin, isImported: false),
                     walletMnemonicProvider: mnemonicProvider
                 )
             }

@@ -7,7 +7,7 @@ import WalletCore
 
 func getMultiAddress(
     xpubs: [XPub],
-    fetchMultiAddressFor: FetchMultiAddressFor
+    fetchMultiAddressFor: @escaping FetchMultiAddressFor
 ) -> AnyPublisher<[AddressItem], Error> {
     fetchMultiAddressFor(xpubs)
         .map(\.addresses)
@@ -28,7 +28,7 @@ extension AddressItem {
 
     init(response: BitcoinChainAddressResponse) {
         self.xpub = response.address
-        self.accountIndex = response.accountIndex
-        self.changeIndex = response.changeIndex
+        self.accountIndex = response.accountIndex ?? 0 // Default to 0 when dealing with legacy addresses
+        self.changeIndex = response.changeIndex ?? 0
     }
 }

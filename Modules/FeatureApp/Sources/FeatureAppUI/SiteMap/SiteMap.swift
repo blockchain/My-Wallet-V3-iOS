@@ -130,7 +130,7 @@ public struct SiteMap {
             .identity(blockchain.ux.scan.QR)
             .ignoresSafeArea()
         case blockchain.ux.currency.receive.select.asset:
-            ReceiveEntryView()
+              ReceiveEntryView()
                 .app(app)
         case blockchain.ux.currency.receive.address:
             ReceiveAddressView()
@@ -190,6 +190,12 @@ public struct SiteMap {
             try FeatureCustodialOnboarding.SiteMap().view(for: ref, in: context)
         case blockchain.ux.onboarding.notification.authorization.display, isDescendant(of: blockchain.ux.onboarding.notification.authorization.display):
             RemoteNotificationAuthorizationView()
+        case blockchain.ux.sweep.imported.addresses.transfer:
+            SweepImportedAddressesView()
+                .app(app)
+        case blockchain.ux.sweep.imported.addresses.no.action:
+            SweepImportedAddressesNoActionView()
+                .app(app)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

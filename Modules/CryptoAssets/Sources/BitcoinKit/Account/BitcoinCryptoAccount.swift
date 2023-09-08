@@ -5,6 +5,7 @@ import BlockchainNamespace
 import Combine
 import DelegatedSelfCustodyDomain
 import DIKit
+import Errors
 import Localization
 import MoneyKit
 import PlatformKit
@@ -21,6 +22,8 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
     let asset: CryptoCurrency = .bitcoin
     let isDefault: Bool
     let hdAccountIndex: Int
+    let isImported: Bool
+    let importedPrivateKey: String?
 
     func createTransactionEngine() -> Any {
         BitcoinOnChainTransactionEngineFactory<BitcoinToken>()
@@ -35,39 +38,57 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
-        balanceRepository
-            .balances
-            .map { [asset, hdAccountIndex] balances in
-                balances.balance(
-                    index: hdAccountIndex,
-                    currency: asset
-                ) ?? MoneyValue.zero(currency: asset)
-            }
-            .eraseToAnyPublisher()
+        if isImported {
+            return importedAddressBalance()
+        } else {
+            return balanceRepository
+                .balances
+                .map { [asset, hdAccountIndex] balances in
+                    balances.balance(
+                        index: hdAccountIndex,
+                        currency: asset
+                    ) ?? MoneyValue.zero(currency: asset)
+                }
+                .eraseToAnyPublisher()
+        }
     }
 
     var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
-        receiveAddressProvider.receiveAddressProvider(UInt32(hdAccountIndex))
-            .map { [label, onTxCompleted] receiveAddress -> ReceiveAddress in
+        if !isImported {
+            return receiveAddressProvider.receiveAddressProvider(UInt32(hdAccountIndex))
+                .map { [label, onTxCompleted] receiveAddress -> ReceiveAddress in
+                    BitcoinChainReceiveAddress<BitcoinToken>(
+                        address: receiveAddress,
+                        label: label,
+                        onTxCompleted: onTxCompleted
+                    )
+                }
+                .eraseToAnyPublisher()
+        } else {
+            return .just(
                 BitcoinChainReceiveAddress<BitcoinToken>(
-                    address: receiveAddress,
+                    address: xPub.address,
                     label: label,
                     onTxCompleted: onTxCompleted
                 )
-            }
-            .eraseToAnyPublisher()
+            )
+        }
     }
 
     var firstReceiveAddress: AnyPublisher<ReceiveAddress, Error> {
-        receiveAddressProvider.firstReceiveAddressProvider(UInt32(hdAccountIndex))
-            .map { [label, onTxCompleted] receiveAddress -> ReceiveAddress in
-                BitcoinChainReceiveAddress<BitcoinToken>(
-                    address: receiveAddress,
-                    label: label,
-                    onTxCompleted: onTxCompleted
-                )
-            }
-            .eraseToAnyPublisher()
+        if !isImported {
+            return receiveAddressProvider.firstReceiveAddressProvider(UInt32(hdAccountIndex))
+                .map { [label, onTxCompleted] receiveAddress -> ReceiveAddress in
+                    BitcoinChainReceiveAddress<BitcoinToken>(
+                        address: receiveAddress,
+                        label: label,
+                        onTxCompleted: onTxCompleted
+                    )
+                }
+                .eraseToAnyPublisher()
+        } else {
+            return receiveAddress
+        }
     }
 
     private var isInterestTransferAvailable: AnyPublisher<Bool, Never> {
@@ -85,6 +106,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
     private let walletAccount: BitcoinWalletAccount
     private let receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
+    private let multiAddrFetcher: FetchMultiAddressFor
 
     init(
         walletAccount: BitcoinWalletAccount,
@@ -92,23 +114,35 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
         app: AppProtocol = resolve(),
         priceService: PriceServiceAPI = resolve(),
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
+        multiAddrFetcher: @escaping FetchMultiAddressFor = resolve(tag: BitcoinChainCoin.bitcoin),
         receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI = resolve(
             tag: BitcoinChainKit.BitcoinChainCoin.bitcoin
         )
     ) {
-        self.xPub = walletAccount.publicKeys.default
+        self.xPub = walletAccount.defaultXPub
         self.hdAccountIndex = walletAccount.index
         self.label = walletAccount.label
         self.assetName = CryptoCurrency.bitcoin.assetModel.name
         self.isDefault = isDefault
+        self.isImported = walletAccount.imported
+        self.importedPrivateKey = walletAccount.importedPrivateKey
         self.priceService = priceService
         self.walletAccount = walletAccount
         self.receiveAddressProvider = receiveAddressProvider
         self.app = app
         self.balanceRepository = balanceRepository
+        self.multiAddrFetcher = multiAddrFetcher
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
+        if isImported {
+            return .just(false)
+        } else {
+            return accountCan(perform: action)
+        }
+    }
+
+    private func accountCan(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .receive,
              .send,
@@ -161,6 +195,26 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
             fiatCurrency: fiatCurrency,
             at: time
         )
+    }
+
+    private func importedAddressBalance() -> AnyPublisher<MoneyValue, Error> {
+        multiAddrFetcher([xPub])
+            .eraseError()
+            .map { [asset] response in
+                response.addresses
+                    .map { address in
+                        MoneyValue(cryptoValue:
+                            CryptoValue.create(
+                                minor: address.finalBalance,
+                                currency: asset
+                            )
+                        )
+                    }
+            }
+            .map { [asset] values in
+                values.first ?? .zero(currency: asset)
+            }
+            .eraseToAnyPublisher()
     }
 
     func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {

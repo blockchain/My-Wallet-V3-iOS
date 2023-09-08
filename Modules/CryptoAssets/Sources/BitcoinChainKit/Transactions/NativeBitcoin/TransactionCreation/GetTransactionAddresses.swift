@@ -55,7 +55,7 @@ func getTransactionAddresses(
 }
 
 private func deriveChangeAddress(
-    context: AccountKeyContext,
+    context: AccountKeyContextProtocol,
     coin: BitcoinChainCoin,
     changeIndex: UInt32
 ) -> String {

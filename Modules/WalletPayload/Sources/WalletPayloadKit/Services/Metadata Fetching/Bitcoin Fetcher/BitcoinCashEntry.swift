@@ -2,6 +2,7 @@
 
 import Foundation
 import Localization
+import MetadataHDWalletKit
 import MetadataKit
 
 /// An entry model that contains information on constructing BitcoinCash wallet account
@@ -18,8 +19,16 @@ public struct BitcoinCashEntry: Equatable {
         }
     }
 
+    public struct ImportedAddress: Equatable {
+        public let addr: String
+        public let priv: String?
+        public let archived: Bool
+        public let label: String?
+    }
+
     public let payload: BitcoinCashEntryPayload
     public let accounts: [AccountEntry]
+    public let importedAddress: [ImportedAddress]
     public let txNotes: [String: String]?
 
     public var defaultAccount: AccountEntry {
@@ -30,11 +39,13 @@ public struct BitcoinCashEntry: Equatable {
     public init(
         payload: BitcoinCashEntryPayload,
         accounts: [AccountEntry],
+        importedAddress: [ImportedAddress],
         txNotes: [String: String]?
     ) {
         self.payload = payload
         self.accounts = accounts
         self.txNotes = txNotes
+        self.importedAddress = importedAddress
     }
 
     init(
@@ -57,6 +68,20 @@ public struct BitcoinCashEntry: Equatable {
                     label: accountData?.label,
                     derivationType: .legacy,
                     archived: accountData?.archived ?? false
+                )
+            }
+
+        self.importedAddress = wallet.addresses
+            .compactMap { address in
+                guard let cashAddress = try? LegacyAddress.init(address.addr, coin: .bitcoinCash).cashaddr else {
+                    return nil
+                }
+                let sanitizedAddress = cashAddress.replacingOccurrences(of: "bitcoincash:", with: "")
+                return ImportedAddress(
+                    addr: sanitizedAddress,
+                    priv: address.priv,
+                    archived: address.isArchived,
+                    label: address.label
                 )
             }
     }
