@@ -30,7 +30,6 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     }
 
     private(set) var oldValue: Property?
-    var isInTransaction: Bool { app?.isInTransaction ?? false }
 
     public init(
         app: AppProtocol?,
@@ -59,7 +58,7 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
         switch try decoder.decodeWithComputes(Property.self, from: any) {
         case .ready(let value):
             guard decoder.isComputing else { return handle(.value(value, result.metadata)) }
-            if isInTransaction || value == oldValue { return }
+            if value == oldValue { return }
             oldValue = value
             handle(.value(value, result.metadata))
         case .computes(let computes):
@@ -76,7 +75,6 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
                 Check for infinite recursion
 
                 \(result)
-                
                 """
             )
             defer { app?.post(error: error) }

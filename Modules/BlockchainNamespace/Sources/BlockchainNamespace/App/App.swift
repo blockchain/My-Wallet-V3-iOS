@@ -35,8 +35,6 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
     var clientObservers: Client.Observers { get }
     var sessionObservers: Session.Observers { get }
 
-    var isInTransaction: Bool { get }
-
     func register(
         napi root: I_blockchain_namespace_napi,
         domain: L,
@@ -240,14 +238,7 @@ public class App: AppProtocol {
     }
 }
 
-var _lock: NSRecursiveLock = NSRecursiveLock()
-var _isInTransaction: DefaultingDictionary<ObjectIdentifier, Bool> = [:].defaulting(to: false)
-
 extension AppProtocol {
-
-    public var isInTransaction: Bool {
-        state.data.isInTransaction || _lock.withLock { _isInTransaction[ObjectIdentifier(self)] }
-    }
 
     public func signIn(userId: String) {
         post(event: blockchain.session.event.will.sign.in)
@@ -636,8 +627,6 @@ extension AppProtocol {
 
     @discardableResult
     public func transaction(_ body: (Self) async throws -> Void) async rethrows -> Self {
-        _lock.withLock { _isInTransaction[ObjectIdentifier(self)] = true }
-        defer { _lock.withLock { _isInTransaction[ObjectIdentifier(self)] = false } }
         try await local.transaction { _ in
             try await body(self)
         }
