@@ -9,7 +9,7 @@ public struct EarnDashboardView: View {
 
     @BlockchainApp var app
     @Environment(\.context) var context
-    @State var selected: Tag = blockchain.ux.earn.portfolio[]
+    @State var selected: Tag = blockchain.ux.earn.discover[]
     @State var showIntro: Bool = false
     @State var showCompare: Bool = false
     @StateObject private var object = Object()
@@ -27,9 +27,8 @@ public struct EarnDashboardView: View {
                     )
                     .padding([.top, .leading, .trailing])
                     .zIndex(1)
-                    .disabled(!object.hasBalance)
+                    .disabled(!(object.totalBalance?.isPositive ?? false))
                     .transition(.opacity)
-
     #if os(iOS)
                     TabView(selection: $selected) {
                         content
@@ -64,8 +63,8 @@ public struct EarnDashboardView: View {
                 object.fetch(app: app)
                 showIntro = !((try? app.state.get(blockchain.ux.earn.intro.did.show)) ?? false)
             }
-            .onChange(of: object.hasBalance) { hasBalance in
-                selected = hasBalance ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
+            .onChange(of: object.totalBalance) { balance in
+                selected = (balance?.isPositive ?? false) ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
             }
             .sheet(isPresented: $showIntro, content: {
                 EarnIntroView(
@@ -102,7 +101,7 @@ public struct EarnDashboardView: View {
     }
 
     @ViewBuilder var content: some View {
-        if object.hasBalance, object.model.isNotNilOrEmpty {
+        if (object.totalBalance?.isPositive ?? false), object.model.isNotNilOrEmpty {
             EarnListView(
                 hub: blockchain.ux.earn.portfolio,
                 model: object.model,
@@ -207,7 +206,6 @@ extension EarnDashboardView {
 
         @Published var model: [Model]?
         @Published var products: [EarnProduct] = [.savings, .staking]
-        @Published var hasBalance: Bool = true
         @Published var totalBalance: MoneyValue?
 
         func fetch(app: AppProtocol) {
@@ -303,12 +301,6 @@ extension EarnDashboardView {
                         .eraseToAnyPublisher()
             }
 
-            func hasBalance(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Bool, Never> {
-                balance(product, asset)
-                    .map(\.isPositive)
-                    .eraseToAnyPublisher()
-            }
-
             func totalBalance(for product: EarnProduct) -> AnyPublisher<MoneyValue?, Never> {
                 app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
                     .replaceError(with: [])
@@ -326,25 +318,6 @@ extension EarnDashboardView {
                     .prepend(nil)
                     .eraseToAnyPublisher()
             }
-
-            products.flatMap { products -> AnyPublisher<Bool, Never> in
-                products.map { product in
-                    app.publisher(for: blockchain.user.earn.product[product.value].all.assets, as: [CryptoCurrency].self)
-                        .replaceError(with: [])
-                        .flatMap { assets -> AnyPublisher<Bool, Never> in
-                            assets.map { asset -> AnyPublisher<Bool, Never> in hasBalance(product, asset) }
-                                .combineLatest()
-                                .map { balances in balances.contains(true) }
-                                .eraseToAnyPublisher()
-                        }
-                        .eraseToAnyPublisher()
-                }
-                .combineLatest()
-                .map { balances in balances.contains(true) }
-                .eraseToAnyPublisher()
-            }
-            .receive(on: DispatchQueue.main.animation())
-            .assign(to: &$hasBalance)
 
             products
                 .flatMap { products -> AnyPublisher<MoneyValue?, Never> in
