@@ -81,6 +81,7 @@ struct ExternalTradingDashboardView: View {
         }
         .onAppear {
             onboarding.request()
+            $app.post(event: blockchain.ux.home.dashboard)
         }
     }
 

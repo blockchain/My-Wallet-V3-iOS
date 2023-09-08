@@ -158,9 +158,13 @@ extension SuperAppRootController {
             .filter(\.self)
             .sink(to: My.handleSendCrypto, on: self)
 
-        displayPostSignUpOnboardingFlow = viewStore.publisher
-            .displayPostSignUpOnboardingFlow
-            .filter(\.self)
+        displayPostSignUpOnboardingFlow = Publishers
+            .CombineLatest(
+                app.on(blockchain.ux.home.dashboard).first(),
+                viewStore.publisher
+                    .displayPostSignUpOnboardingFlow
+                    .filter(\.self)
+            )
             .delay(for: .seconds(4), scheduler: DispatchQueue.main)
             .handleEvents(receiveOutput: { _ in
                 // reset onboarding state
