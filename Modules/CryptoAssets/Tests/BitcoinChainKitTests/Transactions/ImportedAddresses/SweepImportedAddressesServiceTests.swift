@@ -754,7 +754,7 @@ class MockFiatAsset: Asset {
         .empty()
     }
 
-    func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never> {
+    func parse(address: String, memo: String?) -> AnyPublisher<Coincore.ReceiveAddress?, Never> {
         .empty()
     }
 }
