@@ -11,7 +11,9 @@ public class CustodialOnboardingService: ObservableObject {
     @Dependency(\.app) var app
 
     public private(set) var isSynchronized: Bool = false
-    public var isFinished: Bool { isEnabled == false || purchasedCrypto || earningCrypto }
+    public var isFinished: Bool {
+        isEnabled == false || purchasedCrypto || earningCrypto
+    }
 
     lazy var bindings = app.binding(self, .async, managing: CustodialOnboardingService.on(update:))
         .subscribe(\.currency, to: blockchain.user.currency.preferred.fiat.display.currency)
@@ -23,7 +25,7 @@ public class CustodialOnboardingService: ObservableObject {
 
     @Published var currency: FiatCurrency = .USD
     @Published var verifiedEmail: Bool = false
-    @Published var purchasedCrypto: Bool = false
+    @Published var purchasedCrypto: Bool = true
     @Published var earningCrypto: Bool = false
     @Published var isEnabled: Bool = true
     @Published var state: Tag = blockchain.user.account.kyc.state.none[]
@@ -44,19 +46,13 @@ public class CustodialOnboardingService: ObservableObject {
 
     @discardableResult
     public func request() -> Bindings {
-        if BuildFlag.isInternal {
-            bindings.subscribe(\.purchasedCrypto, to: blockchain.ux.user.custodial.onboarding.dashboard.test.has.purchased.crypto)
-        }
-        return bindings.request()
+        bindings.request()
     }
 
     func on(update: Bindings.Update) {
         switch update {
         case .didSynchronize:
             isSynchronized = true
-            if BuildFlag.isInternal {
-                app.state.set(blockchain.ux.user.custodial.onboarding.dashboard.test.has.purchased.crypto, to: purchasedCrypto)
-            }
         default:
             break
         }
