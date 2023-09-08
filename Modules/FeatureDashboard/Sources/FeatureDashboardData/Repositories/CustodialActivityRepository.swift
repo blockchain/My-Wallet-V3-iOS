@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import FeatureDashboardDomain
 import ToolKit
@@ -8,7 +9,6 @@ import UnifiedActivityDomain
 final class CustodialActivityRepository: CustodialActivityRepositoryAPI {
 
     private typealias ThisCachedValue = CachedValueNew<Key, [ActivityEntry], Never>
-    private static let inDiskCacheID = "CustodialActivityRepository"
 
     enum Key: String, CustomStringConvertible {
         case custodial
@@ -22,11 +22,11 @@ final class CustodialActivityRepository: CustodialActivityRepositoryAPI {
     init(service: CustodialActivityServiceAPI) {
         self.service = service
 
-        let cache = InDiskCache<Key, [ActivityEntry]>(
-            id: Self.inDiskCacheID,
+        let cache = InMemoryCache<Key, [ActivityEntry]>(
             configuration: .onUserStateChanged(),
             refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
-        ).eraseToAnyCache()
+        )
+        .eraseToAnyCache()
 
         self.cachedValue = ThisCachedValue(
             cache: cache,
