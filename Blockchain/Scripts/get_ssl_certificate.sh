@@ -19,7 +19,7 @@ cd ${CERTIFICATE_PATH}
 
 if [ ! -f ${CERTIFICATE_PATH}/blockchain_${WALLET_SERVER}.der ]; then
     echo "Downloading certificate from ${WALLET_SERVER}:443"
-    openssl s_client -connect ${WALLET_SERVER}:443 -showcerts -CApath etc/ssl/certs/ | openssl x509 -outform DER > blockchain_${WALLET_SERVER}.der
+    openssl s_client -connect ${WALLET_SERVER}:443 -showcerts -CApath /etc/ssl/certs/ | openssl x509 -outform DER > blockchain_${WALLET_SERVER}.der
 else
     echo "Cache found for certificate from ${WALLET_SERVER}:443"
 fi
