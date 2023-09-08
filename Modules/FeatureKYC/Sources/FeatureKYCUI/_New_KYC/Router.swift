@@ -273,7 +273,7 @@ public final class Router: Routing {
             .receive(on: DispatchQueue.main)
             .mapError { _ in RouterError.kycStepFailed }
             .combineLatest(
-                app.publisher(for:  blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
+                app.publisher(for: blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
                     .replaceError(with: false)
                     .prefix(1)
                     .setFailureType(to: RouterError.self)
@@ -393,7 +393,7 @@ public final class Router: Routing {
         }
     }
 
-    private func ifEligible<E: Error>(_ publisher: AnyPublisher<FlowResult, E>, presenter: UIViewController) ->  AnyPublisher<FlowResult, E> {
+    private func ifEligible<E: Error>(_ publisher: AnyPublisher<FlowResult, E>, presenter: UIViewController) -> AnyPublisher<FlowResult, E> {
         let presentErrorClosure = presentKycDisabledView(from:)
         return app.publisher(for: blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible, as: Bool.self)
             .receive(on: DispatchQueue.main)
@@ -482,12 +482,11 @@ extension Router {
         from presenter: UIViewController
     ) -> AnyPublisher<FlowResult, Never> {
         let publisher = PassthroughSubject<FlowResult, Never>()
-        let errorView =  ErrorView(
+        let errorView = ErrorView(
             ux: UX.Error(title: L10n.GenericError.title, message: L10n.GenericError.featureIsNotAvailableMessage),
             dismiss: {
                 publisher.send(.abandoned)
                 publisher.send(completion: .finished)
-
             }
         )
 
