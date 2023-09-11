@@ -644,7 +644,8 @@ extension DependencyContainer {
 
         factory { () -> TopMoversServiceAPI in
             TopMoversService(
-                app: DIKit.resolve()
+                app: DIKit.resolve(),
+                priceRepository: DIKit.resolve()
             ) as TopMoversServiceAPI
         }
     }

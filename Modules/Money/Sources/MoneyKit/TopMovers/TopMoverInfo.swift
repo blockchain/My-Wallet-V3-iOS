@@ -3,17 +3,17 @@
 import Foundation
 
 public struct TopMoverInfo: Identifiable, Equatable {
-    public var id: String { currency?.id ?? ""}
-    public let currency: CryptoCurrency?
+    public var id: String { currency.id }
+    public let currency: CryptoCurrency
     public let delta: Decimal?
     public let lastPrice: MoneyValue
 
     public init(
-        currency: String,
+        currency: CryptoCurrency,
         delta: Decimal? = nil,
         lastPrice: MoneyValue
     ) {
-        self.currency = CryptoCurrency(code:currency)
+        self.currency = currency
         self.delta = delta
         self.lastPrice = lastPrice
     }

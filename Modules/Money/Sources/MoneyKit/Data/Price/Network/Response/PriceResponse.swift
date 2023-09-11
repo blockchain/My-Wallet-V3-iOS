@@ -91,13 +91,8 @@ extension PriceResponse.TopMovers {
         public struct TopMoverData: Decodable, Equatable {
             public let currency: String
             public let fiatDelta: Double
-            public let percentageDelta: Double
+            public let percentageDelta: Decimal
             public let lastPrice: Double
-        }
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            self.topMoversDescending = try container.decode([TopMoverData].self)
         }
     }
 }

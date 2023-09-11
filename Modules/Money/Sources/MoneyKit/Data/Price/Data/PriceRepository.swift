@@ -118,8 +118,18 @@ final class PriceRepository: PriceRepositoryAPI {
                                topFirst: 5,
                                custodialOnly: true)
                     .map({ response in
-                        response.topMoversDescending.map { item in
-                            TopMoverInfo(currency: item.currency, lastPrice: .zero(currency: .ADP))
+                        response.topMoversDescending
+                            .compactMap { item -> TopMoverInfo? in
+                             print("💪 client got value from top movers \(item)")
+
+                            guard let currency = CryptoCurrency(code: item.currency) else {
+                                print("💪 could not resolve \(item.currency)")
+                                return nil
+                            }
+                            print("💪 client got value after filter \(item)")
+                            return TopMoverInfo(currency: currency,
+                                                delta: item.percentageDelta,
+                                                lastPrice: .create(major: item.lastPrice, currency: .fiat(key.currency)))
                         }
                     })
                     .eraseToAnyPublisher()
@@ -129,6 +139,10 @@ final class PriceRepository: PriceRepositoryAPI {
 
     func symbols() -> AnyPublisher<CurrencySymbols, NetworkError> {
         symbolsCachedValue.get(key: PriceRequest.Symbols.Key())
+    }
+
+    func topMovers(currency: FiatCurrency) -> AnyPublisher<Result<[TopMoverInfo], NetworkError>, Never> {
+        topMoversCachedValue.stream(key: .init(currency: currency))
     }
 
     func stream(

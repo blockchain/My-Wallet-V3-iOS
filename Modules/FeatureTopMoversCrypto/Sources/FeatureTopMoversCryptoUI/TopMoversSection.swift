@@ -4,6 +4,7 @@ import BlockchainNamespace
 import ComposableArchitecture
 import FeatureTopMoversCryptoDomain
 import Foundation
+import MoneyKit
 
 public enum TopMoversPresenter {
     case dashboard, prices, accountPicker
@@ -62,7 +63,7 @@ public struct TopMoversSection: ReducerProtocol {
             case .onAppear:
                 return .run { send in
                     do {
-                        for try await topMovers in topMoversService.getTopMovers() {
+                        for try await topMovers in topMoversService.alternativeTopMovers() {
                             await send(.onPricesDataFetched(topMovers))
                         }
                     } catch {}
