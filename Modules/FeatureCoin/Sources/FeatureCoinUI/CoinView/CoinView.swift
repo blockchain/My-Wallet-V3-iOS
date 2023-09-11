@@ -12,6 +12,10 @@ import SwiftUI
 import ToolKit
 
 public struct CoinView: View {
+
+    private typealias Localization = LocalizationConstants.Coin
+    private typealias RejectedL10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
+
     let store: Store<CoinViewState, CoinViewAction>
     @ObservedObject var viewStore: ViewStore<CoinViewState, CoinViewAction>
 
@@ -19,7 +23,8 @@ public struct CoinView: View {
     @Environment(\.context) var context
     @State private var isVerified: Bool = true
     @State private var isRejected: Bool = false
-
+    @State private var supportURL: URL?
+    @State private var isExpanded: Bool = false
     @State private var scrollOffset: CGPoint = .zero
 
     public init(store: Store<CoinViewState, CoinViewAction>) {
@@ -27,8 +32,7 @@ public struct CoinView: View {
         _viewStore = .init(initialValue: ViewStore(store))
     }
 
-    typealias Localization = LocalizationConstants.Coin
-
+    @ViewBuilder
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
@@ -121,19 +125,17 @@ public struct CoinView: View {
         )
     }
 
-    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
-    @State private var supportURL: URL?
-
+    @ViewBuilder
     var rejectedView: some View {
         AlertCard(
-            title: L10n.weCouldNotVerify,
-            message: L10n.unableToVerifyGoToDeFi,
+            title: RejectedL10n.weCouldNotVerify,
+            message: RejectedL10n.unableToVerifyGoToDeFi,
             variant: .warning,
             isBordered: true,
             footer: {
                 VStack {
                     SmallSecondaryButton(
-                        title: L10n.blockedContactSupport,
+                        title: RejectedL10n.blockedContactSupport,
                         action: {
                             $app.post(event: blockchain.ux.asset.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap)
                         }
@@ -156,13 +158,15 @@ public struct CoinView: View {
         }
     }
 
-    @ViewBuilder func header() -> some View {
+    @ViewBuilder
+    func header() -> some View {
         GraphView(
             store: store.scope(state: \.graph, action: CoinViewAction.graph)
         )
     }
 
-    @ViewBuilder func recurringBuys() -> some View {
+    @ViewBuilder
+    func recurringBuys() -> some View {
         RecurringBuyListView(
             buys: viewStore.recurringBuys,
             location: .coin(asset: viewStore.currency.code),
@@ -170,7 +174,8 @@ public struct CoinView: View {
         )
     }
 
-    @ViewBuilder func allActionsList() -> some View {
+    @ViewBuilder
+    func allActionsList() -> some View {
         ActionsView(actions: viewStore.allActions)
             .context([
                 blockchain.ux.asset.account.id: viewStore.accounts.first?.id,
@@ -178,7 +183,8 @@ public struct CoinView: View {
             ])
     }
 
-    @ViewBuilder func accounts() -> some View {
+    @ViewBuilder
+    func accounts() -> some View {
         VStack {
             if viewStore.error == .failedToLoad {
                 AlertCard(
@@ -225,7 +231,8 @@ public struct CoinView: View {
         .background(Color.semantic.light)
     }
 
-    @ViewBuilder func bakktLogo() -> some View {
+    @ViewBuilder
+    func bakktLogo() -> some View {
         HStack(alignment: .center, content: {
             Image("bakkt-logo", bundle: .componentLibrary)
         }
@@ -233,87 +240,24 @@ public struct CoinView: View {
         .frame(maxWidth: .infinity)
     }
 
-    @ViewBuilder func news() -> some View {
+    @ViewBuilder
+    func news() -> some View {
         NewsSectionView(api: blockchain.api.news.asset, seeAll: false)
             .context([blockchain.api.news.asset.id: viewStore.currency.code])
     }
 
-    @State private var isExpanded: Bool = false
-
-    @ViewBuilder func about() -> some View {
-        if viewStore.assetInformation?.description.nilIfEmpty == nil, viewStore.assetInformation?.website == nil {
-            EmptyView()
-        } else {
-            VStack(alignment: .leading, spacing: .zero) {
-                Text(Localization.Label.Title.aboutCrypto.interpolating(viewStore.currency.name))
-                    .typography(.body2)
-                    .foregroundColor(.semantic.body)
-                    .padding(.horizontal, Spacing.padding2)
-                if let about = viewStore.assetInformation?.description, about.isNotEmpty {
-                    VStack(alignment: .leading, spacing: Spacing.padding2) {
-                                Text(rich: about)
-                                    .lineLimit(isExpanded ? nil : 6)
-                                    .typography(.paragraph1)
-                                    .foregroundColor(.semantic.title)
-                                if !isExpanded {
-                                    SmallMinimalButton(
-                                        title: Localization.Button.Title.readMore,
-                                        action: {
-                                            withAnimation {
-                                                isExpanded.toggle()
-                                            }
-                                        }
-                                    )
-                                }
-                    }
-                    .padding(Spacing.padding2)
-                    .background(Color.semantic.background)
-                    .cornerRadius(16)
-                    .padding(.horizontal, Spacing.padding2)
-                    .padding(.top, Spacing.padding1)
-                }
-                HStack {
-                    if let url = viewStore.assetInformation?.website {
-                        SmallMinimalButton(
-                            title: Localization.Link.Title.visitWebsite,
-                            leadingView: {
-                                Icon.globe.frame(width: 16.pt)
-                            },
-                            action: {
-                                $app.post(event: blockchain.ux.asset.bio.visit.website)
-                            }
-                        )
-                        .batch {
-                            set(blockchain.ux.asset.bio.visit.website.then.enter.into, to: blockchain.ux.web[url])
-                        }
-                    }
-                    if let url = viewStore.assetInformation?.whitepaper {
-                        SmallMinimalButton(
-                            title: Localization.Link.Title.visitWhitepaper,
-                            leadingView: {
-                                Icon.link
-                                .color(.semantic.light)
-                                .circle(backgroundColor: .semantic.primary)
-                                .frame(width: 16.pt)
-                            },
-                            action: {
-                                $app.post(event: blockchain.ux.asset.bio.visit.whitepaper)
-                            }
-                        )
-                        .batch {
-                            set(blockchain.ux.asset.bio.visit.whitepaper.then.enter.into, to: blockchain.ux.web[url])
-                        }
-                    }
-                    Spacer()
-                }
-                .padding(.horizontal, Spacing.padding2)
-                .padding(.top, Spacing.padding2)
-            }
-            .frame(maxWidth: .infinity)
-        }
+    @ViewBuilder
+    func about() -> some View {
+        CoinAboutView(
+            currency: viewStore.currency,
+            value: viewStore.assetInformation,
+            isExpanded: isExpanded,
+            toggleIsExpaded: { isExpanded.toggle() }
+        )
     }
 
-    @ViewBuilder func primaryActions() -> some View {
+    @ViewBuilder
+    func primaryActions() -> some View {
         VStack(spacing: 0) {
             PrimaryDivider()
             HStack(spacing: 8.pt) {
@@ -414,8 +358,8 @@ struct CoinView_PreviewProvider: PreviewProvider {
 
         PrimaryNavigationView {
             CoinView(
-                store: .init(
-                    initialState: .init(
+                store: Store(
+                    initialState: CoinViewState(
                         currency: .bitcoin,
                         kycStatus: .gold,
                         accounts: [
@@ -430,7 +374,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                         )
                     ),
                     reducer: coinViewReducer,
-                    environment: .preview
+                    environment: CoinViewEnvironment.preview
                 )
             )
             .app(App.preview)
@@ -440,8 +384,8 @@ struct CoinView_PreviewProvider: PreviewProvider {
 
         PrimaryNavigationView {
             CoinView(
-                store: .init(
-                    initialState: .init(
+                store: Store(
+                    initialState: CoinViewState(
                         currency: .bitcoin,
                         kycStatus: .gold,
                         accounts: [
@@ -456,7 +400,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                         )
                     ),
                     reducer: coinViewReducer,
-                    environment: .preview
+                    environment: CoinViewEnvironment.preview
                 )
             )
             .app(App.preview)
@@ -466,8 +410,8 @@ struct CoinView_PreviewProvider: PreviewProvider {
 
         PrimaryNavigationView {
             CoinView(
-                store: .init(
-                    initialState: .init(
+                store: Store(
+                    initialState: CoinViewState(
                         currency: .nonTradable,
                         kycStatus: .unverified,
                         accounts: [
@@ -480,7 +424,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                         )
                     ),
                     reducer: coinViewReducer,
-                    environment: .preview
+                    environment: CoinViewEnvironment.preview
                 )
             )
             .app(App.preview)
@@ -489,8 +433,8 @@ struct CoinView_PreviewProvider: PreviewProvider {
 
         PrimaryNavigationView {
             CoinView(
-                store: .init(
-                    initialState: .init(
+                store: Store(
+                    initialState: CoinViewState(
                         currency: .bitcoin,
                         kycStatus: .unverified,
                         accounts: [
@@ -503,7 +447,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                         )
                     ),
                     reducer: coinViewReducer,
-                    environment: .preview
+                    environment: CoinViewEnvironment.preview
                 )
             )
             .app(App.preview)
@@ -512,14 +456,14 @@ struct CoinView_PreviewProvider: PreviewProvider {
 
         PrimaryNavigationView {
             CoinView(
-                store: .init(
-                    initialState: .init(
+                store: Store(
+                    initialState: CoinViewState(
                         currency: .stellar,
                         isFavorite: nil,
                         graph: .init(isFetching: true)
                     ),
                     reducer: coinViewReducer,
-                    environment: .previewEmpty
+                    environment: CoinViewEnvironment.previewEmpty
                 )
             )
             .app(App.preview)
@@ -528,8 +472,8 @@ struct CoinView_PreviewProvider: PreviewProvider {
 
         PrimaryNavigationView {
             CoinView(
-                store: .init(
-                    initialState: .init(
+                store: Store(
+                    initialState: CoinViewState(
                         currency: .bitcoin,
                         kycStatus: .unverified,
                         error: .failedToLoad,
@@ -540,7 +484,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                         )
                     ),
                     reducer: coinViewReducer,
-                    environment: .previewEmpty
+                    environment: CoinViewEnvironment.previewEmpty
                 )
             )
             .app(App.preview)

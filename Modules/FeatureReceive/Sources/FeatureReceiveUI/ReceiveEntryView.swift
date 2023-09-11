@@ -18,10 +18,6 @@ struct AccountInfo: Identifiable, Hashable, Equatable {
     let name: String
     let currency: CryptoCurrency
     let network: EVMNetwork?
-
-    var filterTerm: String {
-        name + " " + currency.code + " " + (network?.networkConfig.shortName ?? "")
-    }
 }
 
 @MainActor

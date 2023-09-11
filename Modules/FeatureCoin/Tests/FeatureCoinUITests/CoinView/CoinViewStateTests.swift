@@ -219,7 +219,6 @@ final class CoinViewStateTests: XCTestCase {
 
     func test_all_defi_actions_no_balance_kyc_verified() {
         // Balance, KYC Verified
-        let send = ButtonAction.send()
         let receive = ButtonAction.receive()
 
         state = CoinViewState(

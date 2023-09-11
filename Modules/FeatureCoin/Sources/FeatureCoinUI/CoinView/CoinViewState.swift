@@ -16,7 +16,7 @@ public struct CoinViewState: Equatable {
     public var accounts: [Account.Snapshot]
     public var recurringBuys: [RecurringBuy]?
     public var error: CoinViewError?
-    public var assetInformation: AssetInformation?
+    public var assetInformation: AboutAssetInformation?
     public var isRecurringBuyEnabled: Bool
     public var earnRates: EarnRates?
     public var kycStatus: KYCStatus?
@@ -151,7 +151,7 @@ public struct CoinViewState: Equatable {
         isDexEnabled: Bool = false,
         isExternalBrokerageEnabled: Bool = false,
         isRecurringBuyEnabled: Bool = false,
-        assetInformation: AssetInformation? = nil,
+        assetInformation: AboutAssetInformation? = nil,
         earnRates: EarnRates? = nil,
         error: CoinViewError? = nil,
         isFavorite: Bool? = nil,

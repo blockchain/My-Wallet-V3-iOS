@@ -43,6 +43,7 @@ public struct CoinAdapterView: View {
         ratesRepository: RatesRepositoryAPI = resolve(),
         watchlistRepository: WatchlistRepositoryAPI = resolve(),
         recurringBuyProviderRepository: RecurringBuyProviderRepositoryAPI = resolve(),
+        currenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default,
         dismiss: @escaping () -> Void
     ) {
         self.cryptoCurrency = cryptoCurrency
@@ -101,8 +102,10 @@ public struct CoinAdapterView: View {
                         .eraseToAnyPublisher()
                 },
                 assetInformationService: AssetInformationService(
-                    currency: cryptoCurrency,
-                    repository: assetInformationRepository
+                    app: app,
+                    cryptoCurrency: cryptoCurrency,
+                    repository: assetInformationRepository,
+                    currenciesService: currenciesService
                 ),
                 historicalPriceService: HistoricalPriceService(
                     base: cryptoCurrency,
