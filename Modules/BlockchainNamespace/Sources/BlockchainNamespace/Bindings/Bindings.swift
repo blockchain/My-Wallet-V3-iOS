@@ -39,7 +39,7 @@ public class Bindings: BindingsProtocol {
 
     init(
         app: AppProtocol?,
-        tempo: Tempo = .sync,
+        tempo: Tempo = isInTest ? .sync : .async,
         context: Tag.Context,
         handle: ((Update) -> Void)?
     ) {
