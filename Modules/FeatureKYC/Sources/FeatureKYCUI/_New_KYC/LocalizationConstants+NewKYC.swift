@@ -20,6 +20,11 @@ extension LocalizationConstants {
                 comment: "A generic alert's retry button"
             )
 
+            static let featureIsNotAvailableMessage = NSLocalizedString(
+                "Feature is not available",
+                comment: "Feature is not available."
+            )
+
             static let cancelButtonTitle = NSLocalizedString(
                 "Cancel",
                 comment: "A generic alert's cancel button"
