@@ -20,8 +20,8 @@ public struct TopMoversSectionView: View {
                 sectionHeader(viewStore)
                 topMoversSection(viewStore)
             }
-            .onAppear {
-                viewStore.send(.onAppear)
+            .task {
+                await viewStore.send(.onAppear).finish()
             }
         })
     }

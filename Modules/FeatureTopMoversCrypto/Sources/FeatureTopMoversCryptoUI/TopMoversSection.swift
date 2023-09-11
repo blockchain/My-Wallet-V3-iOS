@@ -63,9 +63,16 @@ public struct TopMoversSection: ReducerProtocol {
             case .onAppear:
                 return .run { send in
                     do {
-                        for try await topMovers in topMoversService.alternativeTopMovers() {
-                            await send(.onPricesDataFetched(topMovers))
+                        for await appMode in app.stream(blockchain.app.mode, as: AppMode.self) {
+                            print("🎾 fetching top movers for \(appMode)")
+                            guard let appMode = appMode.value else {
+                                return
+                            }
+                            for try await topMovers in topMoversService.alternativeTopMovers(for: appMode, with: .EUR) {
+                                await send(.onPricesDataFetched(topMovers))
+                            }
                         }
+
                     } catch {}
                 }
 
@@ -75,21 +82,12 @@ public struct TopMoversSection: ReducerProtocol {
                     let fastRisingMinDelta = await (try? app.get(blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)) ?? 4
 
                     let filteredData = topMoversData
-                        .sorted(by: { price1, price2 in
-                        guard let delta1 = price1.delta?.doubleValue,
-                               let delta2 = price2.delta?.doubleValue
-                        else {
-                            return false
-                        }
-                        return abs(delta1) >= abs(delta2)
-                    })
-                    .uniqued(on: \.id)
                     .prefix(totalNumberOfMovers)
                     .array
 
                     let hasFastRisingItem = filteredData.filter { Decimal(fastRisingMinDelta / 100).isLessThanOrEqualTo($0.delta ?? 0) }.isNotEmpty
                     await send(.onFastRisingCalculated(hasFastRisingItem))
-                    await send(.onFilteredDataFetched(filteredData))
+                    await send(.onFilteredDataFetched(topMoversData))
                 }
 
             case .onFastRisingCalculated(let isFastRising):

@@ -52,7 +52,8 @@ public protocol PriceRepositoryAPI {
     ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
 
     func topMovers(
-        currency: FiatCurrency
+        currency: FiatCurrency,
+        custodialOnly: Bool
     )
     -> AnyPublisher<Result<[TopMoverInfo], NetworkError>, Never>
     

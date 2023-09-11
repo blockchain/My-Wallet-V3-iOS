@@ -52,7 +52,7 @@ final class PriceRepository: PriceRepositoryAPI {
             configuration: .default(),
             refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
         )
-            .eraseToAnyCache()
+        .eraseToAnyCache()
 
         self.indexMultiCachedValue = CachedValueNew(
             cache: indexMultiCache,
@@ -78,7 +78,8 @@ final class PriceRepository: PriceRepositoryAPI {
             configuration: .default(),
             refreshControl: PerpetualCacheRefreshControl()
         )
-            .eraseToAnyCache()
+        .eraseToAnyCache()
+
         self.symbolsCachedValue = CachedValueNew(
             cache: symbolsCache,
             fetch: { _ in
@@ -115,22 +116,29 @@ final class PriceRepository: PriceRepositoryAPI {
             fetch: { [client] key in
                 client
                     .topMovers(with: key.currency,
-                               topFirst: 5,
-                               custodialOnly: true)
+                               topFirst: 100,
+                               custodialOnly: key.custodialOnly)
                     .map({ response in
                         response.topMoversDescending
                             .compactMap { item -> TopMoverInfo? in
-                             print("💪 client got value from top movers \(item)")
 
-                            guard let currency = CryptoCurrency(code: item.currency) else {
-                                print("💪 could not resolve \(item.currency)")
+                            guard let currency = CryptoCurrency(code: item.currency)  else {
                                 return nil
                             }
-                            print("💪 client got value after filter \(item)")
+
+                            guard (currency.supports(product: .custodialWalletBalance) && key.custodialOnly) || !key.custodialOnly else {
+                                    return nil
+                              }
+
+                            guard item.percentageDelta > -1 else {
+                                return nil
+                            }
+
                             return TopMoverInfo(currency: currency,
                                                 delta: item.percentageDelta,
                                                 lastPrice: .create(major: item.lastPrice, currency: .fiat(key.currency)))
                         }
+                        .array
                     })
                     .eraseToAnyPublisher()
             }
@@ -141,8 +149,11 @@ final class PriceRepository: PriceRepositoryAPI {
         symbolsCachedValue.get(key: PriceRequest.Symbols.Key())
     }
 
-    func topMovers(currency: FiatCurrency) -> AnyPublisher<Result<[TopMoverInfo], NetworkError>, Never> {
-        topMoversCachedValue.stream(key: .init(currency: currency))
+    func topMovers(currency: FiatCurrency,
+                   custodialOnly: Bool) -> AnyPublisher<Result<[TopMoverInfo], NetworkError>, Never> {
+        topMoversCachedValue.stream(key: .init(currency: currency,
+                                               custodialOnly: custodialOnly),
+                                    skipStale: true)
     }
 
     func stream(

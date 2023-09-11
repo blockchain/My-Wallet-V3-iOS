@@ -140,10 +140,10 @@ extension PriceRequest.Symbols {
 
 // MARK: - Top Movers
 extension PriceRequest.TopMovers {
-
     struct Key: Hashable, CustomStringConvertible {
         let currency: FiatCurrency
-        var description: String { "id-\(currency)" }
+        let custodialOnly: Bool
+        var description: String { "id - \(custodialOnly)" }
     }
 
     /// Aggregated call for multiple price quotes.

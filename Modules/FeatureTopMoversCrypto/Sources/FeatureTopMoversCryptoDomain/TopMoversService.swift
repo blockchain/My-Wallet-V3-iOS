@@ -8,8 +8,8 @@ import MoneyKit
 
 
 public protocol TopMoversServiceAPI {
-//    func getTopMovers() -> AsyncThrowingStream<[TopMoverInfo], Error>
-    func alternativeTopMovers() ->  AsyncThrowingStream<[TopMoverInfo], Error>
+    func alternativeTopMovers(for appMode: AppMode,
+                                     with fiatCurrency: FiatCurrency) ->  AsyncThrowingStream<[TopMoverInfo], Error>
 }
 
 public final class TopMoversService: TopMoversServiceAPI {
@@ -21,10 +21,13 @@ public final class TopMoversService: TopMoversServiceAPI {
         self.priceRepository = priceRepository
     }
 
-    public func alternativeTopMovers() -> AsyncThrowingStream<[TopMoverInfo], Error> {
-        AsyncThrowingStream<[TopMoverInfo], Error> { continuation in
+    public func alternativeTopMovers(for appMode: AppMode,
+                                     with fiatCurrency: FiatCurrency) -> AsyncThrowingStream<[TopMoverInfo], Error> {
+        return AsyncThrowingStream<[TopMoverInfo], Error> { continuation in
+
             let cancellable = priceRepository
-                .topMovers(currency: .EUR)
+                .topMovers(currency: .EUR,
+                           custodialOnly: appMode == .trading)
                 .sink { completion in
                 switch completion {
                 case .finished:
