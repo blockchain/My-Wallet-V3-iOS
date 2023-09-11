@@ -113,7 +113,7 @@ public struct ReceiveEntryView: View {
             if filtered.isEmpty {
                 noResultsView
             } else {
-                if showCashDeposit, let tradingCurrency {
+                if showCashDeposit, let tradingCurrency, isSearching == false {
                     Section(
                         content: {
                             cashRowView(currency: tradingCurrency)
