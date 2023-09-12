@@ -178,7 +178,7 @@ extension CreateAccountViewStepTwo {
             .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
-            .textContentType(.newPassword)
+            .textContentType(.oneTimeCode) // Disables strong password suggestions
 
             Text(PasswordValidationRule.displayString) { string in
                 string.foregroundColor = .semantic.body
