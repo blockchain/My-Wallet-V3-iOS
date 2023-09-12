@@ -32,7 +32,7 @@ struct TopMoverView: View {
                     .truncationMode(.middle)
                     .foregroundColor(topMover.priceChangeColor)
 
-                Text(topMover.price.toDisplayString(includeSymbol: true))
+                Text(topMover.lastPrice.toDisplayString(includeSymbol: true))
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
             }
@@ -90,7 +90,7 @@ extension TopMoverInfo {
 
 struct TopMoverView_Previews: PreviewProvider {
     static var previews: some View {
-        let topMover = TopMoverInfo(currency: .bitcoin, delta: 30, price: .one(currency: .EUR))
+        let topMover = TopMoverInfo(currency: .bitcoin, delta: 30, lastPrice: .one(currency: .EUR))
 
         TopMoverView(
             presenter: .accountPicker,

@@ -1,4 +1,4 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BigInt
 import BlockchainNamespace
@@ -85,7 +85,6 @@ public struct ExternalTradingDashboard: ReducerProtocol {
                 app: app
             )
         }
-
 
         Reduce { state, action in
             switch action {

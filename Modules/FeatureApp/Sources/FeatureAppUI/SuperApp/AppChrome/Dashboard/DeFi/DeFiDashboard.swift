@@ -10,6 +10,7 @@ import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureTopMoversCryptoUI
 import FeatureWithdrawalLocksDomain
 import Foundation
 import MoneyKit
@@ -33,6 +34,7 @@ public struct DeFiDashboard: ReducerProtocol {
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
         case announcementsAction(Announcements.Action)
+        case topMoversAction(TopMoversSection.Action)
     }
 
     public struct State: Equatable {
@@ -43,6 +45,7 @@ public struct DeFiDashboard: ReducerProtocol {
         public var activityState: DashboardActivitySection.State = .init(with: .nonCustodial)
         public var announcementState: DashboardAnnouncementsSection.State = .init()
         public var announcementsState: Announcements.State = .init()
+        public var topMoversState: TopMoversSection.State = .init(presenter: .dashboard)
     }
 
     struct FetchBalanceId: Hashable {}
@@ -83,6 +86,13 @@ public struct DeFiDashboard: ReducerProtocol {
             DashboardAnnouncementsSection(
                 app: app,
                 recoverPhraseProviding: resolve()
+            )
+        }
+
+        Scope(state: \.topMoversState, action: /Action.topMoversAction) { () -> TopMoversSection in
+            TopMoversSection(
+                app: app,
+                topMoversService: resolve()
             )
         }
 
@@ -133,6 +143,8 @@ public struct DeFiDashboard: ReducerProtocol {
                 default:
                     return .none
                 }
+            case .topMoversAction:
+                return .none
             case .announcementAction:
                 return .none
             case .allActivityAction(let action):
