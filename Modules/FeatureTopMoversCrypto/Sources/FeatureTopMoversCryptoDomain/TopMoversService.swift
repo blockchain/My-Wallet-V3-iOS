@@ -25,10 +25,12 @@ public final class TopMoversService: TopMoversServiceAPI {
         for appMode: AppMode,
         with fiatCurrency: FiatCurrency
     ) -> AsyncThrowingStream<[TopMoverInfo], Error> {
-       return AsyncThrowingStream(
+       AsyncThrowingStream(
         priceRepository
-            .topMovers(currency: fiatCurrency,
-                                  custodialOnly: appMode == .trading)
+            .topMovers(
+                currency: fiatCurrency,
+                custodialOnly: appMode == .trading
+            )
             .get()
             .values
        )

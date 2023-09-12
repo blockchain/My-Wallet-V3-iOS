@@ -67,7 +67,6 @@ public struct TopMoversSection: ReducerProtocol {
                     .eraseToEffect()
                     .map(TopMoversSection.Action.onAppModeFetched)
 
-
             case .onPricesDataFetched(let topMoversData):
                 return .run { send in
                     let totalNumberOfMovers = await (try? app.get(blockchain.app.configuration.dashboard.top.movers.limit, as: Int.self)) ?? 4
