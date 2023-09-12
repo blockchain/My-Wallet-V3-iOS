@@ -254,7 +254,11 @@ public final class DeepLinkCoordinator: Client.Observer {
             try? event.context.decode(blockchain.app.deep_link.asset.code) as CryptoCurrency
         ) ?? .bitcoin
 
-        app.post(event: blockchain.ux.asset[cryptoCurrency.code].select)
+        app.post(
+            action: blockchain.ux.asset[cryptoCurrency.code].select.then.enter.into,
+            value: blockchain.ux.asset[cryptoCurrency.code],
+            context: [blockchain.ux.asset.select.origin: "DEEPLINK"]
+        )
     }
 
     func showTransactionBuy(_ event: Session.Event) {
