@@ -15,7 +15,8 @@ public struct TopMoversSectionView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 },
+        WithViewStore(store,
+                      observe: { $0 },
                       content: { viewStore in
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
