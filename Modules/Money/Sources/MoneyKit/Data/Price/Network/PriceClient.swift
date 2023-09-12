@@ -59,7 +59,7 @@ public protocol PriceClientAPI {
     ///   - topN: Of all top movers, how many to return of the ones that moved the most.
     ///   - custodialOnly: Only return custodial currencies
     ///
-    /// - Returns: A publisher that emits an array of  `PriceResponse.Item`s on success, or a `NetworkError` on failure.
+    /// - Returns: A publisher that emits an array of  `PriceResponse.TopMovers.Response`s on success, or a `NetworkError` on failure.
 
     func topMovers(
         with baseCurrency: FiatCurrency,

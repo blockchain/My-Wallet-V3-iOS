@@ -137,8 +137,8 @@ extension PriceRequest.Symbols {
     }
 }
 
-
 // MARK: - Top Movers
+
 extension PriceRequest.TopMovers {
     struct Key: Hashable, CustomStringConvertible {
         let currency: FiatCurrency
@@ -146,10 +146,6 @@ extension PriceRequest.TopMovers {
         var description: String { "id - \(custodialOnly)" }
     }
 
-    /// Aggregated call for multiple price quotes.
-    /// - parameter base: Base fiat currency code. Must be supported in https://api.blockchain.info/price/top-movers-24h
-    /// - parameter quote: Currencies to quote, fiat or crypto.
-    /// - parameter time: The epoch seconds used to locate a time in the past.
     static func request(
         requestBuilder: RequestBuilder,
         fiatBase: String,
