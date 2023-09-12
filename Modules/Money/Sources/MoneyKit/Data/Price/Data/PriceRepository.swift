@@ -48,7 +48,7 @@ final class PriceRepository: PriceRepositoryAPI {
             .eraseToAnyCache()
 
         let topMoversCache = InMemoryCache<PriceRequest.TopMovers.Key, [TopMoverInfo]>(
-            configuration: .default(),
+            configuration: .onLoginLogoutTransactionAndDashboardRefresh(),
             refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
         )
         .eraseToAnyCache()
