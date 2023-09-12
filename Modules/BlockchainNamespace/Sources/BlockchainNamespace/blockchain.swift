@@ -10216,7 +10216,7 @@ public extension I_blockchain_ux_onboarding_intro_did {
 public final class L_blockchain_ux_onboarding_intro_did_show: L, I_blockchain_ux_onboarding_intro_did_show {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.did.show", comment: "") }
 }
-public protocol I_blockchain_ux_onboarding_intro_did_show: I_blockchain_db_type_boolean, I_blockchain_session_state_shared_value, I_blockchain_session_state_stored_value {}
+public protocol I_blockchain_ux_onboarding_intro_did_show: I_blockchain_db_type_boolean, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_onboarding_intro_event: L, I_blockchain_ux_onboarding_intro_event {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.onboarding.intro.event", comment: "") }
 }

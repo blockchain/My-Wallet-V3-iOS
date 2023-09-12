@@ -2726,7 +2726,6 @@ blockchain:
 				did:
 					show:
 					+ blockchain.db.type.boolean
-					+ blockchain.session.state.shared.value
 					+ blockchain.session.state.stored.value
 				event:
 					show:

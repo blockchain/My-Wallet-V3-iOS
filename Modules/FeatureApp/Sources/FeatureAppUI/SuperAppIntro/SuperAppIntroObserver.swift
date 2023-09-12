@@ -27,7 +27,6 @@ public final class SuperAppIntroObserver: Client.Observer {
     var observers: [AnyCancellable] {
         [
             userDidSignIn,
-            userDidSignOut,
             tradingTutorial,
             deFiTutorial,
             onAppModeDeFi
@@ -60,10 +59,6 @@ public final class SuperAppIntroObserver: Client.Observer {
         }
         .receive(on: DispatchQueue.main)
         .sink(to: SuperAppIntroObserver.showSuperAppIntro(_:), on: self)
-
-    lazy var userDidSignOut = app.on(blockchain.session.event.did.sign.out)
-        .receive(on: DispatchQueue.main)
-        .sink(to: SuperAppIntroObserver.reset, on: self)
 
     lazy var tradingTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.trading) { [weak self] _ in
         self?.presentSuperAppIntro(.tradingFirst)
@@ -111,10 +106,6 @@ public final class SuperAppIntroObserver: Client.Observer {
                 }
             }
         }
-    }
-
-    func reset() {
-        app.state.set(blockchain.ux.onboarding.intro.did.show, to: false)
     }
 
     func presentSuperAppIntro(_ flow: FeatureSuperAppIntro.State.Flow) {
