@@ -245,7 +245,7 @@ private func address(
 ) -> AnyPublisher<String, Error> {
     app
         .publisher(
-            for: blockchain.coin.core.account[accoundId].receive.address,
+            for: blockchain.coin.core.account[accoundId].receive,
             as: L_blockchain_coin_core_account_receive.JSON.self
         )
         .first()
