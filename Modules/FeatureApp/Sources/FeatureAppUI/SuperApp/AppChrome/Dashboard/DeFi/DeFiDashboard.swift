@@ -10,8 +10,8 @@ import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
-import FeatureWithdrawalLocksDomain
 import FeatureTopMoversCryptoUI
+import FeatureWithdrawalLocksDomain
 import Foundation
 import MoneyKit
 import SwiftUI

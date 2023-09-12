@@ -38,6 +38,7 @@ public struct TopMoversSection: ReducerProtocol {
         case onFilteredDataFetched([TopMoverInfo])
         case onPricesDataFetched([TopMoverInfo])
         case onFastRisingCalculated(Bool)
+        case onAppModeFetched(AppMode)
     }
 
     public struct State: Equatable {
@@ -61,20 +62,11 @@ public struct TopMoversSection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { send in
-                    do {
-                        for await appMode in app.stream(blockchain.app.mode, as: AppMode.self) {
-                            print("🎾 fetching top movers for \(appMode)")
-                            guard let appMode = appMode.value else {
-                                return
-                            }
-                            for try await topMovers in topMoversService.alternativeTopMovers(for: appMode, with: .EUR) {
-                                await send(.onPricesDataFetched(topMovers))
-                            }
-                        }
+                return app
+                    .modePublisher()
+                    .eraseToEffect()
+                    .map(TopMoversSection.Action.onAppModeFetched)
 
-                    } catch {}
-                }
 
             case .onPricesDataFetched(let topMoversData):
                 return .run { send in
@@ -87,7 +79,7 @@ public struct TopMoversSection: ReducerProtocol {
 
                     let hasFastRisingItem = filteredData.filter { Decimal(fastRisingMinDelta / 100).isLessThanOrEqualTo($0.delta ?? 0) }.isNotEmpty
                     await send(.onFastRisingCalculated(hasFastRisingItem))
-                    await send(.onFilteredDataFetched(topMoversData))
+                    await send(.onFilteredDataFetched(filteredData))
                 }
 
             case .onFastRisingCalculated(let isFastRising):
@@ -98,6 +90,16 @@ public struct TopMoversSection: ReducerProtocol {
                 state.topMovers = topMoversData
 
             return .none
+
+            case .onAppModeFetched(let appMode):
+                return .run { send in
+                    do {
+                        let currency = try await app.get(blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self)
+                            for try await topMovers in topMoversService.topMovers(for: appMode, with: currency) {
+                                await send(.onPricesDataFetched(topMovers))
+                            }
+                    } catch {}
+                }
             }
         }
     }

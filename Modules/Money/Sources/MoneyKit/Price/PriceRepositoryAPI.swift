@@ -56,5 +56,4 @@ public protocol PriceRepositoryAPI {
         custodialOnly: Bool
     )
     -> AnyPublisher<Result<[TopMoverInfo], NetworkError>, Never>
-    
 }

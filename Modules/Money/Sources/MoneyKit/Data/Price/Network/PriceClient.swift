@@ -149,14 +149,14 @@ final class PriceClient: PriceClientAPI {
         topFirst topN: Int,
         custodialOnly: Bool
     ) -> AnyPublisher<PriceResponse.TopMovers.Response, NetworkError> {
-        let request: NetworkRequest! = PriceRequest.TopMovers.request(requestBuilder: requestBuilder,
-                                                                      fiatBase: baseCurrency.code,
-                                                                      topN: String(topN),
-                                                                      custodialOnly: String(custodialOnly)
+        let request: NetworkRequest! = PriceRequest.TopMovers.request(
+            requestBuilder: requestBuilder,
+            fiatBase: baseCurrency.code,
+            topN: String(topN),
+            custodialOnly: String(custodialOnly)
         )
         return networkAdapter.perform(request: request)
     }
-
 }
 
 struct IndexMultiSeriesRequest {

@@ -34,7 +34,6 @@ final class PriceRepository: PriceRepositoryAPI {
         NetworkError
     >
 
-
     // MARK: - Setup
 
     init(
@@ -115,14 +114,16 @@ final class PriceRepository: PriceRepositoryAPI {
             cache: topMoversCache,
             fetch: { [client] key in
                 client
-                    .topMovers(with: key.currency,
-                               topFirst: 100,
-                               custodialOnly: key.custodialOnly)
-                    .map({ response in
+                    .topMovers(
+                        with: key.currency,
+                        topFirst: 100,
+                        custodialOnly: key.custodialOnly
+                    )
+                    .map { response in
                         response.topMoversDescending
                             .compactMap { item -> TopMoverInfo? in
 
-                            guard let currency = CryptoCurrency(code: item.currency)  else {
+                            guard let currency = CryptoCurrency(code: item.currency) else {
                                 return nil
                             }
 
@@ -134,12 +135,14 @@ final class PriceRepository: PriceRepositoryAPI {
                                 return nil
                             }
 
-                            return TopMoverInfo(currency: currency,
-                                                delta: item.percentageDelta,
-                                                lastPrice: .create(major: item.lastPrice, currency: .fiat(key.currency)))
-                        }
+                            return TopMoverInfo(
+                                currency: currency,
+                                delta: item.percentageDelta,
+                                lastPrice: .create(major: item.lastPrice, currency: .fiat(key.currency))
+                            )
+                            }
                         .array
-                    })
+                    }
                     .eraseToAnyPublisher()
             }
         )
@@ -149,11 +152,17 @@ final class PriceRepository: PriceRepositoryAPI {
         symbolsCachedValue.get(key: PriceRequest.Symbols.Key())
     }
 
-    func topMovers(currency: FiatCurrency,
-                   custodialOnly: Bool) -> AnyPublisher<Result<[TopMoverInfo], NetworkError>, Never> {
-        topMoversCachedValue.stream(key: .init(currency: currency,
-                                               custodialOnly: custodialOnly),
-                                    skipStale: true)
+    func topMovers(
+        currency: FiatCurrency,
+        custodialOnly: Bool
+    ) -> AnyPublisher<Result<[TopMoverInfo], NetworkError>, Never> {
+        topMoversCachedValue.stream(
+            key: .init(
+                currency: currency,
+                custodialOnly: custodialOnly
+            ),
+            skipStale: true
+        )
     }
 
     func stream(

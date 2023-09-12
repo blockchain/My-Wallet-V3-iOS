@@ -1,4 +1,4 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BigInt
 import BlockchainComponentLibrary
@@ -235,7 +235,6 @@ func provideExternalTradingDashboard(
     .id(tab.ref.description)
     .accessibilityIdentifier(tab.ref.description)
 }
-
 
 func provideExternalTradingPricesTab(
     tab: Tab,

@@ -93,8 +93,10 @@ struct DeFiDashboardView: View {
                     }
 
                     TopMoversSectionView(
-                        store: store.scope(state: \.topMoversState,
-                                           action: DeFiDashboard.Action.topMoversAction)
+                        store: store.scope(
+                            state: \.topMoversState,
+                            action: DeFiDashboard.Action.topMoversAction
+                        )
                     )
                     .padding(.horizontal, Spacing.padding2)
 
@@ -105,11 +107,14 @@ struct DeFiDashboardView: View {
                         )
                     )
 
-                    if isTradingEnabled == false {
-                        NewsSectionView(api: blockchain.api.news.all)
+                    Group {
+                        if isTradingEnabled == false {
+                            NewsSectionView(api: blockchain.api.news.all)
+                        }
+
+                        DashboardHelpSectionView()
                     }
 
-//                    DashboardHelpSectionView()
                 }
                 .scrollOffset($scrollOffset)
                 .task {

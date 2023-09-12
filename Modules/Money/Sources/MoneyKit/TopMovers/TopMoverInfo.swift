@@ -1,4 +1,4 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
 
@@ -18,4 +18,3 @@ public struct TopMoverInfo: Identifiable, Equatable {
         self.lastPrice = lastPrice
     }
 }
-
