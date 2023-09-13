@@ -43,6 +43,7 @@ public struct ReceiveEntryView: View {
             search.isEmpty
                 || account.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
                 || account.currency.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
+                || account.currency.code.distance(between: search, using: fuzzyAlgorithm) < 0.2
                 || account.network?.networkConfig.shortName.distance(between: search, using: fuzzyAlgorithm) == 0.0
         }
     }
