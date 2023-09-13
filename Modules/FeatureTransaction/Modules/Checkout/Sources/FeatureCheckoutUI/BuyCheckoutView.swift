@@ -427,7 +427,7 @@ extension BuyCheckoutView.Loaded {
             asset: checkout.crypto.currency.code
         )
 
-        Text(rich:label)
+        Text(rich: label)
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.leading)

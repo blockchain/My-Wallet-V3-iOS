@@ -94,6 +94,7 @@ public struct ConfettiCannonView<Container: View>: View {
             ForEach(layers, id: \.self) { layer in
                 ConfettiView().id(layer)
             }
+            .allowsHitTesting(false)
         }
         .environment(\.confetti, config)
         .onAppear { layers.append(Date()) }

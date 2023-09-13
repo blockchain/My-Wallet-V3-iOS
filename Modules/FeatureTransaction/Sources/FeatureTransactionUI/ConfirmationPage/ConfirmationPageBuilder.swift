@@ -651,7 +651,24 @@ extension BlockchainAccount {
                 isApplePay: false,
                 isACH: isACH
             )
-        case _:
+        case .suggested(let suggestion):
+            switch suggestion.type {
+            case .applePay:
+                return BuyCheckout.PaymentMethod(
+                    name: LocalizationConstants.Checkout.applePay,
+                    detail: "••••",
+                    isApplePay: true,
+                    isACH: false
+                )
+            default:
+                return BuyCheckout.PaymentMethod(
+                    name: label,
+                    detail: nil,
+                    isApplePay: false,
+                    isACH: isACH
+                )
+            }
+        default:
             return BuyCheckout.PaymentMethod(
                 name: label,
                 detail: nil,
