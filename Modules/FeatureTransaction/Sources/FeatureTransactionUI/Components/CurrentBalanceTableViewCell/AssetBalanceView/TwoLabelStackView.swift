@@ -35,8 +35,9 @@ class TwoLabelStackView: UIStackView {
         spacing = 4
         distribution = .fillEqually
         middleStackView.axis = .horizontal
+        middleStackView.alignment = .center
         middleStackView.spacing = 4
-        middleStackView.distribution = .fill
+        middleStackView.distribution = .fillProportionally
         middleStackView.addArrangedSubview(middleLabel)
         addArrangedSubview(topLabel)
         addArrangedSubview(middleStackView)

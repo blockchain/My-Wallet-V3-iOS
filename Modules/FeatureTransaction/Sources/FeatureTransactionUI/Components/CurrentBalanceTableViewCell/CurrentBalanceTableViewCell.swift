@@ -174,7 +174,7 @@ public final class CurrentBalanceTableViewCell: UITableViewCell {
         labelStackViewBottomSuperview = labelStackView.layoutToSuperview(.bottom, offset: -16)
         labelStackView.layout(edge: .leading, to: .trailing, of: badgeImageView, offset: 16)
 
-        assetBalanceView.layout(edge: .leading, to: .trailing, of: labelStackView)
+        assetBalanceView.layout(edge: .leading, to: .trailing, of: labelStackView, offset: 16)
         assetBalanceView.layoutToSuperview(.trailing, offset: -16)
         assetBalanceView.layout(to: .centerY, of: labelStackView)
 
