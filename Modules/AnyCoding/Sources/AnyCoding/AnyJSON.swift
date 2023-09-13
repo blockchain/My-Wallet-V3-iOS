@@ -287,7 +287,8 @@ enum JSONValue: Codable, Equatable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if container.decodeNil() {
+        let value = (decoder as? AnyDecoderProtocol)?.value
+        if container.decodeNil() || value is NSNull {
             self = .null
         } else if let boolean = try? container.decode(Bool.self) {
             self = .boolean(boolean)
@@ -302,7 +303,6 @@ enum JSONValue: Codable, Equatable {
         } else if let object = try? container.decode([String: JSONValue].self) {
             self = .object(object)
         } else {
-            let value = (decoder as? AnyDecoderProtocol)?.value
             throw DecodingError.typeMismatch(
                 JSONValue.self,
                 .init(

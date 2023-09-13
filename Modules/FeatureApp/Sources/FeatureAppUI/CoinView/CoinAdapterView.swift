@@ -136,7 +136,7 @@ public final class CoinViewObserver: Client.Observer {
     let app: AppProtocol
     let transactionsRouter: TransactionsRouterAPI
     let coincore: CoincoreAPI
-    let kycRouter: KYCRouterAPI
+    let kycRouter: FeatureKYCUI.Routing
     let defaults: UserDefaults
     let application: URLOpener
     let topViewController: TopMostViewControllerProviding
@@ -146,7 +146,7 @@ public final class CoinViewObserver: Client.Observer {
         app: AppProtocol,
         transactionsRouter: TransactionsRouterAPI = resolve(),
         coincore: CoincoreAPI = resolve(),
-        kycRouter: KYCRouterAPI = resolve(),
+        kycRouter: FeatureKYCUI.Routing = resolve(),
         defaults: UserDefaults = .standard,
         application: URLOpener = resolve(),
         topViewController: TopMostViewControllerProviding = resolve(),
@@ -348,8 +348,12 @@ public final class CoinViewObserver: Client.Observer {
         )
     }
 
-    lazy var kyc = app.on(blockchain.ux.asset.account.require.KYC) { @MainActor [unowned self] _ async in
-        kycRouter.start(tier: .verified, parentFlow: .coin)
+    lazy var kyc = app.on(blockchain.ux.asset.account.require.KYC) { @MainActor [unowned self] _ async throws in
+        try await kycRouter.presentEmailVerificationAndKYCIfNeeded(
+            from: topViewController.findTopViewController(allowBeingDismissed: false),
+            requireEmailVerification: true,
+            requiredTier: .verified
+        ).await()
     }
 
     lazy var activity = app.on(blockchain.ux.asset.account.activity) { @MainActor [unowned self] _ async in
