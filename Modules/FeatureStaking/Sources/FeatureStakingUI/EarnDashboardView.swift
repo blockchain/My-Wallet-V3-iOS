@@ -27,7 +27,6 @@ public struct EarnDashboardView: View {
                     )
                     .padding([.top, .leading, .trailing])
                     .zIndex(1)
-                    .disabled(!(object.totalBalance?.isPositive ?? false))
                     .transition(.opacity)
     #if os(iOS)
                     TabView(selection: $selected) {
