@@ -6,7 +6,6 @@ import DIKit
 import FeatureAuthenticationDomain
 import PlatformKit
 import Sift
-import sift_ios
 import ToolKit
 
 final class SiftService: FeatureAuthenticationDomain.SiftServiceAPI, PlatformKit.SiftServiceAPI {
