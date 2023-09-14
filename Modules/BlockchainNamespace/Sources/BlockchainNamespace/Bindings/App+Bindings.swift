@@ -3,7 +3,7 @@ import Extensions
 extension AppProtocol {
 
     public func binding(
-        _ tempo: Bindings.Tempo = .sync,
+        _ tempo: Bindings.Tempo = isInTest ? .sync : .async,
         to context: Tag.Context = [:],
         managing updateManager: ((Bindings.Update) -> Void)? = nil
     ) -> Bindings {
@@ -12,7 +12,7 @@ extension AppProtocol {
 
     public func binding<Object: AnyObject>(
         _ object: Object,
-        _ tempo: Bindings.Tempo = .sync,
+        _ tempo: Bindings.Tempo = isInTest ? .sync : .async,
         to context: Tag.Context = [:],
         managing updateManager: ((Object) -> (Bindings.Update) -> Void)? = nil
     ) -> Bindings.ToObject<Object> {
