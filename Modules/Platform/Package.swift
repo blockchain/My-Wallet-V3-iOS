@@ -23,10 +23,6 @@ let package = Package(
             from: "5.3.0"
         ),
         .package(
-            url: "https://github.com/danielgindi/Charts.git",
-            from: "4.1.0"
-        ),
-        .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
@@ -128,7 +124,6 @@ let package = Package(
                 .product(name: "RIBs", package: "RIBs"),
                 .product(name: "RxDataSources", package: "RxDataSources"),
                 .product(name: "RxAnalyticsKit", package: "RxAnalytics"),
-                .product(name: "Charts", package: "Charts"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "PhoneNumberKit", package: "PhoneNumberKit"),
                 .product(name: "FeatureOpenBankingUI", package: "FeatureOpenBanking"),

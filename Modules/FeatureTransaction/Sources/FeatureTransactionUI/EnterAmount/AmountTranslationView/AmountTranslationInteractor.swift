@@ -665,7 +665,7 @@ extension Observable {
                 handler?.handleCurrency(error: error)
             })
             .catch({ _ in
-                Observable<Element>.empty()
+                Observable.empty()
             })
     }
 }

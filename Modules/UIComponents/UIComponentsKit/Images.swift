@@ -9,7 +9,7 @@ public enum ImageAsset: String {
     case emptyActivity = "empty_activity"
     case linkPattern = "link-pattern"
 
-    public var imageResource: ImageResource {
+    public var imageResource: ImageLocation {
         .local(name: rawValue, bundle: .UIComponents)
     }
 }

@@ -251,7 +251,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
             if let icon = account.data.icon {
                 AsyncMedia(url: icon)
             } else {
-                ImageResource.local(name: "icon-bank", bundle: .platformUIKit).image
+                ImageLocation.local(name: "icon-bank", bundle: .platformUIKit).image
             }
         default:
             EmptyView()

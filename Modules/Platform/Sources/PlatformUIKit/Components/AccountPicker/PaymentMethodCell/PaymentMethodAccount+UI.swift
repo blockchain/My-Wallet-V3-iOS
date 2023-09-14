@@ -7,7 +7,7 @@ import UIComponentsKit
 
 extension PaymentMethod {
 
-    public var logoResource: ImageResource {
+    public var logoResource: ImageLocation {
         switch type {
         case .card:
             return .local(name: "icon-card", bundle: .platformUIKit)
@@ -26,7 +26,7 @@ extension PaymentMethod {
 
 extension PaymentMethodAccount {
 
-    public var logoResource: ImageResource {
+    public var logoResource: ImageLocation {
         switch paymentMethodType {
         case .card(let cardData):
             return cardData.type.thumbnail ?? .local(name: "icon-card", bundle: .platformUIKit)
@@ -35,7 +35,7 @@ extension PaymentMethodAccount {
             return .local(name: "icon-applepay", bundle: .platformUIKit)
 
         case .linkedBank(let data):
-            return data.icon.map(ImageResource.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
+            return data.icon.map(ImageLocation.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
 
         case .account(let fundData):
             return fundData.balance.currency.logoResource

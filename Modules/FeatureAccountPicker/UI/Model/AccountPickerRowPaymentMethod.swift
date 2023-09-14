@@ -16,7 +16,7 @@ extension AccountPickerRow {
         let ux: UX.Dialog?
         var title: String
         var description: String
-        var badge: ImageResource?
+        var badge: ImageLocation?
         var badgeBackground: Color
         var capabilities: Capabilities?
 
@@ -28,7 +28,7 @@ extension AccountPickerRow {
             ux: UX.Dialog? = nil,
             title: String,
             description: String,
-            badge: ImageResource?,
+            badge: ImageLocation?,
             badgeBackground: Color,
             capabilities: Capabilities? = nil
         ) {

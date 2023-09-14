@@ -54,7 +54,7 @@ struct HeaderView: View {
 private struct NormalHeaderView: View {
     let title: String
     let subtitle: String?
-    let image: ImageResource?
+    let image: ImageLocation?
     let tableTitle: String?
     let searchable: Bool
 

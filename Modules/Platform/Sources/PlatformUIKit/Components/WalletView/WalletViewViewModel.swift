@@ -25,9 +25,9 @@ final class WalletViewViewModel {
         let currency = account.currencyType
         self.identifier = account.identifier
 
-        let image: ImageResource
+        let image: ImageLocation
         if let account = account as? LinkedBankAccount {
-            image = account.data.icon.map(ImageResource.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
+            image = account.data.icon.map(ImageLocation.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
         } else {
             image = currency.logoResource
         }

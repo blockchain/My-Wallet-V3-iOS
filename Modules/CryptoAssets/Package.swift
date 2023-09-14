@@ -40,7 +40,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Soneso/stellar-ios-mac-sdk.git",
-            exact: "2.2.5"
+            exact: "2.4.1"
         ),
         .package(
             url: "https://github.com/oliveratkinson-bc/wallet-core.git",

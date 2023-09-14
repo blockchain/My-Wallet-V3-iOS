@@ -34,7 +34,7 @@ final class AccountAuxiliaryViewInteractor: AccountAuxiliaryViewInteractorAPI {
     struct State {
         let title: String
         let subtitle: String
-        let imageResource: ImageResource
+        let imageResource: ImageLocation
         let imageBackgroundColor: UIColor
         let isEnabled: Bool
         let badgeViewModel: BadgeViewModel?
@@ -42,7 +42,7 @@ final class AccountAuxiliaryViewInteractor: AccountAuxiliaryViewInteractorAPI {
         init(
             title: String,
             subtitle: String,
-            imageResource: ImageResource,
+            imageResource: ImageLocation,
             imageBackgroundColor: UIColor,
             isEnabled: Bool = true,
             badgeViewModel: BadgeViewModel? = nil

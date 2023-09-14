@@ -57,10 +57,10 @@ final class RemovePaymentMethodScreenPresenter {
             accessibility: .id(AccessibilityIDs.description)
         )
 
-        let imageResource: ImageResource
+        let imageResource: ImageLocation
         switch interactor.data.type {
         case .beneficiary:
-            imageResource = interactor.data.icon.map(ImageResource.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
+            imageResource = interactor.data.icon.map(ImageLocation.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
         case .card(let type):
             imageResource = type.thumbnail ?? .local(name: "icon-card", bundle: .platformUIKit)
         }

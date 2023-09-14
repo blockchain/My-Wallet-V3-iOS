@@ -34,11 +34,11 @@ public struct ImageViewContent: Equatable {
     }
 
     let accessibility: Accessibility
-    public let imageResource: ImageResource?
+    public let imageResource: ImageLocation?
     let renderingMode: RenderingMode
 
     public init(
-        imageResource: ImageResource? = nil,
+        imageResource: ImageLocation? = nil,
         accessibility: Accessibility = .none,
         renderingMode: RenderingMode = .normal
     ) {

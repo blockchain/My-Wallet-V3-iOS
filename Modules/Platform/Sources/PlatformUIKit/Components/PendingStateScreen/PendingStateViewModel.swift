@@ -11,9 +11,9 @@ public struct PendingStateViewModel {
         case region
         case circleError
         case success
-        case custom(ImageResource)
+        case custom(ImageLocation)
 
-        public var imageResource: ImageResource {
+        public var imageResource: ImageLocation {
             switch self {
             case .circleError:
                 return .local(name: "circular-error-icon", bundle: .platformUIKit)
