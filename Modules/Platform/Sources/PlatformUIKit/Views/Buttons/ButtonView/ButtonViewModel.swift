@@ -209,7 +209,7 @@ extension ButtonViewModel {
         font: UIFont = .main(.semibold, 16),
         accessibilityId: String = Accessibility.Identifier.General.mainCTAButton
     ) -> ButtonViewModel {
-        
+
         var viewModel = ButtonViewModel(
             font: font,
             accessibility: .id(accessibilityId)

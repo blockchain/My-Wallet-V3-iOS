@@ -207,7 +207,7 @@ extension NAPI {
 
     public actor Domain: CustomDebugStringConvertible {
 
-        nonisolated public var debugDescription: String {
+        public nonisolated var debugDescription: String {
             "NAPI.Domain.\(id)"
         }
 

@@ -15,7 +15,7 @@ final class AddressModificationReducerTests: XCTestCase {
         AddressModificationAction,
         AddressModificationState,
         AddressModificationAction,
-        ()
+        Void
     >
 
     private var testStore: TestStoreType!

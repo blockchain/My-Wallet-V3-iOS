@@ -5,8 +5,8 @@ import Blockchain
 import BlockchainComponentLibrary
 import BlockchainUI
 import Combine
-import DIKit
 import Dependencies
+import DIKit
 import Extensions
 import Localization
 import SwiftUI
@@ -94,7 +94,8 @@ struct SweepImportedAddressesView: View {
                 .small(),
             action: {
                 $app.post(event: blockchain.ux.sweep.imported.addresses.transfer.article.plain.navigation.bar.button.close.tap)
-            })
+            }
+        )
             .batch {
                 set(blockchain.ux.sweep.imported.addresses.transfer.article.plain.navigation.bar.button.close.tap.then.close, to: true)
             }
@@ -252,6 +253,7 @@ struct SweepModel: Identifiable, Hashable {
         case success
         case failure
     }
+
     var id: String { account }
 
     var account: String
@@ -322,11 +324,11 @@ extension SweepImportedAddressesView {
                             self?.sweeping = false
                             return
                         }
-                        self.sweeping = false
+                        sweeping = false
                         if completion == .finished {
-                            self.sweepCompletion = self.accountsSend.values.allSatisfy { $0 == .success } ? .finished : .finishedWithErrors
+                            sweepCompletion = accountsSend.values.allSatisfy { $0 == .success } ? .finished : .finishedWithErrors
                         } else {
-                            self.sweepCompletion = .failure
+                            sweepCompletion = .failure
                         }
                     },
                     receiveCancel: { [weak self] in
@@ -348,9 +350,7 @@ extension SweepImportedAddressesView {
 }
 
 private enum SweepImportedAddressesServiceKey: DependencyKey {
-    static var liveValue: SweepImportedAddressesServiceAPI = {
-        DIKit.resolve()
-    }()
+    static var liveValue: SweepImportedAddressesServiceAPI = DIKit.resolve()
 }
 
 extension DependencyValues {

@@ -27,7 +27,7 @@ extension Session.State {
     public class Data {
 
         public internal(set) var store: [Tag.Reference: Any] = [:]
-        internal var subjects: [Tag.Reference: Subject] = [:]
+        var subjects: [Tag.Reference: Subject] = [:]
         private var dirty: (data: [Tag.Reference: Any], level: UInt) = ([:], 0)
 
         private let lock = NSRecursiveLock()

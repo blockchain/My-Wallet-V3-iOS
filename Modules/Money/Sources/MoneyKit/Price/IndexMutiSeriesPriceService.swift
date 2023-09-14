@@ -11,9 +11,9 @@ public actor IndexMutiSeriesPriceService {
     public typealias BufferingPolicy = AsyncStream<Price?>.Continuation.BufferingPolicy
 
     public class Source {
-        internal var fetched: Bool = false
-        internal var error: Error?
-        internal var errorCount: Int = 0
+        var fetched: Bool = false
+        var error: Error?
+        var errorCount: Int = 0
         fileprivate(set) var cancelTimestamp: DispatchTime?
         fileprivate(set) var referenceCount: Int = 0
         fileprivate(set) var pendingContinuations: [PendingContinuation]?

@@ -46,8 +46,11 @@ class CustodialActivityService: CustodialActivityServiceAPI {
     func getActivity(fiatCurrency: FiatCurrency) -> AsyncStream<[ActivityEntry]> {
         let assets = coincore.cryptoAssets
         var streams: [(String, AnyPublisher<[ActivityEntry], Never>)] = [
-            ("fiat \(fiatCurrency)", ordersActivity.activity(fiatCurrency: fiatCurrency).replaceError(with: [])
-                .mapEach(ActivityEntryAdapter.createEntry))
+            (
+                "fiat \(fiatCurrency)",
+                ordersActivity.activity(fiatCurrency: fiatCurrency).replaceError(with: [])
+                .mapEach(ActivityEntryAdapter.createEntry)
+            )
         ]
 
         for asset in assets {
@@ -97,8 +100,9 @@ class CustodialActivityService: CustodialActivityServiceAPI {
         }
 
         return combineLatest(
-            streams.map { name, stream in stream.values },
-            bufferingPolicy: .unbounded)
+            streams.map { _, stream in stream.values },
+            bufferingPolicy: .unbounded
+        )
         .map { items in
             items.flatMap { $0 }.sorted(by: { $0.timestamp > $1.timestamp })
         }

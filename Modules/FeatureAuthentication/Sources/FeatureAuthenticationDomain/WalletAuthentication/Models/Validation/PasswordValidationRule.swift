@@ -20,5 +20,5 @@ public enum PasswordValidationRule: Equatable {
     /// be at least 8 characters long
     case length
 
-    static public let all: [PasswordValidationRule] = [.lowercaseLetter, .uppercaseLetter, .number, .specialCharacter, .length]
+    public static let all: [PasswordValidationRule] = [.lowercaseLetter, .uppercaseLetter, .number, .specialCharacter, .length]
 }

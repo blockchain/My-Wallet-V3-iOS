@@ -106,7 +106,8 @@ struct BuyEntryListView: View {
         List {
             if !isSearching,
                 isTopMoversEnabled == nil || isTopMoversEnabled == true,
-                isExternalTradingEnabled == false {
+                isExternalTradingEnabled == false
+            {
                 Section {
                     topMoversView
                         .transition(.opacity)

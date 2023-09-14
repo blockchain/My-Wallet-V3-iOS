@@ -2,8 +2,8 @@
 
 import BlockchainNamespace
 import Combine
-import DIKit
 import Dependencies
+import DIKit
 import Errors
 import FeatureTransactionDomain
 import MoneyKit
@@ -11,21 +11,21 @@ import NetworkKit
 import PlatformKit
 import ToolKit
 
-typealias FeatureTransactionDomainClientAPI = CustodialQuoteAPI &
-    OrderCreationClientAPI &
+typealias FeatureTransactionDomainClientAPI =
     AvailablePairsClientAPI &
-    TransactionLimitsClientAPI &
-    OrderFetchingClientAPI &
-    OrderUpdateClientAPI &
-    CustodialTransferClientAPI &
+    BankTransferClientAPI &
     BitPayClientAPI &
     BlockchainNameResolutionClientAPI &
-    BankTransferClientAPI &
-    WithdrawalLocksCheckClientAPI &
-    CreateRecurringBuyClientAPI &
     CancelRecurringBuyClientAPI &
+    CreateRecurringBuyClientAPI & CustodialQuoteAPI &
+    CustodialTransferClientAPI &
+    EligiblePaymentMethodRecurringBuyClientAPI &
+    OrderCreationClientAPI &
+    OrderFetchingClientAPI &
+    OrderUpdateClientAPI &
     RecurringBuyProviderClientAPI &
-    EligiblePaymentMethodRecurringBuyClientAPI
+    TransactionLimitsClientAPI &
+    WithdrawalLocksCheckClientAPI
 
 /// FeatureTransactionDomain network client
 final class APIClient: FeatureTransactionDomainClientAPI {

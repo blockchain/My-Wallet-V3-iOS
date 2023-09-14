@@ -25,9 +25,9 @@ public protocol AppSettingsBaseAPI: AnyObject {
 }
 
 public typealias BlockchainSettingsAppAPI = AppSettingsAuthenticating
+    & AppSettingsBaseAPI
     & AppSettingsSecureChannel
     & PermissionSettingsAPI
-    & AppSettingsBaseAPI
 
 /**
  Settings for the current user.

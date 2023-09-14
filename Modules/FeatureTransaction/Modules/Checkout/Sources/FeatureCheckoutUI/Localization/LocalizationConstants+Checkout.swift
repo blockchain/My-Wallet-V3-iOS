@@ -153,7 +153,6 @@ extension LocalizationConstants {
                 ).interpolating(amount, asset, asset)
             }
 
-
             static let authorizeTitle = NSLocalizedString(
                 "AUTHORIZATION AND LIMITED POWER OF ATTORNEY",
                 comment: "Title: AUTHORIZATION AND LIMITED POWER OF ATTORNEY"
@@ -187,9 +186,11 @@ extension LocalizationConstants {
             static func price(_ code: String) -> String {
                 NSLocalizedString("%@ Price", comment: "").interpolating(code)
             }
+
             static func deposit(_ code: String) -> String {
                 NSLocalizedString("Deposit %@", comment: "").interpolating(code)
             }
+
             static let withdraw = NSLocalizedString(
                 "Withdraw",
                 comment: "Withdraw title label"
@@ -270,7 +271,7 @@ extension LocalizationConstants {
             static let learnMore = NSLocalizedString("Learn More", comment: "Learn More")
 
             static let gotIt = NSLocalizedString("Got it", comment: "Got it")
-            
+
             static let viewDisclosures = NSLocalizedString(
                 "Risk Disclosures",
                 comment: "Risk Disclosures"

@@ -7,4 +7,3 @@ import UnifiedActivityDomain
 public protocol CustodialActivityRepositoryAPI {
     func activity() -> StreamOf<[ActivityEntry], Never>
 }
-

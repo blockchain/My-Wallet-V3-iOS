@@ -315,7 +315,7 @@ extension Collection<Account.Snapshot> {
     }
 
     public var canSwapOnDex: Bool {
-        guard let currency = self.first?.cryptoCurrency else {
+        guard let currency = first?.cryptoCurrency else {
             return false
         }
         return EnabledCurrenciesService.default.network(for: currency) != nil

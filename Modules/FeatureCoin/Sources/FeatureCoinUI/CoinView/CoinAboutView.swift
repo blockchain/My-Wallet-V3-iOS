@@ -213,7 +213,7 @@ struct CoinAboutView_PreviewProvider: PreviewProvider {
         make(value: infoFull, title: "ERC20")
     }
 
-    static private func make(
+    private static func make(
         value: AboutAssetInformation?,
         title: String
     ) -> some View {
@@ -224,7 +224,7 @@ struct CoinAboutView_PreviewProvider: PreviewProvider {
                     currency: .bitcoin,
                     value: value,
                     isExpanded: false,
-                    toggleIsExpaded: { }
+                    toggleIsExpaded: {}
                 )
                 .app(App.preview)
                 Divider()

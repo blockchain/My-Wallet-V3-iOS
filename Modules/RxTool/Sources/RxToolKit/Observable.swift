@@ -86,10 +86,10 @@ extension Observable {
                     _ = downstream.receive(element)
                 case .error(let error):
                     downstream.receive(completion: .failure(error))
-                    self.cancel()
+                    cancel()
                 case .completed:
                     downstream.receive(completion: .finished)
-                    self.cancel()
+                    cancel()
                 }
             }
         }

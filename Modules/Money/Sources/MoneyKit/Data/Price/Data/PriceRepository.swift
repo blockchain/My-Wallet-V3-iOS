@@ -138,7 +138,8 @@ final class PriceRepository: PriceRepositoryAPI {
                             return TopMoverInfo(
                                 currency: currency,
                                 delta: item.percentageDelta,
-                                lastPrice: .create(major: item.lastPrice, currency: .fiat(key.currency)))
+                                lastPrice: .create(major: item.lastPrice, currency: .fiat(key.currency))
+                            )
                             }
                     .array
                     }

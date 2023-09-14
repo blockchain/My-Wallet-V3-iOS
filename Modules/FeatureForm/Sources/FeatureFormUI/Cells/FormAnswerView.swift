@@ -174,7 +174,7 @@ struct FormMultipleSelectionAnswerSingleTileView: View {
            }
        )
        .contentShape(Rectangle())
-       .onTapGesture  {
+       .onTapGesture {
            answer.checked = !answer.checked.or(default: false)
        }
        .accessibilityElement(children: .combine)

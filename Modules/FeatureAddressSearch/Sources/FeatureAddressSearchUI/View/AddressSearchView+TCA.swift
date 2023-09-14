@@ -67,10 +67,7 @@ struct AddressSearchState: Equatable, NavigationState {
     }
 }
 
-struct AddressSearchEnvironment {
-
-
-}
+struct AddressSearchEnvironment {}
 
 struct AddressSearchReducer: ReducerProtocol {
 
@@ -93,10 +90,10 @@ struct AddressSearchReducer: ReducerProtocol {
         self.addressSearchService = addressSearchService
         self.onComplete = onComplete
     }
-    
+
     typealias State = AddressSearchState
     typealias Action = AddressSearchAction
-    
+
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
@@ -108,7 +105,7 @@ struct AddressSearchReducer: ReducerProtocol {
                         country: state.address?.country
                     )
                 )
-                
+
             case .selectAddress(let searchAddressResult):
                 if searchAddressResult.isAddressType {
                     return EffectTask(value: .modifySelectedAddress(addressId: searchAddressResult.addressId))
@@ -126,7 +123,7 @@ struct AddressSearchReducer: ReducerProtocol {
                         )
                     )
                 }
-                
+
             case .modifySelectedAddress(let addressId):
                 return EffectTask(
                     value: .navigate(to: .modifyAddress(
@@ -134,7 +131,7 @@ struct AddressSearchReducer: ReducerProtocol {
                         address: state.address
                     ))
                 )
-                
+
             case .modifyAddress:
                 return EffectTask(
                     value: .navigate(to: .modifyAddress(
@@ -142,7 +139,7 @@ struct AddressSearchReducer: ReducerProtocol {
                         address: state.address
                     ))
                 )
-                
+
             case .onAppear:
                 state.screenTitle = config.addressSearchScreen.title
                 state.screenSubtitle = config.addressSearchScreen.subtitle
@@ -160,7 +157,7 @@ struct AddressSearchReducer: ReducerProtocol {
                     }
                 }
                 return .none
-                
+
             case .route(let route):
                 if let routeValue = route?.route {
                     switch routeValue {
@@ -178,26 +175,26 @@ struct AddressSearchReducer: ReducerProtocol {
                     state.route = route
                 }
                 return .none
-                
+
             case .closeError:
                 state.error = nil
                 return .none
-                
+
             case .binding:
                 return .none
-                
+
             case .updateSelectedAddress(let address):
                 state.address = address
                 return EffectTask(value: .complete(.saved(address)))
-                
+
             case .cancelSearch:
                 return EffectTask(value: .complete(.abandoned))
-                
+
             case .complete(let addressResult):
                 return .fireAndForget {
                     onComplete(addressResult)
                 }
-                
+
             case .searchAddresses(let searchText, let country):
                 guard let searchText, searchText.isNotEmpty,
                       let country, country.isNotEmpty
@@ -230,7 +227,7 @@ struct AddressSearchReducer: ReducerProtocol {
                     .map { result in
                             .didReceiveAddressesResult(result)
                     }
-                
+
             case .didReceiveAddressesResult(let result):
                 state.isSearchResultsLoading = false
                 switch result {
@@ -240,7 +237,7 @@ struct AddressSearchReducer: ReducerProtocol {
                     state.error = error.nabuError
                 }
                 return .none
-                
+
             case .addressModificationAction(let modificationAction):
                 switch modificationAction {
                 case .updateAddressResponse(.success(let address)):

@@ -8,13 +8,11 @@ public enum Either<A, B> {
 extension Either where A == B {
 
     @inlinable public subscript<V>(dynamicMember keyPath: KeyPath<A, V>) -> V {
-        get {
             switch self {
             case .left(let a): return a[keyPath: keyPath]
             case .right(let b): return b[keyPath: keyPath]
             }
         }
-    }
 }
 
 extension Either {

@@ -4,10 +4,10 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import BlockchainUI
 import ComposableArchitecture
+import Localization
 import SwiftUI
 import UnifiedActivityDomain
 import UnifiedActivityUI
-import Localization
 
 public struct ActivityDetailSceneView: View {
     @BlockchainApp var app
@@ -20,7 +20,7 @@ public struct ActivityDetailSceneView: View {
         let items: ActivityDetail.GroupedItems?
         let isPlaceholder: Bool
         let isExternalTradingEnabled: Bool
-        
+
         init(state: ActivityDetailScene.State) {
             self.items = state.items
             self.isPlaceholder = state.items == state.placeholderItems
@@ -137,7 +137,7 @@ public struct ActivityDetailSceneView: View {
 
     @ViewBuilder
     func bakktBottomView() -> some View {
-        VStack{
+        VStack {
             VStack(alignment: .leading) {
                 bakktDisclaimer()
                 SmallMinimalButton(title: LocalizationConstants.Activity.Details.Button.viewDisclosures) {
@@ -147,7 +147,6 @@ public struct ActivityDetailSceneView: View {
                     set(blockchain.ux.bakkt.view.disclosures.then.launch.url, to: "https://bakkt.com/disclosures")
                 }
             }
-            
 
             Image("bakkt-logo", bundle: .componentLibrary)
                 .foregroundColor(.semantic.title)
@@ -159,12 +158,11 @@ public struct ActivityDetailSceneView: View {
     @ViewBuilder
     func bakktDisclaimer() -> some View {
         let label = LocalizationConstants.Activity.Details.bakktDisclaimer
-        Text(rich:label)
+        Text(rich: label)
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.leading)
     }
-
 
     @ViewBuilder
     private func imageView(with image: ImageType?) -> some View {

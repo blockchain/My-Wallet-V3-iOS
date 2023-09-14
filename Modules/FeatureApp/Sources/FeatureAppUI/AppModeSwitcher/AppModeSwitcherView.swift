@@ -16,7 +16,7 @@ public struct AppModeSwitcherView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }, content: { viewStore in
+        WithViewStore(store, observe: { $0 }, content: { _ in
             VStack {
                 headerView
                 selectionView

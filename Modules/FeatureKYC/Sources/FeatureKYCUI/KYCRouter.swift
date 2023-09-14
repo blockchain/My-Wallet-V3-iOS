@@ -210,7 +210,7 @@ final class KYCRouter: KYCRouterAPI {
             .zip(
                 nabuUserService.fetchUser().asObservable(),
                 postTierObservable,
-                app.publisher(for:  blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
+                app.publisher(for: blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
                     .replaceError(with: false)
                     .prefix(1)
                     .asObservable()

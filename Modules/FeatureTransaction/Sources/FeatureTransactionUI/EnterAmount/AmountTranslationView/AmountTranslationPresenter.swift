@@ -228,7 +228,7 @@ public final class AmountTranslationPresenter: AmountViewPresenting {
 }
 
 extension AmountPresenterInput {
-    internal var toInteractorInput: AmountInteractorInput {
+    var toInteractorInput: AmountInteractorInput {
         switch self {
         case .input(let value):
             return .insert(value)

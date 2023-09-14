@@ -1,7 +1,7 @@
 import BlockchainUI
+import FeatureCustodialOnboarding
 import FeatureKYCDomain
 import SwiftUI
-import FeatureCustodialOnboarding
 
 struct SSNInputView: View {
 
@@ -30,9 +30,9 @@ struct SSNInputView: View {
             isSecure: isHidingSSN,
             trailing: {
                 if isHidingSSN {
-                    IconButton(icon: .`visibilityOn`, toggle: $isHidingSSN)
+                    IconButton(icon: .visibilityOn, toggle: $isHidingSSN)
                 } else {
-                    IconButton(icon: .`visibilityOff`, toggle: $isHidingSSN)
+                    IconButton(icon: .visibilityOff, toggle: $isHidingSSN)
                 }
             }
         )
@@ -110,7 +110,7 @@ struct SSNCollectionView: View {
                     isLoading: service.isLoading,
                     action: {
                         Task {
-                            self.error = nil
+                            error = nil
                             do {
                                 try await service.submit(SSN: SSN)
                                 action(SSN)
@@ -185,7 +185,7 @@ class SubmitSSNService: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var isTimeout: Bool = false
 
-    init() { }
+    init() {}
 
     @MainActor func submit(SSN: String) async throws {
         isLoading = true

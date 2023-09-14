@@ -264,10 +264,10 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
             .flatMap { [methodTypes] fiatCurrency, isVerifiedApproved, isOpenBankingEnabled, isExternalBrokerage -> AnyPublisher<[PaymentMethodType], PaymentMethodTypesServiceError> in
                 // In case of no preselection we want the first eligible, if none present, check if available is only 1 and
                 // preselect it. Otherwise, don't preselect anything, this is in parallel with Android logic
-                return methodTypes
+                methodTypes
                     .map { (types: [PaymentMethodType]) -> [PaymentMethodType] in
                         // we filter valid methods for buy
-                        return types.filterValidForBuy(
+                        types.filterValidForBuy(
                             currentWalletCurrency: fiatCurrency,
                             accountForEligibility: isVerifiedApproved,
                             isOpenBankingEnabled: isOpenBankingEnabled,

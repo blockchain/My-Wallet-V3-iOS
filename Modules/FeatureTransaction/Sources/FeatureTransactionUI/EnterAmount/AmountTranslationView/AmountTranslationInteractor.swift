@@ -634,7 +634,7 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
 }
 
 extension AmountInteractorState {
-    internal var toValidationState: ValidationState {
+    var toValidationState: ValidationState {
         switch self {
         case .validInput:
             return .valid
@@ -664,8 +664,8 @@ extension Observable {
             .do(onError: { [weak handler] error in
                 handler?.handleCurrency(error: error)
             })
-            .catch({ _ in
+            .catch { _ in
                 Observable.empty()
-            })
+            }
     }
 }

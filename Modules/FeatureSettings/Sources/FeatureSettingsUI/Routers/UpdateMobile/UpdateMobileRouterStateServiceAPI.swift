@@ -12,6 +12,6 @@ protocol UpdateMobileStateReceiverServiceAPI: AnyObject {
 }
 
 /// A composition of all of Simple-Buy state-services
-typealias UpdateMobileStateServiceAPI = UpdateMobileStateReceiverServiceAPI &
+typealias UpdateMobileStateServiceAPI =
     RoutingNextStateEmitterAPI &
-    RoutingPreviousStateEmitterAPI
+    RoutingPreviousStateEmitterAPI & UpdateMobileStateReceiverServiceAPI

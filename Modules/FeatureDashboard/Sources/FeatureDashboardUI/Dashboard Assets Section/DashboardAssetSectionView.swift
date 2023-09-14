@@ -144,7 +144,6 @@ public struct DashboardAssetSectionView: View {
                         Icon
                             .questionFilled.micro()
                             .color(.semantic.muted)
-
                     }
                 },
                 trailing: {

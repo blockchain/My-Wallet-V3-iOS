@@ -44,7 +44,7 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
                                     .topMostViewController?
                                     .dismiss(animated: true) {
                                     promise(.success(address))
-                                }
+                                    }
                             }
                         )
                     )

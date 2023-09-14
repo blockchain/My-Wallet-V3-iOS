@@ -74,7 +74,6 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
     @State private var timeout: Int = 1
     @BlockchainApp var app
 
-
     public func makeBody(configuration: Configuration) -> some View {
         GeometryReader { geometry in
             let lineWidth = lineWidth.in(geometry)

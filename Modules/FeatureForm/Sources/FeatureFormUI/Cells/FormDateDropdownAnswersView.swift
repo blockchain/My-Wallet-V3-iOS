@@ -57,10 +57,10 @@ struct FormDateDropdownAnswersView: View {
             }
             .popover(isPresented: $selectionPanelOpened) {
                 FormDatePickerView(
-                        title: title,
-                        answer: $answer,
-                        selectionPanelOpened: $selectionPanelOpened
-                    )
+                    title: title,
+                    answer: $answer,
+                    selectionPanelOpened: $selectionPanelOpened
+                )
             }
         }
     }

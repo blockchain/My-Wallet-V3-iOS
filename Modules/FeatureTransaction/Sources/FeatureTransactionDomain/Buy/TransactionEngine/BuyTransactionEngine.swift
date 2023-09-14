@@ -297,7 +297,7 @@ final class BuyTransactionEngine: TransactionEngine {
         quoteId: String,
         amount: MoneyValue
     ) -> Single<TransactionOrder?> {
-        return isRecurringBuyEnabled
+        isRecurringBuyEnabled
             .asSingle()
             .flatMap(weak: self) { (self, isRecurringBuyEnabled) -> Single<TransactionOrder?> in
                 guard let sourceAccount = self.sourceAccount as? PaymentMethodAccount else {

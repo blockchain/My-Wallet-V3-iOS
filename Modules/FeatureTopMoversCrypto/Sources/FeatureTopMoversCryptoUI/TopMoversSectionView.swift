@@ -26,7 +26,7 @@ public struct TopMoversSectionView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-        }
+            }
         )
     }
 

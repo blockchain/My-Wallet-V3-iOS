@@ -400,7 +400,7 @@ extension BuyCheckoutView.Loaded {
     }
 
     @ViewBuilder func bakktBottomView() -> some View {
-        VStack{
+        VStack {
             VStack(alignment: .leading) {
                 bakktDisclaimer()
                 SmallMinimalButton(title: L10n.Button.viewDisclosures) {

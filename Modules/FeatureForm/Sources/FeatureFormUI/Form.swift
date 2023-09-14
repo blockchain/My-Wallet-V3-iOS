@@ -42,7 +42,7 @@ public struct PrimaryForm<Header: View>: View {
         fieldConfiguration: @escaping PrimaryFormFieldConfiguration = defaultFieldConfiguration,
         @ViewBuilder headerIcon: @escaping () -> Header
     ) {
-        my = form.wrappedValue
+        self.my = form.wrappedValue
         _form = form.transaction()
         self.submitActionTitle = submitActionTitle
         self.submitActionLoading = submitActionLoading

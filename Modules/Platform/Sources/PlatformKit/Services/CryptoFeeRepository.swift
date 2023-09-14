@@ -6,7 +6,7 @@ import Errors
 import ToolKit
 
 /// Type alias representing fees data for specific crypto currencies.
-public typealias CryptoFeeType = TransactionFee & Decodable
+public typealias CryptoFeeType = Decodable & TransactionFee
 
 /// Service that provides fees of its associated type.
 public protocol CryptoFeeRepositoryAPI {

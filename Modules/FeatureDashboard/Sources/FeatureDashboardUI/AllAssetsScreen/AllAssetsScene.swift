@@ -148,6 +148,6 @@ extension AssetBalanceInfo {
         using algorithm: StringDistanceAlgorithm
     ) -> Bool {
         currency.filter(by: searchText, using: algorithm) ||
-            fiatBalance.flatMap({ $0.quote.displayString.distance(between: searchText, using: algorithm) < 0.3 }) ?? false
+            fiatBalance.flatMap { $0.quote.displayString.distance(between: searchText, using: algorithm) < 0.3 } ?? false
     }
 }

@@ -71,7 +71,7 @@ public final class WebSocketConnection {
     public func send(_ message: Message, onCompletion: (() -> Void)?) {
         consoleLogger?("WebSocketConnection: Send \(message)")
         guard let task else {
-            self.handleEvent(.connnectionError(.unknown))
+            handleEvent(.connnectionError(.unknown))
             onCompletion?()
             return
         }

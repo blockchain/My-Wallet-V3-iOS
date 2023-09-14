@@ -39,12 +39,12 @@ enum EthereumAddressValidator {
 
     static func validate(address: String) throws {
         // Check that the address only contains alphanumerics
-        guard Self.isAlphanumericOnly(address) else {
+        guard isAlphanumericOnly(address) else {
             throw AddressValidationError.containsInvalidCharacters
         }
 
         // Check that the normalised address is exactly 20 bytes long
-        guard Self.hasCorrectLength(address) else {
+        guard hasCorrectLength(address) else {
             throw AddressValidationError.invalidLength
         }
     }

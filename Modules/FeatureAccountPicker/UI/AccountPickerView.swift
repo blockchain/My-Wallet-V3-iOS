@@ -107,7 +107,6 @@ public struct AccountPickerView<
         }
     }
 
-
     @ViewBuilder
     private var errorStateView: some View {
         VStack(spacing: Spacing.padding2) {

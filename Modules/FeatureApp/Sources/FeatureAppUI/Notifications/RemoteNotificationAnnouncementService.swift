@@ -54,9 +54,9 @@ final class RemoteNotificationAnnouncementService: AnnouncementsServiceAPI {
     }
 }
 
-private extension Announcement {
+extension Announcement {
 
-    static let apns = Announcement(
+    fileprivate static let apns = Announcement(
         id: "apns",
         createdAt: .now,
         content: Announcement.Content(

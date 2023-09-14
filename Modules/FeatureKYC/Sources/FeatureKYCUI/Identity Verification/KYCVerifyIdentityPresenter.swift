@@ -34,7 +34,7 @@ class KYCVerifyIdentityPresenter {
     weak var cameraPromptingDelegate: CameraPromptingDelegate?
     weak var microphonePromptingDelegate: MicrophonePromptingDelegate?
 
-    internal lazy var permissionsRequestor: PermissionsRequestor = PermissionsRequestor()
+    lazy var permissionsRequestor: PermissionsRequestor = PermissionsRequestor()
 }
 
 extension KYCVerifyIdentityPresenter: MicrophonePrompting {}

@@ -7,21 +7,21 @@ import FeatureCardPaymentDomain
 import MoneyKit
 import NetworkKit
 
-typealias SimpleBuyClientAPI = EligibilityClientAPI &
+typealias SimpleBuyClientAPI =
+    ApplePayClientAPI &
+    BeneficiariesClientAPI &
+    CardOrderConfirmationClientAPI & EligibilityClientAPI &
+    LinkedBanksClientAPI &
+    OrderCancellationClientAPI &
+    OrderCreationClientAPI &
+    OrderDetailsClientAPI &
+    OrdersActivityClientAPI &
+    PaymentAccountClientAPI &
+    PaymentEligibleMethodsClientAPI &
+    QuoteClientAPI &
     SupportedPairsClientAPI &
     TradingPairsClientAPI &
-    OrderDetailsClientAPI &
-    OrderCancellationClientAPI &
-    PaymentAccountClientAPI &
-    OrderCreationClientAPI &
-    CardOrderConfirmationClientAPI &
-    QuoteClientAPI &
-    BeneficiariesClientAPI &
-    OrdersActivityClientAPI &
-    WithdrawalClientAPI &
-    PaymentEligibleMethodsClientAPI &
-    LinkedBanksClientAPI &
-    ApplePayClientAPI
+    WithdrawalClientAPI
 
 /// Simple-Buy network client
 final class APIClient: SimpleBuyClientAPI {

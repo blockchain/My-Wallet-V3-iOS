@@ -67,7 +67,7 @@ public protocol CryptoCurrenciesServiceAPI {
     ) -> AnyPublisher<[CryptoCurrencyQuote], CryptoCurrenciesServiceError>
 }
 
-internal final class CryptoCurrenciesService: CryptoCurrenciesServiceAPI {
+final class CryptoCurrenciesService: CryptoCurrenciesServiceAPI {
 
     // MARK: - Private Properties
 

@@ -76,7 +76,7 @@ extension EVMNetworkConfig {
 
     static func from(response: NetworkConfigResponse) -> [EVMNetworkConfig] {
         response.networks
-            .compactMap { Self.init(response: $0) }
+            .compactMap { Self(response: $0) }
     }
 
     init?(response: NetworkConfigResponse.Network) {

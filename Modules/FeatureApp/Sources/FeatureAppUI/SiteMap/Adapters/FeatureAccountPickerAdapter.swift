@@ -74,9 +74,9 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                             item.safeBalancePair(fiatCurrency: fiatCurrency)
                         }
                         .map { (balance: MoneyValue?, quote: MoneyValue?) in
-                            return AccountPickerRow.SingleAccount.Balances(
+                            AccountPickerRow.SingleAccount.Balances(
                                 fiatBalance: quote?.displayString ?? "",
-                                cryptoBalance:  balance?.displayString ?? ""
+                                cryptoBalance: balance?.displayString ?? ""
                             )
                         }
                         .prepend(.loading)
@@ -107,7 +107,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
                         .flatMap { fiatCurrency in
                             item.safeBalancePair(fiatCurrency: fiatCurrency)
                         }
-                        .map { (balance: MoneyValue?, quote: MoneyValue?) in
+                        .map { (_: MoneyValue?, quote: MoneyValue?) in
                             guard let quote else {
                                 return .loading
                             }

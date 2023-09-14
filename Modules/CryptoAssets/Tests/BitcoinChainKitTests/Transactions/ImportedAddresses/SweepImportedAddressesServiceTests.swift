@@ -61,14 +61,14 @@ final class SweepImportedAddressesServiceTests: XCTestCase {
         mockClient.underlyingUnspentOutputs = .just(UnspentOutputsResponse(unspent_outputs: []))
         let mockUnspentOutputRepo = UnspentOutputRepository(client: mockClient, coin: .bitcoin, app: App.test)
 
-        self.receiveBTCAddressProviderMock = BitcoinChainReceiveAddressProvider<BitcoinToken>(
+        receiveBTCAddressProviderMock = BitcoinChainReceiveAddressProvider<BitcoinToken>(
             mnemonicProvider: mockMnemonicProvider,
             fetchMultiAddressFor: mockFetchMultiAddressFor,
             unspentOutputRepository: mockUnspentOutputRepo,
             operationQueue: DispatchQueue(label: "receive.address.mock.queue")
         )
 
-        self.receiveBCHAddressProviderMock = BitcoinChainReceiveAddressProvider<BitcoinCashToken>(
+        receiveBCHAddressProviderMock = BitcoinChainReceiveAddressProvider<BitcoinCashToken>(
             mnemonicProvider: mockMnemonicProvider,
             fetchMultiAddressFor: mockFetchMultiAddressFor,
             unspentOutputRepository: mockUnspentOutputRepo,
@@ -93,7 +93,7 @@ final class SweepImportedAddressesServiceTests: XCTestCase {
             )
         }
         let mockDefaultAccount: (BitcoinChainCoin) -> AnyPublisher<BitcoinChainCryptoAccount, Error> = { _ in
-            .just(MockChainAccount.init(coinType: .bitcoin, xpub: XPub(address: "12", derivationType: .bech32), hdAccountIndex: 0))
+            .just(MockChainAccount(coinType: .bitcoin, xpub: XPub(address: "12", derivationType: .bech32), hdAccountIndex: 0))
         }
 
         var mockDoPerformSweepResultValue: Result<EmptyValue, Error> = .success(.noValue)
@@ -151,7 +151,7 @@ final class SweepImportedAddressesServiceTests: XCTestCase {
     }
 
     func test_do_perform_sweep_works_correctly() throws {
-        let source = MockChainAccount(coinType: .bitcoin, xpub: XPub.init(address: "1234", derivationType: .bech32), hdAccountIndex: 0)
+        let source = MockChainAccount(coinType: .bitcoin, xpub: XPub(address: "1234", derivationType: .bech32), hdAccountIndex: 0)
         let target = BitcoinChainReceiveAddress<BitcoinToken>(address: "123", label: "") { _ in
             .empty()
         }
@@ -689,8 +689,7 @@ class MockChainAccount: BitcoinChainCryptoAccount {
         .empty()
     }
 
-    func invalidateAccountBalance() {
-    }
+    func invalidateAccountBalance() {}
 
     var label: String = ""
     var assetName: String = ""
@@ -727,8 +726,7 @@ class MockCoincore: CoincoreAPI {
         .empty()
     }
 
-    func registerNonCustodialAssetLoader(handler: @escaping () -> AnyPublisher<[MoneyKit.CryptoCurrency], Never>) {
-    }
+    func registerNonCustodialAssetLoader(handler: @escaping () -> AnyPublisher<[MoneyKit.CryptoCurrency], Never>) {}
 
     func getTransactionTargets(sourceAccount: Coincore.BlockchainAccount, action: Coincore.AssetAction) -> AnyPublisher<[Coincore.SingleAccount], Coincore.CoincoreError> {
         .empty()
@@ -747,6 +745,7 @@ class MockFiatAsset: Asset {
     func accountGroup(filter: AssetFilter) -> AnyPublisher<AccountGroup?, Never> {
         .empty()
     }
+
     func transactionTargets(
         account: SingleAccount,
         action: AssetAction
@@ -823,8 +822,7 @@ class MockOnChainTxEngine: OnChainTransactionEngine {
         selectedFiatCurrency: .GBP
     )
 
-    func assertInputsValid() {
-    }
+    func assertInputsValid() {}
 
     func doBuildConfirmations(pendingTransaction: FeatureTransactionDomain.PendingTransaction) -> RxSwift.Single<FeatureTransactionDomain.PendingTransaction> {
         RxSwift.Single<FeatureTransactionDomain.PendingTransaction>.just(mockPendingTx)
@@ -835,7 +833,7 @@ class MockOnChainTxEngine: OnChainTransactionEngine {
         self.sourceAccount = sourceAccount
         self.transactionTarget = transactionTarget
         self.askForRefreshConfirmation = askForRefreshConfirmation
-        self.startCalled = true
+        startCalled = true
     }
 
     var initializeTransactionCalled: (Bool, PendingTransaction?) = (false, nil)

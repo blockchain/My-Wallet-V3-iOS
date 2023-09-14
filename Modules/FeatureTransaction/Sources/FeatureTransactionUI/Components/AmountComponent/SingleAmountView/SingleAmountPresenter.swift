@@ -102,7 +102,7 @@ public final class SingleAmountPresenter: AmountViewPresenting {
 
 extension AmountPresenterInput {
 
-    internal var isEmpty: Bool {
+    var isEmpty: Bool {
         switch self {
         case .input(let value):
             return "\(value)".isEmpty

@@ -114,7 +114,6 @@ struct DeFiDashboardView: View {
 
                         DashboardHelpSectionView()
                     }
-
                 }
                 .scrollOffset($scrollOffset)
                 .task {

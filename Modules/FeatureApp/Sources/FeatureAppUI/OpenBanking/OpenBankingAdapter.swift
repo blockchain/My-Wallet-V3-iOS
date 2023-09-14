@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import Combine
 import DIKit
 import FeatureOpenBankingDomain

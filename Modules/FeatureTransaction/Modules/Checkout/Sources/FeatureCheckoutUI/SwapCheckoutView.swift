@@ -311,8 +311,10 @@ extension SwapCheckoutView.Loaded {
                     }
 
                 VStack(alignment: .leading) {
-                    VStack(alignment: .leading,
-                           spacing: Spacing.padding1) {
+                    VStack(
+                        alignment: .leading,
+                        spacing: Spacing.padding1
+                    ) {
                         Text(L10n.Label.networkFeesTitle)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.title)
@@ -351,6 +353,7 @@ extension SwapCheckoutView.Loaded {
             .circle(backgroundColor: .semantic.light)
             .frame(width: 24, height: 24)
     }
+
     @ViewBuilder
     func fee(crypto: CryptoValue, fiat: FiatValue?) -> some View {
         TableRow(title: {

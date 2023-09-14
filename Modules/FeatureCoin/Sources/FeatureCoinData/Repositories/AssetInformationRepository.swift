@@ -17,7 +17,7 @@ public class AssetInformationRepository: AssetInformationRepositoryAPI {
             configuration: .default(),
             refreshControl: PerpetualCacheRefreshControl()
         )
-        cache = .init(
+        self.cache = .init(
             cache: inMemoryCache.eraseToAnyCache(),
             fetch: { [client] key in
                 client

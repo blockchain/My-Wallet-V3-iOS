@@ -11,7 +11,7 @@ import Foundation
         case none
     }
 
-    internal var destinations = [LogDestination]()
+    var destinations = [LogDestination]()
 
     private lazy var timestampFormatter: DateFormatter = {
         let formatter = DateFormatter()

@@ -211,7 +211,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
         currency: CurrencyType,
         isLoading: Bool = true,
         @ViewBuilder footer: () -> Footer = EmptyView.init,
-        action: @escaping () -> Void = { }
+        action: @escaping () -> Void = {}
     ) {
         self.dialog = dialog
         self.currency = currency

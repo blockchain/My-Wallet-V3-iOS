@@ -156,7 +156,7 @@ final class PulseAnalyticsServiceProvider: AnalyticsServiceProviderAPI {
         "Namespace Error",
         "Namespace Event"
     ]
-    
+
     func trackEvent(title: String, parameters: [String: Any]?) {
         if banned.contains(title) { return }
         pulse.storeMessage(

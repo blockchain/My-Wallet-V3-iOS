@@ -79,7 +79,6 @@ public struct WithdrawCheckoutView: View {
                     .foregroundColor(.semantic.title)
             }
         )
-
     }
 
     @ViewBuilder func fee() -> some View {

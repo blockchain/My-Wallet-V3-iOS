@@ -120,7 +120,6 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
         return EVMNetwork(networkConfig: network, nativeAsset: nativeAsset)
     }
 
-
     private let allEnabledCryptoCurrenciesLock = NSLock()
     private let allEnabledCurrenciesLock = NSLock()
     private let allEnabledEVMNetworksLock = NSLock()

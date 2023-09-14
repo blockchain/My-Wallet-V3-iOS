@@ -60,7 +60,7 @@ final class AnnouncementsRepository: AnnouncementsRepositoryAPI {
                         guard let self else {
                             return .empty()
                         }
-                        return self.setDismissed(announcement, with: .open)
+                        return setDismissed(announcement, with: .open)
                     }
                     .eraseToAnyPublisher()
             }
@@ -89,7 +89,6 @@ final class AnnouncementsRepository: AnnouncementsRepositoryAPI {
                     .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
-        
     }
 
     private func remove(announcement: Announcement) -> AnyPublisher<Void, NabuNetworkError> {

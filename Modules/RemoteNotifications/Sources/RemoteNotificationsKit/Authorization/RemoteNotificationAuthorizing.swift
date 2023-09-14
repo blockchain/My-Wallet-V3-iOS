@@ -3,9 +3,9 @@
 import Combine
 import UserNotifications
 
-public typealias RemoteNotificationAuthorizing = RemoteNotificationRegistering
-    & RemoteNotificationAuthorizationRequesting
+public typealias RemoteNotificationAuthorizing = RemoteNotificationAuthorizationRequesting
     & RemoteNotificationAuthorizationStatusProviding
+    & RemoteNotificationRegistering
 
 /// Any potential error that may be risen during authorization request
 public enum RemoteNotificationAuthorizerError: Error {

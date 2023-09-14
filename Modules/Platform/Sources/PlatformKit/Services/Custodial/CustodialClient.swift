@@ -1,9 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Combine
 import Blockchain
-import DIKit
+import Combine
 import Dependencies
+import DIKit
 import Errors
 import MoneyKit
 import NetworkKit

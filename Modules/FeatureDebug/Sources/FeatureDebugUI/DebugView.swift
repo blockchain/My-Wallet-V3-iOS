@@ -253,7 +253,7 @@ extension DebugView {
                 Button("📋") {
                     Task {
                         do {
-                            let dictionary = try await observations.compacted().async.reduce(into: [String: String]()) { (sum, next) async throws in
+                            let dictionary = try await observations.compacted().async.reduce(into: [String: String]()) { sum, next async throws in
                                 sum[next.string] = try? await app.get(next)
                             }
                             let encoder = JSONEncoder()

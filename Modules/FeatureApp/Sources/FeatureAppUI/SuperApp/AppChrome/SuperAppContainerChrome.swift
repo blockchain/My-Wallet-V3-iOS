@@ -60,5 +60,3 @@ public struct SuperAppContainerChrome: View {
         return true
     }
 }
-
-

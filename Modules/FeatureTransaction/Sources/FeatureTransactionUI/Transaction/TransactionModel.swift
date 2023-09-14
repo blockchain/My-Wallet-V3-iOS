@@ -20,8 +20,8 @@ public final class TransactionModel {
     // MARK: - Private Properties
 
     private var mviModel: MviModel<TransactionState, TransactionAction>!
-    internal let interactor: TransactionInteractor
-    internal private(set) var hasInitializedTransaction = false
+    let interactor: TransactionInteractor
+    private(set) var hasInitializedTransaction = false
 
     private let app: AppProtocol
     private let analyticsHook: TransactionAnalyticsHook

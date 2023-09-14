@@ -14,7 +14,7 @@ public struct AnyJSON: Codable, Hashable, Equatable, CustomStringConvertible {
         set { wrapped = newValue }
     }
 
-    internal var __unwrapped: Any {
+    var __unwrapped: Any {
         (wrapped as? AnyJSON)?.__unwrapped ?? wrapped
     }
 

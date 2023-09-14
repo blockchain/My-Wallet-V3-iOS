@@ -52,7 +52,7 @@ struct ErrorRecovery: ReducerProtocol {
     let calloutTapped: (ErrorRecoveryState.Callout) -> Void
 
     var body: some ReducerProtocol<ErrorRecoveryState, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .closeTapped:
                 close()

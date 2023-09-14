@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainUI
 import BlockchainNamespace
+import BlockchainUI
 import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
@@ -233,10 +233,12 @@ public struct CoinView: View {
 
     @ViewBuilder
     func bakktLogo() -> some View {
-        HStack(alignment: .center, content: {
-            Image("bakkt-logo", bundle: .componentLibrary)
-        }
-      )
+        HStack(
+            alignment: .center,
+            content: {
+                Image("bakkt-logo", bundle: .componentLibrary)
+            }
+        )
         .frame(maxWidth: .infinity)
     }
 

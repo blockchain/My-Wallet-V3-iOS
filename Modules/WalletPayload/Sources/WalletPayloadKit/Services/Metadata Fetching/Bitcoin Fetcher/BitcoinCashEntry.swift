@@ -73,7 +73,7 @@ public struct BitcoinCashEntry: Equatable {
 
         self.importedAddress = wallet.addresses
             .compactMap { address in
-                guard let cashAddress = try? LegacyAddress.init(address.addr, coin: .bitcoinCash).cashaddr else {
+                guard let cashAddress = try? LegacyAddress(address.addr, coin: .bitcoinCash).cashaddr else {
                     return nil
                 }
                 let sanitizedAddress = cashAddress.replacingOccurrences(of: "bitcoincash:", with: "")

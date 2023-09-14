@@ -41,6 +41,7 @@ public struct CoinViewState: Equatable {
     var shouldDisplayBakktLogo: Bool {
         isExternalBrokerageEnabled && appMode == .trading
     }
+
     var allActions: [ButtonAction] {
         guard isExternalBrokerageEnabled == false else {
             return []

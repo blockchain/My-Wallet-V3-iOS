@@ -301,5 +301,4 @@ public enum TransactionMemoSupport {
             return false
         }
     }
-
 }

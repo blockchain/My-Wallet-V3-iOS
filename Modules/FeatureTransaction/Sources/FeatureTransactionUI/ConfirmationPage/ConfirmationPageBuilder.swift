@@ -48,7 +48,6 @@ final class ConfirmationPageBuilder: ConfirmationPageBuildable {
         self.fiatCurrencyService = fiatCurrencyService
         self.app = app
         self.isNewCheckoutEnabled = isNewCheckoutEnabled
-
     }
 
     func build(listener: ConfirmationPageListener) -> ViewableRouter<Interactable, ViewControllable> {

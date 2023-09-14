@@ -21,14 +21,14 @@ extension Localization.ActiveRewards {
     static let title = NSLocalizedString("Active Rewards Considerations", comment: "Title for Active Rewards Considerations")
 
     static let description = NSLocalizedString(
-                """
+        """
                 Price movements may result in a reduction of your asset’s balance.
 
                 Once subscribed, assets are locked until the following week and subject to market volatility.
 
                 Blockchain.com does not assume liability for any losses incurred from price fluctuations. Please trade with caution.
                 """,
-                comment: "AR: Explain to users their funds will be locked"
+        comment: "AR: Explain to users their funds will be locked"
     )
 
     enum InfoSheet {
@@ -136,15 +136,15 @@ extension Localization.Staking {
     )
 
     static let page = NSLocalizedString(
-                """
+        """
                 Your staked ETH will start generating rewards after an initial bonding period.
 
                 Unstaking and withdrawing ETH is subject to an unbonding period that depends on the network queue.
 
                 These rules are not specific to Blockchain.com. They’re features of the Ethereum network.
                 """,
-            comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
-        )
+        comment: "Staking: Explain to users their funds will be locked when staking their balance, until ETH implements withdraw. Page 1 of 3"
+    )
 
     enum PendingWithdrawal {
         static let sectionTitle = NSLocalizedString("Pending Activity", comment: "Pending Activity")
@@ -289,8 +289,6 @@ extension Localization.Earn.Compare.Passive {
         static let periodicity = NSLocalizedString("Earn daily", comment: "Earn: Compare Passive Periodicity")
         static let payment = NSLocalizedString("Paid monthly", comment: "Earn: Compare Passive Payment")
         static let withdrawal = NSLocalizedString("Withdraw instantly after 7 days", comment: "Earn: Compare Passive Withdrawal")
-
-
     }
 }
 
@@ -319,4 +317,3 @@ extension Localization.Earn.Compare.Active {
         static let withdrawal = NSLocalizedString("Withdraw weekly", comment: "Earn: Compare Active Withdrawal")
     }
 }
-

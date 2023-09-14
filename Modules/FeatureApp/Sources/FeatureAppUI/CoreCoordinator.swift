@@ -679,7 +679,7 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
 /// The backup/restore of guid and sharedKey requires an encryption/decryption step when backing up and restoring respectively.
 ///
 /// The key used to encrypt/decrypt the guid and sharedKey is provided in the response to a successful PIN auth attempt.
-internal func syncPinKeyWithICloud(
+func syncPinKeyWithICloud(
     blockchainSettings: BlockchainSettingsAppAPI,
     legacyGuid: LegacyGuidRepositoryAPI,
     legacySharedKey: LegacySharedKeyRepositoryAPI,

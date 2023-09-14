@@ -1,9 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-public typealias CardClientAPI = CardListClientAPI &
+public typealias CardClientAPI =
+    CardActivationClientAPI &
+    CardAdditionClientAPI &
     CardChargeClientAPI &
     CardDeletionClientAPI &
-    CardActivationClientAPI &
-    CardDetailClientAPI &
-    CardAdditionClientAPI &
+    CardDetailClientAPI & CardListClientAPI &
     CardSuccessRateClientAPI

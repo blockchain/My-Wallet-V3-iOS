@@ -783,7 +783,6 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         presenter.push(viewController: viewController)
     }
 
-
     private var newSellFlowIsEnabled: Bool {
         app.remoteConfiguration
             .yes(if: blockchain.app.configuration.new.sell.flow.is.enabled)

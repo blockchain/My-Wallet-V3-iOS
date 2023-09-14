@@ -149,7 +149,7 @@ extension EarnProductCompare.State.Step {
     fileprivate func compareView(viewStore: ViewStoreOf<EarnProductCompare>) -> some View {
         VStack {
             header
-            VStack(alignment: .center,spacing: Spacing.padding4) {
+            VStack(alignment: .center, spacing: Spacing.padding4) {
                 ForEach(items) { item in
                     item.makeView(for: self, viewStore: viewStore)
                 }

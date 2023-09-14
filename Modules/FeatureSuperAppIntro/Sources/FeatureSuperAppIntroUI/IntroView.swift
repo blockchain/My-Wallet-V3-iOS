@@ -43,7 +43,7 @@ public struct IntroView: View {
                             .typography(.title1)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
-                        if let byline = byline {
+                        if let byline {
                             Text(LocalizedStringKey(byline))
                                 .typography(.body1)
                                 .foregroundColor(.white)
