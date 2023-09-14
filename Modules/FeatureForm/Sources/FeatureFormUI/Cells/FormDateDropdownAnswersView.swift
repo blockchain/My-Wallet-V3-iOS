@@ -55,7 +55,16 @@ struct FormDateDropdownAnswersView: View {
                     selectionPanelOpened.toggle()
                 }
             }
-            .popover(isPresented: $selectionPanelOpened) {
+        }
+        .sheet(isPresented: $selectionPanelOpened) {
+            if #available(iOS 16.4, *) {
+                FormDatePickerView(
+                    title: title,
+                    answer: $answer,
+                    selectionPanelOpened: $selectionPanelOpened
+                )
+                .presentationDetents([.fraction(0.35)])
+            } else {
                 FormDatePickerView(
                     title: title,
                     answer: $answer,
@@ -107,27 +116,20 @@ struct FormDatePickerView: View {
     }
 
     var body: some View {
-        if #available(iOS 16.4, *) {
+        NavigationView {
             datePicker
-                .frame(minWidth: 300)
-                .presentationCompactAdaptation(.popover)
-        } else {
-            NavigationView {
-                datePicker
-                    .padding(.vertical, Spacing.padding1)
-                    .padding(.horizontal, Spacing.padding2)
-                    .background(Color.semantic.background)
-                    .navigationTitle(title)
-                    .navigationBarItems(
-                        trailing: Button(LocalizationConstants.done) {
-                            if answer.input.isNilOrEmpty, maxDate != .distantFuture {
-                                answer.input = String(maxDate.timeIntervalSince1970)
-                            }
-                            selectionPanelOpened.toggle()
+                .padding(.vertical, Spacing.padding1)
+                .padding(.horizontal, Spacing.padding2)
+                .background(Color.semantic.light)
+                .navigationBarItems(
+                    trailing: Button(LocalizationConstants.done) {
+                        if answer.input.isNilOrEmpty, maxDate != .distantFuture {
+                            answer.input = String(maxDate.timeIntervalSince1970)
                         }
-                    )
-                    .navigationBarTitleDisplayMode(.inline)
-            }
+                        selectionPanelOpened.toggle()
+                    }
+                )
+                .navigationBarTitleDisplayMode(.inline)
         }
     }
 
@@ -148,7 +150,8 @@ struct FormDatePickerView: View {
             displayedComponents: .date,
             label: EmptyView.init
         )
-        .datePickerStyle(.graphical)
+        .datePickerStyle(.wheel)
         .padding(Spacing.padding1)
+        .background(Color.semantic.light)
     }
 }
