@@ -236,7 +236,8 @@ struct PendingTransactionDialogView<Footer: View>: View {
                 .multilineTextAlignment(.center)
                 actions
             }
-            .padding()
+            .padding(.vertical)
+            .padding(.bottom, Spacing.padding2)
         }
     }
 

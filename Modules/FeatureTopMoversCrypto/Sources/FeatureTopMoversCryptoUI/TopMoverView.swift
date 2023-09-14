@@ -29,7 +29,7 @@ struct TopMoverView: View {
                 .padding(.bottom, 4.pt)
                 Text(topMover.priceChangeString ?? "")
                     .typography(.body2)
-                    .truncationMode(.middle)
+                    .minimumScaleFactor(0.8)
                     .foregroundColor(topMover.priceChangeColor)
 
                 Text(topMover.lastPrice.toDisplayString(includeSymbol: true))
