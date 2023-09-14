@@ -227,7 +227,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     }
 
     func closeFlow() {
-        viewController.dismiss()
+        dismiss()
         interactor.listener?.dismissTransactionFlow()
     }
 
