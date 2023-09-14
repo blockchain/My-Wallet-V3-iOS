@@ -151,6 +151,25 @@ We are integrating XcodeGen and, despite still committing project files in git, 
 Please refer to the [README](./Modules/README.md) in the `Modules` directory.
 Please also refer to the [README](./TestKit/README.md) in the `TestKit` directory.
 
+# Troubleshooting LFS
+
+In case `git` shows some files as modified when they were not and displays this warning `Encountered x file(s) that should have been pointers, but weren't:` when trying to checkout, try first this command sequence:
+```
+git lfs uninstall
+git reset --hard
+git lfs install
+git lfs pull
+```
+
+If it didn't work, this sequence should:
+```
+git rm --cached -r .
+git reset --hard
+git rm .gitattributes
+git reset .
+git checkout .
+```
+
 # Contributing
 
 If you would like to contribute code to the Blockchain iOS app, you can do so by forking this repository, making the changes on your fork, and sending a pull request back to this repository.
