@@ -44,7 +44,7 @@ enum AppChromeDetents {
             return 0.95
         case .expanded:
             if #available(iOS 16, *) {
-                return 0.9999
+                return 0.998
             } else {
                 return 0.985
             }

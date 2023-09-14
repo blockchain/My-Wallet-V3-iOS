@@ -66,7 +66,7 @@ public final class CompositeStatusView: UIView {
             layer.cornerRadius = min(bounds.width, bounds.height) * 0.5
         }
 
-        private func setupImageView(with imageResource: ImageResource) {
+        private func setupImageView(with imageResource: ImageLocation) {
             let content = ImageViewContent(imageResource: imageResource)
             let imageView = UIImageView(image: nil)
             add(view: imageView)
@@ -240,7 +240,7 @@ public final class CompositeStatusView: UIView {
         add(view: badgeImageView)
     }
 
-    private func setupImageView(with imageResource: ImageResource) {
+    private func setupImageView(with imageResource: ImageLocation) {
         let content = ImageViewContent(imageResource: imageResource)
         let imageView = UIImageView(image: nil)
         add(view: imageView)

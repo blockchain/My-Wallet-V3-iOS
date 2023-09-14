@@ -9,14 +9,14 @@ struct ErrorRecoveryState: Equatable {
 
     struct Callout: Equatable, Identifiable {
         let id: AnyHashable
-        let image: ImageResource
+        let image: ImageLocation
         let title: String
         let message: String
         let callToAction: String
 
         init(
             id: AnyHashable = UUID(),
-            image: ImageResource,
+            image: ImageLocation,
             title: String,
             message: String,
             callToAction: String

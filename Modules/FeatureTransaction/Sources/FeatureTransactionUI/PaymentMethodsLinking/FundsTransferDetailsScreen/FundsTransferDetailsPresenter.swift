@@ -218,12 +218,12 @@ extension FundsTransferDetailScreenPresenter {
                 (
                     title: FundsString.Notice.BankTransferOnly.title,
                     description: FundsString.Notice.BankTransferOnly.description,
-                    image: ImageResource.local(name: "icon-bank", bundle: .platformUIKit)
+                    image: ImageLocation.local(name: "icon-bank", bundle: .platformUIKit)
                 ),
                 (
                     title: FundsString.Notice.ProcessingTime.title,
                     description: processingTimeNoticeDescription,
-                    image: ImageResource.local(name: "clock-icon", bundle: .platformUIKit)
+                    image: ImageLocation.local(name: "clock-icon", bundle: .platformUIKit)
                 )
             ]
             .map {
