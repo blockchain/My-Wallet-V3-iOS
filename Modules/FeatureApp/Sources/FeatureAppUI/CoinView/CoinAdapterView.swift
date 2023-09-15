@@ -234,13 +234,28 @@ public final class CoinViewObserver: Client.Observer {
         let canBcdcSwap = await (try? account?.can(perform: .swap).await()) ?? false
         let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset)
 
+        app.state.set(
+            blockchain.ux.currency.exchange.dex.action.select.currency.source,
+            to: try? event.reference.context.decode(blockchain.ux.asset.id, as: String.self)
+        )
+        let context = event.context + [
+            blockchain.ux.transaction.source: account.flatMap(AnyJSON.init)
+        ]
         switch (canDexSwap, canBcdcSwap) {
         case (true, true):
-            try await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context + [blockchain.ux.transaction.source: AnyJSON(account)])
+            try await DexFeature.openCurrencyExchangeRouter(
+                app: app,
+                context: context
+            )
         case (true, false):
-            app.post(event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select, context: event.context)
+            app.post(
+                event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
+                context: context
+            )
         case (false, true):
-            await transactionsRouter.presentTransactionFlow(to: .swap(source: account, target: nil))
+            await transactionsRouter.presentTransactionFlow(
+                to: .swap(source: account, target: nil)
+            )
         case (false, false):
             break
         }
@@ -251,17 +266,30 @@ public final class CoinViewObserver: Client.Observer {
         let canBcdcSwap = await (try? account.can(perform: .swap).await()) ?? false
         let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account.asset)
 
-        if canBcdcSwap {
-            await transactionsRouter.presentTransactionFlow(to: .swap(source: nil, target: account))
-            return
-        }
-
-        if canDexSwap {
+        app.state.set(
+            blockchain.ux.currency.exchange.dex.action.select.currency.destination,
+            to: try? event.reference.context.decode(blockchain.ux.asset.id, as: String.self)
+        )
+        let context = event.context + [
+            blockchain.ux.transaction.source: AnyJSON(account)
+        ]
+        switch (canDexSwap, canBcdcSwap) {
+        case (true, true):
+            try await DexFeature.openCurrencyExchangeRouter(
+                app: app,
+                context: context
+            )
+        case (true, false):
             app.post(
                 event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
-                context: event.context
+                context: context
             )
-            return
+        case (false, true):
+            await transactionsRouter.presentTransactionFlow(
+                to: .swap(source: account, target: nil)
+            )
+        case (false, false):
+            break
         }
     }
 

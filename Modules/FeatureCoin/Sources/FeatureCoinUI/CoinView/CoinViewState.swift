@@ -106,7 +106,7 @@ public struct CoinViewState: Equatable {
         // if the token has no balance
         guard accounts.hasPositiveBalanceForSelling else {
             // if it can swap (on dex or bcdc) present the "Get Token" button
-            return canSwapOnDex || canSwapOnBcdc ? [ButtonAction.getToken(currency: currency.code)] : []
+            return canSwapOnDex || canSwapOnBcdc ? [ButtonAction.getToken(currency: currency.displayCode)] : []
         }
 
         let actions = [

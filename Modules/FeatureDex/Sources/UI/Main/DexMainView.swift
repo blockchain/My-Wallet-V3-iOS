@@ -72,7 +72,7 @@ public struct DexMainView: View {
         .bindings {
             subscribe(
                 viewStore.binding(\.$currentSelectedNetworkTicker),
-                to: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker
+                to: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value
             )
         }
         .bindings {

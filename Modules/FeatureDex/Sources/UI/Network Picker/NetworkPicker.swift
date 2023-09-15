@@ -47,7 +47,7 @@ struct NetworkPicker: ReducerProtocol {
                 state.currentNetwork = network.networkConfig.networkTicker
                 return .run { _ in
                     try await app.set(
-                        tag.selected.network.ticker,
+                        tag.selected.network.ticker.value,
                         to: network.networkConfig.networkTicker
                     )
                     try await app.set(

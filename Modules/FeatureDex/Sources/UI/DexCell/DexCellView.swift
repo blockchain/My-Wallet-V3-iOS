@@ -34,8 +34,8 @@ public struct DexCellView: View {
         .onChange(of: viewStore.availableBalances) { _ in
             viewStore.send(.onAvailableBalancesChanged)
         }
-        .onChange(of: viewStore.currentNetwork) { _ in
-            viewStore.send(.onCurrentNetworkChanged)
+        .onChange(of: viewStore.parentNetwork) { value in
+            viewStore.send(.onCurrentNetworkChanged(value))
         }
         .bindings {
             subscribe(
