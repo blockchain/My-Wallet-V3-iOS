@@ -4,10 +4,9 @@ import BlockchainNamespace
 import Combine
 import Foundation
 
-protocol SweepImportedAddressesRepositoryAPI {
-    var sweptBalances: [String] { get }
+public protocol SweepImportedAddressesRepositoryAPI {
     /// Loads previous stored swept imported accounts, or clears them after a certain threshold
-    func prepare()
+    func prepare() -> AnyPublisher<[String], Never>
     /// Store a new swept identifier
     func update(result: TxPairResult)
     /// `true` if the passed result's identifier exists, otherwise `false`
@@ -29,22 +28,43 @@ final class SweepImportedAddressesRepository: SweepImportedAddressesRepositoryAP
         self.now = now
     }
 
-    func prepare() {
-        clearIfNeeded()
-        if let previousSwept: [String] = try? app.state.get(blockchain.ux.sweep.imported.addresses.swept.addresses) {
-            sweptBalances = previousSwept
-        }
+    func prepare() -> AnyPublisher<[String], Never> {
+        app.publisher(for: blockchain.ux.sweep.imported.addresses.swept.last.update, as: Date.self)
+            .first()
+            .flatMap { [weak self, app] result -> AnyPublisher<[String], Never> in
+                guard let self else {
+                    return .just([])
+                }
+                return self.clearIfNeeded(result.value)
+                    .flatMap { _ -> AnyPublisher<[String], Never> in
+                        app.publisher(for: blockchain.ux.sweep.imported.addresses.swept.addresses, as: [String].self)
+                            .map(\.value)
+                            .replaceNil(with: [])
+                            .first()
+                            .eraseToAnyPublisher()
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .handleEvents(
+                receiveOutput: { [weak self] value in
+                    guard let self else { return }
+                    self.sweptBalances = value
+                }
+            )
+            .eraseToAnyPublisher()
     }
 
-    func clearIfNeeded() {
-        if let lastUpdate: Date = try? app.state.get(blockchain.ux.sweep.imported.addresses.swept.last.update) {
-            let hourDiff = Calendar.current.dateComponents([.second], from: lastUpdate, to: Date()).second ?? 0
-            if hourDiff >= 2 * 60 * 60 {
-                sweptBalances = []
-                app.state.clear(blockchain.ux.sweep.imported.addresses.swept.addresses)
-                app.state.clear(blockchain.ux.sweep.imported.addresses.swept.last.update)
-            }
+    func clearIfNeeded(_ lastUpdate: Date?) -> AnyPublisher<Void, Never> {
+        guard let lastUpdate else {
+            return .just(())
         }
+        let hourDiff = Calendar.current.dateComponents([.second], from: lastUpdate, to: Date()).second ?? 0
+        if hourDiff >= 2 * 60 * 60 {
+            sweptBalances = []
+            app.state.clear(blockchain.ux.sweep.imported.addresses.swept.addresses)
+            app.state.clear(blockchain.ux.sweep.imported.addresses.swept.last.update)
+        }
+        return .just(())
     }
 
     func update(result: TxPairResult) {

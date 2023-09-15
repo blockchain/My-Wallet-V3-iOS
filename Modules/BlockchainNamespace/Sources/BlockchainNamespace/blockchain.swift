@@ -11063,7 +11063,7 @@ public extension I_blockchain_ux_sweep_imported_addresses_swept {
 public final class L_blockchain_ux_sweep_imported_addresses_swept_addresses: L, I_blockchain_ux_sweep_imported_addresses_swept_addresses {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.swept.addresses", comment: "") }
 }
-public protocol I_blockchain_ux_sweep_imported_addresses_swept_addresses: I_blockchain_db_type_array_of_strings, I_blockchain_session_state_preference_value {}
+public protocol I_blockchain_ux_sweep_imported_addresses_swept_addresses: I_blockchain_db_type_array_of_strings, I_blockchain_session_state_shared_value, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_sweep_imported_addresses_swept_last: L, I_blockchain_ux_sweep_imported_addresses_swept_last {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.swept.last", comment: "") }
 }
@@ -11074,7 +11074,7 @@ public extension I_blockchain_ux_sweep_imported_addresses_swept_last {
 public final class L_blockchain_ux_sweep_imported_addresses_swept_last_update: L, I_blockchain_ux_sweep_imported_addresses_swept_last_update {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.swept.last.update", comment: "") }
 }
-public protocol I_blockchain_ux_sweep_imported_addresses_swept_last_update: I_blockchain_db_type_date, I_blockchain_session_state_preference_value {}
+public protocol I_blockchain_ux_sweep_imported_addresses_swept_last_update: I_blockchain_db_type_date, I_blockchain_session_state_preference_value, I_blockchain_session_state_shared_value {}
 public final class L_blockchain_ux_sweep_imported_addresses_transfer: L, I_blockchain_ux_sweep_imported_addresses_transfer {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.sweep.imported.addresses.transfer", comment: "") }
 }

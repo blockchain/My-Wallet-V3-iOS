@@ -2956,11 +2956,13 @@ blockchain:
 					swept:
 						addresses:
 						+ blockchain.db.type.array.of.strings
-						+ blockchain.session.state.preference.value
+						+ blockchain.session.state.shared.value
+						+ blockchain.session.state.stored.value
 						last:
 							update:
 							+ blockchain.db.type.date
 							+ blockchain.session.state.preference.value
+							+ blockchain.session.state.shared.value
 					transfer:
 					+ blockchain.ux.type.story
 						failure:

@@ -3,14 +3,17 @@
 @testable import BitcoinChainKit
 import BlockchainNamespace
 
+import Combine
 import XCTest
 
 final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
     let testApp = App.test
+    var cancellables: Set<AnyCancellable>!
 
     override func setUp() {
         testApp.state.clear(blockchain.ux.sweep.imported.addresses.swept.addresses)
+        cancellables = []
     }
 
     func test_sweep_imported_addresses_update() throws {
@@ -19,9 +22,17 @@ final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
         let sut = SweepImportedAddressesRepository(app: testApp, now: now)
 
-        sut.prepare()
+        let expectation = self.expectation(description: "whoa")
 
-        XCTAssertTrue(sut.sweptBalances.isEmpty)
+        sut.prepare()
+            .sink { value in
+                XCTAssertTrue(value.isEmpty)
+                XCTAssertTrue(sut.sweptBalances.isEmpty)
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+
+        wait(for: [expectation], timeout: 1)
 
         sut.update(result: .init(accountIdentifier: "a", result: .success(.noValue)))
 
@@ -42,10 +53,19 @@ final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
         testApp.state.set(blockchain.ux.sweep.imported.addresses.swept.addresses, to: ["a", "b"])
 
-        sut.prepare()
+        let expectation = self.expectation(description: "whoa")
 
-        XCTAssertFalse(sut.sweptBalances.isEmpty)
-        XCTAssertEqual(sut.sweptBalances, ["a", "b"])
+        sut.prepare()
+            .sink { value in
+                XCTAssertFalse(value.isEmpty)
+                XCTAssertEqual(value, ["a", "b"])
+                XCTAssertFalse(sut.sweptBalances.isEmpty)
+                XCTAssertEqual(sut.sweptBalances, ["a", "b"])
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+
+        wait(for: [expectation], timeout: 1)
 
         sut.update(result: .init(accountIdentifier: "c", result: .success(.noValue)))
 
@@ -69,9 +89,17 @@ final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
         let sut2 = SweepImportedAddressesRepository(app: testApp, now: { mockDate })
         // should clear any stored values
+        let expectation = self.expectation(description: "whoa")
         sut2.prepare()
+            .sink { value in
+                XCTAssertEqual(value, [])
+                XCTAssertEqual(sut2.sweptBalances, [])
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
 
-        XCTAssertEqual(sut2.sweptBalances, [])
+        wait(for: [expectation], timeout: 2)
+
         let stored = try? testApp.state.get(blockchain.ux.sweep.imported.addresses.swept.addresses, as: [String].self)
         XCTAssertNil(stored)
     }
@@ -92,16 +120,24 @@ final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
         let sut2 = SweepImportedAddressesRepository(app: testApp, now: { mockDate })
         // should *NOT* clear any stored values
+        let expectation = self.expectation(description: "whoa")
         sut2.prepare()
+            .sink { value in
+                XCTAssertEqual(value, ["a", "b"])
+                XCTAssertEqual(sut2.sweptBalances, ["a", "b"])
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
 
-        XCTAssertEqual(sut2.sweptBalances, ["a", "b"])
+        wait(for: [expectation], timeout: 2)
+
         let stored = try? testApp.state.get(blockchain.ux.sweep.imported.addresses.swept.addresses, as: [String].self)
         XCTAssertNotNil(stored)
         XCTAssertEqual(stored, ["a", "b"])
     }
 
     func test_sweep_imported_addresses_methods() throws {
-        var mockDate = Date()
+        let mockDate = Date()
         let sut = SweepImportedAddressesRepository(app: testApp, now: { mockDate })
 
         sut.update(result: .init(accountIdentifier: "a", result: .success(.noValue)))

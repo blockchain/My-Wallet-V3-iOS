@@ -59,13 +59,14 @@ final class SweepImportedAddressesService: SweepImportedAddressesServiceAPI {
         self.importedAddressesProvider = importedAddresses
         self.defaultAccount = defaultAccount
         self.doPerformSweep = doPerformSweep
-
-        sweptBalancesRepository.prepare()
     }
 
     func prepare(force: Bool) -> AnyPublisher<[BitcoinChainCryptoAccount], Error> {
         if importedAddressSubject.value.isEmpty || force {
-            return importedAddressesProvider(sweptBalancesRepository.sweptBalances)
+            return sweptBalancesRepository.prepare()
+                .flatMap { [importedAddressesProvider] balances -> AnyPublisher<[BitcoinChainCryptoAccount], Error> in
+                    importedAddressesProvider(balances)
+                }
                 .handleEvents(
                     receiveOutput: { [importedAddressSubject] pairs in
                         importedAddressSubject.send(pairs)
