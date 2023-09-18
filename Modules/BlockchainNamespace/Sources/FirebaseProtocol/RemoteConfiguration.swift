@@ -7,12 +7,24 @@ public protocol RemoteConfiguration_p {
     associatedtype FetchStatus: RemoteConfigurationFetchStatus_p
     associatedtype Source: RemoteConfigurationSource_p
     associatedtype Value: RemoteConfigurationValue_p
+    associatedtype RemoteConfigUpdate: RemoteConfigUpdate_p
+    associatedtype ConfigUpdateListenerRegistration: ConfigUpdateListenerRegistration_p
 
     func fetch(withExpirationDuration expirationDuration: TimeInterval, completionHandler: ((FetchStatus, Error?) -> Void)?)
     func activate(completion: ((Bool, Error?) -> Void)?)
     func allKeys(from source: Source) -> [String]
 
+    func addOnConfigUpdateListener(remoteConfigUpdateCompletion listener: @escaping (RemoteConfigUpdate?, Error?) -> Void) -> ConfigUpdateListenerRegistration
+
     subscript(key: String) -> Value { get }
+}
+
+public protocol ConfigUpdateListenerRegistration_p: AnyObject {
+    func remove()
+}
+
+public protocol RemoteConfigUpdate_p {
+    var updatedKeys: Set<String> { get }
 }
 
 public protocol RemoteConfigurationValue_p {
