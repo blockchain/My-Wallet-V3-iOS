@@ -9,6 +9,7 @@ import SwiftUI
 struct SuperAppHeader: ReducerProtocol {
     struct State: Equatable {
         var isRefreshing: Bool = false
+        var hasError: Bool = false
         @BindingState var tradingEnabled: Bool = false
         @BindingState var totalBalance: MoneyValue?
         var thresholdOffsetForRefreshTrigger: CGFloat {
@@ -76,12 +77,13 @@ struct SuperAppHeaderView: View {
                         .opacity(isRefreshing ? 1.0 : opacityForRefreshIndicator(percentageOffset: 1.0))
                     VStack {
                         VStack(spacing: balanceMenuPadding) {
-                            TotalBalanceView(balance: viewStore.totalBalance)
+                            TotalBalanceView(balance: viewStore.totalBalance,
+                                             hasError: viewStore.hasError)
                                 .opacity(
                                     isRefreshing ? 0.0 : opacityForBalance(percentageOffset: 2.0)
                                 )
                                 .onTapGesture {
-                                    if isSmallDevice {
+                                    if isSmallDevice || viewStore.hasError {
                                         if !isRefreshing {
                                             task = Task { @MainActor in
                                                 guard !isRefreshing, !Task.isCancelled else { return }
