@@ -48,6 +48,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     private func nonCustodialCryptoBalances() -> AnyPublisher<(balances: [CryptoValue], networks: [DelegatedCustodyBalances.Network]), Error> {
         nonCustodialBalanceRepository
             .balances
+            .logErrorIfNoOutput(id: "defi")
             .map { balances -> (balances: [CryptoValue], networks: [DelegatedCustodyBalances.Network]) in
                 let grouped = balances.balances
                     .reduce(into: [CurrencyType: [DelegatedCustodyBalances.Balance]]()) { partialResult, balance in
@@ -77,7 +78,6 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                         return (try? first > second) ?? false
                     }
             }
-            .throttle(for: .seconds(0.5), scheduler: DispatchQueue.main, latest: true)
             .eraseToAnyPublisher()
     }
 
@@ -107,6 +107,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                         )
                         .sortedByFiatBalance()
                 }
+                .logErrorIfNoOutput(id: "defi.info")
                 .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
@@ -153,10 +154,12 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                     rawQuote: quote
                 )
             }
+            .logErrorIfNoOutput(id: "trading.info")
             .eraseToAnyPublisher()
         }
 
         return tradingBalanceService.balances
+            .logErrorIfNoOutput(id: "trading")
             .flatMap { balances in
                 balances.enumeratedBalances.compactMap(\.balance)
                     .compactMap { balance -> AnyPublisher<AssetBalanceInfo, Never>? in
@@ -210,7 +213,8 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
         }
 
         return app
-            .publisher(for: blockchain.ux.earn.supported.products, as: [EarnProduct].self).compactMap(\.value)
+            .publisher(for: blockchain.ux.earn.supported.products, as: [EarnProduct].self)
+            .replaceError(with: [.staking, .savings, .active])
             .flatMap { [app] products -> AnyPublisher<[AssetBalanceInfo], Never> in
                 products.map { product -> AnyPublisher<[AssetBalanceInfo], Never> in
                     app
@@ -464,5 +468,34 @@ extension Publisher {
                 Swift.print(emoji, count, "\(message) receive cancel")
             }
         )
+    }
+}
+
+extension Publisher {
+
+    public func logErrorIfNoOutput<S: Scheduler>(
+        id: String = #function,
+        in timeInterval: S.SchedulerTimeType.Stride = .seconds(10),
+        scheduler: S = DispatchQueue.main,
+        app: AppProtocol = runningApp,
+        file: String = #fileID,
+        line: Int = #line
+    ) -> AnyPublisher<Output, Failure> {
+        let seen: CurrentValueSubject<Bool, Never> = .init(false)
+        let noOutputPublisher = Just(())
+            .delay(for: timeInterval, scheduler: scheduler)
+            .filter { !seen.value }
+            .handleEvents(
+                receiveOutput: { _ in app.post(error: "☠️ \(id) No output received in \(timeInterval)", file: file, line: line) }
+            )
+            .flatMap { _ in
+                Empty(completeImmediately: false, outputType: Output.self, failureType: Failure.self)
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+
+        return handleEvents(receiveOutput: { _ in seen.send(true) })
+            .merge(with: noOutputPublisher)
+            .eraseToAnyPublisher()
     }
 }
