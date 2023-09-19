@@ -57,6 +57,7 @@ public final class SuperAppIntroObserver: Client.Observer {
         .map {
             $1
         }
+        .delay(for: .seconds(1), scheduler: DispatchQueue.main)
         .receive(on: DispatchQueue.main)
         .sink(to: SuperAppIntroObserver.showSuperAppIntro(_:), on: self)
 
