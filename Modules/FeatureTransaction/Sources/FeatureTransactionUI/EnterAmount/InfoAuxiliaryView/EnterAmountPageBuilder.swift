@@ -185,11 +185,27 @@ final class EnterAmountPageBuilder {
             .ignoreFailure(setFailureType: Never.self)
             .eraseToAnyPublisher()
 
+        let validationStatePublisher = transactionModel.state.publisher
+            .compactMap { state -> TransactionValidationState? in
+                state.pendingTransaction?.validationState
+            }
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
+
+        let errorStatePublisher = transactionModel.state.publisher
+            .compactMap { state -> TransactionErrorState? in
+                state.errorState
+            }
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
+
+
+
         let sellEnterAmountReducer = SellEnterAmount(
             app: resolve(),
             onAmountChanged: { [weak self] amount in
                 self?.app.post(value: amount.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
-                self?.transactionModel.process(action: .fetchPrice(amount: amount))
+                self?.transactionModel.process(action: .fetchPrice(amount: .one(currency: amount.currency)))
                 self?.transactionModel.process(action: .updateAmount(amount))
             },
             onPreviewTapped: { [weak self] amount in
@@ -198,7 +214,8 @@ final class EnterAmountPageBuilder {
                     self?.transactionModel.process(action: .prepareTransaction)
                 }
             },
-            minMaxAmountsPublisher: minMaxPublisher
+            minMaxAmountsPublisher: minMaxPublisher,
+            validationStatePublisher: validationStatePublisher
         )
 
         let enterAmount = SellEnterAmountView(

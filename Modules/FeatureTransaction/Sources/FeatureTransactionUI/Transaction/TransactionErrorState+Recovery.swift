@@ -14,7 +14,7 @@ extension TransactionErrorState {
 
     private typealias Localization = LocalizationConstants.Transaction.Error
 
-    var recoveryWarningHint: String {
+    public var recoveryWarningHint: String {
         let text: String
         switch self {
         case .none:

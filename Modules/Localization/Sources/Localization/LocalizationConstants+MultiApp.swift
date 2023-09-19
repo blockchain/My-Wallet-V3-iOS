@@ -46,6 +46,10 @@ extension LocalizationConstants.SuperApp.AppChrome {
         "Total Balance",
         comment: "Total Balance title"
     )
+    public static let errorLoadingBalanceMessage = NSLocalizedString(
+        "Error loading total balance",
+        comment: "Error loading total balance"
+    )
 }
 
 extension LocalizationConstants.SuperApp.AllAssets {
