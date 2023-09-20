@@ -91,7 +91,7 @@ struct SuperAppContentView: View {
             .sheet(isPresented: .constant(true), content: {
                 SuperAppDashboardContentView(
                     currentModeSelection: $currentModeSelection,
-                    isTradingEnabled: viewStore.state.tradingEnabled,
+                    isTradingEnabled: isTradingEnabled,
                     isExternalTradingEnabled: isExternalTradingEnabled,
                     store: store
                 )
@@ -101,8 +101,8 @@ struct SuperAppContentView: View {
                 .frame(maxWidth: .infinity)
                 .presentationDetents(
                     selectedDetent: $selectedDetent,
-                    largestUndimmedDetentIdentifier: largestUndimmedDetentIdentifier(isTradingEnabled: viewStore.state.tradingEnabled),
-                    limitDetents: .constant(!viewStore.tradingEnabled),
+                    largestUndimmedDetentIdentifier: largestUndimmedDetentIdentifier(isTradingEnabled: isTradingEnabled),
+                    limitDetents: .constant(!isTradingEnabled),
                     modalOffset: $contentOffset
                 )
             })
