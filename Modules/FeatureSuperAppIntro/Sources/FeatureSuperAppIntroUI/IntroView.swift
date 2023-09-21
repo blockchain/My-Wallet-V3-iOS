@@ -290,3 +290,20 @@ extension AppMode {
         }
     }
 }
+
+extension IntroView {
+    public init(_ flow: IntroViewFlow, pkwOnly: Bool) {
+        switch flow {
+        case .defiFirst:
+            self.init(.pkw, actionTitle: LocalizationConstants.okString)
+        case .tradingFirst:
+            self.init(.trading, actionTitle: LocalizationConstants.okString)
+        default:
+            if pkwOnly {
+                self.init(.pkw)
+            } else {
+                self.init(.trading)
+            }
+        }
+    }
+}

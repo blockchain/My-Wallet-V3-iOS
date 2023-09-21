@@ -109,7 +109,7 @@ public final class SuperAppIntroObserver: Client.Observer {
         }
     }
 
-    func presentSuperAppIntro(_ flow: FeatureSuperAppIntro.State.Flow) {
+    func presentSuperAppIntro(_ flow: IntroViewFlow) {
         let pkwOnly = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
         let intro = IntroView(flow, pkwOnly: pkwOnly)
 
@@ -124,22 +124,5 @@ public final class SuperAppIntroObserver: Client.Observer {
 
     private func dismissView() {
         topViewController.topMostViewController?.dismiss(animated: true)
-    }
-}
-
-extension IntroView {
-    init(_ flow: FeatureSuperAppIntro.State.Flow, pkwOnly: Bool) {
-        switch flow {
-        case .defiFirst:
-            self.init(.pkw, actionTitle: LocalizationConstants.okString)
-        case .tradingFirst:
-            self.init(.trading, actionTitle: LocalizationConstants.okString)
-        default:
-            if pkwOnly {
-                self.init(.pkw)
-            } else {
-                self.init(.trading)
-            }
-        }
     }
 }
