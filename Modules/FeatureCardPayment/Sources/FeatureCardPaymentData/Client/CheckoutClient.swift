@@ -11,7 +11,7 @@ class CheckoutClient: CardAcquirerClientAPI {
 
     private static let envKey = "CHECKOUT_ENV"
     private let apiKey: String
-    private let client: CheckoutAPIClient
+    private let client: CheckoutAPIService
 
     init(_ apiKey: String) {
         self.apiKey = apiKey
@@ -21,17 +21,17 @@ class CheckoutClient: CardAcquirerClientAPI {
             .infoDictionary?[Self.envKey] as? String,
             let environment = Environment(rawValue: rawEnvironment)
         else {
-            self.client = CheckoutAPIClient(publicKey: apiKey, environment: .sandbox)
+            self.client = CheckoutAPIService(publicKey: apiKey, environment: .sandbox)
             return
         }
 
-        self.client = CheckoutAPIClient(publicKey: apiKey, environment: environment)
+        self.client = CheckoutAPIService(publicKey: apiKey, environment: environment)
     }
 
     func tokenize(_ card: CardData, accounts: [String]) -> AnyPublisher<CardTokenizationResponse, CardAcquirerError> {
         Deferred { [client] in
             Future<CardTokenizationResponse, CardAcquirerError> { promise in
-                client.createCardToken(card: card.checkoutParams) { completion in
+                client.createToken(.card(card.checkoutParams)) { completion in
                     switch completion {
                     case .success(let response):
                         promise(.success(.init(token: response.token, accounts: accounts)))
@@ -57,13 +57,12 @@ class CheckoutClient: CardAcquirerClientAPI {
 }
 
 extension CardData {
-    var checkoutParams: CkoCardTokenRequest {
-        CkoCardTokenRequest(
+    var checkoutParams: Card {
+        Card(
             number: number,
-            expiryMonth: month,
-            expiryYear: year,
-            cvv: cvv,
+            expiryDate: .init(month: Int(month) ?? 0, year: Int(year) ?? 0),
             name: ownerName,
+            cvv: cvv,
             billingAddress: billingAddress?.checkoutAddress,
             phone: nil
         )
@@ -71,14 +70,14 @@ extension CardData {
 }
 
 extension BillingAddress {
-    var checkoutAddress: CkoAddress {
-        CkoAddress(
+    var checkoutAddress: Frames.Address {
+        Address(
             addressLine1: addressLine1,
             addressLine2: addressLine2,
             city: city,
             state: state,
             zip: postCode,
-            country: country.code
+            country: Country(iso3166Alpha2: country.code)
         )
     }
 }

@@ -240,7 +240,7 @@ public final class TransactionProcessor {
             .doValidateAll(pendingTransaction: pendingTransaction)
             .map { validatedTransaction in
                 guard validatedTransaction.validationState == .canExecute else {
-                    throw PlatformKitError.illegalStateException(message: "PendingTx is not executable")
+                    throw PlatformKitError.illegalStateException(message: "PendingTx is not executable because of \(validatedTransaction.validationState)")
                 }
                 return validatedTransaction
             }

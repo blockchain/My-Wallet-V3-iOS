@@ -50,7 +50,7 @@ public struct CoinViewEnvironment: BlockchainNamespaceAppEnvironment {
 }
 
 extension CoinViewEnvironment {
-    static var preview: Self = .init(
+    static var preview: Self = CoinViewEnvironment(
         app: App.preview,
         kycStatusProvider: { .empty() },
         accountsProvider: { .empty() },
@@ -63,7 +63,7 @@ extension CoinViewEnvironment {
         dismiss: {}
     )
 
-    static var previewEmpty: Self = .init(
+    static var previewEmpty: Self = CoinViewEnvironment(
         app: App.preview,
         kycStatusProvider: { .empty() },
         accountsProvider: { .empty() },

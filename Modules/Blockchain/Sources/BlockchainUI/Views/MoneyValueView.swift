@@ -186,7 +186,7 @@ public struct MoneyValueDeltaView: View {
         guard let deltaDecimal else {
             return nil
         }
-        
+
         let arrowString = {
             if deltaDecimal.isZero {
                 return ""
@@ -196,7 +196,6 @@ public struct MoneyValueDeltaView: View {
             }
 
             return "↑ "
-
         }()
 
         return "\(arrowString)\(deltaDecimal.abs().formatted(.percent.precision(.fractionLength(2))))"

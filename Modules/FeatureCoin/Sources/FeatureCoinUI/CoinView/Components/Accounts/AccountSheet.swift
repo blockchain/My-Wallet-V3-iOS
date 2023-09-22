@@ -30,8 +30,8 @@ struct AccountSheet: View {
             .sorted(like: account.allowedActions.array)
         self.allActions = OrderedSet(allActionsArray)
 
-        actionsToDisplay = isVerified.isNo && account.isPrivateKey ? account.allowedActions : allActions
-        maxHeight = (85 / max(1, actionsToDisplay.count))
+        self.actionsToDisplay = isVerified.isNo && account.isPrivateKey ? account.allowedActions : allActions
+        self.maxHeight = (85 / max(1, actionsToDisplay.count))
             .clamped(to: 8..<11).vh
     }
 

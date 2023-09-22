@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-public enum ImageResource: Hashable {
+public enum ImageLocation: Hashable {
 
     case local(name: String, bundle: Bundle)
     case remote(url: URL)

@@ -7,7 +7,7 @@ import PlatformKit
 
 extension CardType {
 
-    public var thumbnail: ImageResource? {
+    public var thumbnail: ImageLocation? {
         switch self {
         case .visa:
             return .local(name: "logo-visa", bundle: .platformUIKit)

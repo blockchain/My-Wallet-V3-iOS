@@ -4,9 +4,9 @@ import ComposableArchitecture
 import Errors
 
 public struct PlaidState: Equatable {
-    internal var accountId: String?
-    internal let migratingAccount: Bool
-    internal var uxError: UX.Error?
+    var accountId: String?
+    let migratingAccount: Bool
+    var uxError: UX.Error?
 
     public init(
         accountId: String? = nil,

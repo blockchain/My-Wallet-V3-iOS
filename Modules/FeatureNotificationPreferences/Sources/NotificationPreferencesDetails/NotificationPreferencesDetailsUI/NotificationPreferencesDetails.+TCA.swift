@@ -5,7 +5,7 @@ import ComposableArchitecture
 import FeatureNotificationPreferencesDomain
 import Foundation
 
-internal struct Switch: Equatable, Hashable {
+struct Switch: Equatable, Hashable {
     var method: NotificationMethod
     var isOn: Bool
 }

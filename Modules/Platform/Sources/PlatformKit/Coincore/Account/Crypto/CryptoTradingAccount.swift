@@ -31,7 +31,7 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
     public let isDefault: Bool = false
     public var accountType: AccountType = .trading
 
-    private(set) public var isExternalTradingAccount: Bool = false
+    public private(set) var isExternalTradingAccount: Bool = false
 
     lazy var bindings = app.binding(self)
         .subscribe(\.isExternalTradingAccount, to: blockchain.app.is.external.brokerage)

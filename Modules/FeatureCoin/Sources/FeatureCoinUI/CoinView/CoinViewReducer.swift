@@ -54,7 +54,7 @@ public let coinViewReducer = Reducer<
                 .compactMap(\.value)
                 .receive(on: environment.mainQueue)
                 .eraseToEffect()
-                .map{
+                .map {
                     .binding(.set(\.$isDexEnabled, $0))
                 },
 
@@ -65,7 +65,7 @@ public let coinViewReducer = Reducer<
                 .compactMap(\.value)
                 .receive(on: environment.mainQueue)
                 .eraseToEffect()
-                .map{
+                .map {
                     .binding(.set(\.$isExternalBrokerageEnabled, $0))
                 },
 

@@ -41,7 +41,7 @@ import UnifiedActivityData
 import WalletPayloadDataKit
 import WalletPayloadKit
 
-@UIApplicationMain
+@main
 final class AppDelegate: NSObject, UIApplicationDelegate {
     @LazyInject(tag: DebugScreenContext.tag) var debugCoordinator: DebugCoordinating
 

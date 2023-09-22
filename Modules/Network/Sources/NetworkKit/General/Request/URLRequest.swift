@@ -6,7 +6,7 @@ import Foundation
 extension URLRequest {
 
     /// The cURL representation of the URLRequest, useful for debugging and executing requests outside of the app.
-    internal var cURLCommand: String {
+    var cURLCommand: String {
 
         var command = "curl"
 

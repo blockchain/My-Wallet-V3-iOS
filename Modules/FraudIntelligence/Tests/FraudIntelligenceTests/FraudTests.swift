@@ -161,7 +161,7 @@ enum Test {
         }
 
         static func start(withOptions options: Options) -> AnyObject {
-            Self.count = 0
+            count = 0
             Self.options = options
             return MobileIntelligence()
         }

@@ -99,7 +99,6 @@ final class TargetSelectionInteractor {
     }
 }
 
-
 private func validateDomain(
     service: BlockchainNameResolutionServiceAPI,
     analyticsRecorder: AnalyticsEventRecorderAPI,

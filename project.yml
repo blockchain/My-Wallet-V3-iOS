@@ -167,6 +167,9 @@ settings:
     Release Alpha:
       OTHER_SWIFT_FLAGS: -DINTERNAL_BUILD -DALPHA_BUILD
 packages:
+  sift-ios:
+    url: https://github.com/SiftScience/sift-ios.git
+    version: 2.1.5
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing.git
     version: 1.11.1
@@ -187,7 +190,7 @@ packages:
     version: 6.6.0
   Pulse:
     url: https://github.com/kean/Pulse.git
-    version: 3.7.3
+    version: 4.0.3
   Sardine:
     url: https://github.com/oliveratkinson-bc/swift-sardine.git
     version: 1.0.25
@@ -388,7 +391,6 @@ targets:
         embed: false
       - framework: Carthage/Build/PromisesSwift.xcframework
         embed: false
-      - framework: Carthage/Build/Sift.xcframework
 
       - package: FeatureAttribution
         product: FeatureAttribution
@@ -446,6 +448,7 @@ targets:
 
       - package: BigInt
       - package: ComposableArchitecture
+      - package: sift-ios
       - package: DIKit
       - package: RxSwift
         product: RxCocoa

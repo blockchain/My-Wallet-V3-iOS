@@ -46,7 +46,7 @@ public struct ActivityDetailScene: ReducerProtocol {
             case .onAppear:
                 state.items = state.placeholderItems
                 return .run { [activityEntry = state.activityEntry, app] send in
-                    let isExternalTradingEnabled = (try? await app.get(blockchain.app.is.external.brokerage, as: Bool.self)) ?? false
+                    let isExternalTradingEnabled = await (try? app.get(blockchain.app.is.external.brokerage, as: Bool.self)) ?? false
                     await send(.onExternalTradingEnabled(isExternalTradingEnabled))
 
                     let activityDetails = await TaskResult {

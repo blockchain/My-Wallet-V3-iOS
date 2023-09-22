@@ -9,7 +9,7 @@ public protocol AssetInformationClientAPI {
 
     func fetchInfo(
         _ currencyCode: String
-    ) -> AnyPublisher<AssetInfo, NetworkError>
+    ) -> AnyPublisher<AssetInfoResponse, NetworkError>
 }
 
 public final class AssetInformationClient: AssetInformationClientAPI {
@@ -27,7 +27,7 @@ public final class AssetInformationClient: AssetInformationClientAPI {
 
     public func fetchInfo(
         _ currencyCode: String
-    ) -> AnyPublisher<AssetInfo, NetworkError> {
+    ) -> AnyPublisher<AssetInfoResponse, NetworkError> {
         networkAdapter.perform(request: requestBuilder.get(path: "/assets/info/\(currencyCode)")!)
     }
 }

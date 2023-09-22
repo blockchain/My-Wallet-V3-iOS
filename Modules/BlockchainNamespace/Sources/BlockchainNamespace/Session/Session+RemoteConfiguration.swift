@@ -41,6 +41,7 @@ extension Session {
         var session: URLSessionProtocol
         var scheduler: AnySchedulerOf<DispatchQueue>
         var preferences: Preferences
+        var realtimeListener: AnyObject?
 
         private var experiments: Experiments!
         private unowned var app: AppProtocol!
@@ -84,11 +85,9 @@ extension Session {
                     }
                 }
 
-                remote.fetch(withExpirationDuration: expiration) { [self] _, error in
-                    guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                func activate(keys: [String]) {
                     remote.activate { [self] _, error in
                         guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
-                        let keys = remote.allKeys(from: .remote)
                         if keys.isEmpty {
                             #if DEBUG
                             app.post(error: "remote configuration keys is empty! ‼️‼️‼️‼️")
@@ -110,6 +109,16 @@ extension Session {
                         self._fetched = configuration
                         app.state.set(blockchain.app.configuration.remote.is.stale, to: false)
                     }
+                }
+
+                remote.fetch(withExpirationDuration: expiration) { _, error in
+                    guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                    activate(keys: remote.allKeys(from: .remote))
+                }
+
+                realtimeListener = remote.addOnConfigUpdateListener { update, error in
+                    guard let update, error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                    activate(keys: update.updatedKeys.array)
                 }
             }
         }

@@ -1,10 +1,10 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 @testable import EthereumDataKit
 @testable import EthereumKit
-import Combine
-import UnifiedActivityDomain
 import MoneyKit
+import UnifiedActivityDomain
 import XCTest
 
 final class PendingTransactionRepositoryTests: XCTestCase {

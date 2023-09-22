@@ -1,10 +1,10 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainUI
-import SwiftUI
-import FeatureProductsDomain
-import FeatureAppDomain
 import DIKit
+import FeatureAppDomain
+import FeatureProductsDomain
+import SwiftUI
 
 struct AppLoaderView<Content: View>: View {
     @StateObject var loaderService = AppLoaderService()
@@ -29,12 +29,6 @@ struct AppLoaderView<Content: View>: View {
 
 struct AppLoaderView_Previews: PreviewProvider {
     static var previews: some View {
-        AppLoaderView {
-
-        }
+        AppLoaderView {}
     }
 }
-
-
-
-

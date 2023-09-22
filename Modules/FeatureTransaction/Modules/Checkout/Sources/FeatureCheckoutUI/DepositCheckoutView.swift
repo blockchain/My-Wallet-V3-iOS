@@ -80,7 +80,6 @@ public struct DepositCheckoutView: View {
                     .foregroundColor(.semantic.title)
             }
         )
-
     }
 
     @ViewBuilder func fee() -> some View {
@@ -164,7 +163,7 @@ public struct DepositCheckoutView: View {
 
         VStack(alignment: .leading) {
             Text(rich:
-                    isExternalTradingEnabled ?  L10n.Label.depositDisclaimerBakkt(date: date) :
+                    isExternalTradingEnabled ? L10n.Label.depositDisclaimerBakkt(date: date) :
                     L10n.Label.depositDisclaimer.interpolating(checkout.total.displayString)
             )
                 .typography(.caption1)

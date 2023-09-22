@@ -43,7 +43,7 @@ public struct IntroView: View {
                             .typography(.title1)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
-                        if let byline = byline {
+                        if let byline {
                             Text(LocalizedStringKey(byline))
                                 .typography(.body1)
                                 .foregroundColor(.white)
@@ -287,6 +287,23 @@ extension AppMode {
                 Color(red: 1.0, green: 0, blue: 0.59),
                 Color(red: 0.49, green: 0.20, blue: 0.73)
             ]
+        }
+    }
+}
+
+extension IntroView {
+    public init(_ flow: IntroViewFlow, pkwOnly: Bool) {
+        switch flow {
+        case .defiFirst:
+            self.init(.pkw, actionTitle: LocalizationConstants.okString)
+        case .tradingFirst:
+            self.init(.trading, actionTitle: LocalizationConstants.okString)
+        default:
+            if pkwOnly {
+                self.init(.pkw)
+            } else {
+                self.init(.trading)
+            }
         }
     }
 }

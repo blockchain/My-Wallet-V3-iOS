@@ -2132,6 +2132,15 @@ blockchain:
 			exchange:
 				dex:
 				+ blockchain.ux.type.story
+					action:
+						select:
+							currency:
+								destination:
+								+ blockchain.db.type.string
+								+ blockchain.session.state.value
+								source:
+								+ blockchain.db.type.string
+								+ blockchain.session.state.value
 					allowance:
 						sheet:
 						+ blockchain.ux.type.story
@@ -2155,8 +2164,9 @@ blockchain:
 								network:
 									ticker:
 									+ blockchain.db.type.string
-									+ blockchain.session.state.value
 									+ blockchain.ux.type.story
+										value:
+										+ blockchain.db.type.string
 							sheet:
 							+ blockchain.ux.type.story
 								selected:
@@ -2726,7 +2736,6 @@ blockchain:
 				did:
 					show:
 					+ blockchain.db.type.boolean
-					+ blockchain.session.state.shared.value
 					+ blockchain.session.state.stored.value
 				event:
 					show:

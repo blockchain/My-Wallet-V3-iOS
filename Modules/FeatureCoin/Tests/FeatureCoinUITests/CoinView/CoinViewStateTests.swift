@@ -33,7 +33,7 @@ final class CoinViewStateTests: XCTestCase {
             isDexEnabled: true
         )
         state.appMode = .pkw
-        XCTAssertEqual(state.primaryActions, [ButtonAction.getToken(currency: CryptoCurrency.ethereum.code)])
+        XCTAssertEqual(state.primaryActions, [ButtonAction.getToken(currency: CryptoCurrency.ethereum.displayCode)])
     }
 
     func test_primary_defi_actions_balance_swap() {
@@ -219,7 +219,6 @@ final class CoinViewStateTests: XCTestCase {
 
     func test_all_defi_actions_no_balance_kyc_verified() {
         // Balance, KYC Verified
-        let send = ButtonAction.send()
         let receive = ButtonAction.receive()
 
         state = CoinViewState(

@@ -21,11 +21,12 @@ final class DeFiTotalBalanceService {
 
     func fetchTotalBalance() -> StreamOf<BalanceInfo, BalanceInfoError> {
         app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
-            .compactMap(\.value)
+            .map(\.value)
             .mapError(to: Never.self)
             .receive(on: DispatchQueue.main)
             .flatMap { [repository] fiatCurrency -> StreamOf<BalanceInfo, BalanceInfoError> in
-                fetchDeFiBalanceInfo(repository: repository)(fiatCurrency, .now)
+                guard let fiatCurrency else { return .just(.failure(BalanceInfoError.unableToRetrieve)) }
+                return fetchDeFiBalanceInfo(repository: repository)(fiatCurrency, .now)
                     .zip(fetchDeFiBalanceInfo(repository: repository)(fiatCurrency, .oneDay))
                     .map { currentBalanceResult, previousBalanceResult -> Result<BalanceInfo, BalanceInfoError> in
                         let currentBalance: MoneyValue? = currentBalanceResult.success

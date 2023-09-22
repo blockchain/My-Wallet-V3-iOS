@@ -9,11 +9,11 @@ import PlatformKit
 import ToolKit
 
 typealias FeatureInterestDataAPIClient =
+    InterestAccountBalanceClientAPI &
     InterestAccountLimitsClientAPI &
     InterestAccountRateClientAPI &
-    InterestAccountBalanceClientAPI &
-    InterestAccountWithdrawClientAPI &
-    InterestAccountTransferClientAPI
+    InterestAccountTransferClientAPI &
+    InterestAccountWithdrawClientAPI
 
 final class APIClient: FeatureInterestDataAPIClient {
 

@@ -4,7 +4,7 @@ import BlockchainComponentLibrary
 
 public protocol CurrencyFormatter {
     func displayString(amountMinor: String, currency: String) -> String?
-    func displayImage(currency: String) -> ImageResource?
+    func displayImage(currency: String) -> ImageLocation?
 }
 
 public protocol FiatCurrencyFormatter: CurrencyFormatter {}
@@ -16,7 +16,7 @@ public struct NoFormatCurrencyFormatter: FiatCurrencyFormatter, CryptoCurrencyFo
         "\(currency) \(amountMinor)"
     }
 
-    public func displayImage(currency: String) -> ImageResource? {
+    public func displayImage(currency: String) -> ImageLocation? {
         nil
     }
 }

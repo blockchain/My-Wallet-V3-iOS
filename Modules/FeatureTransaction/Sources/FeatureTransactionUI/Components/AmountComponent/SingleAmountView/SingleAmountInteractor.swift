@@ -107,7 +107,7 @@ public final class SingleAmountInteractor: AmountViewInteracting {
 }
 
 extension AmountInteractorInput {
-    internal var toInputScannerAction: MoneyValueInputScanner.Action {
+    var toInputScannerAction: MoneyValueInputScanner.Action {
         switch self {
         case .insert(let value):
             return .insert(value)

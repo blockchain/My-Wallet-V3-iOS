@@ -55,6 +55,7 @@ extension UIViewController {
             }
         }
     }
+
     private static var maxDepth = 10
 
     public func enter(into viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil, retries: Int = 0) {
@@ -76,7 +77,7 @@ extension UIViewController {
                 name: NSNotification.Name("error.notification"),
                 object: self,
                 userInfo: [
-                    "error": ViewControllerError.unableToFindTopViewController,
+                    "error": ViewControllerError.unableToFindTopViewController
                 ]
             )
         }

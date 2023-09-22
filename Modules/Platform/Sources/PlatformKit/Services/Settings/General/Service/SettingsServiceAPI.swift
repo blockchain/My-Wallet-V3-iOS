@@ -4,17 +4,17 @@ import Combine
 import RxRelay
 import RxSwift
 
-public typealias CompleteSettingsServiceAPI = SettingsServiceAPI &
+public typealias CompleteSettingsServiceAPI =
     EmailSettingsServiceAPI &
-    LastTransactionSettingsUpdateServiceAPI &
     FiatCurrencySettingsServiceAPI &
-    SMSTwoFactorSettingsServiceAPI &
+    LastTransactionSettingsUpdateServiceAPI &
+    SMSTwoFactorSettingsServiceAPI & SettingsServiceAPI &
     UpdateMobileSettingsServiceAPI &
     VerifyMobileSettingsServiceAPI
 
-public typealias MobileSettingsServiceAPI = UpdateMobileSettingsServiceAPI &
-    VerifyMobileSettingsServiceAPI &
-    SettingsServiceAPI
+public typealias MobileSettingsServiceAPI =
+    SettingsServiceAPI & UpdateMobileSettingsServiceAPI &
+    VerifyMobileSettingsServiceAPI
 
 public enum SettingsServiceError: Error {
     case timedOut

@@ -5,7 +5,7 @@ import BlockchainComponentLibrary
 public struct SelectionItemViewModel {
 
     public enum Thumb {
-        case image(ImageResource)
+        case image(ImageLocation)
         case emoji(String)
         case none
     }

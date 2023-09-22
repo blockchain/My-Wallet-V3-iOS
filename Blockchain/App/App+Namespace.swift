@@ -139,6 +139,8 @@ extension AppProtocol {
 }
 
 extension FirebaseRemoteConfig.RemoteConfig: RemoteConfiguration_p {}
+extension FirebaseRemoteConfig.ConfigUpdateListenerRegistration: ConfigUpdateListenerRegistration_p {}
+extension FirebaseRemoteConfig.RemoteConfigUpdate: RemoteConfigUpdate_p {}
 extension FirebaseRemoteConfig.RemoteConfigValue: RemoteConfigurationValue_p {}
 extension FirebaseRemoteConfig.RemoteConfigFetchStatus: RemoteConfigurationFetchStatus_p {}
 extension FirebaseRemoteConfig.RemoteConfigSource: RemoteConfigurationSource_p {}

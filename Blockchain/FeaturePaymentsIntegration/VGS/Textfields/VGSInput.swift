@@ -70,8 +70,10 @@ enum VGS {
                 name: Typography.FontResource.interMedium.rawValue,
                 size: 16
             )
-            input.textColor = UIColor.semantic.text
-            input.padding = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+            input.textColor = UIColor.semantic.title
+            input.backgroundColor = UIColor.semantic.background
+            input.layer.cornerRadius = 16
+            input.padding = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
             input.textAlignment = .natural
             input.borderColor = isValid ? UIColor.semantic.medium : UIColor.semantic.error
             input.tintColor = UIColor.semantic.muted

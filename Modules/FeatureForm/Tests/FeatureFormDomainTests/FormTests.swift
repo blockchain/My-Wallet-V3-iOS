@@ -6,7 +6,6 @@ final class FormTests: XCTestCase {
     func test() throws {
 
         try JSONDecoder().decode(FeatureFormDomain.Form.self, from: json)
-
     }
 }
 

@@ -46,7 +46,7 @@ final class LinkBankFlowRootInteractor: Interactor,
     // MARK: - Private Properties
 
     private let bankFlowEffectRelay = PublishRelay<LinkBankFlowEffect>()
-    internal let retryAction = PublishRelay<LinkBankFlow.Action>()
+    let retryAction = PublishRelay<LinkBankFlow.Action>()
 
     // MARK: - Injected
 

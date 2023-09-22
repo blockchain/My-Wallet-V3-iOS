@@ -53,7 +53,6 @@ public final class KYCPager: KYCPagerAPI {
             }
         }
 
-
         return Observable.combineLatest(
             nabuUserService.user.asObservable(),
             app.publisher(for: blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
@@ -62,7 +61,7 @@ public final class KYCPager: KYCPagerAPI {
                 .asObservable()
         )
         .asSingle()
-        .flatMapMaybe { [weak self] (user, isSSNRequired) -> Maybe<KYCPageType> in
+        .flatMapMaybe { [weak self] user, isSSNRequired -> Maybe<KYCPageType> in
             guard let strongSelf = self else { return Maybe.empty() }
             if let nextPage = page.nextPage(
                 forTier: strongSelf.tier,

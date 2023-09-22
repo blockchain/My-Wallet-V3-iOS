@@ -48,7 +48,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Veriff/veriff-ios-spm.git",
-            exact: "6.13.0"
+            exact: "6.17.0"
         ),
         .package(path: "../Analytics"),
         .package(path: "../FeatureAuthentication"),

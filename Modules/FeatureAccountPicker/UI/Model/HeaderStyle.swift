@@ -15,7 +15,7 @@ public enum HeaderStyle: Equatable {
     case normal(
         title: String,
         subtitle: String?,
-        image: ImageResource?,
+        image: ImageLocation?,
         tableTitle: String?,
         searchable: Bool
     )

@@ -49,6 +49,13 @@ public struct DexMain: ReducerProtocol {
                         .result()
                         .receive(on: mainQueue)
                         .eraseToEffect(Action.onAvailableNetworksFetched)
+                } else if let network = getThatCurrency(app: app)?.network() {
+                    availableNetworks = EffectTask<DexMain.Action>.run(operation: { send in
+                        try await app.set(
+                            blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value,
+                            to: network.networkConfig.networkTicker
+                        )
+                    })
                 }
 
                 let refreshQuote = EffectTask<DexMain.Action>(value: .refreshQuote)
@@ -206,20 +213,10 @@ public struct DexMain: ReducerProtocol {
                 guard wasEmpty else {
                     return .none
                 }
-                guard let network = preselectNetwork(from: networks) else {
+                guard let network = preselectNetwork(app: app, from: networks) else {
                     return .none
                 }
-                state.networkNativePrice = nil
-                state.currentNetwork = network
-                return app
-                    .publisher(
-                        for: blockchain.api.nabu.gateway.price.crypto[network.nativeAsset.code].fiat.quote.value,
-                        as: FiatValue?.self
-                    )
-                    .replaceError(with: nil)
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect(Action.onNetworkPrice)
-                    .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
+                return EffectTask(value: .onNetworkSelected(network))
 
             case .onAvailableNetworksFetched(.failure):
                 return .none
@@ -346,7 +343,7 @@ public struct DexMain: ReducerProtocol {
                 app.post(
                     event: networkPicker.tap,
                     context: [
-                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentSelectedNetworkTicker,
+                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentNetwork?.networkConfig.networkTicker,
                         detents: [detents.automatic.dimension]
                     ]
                 )
@@ -374,9 +371,13 @@ public struct DexMain: ReducerProtocol {
                     .eraseToEffect(Action.onAllowance)
                     .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
             case .binding(\.$currentSelectedNetworkTicker):
-                guard let network = state.availableNetworks
-                    .first(where: { $0.networkConfig.networkTicker == state.currentSelectedNetworkTicker })
-                else {
+                let value = state.currentSelectedNetworkTicker
+                guard let network = state.availableNetworks.first(where: { $0.networkConfig.networkTicker == value }) else {
+                    return .none
+                }
+                return EffectTask(value: .onNetworkSelected(network))
+            case .onNetworkSelected(let network):
+                guard network != state.currentNetwork, state.availableNetworks.contains(network) else {
                     return .none
                 }
                 state.currentNetwork = network
@@ -637,15 +638,74 @@ private func dexSuccessDialog(
 
 private func explorerURL(
     quote: DexQuoteOutput,
-    transactionId: String
+    transactionId: String,
+    currenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
 ) -> URL? {
-    let service = EnabledCurrenciesService.default
-    guard let network = service.network(for: quote.sellAmount.currency) else {
+    guard let network = currenciesService.network(for: quote.sellAmount.currency) else {
         return nil
     }
     return URL(string: network.networkConfig.explorerUrl + "/" + transactionId)
 }
 
-private func preselectNetwork(from networks: [EVMNetwork]) -> EVMNetwork? {
-    networks.first(where: { $0.networkConfig == .ethereum }) ?? networks.first
+private func preselectNetwork(
+    app: AppProtocol,
+    from networks: [EVMNetwork],
+    currenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
+) -> EVMNetwork? {
+    if let currency = getThatCurrency(app: app),
+       let network = currency.network(currenciesService: currenciesService),
+       networks.contains(network)
+    {
+        return network
+    }
+    return networks
+        .first(where: { $0.networkConfig == .ethereum }) ?? networks.first
+}
+
+
+func getThatCurrency(app: AppProtocol) -> CryptoCurrency? {
+    if let source = getThatSourceCurrency(app: app) {
+        eraseThatDestinationCurrency(app: app)
+        return source
+    }
+    if let destination = getThatDestinationCurrency(app: app) {
+        eraseThatSourceCurrency(app: app)
+        return destination
+    }
+    return nil
+}
+
+func getThatSourceCurrency(app: AppProtocol) -> CryptoCurrency? {
+    app.state.get(
+        blockchain.ux.currency.exchange.dex.action.select.currency.source,
+        as: CryptoCurrency?.self,
+        or: nil
+    )
+}
+
+func getThatDestinationCurrency(app: AppProtocol) -> CryptoCurrency? {
+    app.state.get(
+        blockchain.ux.currency.exchange.dex.action.select.currency.destination,
+        as: CryptoCurrency?.self,
+        or: nil
+    )
+}
+
+func eraseThatCurrency(app: AppProtocol) {
+    eraseThatSourceCurrency(app: app)
+    eraseThatDestinationCurrency(app: app)
+}
+
+func eraseThatSourceCurrency(app: AppProtocol) {
+    app.state.set(
+        blockchain.ux.currency.exchange.dex.action.select.currency.source,
+        to: nil
+    )
+}
+
+func eraseThatDestinationCurrency(app: AppProtocol) {
+    app.state.set(
+        blockchain.ux.currency.exchange.dex.action.select.currency.destination,
+        to: nil
+    )
 }

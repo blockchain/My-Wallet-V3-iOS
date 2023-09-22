@@ -20,8 +20,8 @@ public struct Default<Default: DefaultValue>: Codable {
     }
 }
 
-extension Default: Equatable where Default.Value: Equatable { }
-extension Default: Hashable where Default.Value: Hashable { }
+extension Default: Equatable where Default.Value: Equatable {}
+extension Default: Hashable where Default.Value: Hashable {}
 
 extension KeyedDecodingContainer {
 

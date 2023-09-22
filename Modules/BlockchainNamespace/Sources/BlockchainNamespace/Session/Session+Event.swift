@@ -280,7 +280,7 @@ public final class BlockchainEventSubscription: Hashable {
                     do {
                         try action(event)
                     } catch {
-                        self.app.post(error: error, file: self.file, line: self.line)
+                        app.post(error: error, file: file, line: line)
                     }
                 case .async(let action):
                     Task(priority: priority) {

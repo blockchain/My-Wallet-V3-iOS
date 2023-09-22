@@ -30,7 +30,7 @@ final class TransactionInteractor {
         }
     }
 
-    internal let app: AppProtocol
+    let app: AppProtocol
 
     private let coincore: CoincoreAPI
     private let availablePairsService: AvailableTradingPairsServiceAPI

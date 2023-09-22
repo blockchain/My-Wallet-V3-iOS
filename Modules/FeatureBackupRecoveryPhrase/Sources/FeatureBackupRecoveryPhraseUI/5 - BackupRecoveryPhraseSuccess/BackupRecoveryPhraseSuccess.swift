@@ -14,7 +14,7 @@ public struct BackupRecoveryPhraseSuccess: ReducerProtocol {
     public typealias Action = BackupRecoveryPhraseSuccessAction
 
     public var body: some ReducerProtocol<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .onDoneTapped:
                 onNext()

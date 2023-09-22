@@ -145,7 +145,7 @@ private func currencyParams(
         return nil
     }
     let address = cryptoCurrency.assetModel.kind.erc20ContractAddress
-    guard let network = cryptoCurrency.network(enabledCurrenciesService: currenciesService) else {
+    guard let network = cryptoCurrency.network(currenciesService: currenciesService) else {
         return nil
     }
     return DexQuoteRequest.CurrencyParams(

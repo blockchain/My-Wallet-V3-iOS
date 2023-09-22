@@ -138,6 +138,9 @@ struct EditEmailView: View {
                                 }
                             )
                             .accessibility(identifier: "KYC.EmailVerification.edit.email.group")
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .keyboardType(.emailAddress)
                             .textContentType(.emailAddress)
                             .submitLabel(.done)
 

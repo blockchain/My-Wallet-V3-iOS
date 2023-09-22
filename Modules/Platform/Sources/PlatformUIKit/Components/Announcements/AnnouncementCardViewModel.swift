@@ -82,7 +82,7 @@ public final class AnnouncementCardViewModel {
         case visible(BadgeImageViewModel, CGSize)
 
         public init(
-            image: ImageResource,
+            image: ImageLocation,
             contentColor: UIColor? = .primary,
             backgroundColor: UIColor = .lightBadgeBackground,
             cornerRadius: BadgeImageViewModel.CornerRadius = .roundedHigh,

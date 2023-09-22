@@ -37,6 +37,9 @@ class SellEnterAmountTests: XCTestCase {
         minSpendableCryptoValue: self.minSpendableCryptoValue
     ))
 
+    lazy var validationStatePublisher: AnyPublisher<TransactionValidationState, Never> = .just(.canExecute)
+
+
     override func setUpWithError() throws {
         try super.setUpWithError()
         completionHandlerSpy = SellEnterAmountCompletionHandlerSpy()
@@ -47,15 +50,11 @@ class SellEnterAmountTests: XCTestCase {
                 app: App.test,
                 onAmountChanged: completionHandlerSpy.onAmountChanged,
                 onPreviewTapped: completionHandlerSpy.onPreviewTapped,
-                minMaxAmountsPublisher: minMaxAmountsPublisher
+                minMaxAmountsPublisher: minMaxAmountsPublisher,
+                validationStatePublisher: validationStatePublisher
             )
         )
     }
-
-//    func test_initial_state() async {
-//        await testStore.send(.onAppear)
-//
-//    }
 }
 
 private class SellEnterAmountCompletionHandlerSpy {

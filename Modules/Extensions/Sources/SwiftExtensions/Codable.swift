@@ -9,9 +9,9 @@ public struct FailableDecodable<T: Decodable>: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         do {
-            value = try container.decode(T.self)
+            self.value = try container.decode(T.self)
         } catch {
-            value = nil
+            self.value = nil
             print("FailableDecodable: \(error)")
         }
     }

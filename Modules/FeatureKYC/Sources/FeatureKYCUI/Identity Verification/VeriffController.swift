@@ -29,7 +29,7 @@ protocol VeriffController: UIViewController, VeriffSdkDelegate {
 
 extension VeriffController {
 
-    internal var veriff: VeriffSdk {
+    var veriff: VeriffSdk {
         VeriffSdk.shared
     }
 

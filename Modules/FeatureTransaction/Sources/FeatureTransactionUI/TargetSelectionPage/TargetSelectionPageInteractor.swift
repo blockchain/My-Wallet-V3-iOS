@@ -167,7 +167,7 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
         // The stream is debounced and we then process the validation.
         memoTextWhileTyping
             .debounce(.milliseconds(500), scheduler: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .withLatestFrom(Observable.combineLatest(inputText, sourceAccount)) { (memo, values) in
+            .withLatestFrom(Observable.combineLatest(inputText, sourceAccount)) { memo, values in
                 (memo, values.0, values.1)
             }
             .observe(on: MainScheduler.asyncInstance)
@@ -179,7 +179,7 @@ final class TargetSelectionPageInteractor: PresentableInteractor<TargetSelection
         // The stream is debounced and we then process the validation.
         inputTextWhileTyping
             .debounce(.milliseconds(500), scheduler: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
-            .withLatestFrom(Observable.combineLatest(memoText, sourceAccount)) { (text, values) in
+            .withLatestFrom(Observable.combineLatest(memoText, sourceAccount)) { text, values in
                 (text, values.0, values.1)
             }
             .observe(on: MainScheduler.asyncInstance)

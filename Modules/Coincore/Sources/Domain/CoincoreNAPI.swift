@@ -313,7 +313,7 @@ public final class CoincoreNAPI {
                                 do {
                                     value = try value
                                         .sorted { l, r in try l.fiatBalance > r.fiatBalance }
-                                } catch { }
+                                } catch {}
                                 return AnyJSON(value.map(\.account.identifier))
                             }
                             .eraseToAnyPublisher()

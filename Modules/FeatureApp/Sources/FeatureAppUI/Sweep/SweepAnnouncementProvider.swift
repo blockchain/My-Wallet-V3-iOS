@@ -101,19 +101,19 @@ public final class SweepAnnouncementProvider: AnnouncementsServiceAPI {
 
         return announcements
     }
-    
+
     public func setRead(announcement: FeatureAnnouncementsDomain.Announcement) -> AnyPublisher<Void, Errors.NabuNetworkError> {
         .just(())
     }
-    
+
     public func setTapped(announcement: FeatureAnnouncementsDomain.Announcement) -> AnyPublisher<Void, Errors.NabuNetworkError> {
         .just(())
     }
-    
+
     public func setDismissed(_ announcement: FeatureAnnouncementsDomain.Announcement, with action: FeatureAnnouncementsDomain.Announcement.Action) -> AnyPublisher<Void, Errors.NabuNetworkError> {
         .just(())
     }
-    
+
     public func handle(_ announcement: FeatureAnnouncementsDomain.Announcement) -> AnyPublisher<Void, Never> {
         guard announcement == Announcement.sweep else {
             return .just(())

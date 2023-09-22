@@ -77,18 +77,19 @@ struct ChangePasswordReducer: ReducerProtocol {
             case .updatePassword:
                 guard state.current.isNotEmpty,
                       state.new == state.confirmation,
-                      passwordValidator.validate(password: state.new).isEmpty else {
+                      passwordValidator.validate(password: state.new).isEmpty
+                else {
                     return .none
                 }
                 state.loading = true
-                
+
                 let test = passwordRepository
                     .password
                     .map { [state] password in
                         password == state.current
                     }
                     .eraseToAnyPublisher()
-                
+
                 return test
                     .flatMap { [state, passwordRepository] passwordOk -> AnyPublisher<Void, PasswordRepositoryError> in
                         if passwordOk {

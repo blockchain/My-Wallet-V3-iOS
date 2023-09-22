@@ -62,7 +62,7 @@ struct SuperAppContentViewSmallDevice: View {
                 }
                 SuperAppDashboardContentView(
                     currentModeSelection: $currentModeSelection,
-                    isTradingEnabled: viewStore.state.tradingEnabled,
+                    isTradingEnabled: isTradingEnabled,
                     isExternalTradingEnabled: isExternalTradingEnabled,
                     store: store
                 )

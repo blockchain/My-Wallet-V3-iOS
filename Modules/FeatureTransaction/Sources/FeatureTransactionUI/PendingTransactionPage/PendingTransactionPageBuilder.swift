@@ -186,8 +186,7 @@ struct PendingTransactionView: View {
                 PendingTransactionDialogView(progress, currency: model.currency)
             case .success(let success):
                 ConfettiCannonView(confetti) { action in
-                    PendingTransactionDialogView(success, currency: model.currency, isLoading: false)
-                        .onTapGesture(perform: action)
+                    PendingTransactionDialogView(success, currency: model.currency, isLoading: false, action: action)
                 }
             }
         }
@@ -203,6 +202,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
     let dialog: UX.Dialog
     let isLoading: Bool
     let currency: CurrencyType
+    let action: () -> Void
 
     let footer: Footer
 
@@ -210,17 +210,20 @@ struct PendingTransactionDialogView<Footer: View>: View {
         _ dialog: UX.Dialog,
         currency: CurrencyType,
         isLoading: Bool = true,
-        @ViewBuilder footer: () -> Footer = EmptyView.init
+        @ViewBuilder footer: () -> Footer = EmptyView.init,
+        action: @escaping () -> Void = {}
     ) {
         self.dialog = dialog
         self.currency = currency
         self.isLoading = isLoading
         self.footer = footer()
+        self.action = action
     }
 
     var body: some View {
         ZStack {
             Color.semantic.light
+                .onTapGesture(perform: action)
             VStack {
                 VStack(spacing: .none) {
                     Spacer()
@@ -233,7 +236,8 @@ struct PendingTransactionDialogView<Footer: View>: View {
                 .multilineTextAlignment(.center)
                 actions
             }
-            .padding()
+            .padding(.vertical)
+            .padding(.bottom, Spacing.padding2)
         }
     }
 

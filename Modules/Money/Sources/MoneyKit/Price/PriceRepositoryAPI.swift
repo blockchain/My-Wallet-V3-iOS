@@ -8,7 +8,7 @@ public enum DIKitPriceContext: String {
     case volume
 }
 
-protocol PriceRepositoryAPI {
+public protocol PriceRepositoryAPI {
 
     func symbols() -> AnyPublisher<CurrencySymbols, NetworkError>
 
@@ -50,4 +50,10 @@ protocol PriceRepositoryAPI {
         at time: PriceTime,
         skipStale: Bool
     ) -> AnyPublisher<Result<[String: PriceQuoteAtTime], NetworkError>, Never>
+
+    func topMovers(
+        currency: FiatCurrency,
+        custodialOnly: Bool
+    )
+    -> AnyPublisher<Result<[TopMoverInfo], NetworkError>, Never>
 }

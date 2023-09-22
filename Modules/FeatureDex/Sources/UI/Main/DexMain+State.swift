@@ -19,8 +19,8 @@ extension DexMain {
         var currentNetwork: EVMNetwork? {
             didSet {
                 currentSelectedNetworkTicker = currentNetwork?.networkConfig.networkTicker
-                source.currentNetwork = currentNetwork
-                destination.currentNetwork = currentNetwork
+                source.parentNetwork = currentNetwork
+                destination.parentNetwork = currentNetwork
             }
         }
 

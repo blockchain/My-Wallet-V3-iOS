@@ -14,7 +14,7 @@ public struct BackupSkipConfirm: ReducerProtocol {
     public typealias Action = BackupSkipConfirmAction
 
     public var body: some ReducerProtocol<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .onConfirmTapped:
                 onConfirm()

@@ -5,5 +5,4 @@
 #import "KeychainItemWrapper.h"
 #import "KeychainItemWrapper+Credentials.h"
 #import "UIDevice+Hardware.h"
-#import "Sift/Sift.h"
 #import <RecaptchaEnterprise/RecaptchaEnterprise.h>

@@ -36,7 +36,6 @@ public struct AccountListView: View {
         accounts.count == 1 && accounts.first?.accountType == .privateKey
     }
 
-
     public var body: some View {
         VStack(spacing: 0) {
             if accounts.isEmpty {

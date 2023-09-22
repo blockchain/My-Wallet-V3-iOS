@@ -17,8 +17,8 @@ public struct SearchableList<Data, Content: View, Empty: View>: View where
     public var accessory: Image
     public var clear: Image
 
-    internal var content: (Data.Element) -> Content
-    internal var empty: () -> Empty
+    var content: (Data.Element) -> Content
+    var empty: () -> Empty
 
     @ObservedObject private var search: SearchObservableObject<Data>
 

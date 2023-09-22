@@ -49,7 +49,7 @@ extension EarnProductCompare {
         func highestRate(for product: EarnProduct) -> Double {
             model
                 .filter { $0.product == product }
-                .map { $0.rate }
+                .map(\.rate)
                 .max() ?? 0
         }
 

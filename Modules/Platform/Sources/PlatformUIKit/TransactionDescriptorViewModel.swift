@@ -8,7 +8,7 @@ import RxRelay
 import RxSwift
 
 struct BadgeImageAttributes {
-    let imageResource: ImageResource
+    let imageResource: ImageLocation
     let brandColor: UIColor
     let isFiat: Bool
 
@@ -24,7 +24,7 @@ struct BadgeImageAttributes {
         self.isFiat = currencyType.isFiatCurrency
     }
 
-    init(imageResource: ImageResource, brandColor: UIColor, isFiat: Bool) {
+    init(imageResource: ImageLocation, brandColor: UIColor, isFiat: Bool) {
         self.imageResource = imageResource
         self.brandColor = brandColor
         self.isFiat = isFiat

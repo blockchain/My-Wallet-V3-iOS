@@ -68,5 +68,4 @@ extension TimeInterval {
         }
         return dateInterval.duration
     }
-
 }

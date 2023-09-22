@@ -57,7 +57,7 @@ extension DSCNetworkConfig {
 
     static func from(response: NetworkConfigResponse) -> [DSCNetworkConfig] {
         response.networks
-            .compactMap { Self.init(response: $0, types: response.types) }
+            .compactMap { Self(response: $0, types: response.types) }
     }
 
     init?(response: NetworkConfigResponse.Network, types: [NetworkConfigResponse.TypeEntry]) {

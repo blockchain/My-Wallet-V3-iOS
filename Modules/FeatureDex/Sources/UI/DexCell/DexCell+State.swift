@@ -21,6 +21,8 @@ extension DexCell {
             }
         }
 
+        var parentNetwork: EVMNetwork?
+
         let style: Style
         var overrideAmount: CryptoValue?
         var currentNetwork: EVMNetwork?

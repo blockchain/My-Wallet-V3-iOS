@@ -45,7 +45,7 @@ final class ConnectSectionPresenter: SettingsSectionPresenting {
                     return .loaded(next: .empty)
                 }
                 return state
-              }
+            }
         .asObservable()
     }
 }

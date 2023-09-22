@@ -87,7 +87,6 @@ struct SuperAppContent: ReducerProtocol {
             case .onTotalBalanceFetched(.failure):
                 state.headerState.isRefreshing = false
                 state.headerState.hasError = true
-
                 return .none
             case .onDisappear:
                 return .fireAndForget {

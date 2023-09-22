@@ -14,7 +14,7 @@ enum DomainCheckoutRoute: NavigationRoute {
     case confirmation(DomainCheckoutConfirmationStatus)
 
     @ViewBuilder
-    func destination(in store: Store<DomainCheckoutState, DomainCheckoutAction>) -> some View {
+    func destination(in store: Store<DomainCheckout.State, DomainCheckout.Action>) -> some View {
         let viewStore = ViewStore(store)
         switch self {
         case .confirmation(let status):
@@ -54,121 +54,111 @@ struct DomainCheckoutState: Equatable, NavigationState {
     }
 }
 
-struct DomainCheckoutEnvironment {
-    let mainQueue: AnySchedulerOf<DispatchQueue>
+struct DomainCheckout: ReducerProtocol {
+    typealias State = DomainCheckoutState
+    typealias Action = DomainCheckoutAction
+
+    @Dependency(\.mainQueue) var mainQueue
     let analyticsRecorder: AnalyticsEventRecorderAPI
     let orderDomainRepository: OrderDomainRepositoryAPI
     let userInfoProvider: () -> AnyPublisher<OrderDomainUserInfo, Error>
-}
 
-let domainCheckoutReducer = Reducer<
-    DomainCheckoutState,
-    DomainCheckoutAction,
-    DomainCheckoutEnvironment
-> { state, action, environment in
-    switch action {
-    case .route:
-        return .none
-    case .binding(\DomainCheckoutState.$removeCandidate):
-        return EffectTask(value: DomainCheckoutAction.set((\DomainCheckoutState.$isRemoveBottomSheetShown), true))
-    case .binding(\DomainCheckoutState.$isRemoveBottomSheetShown):
-        if state.isRemoveBottomSheetShown {
-            state.removeCandidate = nil
-        }
-        return .none
-    case .binding:
-        return .none
-    case .removeDomain(let domain):
-        guard let domain else {
-            return .none
-        }
-        state.selectedDomains.remove(domain)
-        return EffectTask(value: DomainCheckoutAction.set((\DomainCheckoutState.$isRemoveBottomSheetShown), false))
-    case .claimDomain:
-        guard let domain = state.selectedDomains.first else {
-            return .none
-        }
-        state.isLoading = true
-        return environment
-            .userInfoProvider()
-            .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
-            .flatMap { userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
-                environment
-                    .orderDomainRepository
-                    .createDomainOrder(
-                        isFree: true,
-                        domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
-                        resolutionRecords: userInfo.resolutionRecords
-                    )
-            }
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result in
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .route:
+                return .none
+            case .binding(\State.$removeCandidate):
+                return EffectTask(value: Action.set((\State.$isRemoveBottomSheetShown), true))
+            case .binding(\State.$isRemoveBottomSheetShown):
+                if state.isRemoveBottomSheetShown {
+                    state.removeCandidate = nil
+                }
+                return .none
+            case .binding:
+                return .none
+            case .removeDomain(let domain):
+                guard let domain else {
+                    return .none
+                }
+                state.selectedDomains.remove(domain)
+                return EffectTask(value: Action.set((\State.$isRemoveBottomSheetShown), false))
+            case .claimDomain:
+                guard let domain = state.selectedDomains.first else {
+                    return .none
+                }
+                state.isLoading = true
+                return userInfoProvider()
+                    .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
+                    .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
+                        orderDomainRepository
+                            .createDomainOrder(
+                                isFree: true,
+                                domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
+                                resolutionRecords: userInfo.resolutionRecords
+                            )
+                    }
+                    .receive(on: mainQueue)
+                    .catchToEffect()
+                    .map { result in
+                        switch result {
+                        case .success:
+                            return .didClaimDomain(.success(.noValue))
+                        case .failure(let error):
+                            return .didClaimDomain(.failure(error))
+                        }
+                    }
+
+            case .didClaimDomain(let result):
+                state.isLoading = false
                 switch result {
                 case .success:
-                    return .didClaimDomain(.success(.noValue))
-                case .failure(let error):
-                    return .didClaimDomain(.failure(error))
+                    return .navigate(to: .confirmation(.success))
+                case .failure:
+                    return .navigate(to: .confirmation(.error))
                 }
+
+            case .returnToBrowseDomains:
+                return .none
+
+            case .dismissFlow:
+                return .none
             }
-
-    case .didClaimDomain(let result):
-        state.isLoading = false
-        switch result {
-        case .success:
-            return .navigate(to: .confirmation(.success))
-        case .failure(let error):
-            return .navigate(to: .confirmation(.error))
         }
-
-    case .returnToBrowseDomains:
-        return .none
-
-    case .dismissFlow:
-        return .none
+        .routing()
+        DomainCheckoutAnalytics(analyticsRecorder: analyticsRecorder)
     }
 }
-.binding()
-.routing()
-.analytics()
 
-// MARK: - Private
+struct DomainCheckoutAnalytics: ReducerProtocol {
 
-extension Reducer where
-    Action == DomainCheckoutAction,
-    State == DomainCheckoutState,
-    Environment == DomainCheckoutEnvironment
-{
-    /// Helper reducer for analytics tracking
-    fileprivate func analytics() -> Self {
-        combined(
-            with: Reducer<
-                DomainCheckoutState,
-                DomainCheckoutAction,
-                DomainCheckoutEnvironment
-            > { state, action, environment in
-                switch action {
-                case .binding((\DomainCheckoutState.$termsSwitchIsOn)):
-                    if state.termsSwitchIsOn {
-                        environment.analyticsRecorder.record(event: .domainTermsAgreed)
-                    }
-                    return .none
-                case .removeDomain:
-                    environment.analyticsRecorder.record(event: .domainCartEmptied)
-                    return .none
-                case .claimDomain:
-                    environment.analyticsRecorder.record(event: .registerDomainStarted)
-                    return .none
-                case .didClaimDomain(.success):
-                    environment.analyticsRecorder.record(event: .registerDomainSucceeded)
-                    return .none
-                case .didClaimDomain(.failure):
-                    environment.analyticsRecorder.record(event: .registerDomainFailed)
-                    return .none
-                default:
-                    return .none
-                }
+    typealias State = DomainCheckoutState
+    typealias Action = DomainCheckoutAction
+
+    let analyticsRecorder: AnalyticsEventRecorderAPI
+
+    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+        switch action {
+        case .binding((\DomainCheckoutState.$termsSwitchIsOn)):
+            if state.termsSwitchIsOn {
+                analyticsRecorder.record(event: .domainTermsAgreed)
             }
-        )
+            return .none
+        case .removeDomain:
+            analyticsRecorder.record(event: .domainCartEmptied)
+            return .none
+        case .claimDomain:
+            analyticsRecorder.record(event: .registerDomainStarted)
+            return .none
+        case .didClaimDomain(.success):
+            analyticsRecorder.record(event: .registerDomainSucceeded)
+            return .none
+        case .didClaimDomain(.failure):
+            analyticsRecorder.record(event: .registerDomainFailed)
+            return .none
+        default:
+            return .none
+        }
     }
 }

@@ -9,14 +9,14 @@ struct ErrorRecoveryState: Equatable {
 
     struct Callout: Equatable, Identifiable {
         let id: AnyHashable
-        let image: ImageResource
+        let image: ImageLocation
         let title: String
         let message: String
         let callToAction: String
 
         init(
             id: AnyHashable = UUID(),
-            image: ImageResource,
+            image: ImageLocation,
             title: String,
             message: String,
             callToAction: String
@@ -52,7 +52,7 @@ struct ErrorRecovery: ReducerProtocol {
     let calloutTapped: (ErrorRecoveryState.Callout) -> Void
 
     var body: some ReducerProtocol<ErrorRecoveryState, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .closeTapped:
                 close()

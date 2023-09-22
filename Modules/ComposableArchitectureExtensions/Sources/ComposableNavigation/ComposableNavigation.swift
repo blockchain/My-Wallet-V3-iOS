@@ -136,21 +136,21 @@ extension View {
     }
 }
 
-extension EffectPublisher where Action: NavigationAction {
+extension EffectTask where Action: NavigationAction {
 
     /// A navigation effect to continue a user-journey by navigating to a new screen.
     public static func dismiss() -> Self {
-        EffectPublisher(value: .dismiss())
+        Self(value: .dismiss())
     }
 
     /// A navigation effect to continue a user-journey by navigating to a new screen.
     public static func navigate(to route: Output.RouteType) -> Self {
-        EffectPublisher(value: .navigate(to: route))
+        Self(value: .navigate(to: route))
     }
 
     /// A navigation effect that enters a new user journey context.
     public static func enter(into route: Output.RouteType, context: EnterIntoContext = .default) -> Self {
-        EffectPublisher(value: .enter(into: route, context: context))
+        Self(value: .enter(into: route, context: context))
     }
 }
 
@@ -290,13 +290,40 @@ extension Reducer where Action: NavigationAction, State: NavigationState {
     /// reducer's logic.
     public func routing() -> Self {
         Self { state, action, environment in
-            guard let route = (/Action.route).extract(from: action)
-            else {
+            guard let route = (/Action.route).extract(from: action) else {
                 return self.run(&state, action, environment)
             }
 
             defer { state.route = route as? RouteIntent<State.RouteType> }
             return self.run(&state, action, environment)
         }
+    }
+}
+
+extension ReducerProtocol where Action: NavigationAction, State: NavigationState {
+
+    @inlinable
+    public func routing() -> _NavigationReducer<Self> {
+        _NavigationReducer(base: self)
+    }
+}
+
+public struct _NavigationReducer<Base: ReducerProtocol>: ReducerProtocol where Base.Action: NavigationAction, Base.State: NavigationState {
+
+    @usableFromInline
+    let base: Base
+
+    @usableFromInline
+    init(base: Base) {
+        self.base = base
+    }
+
+    @inlinable
+    public func reduce(into state: inout Base.State, action: Base.Action) -> EffectTask<Base.Action> {
+        guard let route = (/Action.route).extract(from: action) else {
+            return self.base.reduce(into: &state, action: action)
+        }
+        defer { state.route = route as? RouteIntent<State.RouteType> }
+        return self.base.reduce(into: &state, action: action)
     }
 }

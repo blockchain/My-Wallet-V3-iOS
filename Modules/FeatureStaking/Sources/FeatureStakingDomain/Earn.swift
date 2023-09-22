@@ -40,6 +40,7 @@ public struct EarnBondingUnbondingRequests: Equatable, Hashable {
         case bonding
         case unbonding
     }
+
     public let type: RequestType
     public let product: String
     public let currency: String

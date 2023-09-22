@@ -400,7 +400,7 @@ extension BuyCheckoutView.Loaded {
     }
 
     @ViewBuilder func bakktBottomView() -> some View {
-        VStack{
+        VStack {
             VStack(alignment: .leading) {
                 bakktDisclaimer()
                 SmallMinimalButton(title: L10n.Button.viewDisclosures) {
@@ -427,7 +427,7 @@ extension BuyCheckoutView.Loaded {
             asset: checkout.crypto.currency.code
         )
 
-        Text(rich:label)
+        Text(rich: label)
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.leading)

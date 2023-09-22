@@ -8,12 +8,15 @@ import ComposableArchitecture
 import ComposableNavigation
 import ErrorsUI
 import FeatureAuthenticationDomain
+import Foundation
 import Localization
+import Security
 import SwiftUI
 import ToolKit
 import UIComponentsKit
 import WalletPayloadKit
 
+private let domain = "blockchain.com" as CFString
 private typealias L10n = LocalizationConstants.FeatureAuthentication.CreateAccount
 
 public enum CreateAccountStepTwoRoute: NavigationRoute {
@@ -162,6 +165,7 @@ public enum CreateAccountStepTwoAction: Equatable, NavigationAction, BindableAct
     case accountImported(Result<Either<WalletCreatedContext, EmptyValue>, WalletCreationServiceError>)
     case walletFetched(Result<Either<EmptyValue, WalletFetchedContext>, WalletFetcherServiceError>)
     case informWalletFetched(WalletFetchedContext)
+    case saveToCloud
     // required for legacy flow
     case triggerAuthenticate
     case none
@@ -336,6 +340,7 @@ let createAccountStepTwoReducer = Reducer<
 
         return .concatenate(
             EffectTask(value: .triggerAuthenticate),
+            EffectTask(value: .saveToCloud),
             environment
                 .saveReferral(with: state.referralCode)
                 .fireAndForget(),
@@ -436,6 +441,17 @@ let createAccountStepTwoReducer = Reducer<
             message: error.localizedDescription,
             actions: [UX.Action(title: L10n.FatalError.action)]
         )
+        return .none
+
+    case .saveToCloud:
+        if BuildFlag.isAlpha || BuildFlag.isProduction {
+            SecAddSharedWebCredential(
+                domain,
+                state.emailAddress as CFString,
+                state.password as CFString?,
+                { _ in }
+            )
+        }
         return .none
 
     case .triggerAuthenticate:

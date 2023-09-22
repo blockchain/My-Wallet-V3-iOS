@@ -18,17 +18,21 @@ public struct SellEnterAmount: ReducerProtocol {
     }
 
     public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never>
+    public var validationStatePublisher: AnyPublisher<TransactionValidationState, Never>
+
 
     public init(
         app: AppProtocol,
         onAmountChanged: @escaping (MoneyValue) -> Void,
         onPreviewTapped: @escaping (MoneyValue) -> Void,
-        minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never>
+        minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never>,
+        validationStatePublisher: AnyPublisher<TransactionValidationState, Never>
     ) {
         self.app = app
         self.onAmountChanged = onAmountChanged
         self.onPreviewTapped = onPreviewTapped
         self.minMaxAmountsPublisher = minMaxAmountsPublisher
+        self.validationStatePublisher = validationStatePublisher
     }
 
     // MARK: - State
@@ -58,43 +62,8 @@ public struct SellEnterAmount: ReducerProtocol {
             amountCryptoEntered == nil || amountCryptoEntered?.isZero == true
         }
 
-        var transactionDetails: (forbidden: Bool, ctaLabel: String) {
-            guard let maxAmountToSwap,
-                  let currentEnteredMoneyValue = amountCryptoEntered,
-                  currentEnteredMoneyValue.isZero == false
-            else {
-                return (forbidden: false, ctaLabel: LocalizationConstants.Transaction.Sell.Amount.previewButton)
-            }
-
-            if let minAmountToSwap,
-               let currentEnteredMoneyValue = amountCryptoEntered,
-               (try? currentEnteredMoneyValue < minAmountToSwap) ?? false
-            {
-
-                let displayString = isEnteringFiat ? transactionMinMaxValues?.minSpendableFiatValue.toDisplayString(includeSymbol: true) :
-                transactionMinMaxValues?.minSpendableCryptoValue.toDisplayString(includeSymbol: true)
-
-                return (
-                    forbidden: true,
-                    ctaLabel: String.localizedStringWithFormat(
-                        LocalizationConstants.Transaction.Sell.Amount.belowMinimumLimitCTA,
-                        displayString ?? ""
-                    )
-                )
-            }
-
-            if (try? currentEnteredMoneyValue > maxAmountToSwap) ?? false {
-                return (
-                    forbidden: true,
-                    ctaLabel: String.localizedStringWithFormat(
-                        LocalizationConstants.Swap.notEnoughCoin,
-                        source?.code ?? ""
-                    )
-                )
-            }
-
-            return (forbidden: false, ctaLabel: LocalizationConstants.Transaction.Sell.Amount.previewButton)
-        }
+        var ctaLabel: String?
+        var continueDisabled: Bool = true
 
         var mainFieldText: String {
             if isEnteringFiat {
@@ -172,6 +141,8 @@ public struct SellEnterAmount: ReducerProtocol {
         case onBackspace
         case resetInput(newInput: String?)
         case onMinMaxAmountsFetched(TransactionMinMaxValues)
+        case onValidationStateFetched(TransactionValidationState)
+
     }
 
     struct Price: Decodable, Equatable {
@@ -234,7 +205,12 @@ public struct SellEnterAmount: ReducerProtocol {
 
                     minMaxAmountsPublisher
                         .eraseToEffect()
-                        .map(Action.onMinMaxAmountsFetched)
+                        .map(Action.onMinMaxAmountsFetched),
+
+                    validationStatePublisher
+                        .eraseToEffect()
+                        .map(Action.onValidationStateFetched)
+
                 )
 
             case .onAppear:
@@ -250,7 +226,7 @@ public struct SellEnterAmount: ReducerProtocol {
 
                     if let moneyValue {
                         state.isEnteringFiat = true
-                        onAmountChanged(moneyValue)
+                        onAmountChanged(.zero(currency: moneyValue.currency))
                     }
 
                     return EffectTask(value: .resetInput(newInput: nil))
@@ -324,6 +300,16 @@ public struct SellEnterAmount: ReducerProtocol {
                         onAmountChanged(amount)
                     }
                 }
+
+            case .onValidationStateFetched(let validationState):
+                if validationState != .canExecute, let warningHint = validationState.recoveryWarningHint {
+                    state.continueDisabled = true
+                    state.ctaLabel = warningHint
+                } else {
+                    state.continueDisabled = false
+                    state.ctaLabel = LocalizationConstants.Transaction.Sell.Amount.previewButton
+                }
+                return .none
 
             case .prefillButtonAction(let action):
                 switch action {

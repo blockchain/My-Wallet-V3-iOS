@@ -3,7 +3,7 @@
 import BlockchainUI
 import UIComponentsKit
 
-extension ImageResource {
+extension ImageLocation {
 
     var media: UIComponentsKit.Media {
         switch self {

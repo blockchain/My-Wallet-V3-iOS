@@ -11,6 +11,7 @@ import FeatureCoinUI
 import FeatureDashboardUI
 import FeatureProductsDomain
 import FeatureQuickActions
+import FeatureTopMoversCryptoUI
 import FeatureWalletConnectUI
 import Localization
 import SwiftUI
@@ -91,6 +92,14 @@ struct DeFiDashboardView: View {
                         DAppDashboardListView()
                     }
 
+                    TopMoversSectionView(
+                        store: store.scope(
+                            state: \.topMoversState,
+                            action: DeFiDashboard.Action.topMoversAction
+                        )
+                    )
+                    .padding(.horizontal, Spacing.padding2)
+
                     DashboardActivitySectionView(
                         store: store.scope(
                             state: \.activityState,
@@ -98,11 +107,13 @@ struct DeFiDashboardView: View {
                         )
                     )
 
-                    if isTradingEnabled == false {
-                        NewsSectionView(api: blockchain.api.news.all)
-                    }
+                    Group {
+                        if isTradingEnabled == false {
+                            NewsSectionView(api: blockchain.api.news.all)
+                        }
 
-                    DashboardHelpSectionView()
+                        DashboardHelpSectionView()
+                    }
                 }
                 .scrollOffset($scrollOffset)
                 .task {

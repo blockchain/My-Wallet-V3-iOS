@@ -124,7 +124,7 @@ public struct PricesSceneView: View {
                     noResultsView
                 } else {
                     LazyVStack(spacing: 0) {
-                        ForEach(Array(searchResults.enumerated()), id: \.element) { i, info in
+                        ForEach(Array(searchResults.enumerated()), id: \.element) { _, info in
                             Row(info: info)
                                 .onTapGesture {
                                     viewStore.send(.set(\.$isSearching, false))

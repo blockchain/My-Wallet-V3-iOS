@@ -8,7 +8,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 
 extension CurrencyType {
-    public var logoResource: ImageResource {
+    public var logoResource: ImageLocation {
         switch self {
         case .crypto(let currency):
             return currency.logoResource
@@ -19,7 +19,7 @@ extension CurrencyType {
 }
 
 extension FiatCurrency {
-    public var logoResource: ImageResource {
+    public var logoResource: ImageLocation {
         switch self {
         case .GBP:
             return .local(name: "fiat-gbp", bundle: .module)
@@ -34,7 +34,7 @@ extension FiatCurrency {
 }
 
 extension CryptoCurrency {
-    public var logoResource: ImageResource {
+    public var logoResource: ImageLocation {
         switch self {
         case .bitcoin:
             return .local(name: "crypto-btc", bundle: .module)
@@ -49,11 +49,11 @@ extension CryptoCurrency {
         }
     }
 
-    private var assetModelImageResource: ImageResource? {
-        assetModel.logoPngUrl.map(ImageResource.remote(url:))
+    private var assetModelImageResource: ImageLocation? {
+        assetModel.logoPngUrl.map(ImageLocation.remote(url:))
     }
 
-    private var placeholderImageResource: ImageResource {
+    private var placeholderImageResource: ImageLocation {
         .systemName("squareshape.squareshape.dashed")
     }
 }

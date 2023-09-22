@@ -22,85 +22,89 @@ struct EarnProductCompareView: View {
 
     @Environment (\.openURL) var openURL
     let store: StoreOf<EarnProductCompare>
-    let viewStore: ViewStoreOf<EarnProductCompare>
 
     @BlockchainApp var app
     @State var learnMoreUrl: URL?
 
     init(store: StoreOf<EarnProductCompare>) {
         self.store = store
-        self.viewStore = ViewStore(store)
     }
 
     @ViewBuilder
     var body: some View {
-        VStack {
-            ZStack {
-                Text(Localization.Earn.Compare.title)
-                    .typography(.body2)
-                HStack(alignment: .center) {
-                    Spacer()
-                    Button {
-                        viewStore.send(.onDismiss)
-                    } label: {
-                        Icon.navigationCloseButton()
+        WithViewStore(store) { viewStore in
+            VStack {
+                ZStack {
+                    Text(Localization.Earn.Compare.title)
+                        .typography(.body2)
+                    HStack(alignment: .center) {
+                        Spacer()
+                        Button {
+                            viewStore.send(.onDismiss)
+                        } label: {
+                            Icon.navigationCloseButton()
+                        }
+                        .frame(width: 24, height: 24)
                     }
-                    .frame(width: 24, height: 24)
+                    .padding(.horizontal, Spacing.padding3)
                 }
-                .padding(.horizontal, Spacing.padding3)
+                .padding(.top, Spacing.padding2)
+                ZStack {
+                    carouselContentSection()
+                    buttonsSection()
+                }
             }
-            .padding(.top, Spacing.padding2)
-            ZStack {
-                carouselContentSection()
-                buttonsSection()
+            .background(Color.semantic.light.ignoresSafeArea())
+            .onAppear {
+                $app.post(event: blockchain.ux.earn.compare.products)
             }
-        }
-        .background(Color.semantic.light.ignoresSafeArea())
-        .onAppear {
-            $app.post(event: blockchain.ux.earn.compare.products)
-        }
-        .bindings {
-            subscribe($learnMoreUrl, to: blockchain.ux.earn.compare.products.learn.more.url)
+            .bindings {
+                subscribe($learnMoreUrl, to: blockchain.ux.earn.compare.products.learn.more.url)
+            }
         }
     }
 
     @ViewBuilder
     private func carouselContentSection() -> some View {
-        TabView(selection: viewStore.binding(get: \.currentStep, send: Action.didChangeStep)) {
-            ForEach(viewStore.steps) { step in
-                VStack {
-                    step.compareView(viewStore: viewStore)
-                    Spacer()
+        WithViewStore(store) { viewStore in
+            TabView(selection: viewStore.binding(get: \.currentStep, send: Action.didChangeStep)) {
+                ForEach(viewStore.steps) { step in
+                    VStack {
+                        step.compareView(viewStore: viewStore)
+                        Spacer()
+                    }
                 }
             }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
     }
 
     @ViewBuilder
     private func buttonsSection() -> some View {
-        VStack(spacing: .zero) {
-            Spacer()
-            PageControl(
-                controls: viewStore.steps,
-                selection: viewStore.binding(
-                    get: \.currentStep,
-                    send: { .didChangeStep($0) }
+        WithViewStore(store) { viewStore in
+            VStack(spacing: .zero) {
+                Spacer()
+                PageControl(
+                    controls: viewStore.steps,
+                    selection: viewStore.binding(
+                        get: \.currentStep,
+                        send: { .didChangeStep($0) }
+                    )
                 )
-            )
-            PrimaryWhiteButton(
-                title: Localization.Staking.learnMore,
-                action: {
-                    if let learnMoreUrl {
-                        openURL(learnMoreUrl)
+                PrimaryWhiteButton(
+                    title: Localization.Staking.learnMore,
+                    action: {
+                        if let learnMoreUrl {
+                            openURL(learnMoreUrl)
+                        }
                     }
-                }
-            )
-            .disabled(learnMoreUrl.isNil)
-            .padding(.bottom, Spacing.padding3)
+                )
+                .disabled(learnMoreUrl.isNil)
+                .padding(.bottom, Spacing.padding3)
+            }
+            .padding(.horizontal, Spacing.padding3)
+            .opacity(viewStore.gradientBackgroundOpacity)
         }
-        .padding(.horizontal, Spacing.padding3)
-        .opacity(viewStore.gradientBackgroundOpacity)
     }
 }
 
@@ -145,7 +149,7 @@ extension EarnProductCompare.State.Step {
     fileprivate func compareView(viewStore: ViewStoreOf<EarnProductCompare>) -> some View {
         VStack {
             header
-            VStack(alignment: .center,spacing: Spacing.padding4) {
+            VStack(alignment: .center, spacing: Spacing.padding4) {
                 ForEach(items) { item in
                     item.makeView(for: self, viewStore: viewStore)
                 }

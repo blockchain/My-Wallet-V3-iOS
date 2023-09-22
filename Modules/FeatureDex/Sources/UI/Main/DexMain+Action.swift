@@ -27,15 +27,17 @@ extension DexMain {
         case updateAllowance(DexAllowanceResult?)
 
         case onSupportedTokens(Result<[CryptoCurrency], UX.Error>)
-        case onAvailableNetworksFetched(Result<[EVMNetwork], UX.Error>)
         case onBalances(Result<[DexBalance], UX.Error>)
         case updateAvailableBalances([DexBalance])
 
+        case onAvailableNetworksFetched(Result<[EVMNetwork], UX.Error>)
+        case onSelectNetworkTapped
+        case onNetworkSelected(EVMNetwork)
+        case onNetworkPrice(FiatValue?)
+
         case refreshQuote
         case onQuote(Result<DexQuoteOutput, UX.Error>)
-        case onSelectNetworkTapped
         case onTransaction(Result<String, UX.Error>, DexQuoteOutput)
-        case onNetworkPrice(FiatValue?)
 
         case dismissKeyboard
         case onInegibilityLearnMoreTap

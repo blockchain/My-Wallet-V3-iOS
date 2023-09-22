@@ -192,10 +192,10 @@ public struct SellEnterAmountView: View {
 
     @ViewBuilder
     private var previewSwapButton: some View {
-        if viewStore.transactionDetails.forbidden {
-            SecondaryButton(title: viewStore.transactionDetails.ctaLabel, action: {})
+        if viewStore.continueDisabled == true, let ctaLabel = viewStore.ctaLabel {
+            SecondaryButton(title: ctaLabel, action: {})
         } else {
-            PrimaryButton(title: viewStore.transactionDetails.ctaLabel, action: {
+            PrimaryButton(title: viewStore.ctaLabel ?? "", action: {
                 viewStore.send(.onPreviewTapped)
             })
             .disabled(viewStore.previewButtonDisabled)

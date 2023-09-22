@@ -16,7 +16,7 @@ public struct CoinViewState: Equatable {
     public var accounts: [Account.Snapshot]
     public var recurringBuys: [RecurringBuy]?
     public var error: CoinViewError?
-    public var assetInformation: AssetInformation?
+    public var assetInformation: AboutAssetInformation?
     public var isRecurringBuyEnabled: Bool
     public var earnRates: EarnRates?
     public var kycStatus: KYCStatus?
@@ -41,6 +41,7 @@ public struct CoinViewState: Equatable {
     var shouldDisplayBakktLogo: Bool {
         isExternalBrokerageEnabled && appMode == .trading
     }
+
     var allActions: [ButtonAction] {
         guard isExternalBrokerageEnabled == false else {
             return []
@@ -105,7 +106,7 @@ public struct CoinViewState: Equatable {
         // if the token has no balance
         guard accounts.hasPositiveBalanceForSelling else {
             // if it can swap (on dex or bcdc) present the "Get Token" button
-            return canSwapOnDex || canSwapOnBcdc ? [ButtonAction.getToken(currency: currency.code)] : []
+            return canSwapOnDex || canSwapOnBcdc ? [ButtonAction.getToken(currency: currency.displayCode)] : []
         }
 
         let actions = [
@@ -151,7 +152,7 @@ public struct CoinViewState: Equatable {
         isDexEnabled: Bool = false,
         isExternalBrokerageEnabled: Bool = false,
         isRecurringBuyEnabled: Bool = false,
-        assetInformation: AssetInformation? = nil,
+        assetInformation: AboutAssetInformation? = nil,
         earnRates: EarnRates? = nil,
         error: CoinViewError? = nil,
         isFavorite: Bool? = nil,

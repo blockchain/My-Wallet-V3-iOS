@@ -14,7 +14,7 @@ final class AddressSearchReducerTests: XCTestCase {
         AddressSearchAction,
         AddressSearchState,
         AddressSearchAction,
-        ()
+        Void
     >
 
     private var testStore: TestStoreType!

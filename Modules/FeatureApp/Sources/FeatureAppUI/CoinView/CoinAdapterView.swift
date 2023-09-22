@@ -43,6 +43,7 @@ public struct CoinAdapterView: View {
         ratesRepository: RatesRepositoryAPI = resolve(),
         watchlistRepository: WatchlistRepositoryAPI = resolve(),
         recurringBuyProviderRepository: RecurringBuyProviderRepositoryAPI = resolve(),
+        currenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default,
         dismiss: @escaping () -> Void
     ) {
         self.cryptoCurrency = cryptoCurrency
@@ -101,8 +102,10 @@ public struct CoinAdapterView: View {
                         .eraseToAnyPublisher()
                 },
                 assetInformationService: AssetInformationService(
-                    currency: cryptoCurrency,
-                    repository: assetInformationRepository
+                    app: app,
+                    cryptoCurrency: cryptoCurrency,
+                    repository: assetInformationRepository,
+                    currenciesService: currenciesService
                 ),
                 historicalPriceService: HistoricalPriceService(
                     base: cryptoCurrency,
@@ -133,7 +136,7 @@ public final class CoinViewObserver: Client.Observer {
     let app: AppProtocol
     let transactionsRouter: TransactionsRouterAPI
     let coincore: CoincoreAPI
-    let kycRouter: KYCRouterAPI
+    let kycRouter: FeatureKYCUI.Routing
     let defaults: UserDefaults
     let application: URLOpener
     let topViewController: TopMostViewControllerProviding
@@ -143,7 +146,7 @@ public final class CoinViewObserver: Client.Observer {
         app: AppProtocol,
         transactionsRouter: TransactionsRouterAPI = resolve(),
         coincore: CoincoreAPI = resolve(),
-        kycRouter: KYCRouterAPI = resolve(),
+        kycRouter: FeatureKYCUI.Routing = resolve(),
         defaults: UserDefaults = .standard,
         application: URLOpener = resolve(),
         topViewController: TopMostViewControllerProviding = resolve(),
@@ -231,13 +234,28 @@ public final class CoinViewObserver: Client.Observer {
         let canBcdcSwap = await (try? account?.can(perform: .swap).await()) ?? false
         let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account?.asset)
 
+        app.state.set(
+            blockchain.ux.currency.exchange.dex.action.select.currency.source,
+            to: try? event.reference.context.decode(blockchain.ux.asset.id, as: String.self)
+        )
+        let context = event.context + [
+            blockchain.ux.transaction.source: account.flatMap(AnyJSON.init)
+        ]
         switch (canDexSwap, canBcdcSwap) {
         case (true, true):
-            try await DexFeature.openCurrencyExchangeRouter(app: app, context: event.context + [blockchain.ux.transaction.source: AnyJSON(account)])
+            try await DexFeature.openCurrencyExchangeRouter(
+                app: app,
+                context: context
+            )
         case (true, false):
-            app.post(event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select, context: event.context)
+            app.post(
+                event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
+                context: context
+            )
         case (false, true):
-            await transactionsRouter.presentTransactionFlow(to: .swap(source: account, target: nil))
+            await transactionsRouter.presentTransactionFlow(
+                to: .swap(source: account, target: nil)
+            )
         case (false, false):
             break
         }
@@ -248,17 +266,30 @@ public final class CoinViewObserver: Client.Observer {
         let canBcdcSwap = await (try? account.can(perform: .swap).await()) ?? false
         let canDexSwap = await DexFeature.isEnabled(app: app, cryptoCurrency: account.asset)
 
-        if canBcdcSwap {
-            await transactionsRouter.presentTransactionFlow(to: .swap(source: nil, target: account))
-            return
-        }
-
-        if canDexSwap {
+        app.state.set(
+            blockchain.ux.currency.exchange.dex.action.select.currency.destination,
+            to: try? event.reference.context.decode(blockchain.ux.asset.id, as: String.self)
+        )
+        let context = event.context + [
+            blockchain.ux.transaction.source: AnyJSON(account)
+        ]
+        switch (canDexSwap, canBcdcSwap) {
+        case (true, true):
+            try await DexFeature.openCurrencyExchangeRouter(
+                app: app,
+                context: context
+            )
+        case (true, false):
             app.post(
                 event: blockchain.ux.home[AppMode.pkw.rawValue].tab[blockchain.ux.currency.exchange.dex].select,
-                context: event.context
+                context: context
             )
-            return
+        case (false, true):
+            await transactionsRouter.presentTransactionFlow(
+                to: .swap(source: account, target: nil)
+            )
+        case (false, false):
+            break
         }
     }
 
@@ -345,8 +376,12 @@ public final class CoinViewObserver: Client.Observer {
         )
     }
 
-    lazy var kyc = app.on(blockchain.ux.asset.account.require.KYC) { @MainActor [unowned self] _ async in
-        kycRouter.start(tier: .verified, parentFlow: .coin)
+    lazy var kyc = app.on(blockchain.ux.asset.account.require.KYC) { @MainActor [unowned self] _ async throws in
+        try await kycRouter.presentEmailVerificationAndKYCIfNeeded(
+            from: topViewController.findTopViewController(allowBeingDismissed: false),
+            requireEmailVerification: true,
+            requiredTier: .verified
+        ).await()
     }
 
     lazy var activity = app.on(blockchain.ux.asset.account.activity) { @MainActor [unowned self] _ async in

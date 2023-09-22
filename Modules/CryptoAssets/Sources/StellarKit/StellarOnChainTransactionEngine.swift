@@ -96,7 +96,7 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         Single
             .zip(sourceExchangeRatePair, receiveAddress)
-            .map { [sourceAccount] (exchangeRate, receiveAddress) -> [TransactionConfirmation] in
+            .map { [sourceAccount] exchangeRate, receiveAddress -> [TransactionConfirmation] in
                 let from = TransactionConfirmations.Source(value: sourceAccount?.label ?? "")
                 let to = TransactionConfirmations.Destination(value: receiveAddress.label)
                 let feesFiat = pendingTransaction.feeAmount.convert(using: exchangeRate.quote)
@@ -135,7 +135,7 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
             userFiatCurrency,
             actionableBalance
         )
-        .map { receiveAddress, fiatCurrency, availableBalance -> PendingTransaction in
+        .map { _, fiatCurrency, availableBalance -> PendingTransaction in
             let zeroStellar: MoneyValue = .zero(currency: .stellar)
             let transaction = PendingTransaction(
                 amount: zeroStellar,

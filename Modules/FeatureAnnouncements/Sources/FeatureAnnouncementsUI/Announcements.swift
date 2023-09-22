@@ -84,7 +84,7 @@ public struct Announcements: ReducerProtocol {
                             await (try? service.fetchMessages(for: [mode, .universal], force: force)) ?? []
                         }
                     }
-                    
+
                     var collected = [Announcement]()
                     for try await value in group {
                         collected.append(contentsOf: value)

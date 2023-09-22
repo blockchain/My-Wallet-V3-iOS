@@ -105,7 +105,7 @@ extension Bindings {
         func decode<T: Decodable & Equatable>(as type: T.Type) -> (FetchResult) -> Void {
             { [weak self] result in
                 guard let self, let bindings else { return }
-                self.lock.lock()
+                lock.lock()
                 defer { self.lock.unlock() }
                 computeHandler = Compute.Handler(
                     app: bindings.app,
@@ -115,7 +115,7 @@ extension Bindings {
                     type: T.self
                 ) { [weak self] result in
                     guard let self else { return }
-                    self.lock.lock()
+                    lock.lock()
                     defer { self.lock.unlock() }
                     do {
                         self.result = try .success(set(result.any(), self.result), result.metadata)
@@ -127,7 +127,7 @@ extension Bindings {
         }
 
         func unsubscribe() {
-            self.lock.lock()
+            lock.lock()
             defer { self.lock.unlock() }
             computeHandler = nil
             subscription = nil

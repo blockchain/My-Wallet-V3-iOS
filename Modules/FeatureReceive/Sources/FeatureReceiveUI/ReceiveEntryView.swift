@@ -18,10 +18,6 @@ struct AccountInfo: Identifiable, Hashable, Equatable {
     let name: String
     let currency: CryptoCurrency
     let network: EVMNetwork?
-
-    var filterTerm: String {
-        name + " " + currency.code + " " + (network?.networkConfig.shortName ?? "")
-    }
 }
 
 @MainActor
@@ -47,6 +43,7 @@ public struct ReceiveEntryView: View {
             search.isEmpty
                 || account.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
                 || account.currency.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
+                || account.currency.code.distance(between: search, using: fuzzyAlgorithm) < 0.2
                 || account.network?.networkConfig.shortName.distance(between: search, using: fuzzyAlgorithm) == 0.0
         }
     }
@@ -117,7 +114,7 @@ public struct ReceiveEntryView: View {
             if filtered.isEmpty {
                 noResultsView
             } else {
-                if showCashDeposit, let tradingCurrency {
+                if showCashDeposit, let tradingCurrency, isSearching == false {
                     Section(
                         content: {
                             cashRowView(currency: tradingCurrency)

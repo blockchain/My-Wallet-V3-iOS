@@ -27,7 +27,6 @@ public struct EarnDashboardView: View {
                     )
                     .padding([.top, .leading, .trailing])
                     .zIndex(1)
-                    .disabled(!(object.totalBalance?.isPositive ?? false))
                     .transition(.opacity)
     #if os(iOS)
                     TabView(selection: $selected) {
@@ -101,7 +100,7 @@ public struct EarnDashboardView: View {
     }
 
     @ViewBuilder var content: some View {
-        if (object.totalBalance?.isPositive ?? false), object.model.isNotNilOrEmpty {
+        if object.totalBalance?.isPositive ?? false, object.model.isNotNilOrEmpty {
             EarnListView(
                 hub: blockchain.ux.earn.portfolio,
                 model: object.model,

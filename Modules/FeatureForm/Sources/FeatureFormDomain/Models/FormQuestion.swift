@@ -46,15 +46,15 @@ extension Form {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: AnyCodingKey.self)
         if container.contains("pages") {
-            context = try container.decodeIfPresent(String.self, forKey: "context")
-            pages = try container.decode([FormPage].self, forKey: "pages")
-            blocking = try container.decodeIfPresent(Bool.self, forKey: "blocking")
+            self.context = try container.decodeIfPresent(String.self, forKey: "context")
+            self.pages = try container.decode([FormPage].self, forKey: "pages")
+            self.blocking = try container.decodeIfPresent(Bool.self, forKey: "blocking")
         } else {
             let page = try FormPage(from: decoder)
-            context = page.context
-            pages = [page]
-            isLegacy = true
-            blocking = page.blocking
+            self.context = page.context
+            self.pages = [page]
+            self.isLegacy = true
+            self.blocking = page.blocking
         }
     }
 

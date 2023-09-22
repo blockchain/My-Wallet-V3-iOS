@@ -106,7 +106,7 @@ final class KYCSSNController: KYCBaseViewController {
     }
 
     lazy var hostingViewController: UIHostingController<SSNCollectionView> = UIHostingController(
-        rootView: SSNCollectionView { SSN in
+        rootView: SSNCollectionView { _ in
             self.router.handle(event: .nextPageFromPageType(self.pageType, nil))
         }
     )

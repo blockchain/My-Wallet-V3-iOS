@@ -1,20 +1,30 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-import FeatureProductsDomain
 import DIKit
+import BlockchainUI
+import FeatureProductsDomain
+import Foundation
 
 public class AppLoaderService: ObservableObject {
     private let productsService: ProductsServiceAPI
+    private let app: AppProtocol
 
     public init(
-        productsService: ProductsServiceAPI = resolve()
+        productsService: ProductsServiceAPI = resolve(),
+        app: AppProtocol = resolve()
     ) {
         self.productsService = productsService
+        self.app = app
     }
 
     public func loadAppDependencies() async throws -> Bool {
-        let _ = try await productsService.fetchProducts().await()
-        return true
+        do {
+            try await productsService.fetchProducts().await()
+            return true
+        }
+        catch let error {
+            app.post(error: error)
+            return true
+        }
     }
 }

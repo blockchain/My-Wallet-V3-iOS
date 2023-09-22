@@ -711,7 +711,7 @@ extension Tag {
         public let __id: A
         public let __context: [L: AnyHashable]
 
-        internal init(id: A, context: [L: AnyHashable]) {
+        init(id: A, context: [L: AnyHashable]) {
             self.__id = id
             self.__context = context
         }

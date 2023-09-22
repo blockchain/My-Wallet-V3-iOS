@@ -38,7 +38,7 @@ public final class KYCSSNRepository {
             repository: { [cache] _ in
                 cache.stream(key: CodableVoid()).map { ssn -> AnyJSON in
                     switch ssn {
-                    case let .success(ssn):
+                    case .success(let ssn):
                         var json = L_blockchain_api_nabu_gateway_onboarding_SSN.JSON()
                         json.is.mandatory = ssn.requirements.isMandatory
                         if let message = ssn.verification?.errorMessage {
@@ -49,7 +49,7 @@ public final class KYCSSNRepository {
                             json.state = blockchain.api.nabu.gateway.onboarding.SSN.state[][verification.state.value.lowercased()]
                         }
                         return json.toJSON()
-                    case let .failure(error):
+                    case .failure(let error):
                         return AnyJSON(error)
                     }
                 }

@@ -13,3 +13,9 @@ public struct DexBalance: Equatable, Identifiable, Hashable {
         self.value = value
     }
 }
+
+extension DexBalance {
+    public static func zero(_ cryptoCurrency: CryptoCurrency) -> DexBalance {
+        DexBalance(value: .zero(currency: cryptoCurrency))
+    }
+}

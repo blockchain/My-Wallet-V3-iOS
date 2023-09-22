@@ -20,7 +20,7 @@ open class AnyEncoder: AnyEncoderProtocol, TopLevelEncoder {
     public var codingPath: [CodingKey] = []
     public var userInfo: [CodingUserInfoKey: Any] = [:]
 
-    internal var `super`: AnyEncoder?
+    var `super`: AnyEncoder?
 
     public required init(codingPath: [CodingKey] = [], userInfo: [CodingUserInfoKey: Any] = [:]) {
         self.codingPath = codingPath

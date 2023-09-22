@@ -11,4 +11,3 @@ protocol EligibilityClientAPI: AnyObject {
         methods: [String]
     ) -> AnyPublisher<EligibilityResponse, NabuNetworkError>
 }
-

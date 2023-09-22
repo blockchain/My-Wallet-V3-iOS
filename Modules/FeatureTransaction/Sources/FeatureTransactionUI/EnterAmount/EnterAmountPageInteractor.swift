@@ -456,7 +456,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
         accountAuxiliaryViewInteractor
             .auxiliaryViewTapped
             .withLatestFrom(combinedStateWithExternalBrokerage)
-            .subscribe(onNext: { [weak self] isExternalBrokerage, state  in
+            .subscribe(onNext: { [weak self] isExternalBrokerage, state in
                 guard isExternalBrokerage == false else {
                     return
                 }

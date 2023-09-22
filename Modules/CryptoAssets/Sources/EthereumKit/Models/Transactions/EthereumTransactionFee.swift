@@ -22,10 +22,10 @@ public struct EthereumTransactionFee {
 
     static func `default`(network: EVMNetwork) -> EthereumTransactionFee {
         EthereumTransactionFee(
-            regular: .ether(gwei: Self.defaultRegularFee, network: network),
-            priority: .ether(gwei: Self.defaultPriorityFee, network: network),
-            gasLimit: Self.defaultGasLimit,
-            gasLimitContract: Self.defaultGasLimitContract,
+            regular: .ether(gwei: defaultRegularFee, network: network),
+            priority: .ether(gwei: defaultPriorityFee, network: network),
+            gasLimit: defaultGasLimit,
+            gasLimitContract: defaultGasLimitContract,
             network: network
         )
     }

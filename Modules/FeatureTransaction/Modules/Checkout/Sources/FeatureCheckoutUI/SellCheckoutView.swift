@@ -227,7 +227,6 @@ extension SellCheckoutView.Loaded {
         )
     }
 
-
     @ViewBuilder func bakktRows() -> some View {
         DividedVStack(spacing: 0) {
             TableRow(
@@ -275,7 +274,6 @@ extension SellCheckoutView.Loaded {
         )
     }
 
-
     @ViewBuilder func quoteExpiry() -> some View {
         if let expiration = checkout.expiresAt {
             CountdownView(deadline: expiration, remainingTime: $remainingTime)
@@ -301,9 +299,8 @@ extension SellCheckoutView.Loaded {
             }
     }
 
-
     @ViewBuilder func bakktBottomView() -> some View {
-        VStack{
+        VStack {
             VStack(alignment: .leading) {
                 bakktDisclaimer()
                 SmallMinimalButton(title: L10n.Button.viewDisclosures) {
@@ -327,7 +324,7 @@ extension SellCheckoutView.Loaded {
             asset: checkout.value.currencyType.displayCode
         )
 
-        Text(rich:label)
+        Text(rich: label)
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.leading)
@@ -340,7 +337,6 @@ extension SellCheckoutView.Loaded {
                 set(blockchain.ux.bakkt.authorization.then.launch.url, to: { blockchain.ux.bakkt.authorization.url })
             }
     }
-
 
     func footer() -> some View {
         VStack(spacing: 0) {

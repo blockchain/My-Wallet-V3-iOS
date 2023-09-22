@@ -13,9 +13,9 @@ struct DomainCheckoutView: View {
     private typealias LocalizedString = LocalizationConstants.FeatureCryptoDomain.DomainCheckout
     private typealias Accessibility = AccessibilityIdentifiers.DomainCheckout
 
-    private let store: Store<DomainCheckoutState, DomainCheckoutAction>
+    private let store: StoreOf<DomainCheckout>
 
-    init(store: Store<DomainCheckoutState, DomainCheckoutAction>) {
+    init(store: StoreOf<DomainCheckout>) {
         self.store = store
     }
 
@@ -154,9 +154,7 @@ struct DomainCheckView_Previews: PreviewProvider {
         DomainCheckoutView(
             store: .init(
                 initialState: .init(),
-                reducer: domainCheckoutReducer,
-                environment: DomainCheckoutEnvironment(
-                    mainQueue: .main,
+                reducer: DomainCheckout(
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     orderDomainRepository: OrderDomainRepository(
                         apiClient: OrderDomainClient.mock

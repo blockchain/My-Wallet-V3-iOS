@@ -66,7 +66,7 @@ extension SecureChannelResultPresenter {
             }
         }
 
-        var sideImage: ImageResource {
+        var sideImage: ImageLocation {
             switch self {
             case .approved:
                 return PendingStateViewModel.Image.success.imageResource

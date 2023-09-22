@@ -72,7 +72,7 @@ func getTransactionContextProvider(
                 .map { unspentOutputs, addressItems in
                     (context, unspentOutputs, addressItems, account.coin)
                 }
-                .map({ (context, unspentOutputs, addressItems, coin) in
+                .map { context, unspentOutputs, addressItems, coin in
                     NativeBitcoinTransactionContext(
                         accountKeyContext: context,
                         unspentOutputs: unspentOutputs,
@@ -80,7 +80,7 @@ func getTransactionContextProvider(
                         coin: coin,
                         imported: account.isImported
                     )
-                })
+                }
                 .eraseToAnyPublisher()
         }
         .eraseToAnyPublisher()

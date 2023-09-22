@@ -99,9 +99,9 @@ final class SweepImportedAddressesService: SweepImportedAddressesServiceAPI {
                             })
                             .eraseToAnyPublisher()
                     }
-                    .scan([TxPairResult](), { prev, result in
+                    .scan([TxPairResult]()) { prev, result in
                         prev + [result]
-                    })
+                    }
                     .eraseToAnyPublisher()
             }
             .handleEvents(receiveCompletion: { [sweptBalancesRepository] _ in
@@ -269,7 +269,7 @@ func importedAddressesProvider(
                             }
                             .eraseToAnyPublisher()
                     }
-                    .flatMap { target -> AnyPublisher<Bool, Error>  in
+                    .flatMap { target -> AnyPublisher<Bool, Error> in
                         let provider = account.coinType == .bitcoin ? btcCandidateProvider : bchCandidateProvider
                         return balanceIsSendable(
                             source: account,

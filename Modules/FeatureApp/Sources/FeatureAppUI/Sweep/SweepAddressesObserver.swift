@@ -87,7 +87,7 @@ public final class SweepAddressesObserver: Client.Observer {
                 return .just((enabled, addresses))
             }
             .handleEvents(receiveOutput: { [app] enabled, addresses in
-                if enabled && addresses.isNotEmpty {
+                if enabled, addresses.isNotEmpty {
                     app.post(event: blockchain.app.coin.core.load.pkw.assets)
                 }
             })
@@ -99,7 +99,7 @@ public final class SweepAddressesObserver: Client.Observer {
                     return .just(.noAction)
                 }
                 // no need to procceed if there are no addresses
-                if enabled && addresses.isEmpty {
+                if enabled, addresses.isEmpty {
                     return .just(.allGood)
                 }
 

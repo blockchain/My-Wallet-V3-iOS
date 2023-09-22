@@ -27,7 +27,7 @@ struct ClientNetworkError: AnalyticsEvent {
 
     private(set) var params: [String: Any]? = [:]
 
-    internal init(
+    init(
         error_code: Int?,
         http_error: String?,
         http_method: String?,

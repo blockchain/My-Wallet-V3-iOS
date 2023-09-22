@@ -8,15 +8,15 @@ import PlatformKit
 final class YodleeScreenContentReducer {
 
     private enum Image {
-        static var filledBlockchainLogo: ImageResource {
+        static var filledBlockchainLogo: ImageLocation {
             .local(name: "filled_blockchain_logo", bundle: .platformUIKit)
         }
 
-        static var largeBankIcon: ImageResource {
+        static var largeBankIcon: ImageLocation {
             .local(name: "large-bank-icon", bundle: .platformUIKit)
         }
 
-        static var filledYodleeLogo: ImageResource {
+        static var filledYodleeLogo: ImageLocation {
             .local(name: "filled_yodlee_logo", bundle: .platformUIKit)
         }
     }
