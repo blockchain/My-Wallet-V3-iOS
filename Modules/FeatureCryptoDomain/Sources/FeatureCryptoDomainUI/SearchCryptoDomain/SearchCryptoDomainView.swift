@@ -144,9 +144,7 @@ struct SearchCryptoDomainView_Previews: PreviewProvider {
         SearchCryptoDomainView(
             store: .init(
                 initialState: .init(),
-                reducer: searchCryptoDomainReducer,
-                environment: .init(
-                    mainQueue: .main,
+                reducer: SearchCryptoDomain(
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     externalAppOpener: ToLogAppOpener(),
                     searchDomainRepository: SearchDomainRepository(

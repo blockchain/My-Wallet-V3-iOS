@@ -1,0 +1,39 @@
+name: Example
+
+options:
+
+  bundleIDPrefix: com.rainydayapps
+  deploymentTarget:
+    iOS: 15.0
+
+packages: 
+  FeatureCryptoDomain:
+    path: ../FeatureCryptoDomain
+
+targets:
+
+  FeatureCryptoDomainExample:
+  
+    platform: iOS
+    type: application
+    info:
+      path: Example/Info.plist
+      properties:
+            UILaunchScreen:
+    sources:
+      - path: ./Example/App.swift
+      - path: ./Example/ContentView.swift
+    dependencies: 
+      - package: FeatureCryptoDomain
+
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: 1
+        PRODUCT_BUNDLE_IDENTIFIER: com.rainydayapps.feature.crypto.domain
+
+schemes:
+        
+  FeatureCryptoDomainExample:
+    build:
+      targets:
+        FeatureCryptoDomainExample: all
