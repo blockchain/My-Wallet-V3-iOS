@@ -22,7 +22,11 @@ public struct AuthorizeDeviceState: Equatable {
     }
 }
 
-public struct AuthorizeDeviceEnvironment {
+public struct AuthorizeDeviceReducer: ReducerProtocol {
+
+    public typealias State = AuthorizeDeviceState
+    public typealias Action = AuthorizeDeviceAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let deviceVerificationService: DeviceVerificationServiceAPI
 
@@ -33,51 +37,46 @@ public struct AuthorizeDeviceEnvironment {
         self.mainQueue = mainQueue
         self.deviceVerificationService = deviceVerificationService
     }
-}
 
-// MARK: - Properties
-
-public let authorizeDeviceReducer = Reducer<
-    AuthorizeDeviceState,
-    AuthorizeDeviceAction,
-    AuthorizeDeviceEnvironment
-> { state, action, environment in
-    switch action {
-    case .handleAuthorization(let authorized):
-        return environment
-            .deviceVerificationService
-            .authorizeVerifyDevice(
-                from: state.loginRequestInfo.sessionId,
-                payload: state.loginRequestInfo.base64Str,
-                confirmDevice: authorized
-            )
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result -> AuthorizeDeviceAction in
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .handleAuthorization(let authorized):
+                return deviceVerificationService
+                    .authorizeVerifyDevice(
+                        from: state.loginRequestInfo.sessionId,
+                        payload: state.loginRequestInfo.base64Str,
+                        confirmDevice: authorized
+                    )
+                    .receive(on: mainQueue)
+                    .catchToEffect()
+                    .map { result -> AuthorizeDeviceAction in
+                        switch result {
+                        case .success:
+                            return .showAuthorizationResult(.success(.noValue))
+                        case .failure(let error):
+                            return .showAuthorizationResult(.failure(error))
+                        }
+                    }
+            case .showAuthorizationResult(let result):
                 switch result {
                 case .success:
-                    return .showAuthorizationResult(.success(.noValue))
+                    state.authorizationResult = .success
                 case .failure(let error):
-                    return .showAuthorizationResult(.failure(error))
+                    switch error {
+                    case .linkExpired:
+                        state.authorizationResult = .linkExpired
+                    case .requestDenied:
+                        state.authorizationResult = .requestDenied
+                    case .network:
+                        state.authorizationResult = .unknown
+                    case .confirmationRequired:
+                        // not an authorization result
+                        break
+                    }
                 }
-            }
-    case .showAuthorizationResult(let result):
-        switch result {
-        case .success:
-            state.authorizationResult = .success
-        case .failure(let error):
-            switch error {
-            case .linkExpired:
-                state.authorizationResult = .linkExpired
-            case .requestDenied:
-                state.authorizationResult = .requestDenied
-            case .network:
-                state.authorizationResult = .unknown
-            case .confirmationRequired:
-                // not an authorization result
-                break
+                return .none
             }
         }
-        return .none
     }
 }

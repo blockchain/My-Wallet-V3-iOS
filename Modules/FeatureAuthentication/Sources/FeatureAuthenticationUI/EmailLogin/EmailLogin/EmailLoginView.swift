@@ -117,8 +117,7 @@ struct EmailLoginView_Previews: PreviewProvider {
             store:
             Store(
                 initialState: .init(),
-                reducer: emailLoginReducer,
-                environment: .init(
+                reducer: EmailLoginReducer(
                     app: App.preview,
                     mainQueue: .main,
                     sessionTokenService: NoOpSessionTokenService(),
@@ -130,7 +129,14 @@ struct EmailLoginView_Previews: PreviewProvider {
                     walletCreationService: .noop,
                     walletFetcherService: .noop,
                     accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    recaptchaService: NoOpGoogleRecatpchaService(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
+                    seedPhraseValidator: NoOpValidator(),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: NoOpSignupCountryService(),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
                 )
             )
         )

@@ -1,7 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import ComposableArchitecture
-import DIKit
 import FeatureAuthenticationDomain
 import ToolKit
 
@@ -26,29 +25,31 @@ public enum ResetAccountFailureAction: Equatable {
 
 struct ResetAccountFailureState: Equatable {}
 
-struct ResetAccountFailureEnvironment {
+struct ResetAccountFailureReducer: ReducerProtocol {
+
+    typealias State = ResetAccountFailureState
+    typealias Action = ResetAccountFailureAction
+
     let externalAppOpener: ExternalAppOpener
 
     init(
-        externalAppOpener: ExternalAppOpener = resolve()
+        externalAppOpener: ExternalAppOpener
     ) {
         self.externalAppOpener = externalAppOpener
     }
-}
 
-let resetAccountFailureReducer = Reducer<
-    ResetAccountFailureState,
-    ResetAccountFailureAction,
-    ResetAccountFailureEnvironment
-> { _, action, environment in
-    switch action {
-    case .open(let urlContent):
-        guard let url = urlContent.url else {
-            return .none
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .open(let urlContent):
+                guard let url = urlContent.url else {
+                    return .none
+                }
+                externalAppOpener.open(url)
+                return .none
+            case .none:
+                return .none
+            }
         }
-        environment.externalAppOpener.open(url)
-        return .none
-    case .none:
-        return .none
     }
 }

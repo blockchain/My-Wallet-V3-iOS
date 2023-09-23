@@ -180,7 +180,12 @@ public enum CreateAccountStepOneAction: Equatable, NavigationAction, BindableAct
     case none
 }
 
-struct CreateAccountStepOneEnvironment {
+typealias CreateAccountStepOneLocalization = LocalizationConstants.FeatureAuthentication.CreateAccount
+
+struct CreateAccountStepOneReducer: ReducerProtocol {
+    typealias State = CreateAccountStepOneState
+    typealias Action = CreateAccountStepOneAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let passwordValidator: PasswordValidatorAPI
     let externalAppOpener: ExternalAppOpener
@@ -218,281 +223,268 @@ struct CreateAccountStepOneEnvironment {
         self.recaptchaService = recaptchaService
         self.app = app
     }
-}
 
-typealias CreateAccountStepOneLocalization = LocalizationConstants.FeatureAuthentication.CreateAccount
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .binding(\.$referralCode):
+                return EffectTask(value: .validateReferralCode)
 
-let createAccountStepOneReducer = Reducer.combine(
-    createAccountStepTwoReducer
-        .optional()
-        .pullback(
-            state: \.createWalletStateStepTwo,
-            action: /CreateAccountStepOneAction.createWalletStepTwo,
-            environment: {
-                CreateAccountStepTwoEnvironment(
-                    mainQueue: $0.mainQueue,
-                    passwordValidator: $0.passwordValidator,
-                    externalAppOpener: $0.externalAppOpener,
-                    analyticsRecorder: $0.analyticsRecorder,
-                    walletRecoveryService: $0.walletRecoveryService,
-                    walletCreationService: $0.walletCreationService,
-                    walletFetcherService: $0.walletFetcherService,
-                    recaptchaService: $0.recaptchaService,
-                    app: $0.app
+            case .binding(\.$country):
+                return .merge(
+                    EffectTask(value: .didUpdateInputValidation(.unknown)),
+                    EffectTask(value: .set(\.$selectedAddressSegmentPicker, nil))
                 )
-            }
-        ),
-    Reducer<
-        CreateAccountStepOneState,
-        CreateAccountStepOneAction,
-        CreateAccountStepOneEnvironment
-    > { state, action, environment in
-        switch action {
 
-        case .binding(\.$referralCode):
-            return EffectTask(value: .validateReferralCode)
+            case .binding(\.$countryState):
+                return .merge(
+                    EffectTask(value: .didUpdateInputValidation(.unknown)),
+                    EffectTask(value: .set(\.$selectedAddressSegmentPicker, nil))
+                )
 
-        case .binding(\.$country):
-            return .merge(
-                EffectTask(value: .didUpdateInputValidation(.unknown)),
-                EffectTask(value: .set(\.$selectedAddressSegmentPicker, nil))
-            )
+            case .binding(\.$selectedAddressSegmentPicker):
+                guard let selection = state.selectedAddressSegmentPicker else {
+                    return EffectTask(value: .dismiss())
+                }
+                state.selectedInputField = nil
+                switch selection {
+                case .country:
+                    return .enter(into: .countryPicker, context: .none)
+                case .countryState:
+                    return .enter(into: .statePicker, context: .none)
+                }
 
-        case .binding(\.$countryState):
-            return .merge(
-                EffectTask(value: .didUpdateInputValidation(.unknown)),
-                EffectTask(value: .set(\.$selectedAddressSegmentPicker, nil))
-            )
-
-        case .binding(\.$selectedAddressSegmentPicker):
-            guard let selection = state.selectedAddressSegmentPicker else {
-                return EffectTask(value: .dismiss())
-            }
-            state.selectedInputField = nil
-            switch selection {
-            case .country:
-                return .enter(into: .countryPicker, context: .none)
-            case .countryState:
-                return .enter(into: .statePicker, context: .none)
-            }
-
-        case .goToStepTwo:
-            guard state.inputValidationState == .valid else {
-                return .none
-            }
-            let country = state.country?.id
-            let countryState = state.countryState?.id
-            return .merge(
-                .fireAndForget {
-                    environment.app?.state.transaction { state in
-                        state.set(blockchain.ux.user.authentication.sign.up.address.country.code, to: country ?? "N/A")
-                        if let countryState {
-                            state.set(blockchain.ux.user.authentication.sign.up.address.country.state, to: countryState)
-                        } else {
-                            state.clear(blockchain.ux.user.authentication.sign.up.address.country.state)
+            case .goToStepTwo:
+                guard state.inputValidationState == .valid else {
+                    return .none
+                }
+                let country = state.country?.id
+                let countryState = state.countryState?.id
+                return .merge(
+                    .fireAndForget {
+                        app?.state.transaction { state in
+                            state.set(blockchain.ux.user.authentication.sign.up.address.country.code, to: country ?? "N/A")
+                            if let countryState {
+                                state.set(blockchain.ux.user.authentication.sign.up.address.country.state, to: countryState)
+                            } else {
+                                state.clear(blockchain.ux.user.authentication.sign.up.address.country.state)
+                            }
                         }
-                    }
-                },
-                EffectTask(value: .navigate(to: .createWalletStepTwo))
-            )
+                    },
+                    EffectTask(value: .navigate(to: .createWalletStepTwo))
+                )
 
-        case .validateReferralCode:
-            return environment
-                .validateReferralInput(code: state.referralCode)
-                .map(CreateAccountStepOneAction.didUpdateReferralValidation)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-
-        case .nextStepButtonTapped:
-            state.isGoingToNextStep = true
-            state.validatingInput = true
-            state.selectedInputField = nil
-
-            return .concatenate(
-                environment
-                    .validateInputs(state: state)
-                    .map(CreateAccountStepOneAction.didUpdateInputValidation)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect(),
-
-                environment
-                    .checkReferralCode(state.referralCode)
+            case .validateReferralCode:
+                return validateReferralInput(code: state.referralCode)
                     .map(CreateAccountStepOneAction.didUpdateReferralValidation)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect(),
+                    .receive(on: mainQueue)
+                    .eraseToEffect()
 
-                EffectTask(value: .didValidateAfterFormSubmission)
-            )
+            case .nextStepButtonTapped:
+                state.isGoingToNextStep = true
+                state.validatingInput = true
+                state.selectedInputField = nil
 
-        case .didValidateAfterFormSubmission:
-            guard !state.inputValidationState.isInvalid,
-                  !state.referralCodeValidationState.isInvalid
-            else {
+                return .concatenate(
+                    validateInputs(state: state)
+                        .map(CreateAccountStepOneAction.didUpdateInputValidation)
+                        .receive(on: mainQueue)
+                        .eraseToEffect(),
+
+                    checkReferralCode(state.referralCode)
+                        .map(CreateAccountStepOneAction.didUpdateReferralValidation)
+                        .receive(on: mainQueue)
+                        .eraseToEffect(),
+
+                    EffectTask(value: .didValidateAfterFormSubmission)
+                )
+
+            case .didValidateAfterFormSubmission:
+                guard !state.inputValidationState.isInvalid,
+                      !state.referralCodeValidationState.isInvalid
+                else {
+                    return .none
+                }
+
+                return EffectTask(value: .goToStepTwo)
+
+            case .didUpdateInputValidation(let validationState):
+                state.validatingInput = false
+                state.inputValidationState = validationState
                 return .none
-            }
 
-            return EffectTask(value: .goToStepTwo)
-
-        case .didUpdateInputValidation(let validationState):
-            state.validatingInput = false
-            state.inputValidationState = validationState
-            return .none
-
-        case .didUpdateReferralValidation(let validationState):
-            state.referralCodeValidationState = validationState
-            return .none
-
-        case .onWillDisappear:
-            if !state.isGoingToNextStep {
-                return EffectTask(value: .accountCreationCancelled)
-            } else {
-                state.isGoingToNextStep = false
+            case .didUpdateReferralValidation(let validationState):
+                state.referralCodeValidationState = validationState
                 return .none
-            }
 
-        case .route(let route):
-            guard let routeValue = route?.route else {
-                state.createWalletStateStepTwo = nil
+            case .onWillDisappear:
+                if !state.isGoingToNextStep {
+                    return EffectTask(value: .accountCreationCancelled)
+                } else {
+                    state.isGoingToNextStep = false
+                    return .none
+                }
+
+            case .route(let route):
+                guard let routeValue = route?.route else {
+                    state.createWalletStateStepTwo = nil
+                    state.route = route
+                    return .none
+                }
+                switch routeValue {
+                case .createWalletStepTwo:
+                    guard let country = state.country else {
+                        fatalError("Country is nil must never happen")
+                    }
+                    state.createWalletStateStepTwo = .init(
+                        context: .createWallet,
+                        country: country,
+                        countryState: state.countryState,
+                        referralCode: state.referralCode
+                    )
+                case .countryPicker:
+                    break
+                case .statePicker:
+                    break
+                }
                 state.route = route
                 return .none
-            }
-            switch routeValue {
-            case .createWalletStepTwo:
-                guard let country = state.country else {
-                    fatalError("Country is nil must never happen")
+
+            case .accountRecoveryFailed(let error):
+                let title = LocalizationConstants.Errors.error
+                let message = error.localizedDescription
+                return EffectTask(value: .alert(.show(title: title, message: message)))
+
+            case .alert(.show(let title, let message)):
+                state.failureAlert = AlertState(
+                    title: TextState(verbatim: title),
+                    message: TextState(verbatim: message),
+                    dismissButton: .default(
+                        TextState(LocalizationConstants.okString),
+                        action: .send(.alert(.dismiss))
+                    )
+                )
+                return .none
+
+            case .createWalletStepTwo(.triggerAuthenticate):
+                return EffectTask(value: .triggerAuthenticate)
+
+            case .createWalletStepTwo(.importAccount(let mnemonic)):
+                return EffectTask(value: .importAccount(mnemonic))
+
+            case .createWalletStepTwo(.walletFetched(let result)):
+                return EffectTask(value: .walletFetched(result))
+
+            case .createWalletStepTwo(.informWalletFetched(let context)):
+                return EffectTask(value: .informWalletFetched(context))
+
+            case .createWalletStepTwo(.accountCreation(.failure(let error))):
+                return .fireAndForget {
+                    app?.post(
+                        event: blockchain.ux.user.authentication.sign.up.did.fail,
+                        context: [
+                            blockchain.ux.user.authentication.sign.up.did.fail.error: String(describing: error)
+                        ]
+                    )
                 }
-                state.createWalletStateStepTwo = .init(
-                    context: .createWallet,
-                    country: country,
-                    countryState: state.countryState,
-                    referralCode: state.referralCode
+
+            case .createWalletStepTwo(.createButtonTapped):
+                return .fireAndForget {
+                    app?.post(event: blockchain.ux.user.authentication.sign.up.create.tap)
+                }
+
+            case .createWalletStepTwo(.accountCreation(.success)):
+                return .fireAndForget {
+                    app?.post(event: blockchain.ux.user.authentication.sign.up.did.succeed)
+                }
+
+            case .alert(.dismiss):
+                state.failureAlert = nil
+                return .none
+
+            case .triggerAuthenticate:
+                return .none
+
+            case .none:
+                return .none
+
+            case .binding:
+                return .none
+
+            case .onAppear:
+                return .merge(
+                    .fireAndForget {
+                        app?.post(event: blockchain.ux.user.authentication.sign.up)
+                    },
+                    signUpCountriesService
+                        .countries
+                        .replaceError(with: [])
+                        .map(CreateAccountStepOneAction.signUpCountriesFetched)
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
                 )
-            case .countryPicker:
-                break
-            case .statePicker:
-                break
+
+            case .signUpCountriesFetched(let countries):
+                if countries.isNotEmpty {
+                    state.countries = countries
+                        .compactMap { country -> SearchableItem? in
+                            guard let countryName = Locale.current.localizedString(
+                                forRegionCode: country.code
+                            ) else { return nil }
+                            return SearchableItem(
+                                id: country.code,
+                                title: countryName
+                            )
+                        }
+                        .sorted {
+                            $0.title.localizedCompare($1.title) == .orderedAscending
+                        }
+                }
+                return .none
+
+            case .informWalletFetched:
+                return .none
+
+            case .accountCreation,
+                    .accountImported:
+                return .none
+
+            case .createWalletStepTwo:
+                return .none
+
+            case .importAccount:
+                return .none
+
+            case .walletFetched:
+                return .none
+
+            case .accountCreationCancelled:
+                if case .importWallet = state.context {
+                    analyticsRecorder.record(
+                        event: .importWalletCancelled
+                    )
+                }
+                return .none
             }
-            state.route = route
-            return .none
-
-        case .accountRecoveryFailed(let error):
-            let title = LocalizationConstants.Errors.error
-            let message = error.localizedDescription
-            return EffectTask(value: .alert(.show(title: title, message: message)))
-
-        case .alert(.show(let title, let message)):
-            state.failureAlert = AlertState(
-                title: TextState(verbatim: title),
-                message: TextState(verbatim: message),
-                dismissButton: .default(
-                    TextState(LocalizationConstants.okString),
-                    action: .send(.alert(.dismiss))
-                )
+        }
+        .ifLet(\.createWalletStateStepTwo, action: /Action.createWalletStepTwo) {
+            CreateAccountStepTwoReducer(
+                mainQueue: mainQueue,
+                passwordValidator: passwordValidator,
+                externalAppOpener: externalAppOpener,
+                analyticsRecorder: analyticsRecorder,
+                walletRecoveryService: walletRecoveryService,
+                walletCreationService: walletCreationService,
+                walletFetcherService: walletFetcherService,
+                recaptchaService: recaptchaService,
+                app: app
             )
-            return .none
-
-        case .createWalletStepTwo(.triggerAuthenticate):
-            return EffectTask(value: .triggerAuthenticate)
-
-        case .createWalletStepTwo(.importAccount(let mnemonic)):
-            return EffectTask(value: .importAccount(mnemonic))
-
-        case .createWalletStepTwo(.walletFetched(let result)):
-            return EffectTask(value: .walletFetched(result))
-
-        case .createWalletStepTwo(.informWalletFetched(let context)):
-            return EffectTask(value: .informWalletFetched(context))
-
-        case .createWalletStepTwo(.accountCreation(.failure(let error))):
-            return .fireAndForget {
-                environment.app?.post(
-                    event: blockchain.ux.user.authentication.sign.up.did.fail,
-                    context: [
-                        blockchain.ux.user.authentication.sign.up.did.fail.error: String(describing: error)
-                    ]
-                )
-            }
-
-        case .createWalletStepTwo(.createButtonTapped):
-            return .fireAndForget {
-                environment.app?.post(event: blockchain.ux.user.authentication.sign.up.create.tap)
-            }
-
-        case .createWalletStepTwo(.accountCreation(.success)):
-            return .fireAndForget {
-                environment.app?.post(event: blockchain.ux.user.authentication.sign.up.did.succeed)
-            }
-
-        case .alert(.dismiss):
-            state.failureAlert = nil
-            return .none
-
-        case .triggerAuthenticate:
-            return .none
-
-        case .none:
-            return .none
-
-        case .binding:
-            return .none
-
-        case .onAppear:
-            return .merge(
-                .fireAndForget {
-                    environment.app?.post(event: blockchain.ux.user.authentication.sign.up)
-                },
-                environment
-                    .signUpCountriesService
-                    .countries
-                    .replaceError(with: [])
-                    .map(CreateAccountStepOneAction.signUpCountriesFetched)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-            )
-
-        case .signUpCountriesFetched(let countries):
-            if countries.isNotEmpty {
-                state.countries = countries
-                    .compactMap { country -> SearchableItem? in
-                        guard let countryName = Locale.current.localizedString(
-                            forRegionCode: country.code
-                        ) else { return nil }
-                        return SearchableItem(
-                            id: country.code,
-                            title: countryName
-                        )
-                    }
-                    .sorted {
-                        $0.title.localizedCompare($1.title) == .orderedAscending
-                    }
-            }
-            return .none
-
-        case .informWalletFetched:
-            return .none
-
-        case .accountCreation,
-                .accountImported:
-            return .none
-
-        case .createWalletStepTwo:
-            return .none
-
-        case .importAccount:
-            return .none
-
-        case .walletFetched:
-            return .none
-
-        case .accountCreationCancelled:
-            return .none
         }
     }
-)
-.binding()
-.analytics()
+}
 
-extension CreateAccountStepOneEnvironment {
+extension CreateAccountStepOneReducer {
 
     fileprivate func validateInputs(
         state: CreateAccountStepOneState
@@ -540,36 +532,5 @@ extension CreateAccountStepOneEnvironment {
             app?.post(value: code, of: blockchain.user.creation.referral.code)
         }
         return .none
-    }
-}
-
-// MARK: - Private
-
-extension Reducer where
-    Action == CreateAccountStepOneAction,
-    State == CreateAccountStepOneState,
-    Environment == CreateAccountStepOneEnvironment
-{
-    /// Helper function for analytics tracking
-    fileprivate func analytics() -> Self {
-        combined(
-            with: Reducer<
-                CreateAccountStepOneState,
-                CreateAccountStepOneAction,
-                CreateAccountStepOneEnvironment
-            > { state, action, environment in
-                switch action {
-                case .accountCreationCancelled:
-                    if case .importWallet = state.context {
-                        environment.analyticsRecorder.record(
-                            event: .importWalletCancelled
-                        )
-                    }
-                    return .none
-                default:
-                    return .none
-                }
-            }
-        )
     }
 }

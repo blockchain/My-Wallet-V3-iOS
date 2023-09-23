@@ -18,7 +18,11 @@ struct LostFundsWarningState: Equatable {
     var isResetPasswordScreenVisible: Bool = false
 }
 
-struct LostFundsWarningEnvironment {
+struct LostFundsWarningReducer: ReducerProtocol {
+
+    typealias State = LostFundsWarningState
+    typealias Action = LostFundsWarningAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let analyticsRecorder: AnalyticsEventRecorderAPI
     let passwordValidator: PasswordValidatorAPI
@@ -38,46 +42,36 @@ struct LostFundsWarningEnvironment {
         self.externalAppOpener = externalAppOpener
         self.errorRecorder = errorRecorder
     }
-}
 
-let lostFundsWarningReducer = Reducer.combine(
-    resetPasswordReducer
-        .optional()
-        .pullback(
-            state: \LostFundsWarningState.resetPasswordState,
-            action: /LostFundsWarningAction.resetPassword,
-            environment: {
-                ResetPasswordEnvironment(
-                    mainQueue: $0.mainQueue,
-                    passwordValidator: $0.passwordValidator,
-                    externalAppOpener: $0.externalAppOpener,
-                    errorRecorder: $0.errorRecorder
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onDisappear:
+                analyticsRecorder.record(
+                    event: .resetAccountCancelled
                 )
+                return .none
+            case .goBackButtonTapped:
+                return .none
+            case .resetAccountButtonTapped:
+                return EffectTask(value: .setResetPasswordScreenVisible(true))
+            case .resetPassword:
+                return .none
+            case .setResetPasswordScreenVisible(let isVisible):
+                state.isResetPasswordScreenVisible = isVisible
+                if isVisible {
+                    state.resetPasswordState = .init()
+                }
+                return .none
             }
-        ),
-    Reducer<
-        LostFundsWarningState,
-        LostFundsWarningAction,
-        LostFundsWarningEnvironment
-    > { state, action, environment in
-        switch action {
-        case .onDisappear:
-            environment.analyticsRecorder.record(
-                event: .resetAccountCancelled
+        }
+        .ifLet(\.resetPasswordState, action: /Action.resetPassword) {
+            ResetPasswordReducer(
+                mainQueue: mainQueue,
+                passwordValidator: passwordValidator,
+                externalAppOpener: externalAppOpener,
+                errorRecorder: errorRecorder
             )
-            return .none
-        case .goBackButtonTapped:
-            return .none
-        case .resetAccountButtonTapped:
-            return EffectTask(value: .setResetPasswordScreenVisible(true))
-        case .resetPassword:
-            return .none
-        case .setResetPasswordScreenVisible(let isVisible):
-            state.isResetPasswordScreenVisible = isVisible
-            if isVisible {
-                state.resetPasswordState = .init()
-            }
-            return .none
         }
     }
-)
+}

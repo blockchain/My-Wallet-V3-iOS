@@ -81,6 +81,7 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureAuthenticationDomain"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ErrorsUI", package: "Errors"),

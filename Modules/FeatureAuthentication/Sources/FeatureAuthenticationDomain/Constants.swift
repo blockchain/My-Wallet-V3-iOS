@@ -31,22 +31,6 @@ public enum Constants {
         public static var recoverPassword: String {
             "https://\(loginHost)/en/#/recover"
         }
-
-        public static var terms: String {
-            "https://\(normalizedBlockchainHost)/legal/terms"
-        }
-
-        public static var privacyPolicy: String {
-            "https://\(normalizedBlockchainHost)/legal/privacy"
-        }
-
-        public static var bakktUserAgreement: String {
-            "https://\(normalizedBlockchainHost)/legal/bakkt/terms"
-        }
-
-        public static var bakktAuthorization: String {
-            "https://\(normalizedBlockchainHost)/legal/bakkt/authorization"
-        }
     }
 
     public enum SupportURL {

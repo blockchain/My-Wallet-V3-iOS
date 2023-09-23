@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import Combine
 import ComposableArchitecture
 import ComposableNavigation
@@ -42,7 +43,12 @@ public struct SkipUpgradeState: Equatable, NavigationState {
     }
 }
 
-struct SkipUpgradeEnvironment {
+struct SkipUpgradeReducer: ReducerProtocol {
+
+    typealias State = SkipUpgradeState
+    typealias Action = SkipUpgradeAction
+
+    let app: AppProtocol
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let deviceVerificationService: DeviceVerificationServiceAPI
     let errorRecorder: ErrorRecording
@@ -52,8 +58,18 @@ struct SkipUpgradeEnvironment {
     let walletFetcherService: WalletFetcherService
     let accountRecoveryService: AccountRecoveryServiceAPI
     let recaptchaService: GoogleRecaptchaServiceAPI
+    let sessionTokenService: SessionTokenServiceAPI
+    let emailAuthorizationService: EmailAuthorizationServiceAPI
+    let smsService: SMSServiceAPI
+    let loginService: LoginServiceAPI
+    let externalAppOpener: ExternalAppOpener
+    let seedPhraseValidator: SeedPhraseValidatorAPI
+    let passwordValidator: PasswordValidatorAPI
+    let signUpCountriesService: SignUpCountriesServiceAPI
+    let appStoreInformationRepository: AppStoreInformationRepositoryAPI
 
     init(
+        app: AppProtocol,
         mainQueue: AnySchedulerOf<DispatchQueue>,
         deviceVerificationService: DeviceVerificationServiceAPI,
         errorRecorder: ErrorRecording,
@@ -62,8 +78,18 @@ struct SkipUpgradeEnvironment {
         walletCreationService: WalletCreationService,
         walletFetcherService: WalletFetcherService,
         accountRecoveryService: AccountRecoveryServiceAPI,
-        recaptchaService: GoogleRecaptchaServiceAPI
+        recaptchaService: GoogleRecaptchaServiceAPI,
+        sessionTokenService: SessionTokenServiceAPI,
+        emailAuthorizationService: EmailAuthorizationServiceAPI,
+        smsService: SMSServiceAPI,
+        loginService: LoginServiceAPI,
+        externalAppOpener: ExternalAppOpener,
+        seedPhraseValidator: SeedPhraseValidatorAPI,
+        passwordValidator: PasswordValidatorAPI,
+        signUpCountriesService: SignUpCountriesServiceAPI,
+        appStoreInformationRepository: AppStoreInformationRepositoryAPI
     ) {
+        self.app = app
         self.mainQueue = mainQueue
         self.deviceVerificationService = deviceVerificationService
         self.errorRecorder = errorRecorder
@@ -73,63 +99,72 @@ struct SkipUpgradeEnvironment {
         self.walletFetcherService = walletFetcherService
         self.accountRecoveryService = accountRecoveryService
         self.recaptchaService = recaptchaService
+        self.sessionTokenService = sessionTokenService
+        self.emailAuthorizationService = emailAuthorizationService
+        self.smsService = smsService
+        self.loginService = loginService
+        self.externalAppOpener = externalAppOpener
+        self.seedPhraseValidator = seedPhraseValidator
+        self.passwordValidator = passwordValidator
+        self.signUpCountriesService = signUpCountriesService
+        self.appStoreInformationRepository = appStoreInformationRepository
     }
-}
 
-let skipUpgradeReducer = Reducer.combine(
-    credentialsReducer
-        .optional()
-        .pullback(
-            state: \.credentialsState,
-            action: /SkipUpgradeAction.credentials,
-            environment: {
-                CredentialsEnvironment(
-                    mainQueue: $0.mainQueue,
-                    deviceVerificationService: $0.deviceVerificationService,
-                    errorRecorder: $0.errorRecorder,
-                    analyticsRecorder: $0.analyticsRecorder,
-                    walletRecoveryService: $0.walletRecoveryService,
-                    walletCreationService: $0.walletCreationService,
-                    walletFetcherService: $0.walletFetcherService,
-                    accountRecoveryService: $0.accountRecoveryService,
-                    recaptchaService: $0.recaptchaService
-                )
-            }
-        ),
-    Reducer<
-        SkipUpgradeState,
-        SkipUpgradeAction,
-        SkipUpgradeEnvironment
-    > { state, action, _ in
-        switch action {
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
 
-        // MARK: - Transitions and Navigations
+            // MARK: - Transitions and Navigations
 
-        case .route(let route):
-            if let routeValue = route?.route {
-                switch routeValue {
-                case .credentials:
-                    state.credentialsState = .init(
-                        walletPairingState: WalletPairingState(
-                            emailAddress: state.walletInfo.wallet?.email ?? "",
-                            emailCode: state.walletInfo.wallet?.emailCode,
-                            walletGuid: state.walletInfo.wallet?.guid ?? ""
+            case .route(let route):
+                if let routeValue = route?.route {
+                    switch routeValue {
+                    case .credentials:
+                        state.credentialsState = .init(
+                            walletPairingState: WalletPairingState(
+                                emailAddress: state.walletInfo.wallet?.email ?? "",
+                                emailCode: state.walletInfo.wallet?.emailCode,
+                                walletGuid: state.walletInfo.wallet?.guid ?? ""
+                            )
                         )
-                    )
+                    }
+                } else {
+                    state.credentialsState = nil
                 }
-            } else {
-                state.credentialsState = nil
+                state.route = route
+                return .none
+
+            case .returnToUpgradeButtonTapped:
+                return .none
+
+            // MARK: - Local Reducers
+
+            case .credentials:
+                return .none
             }
-            state.route = route
-            return .none
-
-        case .returnToUpgradeButtonTapped:
-            return .none
-
-        // MARK: - Local Reducers
-
-        case .credentials:
-            return .none
+        }
+        .ifLet(\.credentialsState, action: /Action.credentials) {
+            CredentialsReducer(
+                app: app,
+                mainQueue: mainQueue,
+                sessionTokenService: sessionTokenService,
+                deviceVerificationService: deviceVerificationService,
+                emailAuthorizationService: emailAuthorizationService,
+                smsService: smsService,
+                loginService: loginService,
+                errorRecorder: errorRecorder,
+                externalAppOpener: externalAppOpener,
+                analyticsRecorder: analyticsRecorder,
+                walletRecoveryService: walletRecoveryService,
+                walletCreationService: walletCreationService,
+                walletFetcherService: walletFetcherService,
+                accountRecoveryService: accountRecoveryService,
+                recaptchaService: recaptchaService,
+                seedPhraseValidator: seedPhraseValidator,
+                passwordValidator: passwordValidator,
+                signUpCountriesService: signUpCountriesService,
+                appStoreInformationRepository: appStoreInformationRepository
+            )
         }
     }
-)
+}

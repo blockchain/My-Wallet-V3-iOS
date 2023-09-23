@@ -16,7 +16,7 @@ final class AuthorizeDeviceReducerTests: XCTest {
         AuthorizeDeviceAction,
         AuthorizeDeviceState,
         AuthorizeDeviceAction,
-        AuthorizeDeviceEnvironment
+        Void
     >!
 
     override func setUpWithError() throws {
@@ -32,8 +32,7 @@ final class AuthorizeDeviceReducerTests: XCTest {
                     timestamp: Date()
                 )
             ),
-            reducer: authorizeDeviceReducer,
-            environment: .init(
+            reducer: AuthorizeDeviceReducer(
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
                 deviceVerificationService: mockDeviceVerificationService
             )

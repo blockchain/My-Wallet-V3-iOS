@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import BlockchainComponentLibrary
 import ComposableArchitecture
 import ComposableNavigation
@@ -363,17 +364,26 @@ struct PasswordLoginView_Previews: PreviewProvider {
             context: .none,
             store: Store(
                 initialState: .init(),
-                reducer: credentialsReducer,
-                environment: .init(
+                reducer: CredentialsReducer(
+                    app: App.preview,
                     mainQueue: .main,
+                    sessionTokenService: NoOpSessionTokenService(),
                     deviceVerificationService: NoOpDeviceVerificationService(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
                     errorRecorder: NoOpErrorRecorder(),
+                    externalAppOpener: NoOpExternalAppOpener(),
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     walletRecoveryService: .noop,
                     walletCreationService: .noop,
                     walletFetcherService: .noop,
                     accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    recaptchaService: NoOpGoogleRecatpchaService(),
+                    seedPhraseValidator: NoOpValidator(),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: NoOpSignupCountryService(),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
                 )
             )
         )

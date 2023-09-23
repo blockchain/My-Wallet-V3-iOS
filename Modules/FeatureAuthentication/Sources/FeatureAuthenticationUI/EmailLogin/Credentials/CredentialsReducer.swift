@@ -1,9 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import ComposableArchitecture
 import ComposableNavigation
-import DIKit
 import FeatureAuthenticationDomain
 import Localization
 import ToolKit
@@ -27,7 +27,7 @@ public enum CredentialsAction: Equatable, NavigationAction, BindableAction {
     case password(PasswordAction)
     case twoFA(TwoFAAction)
     case seedPhrase(SeedPhraseAction)
-    case secondPasswordNotice(SecondPasswordNotice.Action)
+    case secondPasswordNotice(SecondPasswordNoticeReducer.Action)
     case customerSupport(SupportViewAction)
     case showAccountLockedError(Bool)
     case openExternalLink(URL)
@@ -54,7 +54,7 @@ public struct CredentialsState: Equatable, NavigationState {
     var passwordState: PasswordState
     var twoFAState: TwoFAState?
     var seedPhraseState: SeedPhraseState?
-    var secondPasswordNoticeState: SecondPasswordNotice.State?
+    var secondPasswordNoticeState: SecondPasswordNoticeReducer.State?
     var customerSupportState: SupportViewState?
     var nabuInfo: WalletInfo.Nabu?
     var isManualPairing: Bool
@@ -84,7 +84,7 @@ public struct CredentialsState: Equatable, NavigationState {
         passwordState: PasswordState = .init(),
         twoFAState: TwoFAState? = nil,
         seedPhraseState: SeedPhraseState? = nil,
-        secondPasswordNoticeState: SecondPasswordNotice.State? = nil,
+        secondPasswordNoticeState: SecondPasswordNoticeReducer.State? = nil,
         customerSupportState: SupportViewState? = nil,
         nabuInfo: WalletInfo.Nabu? = nil,
         isManualPairing: Bool = false,
@@ -113,7 +113,11 @@ public struct CredentialsState: Equatable, NavigationState {
     }
 }
 
-struct CredentialsEnvironment {
+struct CredentialsReducer: ReducerProtocol {
+
+    typealias State = CredentialsState
+    typealias Action = CredentialsAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let pollingQueue: AnySchedulerOf<DispatchQueue>
     let sessionTokenService: SessionTokenServiceAPI
@@ -130,27 +134,37 @@ struct CredentialsEnvironment {
     let walletFetcherService: WalletFetcherService
     let accountRecoveryService: AccountRecoveryServiceAPI
     let recaptchaService: GoogleRecaptchaServiceAPI
+    let seedPhraseValidator: SeedPhraseValidatorAPI
+    let passwordValidator: PasswordValidatorAPI
+    let signUpCountriesService: SignUpCountriesServiceAPI
+    let app: AppProtocol
+    let appStoreInformationRepository: AppStoreInformationRepositoryAPI
 
     init(
+        app: AppProtocol,
         mainQueue: AnySchedulerOf<DispatchQueue>,
         pollingQueue: AnySchedulerOf<DispatchQueue> = DispatchQueue(
             label: "com.blockchain.CredentialsEnvironmentPollingQueue",
             qos: .utility
         ).eraseToAnyScheduler(),
-        sessionTokenService: SessionTokenServiceAPI = resolve(),
+        sessionTokenService: SessionTokenServiceAPI,
         deviceVerificationService: DeviceVerificationServiceAPI,
-        emailAuthorizationService: EmailAuthorizationServiceAPI = resolve(),
-        smsService: SMSServiceAPI = resolve(),
-        loginService: LoginServiceAPI = resolve(),
+        emailAuthorizationService: EmailAuthorizationServiceAPI,
+        smsService: SMSServiceAPI,
+        loginService: LoginServiceAPI,
         errorRecorder: ErrorRecording,
-        externalAppOpener: ExternalAppOpener = resolve(),
+        externalAppOpener: ExternalAppOpener,
         analyticsRecorder: AnalyticsEventRecorderAPI,
         walletIdentifierValidator: @escaping (String) -> Bool = TextValidation.walletIdentifierValidator,
         walletRecoveryService: WalletRecoveryService,
         walletCreationService: WalletCreationService,
         walletFetcherService: WalletFetcherService,
         accountRecoveryService: AccountRecoveryServiceAPI,
-        recaptchaService: GoogleRecaptchaServiceAPI
+        recaptchaService: GoogleRecaptchaServiceAPI,
+        seedPhraseValidator: SeedPhraseValidatorAPI,
+        passwordValidator: PasswordValidatorAPI,
+        signUpCountriesService: SignUpCountriesServiceAPI,
+        appStoreInformationRepository: AppStoreInformationRepositoryAPI
     ) {
         self.mainQueue = mainQueue
         self.pollingQueue = pollingQueue
@@ -168,362 +182,390 @@ struct CredentialsEnvironment {
         self.walletFetcherService = walletFetcherService
         self.accountRecoveryService = accountRecoveryService
         self.recaptchaService = recaptchaService
+        self.seedPhraseValidator = seedPhraseValidator
+        self.passwordValidator = passwordValidator
+        self.signUpCountriesService = signUpCountriesService
+        self.app = app
+        self.appStoreInformationRepository = appStoreInformationRepository
+    }
+
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Scope(state: \.passwordState, action: /Action.password) {
+            PasswordReducer()
+        }
+        Scope(state: \.walletPairingState, action: /Action.walletPairing) {
+            WalletPairingReducer(
+                mainQueue: mainQueue,
+                pollingQueue: pollingQueue,
+                sessionTokenService: sessionTokenService,
+                deviceVerificationService: deviceVerificationService,
+                emailAuthorizationService: emailAuthorizationService,
+                smsService: smsService,
+                loginService: loginService,
+                errorRecorder: errorRecorder
+            )
+        }
+        Reduce { state, action in
+            switch action {
+            case .binding(\.$supportSheetShown):
+                if state.supportSheetShown {
+                    state.customerSupportState = .init(
+                        applicationVersion: Bundle.applicationVersion ?? "",
+                        bundleIdentifier: Bundle.main.bundleIdentifier ?? ""
+                    )
+                }
+                return .none
+
+            case .binding:
+                return .none
+
+            case .alert(.show(let title, let message)):
+                state.isLoading = false
+                state.credentialsFailureAlert = AlertState(
+                    title: TextState(verbatim: title),
+                    message: TextState(verbatim: message),
+                    dismissButton: .default(
+                        TextState(LocalizationConstants.okString),
+                        action: .send(.alert(.dismiss))
+                    )
+                )
+                return .none
+
+            case .alert(.dismiss):
+                state.credentialsFailureAlert = nil
+                return .none
+
+            case .onWillDisappear:
+                return .cancel(id: WalletPairingCancelations.WalletIdentifierPollingTimerId())
+
+            case .didAppear(.walletInfo(let info)):
+                state.walletPairingState.emailAddress = info.wallet?.email ?? ""
+                state.walletPairingState.emailCode = info.wallet?.emailCode
+                state.walletPairingState.walletGuid = info.wallet?.guid ?? ""
+                if let nabuInfo = info.wallet?.nabu {
+                    state.nabuInfo = nabuInfo
+                }
+                if !state.isTwoFAPrepared, let type = info.wallet?.twoFaType, type.isTwoFactor {
+                    // if we want to send SMS when the view appears we would need to trigger approve authorization and sms error in order to send SMS when appeared
+                    // also, if we want to show 2FA field when view appears, we need to do the above
+                    state.isTwoFAPrepared = true
+                    return EffectTask(
+                        value: .walletPairing(
+                            .authenticate(
+                                state.passwordState.password,
+                                autoTrigger: true
+                            )
+                        )
+                    )
+                }
+                return .none
+
+            case .didAppear(.walletIdentifier(let guid)):
+                state.walletPairingState.walletGuid = guid ?? ""
+                return .none
+
+            case .didAppear(.manualPairing):
+                state.isManualPairing = true
+                return EffectTask(value: .walletPairing(.setupSessionToken))
+
+            case .didAppear:
+                return .none
+
+            case .didChangeWalletIdentifier(let guid):
+                state.walletPairingState.walletGuid = guid
+                guard !guid.isEmpty else {
+                    state.isWalletIdentifierIncorrect = false
+                    return .none
+                }
+                state.isWalletIdentifierIncorrect = !walletIdentifierValidator(guid)
+                return .none
+
+            case .continueButtonTapped:
+                if state.isTwoFactorOTPVerified {
+                    return EffectTask(value: .walletPairing(.decryptWalletWithPassword(state.passwordState.password)))
+                }
+                if let twoFAState = state.twoFAState, twoFAState.isTwoFACodeFieldVisible {
+                    return EffectTask(value: .walletPairing(.authenticateWithTwoFactorOTP(twoFAState.twoFACode)))
+                }
+                return EffectTask(value: .walletPairing(.authenticate(state.passwordState.password)))
+
+            case .walletPairing(.authenticate):
+                // Set loading state
+                state.isLoading = true
+                return .merge(
+                    clearErrorStates(state),
+                    EffectTask(value: .alert(.dismiss))
+                )
+
+            case .walletPairing(.authenticateDidFail(let error)):
+                return authenticateDidFail(error, &state)
+
+            case .walletPairing(.authenticateWithTwoFactorOTP):
+                // Set loading state
+                state.isLoading = true
+                return .merge(
+                    clearErrorStates(state),
+                    EffectTask(value: .alert(.dismiss))
+                )
+
+            case .walletPairing(.authenticateWithTwoFactorOTPDidFail(let error)):
+                return authenticateWithTwoFactorOTPDidFail(error)
+
+            case .walletPairing(.decryptWalletWithPassword):
+                // also handled in welcome reducer
+                state.isLoading = true
+                return .none
+
+            case .walletPairing(.didResendSMSCode(let result)):
+                return didResendSMSCode(result)
+
+            case .walletPairing(.didSetupSessionToken(let result)):
+                return didSetupSessionToken(result)
+
+            case .walletPairing(.handleSMS):
+                return handleSMS()
+
+            case .walletPairing(.needsEmailAuthorization):
+                // display authorization required alert
+                return needsEmailAuthorization()
+
+            case .walletPairing(.twoFactorOTPDidVerified):
+                state.isTwoFactorOTPVerified = true
+                state.isLoading = false
+                let password = state.passwordState.password
+                return EffectTask(value: .walletPairing(.decryptWalletWithPassword(password)))
+
+            case .walletPairing(.approveEmailAuthorization),
+                 .walletPairing(.pollWalletIdentifier),
+                 .walletPairing(.resendSMSCode),
+                 .walletPairing(.setupSessionToken),
+                 .walletPairing(.startPolling),
+                 .walletPairing(.none):
+                // handled in wallet pairing reducer
+                return .none
+
+            case .showAccountLockedError(let shouldShow):
+                state.isAccountLocked = shouldShow
+                state.isLoading = shouldShow ? false : state.isLoading
+                return .none
+
+            case .openExternalLink(let url):
+                externalAppOpener.open(url)
+                return .none
+
+            case .twoFA(.showTwoFACodeField(let visible)):
+                state.isLoading = visible ? false : state.isLoading
+                return .none
+
+            case .twoFA(.showIncorrectTwoFACodeError(let context)):
+                state.isLoading = context.hasError ? false : state.isLoading
+                return .none
+
+            case .password(.showIncorrectPasswordError(true)):
+                state.isLoading = false
+                // reset state
+                state.twoFAState = .init()
+                return .none
+
+            case .password(.showIncorrectPasswordError(false)):
+                state.isLoading = true
+                return .none
+
+            case .onForgotPasswordTapped:
+                guard let url = URL(string: Constants.HostURL.recoverPassword) else {
+                    return .none
+                }
+                return EffectTask(value: .openExternalLink(url))
+
+            case .route(let route):
+                if let routeValue = route?.route {
+                    switch routeValue {
+                    case .seedPhrase:
+                        state.seedPhraseState = .init(
+                            context: .troubleLoggingIn,
+                            emailAddress: state.walletPairingState.emailAddress,
+                            nabuInfo: state.nabuInfo
+                        )
+                    case .secondPasswordDetected:
+                        state.secondPasswordNoticeState = .init()
+                    }
+                }
+                return .none
+
+            case .twoFA,
+                 .password,
+                 .seedPhrase,
+                 .secondPasswordNotice,
+                 .customerSupport,
+                 .none:
+                return .none
+            }
+        }
+        .ifLet(\.twoFAState, action: /Action.twoFA) {
+            TwoFAReducer()
+        }
+        .ifLet(\.seedPhraseState, action: /Action.seedPhrase) {
+            SeedPhraseReducer(
+                mainQueue: mainQueue,
+                externalAppOpener: externalAppOpener,
+                analyticsRecorder: analyticsRecorder,
+                walletRecoveryService: walletRecoveryService,
+                walletCreationService: walletCreationService,
+                walletFetcherService: walletFetcherService,
+                accountRecoveryService: accountRecoveryService,
+                errorRecorder: errorRecorder,
+                recaptchaService: recaptchaService,
+                validator: seedPhraseValidator,
+                passwordValidator: passwordValidator,
+                signUpCountriesService: signUpCountriesService,
+                app: app
+            )
+        }
+        .ifLet(\.secondPasswordNoticeState, action: /Action.secondPasswordNotice) {
+            SecondPasswordNoticeReducer(
+                externalAppOpener: externalAppOpener
+            )
+        }
+        .ifLet(\.customerSupportState, action: /Action.customerSupport) {
+            SupportViewReducer(
+                appStoreInformationRepository: appStoreInformationRepository,
+                analyticsRecorder: analyticsRecorder,
+                externalAppOpener: externalAppOpener
+            )
+        }
+        .routing()
+        CredentialsAnalytics(analyticsRecorder: analyticsRecorder)
     }
 }
 
-let credentialsReducer = Reducer.combine(
-    passwordReducer
-        .pullback(
-            state: \CredentialsState.passwordState,
-            action: /CredentialsAction.password,
-            environment: { _ in PasswordEnvironment() }
-        ),
-    twoFAReducer
-        .optional()
-        .pullback(
-            state: \CredentialsState.twoFAState,
-            action: /CredentialsAction.twoFA,
-            environment: { $0 }
-        ),
-    walletPairingReducer
-        .pullback(
-            state: \CredentialsState.walletPairingState,
-            action: /CredentialsAction.walletPairing,
-            environment: {
-                WalletPairingEnvironment(
-                    mainQueue: $0.mainQueue,
-                    pollingQueue: $0.pollingQueue,
-                    sessionTokenService: $0.sessionTokenService,
-                    deviceVerificationService: $0.deviceVerificationService,
-                    emailAuthorizationService: $0.emailAuthorizationService,
-                    smsService: $0.smsService,
-                    loginService: $0.loginService,
-                    errorRecorder: $0.errorRecorder
-                )
-            }
-        ),
-    seedPhraseReducer
-        .optional()
-        .pullback(
-            state: \CredentialsState.seedPhraseState,
-            action: /CredentialsAction.seedPhrase,
-            environment: {
-                SeedPhraseEnvironment(
-                    mainQueue: $0.mainQueue,
-                    externalAppOpener: $0.externalAppOpener,
-                    analyticsRecorder: $0.analyticsRecorder,
-                    walletRecoveryService: $0.walletRecoveryService,
-                    walletCreationService: $0.walletCreationService,
-                    walletFetcherService: $0.walletFetcherService,
-                    accountRecoveryService: $0.accountRecoveryService,
-                    errorRecorder: $0.errorRecorder,
-                    recaptchaService: $0.recaptchaService
-                )
-            }
-        ),
-    secondPasswordNoticeReducer
-        .optional()
-        .pullback(
-            state: \CredentialsState.secondPasswordNoticeState,
-            action: /CredentialsAction.secondPasswordNotice,
-            environment: {
-                SecondPasswordNotice.Environment(
-                    externalAppOpener: $0.externalAppOpener
-                )
-            }
-        ),
-    supportViewReducer
-        .optional()
-        .pullback(
-            state: \CredentialsState.customerSupportState,
-            action: /CredentialsAction.customerSupport,
-            environment: { _ in
-                SupportViewEnvironment.default
-            }
-        ),
-    Reducer<
-        CredentialsState,
-        CredentialsAction,
-        CredentialsEnvironment
-    > { state, action, environment in
-        switch action {
-        case .binding(\.$supportSheetShown):
-            if state.supportSheetShown {
-                state.customerSupportState = .init(
-                    applicationVersion: Bundle.applicationVersion ?? "",
-                    bundleIdentifier: Bundle.main.bundleIdentifier ?? ""
-                )
-            }
-            return .none
+// MARK: - Private Methods
 
-        case .binding:
-            return .none
+extension CredentialsReducer {
+    private func clearErrorStates(
+        _ state: CredentialsState
+    ) -> EffectTask<CredentialsAction> {
+        var effects: [EffectTask<CredentialsAction>] = [
+            EffectTask(value: .showAccountLockedError(false)),
+            EffectTask(value: .password(.showIncorrectPasswordError(false)))
+        ]
+        if state.twoFAState != nil {
+            effects.append(EffectTask(value: .twoFA(.showIncorrectTwoFACodeError(.none))))
+        }
+        return .merge(effects)
+    }
 
-        case .alert(.show(let title, let message)):
-            state.isLoading = false
-            state.credentialsFailureAlert = AlertState(
-                title: TextState(verbatim: title),
-                message: TextState(verbatim: message),
-                dismissButton: .default(
-                    TextState(LocalizationConstants.okString),
-                    action: .send(.alert(.dismiss))
+    private func authenticateDidFail(
+        _ error: LoginServiceError,
+        _ state: inout CredentialsState
+    ) -> EffectTask<CredentialsAction> {
+        let isManualPairing = state.isManualPairing
+        switch error {
+        case .twoFactorOTPRequired(let type):
+            switch type {
+            case .email:
+                switch isManualPairing {
+                case true:
+                    return EffectTask(value: .walletPairing(.needsEmailAuthorization))
+                case false:
+                    return EffectTask(value: .walletPairing(.approveEmailAuthorization))
+                }
+            case .sms:
+                state.twoFAState = .init(
+                    twoFAType: .sms
+                )
+                return EffectTask(value: .walletPairing(.handleSMS))
+            case .google, .yubiKey, .yubikeyMtGox:
+                state.twoFAState = .init(
+                    twoFAType: type
+                )
+                return EffectTask(value: .twoFA(.showTwoFACodeField(true)))
+            default:
+                fatalError("Unsupported TwoFA Types")
+            }
+        case .walletPayloadServiceError(.accountLocked):
+            return EffectTask(value: .showAccountLockedError(true))
+        case .walletPayloadServiceError(let error):
+            errorRecorder.error(error)
+            return EffectTask(
+                value: .alert(
+                    .show(
+                        title: CredentialsLocalization.Alerts.GenericNetworkError.title,
+                        message: CredentialsLocalization.Alerts.GenericNetworkError.message
+                    )
                 )
             )
-            return .none
+        case .twoFAWalletServiceError:
+            fatalError("Shouldn't receive TwoFAService errors here")
+        }
+    }
 
-        case .alert(.dismiss):
-            state.credentialsFailureAlert = nil
-            return .none
-
-        case .onWillDisappear:
-            return .cancel(id: WalletPairingCancelations.WalletIdentifierPollingTimerId())
-
-        case .didAppear(.walletInfo(let info)):
-            state.walletPairingState.emailAddress = info.wallet?.email ?? ""
-            state.walletPairingState.emailCode = info.wallet?.emailCode
-            state.walletPairingState.walletGuid = info.wallet?.guid ?? ""
-            if let nabuInfo = info.wallet?.nabu {
-                state.nabuInfo = nabuInfo
-            }
-            if !state.isTwoFAPrepared, let type = info.wallet?.twoFaType, type.isTwoFactor {
-                // if we want to send SMS when the view appears we would need to trigger approve authorization and sms error in order to send SMS when appeared
-                // also, if we want to show 2FA field when view appears, we need to do the above
-                state.isTwoFAPrepared = true
+    private func authenticateWithTwoFactorOTPDidFail(
+        _ error: LoginServiceError
+    ) -> EffectTask<CredentialsAction> {
+        switch error {
+        case .twoFAWalletServiceError(let error):
+            switch error {
+            case .wrongCode(let attemptsLeft):
+                return EffectTask(value: .twoFA(.didChangeTwoFACodeAttemptsLeft(attemptsLeft)))
+            case .accountLocked:
+                return EffectTask(value: .showAccountLockedError(true))
+            case .missingCode:
+                return EffectTask(value: .twoFA(.showIncorrectTwoFACodeError(.missingCode)))
+            case .missingPayload, .missingCredentials, .networkError:
                 return EffectTask(
-                    value: .walletPairing(
-                        .authenticate(
-                            state.passwordState.password,
-                            autoTrigger: true
+                    value:
+                    .alert(
+                        .show(
+                            title: CredentialsLocalization.Alerts.GenericNetworkError.title,
+                            message: CredentialsLocalization.Alerts.GenericNetworkError.message
                         )
                     )
                 )
             }
-            return .none
+        case .walletPayloadServiceError:
+            fatalError("Shouldn't receive WalletPayloadService errors here")
+        case .twoFactorOTPRequired:
+            fatalError("Shouldn't receive twoFactorOTPRequired error here")
+        }
+    }
 
-        case .didAppear(.walletIdentifier(let guid)):
-            state.walletPairingState.walletGuid = guid ?? ""
-            return .none
-
-        case .didAppear(.manualPairing):
-            state.isManualPairing = true
-            return EffectTask(value: .walletPairing(.setupSessionToken))
-
-        case .didAppear:
-            return .none
-
-        case .didChangeWalletIdentifier(let guid):
-            state.walletPairingState.walletGuid = guid
-            guard !guid.isEmpty else {
-                state.isWalletIdentifierIncorrect = false
-                return .none
-            }
-            state.isWalletIdentifierIncorrect = !environment.walletIdentifierValidator(guid)
-            return .none
-
-        case .continueButtonTapped:
-            if state.isTwoFactorOTPVerified {
-                return EffectTask(value: .walletPairing(.decryptWalletWithPassword(state.passwordState.password)))
-            }
-            if let twoFAState = state.twoFAState, twoFAState.isTwoFACodeFieldVisible {
-                return EffectTask(value: .walletPairing(.authenticateWithTwoFactorOTP(twoFAState.twoFACode)))
-            }
-            return EffectTask(value: .walletPairing(.authenticate(state.passwordState.password)))
-
-        case .walletPairing(.authenticate):
-            // Set loading state
-            state.isLoading = true
-            return .merge(
-                clearErrorStates(state),
-                EffectTask(value: .alert(.dismiss))
-            )
-
-        case .walletPairing(.authenticateDidFail(let error)):
-            return authenticateDidFail(error, &state, environment)
-
-        case .walletPairing(.authenticateWithTwoFactorOTP):
-            // Set loading state
-            state.isLoading = true
-            return .merge(
-                clearErrorStates(state),
-                EffectTask(value: .alert(.dismiss))
-            )
-
-        case .walletPairing(.authenticateWithTwoFactorOTPDidFail(let error)):
-            return authenticateWithTwoFactorOTPDidFail(error, environment)
-
-        case .walletPairing(.decryptWalletWithPassword):
-            // also handled in welcome reducer
-            state.isLoading = true
-            return .none
-
-        case .walletPairing(.didResendSMSCode(let result)):
-            return didResendSMSCode(result, environment)
-
-        case .walletPairing(.didSetupSessionToken(let result)):
-            return didSetupSessionToken(result, environment)
-
-        case .walletPairing(.handleSMS):
-            return handleSMS()
-
-        case .walletPairing(.needsEmailAuthorization):
-            // display authorization required alert
-            return needsEmailAuthorization()
-
-        case .walletPairing(.twoFactorOTPDidVerified):
-            state.isTwoFactorOTPVerified = true
-            state.isLoading = false
-            let password = state.passwordState.password
-            return EffectTask(value: .walletPairing(.decryptWalletWithPassword(password)))
-
-        case .walletPairing(.approveEmailAuthorization),
-             .walletPairing(.pollWalletIdentifier),
-             .walletPairing(.resendSMSCode),
-             .walletPairing(.setupSessionToken),
-             .walletPairing(.startPolling),
-             .walletPairing(.none):
-            // handled in wallet pairing reducer
-            return .none
-
-        case .showAccountLockedError(let shouldShow):
-            state.isAccountLocked = shouldShow
-            state.isLoading = shouldShow ? false : state.isLoading
-            return .none
-
-        case .openExternalLink(let url):
-            environment.externalAppOpener.open(url)
-            return .none
-
-        case .twoFA(.showTwoFACodeField(let visible)):
-            state.isLoading = visible ? false : state.isLoading
-            return .none
-
-        case .twoFA(.showIncorrectTwoFACodeError(let context)):
-            state.isLoading = context.hasError ? false : state.isLoading
-            return .none
-
-        case .password(.showIncorrectPasswordError(true)):
-            state.isLoading = false
-            // reset state
-            state.twoFAState = .init()
-            return .none
-
-        case .password(.showIncorrectPasswordError(false)):
-            state.isLoading = true
-            return .none
-
-        case .onForgotPasswordTapped:
-            guard let url = URL(string: Constants.HostURL.recoverPassword) else {
-                return .none
-            }
-            return EffectTask(value: .openExternalLink(url))
-
-        case .route(let route):
-            if let routeValue = route?.route {
-                switch routeValue {
-                case .seedPhrase:
-                    state.seedPhraseState = .init(
-                        context: .troubleLoggingIn,
-                        emailAddress: state.walletPairingState.emailAddress,
-                        nabuInfo: state.nabuInfo
+    private func didResendSMSCode(
+        _ result: Result<EmptyValue, SMSServiceError>
+    ) -> EffectTask<CredentialsAction> {
+        switch result {
+        case .success:
+            return EffectTask(
+                value: .alert(
+                    .show(
+                        title: CredentialsLocalization.Alerts.SMSCode.Success.title,
+                        message: CredentialsLocalization.Alerts.SMSCode.Success.message
                     )
-                case .secondPasswordDetected:
-                    state.secondPasswordNoticeState = .init()
-                }
-            }
-            return .none
-
-        case .twoFA,
-             .password,
-             .seedPhrase,
-             .secondPasswordNotice,
-             .customerSupport,
-             .none:
-            return .none
-        }
-    }
-)
-.binding()
-.routing()
-.analytics()
-
-// MARK: - Private Methods
-
-private func clearErrorStates(
-    _ state: CredentialsState
-) -> EffectTask<CredentialsAction> {
-    var effects: [EffectTask<CredentialsAction>] = [
-        EffectTask(value: .showAccountLockedError(false)),
-        EffectTask(value: .password(.showIncorrectPasswordError(false)))
-    ]
-    if state.twoFAState != nil {
-        effects.append(EffectTask(value: .twoFA(.showIncorrectTwoFACodeError(.none))))
-    }
-    return .merge(effects)
-}
-
-private func authenticateDidFail(
-    _ error: LoginServiceError,
-    _ state: inout CredentialsState,
-    _ environment: CredentialsEnvironment
-) -> EffectTask<CredentialsAction> {
-    let isManualPairing = state.isManualPairing
-    switch error {
-    case .twoFactorOTPRequired(let type):
-        switch type {
-        case .email:
-            switch isManualPairing {
-            case true:
-                return EffectTask(value: .walletPairing(.needsEmailAuthorization))
-            case false:
-                return EffectTask(value: .walletPairing(.approveEmailAuthorization))
-            }
-        case .sms:
-            state.twoFAState = .init(
-                twoFAType: .sms
-            )
-            return EffectTask(value: .walletPairing(.handleSMS))
-        case .google, .yubiKey, .yubikeyMtGox:
-            state.twoFAState = .init(
-                twoFAType: type
-            )
-            return EffectTask(value: .twoFA(.showTwoFACodeField(true)))
-        default:
-            fatalError("Unsupported TwoFA Types")
-        }
-    case .walletPayloadServiceError(.accountLocked):
-        return EffectTask(value: .showAccountLockedError(true))
-    case .walletPayloadServiceError(let error):
-        environment.errorRecorder.error(error)
-        return EffectTask(
-            value: .alert(
-                .show(
-                    title: CredentialsLocalization.Alerts.GenericNetworkError.title,
-                    message: CredentialsLocalization.Alerts.GenericNetworkError.message
                 )
             )
-        )
-    case .twoFAWalletServiceError:
-        fatalError("Shouldn't receive TwoFAService errors here")
-    }
-}
-
-private func authenticateWithTwoFactorOTPDidFail(
-    _ error: LoginServiceError,
-    _ environment: CredentialsEnvironment
-) -> EffectTask<CredentialsAction> {
-    switch error {
-    case .twoFAWalletServiceError(let error):
-        switch error {
-        case .wrongCode(let attemptsLeft):
-            return EffectTask(value: .twoFA(.didChangeTwoFACodeAttemptsLeft(attemptsLeft)))
-        case .accountLocked:
-            return EffectTask(value: .showAccountLockedError(true))
-        case .missingCode:
-            return EffectTask(value: .twoFA(.showIncorrectTwoFACodeError(.missingCode)))
-        case .missingPayload, .missingCredentials, .networkError:
+        case .failure(let error):
+            errorRecorder.error(error)
             return EffectTask(
-                value:
-                .alert(
+                value: .alert(
+                    .show(
+                        title: CredentialsLocalization.Alerts.SMSCode.Failure.title,
+                        message: CredentialsLocalization.Alerts.SMSCode.Failure.message
+                    )
+                )
+            )
+        }
+    }
+
+    private func didSetupSessionToken(
+        _ result: Result<EmptyValue, SessionTokenServiceError>
+    ) -> EffectTask<CredentialsAction> {
+        switch result {
+        case .success:
+            return .none
+        case .failure(let error):
+            errorRecorder.error(error)
+            return EffectTask(
+                value: .alert(
                     .show(
                         title: CredentialsLocalization.Alerts.GenericNetworkError.title,
                         message: CredentialsLocalization.Alerts.GenericNetworkError.message
@@ -531,133 +573,77 @@ private func authenticateWithTwoFactorOTPDidFail(
                 )
             )
         }
-    case .walletPayloadServiceError:
-        fatalError("Shouldn't receive WalletPayloadService errors here")
-    case .twoFactorOTPRequired:
-        fatalError("Shouldn't receive twoFactorOTPRequired error here")
     }
-}
 
-private func didResendSMSCode(
-    _ result: Result<EmptyValue, SMSServiceError>,
-    _ environment: CredentialsEnvironment
-) -> EffectTask<CredentialsAction> {
-    switch result {
-    case .success:
-        return EffectTask(
-            value: .alert(
-                .show(
-                    title: CredentialsLocalization.Alerts.SMSCode.Success.title,
-                    message: CredentialsLocalization.Alerts.SMSCode.Success.message
-                )
-            )
-        )
-    case .failure(let error):
-        environment.errorRecorder.error(error)
-        return EffectTask(
-            value: .alert(
-                .show(
-                    title: CredentialsLocalization.Alerts.SMSCode.Failure.title,
-                    message: CredentialsLocalization.Alerts.SMSCode.Failure.message
+    private func handleSMS() -> EffectTask<CredentialsAction> {
+        .merge(
+            EffectTask(value: .twoFA(.showResendSMSButton(true))),
+            EffectTask(value: .twoFA(.showTwoFACodeField(true))),
+            EffectTask(
+                value: .alert(
+                    .show(
+                        title: CredentialsLocalization.Alerts.SMSCode.Success.title,
+                        message: CredentialsLocalization.Alerts.SMSCode.Success.message
+                    )
                 )
             )
         )
     }
-}
 
-private func didSetupSessionToken(
-    _ result: Result<EmptyValue, SessionTokenServiceError>,
-    _ environment: CredentialsEnvironment
-) -> EffectTask<CredentialsAction> {
-    switch result {
-    case .success:
-        return .none
-    case .failure(let error):
-        environment.errorRecorder.error(error)
-        return EffectTask(
-            value: .alert(
-                .show(
-                    title: CredentialsLocalization.Alerts.GenericNetworkError.title,
-                    message: CredentialsLocalization.Alerts.GenericNetworkError.message
-                )
-            )
-        )
-    }
-}
-
-private func handleSMS() -> EffectTask<CredentialsAction> {
-    .merge(
-        EffectTask(value: .twoFA(.showResendSMSButton(true))),
-        EffectTask(value: .twoFA(.showTwoFACodeField(true))),
+    private func needsEmailAuthorization() -> EffectTask<CredentialsAction> {
         EffectTask(
             value: .alert(
                 .show(
-                    title: CredentialsLocalization.Alerts.SMSCode.Success.title,
-                    message: CredentialsLocalization.Alerts.SMSCode.Success.message
+                    title: CredentialsLocalization.Alerts.EmailAuthorizationAlert.title,
+                    message: CredentialsLocalization.Alerts.EmailAuthorizationAlert.message
                 )
             )
         )
-    )
-}
-
-private func needsEmailAuthorization() -> EffectTask<CredentialsAction> {
-    EffectTask(
-        value: .alert(
-            .show(
-                title: CredentialsLocalization.Alerts.EmailAuthorizationAlert.title,
-                message: CredentialsLocalization.Alerts.EmailAuthorizationAlert.message
-            )
-        )
-    )
+    }
 }
 
 // MARK: - Extension
 
-extension Reducer where
-    Action == CredentialsAction,
-    State == CredentialsState,
-    Environment == CredentialsEnvironment
-{
-    /// Helper reducer for analytics tracking
-    fileprivate func analytics() -> Self {
-        combined(
-            with: Reducer<
-                CredentialsState,
-                CredentialsAction,
-                CredentialsEnvironment
-            > { _, action, environment in
-                switch action {
-                case .continueButtonTapped:
-                    environment.analyticsRecorder.record(
-                        event: .loginPasswordEntered
-                    )
-                    return .none
-                case .walletPairing(.authenticateWithTwoFactorOTP):
-                    environment.analyticsRecorder.record(
-                        event: .loginTwoStepVerificationEntered
-                    )
-                    return .none
-                case .twoFA(.didChangeTwoFACodeAttemptsLeft):
-                    environment.analyticsRecorder.record(
-                        event: .loginTwoStepVerificationDenied
-                    )
-                    return .none
-                case .route(let route):
-                    if let routeValue = route?.route {
-                        switch routeValue {
-                        case .seedPhrase:
-                            environment.analyticsRecorder.record(
-                                event: .recoveryOptionSelected
-                            )
-                        default:
-                            break
-                        }
+struct CredentialsAnalytics: ReducerProtocol {
+
+    typealias Action = CredentialsAction
+    typealias State = CredentialsState
+
+    let analyticsRecorder: AnalyticsEventRecorderAPI
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .continueButtonTapped:
+                analyticsRecorder.record(
+                    event: .loginPasswordEntered
+                )
+                return .none
+            case .walletPairing(.authenticateWithTwoFactorOTP):
+                analyticsRecorder.record(
+                    event: .loginTwoStepVerificationEntered
+                )
+                return .none
+            case .twoFA(.didChangeTwoFACodeAttemptsLeft):
+                analyticsRecorder.record(
+                    event: .loginTwoStepVerificationDenied
+                )
+                return .none
+            case .route(let route):
+                if let routeValue = route?.route {
+                    switch routeValue {
+                    case .seedPhrase:
+                        analyticsRecorder.record(
+                            event: .recoveryOptionSelected
+                        )
+                    default:
+                        break
                     }
-                    return .none
-                default:
-                    return .none
                 }
+                return .none
+            default:
+                return .none
             }
-        )
+        }
     }
 }

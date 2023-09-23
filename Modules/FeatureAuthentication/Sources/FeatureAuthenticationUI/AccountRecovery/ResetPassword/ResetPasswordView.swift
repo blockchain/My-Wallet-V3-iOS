@@ -201,8 +201,7 @@ struct ResetPasswordView_Previews: PreviewProvider {
         ResetPasswordView(
             store: .init(
                 initialState: .init(),
-                reducer: resetPasswordReducer,
-                environment: .init(
+                reducer: ResetPasswordReducer(
                     mainQueue: .main,
                     passwordValidator: PasswordValidator(),
                     externalAppOpener: NoOpExternalAppOpener(),

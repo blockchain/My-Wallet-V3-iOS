@@ -21,7 +21,7 @@ final class SeedPhraseReducerTests: XCTestCase {
         SeedPhraseAction,
         SeedPhraseState,
         SeedPhraseAction,
-        SeedPhraseEnvironment
+        Void
     >!
 
     private let recoverFromMetadata = PassthroughSubject<EmptyValue, WalletRecoveryError>()
@@ -32,20 +32,19 @@ final class SeedPhraseReducerTests: XCTestCase {
         let walletFetcherServiceMock = WalletFetcherServiceMock()
         testStore = TestStore(
             initialState: .init(context: .restoreWallet),
-            reducer: seedPhraseReducer,
-            environment: SeedPhraseEnvironment(
+            reducer: SeedPhraseReducer(
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                validator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
-                passwordValidator: PasswordValidator(),
                 externalAppOpener: MockExternalAppOpener(),
                 analyticsRecorder: MockAnalyticsRecorder(),
                 walletRecoveryService: .mock(),
                 walletCreationService: .mock(),
                 walletFetcherService: walletFetcherServiceMock.mock(),
                 accountRecoveryService: MockAccountRecoveryService(),
-                signUpCountriesService: MockSignUpCountriesService(),
                 errorRecorder: MockErrorRecorder(),
                 recaptchaService: MockRecaptchaService(),
+                validator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+                passwordValidator: PasswordValidator(),
+                signUpCountriesService: MockSignUpCountriesService(),
                 app: App.test
             )
         )
@@ -128,20 +127,19 @@ final class SeedPhraseReducerTests: XCTestCase {
         )
         testStore = TestStore(
             initialState: .init(context: .troubleLoggingIn, emailAddress: "email@email.com", nabuInfo: nabuInfo),
-            reducer: seedPhraseReducer,
-            environment: SeedPhraseEnvironment(
+            reducer: SeedPhraseReducer(
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                validator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
-                passwordValidator: PasswordValidator(),
                 externalAppOpener: MockExternalAppOpener(),
                 analyticsRecorder: MockAnalyticsRecorder(),
                 walletRecoveryService: .mock(),
                 walletCreationService: .mock(),
                 walletFetcherService: walletFetcherServiceMock.mock(),
                 accountRecoveryService: MockAccountRecoveryService(),
-                signUpCountriesService: MockSignUpCountriesService(),
                 errorRecorder: MockErrorRecorder(),
                 recaptchaService: MockRecaptchaService(),
+                validator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+                passwordValidator: PasswordValidator(),
+                signUpCountriesService: MockSignUpCountriesService(),
                 app: App.test
             )
         )

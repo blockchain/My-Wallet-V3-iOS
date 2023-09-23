@@ -1,7 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import ComposableArchitecture
-import DIKit
 import FeatureAuthenticationDomain
 import ToolKit
 
@@ -46,7 +45,11 @@ struct ResetPasswordState: Equatable {
     }
 }
 
-struct ResetPasswordEnvironment {
+struct ResetPasswordReducer: ReducerProtocol {
+
+    typealias State = ResetPasswordState
+    typealias Action = ResetPasswordAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let passwordValidator: PasswordValidatorAPI
     let externalAppOpener: ExternalAppOpener
@@ -63,55 +66,47 @@ struct ResetPasswordEnvironment {
         self.externalAppOpener = externalAppOpener
         self.errorRecorder = errorRecorder
     }
-}
 
-let resetPasswordReducer = Reducer.combine(
-    resetAccountFailureReducer
-        .optional()
-        .pullback(
-            state: \.resetAccountFailureState,
-            action: /ResetPasswordAction.resetAccountFailure,
-            environment: { _ in ResetAccountFailureEnvironment() }
-        ),
-    Reducer<
-        ResetPasswordState,
-        ResetPasswordAction,
-        ResetPasswordEnvironment
-    > { state, action, environment in
-        switch action {
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
 
-        case .didChangeNewPassword(let password):
-            state.newPassword = password
-            state.passwordRulesBreached = environment.passwordValidator.validate(password: password)
-            return .none
+            case .didChangeNewPassword(let password):
+                state.newPassword = password
+                state.passwordRulesBreached = passwordValidator.validate(password: password)
+                return .none
 
-        case .didChangeConfirmNewPassword(let password):
-            state.confirmNewPassword = password
-            return .none
+            case .didChangeConfirmNewPassword(let password):
+                state.confirmNewPassword = password
+                return .none
 
-        case .open(let urlContent):
-            guard let url = urlContent.url else {
+            case .open(let urlContent):
+                guard let url = urlContent.url else {
+                    return .none
+                }
+                externalAppOpener.open(url)
+                return .none
+
+            case .reset:
+                state.isLoading = true
+                return .none
+
+            case .setResetAccountFailureVisible(let isVisible):
+                state.isResetAccountFailureVisible = isVisible
+                if isVisible {
+                    state.resetAccountFailureState = .init()
+                }
+                return .none
+
+            case .resetAccountFailure:
+                return .none
+
+            case .none:
                 return .none
             }
-            environment.externalAppOpener.open(url)
-            return .none
-
-        case .reset:
-            state.isLoading = true
-            return .none
-
-        case .setResetAccountFailureVisible(let isVisible):
-            state.isResetAccountFailureVisible = isVisible
-            if isVisible {
-                state.resetAccountFailureState = .init()
-            }
-            return .none
-
-        case .resetAccountFailure:
-            return .none
-
-        case .none:
-            return .none
+        }
+        .ifLet(\.resetAccountFailureState, action: /Action.resetAccountFailure) {
+            ResetAccountFailureReducer(externalAppOpener: externalAppOpener)
         }
     }
-)
+}

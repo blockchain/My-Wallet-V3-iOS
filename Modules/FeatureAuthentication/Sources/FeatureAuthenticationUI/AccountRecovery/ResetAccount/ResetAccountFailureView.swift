@@ -117,8 +117,7 @@ struct ResetAccountFailureView_Previews: PreviewProvider {
         ResetAccountFailureView(
             store: .init(
                 initialState: .init(),
-                reducer: resetAccountFailureReducer,
-                environment: ResetAccountFailureEnvironment()
+                reducer: ResetAccountFailureReducer(externalAppOpener: NoOpExternalAppOpener())
             )
         )
     }

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import BlockchainComponentLibrary
 import ComposableArchitecture
 import ComposableNavigation
@@ -120,8 +121,8 @@ struct SkipUpgradeView_Previews: PreviewProvider {
                 initialState: .init(
                     walletInfo: .empty
                 ),
-                reducer: skipUpgradeReducer,
-                environment: SkipUpgradeEnvironment(
+                reducer: SkipUpgradeReducer(
+                    app: App.preview,
                     mainQueue: .main,
                     deviceVerificationService: NoOpDeviceVerificationService(),
                     errorRecorder: NoOpErrorRecoder(),
@@ -130,7 +131,16 @@ struct SkipUpgradeView_Previews: PreviewProvider {
                     walletCreationService: .noop,
                     walletFetcherService: .noop,
                     accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    recaptchaService: NoOpGoogleRecatpchaService(),
+                    sessionTokenService: NoOpSessionTokenService(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
+                    externalAppOpener: NoOpExternalAppOpener(),
+                    seedPhraseValidator: NoOpValidator(),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: NoOpSignupCountryService(),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
                 )
             )
         )

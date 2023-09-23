@@ -28,23 +28,24 @@ struct PasswordState: Equatable {
     }
 }
 
-struct PasswordEnvironment {}
+struct PasswordReducer: ReducerProtocol {
+    typealias State = PasswordState
+    typealias Action = PasswordAction
 
-let passwordReducer = Reducer<
-    PasswordState,
-    PasswordAction,
-    PasswordEnvironment
-> { state, action, _ in
-    switch action {
-    case .didChangePassword(let password):
-        state.isPasswordIncorrect = false
-        state.password = password
-        return .none
-    case .didChangeFocusedState(let isFocused):
-        state.isFocused = isFocused
-        return .none
-    case .showIncorrectPasswordError(let shouldShow):
-        state.isPasswordIncorrect = shouldShow
-        return .none
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .didChangePassword(let password):
+                state.isPasswordIncorrect = false
+                state.password = password
+                return .none
+            case .didChangeFocusedState(let isFocused):
+                state.isFocused = isFocused
+                return .none
+            case .showIncorrectPasswordError(let shouldShow):
+                state.isPasswordIncorrect = shouldShow
+                return .none
+            }
+        }
     }
 }

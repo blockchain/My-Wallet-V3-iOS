@@ -88,20 +88,20 @@ public enum Onboarding {
 
 /// The reducer responsible for handing Pin screen and Login/Onboarding screen related action and state.
 let onBoardingReducer = Reducer<Onboarding.State, Onboarding.Action, Onboarding.Environment>.combine(
-    welcomeReducer
+    AnyReducer { env in
+        WelcomeReducer(
+            app: env.app,
+            mainQueue: env.mainQueue,
+            deviceVerificationService: env.deviceVerificationService,
+            recaptchaService: env.recaptchaService,
+            buildVersionProvider: env.buildVersionProvider
+        )
+    }
         .optional()
         .pullback(
             state: \Onboarding.State.welcomeState,
             action: /Onboarding.Action.welcomeScreen,
-            environment: { (env: Onboarding.Environment) in
-                WelcomeEnvironment(
-                    app: env.app,
-                    mainQueue: env.mainQueue,
-                    deviceVerificationService: env.deviceVerificationService,
-                    recaptchaService: env.recaptchaService,
-                    buildVersionProvider: env.buildVersionProvider
-                )
-            }
+            environment: { $0 }
         ),
     pinReducer
         .optional()
@@ -114,21 +114,21 @@ let onBoardingReducer = Reducer<Onboarding.State, Onboarding.Action, Onboarding.
                 )
             }
         ),
-    passwordRequiredReducer
+    AnyReducer { env in
+        PasswordRequiredReducer(
+            mainQueue: env.mainQueue,
+            externalAppOpener: env.externalAppOpener,
+            walletPayloadService: env.walletPayloadService,
+            pushNotificationsRepository: env.pushNotificationsRepository,
+            mobileAuthSyncService: env.mobileAuthSyncService,
+            forgetWalletService: env.forgetWalletService
+        )
+    }
         .optional()
         .pullback(
             state: \Onboarding.State.passwordRequiredState,
             action: /Onboarding.Action.passwordScreen,
-            environment: { (env: Onboarding.Environment) in
-                PasswordRequiredEnvironment(
-                    mainQueue: env.mainQueue,
-                    externalAppOpener: env.externalAppOpener,
-                    walletPayloadService: env.walletPayloadService,
-                    pushNotificationsRepository: env.pushNotificationsRepository,
-                    mobileAuthSyncService: env.mobileAuthSyncService,
-                    forgetWalletService: env.forgetWalletService
-                )
-            }
+            environment: { $0 }
         ),
     appUpgradeReducer
         .optional()

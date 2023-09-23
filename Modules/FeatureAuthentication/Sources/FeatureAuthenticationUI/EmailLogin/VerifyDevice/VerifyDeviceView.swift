@@ -151,8 +151,7 @@ struct VerifyDeviceView_Previews: PreviewProvider {
             store:
             Store(
                 initialState: .init(emailAddress: ""),
-                reducer: verifyDeviceReducer,
-                environment: .init(
+                reducer: VerifyDeviceReducer(
                     app: App.preview,
                     mainQueue: .main,
                     deviceVerificationService: NoOpDeviceVerificationService(),
@@ -163,7 +162,15 @@ struct VerifyDeviceView_Previews: PreviewProvider {
                     walletCreationService: .noop,
                     walletFetcherService: .noop,
                     accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    recaptchaService: NoOpGoogleRecatpchaService(),
+                    sessionTokenService: NoOpSessionTokenService(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
+                    seedPhraseValidator: NoOpValidator(),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: NoOpSignupCountryService(),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
                 )
             )
         )

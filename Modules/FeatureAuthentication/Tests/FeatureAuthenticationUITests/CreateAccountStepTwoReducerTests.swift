@@ -18,7 +18,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         CreateAccountStepTwoAction,
         CreateAccountStepTwoState,
         CreateAccountStepTwoAction,
-        CreateAccountStepTwoEnvironment
+        Void
     >!
     private let mainScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
 
@@ -31,8 +31,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
                 countryState: SearchableItem(id: "FL", title: "Florida"),
                 referralCode: ""
             ),
-            reducer: createAccountStepTwoReducer,
-            environment: CreateAccountStepTwoEnvironment(
+            reducer: CreateAccountStepTwoReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 passwordValidator: PasswordValidator(),
                 externalAppOpener: MockExternalAppOpener(),
@@ -100,25 +99,6 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         testStore.receive(.didValidateAfterFormSubmission)
     }
 
-    func test_tapping_next_validates_input_termsNotAccepted() throws {
-        // GIVEN: The form is invalid
-        fillFormEmailField()
-        fillFormPasswordField()
-        // WHEN: The user taps on the Next button in either part of the UI
-        testStore.send(.createButtonTapped) {
-            $0.validatingInput = true
-            $0.inputConfirmationValidationState = .valid
-        }
-        // THEN: The form is validated
-        mainScheduler.advance() // let the validation complete
-        // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.invalid(.termsNotAccepted))) {
-            $0.validatingInput = false
-            $0.inputValidationState = .invalid(.termsNotAccepted)
-        }
-        testStore.receive(.didValidateAfterFormSubmission)
-    }
-
     func test_tapping_next_creates_an_account_when_valid_form() throws {
         testStore = TestStore(
             initialState: CreateAccountStepTwoState(
@@ -127,8 +107,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
                 countryState: SearchableItem(id: "FL", title: "Florida"),
                 referralCode: ""
             ),
-            reducer: createAccountStepTwoReducer,
-            environment: CreateAccountStepTwoEnvironment(
+            reducer: CreateAccountStepTwoReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 passwordValidator: PasswordValidator(),
                 externalAppOpener: MockExternalAppOpener(),
@@ -177,7 +156,6 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
     private func fillFormWithValidData() {
         fillFormEmailField()
         fillFormPasswordField()
-        fillFormAcceptanceOfTermsAndConditions()
     }
 
     private func fillFormEmailField(email: String = "test@example.com") {
@@ -207,12 +185,5 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
                 $0.passwordRulesBreached = expectedScore
             }
         }
-    }
-
-    private func fillFormAcceptanceOfTermsAndConditions(termsAccepted: Bool = true) {
-        testStore.send(.binding(.set(\.$termsAccepted, termsAccepted))) {
-            $0.termsAccepted = termsAccepted
-        }
-        testStore.receive(.didUpdateInputValidation(.unknown))
     }
 }

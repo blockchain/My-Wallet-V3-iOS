@@ -1,10 +1,12 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import ComposableArchitecture
 @testable import FeatureAuthenticationDomain
 @testable import FeatureAuthenticationUI
 import Localization
 import ToolKit
+@testable import WalletPayloadKit
 import XCTest
 
 // Mocks
@@ -16,38 +18,45 @@ final class CredentialsReducerTests: XCTestCase {
 
     private var mockMainQueue: TestSchedulerOf<DispatchQueue>!
     private var mockPollingQueue: TestSchedulerOf<DispatchQueue>!
+    private var reducer: CredentialsReducer!
+
     private var testStore: TestStore<
         CredentialsState,
         CredentialsAction,
         CredentialsState,
         CredentialsAction,
-        CredentialsEnvironment
+        Void
     >!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         mockMainQueue = DispatchQueue.test
         mockPollingQueue = DispatchQueue.test
+        reducer = CredentialsReducer(
+            app: App.test,
+            mainQueue: mockMainQueue.eraseToAnyScheduler(),
+            pollingQueue: mockPollingQueue.eraseToAnyScheduler(),
+            sessionTokenService: MockSessionTokenService(),
+            deviceVerificationService: MockDeviceVerificationService(),
+            emailAuthorizationService: MockEmailAuthorizationService(),
+            smsService: MockSMSService(),
+            loginService: MockLoginService(),
+            errorRecorder: NoOpErrorRecorder(),
+            externalAppOpener: MockExternalAppOpener(),
+            analyticsRecorder: MockAnalyticsRecorder(),
+            walletRecoveryService: .mock(),
+            walletCreationService: .mock(),
+            walletFetcherService: WalletFetcherServiceMock().mock(),
+            accountRecoveryService: MockAccountRecoveryService(),
+            recaptchaService: MockRecaptchaService(),
+            seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+            passwordValidator: PasswordValidator(),
+            signUpCountriesService: MockSignUpCountriesService(),
+            appStoreInformationRepository: NoOpAppStoreInformationRepository()
+        )
         testStore = TestStore(
             initialState: .init(),
-            reducer: credentialsReducer,
-            environment: .init(
-                mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                pollingQueue: mockPollingQueue.eraseToAnyScheduler(),
-                sessionTokenService: MockSessionTokenService(),
-                deviceVerificationService: MockDeviceVerificationService(),
-                emailAuthorizationService: MockEmailAuthorizationService(),
-                smsService: MockSMSService(),
-                loginService: MockLoginService(),
-                errorRecorder: NoOpErrorRecorder(),
-                externalAppOpener: MockExternalAppOpener(),
-                analyticsRecorder: MockAnalyticsRecorder(),
-                walletRecoveryService: .mock(),
-                walletCreationService: .mock(),
-                walletFetcherService: WalletFetcherServiceMock().mock(),
-                accountRecoveryService: MockAccountRecoveryService(),
-                recaptchaService: MockRecaptchaService()
-            )
+            reducer: reducer
         )
     }
 
@@ -85,7 +94,7 @@ final class CredentialsReducerTests: XCTestCase {
 
     func test_did_appear_should_prepare_twoFA_if_needed() {
         // login service is going to return sms required error
-        (testStore.environment.loginService as! MockLoginService).twoFAType = .sms
+        (reducer.loginService as! MockLoginService).twoFAType = .sms
 
         let mockWalletInfo = MockDeviceVerificationService.mockWalletInfoWithTwoFA
         testStore.send(.didAppear(context: .walletInfo(mockWalletInfo))) { state in
@@ -194,7 +203,7 @@ final class CredentialsReducerTests: XCTestCase {
          */
 
         // set email authorization as default twoFA type
-        (testStore.environment.loginService as! MockLoginService).twoFAType = .email
+        (reducer.loginService as! MockLoginService).twoFAType = .email
 
         // some preliminery actions
         setupWalletInfo()
@@ -215,7 +224,7 @@ final class CredentialsReducerTests: XCTestCase {
         mockMainQueue.advance()
 
         // after approval twoFA type should be set to standard
-        (testStore.environment.loginService as! MockLoginService).twoFAType = .standard
+        (reducer.loginService as! MockLoginService).twoFAType = .standard
 
         // nothing should happen after 1 second
         mockPollingQueue.advance(by: 1)
@@ -244,7 +253,7 @@ final class CredentialsReducerTests: XCTestCase {
          */
 
         // set sms as default twoFA type
-        (testStore.environment.loginService as! MockLoginService).twoFAType = .sms
+        (reducer.loginService as! MockLoginService).twoFAType = .sms
 
         // some preliminery actions
         setupWalletInfo()
@@ -306,7 +315,7 @@ final class CredentialsReducerTests: XCTestCase {
          */
 
         // set google auth as default twoFA type
-        (testStore.environment.loginService as! MockLoginService).twoFAType = .google
+        (reducer.loginService as! MockLoginService).twoFAType = .google
 
         // some preliminery actions
         setupWalletInfo()
@@ -341,7 +350,7 @@ final class CredentialsReducerTests: XCTestCase {
          */
 
         // set 2FA required (e.g. sms) and initialise twoFA state
-        (testStore.environment.loginService as! MockLoginService).twoFAType = .google
+        (reducer.loginService as! MockLoginService).twoFAType = .google
         // some preliminery actions
         setupWalletInfo()
 
@@ -373,11 +382,11 @@ final class CredentialsReducerTests: XCTestCase {
 
     func test_authenticate_with_twoFA_wrong_code_error() {
         // set 2FA required (e.g. google)
-        (testStore.environment.loginService as! MockLoginService).twoFAType = .google
+        (reducer.loginService as! MockLoginService).twoFAType = .google
 
         // set 2FA error type
         let mockAttemptsLeft = 4
-        (testStore.environment.loginService as! MockLoginService)
+        (reducer.loginService as! MockLoginService)
             .twoFAServiceError = .twoFAWalletServiceError(.wrongCode(attemptsLeft: mockAttemptsLeft))
 
         // some preliminery actions

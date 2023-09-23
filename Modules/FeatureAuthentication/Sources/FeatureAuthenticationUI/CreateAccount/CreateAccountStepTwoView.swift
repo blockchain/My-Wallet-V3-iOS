@@ -53,18 +53,7 @@ struct CreateAccountViewStepTwo: View {
             .dismissKeyboardOnScroll()
             // setting the frame is necessary for the Spacer inside the VStack above to work properly
         }
-        .primaryNavigation(title: "") {
-            Button {
-                viewStore.send(.createButtonTapped)
-            } label: {
-                Text(LocalizedString.nextButton)
-                    .typography(.paragraph2)
-            }
-            .disabled(viewStore.isCreateButtonDisabled)
-            // disabling the button doesn't gray it out
-            .foregroundColor(viewStore.isCreateButtonDisabled ? .semantic.muted : .semantic.title)
-            .accessibility(identifier: AccessibilityIdentifier.nextButton)
-        }
+        .primaryNavigation(title: "")
         .onAppear(perform: {
             viewStore.send(.onAppear)
         })
@@ -218,16 +207,13 @@ extension CreateAccountViewStepTwo {
     }
 
     private var termsAgreementView: some View {
-        HStack(spacing: Spacing.baseline) {
-            Toggle(isOn: viewStore.binding(\.$termsAccepted)) {}
-                .labelsHidden()
-                .accessibility(identifier: AccessibilityIdentifier.termsOfServiceButton)
-            agreementText
-                .typography(.micro)
-                .accessibility(identifier: AccessibilityIdentifier.agreementPromptText)
-        }
-        // fixing the size prevents the view from collapsing when the keyboard is on screen
-        .fixedSize(horizontal: false, vertical: true)
+        Text(LocalizedStringKey(LocalizedString.agreementPrompt))
+            .typography(.micro)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.center)
+            .accessibility(identifier: AccessibilityIdentifier.agreementPromptText)
+            // fixing the size prevents the view from collapsing when the keyboard is on screen
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private var bakktTermsAgreementView: some View {
@@ -241,46 +227,6 @@ extension CreateAccountViewStepTwo {
         }
         // fixing the size prevents the view from collapsing when the keyboard is on screen
         .fixedSize(horizontal: false, vertical: true)
-    }
-
-    private var agreementText: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: .zero) {
-                let promptText = Text(
-                    rich: LocalizedString.agreementPrompt
-                )
-                promptText
-                    .foregroundColor(.semantic.body)
-                    .accessibility(identifier: AccessibilityIdentifier.agreementPromptText)
-
-                HStack(alignment: .firstTextBaseline, spacing: .zero) {
-                    Text(LocalizedString.termsOfServiceLink)
-                        .foregroundColor(.semantic.primary)
-                        .onTapGesture {
-                            guard let url = URL(string: Constants.HostURL.terms) else { return }
-                            viewStore.send(.openExternalLink(url))
-                        }
-                        .accessibility(identifier: AccessibilityIdentifier.termsOfServiceButton)
-
-                    Text(" " + LocalizedString.and + " ")
-                        .foregroundColor(.semantic.body)
-
-                    let privacyPolicyComponent = Text(LocalizedString.privacyPolicyLink)
-                        .foregroundColor(.semantic.primary)
-                    let fullStopComponent = Text(".")
-                        .foregroundColor(.semantic.body)
-                    let privacyPolicyText = privacyPolicyComponent + fullStopComponent
-
-                    privacyPolicyText
-                        .onTapGesture {
-                            guard let url = URL(string: Constants.HostURL.privacyPolicy) else { return }
-                            viewStore.send(.openExternalLink(url))
-                        }
-                        .accessibility(identifier: AccessibilityIdentifier.privacyPolicyButton)
-                }
-            }
-            Spacer()
-        }
     }
 
     private var bakktAgreementText: some View {
@@ -399,8 +345,7 @@ struct CreateAccountViewStepTwo_Previews: PreviewProvider {
                     countryState: SearchableItem(id: "1", title: "State"),
                     referralCode: "id1"
                 ),
-                reducer: createAccountStepTwoReducer,
-                environment: .init(
+                reducer: CreateAccountStepTwoReducer(
                     mainQueue: .main,
                     passwordValidator: PasswordValidator(),
                     externalAppOpener: ToLogAppOpener(),

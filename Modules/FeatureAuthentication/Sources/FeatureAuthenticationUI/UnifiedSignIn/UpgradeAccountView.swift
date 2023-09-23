@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import BlockchainComponentLibrary
 import ComposableArchitecture
 import ComposableNavigation
@@ -206,8 +207,8 @@ struct UpgradeAccountView_Previews: PreviewProvider {
                     walletInfo: .empty,
                     base64Str: ""
                 ),
-                reducer: upgradeAccountReducer,
-                environment: UpgradeAccountEnvironment(
+                reducer: UpgradeAccountReducer(
+                    app: App.preview,
                     mainQueue: .main,
                     deviceVerificationService: NoOpDeviceVerificationService(),
                     errorRecorder: NoOpErrorRecoder(),
@@ -216,7 +217,16 @@ struct UpgradeAccountView_Previews: PreviewProvider {
                     walletCreationService: .noop,
                     walletFetcherService: .noop,
                     accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    recaptchaService: NoOpGoogleRecatpchaService(),
+                    sessionTokenService: NoOpSessionTokenService(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
+                    externalAppOpener: NoOpExternalAppOpener(),
+                    seedPhraseValidator: NoOpValidator(),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: NoOpSignupCountryService(),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
                 )
             ),
             exchangeOnly: true

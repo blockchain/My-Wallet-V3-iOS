@@ -497,7 +497,7 @@ extension LocalizationConstants.FeatureAuthentication {
         }
 
         public static let agreementPrompt = NSLocalizedString(
-            "I certify I am 18 years of age or older and I agree to Blockchain.com’s",
+            "By tapping \"Confirm\" you acknowledge that you have read and accept the Blockchain.com [Terms of Services](https://blockchain.com/legal/terms) & [Privacy Policy](https://blockchain.com/legal/privacy).",
             comment: "Create Account screen: I agree to Blockchain.com’s Terms of Service & Privacy Policy."
         )
 
@@ -510,28 +510,17 @@ extension LocalizationConstants.FeatureAuthentication {
             "Secret Private Key Recovery Phrase",
             comment: "Create Account screen: 'Secret Private Key Recovery Phrase' text, split to add emphasis"
         )
-        public static let termsOfServiceLink = NSLocalizedString(
-            "Terms of Services",
-            comment: "Create Account screen: terms of service link"
-        )
 
         public static let bakktUserAgreementLink = NSLocalizedString(
             "Bakkt's User Agreement",
             comment: "Create Account screen: bakkt user agreement link"
         )
 
-        public static let and = NSLocalizedString(
-            "and",
-            comment: "Create Account screen: and (connective)"
-        )
-        public static let privacyPolicyLink = NSLocalizedString(
-            "Privacy Policy",
-            comment: "Create Account screen: privacy policy link"
-        )
         public static let createAccountButton = NSLocalizedString(
-            "Get Started",
+            "Confirm",
             comment: "Create Account screen: create account CTA button"
         )
+
         public static let nextButton = NSLocalizedString(
             "Next",
             comment: "Create Account screen: create account CTA button in nav bar"

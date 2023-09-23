@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import ComposableArchitecture
+import DIKit
 import SwiftUI
 import UIKit
 
@@ -18,8 +19,11 @@ extension UIViewController {
                         applicationVersion: Bundle.applicationVersion ?? "",
                         bundleIdentifier: Bundle.main.bundleIdentifier ?? ""
                     ),
-                    reducer: supportViewReducer,
-                    environment: .default
+                    reducer: SupportViewReducer(
+                        appStoreInformationRepository: DIKit.resolve(),
+                        analyticsRecorder: DIKit.resolve(),
+                        externalAppOpener: DIKit.resolve()
+                    )
                 )
             )
         )

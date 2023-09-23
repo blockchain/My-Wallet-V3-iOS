@@ -189,17 +189,17 @@ let mainAppReducer = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment>.co
                 )
             }
         ),
-    authorizeDeviceReducer
+    AnyReducer {
+        AuthorizeDeviceReducer(
+            mainQueue: $0.mainQueue,
+            deviceVerificationService: $0.deviceVerificationService
+        )
+    }
         .optional()
         .pullback(
             state: \CoreAppState.deviceAuthorization,
             action: CasePath(CoreAppAction.authorizeDevice),
-            environment: {
-                AuthorizeDeviceEnvironment(
-                    mainQueue: $0.mainQueue,
-                    deviceVerificationService: $0.deviceVerificationService
-                )
-            }
+            environment: { $0 }
         ),
     mainAppReducerCore
 )

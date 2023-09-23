@@ -7,6 +7,7 @@ import ComposableNavigation
 @testable import FeatureAuthenticationDomain
 @testable import FeatureAuthenticationUI
 @testable import ToolKit
+@testable import WalletPayloadKit
 import XCTest
 
 // Mocks
@@ -24,7 +25,7 @@ final class WelcomeReducerTests: XCTestCase {
         WelcomeAction,
         WelcomeState,
         WelcomeAction,
-        WelcomeEnvironment
+        Void
     >!
     private var cancellables = Set<AnyCancellable>()
 
@@ -36,8 +37,7 @@ final class WelcomeReducerTests: XCTestCase {
         app.remoteConfiguration.override(blockchain.app.configuration.manual.login.is.enabled[].reference, with: true)
         testStore = TestStore(
             initialState: .init(),
-            reducer: welcomeReducer,
-            environment: WelcomeEnvironment(
+            reducer: WelcomeReducer(
                 app: app,
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
                 passwordValidator: PasswordValidator(),
@@ -53,7 +53,12 @@ final class WelcomeReducerTests: XCTestCase {
                 walletFetcherService: WalletFetcherServiceMock().mock(),
                 signUpCountriesService: MockSignUpCountriesService(),
                 accountRecoveryService: MockAccountRecoveryService(),
-                checkReferralClient: MockCheckReferralClient()
+                checkReferralClient: MockCheckReferralClient(),
+                emailAuthorizationService: NoOpEmailAuthorizationService(),
+                smsService: NoOpSMSService(),
+                loginService: NoOpLoginService(),
+                seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+                appStoreInformationRepository: NoOpAppStoreInformationRepository()
             )
         )
     }

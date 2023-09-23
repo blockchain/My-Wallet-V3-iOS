@@ -204,8 +204,7 @@ struct CreateAccountStepOneView_Previews: PreviewProvider {
                     initialState: .init(
                         context: .createWallet
                     ),
-                    reducer: createAccountStepOneReducer,
-                    environment: .init(
+                    reducer: CreateAccountStepOneReducer(
                         mainQueue: .main,
                         passwordValidator: NoOpPasswordValidator(),
                         externalAppOpener: ToLogAppOpener(),

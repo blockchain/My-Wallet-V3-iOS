@@ -100,8 +100,7 @@ struct ImportWalletView_Previews: PreviewProvider {
         ImportWalletView(
             store: .init(
                 initialState: .init(mnemonic: ""),
-                reducer: importWalletReducer,
-                environment: .init(
+                reducer: ImportWalletReducer(
                     mainQueue: .main,
                     passwordValidator: PasswordValidator(),
                     externalAppOpener: ToLogAppOpener(),

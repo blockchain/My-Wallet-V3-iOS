@@ -61,3 +61,9 @@ final class NoOpAccountRecoveryService: AccountRecoveryServiceAPI {
         .failure(.failedToSaveOfflineToken(.offlineToken))
     }
 }
+
+final class NoOpAppStoreInformationRepository: AppStoreInformationRepositoryAPI {
+    func verifyTheCurrentAppVersionIsTheLatestVersion(_ version: String, bundleId: String) -> AnyPublisher<FeatureAuthenticationDomain.AppStoreApplicationInfo, FeatureAuthenticationDomain.AppStoreServiceError> {
+        .just(.init(version: "999999.9.9", isApplicationUpToDate: true))
+    }
+}

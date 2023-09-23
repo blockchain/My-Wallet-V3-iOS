@@ -71,7 +71,11 @@ public struct WelcomeState: Equatable, NavigationState {
     }
 }
 
-public struct WelcomeEnvironment {
+public struct WelcomeReducer: ReducerProtocol {
+
+    public typealias State = WelcomeState
+    public typealias Action = WelcomeAction
+
     let app: AppProtocol
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let passwordValidator: PasswordValidatorAPI
@@ -88,6 +92,11 @@ public struct WelcomeEnvironment {
     let signUpCountriesService: SignUpCountriesServiceAPI
     let recaptchaService: GoogleRecaptchaServiceAPI
     let checkReferralClient: CheckReferralClientAPI
+    let emailAuthorizationService: EmailAuthorizationServiceAPI
+    let smsService: SMSServiceAPI
+    let loginService: LoginServiceAPI
+    let seedPhraseValidator: SeedPhraseValidatorAPI
+    let appStoreInformationRepository: AppStoreInformationRepositoryAPI
 
     public init(
         app: AppProtocol,
@@ -105,7 +114,12 @@ public struct WelcomeEnvironment {
         walletFetcherService: WalletFetcherService = DIKit.resolve(),
         signUpCountriesService: SignUpCountriesServiceAPI = DIKit.resolve(),
         accountRecoveryService: AccountRecoveryServiceAPI = DIKit.resolve(),
-        checkReferralClient: CheckReferralClientAPI = DIKit.resolve()
+        checkReferralClient: CheckReferralClientAPI = DIKit.resolve(),
+        emailAuthorizationService: EmailAuthorizationServiceAPI = DIKit.resolve(),
+        smsService: SMSServiceAPI = DIKit.resolve(),
+        loginService: LoginServiceAPI = DIKit.resolve(),
+        seedPhraseValidator: SeedPhraseValidatorAPI = DIKit.resolve(),
+        appStoreInformationRepository: AppStoreInformationRepositoryAPI = DIKit.resolve()
     ) {
         self.app = app
         self.mainQueue = mainQueue
@@ -123,283 +137,277 @@ public struct WelcomeEnvironment {
         self.accountRecoveryService = accountRecoveryService
         self.checkReferralClient = checkReferralClient
         self.recaptchaService = recaptchaService
+        self.emailAuthorizationService = emailAuthorizationService
+        self.smsService = smsService
+        self.loginService = loginService
+        self.seedPhraseValidator = seedPhraseValidator
+        self.appStoreInformationRepository = appStoreInformationRepository
     }
-}
 
-public let welcomeReducer = Reducer.combine(
-    createAccountStepOneReducer
-        .optional()
-        .pullback(
-            state: \.createWalletState,
-            action: /WelcomeAction.createWallet,
-            environment: {
-                CreateAccountStepOneEnvironment(
-                    mainQueue: $0.mainQueue,
-                    passwordValidator: $0.passwordValidator,
-                    externalAppOpener: $0.externalAppOpener,
-                    analyticsRecorder: $0.analyticsRecorder,
-                    walletRecoveryService: $0.walletRecoveryService,
-                    walletCreationService: $0.walletCreationService,
-                    walletFetcherService: $0.walletFetcherService,
-                    signUpCountriesService: $0.signUpCountriesService,
-                    recaptchaService: $0.recaptchaService,
-                    checkReferralClient: $0.checkReferralClient,
-                    app: $0.app
-                )
-            }
-        ),
-    emailLoginReducer
-        .optional()
-        .pullback(
-            state: \.emailLoginState,
-            action: /WelcomeAction.emailLogin,
-            environment: {
-                EmailLoginEnvironment(
-                    app: $0.app,
-                    mainQueue: $0.mainQueue,
-                    sessionTokenService: $0.sessionTokenService,
-                    deviceVerificationService: $0.deviceVerificationService,
-                    errorRecorder: $0.errorRecorder,
-                    externalAppOpener: $0.externalAppOpener,
-                    analyticsRecorder: $0.analyticsRecorder,
-                    walletRecoveryService: $0.walletRecoveryService,
-                    walletCreationService: $0.walletCreationService,
-                    walletFetcherService: $0.walletFetcherService,
-                    accountRecoveryService: $0.accountRecoveryService,
-                    recaptchaService: $0.recaptchaService
-                )
-            }
-        ),
-    seedPhraseReducer
-        .optional()
-        .pullback(
-            state: \.restoreWalletState,
-            action: /WelcomeAction.restoreWallet,
-            environment: {
-                SeedPhraseEnvironment(
-                    mainQueue: $0.mainQueue,
-                    externalAppOpener: $0.externalAppOpener,
-                    analyticsRecorder: $0.analyticsRecorder,
-                    walletRecoveryService: $0.walletRecoveryService,
-                    walletCreationService: $0.walletCreationService,
-                    walletFetcherService: $0.walletFetcherService,
-                    accountRecoveryService: $0.accountRecoveryService,
-                    errorRecorder: $0.errorRecorder,
-                    recaptchaService: $0.recaptchaService
-                )
-            }
-        ),
-    credentialsReducer
-        .optional()
-        .pullback(
-            state: \.manualCredentialsState,
-            action: /WelcomeAction.manualPairing,
-            environment: {
-                CredentialsEnvironment(
-                    mainQueue: $0.mainQueue,
-                    deviceVerificationService: $0.deviceVerificationService,
-                    errorRecorder: $0.errorRecorder,
-                    analyticsRecorder: $0.analyticsRecorder,
-                    walletRecoveryService: $0.walletRecoveryService,
-                    walletCreationService: $0.walletCreationService,
-                    walletFetcherService: $0.walletFetcherService,
-                    accountRecoveryService: $0.accountRecoveryService,
-                    recaptchaService: $0.recaptchaService
-                )
-            }
-        ),
-    Reducer<
-        WelcomeState,
-        WelcomeAction,
-        WelcomeEnvironment
-    > { state, action, environment in
-        switch action {
-        case .route(let route):
-            guard let routeValue = route?.route else {
-                state.createWalletState = nil
-                state.emailLoginState = nil
-                state.restoreWalletState = nil
-                state.manualCredentialsState = nil
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .route(let route):
+                guard let routeValue = route?.route else {
+                    state.createWalletState = nil
+                    state.emailLoginState = nil
+                    state.restoreWalletState = nil
+                    state.manualCredentialsState = nil
+                    state.route = route
+                    return .none
+                }
+                switch routeValue {
+                case .createWallet:
+                    state.createWalletState = .init(context: .createWallet)
+                case .emailLogin:
+                    state.emailLoginState = .init()
+                case .restoreWallet:
+                    state.restoreWalletState = .init(context: .restoreWallet)
+                case .manualLogin:
+                    state.manualCredentialsState = .init()
+                }
                 state.route = route
                 return .none
-            }
-            switch routeValue {
-            case .createWallet:
-                state.createWalletState = .init(context: .createWallet)
-            case .emailLogin:
-                state.emailLoginState = .init()
-            case .restoreWallet:
-                state.restoreWalletState = .init(context: .restoreWallet)
-            case .manualLogin:
-                state.manualCredentialsState = .init()
-            }
-            state.route = route
-            return .none
 
-        case .start:
-            state.buildVersion = environment.buildVersionProvider()
-            if BuildFlag.isInternal {
-                return environment.app
-                    .publisher(for: blockchain.app.configuration.manual.login.is.enabled, as: Bool.self)
-                    .prefix(1)
-                    .replaceError(with: false)
-                    .flatMap { isEnabled -> EffectTask<WelcomeAction> in
-                        guard isEnabled else {
-                            return .none
+            case .start:
+                state.buildVersion = buildVersionProvider()
+                if BuildFlag.isInternal {
+                    return app
+                        .publisher(for: blockchain.app.configuration.manual.login.is.enabled, as: Bool.self)
+                        .prefix(1)
+                        .replaceError(with: false)
+                        .flatMap { isEnabled -> EffectTask<WelcomeAction> in
+                            guard isEnabled else {
+                                return .none
+                            }
+                            return EffectTask(value: .setManualPairingEnabled)
                         }
-                        return EffectTask(value: .setManualPairingEnabled)
-                    }
-                    .eraseToEffect()
-            }
-            return .none
-
-        case .setManualPairingEnabled:
-            state.manualPairingEnabled = true
-            return .none
-
-        case .deeplinkReceived(let url):
-            // handle deeplink if we've entered verify device flow
-            guard let loginState = state.emailLoginState,
-                  loginState.verifyDeviceState != nil
-            else {
+                        .eraseToEffect()
+                }
                 return .none
-            }
-            return EffectTask(value: .emailLogin(.verifyDevice(.didReceiveWalletInfoDeeplink(url))))
 
-        case .requestedToCreateWallet,
-             .requestedToDecryptWallet,
-             .requestedToRestoreWallet:
-            // handled in core coordinator
-            return .none
-
-        case .createWallet(.triggerAuthenticate):
-            return .none
-
-        case .createWallet(.informWalletFetched(let context)):
-            return EffectTask(value: .informWalletFetched(context))
-
-        case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.informWalletFetched(let context))))):
-            return EffectTask(value: .informWalletFetched(context))
-
-        case .emailLogin(.verifyDevice(.credentials(.onForgotPasswordTapped))):
-            state.route = nil
-            return .none
-
-        // TODO: refactor this by not relying on access lower level reducers
-        case .emailLogin(.verifyDevice(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))),
-             .emailLogin(.verifyDevice(.upgradeAccount(.skipUpgrade(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))))):
-            return EffectTask(value: .requestedToDecryptWallet(password))
-
-        case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restoreWallet(let walletRecovery))))):
-            return EffectTask(value: .requestedToRestoreWallet(walletRecovery))
-
-        case .restoreWallet(.restoreWallet(let walletRecovery)):
-            return EffectTask(value: .requestedToRestoreWallet(walletRecovery))
-
-        case .restoreWallet(.importWallet(.createAccount(.importAccount))):
-            return EffectTask(value: .requestedToRestoreWallet(.importRecovery))
-
-        case .manualPairing(.walletPairing(.decryptWalletWithPassword(let password))):
-            return EffectTask(value: .requestedToDecryptWallet(password))
-
-        case .emailLogin(.verifyDevice(.credentials(.secondPasswordNotice(.returnTapped)))),
-             .manualPairing(.secondPasswordNotice(.returnTapped)):
-            return .dismiss()
-
-        case .manualPairing(.seedPhrase(.informWalletFetched(let context))):
-            return EffectTask(value: .informWalletFetched(context))
-
-        case .manualPairing(.seedPhrase(.importWallet(.createAccount(.walletFetched(.success(.right(let context))))))):
-            return EffectTask(value: .informWalletFetched(context))
-
-        case .manualPairing:
-            return .none
-
-        case .restoreWallet(.triggerAuthenticate):
-            return .none
-
-        case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.triggerAuthenticate)))):
-            return .none
-
-        case .restoreWallet(.restored(.success(.right(let context)))),
-             .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.success(.right(let context))))))):
-            return EffectTask(value: .informWalletFetched(context))
-
-        case .restoreWallet(.importWallet(.createAccount(.walletFetched(.success(.right(let context)))))):
-            return EffectTask(value: .informWalletFetched(context))
-
-        case .restoreWallet(.restored(.success(.left(.noValue)))),
-             .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.success(.left(.noValue))))))):
-            return EffectTask(value: .informForWalletInitialization)
-        case .restoreWallet(.restored(.failure)),
-             .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.failure))))):
-            return .none
-        case .createWallet(.accountCreation(.failure)):
-            return .none
-
-        case .informSecondPasswordDetected:
-            switch state.route?.route {
-            case .emailLogin:
-                return EffectTask(value: .emailLogin(.verifyDevice(.credentials(.navigate(to: .secondPasswordDetected)))))
-            case .manualLogin:
-                return EffectTask(value: .manualPairing(.navigate(to: .secondPasswordDetected)))
-            case .restoreWallet:
-                return EffectTask(value: .restoreWallet(.setSecondPasswordNoticeVisible(true)))
-            default:
+            case .setManualPairingEnabled:
+                state.manualPairingEnabled = true
                 return .none
-            }
 
-        case .informForWalletInitialization,
-             .informWalletFetched:
-            // handled in core coordinator
-            return .none
-
-        case .createWallet,
-             .emailLogin,
-             .restoreWallet:
-            return .none
-
-        case .none:
-            return .none
-        }
-    }
-)
-.analytics()
-
-extension Reducer where
-    Action == WelcomeAction,
-    State == WelcomeState,
-    Environment == WelcomeEnvironment
-{
-    func analytics() -> Self {
-        combined(
-            with: Reducer<
-                WelcomeState,
-                WelcomeAction,
-                WelcomeEnvironment
-            > { _, action, environment in
-                switch action {
-                case .route(let route):
-                    guard let routeValue = route?.route else {
-                        return .none
-                    }
-                    switch routeValue {
-                    case .emailLogin:
-                        environment.analyticsRecorder.record(
-                            event: .loginClicked()
-                        )
-                    case .restoreWallet:
-                        environment.analyticsRecorder.record(
-                            event: .recoveryOptionSelected
-                        )
-                    default:
-                        break
-                    }
+            case .deeplinkReceived(let url):
+                // handle deeplink if we've entered verify device flow
+                guard let loginState = state.emailLoginState,
+                      loginState.verifyDeviceState != nil
+                else {
                     return .none
+                }
+                return EffectTask(value: .emailLogin(.verifyDevice(.didReceiveWalletInfoDeeplink(url))))
+
+            case .requestedToCreateWallet,
+                 .requestedToDecryptWallet,
+                 .requestedToRestoreWallet:
+                // handled in core coordinator
+                return .none
+
+            case .createWallet(.triggerAuthenticate):
+                return .none
+
+            case .createWallet(.informWalletFetched(let context)):
+                return EffectTask(value: .informWalletFetched(context))
+
+            case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.informWalletFetched(let context))))):
+                return EffectTask(value: .informWalletFetched(context))
+
+            case .emailLogin(.verifyDevice(.credentials(.onForgotPasswordTapped))):
+                state.route = nil
+                return .none
+
+            // TODO: refactor this by not relying on access lower level reducers
+            case .emailLogin(.verifyDevice(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))),
+                 .emailLogin(.verifyDevice(.upgradeAccount(.skipUpgrade(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))))):
+                return EffectTask(value: .requestedToDecryptWallet(password))
+
+            case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restoreWallet(let walletRecovery))))):
+                return EffectTask(value: .requestedToRestoreWallet(walletRecovery))
+
+            case .restoreWallet(.restoreWallet(let walletRecovery)):
+                return EffectTask(value: .requestedToRestoreWallet(walletRecovery))
+
+            case .restoreWallet(.importWallet(.createAccount(.importAccount))):
+                return EffectTask(value: .requestedToRestoreWallet(.importRecovery))
+
+            case .manualPairing(.walletPairing(.decryptWalletWithPassword(let password))):
+                return EffectTask(value: .requestedToDecryptWallet(password))
+
+            case .emailLogin(.verifyDevice(.credentials(.secondPasswordNotice(.returnTapped)))),
+                 .manualPairing(.secondPasswordNotice(.returnTapped)):
+                return .dismiss()
+
+            case .manualPairing(.seedPhrase(.informWalletFetched(let context))):
+                return EffectTask(value: .informWalletFetched(context))
+
+            case .manualPairing(.seedPhrase(.importWallet(.createAccount(.walletFetched(.success(.right(let context))))))):
+                return EffectTask(value: .informWalletFetched(context))
+
+            case .manualPairing:
+                return .none
+
+            case .restoreWallet(.triggerAuthenticate):
+                return .none
+
+            case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.triggerAuthenticate)))):
+                return .none
+
+            case .restoreWallet(.restored(.success(.right(let context)))),
+                 .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.success(.right(let context))))))):
+                return EffectTask(value: .informWalletFetched(context))
+
+            case .restoreWallet(.importWallet(.createAccount(.walletFetched(.success(.right(let context)))))):
+                return EffectTask(value: .informWalletFetched(context))
+
+            case .restoreWallet(.restored(.success(.left(.noValue)))),
+                 .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.success(.left(.noValue))))))):
+                return EffectTask(value: .informForWalletInitialization)
+            case .restoreWallet(.restored(.failure)),
+                 .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.failure))))):
+                return .none
+            case .createWallet(.accountCreation(.failure)):
+                return .none
+
+            case .informSecondPasswordDetected:
+                switch state.route?.route {
+                case .emailLogin:
+                    return EffectTask(value: .emailLogin(.verifyDevice(.credentials(.navigate(to: .secondPasswordDetected)))))
+                case .manualLogin:
+                    return EffectTask(value: .manualPairing(.navigate(to: .secondPasswordDetected)))
+                case .restoreWallet:
+                    return EffectTask(value: .restoreWallet(.setSecondPasswordNoticeVisible(true)))
                 default:
                     return .none
                 }
+
+            case .informForWalletInitialization,
+                 .informWalletFetched:
+                // handled in core coordinator
+                return .none
+
+            case .createWallet,
+                 .emailLogin,
+                 .restoreWallet:
+                return .none
+
+            case .none:
+                return .none
             }
-        )
+        }
+        .ifLet(\.createWalletState, action: /Action.createWallet) {
+            CreateAccountStepOneReducer(
+                mainQueue: mainQueue,
+                passwordValidator: passwordValidator,
+                externalAppOpener: externalAppOpener,
+                analyticsRecorder: analyticsRecorder,
+                walletRecoveryService: walletRecoveryService,
+                walletCreationService: walletCreationService,
+                walletFetcherService: walletFetcherService,
+                signUpCountriesService: signUpCountriesService,
+                recaptchaService: recaptchaService,
+                checkReferralClient: checkReferralClient,
+                app: app
+            )
+        }
+        .ifLet(\.emailLoginState, action: /Action.emailLogin) {
+            EmailLoginReducer(
+                app: app,
+                mainQueue: mainQueue,
+                sessionTokenService: sessionTokenService,
+                deviceVerificationService: deviceVerificationService,
+                errorRecorder: errorRecorder,
+                externalAppOpener: externalAppOpener,
+                analyticsRecorder: analyticsRecorder,
+                walletRecoveryService: walletRecoveryService,
+                walletCreationService: walletCreationService,
+                walletFetcherService: walletFetcherService,
+                accountRecoveryService: accountRecoveryService,
+                recaptchaService: recaptchaService,
+                emailAuthorizationService: emailAuthorizationService,
+                smsService: smsService,
+                loginService: loginService,
+                seedPhraseValidator: seedPhraseValidator,
+                passwordValidator: passwordValidator,
+                signUpCountriesService: signUpCountriesService,
+                appStoreInformationRepository: appStoreInformationRepository
+            )
+        }
+        .ifLet(\.restoreWalletState, action: /Action.restoreWallet) {
+            SeedPhraseReducer(
+                mainQueue: mainQueue,
+                externalAppOpener: externalAppOpener,
+                analyticsRecorder: analyticsRecorder,
+                walletRecoveryService: walletRecoveryService,
+                walletCreationService: walletCreationService,
+                walletFetcherService: walletFetcherService,
+                accountRecoveryService: accountRecoveryService,
+                errorRecorder: errorRecorder,
+                recaptchaService: recaptchaService,
+                validator: seedPhraseValidator,
+                passwordValidator: passwordValidator,
+                signUpCountriesService: signUpCountriesService,
+                app: app
+            )
+        }
+        .ifLet(\.manualCredentialsState, action: /Action.manualPairing) {
+            CredentialsReducer(
+                app: app,
+                mainQueue: mainQueue,
+                sessionTokenService: sessionTokenService,
+                deviceVerificationService: deviceVerificationService,
+                emailAuthorizationService: emailAuthorizationService,
+                smsService: smsService,
+                loginService: loginService,
+                errorRecorder: errorRecorder,
+                externalAppOpener: externalAppOpener,
+                analyticsRecorder: analyticsRecorder,
+                walletRecoveryService: walletRecoveryService,
+                walletCreationService: walletCreationService,
+                walletFetcherService: walletFetcherService,
+                accountRecoveryService: accountRecoveryService,
+                recaptchaService: recaptchaService,
+                seedPhraseValidator: seedPhraseValidator,
+                passwordValidator: passwordValidator,
+                signUpCountriesService: signUpCountriesService,
+                appStoreInformationRepository: appStoreInformationRepository
+            )
+        }
+        WelcomeAnalytics(analyticsRecorder: analyticsRecorder)
+    }
+}
+
+struct WelcomeAnalytics: ReducerProtocol {
+
+    typealias Action = WelcomeAction
+    typealias State = WelcomeState
+
+    let analyticsRecorder: AnalyticsEventRecorderAPI
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .route(let route):
+                guard let routeValue = route?.route else {
+                    return .none
+                }
+                switch routeValue {
+                case .emailLogin:
+                    analyticsRecorder.record(
+                        event: .loginClicked()
+                    )
+                case .restoreWallet:
+                    analyticsRecorder.record(
+                        event: .recoveryOptionSelected
+                    )
+                default:
+                    break
+                }
+                return .none
+            default:
+                return .none
+            }
+        }
     }
 }

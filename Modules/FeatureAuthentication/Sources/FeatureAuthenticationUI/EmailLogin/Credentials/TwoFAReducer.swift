@@ -58,28 +58,31 @@ struct TwoFAState: Equatable {
     }
 }
 
-let twoFAReducer = Reducer<
-    TwoFAState,
-    TwoFAAction,
-    CredentialsEnvironment
-> { state, action, _ in
-    switch action {
-    case .didChangeTwoFACode(let code):
-        state.twoFACode = code
-        return .none
-    case .didChangeTwoFACodeAttemptsLeft(let attemptsLeft):
-        state.twoFACodeAttemptsLeft = attemptsLeft
-        return EffectTask(value: .showIncorrectTwoFACodeError(.incorrect))
-    case .showIncorrectTwoFACodeError(let context):
-        state.twoFACodeIncorrectContext = context
-        state.isTwoFACodeIncorrect = context.hasError
-        return .none
-    case .showResendSMSButton(let shouldShow):
-        state.isResendSMSButtonVisible = shouldShow
-        return .none
-    case .showTwoFACodeField(let isVisible):
-        state.twoFACode = ""
-        state.isTwoFACodeFieldVisible = isVisible
-        return .none
+struct TwoFAReducer: ReducerProtocol {
+    typealias State = TwoFAState
+    typealias Action = TwoFAAction
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .didChangeTwoFACode(let code):
+                state.twoFACode = code
+                return .none
+            case .didChangeTwoFACodeAttemptsLeft(let attemptsLeft):
+                state.twoFACodeAttemptsLeft = attemptsLeft
+                return EffectTask(value: .showIncorrectTwoFACodeError(.incorrect))
+            case .showIncorrectTwoFACodeError(let context):
+                state.twoFACodeIncorrectContext = context
+                state.isTwoFACodeIncorrect = context.hasError
+                return .none
+            case .showResendSMSButton(let shouldShow):
+                state.isResendSMSButtonVisible = shouldShow
+                return .none
+            case .showTwoFACodeField(let isVisible):
+                state.twoFACode = ""
+                state.isTwoFACodeFieldVisible = isVisible
+                return .none
+            }
+        }
     }
 }
