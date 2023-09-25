@@ -130,7 +130,9 @@ let onBoardingReducer = Reducer<Onboarding.State, Onboarding.Action, Onboarding.
             action: /Onboarding.Action.passwordScreen,
             environment: { $0 }
         ),
-    appUpgradeReducer
+    AnyReducer { _ in
+        AppUpgradeReducer()
+    }
         .optional()
         .pullback(
             state: \Onboarding.State.appUpgradeState,
