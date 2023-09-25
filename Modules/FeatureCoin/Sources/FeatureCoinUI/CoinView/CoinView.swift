@@ -356,27 +356,29 @@ private struct NavigationModifier: ViewModifier {
 // swiftlint:disable type_name
 struct CoinView_PreviewProvider: PreviewProvider {
 
-    static var previews: some View {
+    static var normalState: CoinViewState {
+        CoinViewState(
+            currency: .bitcoin,
+            kycStatus: .gold,
+            accounts: [
+                .preview.privateKey,
+                .preview.trading,
+                .preview.rewards
+            ],
+            isFavorite: true,
+            graph: .init(
+                interval: .day,
+                result: .success(.preview)
+            )
+        )
+    }
 
+    static var previews: some View {
         PrimaryNavigationView {
             CoinView(
                 store: Store(
-                    initialState: CoinViewState(
-                        currency: .bitcoin,
-                        kycStatus: .gold,
-                        accounts: [
-                            .preview.privateKey,
-                            .preview.trading,
-                            .preview.rewards
-                        ],
-                        isFavorite: true,
-                        graph: .init(
-                            interval: .day,
-                            result: .success(.preview)
-                        )
-                    ),
-                    reducer: coinViewReducer,
-                    environment: CoinViewEnvironment.preview
+                    initialState: normalState,
+                    reducer: CoinViewReducer(environment: .preview)
                 )
             )
             .app(App.preview)
@@ -387,22 +389,8 @@ struct CoinView_PreviewProvider: PreviewProvider {
         PrimaryNavigationView {
             CoinView(
                 store: Store(
-                    initialState: CoinViewState(
-                        currency: .bitcoin,
-                        kycStatus: .gold,
-                        accounts: [
-                            .preview.privateKey,
-                            .preview.trading,
-                            .preview.rewards
-                        ],
-                        isFavorite: true,
-                        graph: .init(
-                            interval: .day,
-                            result: .success(.preview)
-                        )
-                    ),
-                    reducer: coinViewReducer,
-                    environment: CoinViewEnvironment.preview
+                    initialState: normalState,
+                    reducer: CoinViewReducer(environment: .preview)
                 )
             )
             .app(App.preview)
@@ -425,8 +413,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                             result: .success(.preview)
                         )
                     ),
-                    reducer: coinViewReducer,
-                    environment: CoinViewEnvironment.preview
+                    reducer: CoinViewReducer(environment: .preview)
                 )
             )
             .app(App.preview)
@@ -448,8 +435,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                             result: .success(.preview)
                         )
                     ),
-                    reducer: coinViewReducer,
-                    environment: CoinViewEnvironment.preview
+                    reducer: CoinViewReducer(environment: .preview)
                 )
             )
             .app(App.preview)
@@ -464,8 +450,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                         isFavorite: nil,
                         graph: .init(isFetching: true)
                     ),
-                    reducer: coinViewReducer,
-                    environment: CoinViewEnvironment.previewEmpty
+                    reducer: CoinViewReducer(environment: .previewEmpty)
                 )
             )
             .app(App.preview)
@@ -485,8 +470,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                             result: .failure(.init(request: nil, type: .serverError(.badResponse)))
                         )
                     ),
-                    reducer: coinViewReducer,
-                    environment: CoinViewEnvironment.previewEmpty
+                    reducer: CoinViewReducer(environment: .previewEmpty)
                 )
             )
             .app(App.preview)

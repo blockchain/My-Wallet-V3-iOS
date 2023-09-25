@@ -26,22 +26,22 @@ extension AsyncThrowingStream {
     }
 }
 
-// Once it is possible to express conformance to a non-throwing async sequence we should create a new type
-// `AsyncSequencePublisher<S: nothrow AsyncSequence>`. At the moment the safest thing to do is capture the error and
-// allow the consumer to ignore it if they wish
-public struct AsyncSequencePublisher<S: AsyncSequence, Failure: Error>: Combine.Publisher {
+/// Once it is possible to express conformance to a non-throwing async sequence
+/// we should create a new type `AsyncSequencePublisher<Seq: nothrow AsyncSequence>`.
+/// At the moment the safest thing to do is capture the error and allow the consumer to ignore it if they wish
+public struct AsyncSequencePublisher<Seq: AsyncSequence, Failure: Error>: Combine.Publisher {
 
-    public typealias Output = S.Element
+    public typealias Output = Seq.Element
 
-    private var sequence: S
+    private var sequence: Seq
 
-    public init(_ sequence: S) {
+    public init(_ sequence: Seq) {
         self.sequence = sequence
     }
 
-    public func receive<S>(
-        subscriber: S
-    ) where S: Subscriber, Failure == S.Failure, Output == S.Input {
+    public func receive<Sub>(
+        subscriber: Sub
+    ) where Sub: Subscriber, Failure == Sub.Failure, Output == Sub.Input {
         subscriber.receive(
             subscription: Subscription(subscriber: subscriber, sequence: sequence)
         )
@@ -51,14 +51,14 @@ public struct AsyncSequencePublisher<S: AsyncSequence, Failure: Error>: Combine.
         Subscriber: Combine.Subscriber
     >: Combine.Subscription where Subscriber.Input == Output, Subscriber.Failure == Failure {
 
-        private var sequence: S
+        private var sequence: Seq
         private var subscriber: Subscriber
         private var isCancelled = false
 
         private var demand: Subscribers.Demand = .none
         private var task: Task<Void, Error>?
 
-        init(subscriber: Subscriber, sequence: S) {
+        init(subscriber: Subscriber, sequence: Seq) {
             self.sequence = sequence
             self.subscriber = subscriber
         }
@@ -74,7 +74,7 @@ public struct AsyncSequencePublisher<S: AsyncSequence, Failure: Error>: Combine.
             task = Task {
                 var iterator = sequence.makeAsyncIterator()
                 while !isCancelled, demand > 0 {
-                    let element: S.Element?
+                    let element: Seq.Element?
                     do {
                         element = try await iterator.next()
                     } catch is CancellationError {

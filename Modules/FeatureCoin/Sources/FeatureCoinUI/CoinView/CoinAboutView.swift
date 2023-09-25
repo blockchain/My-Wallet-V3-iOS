@@ -83,6 +83,9 @@ struct CoinAboutView: View {
     }
 
     private func detailsItems(_ value: AboutAssetInformation) -> [DetailRow] {
+        guard app.currentMode == .pkw else {
+            return []
+        }
         var items: [DetailRow] = []
         if let network = value.network {
             items.append(.init(
@@ -101,7 +104,7 @@ struct CoinAboutView: View {
         if let marketCap = value.marketCap {
             items.append(.init(
                 title: L10n.About.marketCap,
-                value: marketCap.displayString,
+                value: marketCap.toDisplayString(includeSymbol: true, format: .forceShortened),
                 copyableValue: nil
             ))
         }
