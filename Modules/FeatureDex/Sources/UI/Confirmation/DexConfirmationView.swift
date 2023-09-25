@@ -54,6 +54,12 @@ struct DexConfirmationView: View {
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.to.currency.code].fiat.quote.value
                 )
             }
+            .bindings {
+                subscribe(
+                    viewStore.binding(\.$productFeeFiatExchangeRate),
+                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.productFee?.currency.code].fiat.quote.value
+                )
+            }
             PrimaryNavigationLink(
                 destination: pendingTransactionView,
                 isActive: viewStore.binding(\.$didConfirm),
@@ -223,16 +229,19 @@ struct DexConfirmationView: View {
                 },
                 tooltip: (L10n.networkFee, L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode))
             )
-            tableRow(
-                title: L10n.blockchainFee,
-                value: {
-                    valueWithQuote(
-                        viewStore.quote.productFee,
-                        using: viewStore.toFiatExchangeRate
-                    )
-                },
-                tooltip: (L10n.blockchainFee, L10n.blockchainFeeDescription)
-            )
+            if let productFee = viewStore.quote.productFee {
+                tableRow(
+                    title: L10n.blockchainFee,
+                    value: {
+                        valueWithQuote(
+                            productFee,
+                            using: viewStore.productFeeFiatExchangeRate
+                        )
+                    },
+                    tooltip: (L10n.blockchainFee, L10n.blockchainFeeDescription)
+                )
+
+            }
         }
         .padding(.vertical, 6.pt)
         .background(

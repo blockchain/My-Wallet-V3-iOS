@@ -16,6 +16,7 @@ extension DexConfirmation {
         @BindingState var networkFiatExchangeRate: MoneyValue?
         @BindingState var fromFiatExchangeRate: MoneyValue?
         @BindingState var toFiatExchangeRate: MoneyValue?
+        @BindingState var productFeeFiatExchangeRate: MoneyValue?
 
         var sourceBalance: DexBalance? {
             balances.first(where: { $0.currency == quote.from.currency })
@@ -33,7 +34,7 @@ extension DexConfirmation.State {
         var from: CryptoValue
         var minimumReceivedAmount: CryptoValue
         var networkFee: CryptoValue
-        var productFee: CryptoValue
+        var productFee: CryptoValue?
         var slippage: Double
         var to: CryptoValue
         var exchangeRate: MoneyValuePair {

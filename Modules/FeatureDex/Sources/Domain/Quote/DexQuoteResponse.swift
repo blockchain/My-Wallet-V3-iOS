@@ -7,28 +7,28 @@ public struct DexQuoteResponse: Decodable, Equatable {
     public struct Quote: Decodable, Equatable {
         public var buyAmount: Amount
         public var sellAmount: Amount
-        public var buyTokenFee: String
+        public var bcdcFee: Amount?
         public var gasFee: String
 
-        init(buyAmount: Amount, sellAmount: Amount, buyTokenFee: String, gasFee: String) {
+        init(buyAmount: Amount, sellAmount: Amount, bcdcFee: Amount, gasFee: String) {
             self.buyAmount = buyAmount
             self.sellAmount = sellAmount
-            self.buyTokenFee = buyTokenFee
+            self.bcdcFee = bcdcFee
             self.gasFee = gasFee
         }
     }
 
+
+
     public struct Amount: Decodable, Equatable {
         public var address: String?
         public var amount: String
-        public var chainId: Int
         public var minAmount: String?
         public var symbol: String
 
-        init(address: String? = nil, amount: String, chainId: Int, minAmount: String? = nil, symbol: String) {
+        init(address: String? = nil, amount: String, minAmount: String? = nil, symbol: String) {
             self.address = address
             self.amount = amount
-            self.chainId = chainId
             self.minAmount = minAmount
             self.symbol = symbol
         }

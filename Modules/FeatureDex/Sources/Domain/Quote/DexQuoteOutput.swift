@@ -19,7 +19,7 @@ public struct DexQuoteOutput: Equatable {
     public let field: Field
     public let isValidated: Bool
     public let networkFee: CryptoValue
-    public let productFee: CryptoValue
+    public let productFee: CryptoValue?
     public let sellAmount: CryptoValue
     public let slippage: String
 
@@ -30,7 +30,7 @@ public struct DexQuoteOutput: Equatable {
         field: Field,
         isValidated: Bool,
         networkFee: CryptoValue,
-        productFee: CryptoValue,
+        productFee: CryptoValue?,
         sellAmount: CryptoValue,
         slippage: String,
         response: DexQuoteResponse
@@ -55,12 +55,6 @@ public struct DexQuoteOutput: Equatable {
             return nil
         }
 
-        guard let buyCurrency = cryptoCurrency(
-            code: response.quote.buyAmount.symbol,
-            address: response.quote.buyAmount.address,
-            currenciesService
-        ) else { return nil }
-
         guard let sellCurrency = cryptoCurrency(
             code: response.quote.sellAmount.symbol,
             address: response.quote.sellAmount.address,
@@ -71,38 +65,29 @@ public struct DexQuoteOutput: Equatable {
             .network(for: sellCurrency)
         else { return nil }
 
-        guard let buyAmount = CryptoValue.create(
-            minor: response.quote.buyAmount.amount,
-            currency: buyCurrency
-        ) else { return nil }
-
-        guard let sellAmount = CryptoValue.create(
-            minor: response.quote.sellAmount.amount,
-            currency: sellCurrency
-        ) else { return nil }
-
-        guard let productFee = CryptoValue.create(
-            minor: response.quote.buyTokenFee,
-            currency: buyCurrency
-        ) else { return nil }
-
         guard let networkFee = CryptoValue.create(
             minor: response.quote.gasFee,
             currency: sellNetwork.nativeAsset
         ) else { return nil }
 
-        let minimum: CryptoValue? = response.quote.buyAmount.minAmount
-            .flatMap { minAmount in
-                CryptoValue.create(
-                    minor: minAmount,
-                    currency: buyCurrency
-                )
-            }
+        guard let buyAmount = cryptoValue(from: response.quote.buyAmount, currenciesService: currenciesService) else {
+            return nil
+        }
+        guard let sellAmount = cryptoValue(from: response.quote.sellAmount, currenciesService: currenciesService) else {
+            return nil
+        }
+        let productFee: CryptoValue? =  response.quote.bcdcFee
+            .flatMap { cryptoValue(from: $0, currenciesService: currenciesService) }
+
+        let minimumBuyAmount: CryptoValue? = minumumCryptoValue(
+            from: response.quote.buyAmount,
+            currenciesService: currenciesService
+        )
 
         guard let field = FeatureDexDomain.field(from: request) else { return nil }
 
         self.init(
-            buyAmount: BuyAmount(amount: buyAmount, minimum: minimum),
+            buyAmount: BuyAmount(amount: buyAmount, minimum: minimumBuyAmount),
             field: field,
             isValidated: !request.params.skipValidation,
             networkFee: networkFee,
@@ -112,6 +97,63 @@ public struct DexQuoteOutput: Equatable {
             response: response
         )
     }
+}
+
+private func networkFee(
+    quote: DexQuoteResponse.Quote,
+    currenciesService: EnabledCurrenciesServiceAPI
+) -> CryptoValue? {
+    let sellCurrency = cryptoCurrency(
+        code: quote.sellAmount.symbol,
+        address: quote.sellAmount.address,
+        currenciesService
+    )
+    guard let sellCurrency else { return nil }
+    guard let sellNetwork = currenciesService.network(for: sellCurrency) else {
+        return nil
+    }
+    let value = CryptoValue.create(
+        minor: quote.gasFee,
+        currency: sellNetwork.nativeAsset
+    )
+    return value
+}
+
+private func minumumCryptoValue(
+    from amount: DexQuoteResponse.Amount,
+    currenciesService: EnabledCurrenciesServiceAPI
+) -> CryptoValue? {
+    guard let minAmount = amount.minAmount else {
+        return nil
+    }
+    let currency = cryptoCurrency(
+        code: amount.symbol,
+        address: amount.address,
+        currenciesService
+    )
+    guard let currency else { return nil }
+    let value = CryptoValue.create(
+        minor: minAmount,
+        currency: currency
+    )
+    return value
+}
+
+private func cryptoValue(
+    from amount: DexQuoteResponse.Amount,
+    currenciesService: EnabledCurrenciesServiceAPI
+) -> CryptoValue? {
+    let currency = cryptoCurrency(
+        code: amount.symbol,
+        address: amount.address,
+        currenciesService
+    )
+    guard let currency else { return nil }
+    let value = CryptoValue.create(
+        minor: amount.amount,
+        currency: currency
+    )
+    return value
 }
 
 private func field(from request: DexQuoteRequest) -> DexQuoteOutput.Field? {
@@ -152,9 +194,9 @@ extension DexQuoteOutput {
     ) -> DexQuoteOutput {
         let response = DexQuoteResponse(
             quote: .init(
-                buyAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
-                sellAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
-                buyTokenFee: "111000",
+                buyAmount: .init(amount: "0", symbol: "USDT"),
+                sellAmount: .init(amount: "0", symbol: "USDT"),
+                bcdcFee: .init(amount: "111000", symbol: "USDT"),
                 gasFee: "777000000"
             ),
             tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),

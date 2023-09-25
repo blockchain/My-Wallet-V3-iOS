@@ -62,9 +62,9 @@ extension AnalyticsEvents.New.Dex {
         var slippageAllowed: String
         var networkFeeAmount: String
         var networkFeeCurrency: String
-        var blockchainFeeAmount: String
+        var blockchainFeeAmount: String?
         var blockchainFeeAmountUsd: String?
-        var blockchainFeeCurrency: String
+        var blockchainFeeCurrency: String?
         var inputNetwork: String?
         var outputNetwork: String?
     }

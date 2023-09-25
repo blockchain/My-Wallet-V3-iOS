@@ -89,9 +89,9 @@ final class QuotePayloadFactoryTests: XCTestCase {
     private var mockResponse: DexQuoteResponse {
         DexQuoteResponse(
             quote: .init(
-                buyAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
-                sellAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
-                buyTokenFee: "111000",
+                buyAmount: .init(amount: "0", symbol: "USDT"),
+                sellAmount: .init(amount: "0", symbol: "USDT"),
+                bcdcFee: .init(amount: "111000", symbol: "USDT"),
                 gasFee: "777000000"
             ),
             tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
