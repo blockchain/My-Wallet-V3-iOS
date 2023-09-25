@@ -47,15 +47,18 @@ public final class ReferralAppObserver: Client.Observer {
         .await()
     }
 
-    lazy var fetchReferral = app.on(
-        blockchain.session.event.did.sign.in,
-        blockchain.ux.kyc.event.did.finish,
-        blockchain.ux.home.event.did.pull.to.refresh
-    ) { [unowned self] _ in
+    lazy var fetchReferral = app.on(blockchain.user.event.did.update) { [unowned self] _ in
         do {
-            guard try await app.get(blockchain.app.configuration.referral.is.enabled) else { return }
-            let campaign = try await referralService.fetchReferralCampaign().await()
-            app.post(value: campaign, of: blockchain.user.referral.campaign)
+            guard try await app.get(blockchain.app.configuration.referral.is.enabled) else {
+                return app.state.clear(blockchain.user.referral.campaign)
+            }
+            guard app.state.doesNotContain(blockchain.user.referral.campaign) else {
+                return
+            }
+            try await app.post(
+                value: referralService.fetchReferralCampaign().await(),
+                of: blockchain.user.referral.campaign
+            )
         } catch {
             app.state.clear(blockchain.user.referral.campaign)
         }
