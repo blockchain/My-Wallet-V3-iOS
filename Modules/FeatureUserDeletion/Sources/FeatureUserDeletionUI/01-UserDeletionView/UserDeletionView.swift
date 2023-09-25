@@ -169,3 +169,18 @@ public struct UserDeletionView: View {
         .padding()
     }
 }
+
+#if DEBUG
+
+struct UserDeletion_Previews: PreviewProvider {
+    static var previews: some View {
+        UserDeletionView(
+            store: Store(
+                initialState: UserDeletionState(),
+                reducer: UserDeletionReducer.preview
+            )
+        )
+    }
+}
+
+#endif

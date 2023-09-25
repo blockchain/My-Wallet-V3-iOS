@@ -10,7 +10,6 @@ import XCTest
 
 final class FeatureUserDeletionSnapshotTests: XCTestCase {
 
-    private var environment: UserDeletionEnvironment!
     private var mockEmailVerificationService: MockUserDeletionRepositoryAPI!
     private var analyticsRecorder: MockAnalyticsRecorder!
     private var userDeletionState: UserDeletionState!
@@ -22,18 +21,10 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
 
         mockEmailVerificationService = MockUserDeletionRepositoryAPI()
         analyticsRecorder = MockAnalyticsRecorder()
-        environment = UserDeletionEnvironment(
-            mainQueue: .immediate,
-            userDeletionRepository: mockEmailVerificationService,
-            analyticsRecorder: analyticsRecorder,
-            dismissFlow: {},
-            logoutAndForgetWallet: {}
-        )
     }
 
     override func tearDownWithError() throws {
         mockEmailVerificationService = nil
-        environment = nil
         analyticsRecorder = nil
         try super.tearDownWithError()
     }
@@ -63,8 +54,13 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
                 confirmViewState: confirmViewState,
                 route: route
             ),
-            reducer: UserDeletionModule.reducer,
-            environment: environment
+            reducer: UserDeletionReducer(
+                mainQueue: .immediate,
+                userDeletionRepository: mockEmailVerificationService,
+                analyticsRecorder: analyticsRecorder,
+                dismissFlow: {},
+                logoutAndForgetWallet: {}
+            )
         )
     }
 }

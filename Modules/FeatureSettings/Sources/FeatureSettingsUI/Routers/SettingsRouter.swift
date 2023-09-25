@@ -409,8 +409,7 @@ final class SettingsRouter: SettingsRouterAPI {
         }
         let view = UserDeletionView(store: .init(
             initialState: UserDeletionState(),
-            reducer: UserDeletionModule.reducer,
-            environment: .init(
+            reducer: UserDeletionReducer(
                 mainQueue: .main,
                 userDeletionRepository: resolve(),
                 analyticsRecorder: resolve(),
