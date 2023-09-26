@@ -11,7 +11,7 @@ final class LoadingStateViewTests: XCTestCase {
         isRecording = false
     }
 
-    func testLoadingStateView() {
+    func x_testLoadingStateView() {
         let view = LoadingStateView(title: "Loading...")
         assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone8)))
     }

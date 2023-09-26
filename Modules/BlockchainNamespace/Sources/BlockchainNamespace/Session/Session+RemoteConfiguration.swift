@@ -90,9 +90,9 @@ extension Session {
                         guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
                         if keys.isEmpty {
                             #if DEBUG
-                            app.post(error: "remote configuration keys is empty! ‼️‼️‼️‼️")
                             if !isInTest { return errored() }
                             #else
+                            app.post(error: "Firebase returned no remote configuration values")
                             return errored()
                             #endif
                         }
@@ -465,11 +465,12 @@ private actor ExponentialBackoff {
 
     func next() async throws {
         n += 1
+        let time = TimeInterval.random(
+            in: unit...unit * pow(2, TimeInterval(n - 1)),
+            using: &rng
+        ) * 1_000_000
         try await Task.sleep(
-            nanoseconds: UInt64(TimeInterval.random(
-                in: unit...unit * pow(2, TimeInterval(n - 1)),
-                using: &rng
-            ) * 1_000_000)
+            nanoseconds: time.clamped(to: 0...UInt64.max.d).u64
         )
     }
 }

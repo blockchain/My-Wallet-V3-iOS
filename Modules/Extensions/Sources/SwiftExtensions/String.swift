@@ -147,7 +147,7 @@ extension String {
         .init(message: self, function: function, file: file, line: line)
     }
 
-    public struct Error: Swift.Error, CustomStringConvertible, CustomDebugStringConvertible, LocalizedError {
+    public struct Error: Swift.Error, CustomStringConvertible, CustomDebugStringConvertible, LocalizedError, Decodable {
 
         let message: String
         let function: String

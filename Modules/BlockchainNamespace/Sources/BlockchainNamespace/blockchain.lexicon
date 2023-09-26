@@ -1189,6 +1189,9 @@ blockchain:
 					code:
 					+ blockchain.db.type.string
 					+ blockchain.session.state.shared.value
+					identifier:
+					+ blockchain.db.type.string
+					+ blockchain.session.state.shared.value
 			os:
 				name:
 				+ blockchain.db.type.string
