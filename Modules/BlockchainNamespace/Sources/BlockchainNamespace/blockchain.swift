@@ -7545,8 +7545,20 @@ public final class L_blockchain_ux_asset_bio: L, I_blockchain_ux_asset_bio {
 }
 public protocol I_blockchain_ux_asset_bio: I {}
 public extension I_blockchain_ux_asset_bio {
+	var `copy`: L_blockchain_ux_asset_bio_copy { .init("\(__).copy") }
 	var `visit`: L_blockchain_ux_asset_bio_visit { .init("\(__).visit") }
 }
+public final class L_blockchain_ux_asset_bio_copy: L, I_blockchain_ux_asset_bio_copy {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.copy", comment: "") }
+}
+public protocol I_blockchain_ux_asset_bio_copy: I {}
+public extension I_blockchain_ux_asset_bio_copy {
+	var `contract`: L_blockchain_ux_asset_bio_copy_contract { .init("\(__).contract") }
+}
+public final class L_blockchain_ux_asset_bio_copy_contract: L, I_blockchain_ux_asset_bio_copy_contract {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.copy.contract", comment: "") }
+}
+public protocol I_blockchain_ux_asset_bio_copy_contract: I_blockchain_ui_type_action, I_blockchain_ui_device_haptic_feedback_impact_medium {}
 public final class L_blockchain_ux_asset_bio_visit: L, I_blockchain_ux_asset_bio_visit {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.visit", comment: "") }
 }

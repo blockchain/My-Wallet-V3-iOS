@@ -132,8 +132,9 @@ struct CoinAboutView: View {
                     .with(length: 12.pt)
                     .color(.semantic.muted)
                     .padding(Spacing.textSpacing)
-                    .onTapGesture {
-                        UIPasteboard.general.string = copyableValue
+                    .onTapGesture { $app.post(event: blockchain.ux.asset.bio.copy.contract) }
+                    .batch {
+                        set(blockchain.ux.asset.bio.copy.contract.then.copy, to: copyableValue)
                     }
             }
             Spacer()

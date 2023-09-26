@@ -218,8 +218,8 @@ public class App: AppProtocol {
     }
 
     private lazy var copyItems = on(blockchain.ui.type.action.then.copy) { event throws in
-#if canImport(UIKit)
         let string: String = try event.action.or(throw: "No action").data.decode()
+#if canImport(UIKit)
         UIPasteboard.general.string = string
 #endif
     }

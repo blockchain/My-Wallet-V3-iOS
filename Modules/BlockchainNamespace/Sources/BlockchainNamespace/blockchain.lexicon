@@ -1993,6 +1993,10 @@ blockchain:
 			+ blockchain.db.collection
 			+ blockchain.ux.type.story
 			bio:
+				copy:
+					contract:
+					+ blockchain.ui.device.haptic.feedback.impact.medium
+					+ blockchain.ui.type.action
 				visit:
 					website:
 					+ blockchain.ux.type.action
