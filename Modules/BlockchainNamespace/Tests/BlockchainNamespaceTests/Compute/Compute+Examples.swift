@@ -52,9 +52,11 @@ final class ComputeExamples: ComputeTestCase {
         await bindings.requestThenSynchronize()
 
         try await app.set(blockchain.user.is.verified, to: true)
+        await Task.megaYield()
         XCTAssertEqual(tag, blockchain.ux.currency.receive.address[])
 
         try await app.set(blockchain.user.is.verified, to: false)
+        await Task.megaYield()
         XCTAssertEqual(tag, blockchain.ux.user.KYC[])
     }
 }

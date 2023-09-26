@@ -43,6 +43,7 @@ extension Compute.From {
                     ).validated(),
                     computeConfiguration: false
                 )
+                .receive(on: DispatchQueue.main)
                 .sink { result in
                     do {
                         try handle(.value(result.get(), Compute.metadata()))
