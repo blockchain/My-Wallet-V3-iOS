@@ -4,6 +4,7 @@
 
 import Combine
 import Foundation
+import SwiftExtensions
 
 extension AsyncSequence {
 
@@ -26,86 +27,84 @@ extension AsyncThrowingStream {
     }
 }
 
-/// Once it is possible to express conformance to a non-throwing async sequence
-/// we should create a new type `AsyncSequencePublisher<Seq: nothrow AsyncSequence>`.
-/// At the moment the safest thing to do is capture the error and allow the consumer to ignore it if they wish
-public struct AsyncSequencePublisher<Seq: AsyncSequence, Failure: Error>: Combine.Publisher {
+// Once it is possible to express conformance to a non-throwing async sequence we should create a new type
+// `AsyncSequencePublisher<S: nothrow AsyncSequence>`. At the moment the safest thing to do is capture the error and
+// allow the consumer to ignore it if they wish
+public struct AsyncSequencePublisher<S: AsyncSequence, Failure: Error>: Combine.Publisher {
 
-    public typealias Output = Seq.Element
+    public typealias Output = S.Element
 
-    private var sequence: Seq
+    private var sequence: S
 
-    public init(_ sequence: Seq) {
+    public init(_ sequence: S) {
         self.sequence = sequence
     }
 
-    public func receive<Sub>(
-        subscriber: Sub
-    ) where Sub: Subscriber, Failure == Sub.Failure, Output == Sub.Input {
+    public func receive<Subscriber>(
+        subscriber: Subscriber
+    ) where Subscriber: Combine.Subscriber, Failure == Subscriber.Failure, Output == Subscriber.Input {
         subscriber.receive(
             subscription: Subscription(subscriber: subscriber, sequence: sequence)
         )
     }
 
-    actor Subscription<
+    final class Subscription<
         Subscriber: Combine.Subscriber
     >: Combine.Subscription where Subscriber.Input == Output, Subscriber.Failure == Failure {
 
-        private var sequence: Seq
+        private var sequence: S
         private var subscriber: Subscriber
         private var isCancelled = false
 
+        private var lock = UnfairLock()
         private var demand: Subscribers.Demand = .none
         private var task: Task<Void, Error>?
 
-        init(subscriber: Subscriber, sequence: Seq) {
+        init(subscriber: Subscriber, sequence: S) {
             self.sequence = sequence
             self.subscriber = subscriber
         }
 
-        nonisolated func request(_ demand: Subscribers.Demand) {
-            Task { await _request(demand) }
-        }
-
-        private func _request(_ __demand: Subscribers.Demand) {
-            demand = __demand
-            guard demand > 0 else { return }
-            task?.cancel()
+        func request(_ __demand: Subscribers.Demand) {
+            precondition(__demand > 0)
+            lock.withLock { demand = __demand }
+            guard task.isNil else { return }
+            lock.lock(); defer { lock.unlock() }
             task = Task {
-                var iterator = sequence.makeAsyncIterator()
-                while !isCancelled, demand > 0 {
-                    let element: Seq.Element?
+                var iterator = lock.withLock { sequence.makeAsyncIterator() }
+                while lock.withLock(body: { !isCancelled && demand > 0 }) {
+                    let element: S.Element?
                     do {
                         element = try await iterator.next()
                     } catch is CancellationError {
-                        subscriber.receive(completion: .finished)
+                        lock.withLock { subscriber }.receive(completion: .finished)
                         return
                     } catch let error as Failure {
-                        subscriber.receive(completion: .failure(error))
+                        lock.withLock { subscriber }.receive(completion: .failure(error))
                         throw CancellationError()
                     } catch {
                         assertionFailure("Expected \(Failure.self) but got \(type(of: error))")
                         throw CancellationError()
                     }
                     guard let element else {
-                        subscriber.receive(completion: .finished)
+                        lock.withLock { subscriber }.receive(completion: .finished)
                         throw CancellationError()
                     }
                     try Task.checkCancellation()
-                    demand -= 1
-                    demand += subscriber.receive(element)
+                    lock.withLock { demand -= 1 }
+                    let newDemand = lock.withLock { subscriber }.receive(element)
+                    lock.withLock { demand += newDemand }
                     await Task.yield()
                 }
+                task = nil
             }
         }
 
-        nonisolated func cancel() {
-            Task { await _cancel() }
-        }
-
-        private func _cancel() {
-            task?.cancel()
-            isCancelled = true
+        func cancel() {
+            lock.withLock {
+                task?.cancel()
+                isCancelled = true
+            }
         }
     }
 }
