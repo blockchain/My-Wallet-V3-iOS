@@ -194,18 +194,6 @@ struct CredentialsReducer: ReducerProtocol {
         Scope(state: \.passwordState, action: /Action.password) {
             PasswordReducer()
         }
-        Scope(state: \.walletPairingState, action: /Action.walletPairing) {
-            WalletPairingReducer(
-                mainQueue: mainQueue,
-                pollingQueue: pollingQueue,
-                sessionTokenService: sessionTokenService,
-                deviceVerificationService: deviceVerificationService,
-                emailAuthorizationService: emailAuthorizationService,
-                smsService: smsService,
-                loginService: loginService,
-                errorRecorder: errorRecorder
-            )
-        }
         Reduce { state, action in
             switch action {
             case .binding(\.$supportSheetShown):
@@ -434,7 +422,19 @@ struct CredentialsReducer: ReducerProtocol {
                 externalAppOpener: externalAppOpener
             )
         }
-        .routing()
+        .routing()  
+        Scope(state: \.walletPairingState, action: /Action.walletPairing) {
+            WalletPairingReducer(
+                mainQueue: mainQueue,
+                pollingQueue: pollingQueue,
+                sessionTokenService: sessionTokenService,
+                deviceVerificationService: deviceVerificationService,
+                emailAuthorizationService: emailAuthorizationService,
+                smsService: smsService,
+                loginService: loginService,
+                errorRecorder: errorRecorder
+            )
+        }
         CredentialsAnalytics(analyticsRecorder: analyticsRecorder)
     }
 }
