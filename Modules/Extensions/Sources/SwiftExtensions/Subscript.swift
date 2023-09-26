@@ -129,7 +129,7 @@ private func set(_ value: some Any, at path: some Collection<CodingKey>, on any:
 }
 
 private func _set(_ value: Any?, at path: some Collection<CodingKey>, on any: Any?) -> Any {
-    guard let (crumb, _) = path.headAndTail else { return recursiveFlatMapOptional(value) as Any }
+    guard let (crumb, _) = path.headAndTail else { return value as Any }
     switch crumb {
     case _ where crumb.intValue != nil:
         var array = (any as? [Any]) ?? []
