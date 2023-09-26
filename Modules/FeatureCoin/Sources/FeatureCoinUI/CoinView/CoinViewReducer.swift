@@ -48,8 +48,7 @@ public struct CoinViewReducer: ReducerProtocol {
                     environment.assetInformationService
                         .fetch()
                         .receive(on: environment.mainQueue)
-                        .catchToEffect()
-                        .map(CoinViewAction.fetchedAssetInformation),
+                        .catchToEffect(CoinViewAction.fetchedAssetInformation),
 
                     environment.app.publisher(
                         for: blockchain.app.configuration.recurring.buy.is.enabled,

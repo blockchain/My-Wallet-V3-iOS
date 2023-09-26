@@ -26,19 +26,25 @@ public class AssetInformationService {
         self.currenciesService = currenciesService
     }
 
-    public func fetch() -> AnyPublisher<AboutAssetInformation, NetworkError> {
-        repository.fetchInfo(cryptoCurrency.code)
-            .zip(marketCap.setFailureType(to: NetworkError.self))
+    public func fetch() -> AnyPublisher<AboutAssetInformation, Never> {
+        info.zip(marketCap)
             .map { [networkConfig, contractAddress] info, marketCap in
                 AboutAssetInformation(
-                    description: info.description,
-                    whitepaper: info.whitepaper,
-                    website: info.website,
+                    description: info?.description,
+                    whitepaper: info?.whitepaper,
+                    website: info?.website,
                     network: networkConfig?.name,
                     marketCap: marketCap,
                     contractAddress: contractAddress
                 )
             }
+            .eraseToAnyPublisher()
+    }
+
+    private var info: AnyPublisher<AssetInformation?, Never> {
+        repository.fetchInfo(cryptoCurrency.code)
+            .optional()
+            .replaceError(with: nil)
             .eraseToAnyPublisher()
     }
 
