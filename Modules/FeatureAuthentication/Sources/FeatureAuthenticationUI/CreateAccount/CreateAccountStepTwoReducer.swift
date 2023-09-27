@@ -487,14 +487,13 @@ struct CreateAccountStepTwoReducer: ReducerProtocol {
 }
 
 extension CreateAccountStepTwoReducer {
-
     fileprivate func validateInputs(
         state: CreateAccountStepTwoState
     ) -> CreateAccountStepTwoState.InputValidationState {
         guard state.emailAddress.isEmail else {
             return .invalid(.invalidEmail)
         }
-        let didAcceptBakktTerms = state.shouldDisplayBakktTermsAndConditions == false
+        let didAcceptBakktTerms = state.shouldDisplayBakktTermsAndConditions == false || state.bakktTermsAccepted
         let errors = passwordValidator.validate(password: state.password)
 
         guard errors.isEmpty else {
