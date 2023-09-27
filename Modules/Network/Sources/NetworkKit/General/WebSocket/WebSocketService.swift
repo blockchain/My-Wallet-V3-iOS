@@ -26,7 +26,9 @@ public final class WebSocketService {
             guard let self else { return }
             switch event {
             case .disconnected:
-                connections[url] = nil
+                queue.sync {
+                    self.connections[url] = nil
+                }
             default:
                 break
             }
