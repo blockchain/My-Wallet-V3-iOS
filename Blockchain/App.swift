@@ -20,6 +20,7 @@ import FeatureCardPaymentData
 import FeatureCardPaymentUI
 import FeatureDashboardData
 import FeatureDebugUI
+import FeatureExternalTradingMigrationData
 import FeatureInterestData
 import FeatureNotificationPreferencesDomain
 import FeatureSettingsDomain
@@ -159,6 +160,7 @@ func defineDependencies() {
         DependencyContainer.unifiedActivityData
         DependencyContainer.featureAnnouncementsData
         DependencyContainer.featureAnnouncementsDomain
+        DependencyContainer.featureExternalTradingMigrationData
         #if INTERNAL_BUILD
         DependencyContainer.featureDebugUI
         #endif

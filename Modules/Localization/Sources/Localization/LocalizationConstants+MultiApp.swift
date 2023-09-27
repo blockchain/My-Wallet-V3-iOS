@@ -248,6 +248,31 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
         comment: "Blocked: Message"
     )
 
+    public static let bakktStartMigrationTitle = NSLocalizedString(
+        "Before you continue trading",
+        comment: "Blocked: Before you continue trading"
+    )
+
+    public static let bakktStartMigrationMessage = NSLocalizedString(
+        "We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto.",
+        comment: "Blocked: We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto."
+    )
+
+    public static let bakktUpgradeAccountButton = NSLocalizedString(
+        "Upgrade account",
+        comment: "Blocked: Upgrade account"
+    )
+    
+    public static let bakktMigrationInProgressTitle = NSLocalizedString(
+        "Migration in progress",
+        comment: "Blocked: Title"
+    )
+
+    public static let bakktMigrationMessage = NSLocalizedString(
+        "We are upgrading your account. This process might take up to 24 hours.",
+        comment: "Blocked: We are upgrading your account. This process might take up to 24 hours."
+    )
+    
     public static let blockedContactSupport = NSLocalizedString(
         "Contact Support",
         comment: "Blocked: Contact Support"

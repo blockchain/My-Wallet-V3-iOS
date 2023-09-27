@@ -12,6 +12,7 @@ import FeatureAppDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
 import FeatureDashboardUI
+import FeatureExternalTradingMigrationDomain
 import FeatureQuickActions
 import FeatureTopMoversCryptoUI
 import FeatureTransactionUI
@@ -28,19 +29,24 @@ struct TradingDashboardView: View {
     @State private var scrollOffset: CGPoint = .zero
     @State private var isBlocked = false
     @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
-
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
 
     @StateObject private var onboarding = CustodialOnboardingService()
 
     struct ViewState: Equatable {
+        @BindingViewState var migrationInfo: ExternalTradingMigrationInfo?
         let balance: BalanceInfo?
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
-        init(state: TradingDashboard.State) {
+        var needsExternalTradingMigration: Bool {
+            migrationInfo?.state == .available
+        }
+
+        init(state: BindingViewStore<TradingDashboard.State>) {
             self.balance = state.tradingBalance
             self.getStartedBuyCryptoAmmounts = state.getStartedBuyCryptoAmmounts
+            self._migrationInfo = state.$migrationInfo
         }
     }
 
@@ -77,6 +83,7 @@ struct TradingDashboardView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
+            subscribe(viewStore.$migrationInfo, to: blockchain.api.nabu.gateway.user.external.brokerage.migration)
             subscribe($kycState, to: blockchain.user.account.kyc.state)
         }
         .onAppear {
@@ -96,13 +103,13 @@ struct TradingDashboardView: View {
             if isBlocked {
                 blockedView
             }
+            externalTradingUpdateNowView
             CustodialOnboardingDashboardView(service: onboarding)
         }
     }
 
     var dashboardView: some View {
         VStack(spacing: Spacing.padding3) {
-
             Group {
                 DashboardMainBalanceView(
                     info: .constant(viewStore.balance),
@@ -126,6 +133,10 @@ struct TradingDashboardView: View {
 
             if isBlocked {
                 blockedView
+            }
+
+            if viewStore.needsExternalTradingMigration {
+                externalTradingUpdateNowView
             }
 
             if !viewStore.isZeroBalance {
@@ -239,6 +250,30 @@ struct TradingDashboardView: View {
             if let supportURL {
                 set(blockchain.ux.dashboard.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap.then.enter.into, to: blockchain.ux.web[supportURL])
             }
+        }
+    }
+
+    var externalTradingUpdateNowView: some View {
+        AlertCard(
+            title: L10n.bakktStartMigrationTitle,
+            message: L10n.bakktStartMigrationMessage,
+            variant: .warning,
+            isBordered: true,
+            footer: {
+                HStack {
+                    SmallSecondaryButton(
+                        title: L10n.bakktUpgradeAccountButton,
+                        action: {
+                            $app.post(event: blockchain.ux.dashboard.external.trading.migration.start.paragraph.button.primary.tap)
+                        }
+                    )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        )
+        .padding(.horizontal)
+        .batch {
+            set(blockchain.ux.dashboard.external.trading.migration.start.paragraph.button.primary.tap.then.enter.into, to: blockchain.ux.dashboard.external.trading.migration)
         }
     }
 }

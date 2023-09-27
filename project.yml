@@ -335,6 +335,8 @@ packages:
     path: Modules/FeatureTopMoversCrypto
   FeatureReceive:
     path: Modules/FeatureReceive
+  FeatureExternalTradingMigration:
+    path: Modules/FeatureExternalTradingMigration
 
 targets:
   BlockchainApp:
@@ -546,6 +548,8 @@ targets:
         product: FeatureAnnouncements
       - package: FeatureTopMoversCrypto
         product: FeatureTopMoversCrypto
+      - package: FeatureExternalTradingMigration
+        product: FeatureExternalTradingMigration
 
     platform: iOS
     postBuildScripts:

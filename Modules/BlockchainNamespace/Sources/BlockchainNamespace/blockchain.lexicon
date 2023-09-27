@@ -167,6 +167,28 @@ blockchain:
 						+ blockchain.db.type.array.of.strings
 				user:
 				+ blockchain.namespace.napi
+					external:
+						brokerage:
+							migration:
+								complete:
+									success:
+										message:
+											shown:
+											+ blockchain.db.type.boolean
+											+ blockchain.session.state.preference.value
+								info:
+								+ blockchain.session.state.stored.value
+								last:
+									known:
+										state:
+										+ blockchain.db.type.enum
+										+ blockchain.session.state.stored.value
+											available:
+											complete:
+											not_available:
+											pending:
+								needed:
+								+ blockchain.db.type.boolean
 					products:
 						product:
 						+ blockchain.db.collection
@@ -2286,6 +2308,12 @@ blockchain:
 					+ blockchain.ux.type.task
 				receive:
 				+ blockchain.ux.type.task
+			external:
+				trading:
+					migration:
+					+ blockchain.ux.type.story
+						start:
+						+ blockchain.ux.type.task
 			fiat:
 				account:
 					action:

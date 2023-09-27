@@ -1016,3 +1016,7 @@ extension LocalizationConstants {
 extension LocalizationConstants {
     public struct Announcements {}
 }
+
+extension LocalizationConstants {
+    public struct ExternalTradingMigration {}
+}

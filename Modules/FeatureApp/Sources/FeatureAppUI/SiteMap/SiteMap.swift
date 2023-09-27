@@ -27,6 +27,7 @@ import RemoteNotificationsKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
+import FeatureExternalTradingMigrationUI
 
 @MainActor
 public struct SiteMap {
@@ -196,6 +197,15 @@ public struct SiteMap {
         case blockchain.ux.sweep.imported.addresses.no.action:
             SweepImportedAddressesNoActionView()
                 .app(app)
+
+        case blockchain.ux.dashboard.external.trading.migration:
+            ExternalTradingMigrationView(
+                store:.init(
+                    initialState: .init(),
+                    reducer: ExternalTradingMigration(app: app)
+                )
+            )
+
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

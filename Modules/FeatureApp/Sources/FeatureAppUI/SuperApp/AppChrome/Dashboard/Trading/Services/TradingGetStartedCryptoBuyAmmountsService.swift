@@ -8,7 +8,7 @@ import Foundation
 import MoneyKit
 import ToolKit
 
-public struct TradingGetStartedAmmountValue: Hashable {
+public struct TradingGetStartedAmmountValue: Hashable, Decodable {
     let valueToDisplay: String
     let valueToPreselectOnBuy: String
 }
