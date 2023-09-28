@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
 import BlockchainNamespace
+import BlockchainUI
 import CoreMotion
 import Foundation
 import Localization
@@ -54,6 +54,8 @@ public struct IntroView: View {
                     .padding(.vertical, byline.isNil ? Spacing.padding4 : 0)
                     VStack {
                         rows
+                        FinancialPromotionDisclaimerView()
+                            .padding(.top)
                         Spacer()
                         Text(footer)
                             .typography(.caption1)

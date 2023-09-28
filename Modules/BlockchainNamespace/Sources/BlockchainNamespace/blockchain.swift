@@ -86,6 +86,7 @@ public final class L_blockchain_api_nabu_gateway: L, I_blockchain_api_nabu_gatew
 public protocol I_blockchain_api_nabu_gateway: I {}
 public extension I_blockchain_api_nabu_gateway {
 	var `generate`: L_blockchain_api_nabu_gateway_generate { .init("\(__).generate") }
+	var `geo`: L_blockchain_api_nabu_gateway_geo { .init("\(__).geo") }
 	var `kyc`: L_blockchain_api_nabu_gateway_kyc { .init("\(__).kyc") }
 	var `onboarding`: L_blockchain_api_nabu_gateway_onboarding { .init("\(__).onboarding") }
 	var `payments`: L_blockchain_api_nabu_gateway_payments { .init("\(__).payments") }
@@ -125,6 +126,68 @@ public final class L_blockchain_api_nabu_gateway_generate_session_is_enabled: L,
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.generate.session.is.enabled", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_generate_session_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_api_nabu_gateway_geo: L, I_blockchain_api_nabu_gateway_geo {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo: I_blockchain_namespace_napi {}
+public extension I_blockchain_api_nabu_gateway_geo {
+	var `location`: L_blockchain_api_nabu_gateway_geo_location { .init("\(__).location") }
+}
+public final class L_blockchain_api_nabu_gateway_geo_location: L, I_blockchain_api_nabu_gateway_geo_location {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location: I {}
+public extension I_blockchain_api_nabu_gateway_geo_location {
+	var `country`: L_blockchain_api_nabu_gateway_geo_location_country { .init("\(__).country") }
+	var `header`: L_blockchain_api_nabu_gateway_geo_location_header { .init("\(__).header") }
+	var `ip`: L_blockchain_api_nabu_gateway_geo_location_ip { .init("\(__).ip") }
+}
+public final class L_blockchain_api_nabu_gateway_geo_location_country: L, I_blockchain_api_nabu_gateway_geo_location_country {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.country", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_country: I {}
+public extension I_blockchain_api_nabu_gateway_geo_location_country {
+	var `code`: L_blockchain_api_nabu_gateway_geo_location_country_code { .init("\(__).code") }
+}
+public final class L_blockchain_api_nabu_gateway_geo_location_country_code: L, I_blockchain_api_nabu_gateway_geo_location_country_code {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.country.code", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_country_code: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_geo_location_header: L, I_blockchain_api_nabu_gateway_geo_location_header {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.header", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_header: I {}
+public extension I_blockchain_api_nabu_gateway_geo_location_header {
+	var `city`: L_blockchain_api_nabu_gateway_geo_location_header_city { .init("\(__).city") }
+	var `continent`: L_blockchain_api_nabu_gateway_geo_location_header_continent { .init("\(__).continent") }
+	var `country`: L_blockchain_api_nabu_gateway_geo_location_header_country { .init("\(__).country") }
+	var `latitude`: L_blockchain_api_nabu_gateway_geo_location_header_latitude { .init("\(__).latitude") }
+	var `longitude`: L_blockchain_api_nabu_gateway_geo_location_header_longitude { .init("\(__).longitude") }
+}
+public final class L_blockchain_api_nabu_gateway_geo_location_header_city: L, I_blockchain_api_nabu_gateway_geo_location_header_city {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.header.city", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_header_city: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_geo_location_header_continent: L, I_blockchain_api_nabu_gateway_geo_location_header_continent {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.header.continent", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_header_continent: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_geo_location_header_country: L, I_blockchain_api_nabu_gateway_geo_location_header_country {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.header.country", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_header_country: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_geo_location_header_latitude: L, I_blockchain_api_nabu_gateway_geo_location_header_latitude {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.header.latitude", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_header_latitude: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_geo_location_header_longitude: L, I_blockchain_api_nabu_gateway_geo_location_header_longitude {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.header.longitude", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_header_longitude: I_blockchain_db_type_string {}
+public final class L_blockchain_api_nabu_gateway_geo_location_ip: L, I_blockchain_api_nabu_gateway_geo_location_ip {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.geo.location.ip", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_geo_location_ip: I_blockchain_db_type_string {}
 public final class L_blockchain_api_nabu_gateway_kyc: L, I_blockchain_api_nabu_gateway_kyc {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.kyc", comment: "") }
 }
@@ -4726,11 +4789,16 @@ public final class L_blockchain_ui_device_locale_language: L, I_blockchain_ui_de
 public protocol I_blockchain_ui_device_locale_language: I {}
 public extension I_blockchain_ui_device_locale_language {
 	var `code`: L_blockchain_ui_device_locale_language_code { .init("\(__).code") }
+	var `identifier`: L_blockchain_ui_device_locale_language_identifier { .init("\(__).identifier") }
 }
 public final class L_blockchain_ui_device_locale_language_code: L, I_blockchain_ui_device_locale_language_code {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.device.locale.language.code", comment: "") }
 }
 public protocol I_blockchain_ui_device_locale_language_code: I_blockchain_db_type_string, I_blockchain_session_state_shared_value {}
+public final class L_blockchain_ui_device_locale_language_identifier: L, I_blockchain_ui_device_locale_language_identifier {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.locale.language.identifier", comment: "") }
+}
+public protocol I_blockchain_ui_device_locale_language_identifier: I_blockchain_db_type_string, I_blockchain_session_state_shared_value {}
 public final class L_blockchain_ui_device_os: L, I_blockchain_ui_device_os {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.device.os", comment: "") }
 }
@@ -7081,6 +7149,7 @@ public extension I_blockchain_ux {
 	var `defi`: L_blockchain_ux_defi { .init("\(__).defi") }
 	var `earn`: L_blockchain_ux_earn { .init("\(__).earn") }
 	var `error`: L_blockchain_ux_error { .init("\(__).error") }
+	var `finproms`: L_blockchain_ux_finproms { .init("\(__).finproms") }
 	var `frequent`: L_blockchain_ux_frequent { .init("\(__).frequent") }
 	var `home`: L_blockchain_ux_home { .init("\(__).home") }
 	var `kyc`: L_blockchain_ux_kyc { .init("\(__).kyc") }
@@ -9314,6 +9383,29 @@ public final class L_blockchain_ux_error_dismiss: L, I_blockchain_ux_error_dismi
 	public override class var localized: String { NSLocalizedString("blockchain.ux.error.dismiss", comment: "") }
 }
 public protocol I_blockchain_ux_error_dismiss: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_finproms: L, I_blockchain_ux_finproms {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms", comment: "") }
+}
+public protocol I_blockchain_ux_finproms: I {}
+public extension I_blockchain_ux_finproms {
+	var `disclaimer`: L_blockchain_ux_finproms_disclaimer { .init("\(__).disclaimer") }
+}
+public final class L_blockchain_ux_finproms_disclaimer: L, I_blockchain_ux_finproms_disclaimer {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_disclaimer: I {}
+public extension I_blockchain_ux_finproms_disclaimer {
+	var `tap`: L_blockchain_ux_finproms_disclaimer_tap { .init("\(__).tap") }
+	var `text`: L_blockchain_ux_finproms_disclaimer_text { .init("\(__).text") }
+}
+public final class L_blockchain_ux_finproms_disclaimer_tap: L, I_blockchain_ux_finproms_disclaimer_tap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.tap", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_disclaimer_tap: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_finproms_disclaimer_text: L, I_blockchain_ux_finproms_disclaimer_text {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.text", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_disclaimer_text: I_blockchain_db_type_string, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_frequent: L, I_blockchain_ux_frequent {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.frequent", comment: "") }
 }

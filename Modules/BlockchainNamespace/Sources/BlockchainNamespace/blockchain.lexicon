@@ -11,6 +11,25 @@ blockchain:
 							enabled:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.configuration.value
+				geo:
+				+ blockchain.namespace.napi
+					location:
+						country:
+							code:
+							+ blockchain.db.type.string
+						header:
+							city:
+							+ blockchain.db.type.string
+							continent:
+							+ blockchain.db.type.string
+							country:
+							+ blockchain.db.type.string
+							latitude:
+							+ blockchain.db.type.string
+							longitude:
+							+ blockchain.db.type.string
+						ip:
+						+ blockchain.db.type.string
 				kyc:
 				+ blockchain.namespace.napi
 					tiers:
@@ -2482,6 +2501,14 @@ blockchain:
 				+ blockchain.session.state.value
 			dismiss:
 			+ blockchain.ux.type.task
+		finproms:
+			disclaimer:
+				tap:
+				+ blockchain.session.configuration.value
+				+ blockchain.ux.type.action
+				text:
+				+ blockchain.db.type.string
+				+ blockchain.session.configuration.value
 		frequent:
 			action:
 			+ blockchain.ux.type.story

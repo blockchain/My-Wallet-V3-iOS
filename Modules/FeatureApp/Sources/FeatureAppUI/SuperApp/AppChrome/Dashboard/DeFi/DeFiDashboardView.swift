@@ -79,6 +79,7 @@ struct DeFiDashboardView: View {
 
                     if viewStore.isZeroBalance {
                         DeFiDashboardToGetStartedView()
+                        FinancialPromotionDisclaimerView()
                     } else {
                         DashboardAssetSectionView(
                             store: store.scope(

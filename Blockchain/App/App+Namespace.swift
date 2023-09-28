@@ -123,6 +123,7 @@ extension AppProtocol {
                 try await UserProductsRepository(app: self).register()
                 let kycRepository: KYCSSNRepository = DIKit.resolve()
                 try await kycRepository.register()
+                try await registerGeolocationNAPI()
             } catch {
                 post(error: error)
                 #if DEBUG

@@ -21,6 +21,7 @@ public struct CustodialOnboardingDashboardView: View {
                     .padding(.vertical)
                 CustodialOnboardingProgressView(progress: onboarding.progress)
                 CustodialOnboardingTaskListView(service: onboarding)
+                FinancialPromotionDisclaimerView()
                 if onboarding.isVerified {
                     CustodialOnboardingHelpSectionView()
                 }
