@@ -88,7 +88,8 @@ struct BakktConsentView: View {
                             title: LocalizationConstants.ExternalTradingMigration.upgradeButton,
                             action: {
                             onDone?()
-                        })
+                            }
+                        )
                         .disabled(!continueButtonEnabled)
                     }
                 }
@@ -96,12 +97,15 @@ struct BakktConsentView: View {
             .padding(Spacing.padding2)
         }
         .navigationBarHidden(true)
-        .superAppNavigationBar(leading: {},
-                               trailing: {
+        .superAppNavigationBar(
+            leading: {},
+            trailing: {
             IconButton(icon: .navigationCloseButton()) {
                 app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
             }
-        }, scrollOffset: nil)
+        },
+            scrollOffset: nil
+        )
         .background(Color.semantic.light.ignoresSafeArea())
         .batch {
             set(blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap.then.close, to: true)
@@ -119,13 +123,12 @@ struct BakktConsentView: View {
     }
 }
 
-//#Preview {
-//    BakktConsentView(hasAssetsToConsolidate: false)
-//}
-//
-//#Preview {
-//    BakktConsentView(hasAssetsToConsolidate: true)
-//}
+struct BakktConsentView_Preview: PreviewProvider {
+    static var previews: some View {
+        BakktConsentView(hasAssetsToConsolidate: false)
+        BakktConsentView(hasAssetsToConsolidate: true)
+    }
+}
 
 struct MigrationConsentElement: Identifiable {
     let id = UUID()

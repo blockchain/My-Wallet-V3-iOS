@@ -7,6 +7,7 @@ import FeatureCustodialOnboarding
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
+import FeatureExternalTradingMigrationUI
 import FeatureKYCUI
 import FeatureQRCodeScannerUI
 import FeatureQuickActions
@@ -200,9 +201,12 @@ public struct SiteMap {
 
         case blockchain.ux.dashboard.external.trading.migration:
             ExternalTradingMigrationView(
-                store:.init(
+                store: .init(
                     initialState: .init(),
-                    reducer: ExternalTradingMigration(app: app)
+                    reducer: ExternalTradingMigration(
+                        app: app,
+                        externalTradingMigrationService: resolve()
+                    )
                 )
             )
 

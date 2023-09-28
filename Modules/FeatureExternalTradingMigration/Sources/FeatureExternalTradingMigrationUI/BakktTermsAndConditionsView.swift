@@ -7,7 +7,7 @@ struct BakktTermsAndConditionsView: View {
     @State var termsApproved: Bool = false
     var onDone: () -> Void
     var termsAndConditionsUrl: URL? {
-        URL(string: "https://www.blockchain.com/legal/bakkt/terms")
+        URL(string: "https://bakkt.com/user-agreement-blockchain")
     }
 
     var body: some View {
@@ -35,7 +35,9 @@ struct BakktTermsAndConditionsView: View {
         }
     }
 }
-//
-//#Preview {
-//    BakktTermsAndConditionsView(onDone: {})
-//}
+
+struct BakktTermsAndConditionsView_Preview: PreviewProvider {
+    static var previews: some View {
+        BakktTermsAndConditionsView(onDone: {})
+    }
+}

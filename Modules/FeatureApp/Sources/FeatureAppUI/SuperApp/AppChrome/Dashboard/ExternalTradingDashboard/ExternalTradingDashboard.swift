@@ -150,11 +150,6 @@ public struct ExternalTradingDashboard: ReducerProtocol {
                     return .none
                 }
 
-            case .binding(\.$migrationInfo):
-                // TODO: Show success screen
-                print(state.migrationInfo)
-                return .none
-
             case .binding:
                 return .none
             case .activityAction(let action):

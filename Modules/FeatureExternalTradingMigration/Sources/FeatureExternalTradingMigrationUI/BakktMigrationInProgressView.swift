@@ -4,7 +4,9 @@ import BlockchainUI
 import SwiftUI
 
 struct BakktMigrationInProgressView: View {
+    @Dependency(\.app) var app
     typealias L10n = LocalizationConstants.ExternalTradingMigration.MigrationInProgress
+    var onDone: () -> Void
 
     var body: some View {
         VStack {
@@ -26,13 +28,18 @@ struct BakktMigrationInProgressView: View {
             }
             Spacer()
 
-            PrimaryButton(title: L10n.goToDashboard)
+            PrimaryButton(title: L10n.goToDashboard) {
+                onDone()
+            }
         }
         .padding(.top, Spacing.padding2)
         .padding(.horizontal, Spacing.padding2)
     }
 }
-//
-//#Preview {
-//    BakktMigrationInProgressView()
-//}
+
+
+struct BakktMigrationInProgressView_Preview: PreviewProvider {
+    static var previews: some View {
+        BakktMigrationInProgressView(onDone: {})
+    }
+}

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
+import MoneyKit
 
 public enum MigrationState: String, Encodable, Decodable {
     case available = "AVAILABLE"
@@ -10,10 +11,23 @@ public enum MigrationState: String, Encodable, Decodable {
 }
 
 public struct Balance: Equatable, Decodable {
-    public let currency: String
-    public let amount: String
+    public let currency: CurrencyType
+    public let amount: MoneyValue
 
-    public init(currency: String, amount: String) {
+    enum CodingKeys: String, CodingKey {
+        case amount
+        case currency
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        let amountString = try values.decode(String.self, forKey: .amount)
+        let currency = try values.decode(String.self, forKey: .currency)
+        self.currency = try CurrencyType(code: currency)
+        self.amount = MoneyValue.create(minor: amountString, currency: self.currency) ?? .zero(currency: self.currency)
+    }
+
+    public init(currency: CurrencyType, amount: MoneyValue) {
         self.currency = currency
         self.amount = amount
     }

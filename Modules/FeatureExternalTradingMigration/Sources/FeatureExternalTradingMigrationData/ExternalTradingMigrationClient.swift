@@ -34,4 +34,14 @@ public struct ExternalTradingMigrationClient: ExternalTradingMigrationClientAPI 
         return networkAdapter
             .perform(request: request)
     }
+
+    public func startMigration() -> AnyPublisher<Void, NabuNetworkError> {
+        let request = requestBuilder.post(
+            path: Path.externalBrokerageMigration,
+            authenticated: true
+        )!
+
+        return networkAdapter
+            .perform(request: request)
+    }
 }

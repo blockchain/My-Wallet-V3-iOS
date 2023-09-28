@@ -72,8 +72,8 @@ struct SuperAppContent: ReducerProtocol {
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
                 state.headerState.isRefreshing = true
                 return .run { [totalBalanceService] send in
-                        for await total in totalBalanceService.totalBalance() {
-                            await send(.onTotalBalanceFetched(TaskResult { try total.get() }))
+                    for await total in totalBalanceService.totalBalance() {
+                        await send(.onTotalBalanceFetched(TaskResult { try total.get() }))
                     }
                 }
                 .cancellable(id: TotalBalanceFetchId.self, cancelInFlight: true)

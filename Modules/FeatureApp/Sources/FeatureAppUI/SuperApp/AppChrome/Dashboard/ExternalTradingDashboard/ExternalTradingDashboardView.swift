@@ -33,15 +33,15 @@ struct ExternalTradingDashboardView: View {
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
     @StateObject private var onboarding = CustodialOnboardingService()
 
+    @State private var externalTradingMigrationState: Tag?
+    var externalTradingMigrationIsPending: Bool { externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[] }
+
     struct ViewState: Equatable {
         @BindingViewState var migrationInfo: ExternalTradingMigrationInfo?
         let balance: BalanceInfo?
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
-        var externalTradingMigrationInProgress: Bool {
-            migrationInfo?.state == .pending
-        }
 
         init(state: BindingViewStore<ExternalTradingDashboard.State>) {
             self.balance = state.tradingBalance
@@ -81,14 +81,14 @@ struct ExternalTradingDashboardView: View {
             scrollOffset: $scrollOffset.y
         )
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
-        .bindings(managing: Bindings._printChanges("👀")) {
+        .bindings {
             subscribe(
                 $isBlocked,
                 to: blockchain.user.is.blocked
             )
             subscribe(
-                viewStore.$migrationInfo,
-                to: blockchain.api.nabu.gateway.user.external.brokerage.migration
+                $externalTradingMigrationState,
+                to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state
             )
             subscribe(
                 $kycState,
@@ -136,7 +136,7 @@ struct ExternalTradingDashboardView: View {
                 blockedView
             }
 
-            if viewStore.externalTradingMigrationInProgress {
+            if externalTradingMigrationIsPending {
                 externalTradingMigrationInProgressView
             }
 

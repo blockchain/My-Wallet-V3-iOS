@@ -38,7 +38,7 @@ let package = Package(
         .package(path: "../Blockchain"),
         .package(path: "../Network"),
         .package(path: "../Errors"),
-        .package(path: "../Localization"),
+        .package(path: "../Localization")
     ],
     targets: [
         .target(
@@ -64,7 +64,7 @@ let package = Package(
                 .target(name: "FeatureExternalTradingMigrationDomain"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "Errors", package: "Errors"),
-                .product(name: "NetworkKit", package: "Network"),
+                .product(name: "NetworkKit", package: "Network")
             ]
         )
     ]

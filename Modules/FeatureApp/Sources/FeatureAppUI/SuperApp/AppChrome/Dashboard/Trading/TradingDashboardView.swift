@@ -31,22 +31,22 @@ struct TradingDashboardView: View {
     @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
 
+    @State private var externalTradingMigrationState: Tag?
+    var externalTradingMigrationIsAvailable: Bool {
+        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]
+    }
+
     @StateObject private var onboarding = CustodialOnboardingService()
 
     struct ViewState: Equatable {
-        @BindingViewState var migrationInfo: ExternalTradingMigrationInfo?
         let balance: BalanceInfo?
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
-        var needsExternalTradingMigration: Bool {
-            migrationInfo?.state == .available
-        }
 
-        init(state: BindingViewStore<TradingDashboard.State>) {
+        init(state: TradingDashboard.State) {
             self.balance = state.tradingBalance
             self.getStartedBuyCryptoAmmounts = state.getStartedBuyCryptoAmmounts
-            self._migrationInfo = state.$migrationInfo
         }
     }
 
@@ -83,7 +83,7 @@ struct TradingDashboardView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
-            subscribe(viewStore.$migrationInfo, to: blockchain.api.nabu.gateway.user.external.brokerage.migration)
+            subscribe($externalTradingMigrationState, to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state)
             subscribe($kycState, to: blockchain.user.account.kyc.state)
         }
         .onAppear {
@@ -135,7 +135,7 @@ struct TradingDashboardView: View {
                 blockedView
             }
 
-            if viewStore.needsExternalTradingMigration {
+            if externalTradingMigrationIsAvailable {
                 externalTradingUpdateNowView
             }
 
@@ -273,7 +273,8 @@ struct TradingDashboardView: View {
         )
         .padding(.horizontal)
         .batch {
-            set(blockchain.ux.dashboard.external.trading.migration.start.paragraph.button.primary.tap.then.enter.into, to: blockchain.ux.dashboard.external.trading.migration)
+            set(blockchain.ux.dashboard.external.trading.migration.start.paragraph.button.primary.tap.then.enter.into, 
+                to: blockchain.ux.dashboard.external.trading.migration)
         }
     }
 }

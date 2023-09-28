@@ -17,5 +17,22 @@ extension DependencyContainer {
             )
             as ExternalTradingMigrationClientAPI
         }
+
+        single { () -> ExternalTradingMigrationRepositoryAPI in
+            ExternalTradingMigrationRepository(
+                app: DIKit.resolve(),
+                client: ExternalTradingMigrationClient(
+                    networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
+                    requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
+                )
+            )
+        }
+
+        factory { () -> ExternalTradingMigrationServiceAPI in
+            ExternalTradingMigrationService(
+                app: DIKit.resolve(),
+                repository: DIKit.resolve()
+            )
+        }
     }
 }

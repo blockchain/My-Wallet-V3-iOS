@@ -125,6 +125,7 @@ extension AppProtocol {
                 try await ExternalTradingMigrationRepository().register()
                 let kycRepository: KYCSSNRepository = DIKit.resolve()
                 try await kycRepository.register()
+                try await ExternalTradingMigrationNAPI(app: self).register()
                 try await registerGeolocationNAPI()
             } catch {
                 post(error: error)

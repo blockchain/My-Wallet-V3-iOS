@@ -195,8 +195,6 @@ blockchain:
 											shown:
 											+ blockchain.db.type.boolean
 											+ blockchain.session.state.preference.value
-								info:
-								+ blockchain.session.state.stored.value
 								last:
 									known:
 										state:
@@ -206,8 +204,12 @@ blockchain:
 											complete:
 											not_available:
 											pending:
-								needed:
-								+ blockchain.db.type.boolean
+								state:
+								+ blockchain.db.type.enum
+									available:
+									complete:
+									not_available:
+									pending:
 					products:
 						product:
 						+ blockchain.db.collection
