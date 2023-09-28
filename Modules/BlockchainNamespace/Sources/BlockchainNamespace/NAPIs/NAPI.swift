@@ -328,11 +328,16 @@ extension NAPI {
             switch result {
             case .value(let instance, _):
                 isSynchronized = true
-                do {
-                    try await domain?.root?.store?.data.merge(dst.route(app: domain?.root?.store?.app), with: instance.data.any)
-                    await fulfill()
-                } catch {
+                if let error = instance.data as? any Error {
                     await domain?.root?.store?.app?.post(error: error)
+                    await handle(error: error)
+                } else {
+                    do {
+                        try await domain?.root?.store?.data.merge(dst.route(app: domain?.root?.store?.app), with: instance.data.any)
+                        await fulfill()
+                    } catch {
+                        await domain?.root?.store?.app?.post(error: error)
+                    }
                 }
             case .error(let error, _):
                 await domain?.root?.store?.app?.post(error: error)
@@ -380,6 +385,13 @@ extension NAPI {
             self.intents.removeAll(keepingCapacity: true)
             for intent in intents {
                 intent.fulfill()
+            }
+        }
+
+        func handle(error: Error) async {
+            guard isSynchronized else { return }
+            for intent in intents {
+                intent.handle(error)
             }
         }
     }

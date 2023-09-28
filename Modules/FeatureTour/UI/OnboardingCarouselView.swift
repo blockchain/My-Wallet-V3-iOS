@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import Localization
 import PlatformUIKit
@@ -90,6 +90,8 @@ extension OnboardingCarouselView {
                     .frame(width: 200.0)
                     .typography(.title3)
                     .foregroundColor(.semantic.title)
+
+                FinancialPromotionDisclaimerView()
 
                 Spacer()
             }

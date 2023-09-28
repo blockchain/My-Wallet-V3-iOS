@@ -157,6 +157,10 @@ public class App: AppProtocol {
         } catch {
             if ProcessInfo.processInfo.environment["BLOCKCHAIN_DEBUG_NAMESPACE_ACTION"] == "TRUE" {
                 post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            } else {
+#if DEBUG
+                post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+#endif
             }
             return
         }

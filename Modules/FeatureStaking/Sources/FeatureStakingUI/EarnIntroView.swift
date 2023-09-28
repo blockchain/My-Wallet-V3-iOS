@@ -1,4 +1,4 @@
-import BlockchainComponentLibrary
+import BlockchainUI
 import BlockchainNamespace
 import ComposableArchitecture
 import FeatureStakingDomain
@@ -6,6 +6,7 @@ import Foundation
 import SwiftUI
 
 public struct EarnIntroView: View {
+
     let store: StoreOf<EarnIntro>
 
     public init(store: StoreOf<EarnIntro>) {
@@ -202,6 +203,8 @@ extension EarnIntroView {
                     radius: 8,
                     y: 3
                 )
+                FinancialPromotionDisclaimerView()
+                    .padding(.top)
             }
             .padding(.horizontal, Spacing.padding3)
             .opacity(viewStore.gradientBackgroundOpacity)

@@ -205,6 +205,8 @@ packages:
     version: 18.2.1
   Analytics:
     path: Modules/Analytics
+  Blockchain:
+    path: Modules/Blockchain
   BlockchainNamespace:
     path: Modules/BlockchainNamespace
   Coincore:
