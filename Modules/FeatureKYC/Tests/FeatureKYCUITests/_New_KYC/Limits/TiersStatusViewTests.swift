@@ -83,8 +83,7 @@ final class TiersStatusViewTests: XCTestCase {
         TiersStatusView(
             store: .init(
                 initialState: tiers,
-                reducer: tiersStatusViewReducer,
-                environment: TiersStatusViewEnvironment(presentKYCFlow: { _ in })
+                reducer: TiersStatusViewReducer(presentKYCFlow: { _ in })
             )
         )
         // fix the frame to a size that fits the content otherwise tests fail on CI

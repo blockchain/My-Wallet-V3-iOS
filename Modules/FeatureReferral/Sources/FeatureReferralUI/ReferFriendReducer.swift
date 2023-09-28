@@ -2,13 +2,29 @@
 
 import AnalyticsKit
 import ComposableArchitecture
+import Foundation
 import UIKit
 
-public enum ReferFriendModule {}
 
-extension ReferFriendModule {
-    public static var reducer: Reducer<ReferFriendState, ReferFriendAction, ReferFriendEnvironment> {
-        .init { state, action, environment in
+public struct ReferFriendReducer: ReducerProtocol {
+
+    public typealias State = ReferFriendState
+    public typealias Action = ReferFriendAction
+
+    public let mainQueue: AnySchedulerOf<DispatchQueue>
+    public let analyticsRecorder: AnalyticsEventRecorderAPI
+
+    public init(
+        mainQueue: AnySchedulerOf<DispatchQueue>,
+        analyticsRecorder: AnalyticsEventRecorderAPI
+    ) {
+        self.mainQueue = mainQueue
+        self.analyticsRecorder = analyticsRecorder
+    }
+
+    public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
             switch action {
             case .onAppear:
                 return .none
@@ -38,14 +54,13 @@ extension ReferFriendModule {
                     EffectTask(value: .onCopyReturn)
                         .delay(
                             for: 2,
-                            scheduler: environment.mainQueue
+                            scheduler: mainQueue
                         )
                         .eraseToEffect()
                 )
             }
         }
-        .binding()
-        .analytics()
+        ReferFriendAnalytics(analyticsRecorder: analyticsRecorder)
     }
 }
 
@@ -69,25 +84,21 @@ extension ReferFriendState {
     }
 }
 
-extension Reducer where
-    Action == ReferFriendAction,
-    State == ReferFriendState,
-    Environment == ReferFriendEnvironment
-{
-    fileprivate func analytics() -> Self {
-        combined(
-            with: Reducer<
-                ReferFriendState,
-                ReferFriendAction,
-                ReferFriendEnvironment
-            > { state, action, env in
-                guard let event = state.analyticsEvent(for: action) else {
-                    return .none
-                }
-                return .fireAndForget {
-                    env.analyticsRecorder.record(event: event)
-                }
+struct ReferFriendAnalytics: ReducerProtocol {
+
+    typealias Action = ReferFriendAction
+    typealias State = ReferFriendState
+
+    let analyticsRecorder: AnalyticsEventRecorderAPI
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            guard let event = state.analyticsEvent(for: action) else {
+                return .none
             }
-        )
+            return .fireAndForget {
+                analyticsRecorder.record(event: event)
+            }
+        }
     }
 }

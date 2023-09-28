@@ -490,8 +490,7 @@ final class KYCRouter: KYCRouterAPI {
             EmailVerificationView(
                 store: .init(
                     initialState: .init(emailAddress: emailAddress),
-                    reducer: emailVerificationReducer,
-                    environment: buildEmailVerificationEnvironment(
+                    reducer: buildEmailVerificationReducer(
                         emailAddress: emailAddress,
                         flowCompletion: flowCompletion
                     )
@@ -500,11 +499,11 @@ final class KYCRouter: KYCRouterAPI {
         )
     }
 
-    private func buildEmailVerificationEnvironment(
+    private func buildEmailVerificationReducer(
         emailAddress: String,
         flowCompletion: @escaping (FlowResult) -> Void
-    ) -> EmailVerificationEnvironment {
-        EmailVerificationEnvironment(
+    ) -> EmailVerificationReducer {
+        EmailVerificationReducer(
             analyticsRecorder: analyticsRecorder,
             emailVerificationService: emailVerificationService,
             flowCompletionCallback: flowCompletion,

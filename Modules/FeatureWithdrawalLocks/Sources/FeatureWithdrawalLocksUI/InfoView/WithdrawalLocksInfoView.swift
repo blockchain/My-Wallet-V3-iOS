@@ -37,7 +37,11 @@ public enum WithdrawalLocksInfoRoute: NavigationRoute {
     }
 }
 
-public struct WithdrawalLocksInfoEnvironment {
+public struct WithdrawalLockInfoReducer: ReducerProtocol {
+
+    public typealias State = WithdrawalLocksInfoState
+    public typealias Action = WithdrawalLocksInfoAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let withdrawalLockService: WithdrawalLocksServiceAPI
     let closeAction: (() -> Void)?
@@ -51,34 +55,31 @@ public struct WithdrawalLocksInfoEnvironment {
         self.withdrawalLockService = withdrawalLockService
         self.closeAction = closeAction
     }
-}
 
-public let withdrawalLockInfoReducer = Reducer<
-    WithdrawalLocksInfoState,
-    WithdrawalLocksInfoAction,
-    WithdrawalLocksInfoEnvironment
-> { state, action, environment in
-
-    switch action {
-    case .loadWithdrawalLocks:
-        return .merge(
-            environment.withdrawalLockService
-                .withdrawalLocks
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .map { withdrawalLocks in
-                    .present(withdrawalLocks: withdrawalLocks)
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .loadWithdrawalLocks:
+                return .merge(
+                    withdrawalLockService
+                        .withdrawalLocks
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
+                        .map { withdrawalLocks in
+                                .present(withdrawalLocks: withdrawalLocks)
+                        }
+                )
+            case .present(withdrawalLocks: let withdrawalLocks):
+                state.withdrawalLocks = withdrawalLocks
+                return .none
+            case .route(let routeItent):
+                state.route = routeItent
+                return .none
+            case .dismiss:
+                return .fireAndForget {
+                    closeAction?()
                 }
-        )
-    case .present(withdrawalLocks: let withdrawalLocks):
-        state.withdrawalLocks = withdrawalLocks
-        return .none
-    case .route(let routeItent):
-        state.route = routeItent
-        return .none
-    case .dismiss:
-        return .fireAndForget {
-            environment.closeAction?()
+            }
         }
     }
 }
@@ -183,8 +184,7 @@ struct WithdrawalLocksInfoView_PreviewProvider: PreviewProvider {
                     initialState: .init(
                         amountAvailable: "$191.12"
                     ),
-                    reducer: withdrawalLockInfoReducer,
-                    environment: .init(
+                    reducer: WithdrawalLockInfoReducer(
                         withdrawalLockService: NoOpWithdrawalLocksService()
                     )
                 )

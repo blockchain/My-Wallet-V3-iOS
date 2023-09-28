@@ -173,8 +173,7 @@ final class DepositRootRouter: RIBs.Router<DepositRootInteractable>, DepositRoot
         let app: AppProtocol = DIKit.resolve()
         let view = PlaidView(store: .init(
             initialState: PlaidState(),
-            reducer: PlaidModule.reducer,
-            environment: .init(
+            reducer: PlaidReducer(
                 app: app,
                 mainQueue: .main,
                 plaidRepository: DIKit.resolve(),

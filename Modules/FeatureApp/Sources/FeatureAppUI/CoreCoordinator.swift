@@ -138,528 +138,531 @@ struct CoreAppEnvironment {
     var walletStateProvider: WalletStateProvider
 }
 
-let mainAppReducer = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment>.combine(
-    onBoardingReducer
-        .optional()
-        .pullback(
-            state: \CoreAppState.onboarding,
-            action: CasePath(CoreAppAction.onboarding),
-            environment: { environment -> Onboarding.Environment in
-                Onboarding.Environment(
-                    app: environment.app,
-                    appSettings: environment.blockchainSettings,
-                    credentialsStore: environment.credentialsStore,
-                    alertPresenter: environment.alertPresenter,
-                    mainQueue: environment.mainQueue,
-                    deviceVerificationService: environment.deviceVerificationService,
-                    legacyGuidRepository: environment.legacyGuidRepository,
-                    legacySharedKeyRepository: environment.legacySharedKeyRepository,
-                    mobileAuthSyncService: environment.mobileAuthSyncService,
-                    pushNotificationsRepository: environment.pushNotificationsRepository,
-                    walletPayloadService: environment.walletPayloadService,
-                    externalAppOpener: environment.externalAppOpener,
-                    forgetWalletService: environment.forgetWalletService,
-                    recaptchaService: environment.recaptchaService,
-                    buildVersionProvider: environment.buildVersionProvider,
-                    appUpgradeState: environment.appUpgradeState
-                )
-            }
-        ),
-    loggedInReducer
-        .optional()
-        .pullback(
-            state: \CoreAppState.loggedIn,
-            action: CasePath(CoreAppAction.loggedIn),
-            environment: { environment -> LoggedIn.Environment in
-                LoggedIn.Environment(
-                    analyticsRecorder: environment.analyticsRecorder,
-                    app: environment.app,
-                    appSettings: environment.blockchainSettings,
-                    deeplinkRouter: environment.deeplinkRouter,
-                    exchangeRepository: environment.exchangeRepository,
-                    fiatCurrencySettingsService: environment.fiatCurrencySettingsService,
-                    loadingViewPresenter: environment.loadingViewPresenter,
-                    mainQueue: environment.mainQueue,
-                    nabuUserService: environment.nabuUserService,
-                    performanceTracing: environment.performanceTracing,
-                    reactiveWallet: environment.reactiveWallet,
-                    remoteNotificationAuthorizer: environment.remoteNotificationServiceContainer.authorizer,
-                    remoteNotificationTokenSender: environment.remoteNotificationServiceContainer.tokenSender,
-                    unifiedActivityService: environment.unifiedActivityService
-                )
-            }
-        ),
-    AnyReducer {
-        AuthorizeDeviceReducer(
-            mainQueue: $0.mainQueue,
-            deviceVerificationService: $0.deviceVerificationService
-        )
-    }
-        .optional()
-        .pullback(
-            state: \CoreAppState.deviceAuthorization,
-            action: CasePath(CoreAppAction.authorizeDevice),
-            environment: { $0 }
-        ),
-    mainAppReducerCore
-)
+struct MainAppReducer: ReducerProtocol {
 
-let mainAppReducerCore = Reducer<CoreAppState, CoreAppAction, CoreAppEnvironment> { state, action, environment in
-    switch action {
-    case .start:
-        return .fireAndForget {
-            syncPinKeyWithICloud(
-                blockchainSettings: environment.blockchainSettings,
-                legacyGuid: environment.legacyGuidRepository,
-                legacySharedKey: environment.legacySharedKeyRepository,
-                credentialsStore: environment.credentialsStore
+    typealias State = CoreAppState
+    typealias Action = CoreAppAction
+
+    let environment: CoreAppEnvironment
+
+    var body: some ReducerProtocol<State, Action> {
+        MainAppReducerCore(environment: environment)
+        .ifLet(\CoreAppState.onboarding, action: CasePath(CoreAppAction.onboarding)) {
+            OnboardingReducer(
+                app: environment.app,
+                appSettings: environment.blockchainSettings,
+                credentialsStore: environment.credentialsStore,
+                alertPresenter: environment.alertPresenter,
+                mainQueue: environment.mainQueue,
+                deviceVerificationService: environment.deviceVerificationService,
+                legacyGuidRepository: environment.legacyGuidRepository,
+                legacySharedKeyRepository: environment.legacySharedKeyRepository,
+                mobileAuthSyncService: environment.mobileAuthSyncService,
+                pushNotificationsRepository: environment.pushNotificationsRepository,
+                walletPayloadService: environment.walletPayloadService,
+                externalAppOpener: environment.externalAppOpener,
+                forgetWalletService: environment.forgetWalletService,
+                recaptchaService: environment.recaptchaService,
+                buildVersionProvider: environment.buildVersionProvider,
+                appUpgradeState: environment.appUpgradeState
             )
         }
-
-    case .appForegrounded:
-        let isLoggedIn = state.isLoggedIn
-        return environment.walletStateProvider
-            .isWalletInitializedPublisher()
-            .receive(on: environment.mainQueue)
-            .flatMap { isWalletInitialized -> EffectTask<CoreAppAction> in
-                // check if we need to display the pin for authentication
-                guard isWalletInitialized else {
-                    // do nothing if we're on the authentication state,
-                    // meaning we either need to register, login or recover
-                    guard isLoggedIn else {
-                        return .cancel(id: WalletCancelations.ForegroundInitCheckId)
-                    }
-                    // We need to send the `stop` action prior we show the pin entry,
-                    // this clears any running operation from the logged-in state.
-                    return .concatenate(
-                        EffectTask(value: .loggedIn(.stop)),
-                        EffectTask(value: .requirePin)
-                    )
-                }
-                return .cancel(id: WalletCancelations.ForegroundInitCheckId)
-            }
-            .eraseToEffect()
-            .cancellable(id: WalletCancelations.ForegroundInitCheckId, cancelInFlight: true)
-
-    case .deeplink(.handleLink(let content)) where content.context == .dynamicLinks:
-        // for context this performs side-effect to values in the appSettings
-        // it'll then be up to the `DeeplinkRouter` to capture any of these changes
-        // and route if needed, the router is handled once we're in a logged-in state
-        environment.deeplinkHandler.handle(deepLink: content.url.absoluteString)
-        return .none
-
-    case .deeplink(.handleLink(let content)) where content.context.usableOnlyDuringAuthentication:
-        // currently we only support only one deeplink for login, so being naive here
-        guard content.context == .blockchainLinks(.login) else {
-            return .none
-        }
-        // handle deeplink if we've entered verify device flow
-        if let onboarding = state.onboarding,
-           let authState = onboarding.welcomeState,
-           let loginState = authState.emailLoginState,
-           loginState.verifyDeviceState != nil
-        {
-            // Pass content to welcomeScreen to be handled
-            return EffectTask(value: .onboarding(.welcomeScreen(.deeplinkReceived(content.url))))
-        } else {
-            return EffectTask(value: .loginRequestReceived(deeplink: content.url))
-        }
-
-    case .deeplink(.handleLink(let content)):
-        // we first check if we're logged in, if not we need to defer the deeplink routing
-        guard state.isLoggedIn else {
-            // continue if we're on the onboarding state
-            guard let onboarding = state.onboarding else {
-                return .none
-            }
-            // check if we're on the pinState and we need the user to enter their pin
-            if let pinState = onboarding.pinState,
-               pinState.requiresPinAuthentication,
-               !content.context.usableOnlyDuringAuthentication
-            {
-                // defer the deeplink until we handle the `.proceedToLoggedIn` action
-                state.onboarding?.deeplinkContent = content
-            }
-            return .none
-        }
-        // continue with the deeplink
-        return EffectTask(value: .loggedIn(.deeplink(content)))
-
-    case .deeplink(.informAppNeedsUpdate):
-        let buttons: CoreAlertAction.Buttons = .init(
-            primary: .default(
-                TextState(verbatim: LocalizationConstants.DeepLink.updateNow),
-                action: .send(.alert(.openAppStore))
-            ),
-            secondary: .cancel(
-                TextState(verbatim: LocalizationConstants.cancel),
-                action: .send(.alert(.dismiss))
+        .ifLet(\CoreAppState.loggedIn, action: CasePath(CoreAppAction.loggedIn)) {
+            LoggedInReducer(
+                analyticsRecorder: environment.analyticsRecorder,
+                app: environment.app,
+                appSettings: environment.blockchainSettings,
+                deeplinkRouter: environment.deeplinkRouter,
+                exchangeRepository: environment.exchangeRepository,
+                fiatCurrencySettingsService: environment.fiatCurrencySettingsService,
+                loadingViewPresenter: environment.loadingViewPresenter,
+                mainQueue: environment.mainQueue,
+                nabuUserService: environment.nabuUserService,
+                performanceTracing: environment.performanceTracing,
+                reactiveWallet: environment.reactiveWallet,
+                remoteNotificationAuthorizer: environment.remoteNotificationServiceContainer.authorizer,
+                remoteNotificationTokenSender: environment.remoteNotificationServiceContainer.tokenSender,
+                unifiedActivityService: environment.unifiedActivityService
             )
-        )
-        let alertAction = CoreAlertAction.show(
-            title: LocalizationConstants.DeepLink.deepLinkUpdateTitle,
-            message: LocalizationConstants.DeepLink.deepLinkUpdateMessage,
-            buttons: buttons
-        )
-        return EffectTask(value: .alert(alertAction))
-
-    case .deeplink(.ignore):
-        return .none
-
-    case .requirePin:
-        state.loggedIn = nil
-        state.onboarding = Onboarding.State(pinState: .init())
-        return .merge(
-            .cancel(id: WalletCancelations.ForegroundInitCheckId),
-            EffectTask(value: .onboarding(.start))
-        )
-
-    case .fetchWallet(let password):
-        environment.loadingViewPresenter.showCircular()
-        return EffectTask(value: .wallet(.fetch(password: password)))
-
-    case .setupPin:
-        environment.loadingViewPresenter.hide()
-        state.onboarding?.pinState = .init()
-        state.onboarding?.passwordRequiredState = nil
-        return EffectTask(value: CoreAppAction.onboarding(.pin(.create)))
-
-    case .initializeWallet:
-        return environment.reactiveWallet
-            .waitUntilInitializedFirst
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .cancellable(id: WalletCancelations.InitializationId, cancelInFlight: false)
-            .map { _ in CoreAppAction.walletInitialized }
-
-    case .walletInitialized:
-        return EffectTask(value: .prepareForLoggedIn)
-
-    case .loginRequestReceived(let deeplink):
-        return environment
-            .deviceVerificationService
-            .handleLoginRequestDeeplink(url: deeplink)
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result -> CoreAppAction in
-                guard case .failure(let error) = result else {
-                    // if success, just ignore the effect
-                    return .none
-                }
-                switch error {
-                    // when catched a deeplink with a different session token,
-                    // or when there is no session token from the app,
-                    // it means a login magic link generated from a different device is catched
-                    // proceed to login request authorization in this case
-                case .missingSessionToken(let sessionId, let base64Str),
-                        .sessionTokenMismatch(let sessionId, let base64Str):
-                    return .checkIfConfirmationRequired(sessionId: sessionId, base64Str: base64Str)
-                case .failToDecodeBase64Component,
-                        .failToDecodeToWalletInfo:
-                    return .none
-                }
-            }
-            .eraseToEffect()
-
-    case .onboarding(.welcomeScreen(.emailLogin(.verifyDevice(.checkIfConfirmationRequired(let sessionId, let base64Str))))),
-         .checkIfConfirmationRequired(let sessionId, let base64Str):
-        return environment
-            .deviceVerificationService
-            // trigger confirmation required error
-            .authorizeVerifyDevice(from: sessionId, payload: base64Str, confirmDevice: nil)
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result -> CoreAppAction in
-                guard case .failure(let error) = result else {
-                    return .none
-                }
-                switch error {
-                case .confirmationRequired(let timestamp, let details):
-                    let info = LoginRequestInfo(
-                        sessionId: sessionId,
-                        base64Str: base64Str,
-                        details: details,
-                        timestamp: timestamp
-                    )
-                    return .proceedToDeviceAuthorization(info)
-                default:
-                    return .none
-                }
-            }
-
-    case .proceedToDeviceAuthorization(let loginRequestInfo):
-        state.deviceAuthorization = .init(
-            loginRequestInfo: loginRequestInfo
-        )
-        return .none
-
-    case .deviceAuthorizationFinished:
-        state.deviceAuthorization = nil
-        return .none
-
-    case .prepareForLoggedIn:
-        environment.erc20CryptoAssetService.setupCoincore()
-        return environment.coincore
-            .initialize()
-            .receive(on: environment.mainQueue)
-            .eraseToEffect { _ in CoreAppAction.proceedToLoggedIn(.success(true)) }
-            .cancellable(id: WalletCancelations.AssetInitializationId, cancelInFlight: false)
-
-    case .proceedToLoggedIn(.failure(let error)):
-        environment.loadingViewPresenter.hide()
-        state.onboarding?.displayAlert = .proceedToLoggedIn(error)
-        return .merge(
-            .cancel(id: WalletCancelations.AssetInitializationId),
-            .cancel(id: WalletCancelations.InitializationId),
-            .cancel(id: WalletCancelations.UpgradeId)
-        )
-
-    case .proceedToLoggedIn(.success):
-        environment.loadingViewPresenter.hide()
-        // prepare the context for logged in state, if required
-        var context: LoggedIn.Context = .none
-        if let deeplinkContent = state.onboarding?.deeplinkContent {
-            context = .deeplink(deeplinkContent)
         }
-        if let walletContext = state.onboarding?.walletCreationContext {
-            context = .wallet(walletContext)
-        }
-        state.loggedIn = LoggedIn.State()
-        state.onboarding = nil
-        return .merge(
-            .cancel(id: WalletCancelations.AssetInitializationId),
-            .cancel(id: WalletCancelations.InitializationId),
-            .cancel(id: WalletCancelations.UpgradeId),
-            EffectTask(value: CoreAppAction.loggedIn(.start(context))),
-            EffectTask(value: CoreAppAction.mobileAuthSync(isLogin: true))
-        )
-
-    case .onboarding(.informForWalletInitialization):
-        return EffectTask(value: .initializeWallet)
-
-    case .onboarding(.welcomeScreen(.emailLogin(.verifyDevice(.credentials(.seedPhrase(.resetPassword(.reset(let password)))))))),
-         .onboarding(.welcomeScreen(.restoreWallet(.resetPassword(.reset(let password))))):
-        return EffectTask(value: .resetPassword(newPassword: password))
-
-    case .onboarding(.passwordScreen(.authenticate(let password))):
-        return EffectTask(
-            value: .fetchWallet(password: password)
-        )
-
-    case .onboarding(.pin(.handleAuthentication(let password))):
-        return .merge(
-            .fireAndForget {
-                environment.app.post(event: blockchain.ux.user.event.authenticated.pin)
-            },
-            EffectTask(
-                value: .fetchWallet(password: password)
+        .ifLet(\CoreAppState.deviceAuthorization, action: CasePath(CoreAppAction.authorizeDevice)) {
+            AuthorizeDeviceReducer(
+                mainQueue: environment.mainQueue,
+                deviceVerificationService: environment.deviceVerificationService
             )
-        )
-
-    case .onboarding(.pin(.pinCreated)):
-        environment.loadingViewPresenter.showCircular()
-        return EffectTask(
-            value: .initializeWallet
-        )
-
-    case .onboarding(.welcomeScreen(.requestedToDecryptWallet(let password))):
-        return EffectTask(
-            value: .fetchWallet(password: password)
-        )
-
-    case .onboarding(.welcomeScreen(.requestedToRestoreWallet(let walletRecovery))):
-        switch walletRecovery {
-        case .metadataRecovery,
-             .importRecovery:
-            return .none
-        case .resetAccountRecovery:
-            return .none
         }
-    case .loggedIn(.deleteWallet):
-
-        NotificationCenter.default.post(name: .logout, object: nil)
-        environment.siftService.removeUserId()
-        environment.sharedContainer.reset()
-        environment.blockchainSettings.reset()
-
-        // forget wallet
-        environment.credentialsStore.erase()
-
-        // update state
-        state.loggedIn = nil
-        state.onboarding = .init(
-            welcomeState: .init()
-        )
-
-        return .merge(
-            environment.forgetWalletService
-                .forget()
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .fireAndForget(),
-            environment
-                .pushNotificationsRepository
-                .revokeToken()
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .fireAndForget(),
-            environment
-                .mobileAuthSyncService
-                .updateMobileSetup(isMobileSetup: false)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .fireAndForget(),
-            environment
-                .mobileAuthSyncService
-                .verifyCloudBackup(hasCloudBackup: false)
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .fireAndForget()
-        )
-    case .onboarding(.welcomeScreen(.informWalletFetched(let context))):
-        return EffectTask(value: .wallet(.walletFetched(.success(context))))
-    case .onboarding(.pin(.logout)),
-         .loggedIn(.logout):
-        // reset
-
-        NotificationCenter.default.post(name: .logout, object: nil)
-        environment.siftService.removeUserId()
-        environment.sharedContainer.reset()
-        environment.blockchainSettings.reset()
-
-        // update state
-        state.loggedIn = nil
-        state.onboarding = .init(
-            pinState: nil,
-            passwordRequiredState: .init(
-                walletIdentifier: environment.legacyGuidRepository.directGuid ?? ""
-            )
-        )
-        // show password screen
-        return EffectTask(value: .onboarding(.passwordScreen(.start)))
-
-    case .loggedIn(.wallet(.authenticateForBiometrics(let password))):
-        return EffectTask(value: .fetchWallet(password: password))
-
-    case .resetPassword(let newPassword):
-        return environment
-            .resetPasswordService
-            .setNewPassword(newPassword: newPassword)
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result -> CoreAppAction in
-                guard case .success = result else {
-                    environment.analyticsRecorder.record(
-                        event: AnalyticsEvents.New.AccountRecoveryCoreFlow.accountRecoveryFailed
-                    )
-                    return .none
-                }
-                environment.analyticsRecorder.record(
-                    event: AnalyticsEvents.New.AccountRecoveryCoreFlow
-                        .accountPasswordReset(hasRecoveryPhrase: true)
-                )
-                // proceed to setup PIN after reset password if needed
-                guard environment.blockchainSettings.isPinSet else {
-                    return .setupPin
-                }
-                return .none
-            }
-
-    case .resetVerificationStatusIfNeeded(let guidOrNil, let sharedKeyOrNil):
-        guard let context = state.onboarding?.walletRecoveryContext,
-              let guid = guidOrNil,
-              let sharedKey = sharedKeyOrNil
-        else {
-            return .none
-        }
-        return environment
-            .accountRecoveryService
-            .resetVerificationStatus(guid: guid, sharedKey: sharedKey)
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result -> CoreAppAction in
-                guard case .success = result else {
-                    environment.analyticsRecorder.record(
-                        event: AnalyticsEvents.New.AccountRecoveryCoreFlow.accountRecoveryFailed
-                    )
-                    return .none
-                }
-                return .none
-            }
-
-    case .mobileAuthSync(let isLogin):
-        return .merge(
-            environment
-                .mobileAuthSyncService
-                .updateMobileSetup(isMobileSetup: isLogin)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .fireAndForget(),
-            environment
-                .mobileAuthSyncService
-                .verifyCloudBackup(hasCloudBackup: isLogin)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .fireAndForget()
-        )
-
-    case .onboarding,
-         .loggedIn,
-         .authorizeDevice,
-         .none:
-        return .none
-    default:
-        return .none
     }
 }
-.walletReducer()
-.alertReducer()
+
+struct MainAppReducerCore: ReducerProtocol {
+
+    typealias State = CoreAppState
+    typealias Action = CoreAppAction
+
+    let environment: CoreAppEnvironment
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .start:
+                return .fireAndForget {
+                    syncPinKeyWithICloud(
+                        blockchainSettings: environment.blockchainSettings,
+                        legacyGuid: environment.legacyGuidRepository,
+                        legacySharedKey: environment.legacySharedKeyRepository,
+                        credentialsStore: environment.credentialsStore
+                    )
+                }
+
+            case .appForegrounded:
+                let isLoggedIn = state.isLoggedIn
+                return environment.walletStateProvider
+                    .isWalletInitializedPublisher()
+                    .receive(on: environment.mainQueue)
+                    .flatMap { isWalletInitialized -> EffectTask<CoreAppAction> in
+                        // check if we need to display the pin for authentication
+                        guard isWalletInitialized else {
+                            // do nothing if we're on the authentication state,
+                            // meaning we either need to register, login or recover
+                            guard isLoggedIn else {
+                                return .cancel(id: WalletCancelations.ForegroundInitCheckId)
+                            }
+                            // We need to send the `stop` action prior we show the pin entry,
+                            // this clears any running operation from the logged-in state.
+                            return .concatenate(
+                                EffectTask(value: .loggedIn(.stop)),
+                                EffectTask(value: .requirePin)
+                            )
+                        }
+                        return .cancel(id: WalletCancelations.ForegroundInitCheckId)
+                    }
+                    .eraseToEffect()
+                    .cancellable(id: WalletCancelations.ForegroundInitCheckId, cancelInFlight: true)
+
+            case .deeplink(.handleLink(let content)) where content.context == .dynamicLinks:
+                // for context this performs side-effect to values in the appSettings
+                // it'll then be up to the `DeeplinkRouter` to capture any of these changes
+                // and route if needed, the router is handled once we're in a logged-in state
+                environment.deeplinkHandler.handle(deepLink: content.url.absoluteString)
+                return .none
+
+            case .deeplink(.handleLink(let content)) where content.context.usableOnlyDuringAuthentication:
+                // currently we only support only one deeplink for login, so being naive here
+                guard content.context == .blockchainLinks(.login) else {
+                    return .none
+                }
+                // handle deeplink if we've entered verify device flow
+                if let onboarding = state.onboarding,
+                   let authState = onboarding.welcomeState,
+                   let loginState = authState.emailLoginState,
+                   loginState.verifyDeviceState != nil
+                {
+                    // Pass content to welcomeScreen to be handled
+                    return EffectTask(value: .onboarding(.welcomeScreen(.deeplinkReceived(content.url))))
+                } else {
+                    return EffectTask(value: .loginRequestReceived(deeplink: content.url))
+                }
+
+            case .deeplink(.handleLink(let content)):
+                // we first check if we're logged in, if not we need to defer the deeplink routing
+                guard state.isLoggedIn else {
+                    // continue if we're on the onboarding state
+                    guard let onboarding = state.onboarding else {
+                        return .none
+                    }
+                    // check if we're on the pinState and we need the user to enter their pin
+                    if let pinState = onboarding.pinState,
+                       pinState.requiresPinAuthentication,
+                       !content.context.usableOnlyDuringAuthentication
+                    {
+                        // defer the deeplink until we handle the `.proceedToLoggedIn` action
+                        state.onboarding?.deeplinkContent = content
+                    }
+                    return .none
+                }
+                // continue with the deeplink
+                return EffectTask(value: .loggedIn(.deeplink(content)))
+
+            case .deeplink(.informAppNeedsUpdate):
+                let buttons: CoreAlertAction.Buttons = .init(
+                    primary: .default(
+                        TextState(verbatim: LocalizationConstants.DeepLink.updateNow),
+                        action: .send(.alert(.openAppStore))
+                    ),
+                    secondary: .cancel(
+                        TextState(verbatim: LocalizationConstants.cancel),
+                        action: .send(.alert(.dismiss))
+                    )
+                )
+                let alertAction = CoreAlertAction.show(
+                    title: LocalizationConstants.DeepLink.deepLinkUpdateTitle,
+                    message: LocalizationConstants.DeepLink.deepLinkUpdateMessage,
+                    buttons: buttons
+                )
+                return EffectTask(value: .alert(alertAction))
+
+            case .deeplink(.ignore):
+                return .none
+
+            case .requirePin:
+                state.loggedIn = nil
+                state.onboarding = Onboarding.State(pinState: .init())
+                return .merge(
+                    .cancel(id: WalletCancelations.ForegroundInitCheckId),
+                    EffectTask(value: .onboarding(.start))
+                )
+
+            case .fetchWallet(let password):
+                environment.loadingViewPresenter.showCircular()
+                return EffectTask(value: .wallet(.fetch(password: password)))
+
+            case .setupPin:
+                environment.loadingViewPresenter.hide()
+                state.onboarding?.pinState = .init()
+                state.onboarding?.passwordRequiredState = nil
+                return EffectTask(value: CoreAppAction.onboarding(.pin(.create)))
+
+            case .initializeWallet:
+                return environment.reactiveWallet
+                    .waitUntilInitializedFirst
+                    .receive(on: environment.mainQueue)
+                    .catchToEffect()
+                    .cancellable(id: WalletCancelations.InitializationId, cancelInFlight: false)
+                    .map { _ in CoreAppAction.walletInitialized }
+
+            case .walletInitialized:
+                return EffectTask(value: .prepareForLoggedIn)
+
+            case .loginRequestReceived(let deeplink):
+                return environment
+                    .deviceVerificationService
+                    .handleLoginRequestDeeplink(url: deeplink)
+                    .receive(on: environment.mainQueue)
+                    .catchToEffect()
+                    .map { result -> CoreAppAction in
+                        guard case .failure(let error) = result else {
+                            // if success, just ignore the effect
+                            return .none
+                        }
+                        switch error {
+                            // when catched a deeplink with a different session token,
+                            // or when there is no session token from the app,
+                            // it means a login magic link generated from a different device is catched
+                            // proceed to login request authorization in this case
+                        case .missingSessionToken(let sessionId, let base64Str),
+                                .sessionTokenMismatch(let sessionId, let base64Str):
+                            return .checkIfConfirmationRequired(sessionId: sessionId, base64Str: base64Str)
+                        case .failToDecodeBase64Component,
+                                .failToDecodeToWalletInfo:
+                            return .none
+                        }
+                    }
+                    .eraseToEffect()
+
+            case .onboarding(.welcomeScreen(.emailLogin(.verifyDevice(.checkIfConfirmationRequired(let sessionId, let base64Str))))),
+                 .checkIfConfirmationRequired(let sessionId, let base64Str):
+                return environment
+                    .deviceVerificationService
+                    // trigger confirmation required error
+                    .authorizeVerifyDevice(from: sessionId, payload: base64Str, confirmDevice: nil)
+                    .receive(on: environment.mainQueue)
+                    .catchToEffect()
+                    .map { result -> CoreAppAction in
+                        guard case .failure(let error) = result else {
+                            return .none
+                        }
+                        switch error {
+                        case .confirmationRequired(let timestamp, let details):
+                            let info = LoginRequestInfo(
+                                sessionId: sessionId,
+                                base64Str: base64Str,
+                                details: details,
+                                timestamp: timestamp
+                            )
+                            return .proceedToDeviceAuthorization(info)
+                        default:
+                            return .none
+                        }
+                    }
+
+            case .proceedToDeviceAuthorization(let loginRequestInfo):
+                state.deviceAuthorization = .init(
+                    loginRequestInfo: loginRequestInfo
+                )
+                return .none
+
+            case .deviceAuthorizationFinished:
+                state.deviceAuthorization = nil
+                return .none
+
+            case .prepareForLoggedIn:
+                environment.erc20CryptoAssetService.setupCoincore()
+                return environment.coincore
+                    .initialize()
+                    .receive(on: environment.mainQueue)
+                    .eraseToEffect { _ in CoreAppAction.proceedToLoggedIn(.success(true)) }
+                    .cancellable(id: WalletCancelations.AssetInitializationId, cancelInFlight: false)
+
+            case .proceedToLoggedIn(.failure(let error)):
+                environment.loadingViewPresenter.hide()
+                state.onboarding?.displayAlert = .proceedToLoggedIn(error)
+                return .merge(
+                    .cancel(id: WalletCancelations.AssetInitializationId),
+                    .cancel(id: WalletCancelations.InitializationId),
+                    .cancel(id: WalletCancelations.UpgradeId)
+                )
+
+            case .proceedToLoggedIn(.success):
+                environment.loadingViewPresenter.hide()
+                // prepare the context for logged in state, if required
+                var context: LoggedIn.Context = .none
+                if let deeplinkContent = state.onboarding?.deeplinkContent {
+                    context = .deeplink(deeplinkContent)
+                }
+                if let walletContext = state.onboarding?.walletCreationContext {
+                    context = .wallet(walletContext)
+                }
+                state.loggedIn = LoggedIn.State()
+                state.onboarding = nil
+                return .merge(
+                    .cancel(id: WalletCancelations.AssetInitializationId),
+                    .cancel(id: WalletCancelations.InitializationId),
+                    .cancel(id: WalletCancelations.UpgradeId),
+                    EffectTask(value: CoreAppAction.loggedIn(.start(context))),
+                    EffectTask(value: CoreAppAction.mobileAuthSync(isLogin: true))
+                )
+
+            case .onboarding(.informForWalletInitialization):
+                return EffectTask(value: .initializeWallet)
+
+            case .onboarding(.welcomeScreen(.emailLogin(.verifyDevice(.credentials(.seedPhrase(.resetPassword(.reset(let password)))))))),
+                 .onboarding(.welcomeScreen(.restoreWallet(.resetPassword(.reset(let password))))):
+                return EffectTask(value: .resetPassword(newPassword: password))
+
+            case .onboarding(.passwordScreen(.authenticate(let password))):
+                return EffectTask(
+                    value: .fetchWallet(password: password)
+                )
+
+            case .onboarding(.pin(.handleAuthentication(let password))):
+                return .merge(
+                    .fireAndForget {
+                        environment.app.post(event: blockchain.ux.user.event.authenticated.pin)
+                    },
+                    EffectTask(
+                        value: .fetchWallet(password: password)
+                    )
+                )
+
+            case .onboarding(.pin(.pinCreated)):
+                environment.loadingViewPresenter.showCircular()
+                return EffectTask(
+                    value: .initializeWallet
+                )
+
+            case .onboarding(.welcomeScreen(.requestedToDecryptWallet(let password))):
+                return EffectTask(
+                    value: .fetchWallet(password: password)
+                )
+
+            case .onboarding(.welcomeScreen(.requestedToRestoreWallet(let walletRecovery))):
+                switch walletRecovery {
+                case .metadataRecovery,
+                     .importRecovery:
+                    return .none
+                case .resetAccountRecovery:
+                    return .none
+                }
+            case .loggedIn(.deleteWallet):
+
+                NotificationCenter.default.post(name: .logout, object: nil)
+                environment.siftService.removeUserId()
+                environment.sharedContainer.reset()
+                environment.blockchainSettings.reset()
+
+                // forget wallet
+                environment.credentialsStore.erase()
+
+                // update state
+                state.loggedIn = nil
+                state.onboarding = .init(
+                    welcomeState: .init()
+                )
+
+                return .merge(
+                    environment.forgetWalletService
+                        .forget()
+                        .receive(on: environment.mainQueue)
+                        .catchToEffect()
+                        .fireAndForget(),
+                    environment
+                        .pushNotificationsRepository
+                        .revokeToken()
+                        .receive(on: environment.mainQueue)
+                        .catchToEffect()
+                        .fireAndForget(),
+                    environment
+                        .mobileAuthSyncService
+                        .updateMobileSetup(isMobileSetup: false)
+                        .receive(on: environment.mainQueue)
+                        .catchToEffect()
+                        .fireAndForget(),
+                    environment
+                        .mobileAuthSyncService
+                        .verifyCloudBackup(hasCloudBackup: false)
+                        .receive(on: environment.mainQueue)
+                        .catchToEffect()
+                        .fireAndForget()
+                )
+            case .onboarding(.welcomeScreen(.informWalletFetched(let context))):
+                return EffectTask(value: .wallet(.walletFetched(.success(context))))
+            case .onboarding(.pin(.logout)),
+                 .loggedIn(.logout):
+                // reset
+
+                NotificationCenter.default.post(name: .logout, object: nil)
+                environment.siftService.removeUserId()
+                environment.sharedContainer.reset()
+                environment.blockchainSettings.reset()
+
+                // update state
+                state.loggedIn = nil
+                state.onboarding = .init(
+                    pinState: nil,
+                    passwordRequiredState: .init(
+                        walletIdentifier: environment.legacyGuidRepository.directGuid ?? ""
+                    )
+                )
+                // show password screen
+                return EffectTask(value: .onboarding(.passwordScreen(.start)))
+
+            case .loggedIn(.wallet(.authenticateForBiometrics(let password))):
+                return EffectTask(value: .fetchWallet(password: password))
+
+            case .resetPassword(let newPassword):
+                return environment
+                    .resetPasswordService
+                    .setNewPassword(newPassword: newPassword)
+                    .receive(on: environment.mainQueue)
+                    .catchToEffect()
+                    .map { result -> CoreAppAction in
+                        guard case .success = result else {
+                            environment.analyticsRecorder.record(
+                                event: AnalyticsEvents.New.AccountRecoveryCoreFlow.accountRecoveryFailed
+                            )
+                            return .none
+                        }
+                        environment.analyticsRecorder.record(
+                            event: AnalyticsEvents.New.AccountRecoveryCoreFlow
+                                .accountPasswordReset(hasRecoveryPhrase: true)
+                        )
+                        // proceed to setup PIN after reset password if needed
+                        guard environment.blockchainSettings.isPinSet else {
+                            return .setupPin
+                        }
+                        return .none
+                    }
+
+            case .resetVerificationStatusIfNeeded(let guidOrNil, let sharedKeyOrNil):
+                guard state.onboarding?.walletRecoveryContext != nil,
+                      let guid = guidOrNil,
+                      let sharedKey = sharedKeyOrNil
+                else {
+                    return .none
+                }
+                return environment
+                    .accountRecoveryService
+                    .resetVerificationStatus(guid: guid, sharedKey: sharedKey)
+                    .receive(on: environment.mainQueue)
+                    .catchToEffect()
+                    .map { result -> CoreAppAction in
+                        guard case .success = result else {
+                            environment.analyticsRecorder.record(
+                                event: AnalyticsEvents.New.AccountRecoveryCoreFlow.accountRecoveryFailed
+                            )
+                            return .none
+                        }
+                        return .none
+                    }
+
+            case .mobileAuthSync(let isLogin):
+                return .merge(
+                    environment
+                        .mobileAuthSyncService
+                        .updateMobileSetup(isMobileSetup: isLogin)
+                        .receive(on: environment.mainQueue)
+                        .eraseToEffect()
+                        .fireAndForget(),
+                    environment
+                        .mobileAuthSyncService
+                        .verifyCloudBackup(hasCloudBackup: isLogin)
+                        .receive(on: environment.mainQueue)
+                        .eraseToEffect()
+                        .fireAndForget()
+                )
+
+            case .onboarding,
+                 .loggedIn,
+                 .authorizeDevice,
+                 .none:
+                return .none
+            default:
+                return .none
+            }
+        }
+        WalletReducer(environment: environment)
+        AlertReducer(environment: environment)
+    }
+}
 
 // MARK: - Alert Reducer
 
-extension Reducer where State == CoreAppState, Action == CoreAppAction, Environment == CoreAppEnvironment {
-    /// Returns a combined reducer that handles all the wallet related actions
-    func alertReducer() -> Self {
-        combined(
-            with: Reducer { state, action, environment in
-                switch action {
-                case .alert(.show(let title, let message, let buttons)):
-                    let defaultButton = ButtonState<CoreAppAction>.default(
-                        TextState(verbatim: LocalizationConstants.ErrorAlert.button),
-                        action: .send(.alert(.dismiss))
-                    )
-                    let buttons = buttons ?? CoreAlertAction.Buttons(
-                        primary: defaultButton,
-                        secondary: nil
-                    )
-                    if let secondary = buttons.secondary {
-                        state.alertState = AlertState(
-                            title: TextState(verbatim: title),
-                            message: TextState(verbatim: message),
-                            primaryButton: buttons.primary,
-                            secondaryButton: secondary
-                        )
-                    } else {
-                        state.alertState = AlertState(
-                            title: TextState(verbatim: title),
-                            message: TextState(verbatim: message),
-                            dismissButton: buttons.primary
-                        )
-                    }
-                    return .none
-                case .alert(.dismiss):
-                    state.alertState = nil
-                    return .none
+struct AlertReducer: ReducerProtocol {
 
-                case .alert(.openAppStore):
-                    state.alertState = nil
-                    environment.appStoreOpener.openAppStore()
-                    return .none
-                default:
-                    return .none
+    typealias State = CoreAppState
+    typealias Action = CoreAppAction
+
+    let environment: CoreAppEnvironment
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .alert(.show(let title, let message, let buttons)):
+                let defaultButton = ButtonState<CoreAppAction>.default(
+                    TextState(verbatim: LocalizationConstants.ErrorAlert.button),
+                    action: .send(.alert(.dismiss))
+                )
+                let buttons = buttons ?? CoreAlertAction.Buttons(
+                    primary: defaultButton,
+                    secondary: nil
+                )
+                if let secondary = buttons.secondary {
+                    state.alertState = AlertState(
+                        title: TextState(verbatim: title),
+                        message: TextState(verbatim: message),
+                        primaryButton: buttons.primary,
+                        secondaryButton: secondary
+                    )
+                } else {
+                    state.alertState = AlertState(
+                        title: TextState(verbatim: title),
+                        message: TextState(verbatim: message),
+                        dismissButton: buttons.primary
+                    )
                 }
+                return .none
+            case .alert(.dismiss):
+                state.alertState = nil
+                return .none
+
+            case .alert(.openAppStore):
+                state.alertState = nil
+                environment.appStoreOpener.openAppStore()
+                return .none
+            default:
+                return .none
             }
-        )
+        }
     }
 }
 

@@ -295,8 +295,7 @@ struct AssetListSceneView_Previews: PreviewProvider {
         AssetListSceneView.NoNFTsView(
             store: .init(
                 initialState: .init(),
-                reducer: assetListReducer,
-                environment: .init(
+                reducer: AssetListReducer(
                     assetProviderService: AssetProviderService.previewEmpty
                 )
             )

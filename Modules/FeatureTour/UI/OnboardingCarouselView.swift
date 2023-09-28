@@ -12,21 +12,10 @@ public struct OnboardingCarouselView: View {
     private let list: LivePricesList
     private var manualLoginEnabled: Bool
 
-    private init(store: Store<TourState, TourAction>, manualLoginEnabled: Bool) {
+    public init(store: Store<TourState, TourAction>, manualLoginEnabled: Bool) {
         self.store = store
         self.manualLoginEnabled = manualLoginEnabled
         self.list = LivePricesList(store: store)
-    }
-
-    public init(environment: TourEnvironment, manualLoginEnabled: Bool) {
-        self.init(
-            store: Store(
-                initialState: TourState(),
-                reducer: tourReducer,
-                environment: environment
-            ),
-            manualLoginEnabled: manualLoginEnabled
-        )
     }
 
     public var body: some View {
@@ -159,11 +148,9 @@ struct TourView_Previews: PreviewProvider {
 
     static var previews: some View {
         OnboardingCarouselView(
-            environment: TourEnvironment(
-                createAccountAction: {},
-                restoreAction: {},
-                logInAction: {},
-                manualLoginAction: {}
+            store: Store(
+                initialState: TourState(),
+                reducer: NoOpReducer()
             ),
             manualLoginEnabled: false
         )

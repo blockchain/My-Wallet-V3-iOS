@@ -23,59 +23,65 @@ extension AccountUsage {
             case dismissSubmissionError
         }
 
-        struct Environment {
+        struct Reducer: ReducerProtocol {
+
+            typealias State = AccountUsage.Form.State
+            typealias Action = AccountUsage.Form.Action
+
             let submitForm: (FeatureFormDomain.Form) -> AnyPublisher<Void, NabuNetworkError>
             let mainQueue: AnySchedulerOf<DispatchQueue>
-        }
 
-        static let reducer = Reducer<State, Action, Environment> { state, action, environment in
-            switch action {
-            case .binding:
-                return .none
+            var body: some ReducerProtocol<State, Action> {
+                BindingReducer()
+                Reduce { state, action in
+                    switch action {
+                    case .binding:
+                        return .none
 
-            case .onComplete:
-                // handled in parent reducer
-                return .none
+                    case .onComplete:
+                        // handled in parent reducer
+                        return .none
 
-            case .submit:
-                state.submissionState = .loading
-                return environment.submitForm(state.form)
-                    .catchToEffect()
-                    .map { result in
-                        result.map(Empty.init)
-                    }
-                    .map(Action.submissionDidComplete)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
+                    case .submit:
+                        state.submissionState = .loading
+                        return submitForm(state.form)
+                            .catchToEffect()
+                            .map { result in
+                                result.map(Empty.init)
+                            }
+                            .map(Action.submissionDidComplete)
+                            .receive(on: mainQueue)
+                            .eraseToEffect()
 
-            case .submissionDidComplete(let result):
-                switch result {
-                case .success:
-                    state.submissionState = .success(Empty())
-                    return EffectTask(value: .onComplete)
+                    case .submissionDidComplete(let result):
+                        switch result {
+                        case .success:
+                            state.submissionState = .success(Empty())
+                            return EffectTask(value: .onComplete)
 
-                case .failure(let error):
-                    state.submissionState = .failure(
-                        AlertState(
-                            title: TextState(LocalizationConstants.NewKYC.GenericError.title),
-                            message: TextState(String(describing: error)),
-                            primaryButton: .default(
-                                TextState(LocalizationConstants.NewKYC.GenericError.retryButtonTitle),
-                                action: .send(.submit)
-                            ),
-                            secondaryButton: .cancel(
-                                TextState(LocalizationConstants.NewKYC.GenericError.cancelButtonTitle)
+                        case .failure(let error):
+                            state.submissionState = .failure(
+                                AlertState(
+                                    title: TextState(LocalizationConstants.NewKYC.GenericError.title),
+                                    message: TextState(String(describing: error)),
+                                    primaryButton: .default(
+                                        TextState(LocalizationConstants.NewKYC.GenericError.retryButtonTitle),
+                                        action: .send(.submit)
+                                    ),
+                                    secondaryButton: .cancel(
+                                        TextState(LocalizationConstants.NewKYC.GenericError.cancelButtonTitle)
+                                    )
+                                )
                             )
-                        )
-                    )
-                }
-                return .none
+                        }
+                        return .none
 
-            case .dismissSubmissionError:
-                state.submissionState = .idle
-                return .none
+                    case .dismissSubmissionError:
+                        state.submissionState = .idle
+                        return .none
+                    }
+                }
             }
         }
-        .binding()
     }
 }

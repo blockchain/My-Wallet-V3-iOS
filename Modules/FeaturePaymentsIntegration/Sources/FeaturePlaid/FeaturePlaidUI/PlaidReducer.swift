@@ -4,12 +4,32 @@ import BlockchainNamespace
 import ComposableArchitecture
 import Errors
 import FeaturePlaidDomain
+import Foundation
 
-public enum PlaidModule {}
+public struct PlaidReducer: ReducerProtocol {
 
-extension PlaidModule {
-    public static var reducer: Reducer<PlaidState, PlaidAction, PlaidEnvironment> {
-        .init { state, action, environment in
+    public typealias State = PlaidState
+    public typealias Action = PlaidAction
+
+    public let app: AppProtocol
+    public let mainQueue: AnySchedulerOf<DispatchQueue>
+    public let plaidRepository: PlaidRepositoryAPI
+    public let dismissFlow: (Bool) -> Void
+
+    public init(
+        app: AppProtocol,
+        mainQueue: AnySchedulerOf<DispatchQueue>,
+        plaidRepository: PlaidRepositoryAPI,
+        dismissFlow: @escaping (Bool) -> Void
+    ) {
+        self.app = app
+        self.mainQueue = mainQueue
+        self.plaidRepository = plaidRepository
+        self.dismissFlow = dismissFlow
+    }
+
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
             switch action {
             case .onAppear:
                 guard let accountId = state.accountId else {
@@ -18,10 +38,9 @@ extension PlaidModule {
                 return EffectTask(value: .getLinkTokenForExistingAccount(accountId))
 
             case .startLinkingNewBank:
-                return environment
-                    .plaidRepository
+                return plaidRepository
                     .getLinkToken()
-                    .receive(on: environment.mainQueue)
+                    .receive(on: mainQueue)
                     .catchToEffect()
                     .map { result -> PlaidAction in
                         switch result {
@@ -33,10 +52,9 @@ extension PlaidModule {
                     }
 
             case .getLinkTokenForExistingAccount(let accountId):
-                return environment
-                    .plaidRepository
+                return plaidRepository
                     .getLinkToken(accountId: accountId)
-                    .receive(on: environment.mainQueue)
+                    .receive(on: mainQueue)
                     .catchToEffect()
                     .map { result -> PlaidAction in
                         switch result {
@@ -53,7 +71,7 @@ extension PlaidModule {
                     .fireAndForget {
                         // post blockchain event with received token so
                         // LinkKit SDK can act on it
-                        environment.app.post(
+                        app.post(
                             value: response.linkToken,
                             of: blockchain.ux.payment.method.plaid.event.receive.link.token
                         )
@@ -62,8 +80,8 @@ extension PlaidModule {
                 )
 
             case .waitingForAccountLinkResult:
-                return environment.app.on(blockchain.ux.payment.method.plaid.event.finished)
-                    .receive(on: environment.mainQueue)
+                return app.on(blockchain.ux.payment.method.plaid.event.finished)
+                    .receive(on: mainQueue)
                     .eraseToEffect()
                     .map { event -> PlaidAction in
                         do {
@@ -85,10 +103,9 @@ extension PlaidModule {
                     // This should not happen
                     return EffectTask(value: .finishedWithError(nil))
                 }
-                return environment
-                    .plaidRepository
+                return plaidRepository
                     .updatePlaidAccount(accountId, attributes: attribute)
-                    .receive(on: environment.mainQueue)
+                    .receive(on: mainQueue)
                     .catchToEffect()
                     .map { result -> PlaidAction in
                         switch result {
@@ -100,10 +117,9 @@ extension PlaidModule {
                     }
 
             case .waitForActivation(let accountId):
-                return environment
-                    .plaidRepository
+                return plaidRepository
                     .waitForActivationOfLinkedBank(id: accountId)
-                    .receive(on: environment.mainQueue)
+                    .receive(on: mainQueue)
                     .catchToEffect()
                     .map { _ in .updateSourceSelection }
 
@@ -112,10 +128,10 @@ extension PlaidModule {
                 return .merge(
                     .fireAndForget {
                         // Update the transaction source
-                        environment.app.post(
+                        app.post(
                             event: blockchain.ux.payment.method.plaid.event.reload.linked_banks
                         )
-                        environment.app.post(
+                        app.post(
                             event: blockchain.ux.transaction.action.select.payment.method,
                             context: [
                                 blockchain.ux.transaction.action.select.payment.method.id: accountId
@@ -127,7 +143,7 @@ extension PlaidModule {
 
             case .finished(let success):
                 return .fireAndForget {
-                    environment.dismissFlow(success)
+                    dismissFlow(success)
                 }
 
             case .finishedWithError(let error):

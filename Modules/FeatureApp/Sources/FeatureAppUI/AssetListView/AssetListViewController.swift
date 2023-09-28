@@ -19,8 +19,7 @@ public struct AssetListViewController: UIViewControllerRepresentable {
     ) {
         self.store = .init(
             initialState: .empty,
-            reducer: assetListReducer,
-            environment: .init(
+            reducer: AssetListReducer(
                 assetProviderService: assetProviderService
             )
         )

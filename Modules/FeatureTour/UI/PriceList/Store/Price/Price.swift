@@ -8,12 +8,12 @@ import PlatformKit
 import PlatformUIKit
 import SwiftUI
 
-struct Price: Equatable, Identifiable {
+public struct Price: Equatable, Identifiable {
 
     var currency: CryptoCurrency
     var value: LoadingState<String> = .loading
     var deltaPercentage: LoadingState<Double> = .loading
-    var id: AnyHashable = UUID()
+    public var id: AnyHashable = UUID()
 
     var title: String {
         currency.name

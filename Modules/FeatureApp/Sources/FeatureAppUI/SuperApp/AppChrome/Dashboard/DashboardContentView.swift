@@ -227,8 +227,7 @@ func provideNftTab(
     AssetListSceneView(
         store: .init(
             initialState: .empty,
-            reducer: assetListReducer,
-            environment: .init(
+            reducer: AssetListReducer(
                 assetProviderService: DIKit.resolve()
             )
         )

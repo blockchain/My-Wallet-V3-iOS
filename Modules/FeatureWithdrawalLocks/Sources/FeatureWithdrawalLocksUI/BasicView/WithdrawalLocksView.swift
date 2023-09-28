@@ -37,7 +37,11 @@ public enum WithdrawalLocksRoute: NavigationRoute {
     }
 }
 
-public struct WithdrawalLocksEnvironment {
+public struct WithdrawalLocksReducer: ReducerProtocol {
+
+    public typealias State = WithdrawalLocksState
+    public typealias Action = WithdrawalLocksAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let withdrawalLockService: WithdrawalLocksServiceAPI
     let updateViewAction: ((_ isVisible: Bool) -> Void)?
@@ -51,40 +55,37 @@ public struct WithdrawalLocksEnvironment {
         self.withdrawalLockService = withdrawalLockService
         self.updateViewAction = updateViewAction
     }
-}
 
-public let withdrawalLocksReducer = Reducer<
-    WithdrawalLocksState,
-    WithdrawalLocksAction,
-    WithdrawalLocksEnvironment
-> { state, action, environment in
-
-    switch action {
-    case .loadWithdrawalLocks:
-        return .merge(
-            environment.withdrawalLockService
-                .withdrawalLocks
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .map { withdrawalLocks in
-                    .present(withdrawalLocks: withdrawalLocks)
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .loadWithdrawalLocks:
+                return .merge(
+                    withdrawalLockService
+                        .withdrawalLocks
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
+                        .map { withdrawalLocks in
+                            .present(withdrawalLocks: withdrawalLocks)
+                        }
+                )
+            case .present(withdrawalLocks: let withdrawalLocks):
+                let updated = state.withdrawalLocks != withdrawalLocks
+                state.withdrawalLocks = withdrawalLocks
+                return .fireAndForget {
+                    if updated {
+                        mainQueue.schedule {
+                            updateViewAction?(
+                                withdrawalLocks?.items.isEmpty == false
+                            )
+                        }
+                    }
                 }
-        )
-    case .present(withdrawalLocks: let withdrawalLocks):
-        let updated = state.withdrawalLocks != withdrawalLocks
-        state.withdrawalLocks = withdrawalLocks
-        return .fireAndForget {
-            if updated {
-                environment.mainQueue.schedule {
-                    environment.updateViewAction?(
-                        withdrawalLocks?.items.isEmpty == false
-                    )
-                }
+            case .route(let routeItent):
+                state.route = routeItent
+                return .none
             }
         }
-    case .route(let routeItent):
-        state.route = routeItent
-        return .none
     }
 }
 
@@ -141,8 +142,7 @@ struct WithdrawalLocksView_PreviewProvider: PreviewProvider {
             WithdrawalLocksView(store:
                 .init(
                     initialState: .init(withdrawalLocks: nil),
-                    reducer: withdrawalLocksReducer,
-                    environment: WithdrawalLocksEnvironment(
+                    reducer: WithdrawalLocksReducer(
                         withdrawalLockService: NoOpWithdrawalLocksService(),
                         updateViewAction: nil
                     )

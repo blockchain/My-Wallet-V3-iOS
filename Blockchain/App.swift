@@ -57,8 +57,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         bootstrap()
         store = Store(
             initialState: AppState(),
-            reducer: appReducer,
-            environment: .live
+            reducer: AppReducer(environment: .live)
         )
         super.init()
     }

@@ -47,104 +47,109 @@ enum PersonalInfo {
         case onViewAppear
     }
 
-    struct Environment {
+    struct Reducer: ReducerProtocol {
+
+        typealias State = PersonalInfo.State
+        typealias Action = PersonalInfo.Action
+
         let onClose: () -> Void
         let onComplete: () -> Void
         let loadForm: () -> AnyPublisher<[FormQuestion], KYCFlowError>
         let submitForm: (Form) -> AnyPublisher<Void, KYCFlowError>
         let analyticsRecorder: AnalyticsEventRecorderAPI // TODO: use me
         let mainQueue: AnySchedulerOf<DispatchQueue>
-    }
 
-    static let reducer: Reducer<State, Action, Environment> = Reducer { state, action, environment in
-        switch action {
-        case .binding:
-            return .none
+        var body: some ReducerProtocol<State, Action> {
+            BindingReducer()
+            Reduce { state, action in
+                switch action {
+                case .binding:
+                    return .none
 
-        case .close:
-            return .fireAndForget(environment.onClose)
+                case .close:
+                    return .fireAndForget(onClose)
 
-        case .loadForm:
-            return environment.loadForm()
-                .catchToEffect()
-                .map(Action.formDidLoad)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
+                case .loadForm:
+                    return loadForm()
+                        .catchToEffect()
+                        .map(Action.formDidLoad)
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
 
-        case .formDidLoad(let result):
-            switch result {
-            case .success(let questions):
-                state.form = .init(
-                    header: .init(
-                        title: LocalizedStrings.title,
-                        description: LocalizedStrings.message
-                    ),
-                    nodes: questions,
-                    blocking: true
-                )
-            case .failure(let error):
-                // This should never fail at the moment
-                print(error)
-            }
-            return .none
-
-        case .submit:
-            guard state.isValidForm else {
-                return .none
-            }
-            state.formSubmissionState = .loading
-            return environment.submitForm(state.form)
-                .map(Empty.init)
-                .catchToEffect()
-                .map(Action.submissionResultReceived)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-
-        case .submissionResultReceived(let result):
-            switch result {
-            case .success:
-                state.formSubmissionState = .success(Empty())
-                return .fireAndForget(environment.onComplete)
-
-            case .failure(let error):
-                state.formSubmissionState = .failure(
-                    FailureState(
-                        title: LocalizedErrorStrings.title,
-                        message: String(describing: error),
-                        buttons: [
-                            .cancel(
-                                title: LocalizedErrorStrings.cancelButtonTitle,
-                                action: .dismissSubmissionFailureAlert
+                case .formDidLoad(let result):
+                    switch result {
+                    case .success(let questions):
+                        state.form = .init(
+                            header: .init(
+                                title: LocalizedStrings.title,
+                                description: LocalizedStrings.message
                             ),
-                            .primary(
-                                title: LocalizedErrorStrings.retryButtonTitle,
-                                action: .submit
-                            )
-                        ]
-                    )
-                )
-                return .none
-            }
+                            nodes: questions,
+                            blocking: true
+                        )
+                    case .failure(let error):
+                        // This should never fail at the moment
+                        print(error)
+                    }
+                    return .none
 
-        case .dismissSubmissionFailureAlert:
-            state.formSubmissionState = .idle
-            return .none
-        case .onViewAppear:
-            guard state.form.isEmpty else {
-                return .none
+                case .submit:
+                    guard state.isValidForm else {
+                        return .none
+                    }
+                    state.formSubmissionState = .loading
+                    return submitForm(state.form)
+                        .map(Empty.init)
+                        .catchToEffect()
+                        .map(Action.submissionResultReceived)
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
+
+                case .submissionResultReceived(let result):
+                    switch result {
+                    case .success:
+                        state.formSubmissionState = .success(Empty())
+                        return .fireAndForget(onComplete)
+
+                    case .failure(let error):
+                        state.formSubmissionState = .failure(
+                            FailureState(
+                                title: LocalizedErrorStrings.title,
+                                message: String(describing: error),
+                                buttons: [
+                                    .cancel(
+                                        title: LocalizedErrorStrings.cancelButtonTitle,
+                                        action: .dismissSubmissionFailureAlert
+                                    ),
+                                    .primary(
+                                        title: LocalizedErrorStrings.retryButtonTitle,
+                                        action: .submit
+                                    )
+                                ]
+                            )
+                        )
+                        return .none
+                    }
+
+                case .dismissSubmissionFailureAlert:
+                    state.formSubmissionState = .idle
+                    return .none
+                case .onViewAppear:
+                    guard state.form.isEmpty else {
+                        return .none
+                    }
+                    return EffectTask(value: .loadForm)
+                }
             }
-            return EffectTask(value: .loadForm)
         }
     }
-    .binding()
 }
 
 extension Store where State == PersonalInfo.State, Action == PersonalInfo.Action {
 
     static let emptyPreview = Store(
         initialState: PersonalInfo.State(),
-        reducer: PersonalInfo.reducer,
-        environment: PersonalInfo.Environment(
+        reducer: PersonalInfo.Reducer(
             onClose: {},
             onComplete: {},
             loadForm: {
@@ -164,8 +169,7 @@ extension Store where State == PersonalInfo.State, Action == PersonalInfo.Action
 
     static let filledPreview = Store(
         initialState: PersonalInfo.State(),
-        reducer: PersonalInfo.reducer,
-        environment: PersonalInfo.Environment(
+        reducer: PersonalInfo.Reducer(
             onClose: {},
             onComplete: {},
             loadForm: {

@@ -504,8 +504,7 @@ extension TransactionsRouter {
                         displayCurrency: displayCurrency,
                         currencies: currencies
                     ),
-                    reducer: TradingCurrency.reducer,
-                    environment: .init(
+                    reducer: TradingCurrency.Reducer(
                         closeHandler: {
                             handler(.abandoned)
                         },

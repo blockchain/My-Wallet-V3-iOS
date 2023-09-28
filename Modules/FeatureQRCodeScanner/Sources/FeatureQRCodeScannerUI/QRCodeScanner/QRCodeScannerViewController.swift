@@ -182,7 +182,7 @@ final class QRCodeScannerViewController: UIViewController, UINavigationControlle
     }
 
     private func showAllowAccessSheet(informationalOnly: Bool) {
-        let environment = AllowAccessEnvironment(
+        let reducer = AllowAccessReducer(
             allowCameraAccess: { [viewModel] in
                 viewModel.allowCameraAccess()
             },
@@ -207,8 +207,7 @@ final class QRCodeScannerViewController: UIViewController, UINavigationControlle
                 informationalOnly: informationalOnly,
                 showWalletConnectRow: true
             ),
-            reducer: qrScannerAllowAccessReducer,
-            environment: environment
+            reducer: reducer
         )
         let view = QRCodeScannerAllowAccessView(store: allowAccessStore)
         let hostingController = UIHostingController(rootView: view)

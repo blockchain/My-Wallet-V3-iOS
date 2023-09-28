@@ -44,56 +44,51 @@ enum LimitedFeaturesListAction: Equatable, NavigationAction {
     case tiersStatusViewAction(TiersStatusViewAction)
 }
 
-struct LimitedFeaturesListEnvironment {
+struct LimitedFeaturesListReducer: ReducerProtocol {
+
+    typealias State = LimitedFeaturesListState
+    typealias Action = LimitedFeaturesListAction
 
     let openURL: (URL) -> Void
     let presentKYCFlow: (KYC.Tier) -> Void
-}
 
-let limitedFeaturesListReducer: Reducer<
-    LimitedFeaturesListState,
-    LimitedFeaturesListAction,
-    LimitedFeaturesListEnvironment
-> = Reducer.combine(
-    tiersStatusViewReducer.pullback(
-        state: \LimitedFeaturesListState.kycTiers,
-        action: /LimitedFeaturesListAction.tiersStatusViewAction,
-        environment: {
-            TiersStatusViewEnvironment(
-                presentKYCFlow: $0.presentKYCFlow
+    var body: some ReducerProtocol<State, Action> {
+        Scope(state: \LimitedFeaturesListState.kycTiers, action: /LimitedFeaturesListAction.tiersStatusViewAction) {
+            TiersStatusViewReducer(
+                presentKYCFlow: presentKYCFlow
             )
         }
-    ),
-    .init { state, action, environment in
-        switch action {
-        case .route(let route):
-            state.route = route
-            return .none
-
-        case .viewTiersTapped:
-            return .enter(into: .viewTiers, context: .none)
-
-        case .verify:
-            return .fireAndForget {
-                environment.presentKYCFlow(.verified)
-            }
-
-        case .supportCenterLinkTapped:
-            return .fireAndForget {
-                environment.openURL(.customerSupport)
-            }
-
-        case .tiersStatusViewAction(let action):
+        Reduce { state, action in
             switch action {
-            case .close:
-                return .init(value: .dismiss())
-
-            default:
+            case .route(let route):
+                state.route = route
                 return .none
+
+            case .viewTiersTapped:
+                return .enter(into: .viewTiers, context: .none)
+
+            case .verify:
+                return .fireAndForget {
+                    presentKYCFlow(.verified)
+                }
+
+            case .supportCenterLinkTapped:
+                return .fireAndForget {
+                    openURL(.customerSupport)
+                }
+
+            case .tiersStatusViewAction(let action):
+                switch action {
+                case .close:
+                    return .init(value: .dismiss())
+
+                default:
+                    return .none
+                }
             }
         }
     }
-)
+}
 
 private typealias LocalizedStrings = LocalizationConstants.KYC.LimitsOverview
 
@@ -209,8 +204,7 @@ struct LimitedFeaturesListView_Previews: PreviewProvider {
                     features: [],
                     kycTiers: .init(tiers: [])
                 ),
-                reducer: limitedFeaturesListReducer,
-                environment: LimitedFeaturesListEnvironment(
+                reducer: LimitedFeaturesListReducer(
                     openURL: { _ in },
                     presentKYCFlow: { _ in }
                 )

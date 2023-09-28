@@ -62,7 +62,10 @@ public enum BankAction: Hashable, FailureAction {
     case failure(OpenBanking.Error)
 }
 
-public let bankReducer = Reducer<BankState, BankAction, OpenBankingEnvironment> { state, action, environment in
+public struct BankReducer: ReducerProtocol {
+    
+    public typealias State = BankState
+    public typealias Action = BankAction
 
     enum ID {
         struct Request: Hashable {}
@@ -70,136 +73,149 @@ public let bankReducer = Reducer<BankState, BankAction, OpenBankingEnvironment> 
         struct ConsentError: Hashable {}
     }
 
-    switch action {
-    case .retry:
-        return .merge(
-            .cancel(id: ID.Request()),
-            .cancel(id: ID.LaunchBank()),
-            EffectTask(value: .request)
-        )
-    case .request:
-        state.ui = .communicating(to: state.name)
-        state.showActions = false
-        return .merge(
-            Just(())
-                .delay(for: .seconds(90), scheduler: environment.scheduler)
-                .eraseToEffect()
-                .map { BankAction.showActions },
-            .fireAndForget {
-                environment.openBanking.reset()
-            },
-            environment.openBanking.start(state.data)
-                .compactMap { state -> BankAction in
-                    switch state {
-                    case .waitingForConsent:
-                        return .waitingForConsent
-                    case .success(let output):
-                        return .finalise(output)
-                    case .fail(let error):
-                        return BankAction.failure(error)
-                    }
+    let environment: OpenBankingEnvironment
+
+    public init(environment: OpenBankingEnvironment) {
+        self.environment = environment
+    }
+
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .retry:
+                return .merge(
+                    .cancel(id: ID.Request()),
+                    .cancel(id: ID.LaunchBank()),
+                    EffectTask(value: .request)
+                )
+            case .request:
+                state.ui = .communicating(to: state.name)
+                state.showActions = false
+                return .merge(
+                    Just(())
+                        .delay(for: .seconds(90), scheduler: environment.scheduler)
+                        .eraseToEffect()
+                        .map { BankAction.showActions },
+                    .fireAndForget {
+                        environment.openBanking.reset()
+                    },
+                    environment.openBanking.start(state.data)
+                        .compactMap { state -> BankAction in
+                            switch state {
+                            case .waitingForConsent:
+                                return .waitingForConsent
+                            case .success(let output):
+                                return .finalise(output)
+                            case .fail(let error):
+                                return BankAction.failure(error)
+                            }
+                        }
+                        .receive(on: environment.scheduler)
+                        .eraseToEffect()
+                        .cancellable(id: ID.Request()),
+                    environment.openBanking.authorisationURLPublisher
+                        .map(BankAction.launchAuthorisation)
+                        .receive(on: environment.scheduler)
+                        .eraseToEffect()
+                        .cancellable(id: ID.LaunchBank())
+                )
+            case .showActions:
+                state.showActions = true
+                return .none
+
+            case .waitingForConsent:
+                state.ui = .waiting(for: state.name)
+                return .none
+
+            case .launchAuthorisation(let url):
+                state.ui = .waiting(for: state.name)
+                return .merge(
+                    .fireAndForget { environment.openURL.open(url) },
+                    .cancel(id: ID.LaunchBank())
+                )
+
+            case .finalise(let output):
+                state.showActions = true
+                switch output {
+                case .linked:
+                    state.ui = .linked(institution: state.name)
+                    return .merge(
+                        .cancel(id: ID.ConsentError()),
+                        .cancel(id: ID.Request()),
+                        .cancel(id: ID.LaunchBank())
+                    )
+                case .deposited(let payment):
+                    state.ui = .deposit(success: payment, in: environment)
+                case .confirmed(let order) where order.state == .finished:
+                    state.ui = .buy(finished: order, in: environment)
+                case .confirmed(let order):
+                    state.ui = .buy(pending: order, in: environment)
                 }
-                .receive(on: environment.scheduler)
-                .eraseToEffect()
-                .cancellable(id: ID.Request()),
-            environment.openBanking.authorisationURLPublisher
-                .map(BankAction.launchAuthorisation)
-                .receive(on: environment.scheduler)
-                .eraseToEffect()
-                .cancellable(id: ID.LaunchBank())
-        )
-    case .showActions:
-        state.showActions = true
-        return .none
+                return .merge(
+                    .cancel(id: ID.ConsentError()),
+                    .cancel(id: ID.Request()),
+                    .cancel(id: ID.LaunchBank())
+                )
 
-    case .waitingForConsent:
-        state.ui = .waiting(for: state.name)
-        return .none
+            case .dismiss:
+                return .fireAndForget(environment.dismiss)
 
-    case .launchAuthorisation(let url):
-        state.ui = .waiting(for: state.name)
-        return .merge(
-            .fireAndForget { environment.openURL.open(url) },
-            .cancel(id: ID.LaunchBank())
-        )
+            case .finished, .cancel:
+                return .merge(
+                    .cancel(id: ID.ConsentError()),
+                    .cancel(id: ID.Request()),
+                    .cancel(id: ID.LaunchBank())
+                )
 
-    case .finalise(let output):
-        state.showActions = true
-        switch output {
-        case .linked(let account, let institution):
-            state.ui = .linked(institution: state.name)
-            return .merge(
-                .cancel(id: ID.ConsentError()),
-                .cancel(id: ID.Request()),
-                .cancel(id: ID.LaunchBank())
-            )
-        case .deposited(let payment):
-            state.ui = .deposit(success: payment, in: environment)
-        case .confirmed(let order) where order.state == .finished:
-            state.ui = .buy(finished: order, in: environment)
-        case .confirmed(let order):
-            state.ui = .buy(pending: order, in: environment)
+            case .failure(let error):
+                state.showActions = true
+                switch error {
+                case .timeout:
+                    state.ui = .pending()
+                case .ux(let error):
+                    state.error = error
+                default:
+                    state.ui = .error(error, currency: state.currency, in: environment)
+                }
+                return .cancel(id: ID.ConsentError())
+            }
         }
-        return .merge(
-            .cancel(id: ID.ConsentError()),
-            .cancel(id: ID.Request()),
-            .cancel(id: ID.LaunchBank())
-        )
-
-    case .dismiss:
-        return .fireAndForget(environment.dismiss)
-
-    case .finished, .cancel:
-        return .merge(
-            .cancel(id: ID.ConsentError()),
-            .cancel(id: ID.Request()),
-            .cancel(id: ID.LaunchBank())
-        )
-
-    case .failure(let error):
-        state.showActions = true
-        switch error {
-        case .timeout:
-            state.ui = .pending()
-        case .ux(let error):
-            state.error = error
-        default:
-            state.ui = .error(error, currency: state.currency, in: environment)
-        }
-        return .cancel(id: ID.ConsentError())
+        BankAnalyticsReducer(analytics: environment.analytics)
     }
 }
-.analytics()
 
-extension Reducer where State == BankState, Action == BankAction, Environment == OpenBankingEnvironment {
+struct BankAnalyticsReducer: ReducerProtocol {
+    
+    typealias State = BankState
+    typealias Action = BankAction
 
-    func analytics() -> Self {
-        combined(
-            with: .init { _, action, environment in
-                switch action {
-                case .failure(let error):
-                    return .fireAndForget {
-                        environment.analytics.record(
-                            event: ClientEvent.clientError(
-                                id: error.code,
-                                error: BankState.UI.errors[error] != nil
-                                    ? "OPEN_BANKING_ERROR"
-                                    : "OPEN_BANKING_OOPS_ERROR",
-                                networkEndpoint: nil,
-                                networkErrorCode: nil,
-                                networkErrorDescription: error.description,
-                                networkErrorId: nil,
-                                networkErrorType: error.code,
-                                source: error.code == nil ? "CLIENT" : "NABU",
-                                title: error.description
-                            )
+    let analytics: AnalyticsEventRecorderAPI
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .failure(let error):
+                return .fireAndForget {
+                    analytics.record(
+                        event: ClientEvent.clientError(
+                            id: error.code,
+                            error: BankState.UI.errors[error] != nil
+                                ? "OPEN_BANKING_ERROR"
+                                : "OPEN_BANKING_OOPS_ERROR",
+                            networkEndpoint: nil,
+                            networkErrorCode: nil,
+                            networkErrorDescription: error.description,
+                            networkErrorId: nil,
+                            networkErrorType: error.code,
+                            source: error.code == nil ? "CLIENT" : "NABU",
+                            title: error.description
                         )
-                    }
-                default:
-                    return .none
+                    )
                 }
+            default:
+                return .none
             }
-        )
+        }
     }
 }
 
@@ -309,8 +325,9 @@ struct BankView_Previews: PreviewProvider {
                         action: .link(institution: .mock)
                     )
                 ),
-                reducer: bankReducer,
-                environment: .mock
+                reducer: BankReducer(
+                    environment: .mock
+                )
             )
         )
     }

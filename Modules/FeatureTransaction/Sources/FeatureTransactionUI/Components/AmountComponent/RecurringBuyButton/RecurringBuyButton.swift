@@ -73,56 +73,55 @@ struct RecurringBuyButtonState: Equatable {
     }
 }
 
-struct RecurringBuyButtonEnvironment {
-    let app: AppProtocol
-    let recurringBuyButtonTapped: () -> Void
-}
-
 enum RecurringBuyButtonAction: Equatable, BindableAction {
     case buttonTapped
     case refresh
     case binding(BindingAction<RecurringBuyButtonState>)
 }
 
-let recurringBuyButtonReducer = Reducer<
-    RecurringBuyButtonState,
-    RecurringBuyButtonAction,
-    RecurringBuyButtonEnvironment
-> { _, action, environment in
-    switch action {
-    case .refresh:
-        return .merge(
-            environment
-                .app.publisher(for: blockchain.ux.transaction.checkout.recurring.buy.frequency.localized, as: String.self)
-                .receive(on: DispatchQueue.main)
-                .compactMap(\.value)
-                .eraseToEffect()
-                .map { .binding(.set(\.$title, $0)) },
-            environment
-                .app.publisher(for: blockchain.ux.transaction.recurring.buy.button.tapped.once, as: Bool.self)
-                .replaceError(with: false)
-                .receive(on: DispatchQueue.main)
-                .eraseToEffect()
-                .map { .binding(.set(\.$highlighted, !$0)) }
-        )
-    case .buttonTapped:
-        return .fireAndForget {
-            environment.app.post(value: true, of: blockchain.ux.transaction.recurring.buy.button.tapped.once)
-            environment.recurringBuyButtonTapped()
+struct RecurringBuyButtonReducer: ReducerProtocol {
+    
+    typealias State = RecurringBuyButtonState
+    typealias Action = RecurringBuyButtonAction
+
+    let app: AppProtocol
+    let recurringBuyButtonTapped: () -> Void
+
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .refresh:
+                return .merge(
+                    app.publisher(for: blockchain.ux.transaction.checkout.recurring.buy.frequency.localized, as: String.self)
+                        .receive(on: DispatchQueue.main)
+                        .compactMap(\.value)
+                        .eraseToEffect()
+                        .map { .binding(.set(\.$title, $0)) },
+                    app.publisher(for: blockchain.ux.transaction.recurring.buy.button.tapped.once, as: Bool.self)
+                        .replaceError(with: false)
+                        .receive(on: DispatchQueue.main)
+                        .eraseToEffect()
+                        .map { .binding(.set(\.$highlighted, !$0)) }
+                )
+            case .buttonTapped:
+                return .fireAndForget {
+                    app.post(value: true, of: blockchain.ux.transaction.recurring.buy.button.tapped.once)
+                    recurringBuyButtonTapped()
+                }
+            case .binding:
+                return .none
+            }
         }
-    case .binding:
-        return .none
     }
 }
-.binding()
 
 struct RecurringBuyButton_Previews: PreviewProvider {
     static var previews: some View {
         RecurringBuyButton(
             store: .init(
                 initialState: .init(title: ""),
-                reducer: recurringBuyButtonReducer,
-                environment: .init(app: App.preview, recurringBuyButtonTapped: {})
+                reducer: RecurringBuyButtonReducer(app: App.preview, recurringBuyButtonTapped: {})
             ),
             trailingView: { Icon.placeholder }
         )

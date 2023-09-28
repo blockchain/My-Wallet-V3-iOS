@@ -26,11 +26,9 @@ final class TourViewTests: XCTestCase {
 
     func testTourView_manualLogin_disabled() {
         let view = OnboardingCarouselView(
-            environment: TourEnvironment(
-                createAccountAction: {},
-                restoreAction: {},
-                logInAction: {},
-                manualLoginAction: {}
+            store: Store(
+                initialState: TourState(),
+                reducer: NoOpReducer()
             ),
             manualLoginEnabled: false
         )
@@ -81,18 +79,10 @@ final class TourViewTests: XCTestCase {
         ]
         var tourState = TourState()
         tourState.items = IdentifiedArray(uniqueElements: items)
-        let mockTourReducer: Reducer<TourState, TourAction, TourEnvironment> = Reducer { _, _, _ in
-            .none
-        }
+
         let tourStore = Store(
             initialState: tourState,
-            reducer: mockTourReducer,
-            environment: TourEnvironment(
-                createAccountAction: {},
-                restoreAction: {},
-                logInAction: {},
-                manualLoginAction: {}
-            )
+            reducer: NoOpReducer()
         )
         let livePricesView = LivePricesView(
             store: tourStore,
@@ -110,11 +100,9 @@ final class TourViewTests: XCTestCase {
 
     func testTourView_manualLogin_enabled() {
         let view = OnboardingCarouselView(
-            environment: TourEnvironment(
-                createAccountAction: {},
-                restoreAction: {},
-                logInAction: {},
-                manualLoginAction: {}
+            store: Store(
+                initialState: TourState(),
+                reducer: NoOpReducer()
             ),
             manualLoginEnabled: true
         )
@@ -165,18 +153,10 @@ final class TourViewTests: XCTestCase {
         ]
         var tourState = TourState()
         tourState.items = IdentifiedArray(uniqueElements: items)
-        let mockTourReducer: Reducer<TourState, TourAction, TourEnvironment> = Reducer { _, _, _ in
-            .none
-        }
+
         let tourStore = Store(
             initialState: tourState,
-            reducer: mockTourReducer,
-            environment: TourEnvironment(
-                createAccountAction: {},
-                restoreAction: {},
-                logInAction: {},
-                manualLoginAction: {}
-            )
+            reducer: NoOpReducer()
         )
         let livePricesView = LivePricesView(
             store: tourStore,

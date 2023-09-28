@@ -33,6 +33,27 @@ final class OnboardingReducerTests: XCTestCase {
     var mockLegacySharedKeyRepository: MockLegacySharedKeyRepository!
     var cancellables = Set<AnyCancellable>()
 
+    var onboardingReducer: OnboardingReducer {
+        OnboardingReducer(
+            app: app,
+            appSettings: settingsApp,
+            credentialsStore: mockCredentialsStore,
+            alertPresenter: mockAlertPresenter,
+            mainQueue: mockQueue.eraseToAnyScheduler(),
+            deviceVerificationService: mockDeviceVerificationService,
+            legacyGuidRepository: mockLegacyGuidRepository,
+            legacySharedKeyRepository: mockLegacySharedKeyRepository,
+            mobileAuthSyncService: mockMobileAuthSyncService,
+            pushNotificationsRepository: mockPushNotificationsRepository,
+            walletPayloadService: mockWalletPayloadService,
+            externalAppOpener: mockExternalAppOpener,
+            forgetWalletService: mockForgetWalletService,
+            recaptchaService: mockRecaptchaService,
+            buildVersionProvider: { "v1.0.0" },
+            appUpgradeState: { .just(nil) }
+        )
+    }
+
     override func setUp() {
         super.setUp()
 
@@ -54,27 +75,6 @@ final class OnboardingReducerTests: XCTestCase {
 
         // disable the manual login
         app.remoteConfiguration.override(blockchain.app.configuration.manual.login.is.enabled[].reference, with: false)
-    }
-
-    var onboardingEnvironment: Onboarding.Environment {
-        Onboarding.Environment(
-            app: app,
-            appSettings: settingsApp,
-            credentialsStore: mockCredentialsStore,
-            alertPresenter: mockAlertPresenter,
-            mainQueue: mockQueue.eraseToAnyScheduler(),
-            deviceVerificationService: mockDeviceVerificationService,
-            legacyGuidRepository: mockLegacyGuidRepository,
-            legacySharedKeyRepository: mockLegacySharedKeyRepository,
-            mobileAuthSyncService: mockMobileAuthSyncService,
-            pushNotificationsRepository: mockPushNotificationsRepository,
-            walletPayloadService: mockWalletPayloadService,
-            externalAppOpener: mockExternalAppOpener,
-            forgetWalletService: mockForgetWalletService,
-            recaptchaService: mockRecaptchaService,
-            buildVersionProvider: { "v1.0.0" },
-            appUpgradeState: { .just(nil) }
-        )
     }
 
     override func tearDownWithError() throws {
@@ -110,8 +110,7 @@ final class OnboardingReducerTests: XCTestCase {
     func test_should_authenticate_when_pinIsSet_and_guidSharedKey_are_set() {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onBoardingReducer,
-            environment: onboardingEnvironment
+            reducer: onboardingReducer
         )
 
         // given
@@ -132,8 +131,24 @@ final class OnboardingReducerTests: XCTestCase {
     func test_should_passwordScreen_when_pin_is_not_set() {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onBoardingReducer,
-            environment: onboardingEnvironment
+            reducer: OnboardingReducer(
+                app: app,
+                appSettings: settingsApp,
+                credentialsStore: mockCredentialsStore,
+                alertPresenter: mockAlertPresenter,
+                mainQueue: mockQueue.eraseToAnyScheduler(),
+                deviceVerificationService: mockDeviceVerificationService,
+                legacyGuidRepository: mockLegacyGuidRepository,
+                legacySharedKeyRepository: mockLegacySharedKeyRepository,
+                mobileAuthSyncService: mockMobileAuthSyncService,
+                pushNotificationsRepository: mockPushNotificationsRepository,
+                walletPayloadService: mockWalletPayloadService,
+                externalAppOpener: mockExternalAppOpener,
+                forgetWalletService: mockForgetWalletService,
+                recaptchaService: mockRecaptchaService,
+                buildVersionProvider: { "v1.0.0" },
+                appUpgradeState: { .just(nil) }
+            )
         )
 
         // given
@@ -154,8 +169,7 @@ final class OnboardingReducerTests: XCTestCase {
     func test_should_authenticate_pinIsSet_and_icloud_restoration_exists() {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onBoardingReducer,
-            environment: onboardingEnvironment
+            reducer: onboardingReducer
         )
 
         // given
@@ -176,8 +190,7 @@ final class OnboardingReducerTests: XCTestCase {
     func test_should_passwordScreen_whenPin_not_set_and_icloud_restoration_exists() {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onBoardingReducer,
-            environment: onboardingEnvironment
+            reducer: onboardingReducer
         )
 
         // given
@@ -198,8 +211,7 @@ final class OnboardingReducerTests: XCTestCase {
     func test_should_show_welcome_screen() {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onBoardingReducer,
-            environment: onboardingEnvironment
+            reducer: onboardingReducer
         )
 
         // given
@@ -221,8 +233,7 @@ final class OnboardingReducerTests: XCTestCase {
     func test_forget_wallet_should_show_welcome_screen() {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onBoardingReducer,
-            environment: onboardingEnvironment
+            reducer: onboardingReducer
         )
 
         // given
@@ -254,8 +265,7 @@ final class OnboardingReducerTests: XCTestCase {
     func test_forget_wallet_from_password_screen() {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onBoardingReducer,
-            environment: onboardingEnvironment
+            reducer: onboardingReducer
         )
 
         // given

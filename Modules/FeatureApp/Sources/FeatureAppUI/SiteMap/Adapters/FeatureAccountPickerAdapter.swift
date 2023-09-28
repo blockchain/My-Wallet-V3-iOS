@@ -306,8 +306,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     @ViewBuilder func withdrawalLocksView() -> some View {
         let store = Store<WithdrawalLocksState, WithdrawalLocksAction>(
             initialState: .init(),
-            reducer: withdrawalLocksReducer,
-            environment: WithdrawalLocksEnvironment { _ in }
+            reducer: WithdrawalLocksReducer { _ in }
         )
         WithdrawalLocksView(store: store)
     }

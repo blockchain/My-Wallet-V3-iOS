@@ -65,227 +65,199 @@ public enum Onboarding {
             self.walletCreationContext = walletCreationContext
         }
     }
-
-    public struct Environment {
-        let app: AppProtocol
-        var appSettings: BlockchainSettingsAppAPI
-        var credentialsStore: CredentialsStoreAPI
-        var alertPresenter: AlertViewPresenterAPI
-        var mainQueue: AnySchedulerOf<DispatchQueue>
-        let deviceVerificationService: DeviceVerificationServiceAPI
-        var legacyGuidRepository: LegacyGuidRepositoryAPI
-        var legacySharedKeyRepository: LegacySharedKeyRepositoryAPI
-        let mobileAuthSyncService: MobileAuthSyncServiceAPI
-        let pushNotificationsRepository: PushNotificationsRepositoryAPI
-        let walletPayloadService: WalletPayloadServiceAPI
-        let externalAppOpener: ExternalAppOpener
-        let forgetWalletService: ForgetWalletService
-        let recaptchaService: GoogleRecaptchaServiceAPI
-        var buildVersionProvider: () -> String
-        var appUpgradeState: () -> AnyPublisher<AppUpgradeState?, Never>
-    }
 }
 
 /// The reducer responsible for handing Pin screen and Login/Onboarding screen related action and state.
-let onBoardingReducer = Reducer<Onboarding.State, Onboarding.Action, Onboarding.Environment>.combine(
-    AnyReducer { env in
-        WelcomeReducer(
-            app: env.app,
-            mainQueue: env.mainQueue,
-            deviceVerificationService: env.deviceVerificationService,
-            recaptchaService: env.recaptchaService,
-            buildVersionProvider: env.buildVersionProvider
-        )
-    }
-        .optional()
-        .pullback(
-            state: \Onboarding.State.welcomeState,
-            action: /Onboarding.Action.welcomeScreen,
-            environment: { $0 }
-        ),
-    pinReducer
-        .optional()
-        .pullback(
-            state: \Onboarding.State.pinState,
-            action: /Onboarding.Action.pin,
-            environment: { (env: Onboarding.Environment) in
-                PinCore.Environment(
-                    alertPresenter: env.alertPresenter
-                )
-            }
-        ),
-    AnyReducer { env in
-        PasswordRequiredReducer(
-            mainQueue: env.mainQueue,
-            externalAppOpener: env.externalAppOpener,
-            walletPayloadService: env.walletPayloadService,
-            pushNotificationsRepository: env.pushNotificationsRepository,
-            mobileAuthSyncService: env.mobileAuthSyncService,
-            forgetWalletService: env.forgetWalletService
-        )
-    }
-        .optional()
-        .pullback(
-            state: \Onboarding.State.passwordRequiredState,
-            action: /Onboarding.Action.passwordScreen,
-            environment: { $0 }
-        ),
-    AnyReducer { _ in
-        AppUpgradeReducer()
-    }
-        .optional()
-        .pullback(
-            state: \Onboarding.State.appUpgradeState,
-            action: /Onboarding.Action.appUpgrade,
-            environment: { (_: Onboarding.Environment) in
-                ()
-            }
-        ),
-    Reducer<
-        Onboarding.State,
-        Onboarding.Action,
-        Onboarding.Environment
-    > { state, action, environment in
-        switch action {
-        case .showAppUpgrade(let appUpgradeState):
-            state.appUpgradeState = appUpgradeState
-            return .none
-        case .appUpgrade(AppUpgradeAction.skip):
-            return EffectTask(value: .proceedToFlow)
-        case .start:
-            return .merge(
-                .fireAndForget {
-                    environment.recaptchaService.load()
-                },
-                environment.appUpgradeState()
-                    .eraseToEffect()
-                    .map { state in
-                        guard let state else {
-                            return .proceedToFlow
+struct OnboardingReducer: ReducerProtocol {
+
+    typealias State = Onboarding.State
+    typealias Action = Onboarding.Action
+
+    let app: AppProtocol
+    var appSettings: BlockchainSettingsAppAPI
+    var credentialsStore: CredentialsStoreAPI
+    var alertPresenter: AlertViewPresenterAPI
+    var mainQueue: AnySchedulerOf<DispatchQueue>
+    let deviceVerificationService: DeviceVerificationServiceAPI
+    var legacyGuidRepository: LegacyGuidRepositoryAPI
+    var legacySharedKeyRepository: LegacySharedKeyRepositoryAPI
+    let mobileAuthSyncService: MobileAuthSyncServiceAPI
+    let pushNotificationsRepository: PushNotificationsRepositoryAPI
+    let walletPayloadService: WalletPayloadServiceAPI
+    let externalAppOpener: ExternalAppOpener
+    let forgetWalletService: ForgetWalletService
+    let recaptchaService: GoogleRecaptchaServiceAPI
+    var buildVersionProvider: () -> String
+    var appUpgradeState: () -> AnyPublisher<AppUpgradeState?, Never>
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .showAppUpgrade(let appUpgradeState):
+                state.appUpgradeState = appUpgradeState
+                return .none
+            case .appUpgrade(AppUpgradeAction.skip):
+                return EffectTask(value: .proceedToFlow)
+            case .start:
+                return .merge(
+                    .fireAndForget {
+                        recaptchaService.load()
+                    },
+                    appUpgradeState()
+                        .eraseToEffect()
+                        .map { state in
+                            guard let state else {
+                                return .proceedToFlow
+                            }
+                            return .showAppUpgrade(state)
                         }
-                        return .showAppUpgrade(state)
-                    }
-            )
-        case .proceedToFlow:
-            return decideFlow(
-                state: &state,
-                legacyGuidRepository: environment.legacyGuidRepository,
-                legacySharedKeyRepository: environment.legacySharedKeyRepository,
-                settingsAuthenticating: environment.appSettings
-            )
-        case .pin:
-            return .none
-
-        case .welcomeScreen(.route(nil)):
-            // don't clear the state if the state is .new when dismissing the modal by setting the screen flow back to welcome screen
-            if state.walletCreationContext == .existing || state.walletCreationContext == .recovery {
-                state.walletCreationContext = nil
-            }
-            return .none
-
-        case .welcomeScreen(WelcomeAction.navigate(to: WelcomeRoute.createWallet)),
-             .welcomeScreen(WelcomeAction.enter(into: WelcomeRoute.createWallet)):
-            state.walletCreationContext = .new
-            return .none
-
-        case .welcomeScreen(WelcomeAction.enter(into: WelcomeRoute.emailLogin)):
-            state.walletCreationContext = .existing
-            return .none
-
-        case .welcomeScreen(WelcomeAction.enter(into: WelcomeRoute.restoreWallet)):
-            state.walletCreationContext = .recovery
-            return .none
-        case .welcomeScreen(.requestedToRestoreWallet(let walletRecovery)):
-            switch walletRecovery {
-            case .metadataRecovery(let seedPhrase):
-                state.walletRecoveryContext = .metadataRecovery
-                return .none
-            case .importRecovery:
-                state.walletRecoveryContext = .importRecovery
-                return .none
-            case .resetAccountRecovery(let email, let newPassword, let nabuInfo):
-                return .none
-            }
-        case .welcomeScreen(.informForWalletInitialization):
-            return EffectTask(value: .informForWalletInitialization)
-        case .welcomeScreen:
-            return .none
-        case .passwordScreen(.forgetWallet),
-             .forgetWallet:
-            state.passwordRequiredState = nil
-            state.pinState = nil
-            state.welcomeState = .init()
-
-            return .merge(
-                .fireAndForget {
-                    environment.appSettings.clear()
-                    environment.credentialsStore.erase()
-                },
-                environment.forgetWalletService.forget().fireAndForget(),
-                EffectTask(value: .welcomeScreen(.start))
-            )
-        case .passwordScreen:
-            return .none
-        case .informSecondPasswordDetected:
-            guard state.welcomeState != nil else {
-                return .none
-            }
-            return EffectTask(value: .welcomeScreen(.informSecondPasswordDetected))
-
-        case .informForWalletInitialization:
-            return .none
-        case .handleWalletDecryptionError:
-            if state.welcomeState?.manualCredentialsState != nil {
-                return EffectTask(
-                    value: .welcomeScreen(
-                        .manualPairing(
-                            .password(
-                                .showIncorrectPasswordError(true)
-                            )
-                        )
-                    )
                 )
-            }
-            return EffectTask(
-                value: .welcomeScreen(
-                    .emailLogin(
-                        .verifyDevice(
-                            .credentials(
+            case .proceedToFlow:
+                return decideFlow(
+                    state: &state,
+                    legacyGuidRepository: legacyGuidRepository,
+                    legacySharedKeyRepository: legacySharedKeyRepository,
+                    settingsAuthenticating: appSettings
+                )
+            case .pin:
+                return .none
+
+            case .welcomeScreen(.route(nil)):
+                // don't clear the state if the state is .new when dismissing the modal by setting the screen flow back to welcome screen
+                if state.walletCreationContext == .existing || state.walletCreationContext == .recovery {
+                    state.walletCreationContext = nil
+                }
+                return .none
+
+            case .welcomeScreen(WelcomeAction.navigate(to: WelcomeRoute.createWallet)),
+                 .welcomeScreen(WelcomeAction.enter(into: WelcomeRoute.createWallet)):
+                state.walletCreationContext = .new
+                return .none
+
+            case .welcomeScreen(WelcomeAction.enter(into: WelcomeRoute.emailLogin)):
+                state.walletCreationContext = .existing
+                return .none
+
+            case .welcomeScreen(WelcomeAction.enter(into: WelcomeRoute.restoreWallet)):
+                state.walletCreationContext = .recovery
+                return .none
+            case .welcomeScreen(.requestedToRestoreWallet(let walletRecovery)):
+                switch walletRecovery {
+                case .metadataRecovery(let seedPhrase):
+                    state.walletRecoveryContext = .metadataRecovery
+                    return .none
+                case .importRecovery:
+                    state.walletRecoveryContext = .importRecovery
+                    return .none
+                case .resetAccountRecovery(let email, let newPassword, let nabuInfo):
+                    return .none
+                }
+            case .welcomeScreen(.informForWalletInitialization):
+                return EffectTask(value: .informForWalletInitialization)
+            case .welcomeScreen:
+                return .none
+            case .passwordScreen(.forgetWallet),
+                 .forgetWallet:
+                state.passwordRequiredState = nil
+                state.pinState = nil
+                state.welcomeState = .init()
+
+                return .merge(
+                    .fireAndForget {
+                        appSettings.clear()
+                        credentialsStore.erase()
+                    },
+                    forgetWalletService.forget().fireAndForget(),
+                    EffectTask(value: .welcomeScreen(.start))
+                )
+            case .passwordScreen:
+                return .none
+            case .informSecondPasswordDetected:
+                guard state.welcomeState != nil else {
+                    return .none
+                }
+                return EffectTask(value: .welcomeScreen(.informSecondPasswordDetected))
+
+            case .informForWalletInitialization:
+                return .none
+            case .handleWalletDecryptionError:
+                if state.welcomeState?.manualCredentialsState != nil {
+                    return EffectTask(
+                        value: .welcomeScreen(
+                            .manualPairing(
                                 .password(
                                     .showIncorrectPasswordError(true)
                                 )
                             )
                         )
                     )
-                )
-            )
-        case .handleMetadataRecoveryAfterAuthentication:
-            // if it is from the restore wallet screen
-            if state.welcomeState?.restoreWalletState != nil {
-                return .merge(
-                    EffectTask(value: .welcomeScreen(.restoreWallet(.setResetPasswordScreenVisible(true))))
-                )
-                // if it is from the trouble logging in screen
-            } else if state.welcomeState?.emailLoginState != nil {
-                return .merge(
-                    EffectTask(
-                        value: .welcomeScreen(
-                            .emailLogin(
-                                .verifyDevice(
-                                    .credentials(
-                                        .seedPhrase(
-                                            .setResetPasswordScreenVisible(true))
+                }
+                return EffectTask(
+                    value: .welcomeScreen(
+                        .emailLogin(
+                            .verifyDevice(
+                                .credentials(
+                                    .password(
+                                        .showIncorrectPasswordError(true)
                                     )
                                 )
                             )
                         )
                     )
                 )
+            case .handleMetadataRecoveryAfterAuthentication:
+                // if it is from the restore wallet screen
+                if state.welcomeState?.restoreWalletState != nil {
+                    return .merge(
+                        EffectTask(value: .welcomeScreen(.restoreWallet(.setResetPasswordScreenVisible(true))))
+                    )
+                    // if it is from the trouble logging in screen
+                } else if state.welcomeState?.emailLoginState != nil {
+                    return .merge(
+                        EffectTask(
+                            value: .welcomeScreen(
+                                .emailLogin(
+                                    .verifyDevice(
+                                        .credentials(
+                                            .seedPhrase(
+                                                .setResetPasswordScreenVisible(true))
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                }
+                return .none
             }
-            return .none
+        }
+        .ifLet(\Onboarding.State.welcomeState, action: /Onboarding.Action.welcomeScreen) {
+            WelcomeReducer(
+                app: app,
+                mainQueue: mainQueue,
+                deviceVerificationService: deviceVerificationService,
+                recaptchaService: recaptchaService,
+                buildVersionProvider: buildVersionProvider
+            )
+        }
+        .ifLet(\Onboarding.State.pinState, action: /Onboarding.Action.pin) {
+            PinReducer(alertPresenter: alertPresenter)
+        }
+        .ifLet(\Onboarding.State.passwordRequiredState, action: /Onboarding.Action.passwordScreen) {
+            PasswordRequiredReducer(
+                mainQueue: mainQueue,
+                externalAppOpener: externalAppOpener,
+                walletPayloadService: walletPayloadService,
+                pushNotificationsRepository: pushNotificationsRepository,
+                mobileAuthSyncService: mobileAuthSyncService,
+                forgetWalletService: forgetWalletService
+            )
+        }
+        .ifLet(\Onboarding.State.appUpgradeState, action: /Onboarding.Action.appUpgrade) {
+            AppUpgradeReducer()
         }
     }
-)
+}
 
 // MARK: - Internal Methods
 

@@ -22,7 +22,7 @@ final class TradingLimitsViewTests: XCTestCase {
         TradingLimitsAction,
         TradingLimitsState,
         TradingLimitsAction,
-        TradingLimitsEnvironment
+        Void
     >!
     private let testScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
 
@@ -150,8 +150,7 @@ final class TradingLimitsViewTests: XCTestCase {
                     kycTiers: .init(tiers: [])
                 )
             ),
-            reducer: tradingLimitsReducer,
-            environment: TradingLimitsEnvironment(
+            reducer: TradingLimitsReducer(
                 close: { [weak self] in
                     self?.recordedInvocations.close.append(())
                 },

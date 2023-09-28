@@ -20,26 +20,32 @@ enum TradingCurrency {
         case didSelect(FiatCurrency)
     }
 
-    struct Environment {
+    public struct Reducer: ReducerProtocol {
+
+        typealias State = TradingCurrency.State
+        typealias Action = TradingCurrency.Action
+
         let closeHandler: () -> Void
         let selectionHandler: (FiatCurrency) -> Void
         let analyticsRecorder: AnalyticsEventRecorderAPI
-    }
 
-    static let reducer = Reducer<State, Action, Environment> { _, action, env in
-        switch action {
-        case .close:
-            return .fireAndForget {
-                env.closeHandler()
-            }
+        public var body: some ReducerProtocol<State, Action> {
+            TradingCurrencyAnalyticsReducer(analyticsRecorder: analyticsRecorder)
+            Reduce { _, action in
+                switch action {
+                case .close:
+                    return .fireAndForget {
+                        closeHandler()
+                    }
 
-        case .didSelect(let fiatCurrency):
-            return .fireAndForget {
-                env.selectionHandler(fiatCurrency)
+                case .didSelect(let fiatCurrency):
+                    return .fireAndForget {
+                        selectionHandler(fiatCurrency)
+                    }
+                }
             }
         }
     }
-    .analytics()
 }
 
 struct TradingCurrencySelector: View {
@@ -108,8 +114,7 @@ struct TradingCurrencySelector_Previews: PreviewProvider {
                     displayCurrency: .JPY,
                     currencies: FiatCurrency.allEnabledFiatCurrencies
                 ),
-                reducer: TradingCurrency.reducer,
-                environment: .init(
+                reducer: TradingCurrency.Reducer(
                     closeHandler: {},
                     selectionHandler: { _ in },
                     analyticsRecorder: NoOpAnalyticsRecorder()

@@ -25,60 +25,60 @@ enum EmailVerificationHelpAction: Equatable {
     case dismissEmailSendingFailureAlert
 }
 
-struct EmailVerificationHelpEnvironment {
-    let emailVerificationService: EmailVerificationServiceAPI
-    let mainQueue: AnySchedulerOf<DispatchQueue>
-}
-
 private typealias L10n = LocalizationConstants.NewKYC
 
-typealias EmailVerificationHelpReducer = Reducer<
-    EmailVerificationHelpState,
-    EmailVerificationHelpAction,
-    EmailVerificationHelpEnvironment
->
+struct EmailVerificationHelpReducer: ReducerProtocol {
+    
+    typealias State = EmailVerificationHelpState
+    typealias Action = EmailVerificationHelpAction
 
-let emailVerificationHelpReducer = EmailVerificationHelpReducer { state, action, environment in
-    switch action {
-    case .editEmailAddress:
-        return .none
+    let emailVerificationService: EmailVerificationServiceAPI
+    let mainQueue: AnySchedulerOf<DispatchQueue>
+    
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .editEmailAddress:
+                return .none
 
-    case .sendVerificationEmail:
-        state.sendingVerificationEmail = true
-        return environment.emailVerificationService.sendVerificationEmail(to: state.emailAddress)
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result in
+            case .sendVerificationEmail:
+                state.sendingVerificationEmail = true
+                return emailVerificationService.sendVerificationEmail(to: state.emailAddress)
+                    .receive(on: mainQueue)
+                    .catchToEffect()
+                    .map { result in
+                        switch result {
+                        case .success:
+                            return .didReceiveEmailSendingResponse(.success(0))
+                        case .failure(let error):
+                            return .didReceiveEmailSendingResponse(.failure(error))
+                        }
+                    }
+
+            case .didReceiveEmailSendingResponse(let result):
+                state.sendingVerificationEmail = false
                 switch result {
                 case .success:
-                    return .didReceiveEmailSendingResponse(.success(0))
-                case .failure(let error):
-                    return .didReceiveEmailSendingResponse(.failure(error))
+                    return .none
+
+                case .failure:
+                    state.sentFailedAlert = AlertState(
+                        title: TextState(L10n.GenericError.title),
+                        message: TextState(L10n.EmailVerificationHelp.couldNotSendEmailAlertMessage),
+                        primaryButton: .default(
+                            TextState(L10n.GenericError.retryButtonTitle),
+                            action: .send(.sendVerificationEmail)
+                        ),
+                        secondaryButton: .cancel(TextState(L10n.GenericError.cancelButtonTitle))
+                    )
+                    return .none
                 }
+
+            case .dismissEmailSendingFailureAlert:
+                state.sentFailedAlert = nil
+                return .none
             }
-
-    case .didReceiveEmailSendingResponse(let result):
-        state.sendingVerificationEmail = false
-        switch result {
-        case .success:
-            return .none
-
-        case .failure:
-            state.sentFailedAlert = AlertState(
-                title: TextState(L10n.GenericError.title),
-                message: TextState(L10n.EmailVerificationHelp.couldNotSendEmailAlertMessage),
-                primaryButton: .default(
-                    TextState(L10n.GenericError.retryButtonTitle),
-                    action: .send(.sendVerificationEmail)
-                ),
-                secondaryButton: .cancel(TextState(L10n.GenericError.cancelButtonTitle))
-            )
-            return .none
         }
-
-    case .dismissEmailSendingFailureAlert:
-        state.sentFailedAlert = nil
-        return .none
     }
 }
 
@@ -151,8 +151,7 @@ struct EmailVerificationHelpView_Previews: PreviewProvider {
         EmailVerificationHelpView(
             store: .init(
                 initialState: .init(emailAddress: "test@example.com"),
-                reducer: emailVerificationHelpReducer,
-                environment: EmailVerificationHelpEnvironment(
+                reducer: EmailVerificationHelpReducer(
                     emailVerificationService: NoOpEmailVerificationService(),
                     mainQueue: .main
                 )
@@ -163,8 +162,7 @@ struct EmailVerificationHelpView_Previews: PreviewProvider {
         EmailVerificationHelpView(
             store: .init(
                 initialState: .init(emailAddress: "test@example.com"),
-                reducer: emailVerificationHelpReducer,
-                environment: EmailVerificationHelpEnvironment(
+                reducer: EmailVerificationHelpReducer(
                     emailVerificationService: NoOpEmailVerificationService(),
                     mainQueue: .main
                 )

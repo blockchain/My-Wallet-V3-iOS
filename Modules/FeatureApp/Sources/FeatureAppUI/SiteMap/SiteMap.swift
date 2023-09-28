@@ -143,9 +143,9 @@ public struct SiteMap {
             let model = try context[blockchain.ux.referral.details.screen.info].decode(Referral.self)
             ReferFriendView(store: .init(
                 initialState: .init(referralInfo: model),
-                reducer: ReferFriendModule.reducer,
-                environment: .init(
-                    mainQueue: .main
+                reducer: ReferFriendReducer(
+                    mainQueue: .main,
+                    analyticsRecorder: resolve()
                 )
             ))
             .identity(blockchain.ux.referral)

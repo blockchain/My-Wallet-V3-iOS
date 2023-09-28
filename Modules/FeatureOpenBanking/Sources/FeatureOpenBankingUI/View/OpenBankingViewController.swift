@@ -59,8 +59,7 @@ public final class OpenBankingViewController: UIHostingController<OpenBankingVie
         self.eventPublisher = environment.eventPublisher.eraseToAnyPublisher()
         let store = Store<OpenBankingState, OpenBankingAction>(
             initialState: state,
-            reducer: openBankingReducer,
-            environment: environment
+            reducer: OpenBankingReducer(environment: environment)
         )
         super.init(
             rootView: Container(store: store, environment: environment)
