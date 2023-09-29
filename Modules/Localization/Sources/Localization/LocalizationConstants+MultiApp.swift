@@ -248,21 +248,36 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
         comment: "Blocked: Message"
     )
 
-    public static let bakktStartMigrationTitle = NSLocalizedString(
+    public static let bakktStartMigrationWithAssetsTitle = NSLocalizedString(
         "Before you continue trading",
-        comment: "Blocked: Before you continue trading"
+        comment: "Bakkt Migration Title: Before you continue trading"
     )
 
-    public static let bakktStartMigrationMessage = NSLocalizedString(
+    public static let bakktStartMigrationWithAssetsMessage = NSLocalizedString(
         "We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto.",
-        comment: "Blocked: We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto."
+        comment: "Bakkt Migration Message: We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto."
+    )
+
+    public static let bakktStartMigrationNoAssetsTitle = NSLocalizedString(
+        "Important information",
+        comment: "Bakkt Migration Title: Before you continue trading"
+    )
+
+    public static let bakktStartMigrationNoAssetsMessage = NSLocalizedString(
+        "We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, review our new Terms of Services to start trading crypto.",
+        comment: "Bakkt Migration Message: We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, review our new Terms of Services to start trading crypto."
     )
 
     public static let bakktUpgradeAccountButton = NSLocalizedString(
         "Upgrade account",
-        comment: "Blocked: Upgrade account"
+        comment: "Bakkt Migration CTA: Upgrade account"
     )
-    
+
+    public static let bakktReviewTermsButton = NSLocalizedString(
+        "Review Terms of Service",
+        comment: "Bakkt Migration CTA: Review Terms of Service"
+    )
+
     public static let bakktMigrationInProgressTitle = NSLocalizedString(
         "Migration in progress",
         comment: "Blocked: Title"

@@ -21,6 +21,7 @@ struct BakktTermsAndConditionsView: View {
                 PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton) {
                     onDone()
                 }
+                .disabled(!termsApproved)
             }
         }
         .padding(.horizontal, Spacing.padding2)

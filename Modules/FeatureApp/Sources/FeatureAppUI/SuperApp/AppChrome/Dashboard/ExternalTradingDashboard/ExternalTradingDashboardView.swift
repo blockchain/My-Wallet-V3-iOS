@@ -34,7 +34,12 @@ struct ExternalTradingDashboardView: View {
     @StateObject private var onboarding = CustodialOnboardingService()
 
     @State private var externalTradingMigrationState: Tag?
-    var externalTradingMigrationIsPending: Bool { externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[] }
+    var externalTradingMigrationIsPending: Bool {
+        guard let externalTradingMigrationState else {
+            return false
+        }
+        return externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
+    }
 
     struct ViewState: Equatable {
         @BindingViewState var migrationInfo: ExternalTradingMigrationInfo?

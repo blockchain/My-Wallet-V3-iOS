@@ -18,12 +18,14 @@ public struct ExternalTradingMigrationView: View {
         WithViewStore(store) { viewStore in
             Group {
                 content
-                    .sheet(isPresented: viewStore.$migrationInProgressPresented,
-                           content: {
+                    .sheet(
+                        isPresented: viewStore.$migrationInProgressPresented,
+                        content: {
                         BakktMigrationInProgressView(onDone: {
                             viewStore.send(.onFlowComplete)
                         })
-                    })
+                    }
+                    )
             }
         }
     }
@@ -106,15 +108,14 @@ struct ExternalTradingMigrationView_Preview: PreviewProvider {
                 reducer: ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
             )
         )
-        
-        
+
         ExternalTradingMigrationView(
             store: .init(
                 initialState: .init(flow: .existingUsersNoAssets),
                 reducer: ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
             )
         )
-        
+
         ExternalTradingMigrationView(
             store: .init(
                 initialState: .init(flow: .existingUserAssetsConsolidationNeeded),
@@ -126,7 +127,7 @@ struct ExternalTradingMigrationView_Preview: PreviewProvider {
 
 private class ExternalTradingMigrationServiceMock: ExternalTradingMigrationServiceAPI {
     func startMigration() async throws {}
-    
+
     func fetchMigrationInfo() async throws -> FeatureExternalTradingMigrationDomain.ExternalTradingMigrationInfo? {
         nil
     }

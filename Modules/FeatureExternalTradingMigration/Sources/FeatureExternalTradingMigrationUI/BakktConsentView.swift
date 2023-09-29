@@ -42,60 +42,24 @@ struct BakktConsentView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: Spacing.padding3) {
-                Image(
-                    "blockchain_logo",
-                    bundle: Bundle.featureExternalTradingMigration
-                )
-                .frame(width: 88)
+        VStack {
+            ScrollView {
+                VStack(spacing: Spacing.padding3) {
+                    Image(
+                        "blockchain_logo",
+                        bundle: Bundle.featureExternalTradingMigration
+                    )
+                    .frame(width: 88)
 
-                VStack(spacing: Spacing.padding1) {
-                    Text(L10n.headerTitle)
-                        .typography(.title3)
-                        .foregroundColor(.semantic.title)
-
-                    Text(L10n.headerDescription)
-                        .typography(.body2)
-                        .foregroundColor(.semantic.text
-                        )
-                        .multilineTextAlignment(.center)
-
-                    if hasAssetsToConsolidate {
-                        SmallMinimalButton(title: LocalizationConstants.ExternalTradingMigration.learnMoreButton) {}
-                    }
-                }
-
-                VStack(spacing: 0) {
-                    ForEach($consentItems, id: \.id) { item in
-                        ExpandingTableRow(item: item)
-                    }
-                }
-                .background(.white)
-                .cornerRadius(16, corners: .allCorners)
-
-                Spacer()
-
-                VStack(spacing: Spacing.padding2) {
+                    labelsView
+                    consentItemsView
+                    Spacer()
                     termsAndConditions
-                    if hasAssetsToConsolidate {
-                        PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton, action: {
-                            onContinue?()
-                        })
-                        .disabled(!continueButtonEnabled)
-                    } else {
-                        PrimaryButton(
-                            title: LocalizationConstants.ExternalTradingMigration.upgradeButton,
-                            action: {
-                            onDone?()
-                            }
-                        )
-                        .disabled(!continueButtonEnabled)
-                    }
                 }
             }
-            .padding(Spacing.padding2)
+            bottomView
         }
+        .padding(Spacing.padding2)
         .navigationBarHidden(true)
         .superAppNavigationBar(
             leading: {},
@@ -103,12 +67,62 @@ struct BakktConsentView: View {
             IconButton(icon: .navigationCloseButton()) {
                 app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
             }
-        },
+            },
             scrollOffset: nil
         )
         .background(Color.semantic.light.ignoresSafeArea())
         .batch {
             set(blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
+    }
+
+    @ViewBuilder
+    var bottomView: some View {
+        VStack(spacing: Spacing.padding2) {
+            if hasAssetsToConsolidate {
+                PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton, action: {
+                    onContinue?()
+                })
+                .disabled(!continueButtonEnabled)
+            } else {
+                PrimaryButton(
+                    title: LocalizationConstants.ExternalTradingMigration.upgradeButton,
+                    action: {
+                    onDone?()
+                    }
+                )
+                .disabled(!continueButtonEnabled)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var consentItemsView: some View {
+        VStack(spacing: 0) {
+            ForEach($consentItems, id: \.id) { item in
+                ExpandingTableRow(item: item)
+            }
+        }
+        .background(.white)
+        .cornerRadius(16, corners: .allCorners)
+    }
+
+    @ViewBuilder
+    var labelsView: some View {
+        VStack(spacing: Spacing.padding1) {
+            Text(L10n.headerTitle)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
+
+            Text(L10n.headerDescription)
+                .typography(.body2)
+                .foregroundColor(.semantic.text
+                )
+                .multilineTextAlignment(.center)
+
+            if hasAssetsToConsolidate {
+                SmallMinimalButton(title: LocalizationConstants.ExternalTradingMigration.learnMoreButton) {}
+            }
         }
     }
 
@@ -145,7 +159,6 @@ struct MigrationConsentElement: Identifiable {
             return LocalizationConstants.ExternalTradingMigration.Consent.SupportedAssets.title
         case .transactions:
             return LocalizationConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
-
         case .migrationPeriod:
             return LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
         case .historicalData:
@@ -161,7 +174,6 @@ struct MigrationConsentElement: Identifiable {
             return LocalizationConstants.ExternalTradingMigration.Consent.SupportedAssets.message
         case .transactions:
             return LocalizationConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
-
         case .migrationPeriod:
             return LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
         case .historicalData:
@@ -185,7 +197,6 @@ enum MigrationConsentItem: String, CaseIterable {
             return LocalizationConstants.ExternalTradingMigration.Consent.SupportedAssets.title
         case .transactions:
             return LocalizationConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
-
         case .migrationPeriod:
             return LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
         case .historicalData:

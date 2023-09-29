@@ -52,7 +52,6 @@ public struct ExternalTradingMigration: ReducerProtocol {
         self.externalTradingMigrationService = externalTradingMigrationService
     }
 
-
     public var body: some ReducerProtocol<State, Action> {
         BindingReducer()
         Reduce { state, action in
@@ -71,7 +70,7 @@ public struct ExternalTradingMigration: ReducerProtocol {
                     return .none
                 }
 
-                if migrationInfo.availableBalances.isNotEmpty {
+                if migrationInfo.availableBalances?.isNotEmpty == true {
                     state.flow = .existingUserAssetsNoConsolidationNeeded
                     return .none
                 }
@@ -90,7 +89,7 @@ public struct ExternalTradingMigration: ReducerProtocol {
             case .onFlowComplete:
                 state.migrationInProgressPresented = false
                 app.post(event: blockchain.user.event.did.update)
-                app.post(event:blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
+                app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
                 return .none
 
             case .onUpgrade:
@@ -98,8 +97,7 @@ public struct ExternalTradingMigration: ReducerProtocol {
                 return .run { [externalTradingMigrationService] _ in
                     do {
                         try await externalTradingMigrationService.startMigration()
-                    }
-                    catch let error {
+                    } catch {
                         print(error.localizedDescription)
                     }
                 }

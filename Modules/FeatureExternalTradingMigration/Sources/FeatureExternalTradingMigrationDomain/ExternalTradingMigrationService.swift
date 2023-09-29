@@ -8,7 +8,7 @@ public protocol ExternalTradingMigrationServiceAPI {
     func startMigration() async throws
 }
 
-public final class ExternalTradingMigrationService: ExternalTradingMigrationServiceAPI {
+public final class ExternalTradingMigrationService: ExternalTradingMigrationServiceAPI, ObservableObject {
     private let repository: ExternalTradingMigrationRepositoryAPI
     private let app: AppProtocol
 

@@ -13,6 +13,7 @@ import FeatureCoinUI
 import FeatureCustodialOnboarding
 import FeatureDashboardUI
 import FeatureExternalTradingMigrationDomain
+import FeatureExternalTradingMigrationUI
 import FeatureQuickActions
 import FeatureTopMoversCryptoUI
 import FeatureTransactionUI
@@ -103,7 +104,6 @@ struct TradingDashboardView: View {
             if isBlocked {
                 blockedView
             }
-            externalTradingUpdateNowView
             CustodialOnboardingDashboardView(service: onboarding)
         }
     }
@@ -136,7 +136,7 @@ struct TradingDashboardView: View {
             }
 
             if externalTradingMigrationIsAvailable {
-                externalTradingUpdateNowView
+                DashboardExternalMigrateView()
             }
 
             if !viewStore.isZeroBalance {
@@ -250,31 +250,6 @@ struct TradingDashboardView: View {
             if let supportURL {
                 set(blockchain.ux.dashboard.kyc.is.rejected.contact.support.paragraph.button.small.secondary.tap.then.enter.into, to: blockchain.ux.web[supportURL])
             }
-        }
-    }
-
-    var externalTradingUpdateNowView: some View {
-        AlertCard(
-            title: L10n.bakktStartMigrationTitle,
-            message: L10n.bakktStartMigrationMessage,
-            variant: .warning,
-            isBordered: true,
-            footer: {
-                HStack {
-                    SmallSecondaryButton(
-                        title: L10n.bakktUpgradeAccountButton,
-                        action: {
-                            $app.post(event: blockchain.ux.dashboard.external.trading.migration.start.paragraph.button.primary.tap)
-                        }
-                    )
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        )
-        .padding(.horizontal)
-        .batch {
-            set(blockchain.ux.dashboard.external.trading.migration.start.paragraph.button.primary.tap.then.enter.into, 
-                to: blockchain.ux.dashboard.external.trading.migration)
         }
     }
 }

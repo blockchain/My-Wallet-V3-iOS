@@ -27,40 +27,25 @@ struct BakktAssetMigrationView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(spacing: Spacing.padding3) {
-                    Image(
-                        "last_step_logo",
-                        bundle: Bundle.featureExternalTradingMigration
-                    )
-                    .frame(width: 88)
+            VStack {
+                ScrollView {
+                    VStack(spacing: Spacing.padding3) {
+                        Image(
+                            "last_step_logo",
+                            bundle: Bundle.featureExternalTradingMigration
+                        )
+                        .frame(width: 88)
 
-                    VStack(spacing: Spacing.padding1) {
-                        Text(L10n.headerTitle)
-                            .typography(.title3)
-                            .foregroundColor(.semantic.title)
-
-                        Text(L10n.headerDescription)
-                            .typography(.body1)
-                            .foregroundColor(.semantic.text)
-                            .multilineTextAlignment(.center)
+                        labelsView
+                        beforeMigrationAssetsView
                     }
-
-                    DividedVStack(spacing: 0) {
-                        ForEach(beforeMigrationBalances, id: \.currency) { item in
-                            AssetMigrationRow(balance: item)
-                        }
-                        .cornerRadius(16)
-                        Spacer()
-                    }
-                    .padding(.horizontal, Spacing.padding2)
                 }
                 bottomView
             }
             .navigationBarHidden(true)
             .superAppNavigationBar(
                 leading: {
-                    IconButton(icon: .arrowLeft) {
+                    IconButton(icon: .chevronLeft) {
                         onGoBack()
                     }
                 },
@@ -78,11 +63,40 @@ struct BakktAssetMigrationView: View {
         }
     }
 
+    @MainActor
+    @ViewBuilder
+    var beforeMigrationAssetsView: some View {
+        DividedVStack(spacing: 0) {
+            ForEach(beforeMigrationBalances, id: \.currency) { item in
+                AssetMigrationRow(balance: item)
+            }
+            Spacer()
+        }
+        .cornerRadius(16)
+        .padding(.horizontal, Spacing.padding2)
+    }
+
+    @ViewBuilder
+    var labelsView: some View {
+        VStack(spacing: Spacing.padding1) {
+            Text(L10n.headerTitle)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
+
+            Text(L10n.headerDescription)
+                .typography(.body1)
+                .foregroundColor(.semantic.text)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.horizontal, Spacing.padding2)
+    }
+
     @ViewBuilder
     @MainActor
     var bottomView: some View {
         VStack(spacing: Spacing.padding2) {
             AssetMigrationRow(balance: afterMigrationBalance)
+                .cornerRadius(16)
                 .padding(.top, Spacing.padding3)
 
             termsAndConditions
@@ -158,7 +172,6 @@ struct AssetMigrationRow: View {
         ) {
             balance.currency.logo()
         }
-        .cornerRadius(16)
         .bindings {
             subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[balance.currency.code].fiat["USD"].quote.value)
         }

@@ -62,6 +62,4 @@ extension LocalizationConstants.CustodialOnboarding {
     static let address = NSLocalizedString("Address", comment: "Address")
     static let changeAddress = NSLocalizedString("Change address manually ->", comment: "Change address manually ->")
     static let socialSecurityNumber = NSLocalizedString("Social Security Number (SSN)", comment: "Social Security Number (SSN)")
-
-
 }

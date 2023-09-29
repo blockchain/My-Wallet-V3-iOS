@@ -10,11 +10,15 @@ struct BakktMigrationInProgressView: View {
 
     var body: some View {
         VStack {
-            Image(
-                "blockchain_logo",
-                bundle: Bundle.featureExternalTradingMigration
-            )
-            .frame(width: 88)
+            ZStack(alignment: .bottomTrailing) {
+                Image(
+                    "blockchain_logo",
+                    bundle: Bundle.featureExternalTradingMigration
+                )
+                .frame(width: 88)
+
+                progressView
+            }
 
             VStack(spacing: Spacing.padding1) {
                 Text(L10n.headerTitle)
@@ -26,6 +30,8 @@ struct BakktMigrationInProgressView: View {
                     .foregroundColor(.semantic.body)
                     .multilineTextAlignment(.center)
             }
+            .padding(.top, Spacing.padding2)
+
             Spacer()
 
             PrimaryButton(title: L10n.goToDashboard) {
@@ -33,10 +39,23 @@ struct BakktMigrationInProgressView: View {
             }
         }
         .padding(.top, Spacing.padding2)
-        .padding(.horizontal, Spacing.padding2)
+        .padding(.horizontal, Spacing.padding3)
+        .background(Color.semantic.light.ignoresSafeArea())
+    }
+
+    var progressView: some View {
+        ProgressView()
+            .progressViewStyle(.indeterminate)
+            .overlay(
+                RoundedRectangle(cornerRadius: 51 / 2)
+                    .stroke(Color.WalletSemantic.light, lineWidth: 3)
+            )
+            .background(Color.semantic.light.cornerRadius(16, corners: .allCorners))
+            .frame(height: 51)
+            .padding(.bottom, -Spacing.padding2)
+            .padding(.trailing, -Spacing.padding2)
     }
 }
-
 
 struct BakktMigrationInProgressView_Preview: PreviewProvider {
     static var previews: some View {

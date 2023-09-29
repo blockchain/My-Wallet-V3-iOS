@@ -42,6 +42,5 @@ public struct ExternalTradingMigrationInfo: Equatable, Decodable {
     public let state: MigrationState
     public let consolidationCurrencies: [String]
     public let consolidatedBalances: ConsolidatedBalances
-    public let availableBalances: [Balance]
-    public let pendingBalances: [Balance]
+    public let availableBalances: [Balance]?
 }
