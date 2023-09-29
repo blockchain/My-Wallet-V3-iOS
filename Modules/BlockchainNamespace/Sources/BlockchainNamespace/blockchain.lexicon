@@ -210,6 +210,11 @@ blockchain:
 									complete:
 									not_available:
 									pending:
+					intercom:
+						identity:
+							user:
+								digest:
+								+ blockchain.db.type.string
 					products:
 						product:
 						+ blockchain.db.collection

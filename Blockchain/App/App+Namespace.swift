@@ -26,6 +26,7 @@ import FirebaseInstallations
 import FirebaseProtocol
 import FirebaseRemoteConfig
 import FraudIntelligence
+import NetworkKit
 import ObservabilityKit
 import PlatformKit
 import ToolKit
@@ -127,6 +128,13 @@ extension AppProtocol {
                 try await kycRepository.register()
                 try await ExternalTradingMigrationNAPI(app: self).register()
                 try await registerGeolocationNAPI()
+                try await IntercomIdentityNAPI(
+                    client: GetIntercomIdentity(
+                        adapter: resolve(tag: DIKitContext.retail),
+                        request: resolve(tag: DIKitContext.retail)
+                    )
+                )
+                .register()
             } catch {
                 post(error: error)
                 #if DEBUG

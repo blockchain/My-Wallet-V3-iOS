@@ -711,6 +711,7 @@ public final class L_blockchain_api_nabu_gateway_user: L, I_blockchain_api_nabu_
 public protocol I_blockchain_api_nabu_gateway_user: I_blockchain_namespace_napi {}
 public extension I_blockchain_api_nabu_gateway_user {
 	var `external`: L_blockchain_api_nabu_gateway_user_external { .init("\(__).external") }
+	var `intercom`: L_blockchain_api_nabu_gateway_user_intercom { .init("\(__).intercom") }
 	var `products`: L_blockchain_api_nabu_gateway_user_products { .init("\(__).products") }
 	var `tag`: L_blockchain_api_nabu_gateway_user_tag { .init("\(__).tag") }
 }
@@ -828,6 +829,31 @@ public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migrati
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending", comment: "") }
 }
 public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_pending: I {}
+public final class L_blockchain_api_nabu_gateway_user_intercom: L, I_blockchain_api_nabu_gateway_user_intercom {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.intercom", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_intercom: I {}
+public extension I_blockchain_api_nabu_gateway_user_intercom {
+	var `identity`: L_blockchain_api_nabu_gateway_user_intercom_identity { .init("\(__).identity") }
+}
+public final class L_blockchain_api_nabu_gateway_user_intercom_identity: L, I_blockchain_api_nabu_gateway_user_intercom_identity {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.intercom.identity", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_intercom_identity: I {}
+public extension I_blockchain_api_nabu_gateway_user_intercom_identity {
+	var `user`: L_blockchain_api_nabu_gateway_user_intercom_identity_user { .init("\(__).user") }
+}
+public final class L_blockchain_api_nabu_gateway_user_intercom_identity_user: L, I_blockchain_api_nabu_gateway_user_intercom_identity_user {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.intercom.identity.user", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_intercom_identity_user: I {}
+public extension I_blockchain_api_nabu_gateway_user_intercom_identity_user {
+	var `digest`: L_blockchain_api_nabu_gateway_user_intercom_identity_user_digest { .init("\(__).digest") }
+}
+public final class L_blockchain_api_nabu_gateway_user_intercom_identity_user_digest: L, I_blockchain_api_nabu_gateway_user_intercom_identity_user_digest {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.intercom.identity.user.digest", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_intercom_identity_user_digest: I_blockchain_db_type_string {}
 public final class L_blockchain_api_nabu_gateway_user_products: L, I_blockchain_api_nabu_gateway_user_products {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products", comment: "") }
 }
@@ -9554,7 +9580,7 @@ public extension I_blockchain_ux_finproms_disclaimer {
 public final class L_blockchain_ux_finproms_disclaimer_tap: L, I_blockchain_ux_finproms_disclaimer_tap {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.tap", comment: "") }
 }
-public protocol I_blockchain_ux_finproms_disclaimer_tap: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_finproms_disclaimer_tap: I_blockchain_session_configuration_value, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_finproms_disclaimer_text: L, I_blockchain_ux_finproms_disclaimer_text {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.text", comment: "") }
 }

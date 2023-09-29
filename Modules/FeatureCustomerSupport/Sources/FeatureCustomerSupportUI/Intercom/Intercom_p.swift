@@ -12,6 +12,7 @@ public protocol Intercom_p: AnyObject {
     associatedtype UserAttributes: IntercomUserAttributes_p
 
     static func setApiKey(_ key: String, forAppId: String)
+    static func setUserHash(_ userHash: String)
 
     static func unreadConversationCount() -> UInt
 

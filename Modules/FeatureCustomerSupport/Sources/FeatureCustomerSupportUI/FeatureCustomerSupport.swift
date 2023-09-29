@@ -44,15 +44,18 @@ public final class CustomerSupportObserver<Intercom: Intercom_p>: Client.Observe
         sdk.setApiKey(apiKey, forAppId: appId)
 
         app.on(blockchain.session.event.did.sign.in)
-            .flatMap { [app] _ -> AnyPublisher<(String, String), Never> in
+            .flatMap { [app] _ -> AnyPublisher<(String, String, String), Never> in
                 app.publisher(for: blockchain.user.id, as: String.self)
                     .compactMap(\.value)
-                    .zip(app.state.publisher(for: blockchain.user.email.address).decode().compactMap(\.value))
+                    .zip(
+                        app.state.publisher(for: blockchain.user.email.address).decode().compactMap(\.value),
+                        app.publisher(for: blockchain.api.nabu.gateway.user.intercom.identity.user.digest).compactMap(\.value)
+                    )
                     .first()
                     .eraseToAnyPublisher()
             }
             .receive(on: scheduler)
-            .sink { [weak self] id, email in self?.login(id: id, email: email) }
+            .sink { [weak self] id, email, hash in self?.login(id: id, email: email, digest: hash) }
             .store(in: &bag)
 
         app.on(blockchain.session.event.did.sign.out)
@@ -99,7 +102,13 @@ public final class CustomerSupportObserver<Intercom: Intercom_p>: Client.Observe
         bag.removeAll()
     }
 
-    private func login(id: String, email: String) {
+    private func login(id: String, email: String, digest: String) {
+
+        // When your iOS app initializes Intercom if the user is identified (i.e., you have a user id or email address),
+        // pass in a String of the HMAC returned from your server's authentication call.
+        // This should be called before any registration calls
+        Intercom.setUserHash(digest)
+
         let attributes = Intercom.UserAttributes()
         attributes.userId = id
         attributes.email = email
