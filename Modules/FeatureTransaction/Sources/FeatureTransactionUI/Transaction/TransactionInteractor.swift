@@ -88,9 +88,8 @@ final class TransactionInteractor {
                 target: transactionTarget,
                 action: action
             )
-            .do(onSuccess: { [weak self] transactionProcessor in
-                guard let self else { return }
-                self.transactionProcessor = transactionProcessor
+            .handleEvents(receiveOutput: { [weak self] transactionProcessor in
+                self?.transactionProcessor = transactionProcessor
             })
             .asObservable()
             .flatMap(\.initializeTransaction)

@@ -135,7 +135,9 @@ public final class InterestWithdrawOnChainTransactionEngine: OnChainTransactionE
         }
     }
 
-    public func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    public func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let source = sourceAccount.label
         let destination = transactionTarget.label
         return fiatAmountAndFees(from: pendingTransaction)
@@ -157,6 +159,7 @@ public final class InterestWithdrawOnChainTransactionEngine: OnChainTransactionE
                         ]
                     )
             }
+            .eraseToAnyPublisher()
     }
 
     public func update(

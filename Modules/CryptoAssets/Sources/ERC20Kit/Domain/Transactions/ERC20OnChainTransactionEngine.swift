@@ -19,19 +19,6 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
     let walletCurrencyService: FiatCurrencyServiceAPI
 
     var askForRefreshConfirmation: AskForRefreshConfirmation!
-
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .asSingle()
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
-    }
-
     var sourceAccount: BlockchainAccount!
     var transactionTarget: TransactionTarget!
 
@@ -128,8 +115,10 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
             .asSingle()
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        doBuildConfirmationsPublisher(pendingTransaction: pendingTransaction).asSingle()
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
+        doBuildConfirmationsPublisher(pendingTransaction: pendingTransaction)
     }
 
     private func doBuildConfirmationsPublisher(

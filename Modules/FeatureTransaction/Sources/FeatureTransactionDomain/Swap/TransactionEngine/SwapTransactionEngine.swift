@@ -34,42 +34,18 @@ extension SwapTransactionEngine {
 
     // MARK: - TransactionEngine
 
-    func validateUpdateAmount(_ amount: MoneyValue) -> Single<MoneyValue> {
+    func validateUpdateAmount(_ amount: MoneyValue) -> AnyPublisher<MoneyValue, PriceServiceError> {
         currencyConversionService
             .convert(amount, to: sourceAsset.currencyType)
-            .asSingle()
-    }
-
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        Single.zip(sourceExchangeRatePair, destinationExchangeRatePair)
-            .map { tuple -> TransactionMoneyValuePairs in
-                let (source, destination) = tuple
-                return TransactionMoneyValuePairs(
-                    source: source,
-                    destination: destination
-                )
-            }
-            .asObservable()
-    }
-
-    var transactionExchangeRatePair: Observable<MoneyValuePair> {
-        app.publisher(for: blockchain.ux.transaction.source.target.quote.price)
-            .decode(BrokerageQuote.Price.self)
-            .compactMap { [source = sourceAsset, target = targetAsset] quote -> MoneyValuePair? in
-                MoneyValue.create(minor: quote.price, currency: target.currencyType)
-                    .map { price in
-                        MoneyValuePair(base: .one(currency: source), exchangeRate: price)
-                    }
-            }
-            .asObservable()
-            .share(replay: 1, scope: .whileConnected)
+            .prefix(1)
+            .eraseToAnyPublisher()
     }
 
     func clearConfirmations(pendingTransaction: PendingTransaction) -> PendingTransaction {
         pendingTransaction.update(confirmations: [])
     }
 
-    func update(price: BrokerageQuote.Price, on pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func update(price: BrokerageQuote.Price, on pendingTransaction: PendingTransaction) -> AnyPublisher<PendingTransaction, Error> {
         updateLimits(
             pendingTransaction: pendingTransaction,
             quote: price
@@ -80,7 +56,7 @@ extension SwapTransactionEngine {
     func updateLimits(
         pendingTransaction: PendingTransaction,
         quote: BrokerageQuote
-    ) -> Single<PendingTransaction> {
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let limitsPublisher = transactionLimitsService.fetchLimits(
             source: LimitsAccount(
                 currency: sourceAsset.currencyType,
@@ -93,18 +69,19 @@ extension SwapTransactionEngine {
             product: .swap(orderDirection)
         )
         return limitsPublisher
-            .asSingle()
-            .map { transactionLimits -> PendingTransaction in
+            .prefix(1)
+            .tryMap { transactionLimits -> PendingTransaction in
                 var pendingTransaction = pendingTransaction
                 pendingTransaction.limits = try transactionLimits.update(with: quote)
                 return pendingTransaction
             }
+            .eraseToAnyPublisher()
     }
 
     func updateLimits(
         pendingTransaction: PendingTransaction,
         quote: BrokerageQuote.Price
-    ) -> Single<PendingTransaction> {
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let limitsPublisher = transactionLimitsService.fetchLimits(
             source: LimitsAccount(
                 currency: sourceAsset.currencyType,
@@ -117,12 +94,13 @@ extension SwapTransactionEngine {
             product: .swap(orderDirection)
         )
         return limitsPublisher
-            .asSingle()
-            .map { transactionLimits -> PendingTransaction in
+            .prefix(1)
+            .tryMap { transactionLimits -> PendingTransaction in
                 var pendingTransaction = pendingTransaction
                 pendingTransaction.limits = try transactionLimits.update(with: quote)
                 return pendingTransaction
             }
+            .eraseToAnyPublisher()
     }
 
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
@@ -133,7 +111,9 @@ extension SwapTransactionEngine {
         validateAmount(pendingTransaction: pendingTransaction)
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let sourceAsset = sourceAsset, targetAsset = targetAsset
         do {
             guard let pricedQuote = pendingTransaction.quote else {
@@ -173,11 +153,11 @@ extension SwapTransactionEngine {
             let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
             return updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
         } catch {
-            return .error(error)
+            return .failure(error)
         }
     }
 
-    func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> AnyPublisher<PendingTransaction, Error> {
         doBuildConfirmations(pendingTransaction: pendingTransaction)
     }
 
@@ -203,24 +183,9 @@ extension SwapTransactionEngine {
                 .asSingle()
         }
     }
-
-    // MARK: - Private Functions
-
-    private var sourceExchangeRatePair: Single<MoneyValuePair> {
-        transactionExchangeRatePair
-            .take(1)
-            .asSingle()
-    }
-
-    private var destinationExchangeRatePair: Single<MoneyValuePair> {
-        transactionExchangeRatePair
-            .take(1)
-            .asSingle()
-            .map(\.inverseExchangeRate)
-    }
 }
 
-extension PrimitiveSequence where Trait == SingleTrait, Element == PendingTransaction {
+extension Publisher where Output == PendingTransaction {
 
     /// Checks if `pendingOrdersLimitReached` error occured and passes that down the stream, otherwise
     ///  - in case the error is not a `NabuNetworkError` it throws the erro
@@ -228,8 +193,8 @@ extension PrimitiveSequence where Trait == SingleTrait, Element == PendingTransa
     ///    it passes a `nabuError` which contains the raw nabu error
     /// - Parameter initialValue: The current `PendingTransaction` to be updated
     /// - Returns: An `Single<PendingTransaction>` with updated `validationState`
-    func handlePendingOrdersError(initialValue: PendingTransaction) -> Single<PendingTransaction> {
-        `catch` { error -> Single<PendingTransaction> in
+    func handlePendingOrdersError(initialValue: PendingTransaction) -> AnyPublisher<PendingTransaction, Error> {
+        tryCatch { error -> AnyPublisher<PendingTransaction, Error> in
             guard let nabuError = error as? NabuNetworkError else {
                 throw error
             }
@@ -242,5 +207,6 @@ extension PrimitiveSequence where Trait == SingleTrait, Element == PendingTransa
             initialValue.validationState = .pendingOrdersLimitReached
             return .just(initialValue)
         }
+        .eraseToAnyPublisher()
     }
 }

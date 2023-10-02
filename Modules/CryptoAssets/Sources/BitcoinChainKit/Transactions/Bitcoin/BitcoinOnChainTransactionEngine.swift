@@ -28,17 +28,6 @@ final class BitcoinOnChainTransactionEngine<Token: BitcoinChainToken> {
     var askForRefreshConfirmation: AskForRefreshConfirmation!
     var transactionTarget: TransactionTarget!
 
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
-    }
-
     // MARK: - Private Properties
 
     private let app: AppProtocol
@@ -162,7 +151,9 @@ extension BitcoinOnChainTransactionEngine: OnChainTransactionEngine {
             .asSingle()
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         fiatAmountAndFees(from: pendingTransaction)
             .zip(makeFeeSelectionOption(pendingTransaction: pendingTransaction))
             .map { [weak self] fiatAmountAndFees, feeSelectionOption -> [TransactionConfirmation] in
@@ -183,7 +174,8 @@ extension BitcoinOnChainTransactionEngine: OnChainTransactionEngine {
                 ]
             }
             .map { pendingTransaction.update(confirmations: $0) }
-            .asSingle()
+            .prefix(1)
+            .eraseToAnyPublisher()
     }
 
     func update(

@@ -129,7 +129,9 @@ public final class TransactionProcessor {
             let pendingTransaction = try pendingTransaction()
                 .update(quote: quote)
             return engine.doBuildConfirmations(pendingTransaction: pendingTransaction)
-                .do(onSuccess: updatePendingTx(_:))
+                .handleEvents(receiveOutput: { [pendingTxSubject] pendingTransaction in
+                    pendingTxSubject.on(.next(pendingTransaction))
+                })
                 .asCompletable()
         } catch {
             return .error(error)
@@ -279,6 +281,7 @@ public final class TransactionProcessor {
     public func validateAll(pendingTransaction: PendingTransaction) -> Completable {
         Logger.shared.debug("!TRANSACTION!> in `validateAll`")
         return engine.doBuildConfirmations(pendingTransaction: pendingTransaction)
+            .asSingle()
             .flatMap(weak: self) { (self, pendingTransaction) -> Single<PendingTransaction> in
                 self.engine.doValidateAll(pendingTransaction: pendingTransaction)
             }
@@ -327,6 +330,7 @@ public final class TransactionProcessor {
             return .empty()
         }
         return engine.doRefreshConfirmations(pendingTransaction: pendingTransaction)
+            .asSingle()
             .flatMap { [engine] pendingTransaction -> Single<PendingTransaction> in
                 if revalidate {
                     return engine.doValidateAll(pendingTransaction: pendingTransaction)

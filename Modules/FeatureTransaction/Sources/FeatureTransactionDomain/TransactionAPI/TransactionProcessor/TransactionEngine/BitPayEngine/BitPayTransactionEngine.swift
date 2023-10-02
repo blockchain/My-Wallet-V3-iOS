@@ -16,11 +16,6 @@ final class BitPayTransactionEngine: TransactionEngine {
     let currencyConversionService: CurrencyConversionServiceAPI
     let walletCurrencyService: FiatCurrencyServiceAPI
 
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        onChainEngine
-            .fiatExchangeRatePairs
-    }
-
     // MARK: - Private Properties
 
     /// This is due to the fact that the validation of the timeout occurs on completion of
@@ -94,7 +89,9 @@ final class BitPayTransactionEngine: TransactionEngine {
             }
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         onChainEngine
             .update(
                 amount: bitpayInvoice.amount.moneyValue,
@@ -103,6 +100,7 @@ final class BitPayTransactionEngine: TransactionEngine {
             .flatMap(weak: self) { (self, pendingTransaction) in
                 self.onChainEngine
                     .doBuildConfirmations(pendingTransaction: pendingTransaction)
+                    .asSingle()
             }
             .map(weak: self) { (self, pendingTransaction) in
                 self.startTimeIfNotStarted(pendingTransaction)
@@ -116,9 +114,11 @@ final class BitPayTransactionEngine: TransactionEngine {
                         prepend: true
                     )
             }
+            .asPublisher()
+            .eraseToAnyPublisher()
     }
 
-    func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> AnyPublisher<PendingTransaction, Error> {
         .just(
             pendingTransaction
                 .insert(
