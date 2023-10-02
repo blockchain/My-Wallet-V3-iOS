@@ -464,13 +464,13 @@ private actor ExponentialBackoff {
     }
 
     func next() async throws {
-        n += 1
-        let time = TimeInterval.random(
-            in: unit...unit * pow(2, TimeInterval(n - 1)),
+        n = min(n + 1, 15)
+        let time = unit * TimeInterval.random(
+            in: 1...pow(2, n.d),
             using: &rng
-        ) * 1_000_000
+        )
         try await Task.sleep(
-            nanoseconds: time.clamped(to: 0...UInt64.max.d).u64
+            nanoseconds: min(time * NSEC_PER_SEC.d, UInt64.max.d).u64
         )
     }
 }
