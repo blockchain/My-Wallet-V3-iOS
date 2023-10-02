@@ -23,8 +23,8 @@ public struct ExternalTradingMigrationView: View {
                         content: {
                         BakktMigrationInProgressView(onDone: {
                             viewStore.send(.onFlowComplete)
-                        })
-                    }
+                            })
+                        }
                     )
             }
         }
@@ -84,7 +84,7 @@ public struct ExternalTradingMigrationView: View {
                     beforeMigrationBalances: migrationInfo.consolidatedBalances.beforeMigration,
                     afterMigrationBalance: migrationInfo.consolidatedBalances.afterMigration,
                     onDone: {
-                    viewStore.send(.onUpgrade)
+                        viewStore.send(.onUpgrade)
                     },
                     onGoBack: {
                         viewStore.send(.setNavigation(isActive: false))

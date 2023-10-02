@@ -137,6 +137,7 @@ struct TradingDashboardView: View {
 
             if externalTradingMigrationIsAvailable {
                 DashboardExternalMigrateView()
+                    .padding(.horizontal, Spacing.padding2)
             }
 
             if !viewStore.isZeroBalance {
