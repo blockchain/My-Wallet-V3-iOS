@@ -52,8 +52,7 @@ final class KYCPersonalDetailsControllerNew: KYCBaseViewController {
         let view = PersonalInfoView(
             store: Store(
                 initialState: PersonalInfo.State(),
-                reducer: PersonalInfo.reducer,
-                environment: PersonalInfo.Environment(
+                reducer: PersonalInfo.Reducer(
                     onClose: dismiss,
                     onComplete: moveToNextStep,
                     loadForm: loadForm,

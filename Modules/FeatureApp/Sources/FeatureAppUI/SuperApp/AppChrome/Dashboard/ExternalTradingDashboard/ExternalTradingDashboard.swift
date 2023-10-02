@@ -11,6 +11,7 @@ import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureExternalTradingMigrationDomain
 import FeatureTopMoversCryptoUI
 import FeatureWithdrawalLocksDomain
 import Foundation
@@ -43,6 +44,7 @@ public struct ExternalTradingDashboard: ReducerProtocol {
 
     public struct State: Equatable {
         var context: Tag.Context?
+        @BindingState var migrationInfo: ExternalTradingMigrationInfo?
         public var tradingBalance: BalanceInfo?
         public var getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue] = []
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .custodial)
@@ -147,6 +149,7 @@ public struct ExternalTradingDashboard: ReducerProtocol {
                 default:
                     return .none
                 }
+
             case .binding:
                 return .none
             case .activityAction(let action):

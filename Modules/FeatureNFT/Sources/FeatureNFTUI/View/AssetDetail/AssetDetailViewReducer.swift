@@ -2,15 +2,17 @@ import Combine
 import ComposableArchitecture
 import FeatureNFTDomain
 
-struct AssetDetailEnvironment {}
-
-let assetDetailReducer = Reducer<
-    AssetDetailViewState,
-    AssetDetailViewAction,
-    AssetDetailEnvironment
-> { _, action, _ in
-    switch action {
-    case .viewOnWebTapped:
-        return .none
+struct AssetDetailReducer: ReducerProtocol {
+    
+    typealias State = AssetDetailViewState
+    typealias Action = AssetDetailViewAction
+    
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .viewOnWebTapped:
+                return .none
+            }
+        }
     }
 }

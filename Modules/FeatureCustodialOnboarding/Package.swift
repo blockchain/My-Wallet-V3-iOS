@@ -18,15 +18,29 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Blockchain"),
-        .package(path: "../FeatureQuickActions")
+        .package(path: "../FeatureQuickActions"),
+        .package(path: "../FeatureExternalTradingMigration")
     ],
     targets: [
         .target(
             name: "FeatureCustodialOnboarding",
             dependencies: [
-                .product(name: "Blockchain", package: "Blockchain"),
-                .product(name: "BlockchainUI", package: "Blockchain"),
-                .product(name: "FeatureQuickActions", package: "FeatureQuickActions")
+                .product(
+                    name: "Blockchain",
+                    package: "Blockchain"
+                ),
+                .product(
+                    name: "BlockchainUI",
+                    package: "Blockchain"
+                ),
+                .product(
+                    name: "FeatureQuickActions",
+                    package: "FeatureQuickActions"
+                ),
+                .product(
+                    name: "FeatureExternalTradingMigrationUI",
+                    package: "FeatureExternalTradingMigration"
+                )
             ]
         ),
         .testTarget(

@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-enum TourAction {
+public enum TourAction {
     case createAccount
     case didChangeStep(TourState.Step)
     case restore

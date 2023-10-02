@@ -16,7 +16,7 @@ class NotificationPreferencesReducerTest: XCTestCase {
         NotificationPreferencesAction,
         NotificationPreferencesState,
         NotificationPreferencesAction,
-        NotificationPreferencesEnvironment
+        Void
     >!
 
     private let mainScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
@@ -27,8 +27,7 @@ class NotificationPreferencesReducerTest: XCTestCase {
         notificationRepoMock = NotificationPreferencesRepositoryMock()
         testStore = TestStore(
             initialState: .init(viewState: .loading),
-            reducer: notificationPreferencesReducer,
-            environment: NotificationPreferencesEnvironment(
+            reducer: NotificationPreferencesReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 notificationPreferencesRepository: notificationRepoMock,
                 analyticsRecorder: MockAnalyticsRecorder()
@@ -85,8 +84,7 @@ class NotificationPreferencesReducerTest: XCTestCase {
                     notificationPreference: MockGenerator.marketingNotificationPreference),
                 viewState: .loading
             ),
-            reducer: featureNotificationPreferencesMainReducer,
-            environment: NotificationPreferencesEnvironment(
+            reducer: FeatureNotificationPreferencesMainReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 notificationPreferencesRepository: notificationRepoMock,
                 analyticsRecorder: MockAnalyticsRecorder()

@@ -20,12 +20,14 @@ enum EmailVerifiedAction: Equatable {
     case acknowledgeEmailVerification
 }
 
-struct EmailVerifiedEnvironment: Equatable {}
-
-typealias EmailVerifiedReducer = Reducer<EmailVerifiedState, EmailVerifiedAction, EmailVerifiedEnvironment>
-
-let emailVerifiedReducer = EmailVerifiedReducer { _, _, _ in
-    .none
+struct EmailVerifiedReducer: ReducerProtocol {
+    
+    typealias State = EmailVerifiedState
+    typealias Action = EmailVerifiedAction
+    
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { _, _ in .none }
+    }
 }
 
 struct EmailVerifiedView: View {
@@ -107,8 +109,7 @@ struct EmailVerifiedView_Previews: PreviewProvider {
                 initialState: .init(
                     emailAddress: "test@example.com"
                 ),
-                reducer: emailVerifiedReducer,
-                environment: EmailVerifiedEnvironment()
+                reducer: EmailVerifiedReducer()
             )
         )
         .preferredColorScheme(.light)
@@ -118,8 +119,7 @@ struct EmailVerifiedView_Previews: PreviewProvider {
                 initialState: .init(
                     emailAddress: "test@example.com"
                 ),
-                reducer: emailVerifiedReducer,
-                environment: EmailVerifiedEnvironment()
+                reducer: EmailVerifiedReducer()
             )
         )
         .preferredColorScheme(.dark)

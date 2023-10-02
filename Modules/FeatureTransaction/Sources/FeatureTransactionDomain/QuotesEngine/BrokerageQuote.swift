@@ -336,7 +336,7 @@ extension BrokerageQuote.Fee {
 extension BrokerageQuote: CustomStringConvertible {
 
     public var description: String {
-        "Quote \(self.id), price \(self.price), expires \(self.expiresAt)"
+        "Quote \(self.id), price \(self.price), expires \(String(describing: self.expiresAt))"
     }
 }
 

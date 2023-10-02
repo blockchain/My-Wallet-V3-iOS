@@ -12,6 +12,8 @@ import FeatureAppDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
 import FeatureDashboardUI
+import FeatureExternalTradingMigrationDomain
+import FeatureExternalTradingMigrationUI
 import FeatureQuickActions
 import FeatureTopMoversCryptoUI
 import FeatureTransactionUI
@@ -28,8 +30,12 @@ struct TradingDashboardView: View {
     @State private var scrollOffset: CGPoint = .zero
     @State private var isBlocked = false
     @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
-
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
+
+    @State private var externalTradingMigrationState: Tag?
+    var externalTradingMigrationIsAvailable: Bool {
+        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]
+    }
 
     @StateObject private var onboarding = CustodialOnboardingService()
 
@@ -38,6 +44,7 @@ struct TradingDashboardView: View {
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
+
         init(state: TradingDashboard.State) {
             self.balance = state.tradingBalance
             self.getStartedBuyCryptoAmmounts = state.getStartedBuyCryptoAmmounts
@@ -77,6 +84,7 @@ struct TradingDashboardView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
+            subscribe($externalTradingMigrationState, to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state)
             subscribe($kycState, to: blockchain.user.account.kyc.state)
         }
         .onAppear {
@@ -102,7 +110,6 @@ struct TradingDashboardView: View {
 
     var dashboardView: some View {
         VStack(spacing: Spacing.padding3) {
-
             Group {
                 DashboardMainBalanceView(
                     info: .constant(viewStore.balance),
@@ -126,6 +133,10 @@ struct TradingDashboardView: View {
 
             if isBlocked {
                 blockedView
+            }
+
+            if externalTradingMigrationIsAvailable {
+                DashboardExternalMigrateView()
             }
 
             if !viewStore.isZeroBalance {

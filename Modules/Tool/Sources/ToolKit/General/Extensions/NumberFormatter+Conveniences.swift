@@ -9,6 +9,9 @@ extension NumberFormatter {
     /// A currency format.
     public enum CurrencyFormat {
 
+        /// Hide all fractional digits (e.g. `23.99` becomes `23`).
+        case forceShortened
+
         /// If there are no fractional digits, the string would be shortened (e.g. `23.00` becomes `23`).
         case shortened
 

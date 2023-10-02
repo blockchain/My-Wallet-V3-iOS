@@ -136,8 +136,7 @@ struct QRCodeScannerAllowAccessView_Previews: PreviewProvider {
                     informationalOnly: false,
                     showWalletConnectRow: true
                 ),
-                reducer: qrScannerAllowAccessReducer,
-                environment: AllowAccessEnvironment(
+                reducer: AllowAccessReducer(
                     allowCameraAccess: {},
                     cameraAccessDenied: { false },
                     dismiss: {},

@@ -59,61 +59,11 @@ public struct AvailableBalanceDetailViewState: Equatable {
 
 // MARK: - Reducer
 
-public let availableBalanceDetailViewReducer = Reducer<
-    AvailableBalanceDetailViewState,
-    AvailableBalanceDetailViewAction,
-    AvailableBalanceDetailViewEnvironment
-> { state, action, environment in
-    switch action {
-    case .onAppear:
+public struct AvailableBalanceDetailViewReducer: ReducerProtocol {
+    
+    public typealias State = AvailableBalanceDetailViewState
+    public typealias Action = AvailableBalanceDetailViewAction
 
-        let balancePublishers = Publishers.Zip(
-            environment.balancePublisher,
-            environment.availableBalancePublisher
-        )
-
-        let feesPublishers = Publishers.Zip(
-            environment.feesPublisher,
-            environment.transactionIsFeeLessPublisher
-        )
-
-        return Publishers.Zip3(
-            balancePublishers,
-            feesPublishers,
-            environment.app
-                .publisher(for: blockchain.ux.transaction.id, as: String.self)
-                .compactMap(\.value)
-                .compactMap { AssetAction(rawValue: $0) }
-        )
-            .map { payload -> (FiatValue, FiatValue, FiatValue, AssetAction, Bool) in
-                let (balance, availableBalance) = payload.0
-                let (fees, isTxFeeLess) = payload.1
-                let assetAction = payload.2
-                return (balance, availableBalance, fees, assetAction, isTxFeeLess)
-            }
-            .receive(on: environment.mainQueue)
-            .eraseToEffect()
-            .map(AvailableBalanceDetailViewAction.updateAvailableBalanceDetails)
-
-    case .updateAvailableBalanceDetails(let balance, let available, let fees, let action, let isTxFeeLess):
-        state.title = "\(LocalizedIds.availableTo) \(action.name)"
-        state.data = [
-            .init(title: LocalizedIds.total, content: .text(balance.displayString)),
-            .init(title: "\(LocalizedIds.estimated) \(LocalizedIds.fees.lowercased())", content: isTxFeeLess ? .badge("Free") : .text(fees.displayString)),
-            .init(title: "\(LocalizedIds.availableTo) \(action.name)", content: .text(available.displayString))
-        ]
-        return .none
-    case .okayButtonTapped,
-            .closeButtonTapped:
-        return .fireAndForget {
-            environment.closeAction?()
-        }
-    }
-}
-
-// MARK: - Environment
-
-public struct AvailableBalanceDetailViewEnvironment {
     let app: AppProtocol
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let balancePublisher: AnyPublisher<FiatValue, Never>
@@ -141,13 +91,63 @@ public struct AvailableBalanceDetailViewEnvironment {
     }
 
     static var preview: Self {
-        AvailableBalanceDetailViewEnvironment(
+        AvailableBalanceDetailViewReducer(
             app: App.preview,
             balancePublisher: .empty(),
             availableBalancePublisher: .empty(),
             feesPublisher: .empty(),
             transactionIsFeeLessPublisher: .empty()
         )
+    }
+    
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
+
+                let balancePublishers = Publishers.Zip(
+                    balancePublisher,
+                    availableBalancePublisher
+                )
+
+                let feesPublishers = Publishers.Zip(
+                    feesPublisher,
+                    transactionIsFeeLessPublisher
+                )
+
+                return Publishers.Zip3(
+                    balancePublishers,
+                    feesPublishers,
+                    app
+                        .publisher(for: blockchain.ux.transaction.id, as: String.self)
+                        .compactMap(\.value)
+                        .compactMap { AssetAction(rawValue: $0) }
+                )
+                    .map { payload -> (FiatValue, FiatValue, FiatValue, AssetAction, Bool) in
+                        let (balance, availableBalance) = payload.0
+                        let (fees, isTxFeeLess) = payload.1
+                        let assetAction = payload.2
+                        return (balance, availableBalance, fees, assetAction, isTxFeeLess)
+                    }
+                    .receive(on: mainQueue)
+                    .eraseToEffect()
+                    .map(AvailableBalanceDetailViewAction.updateAvailableBalanceDetails)
+
+            case .updateAvailableBalanceDetails(let balance, let available, let fees, let action, let isTxFeeLess):
+                state.title = "\(LocalizedIds.availableTo) \(action.name)"
+                state.data = [
+                    .init(title: LocalizedIds.total, content: .text(balance.displayString)),
+                    .init(title: "\(LocalizedIds.estimated) \(LocalizedIds.fees.lowercased())", content: isTxFeeLess ? .badge("Free") : .text(fees.displayString)),
+                    .init(title: "\(LocalizedIds.availableTo) \(action.name)", content: .text(available.displayString))
+                ]
+                return .none
+            case .okayButtonTapped,
+                    .closeButtonTapped:
+                return .fireAndForget {
+                    closeAction?()
+                }
+            }
+        }
     }
 }
 
@@ -243,8 +243,7 @@ struct AvailableBalanceDetailView_Previews: PreviewProvider {
         AvailableBalanceDetailView(
             store: .init(
                 initialState: .init(data: []),
-                reducer: availableBalanceDetailViewReducer,
-                environment: .preview
+                reducer: AvailableBalanceDetailViewReducer.preview
             )
         )
     }

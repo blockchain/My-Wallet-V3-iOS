@@ -40,27 +40,36 @@ public enum PinCore {
     }
 
     public struct Environment {
-        let alertPresenter: AlertViewPresenterAPI
     }
 }
 
-let pinReducer = Reducer<PinCore.State, PinCore.Action, PinCore.Environment> { state, action, _ in
-    switch action {
-    case .authenticate:
-        state.creating = false
-        state.authenticate = true
-        return .none
-    case .create:
-        state.creating = true
-        state.authenticate = false
-        return .none
-    case .logout:
-        return .none
-    case .handleAuthentication(let password):
-        return .none
-    case .pinCreated:
-        return .none
-    case .none:
-        return .none
+struct PinReducer: ReducerProtocol {
+
+    typealias State = PinCore.State
+    typealias Action = PinCore.Action
+
+    let alertPresenter: AlertViewPresenterAPI
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .authenticate:
+                state.creating = false
+                state.authenticate = true
+                return .none
+            case .create:
+                state.creating = true
+                state.authenticate = false
+                return .none
+            case .logout:
+                return .none
+            case .handleAuthentication:
+                return .none
+            case .pinCreated:
+                return .none
+            case .none:
+                return .none
+            }
+        }
     }
 }

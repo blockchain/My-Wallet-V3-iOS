@@ -710,9 +710,150 @@ public final class L_blockchain_api_nabu_gateway_user: L, I_blockchain_api_nabu_
 }
 public protocol I_blockchain_api_nabu_gateway_user: I_blockchain_namespace_napi {}
 public extension I_blockchain_api_nabu_gateway_user {
+	var `external`: L_blockchain_api_nabu_gateway_user_external { .init("\(__).external") }
+	var `intercom`: L_blockchain_api_nabu_gateway_user_intercom { .init("\(__).intercom") }
 	var `products`: L_blockchain_api_nabu_gateway_user_products { .init("\(__).products") }
 	var `tag`: L_blockchain_api_nabu_gateway_user_tag { .init("\(__).tag") }
 }
+public final class L_blockchain_api_nabu_gateway_user_external: L, I_blockchain_api_nabu_gateway_user_external {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external: I {}
+public extension I_blockchain_api_nabu_gateway_user_external {
+	var `brokerage`: L_blockchain_api_nabu_gateway_user_external_brokerage { .init("\(__).brokerage") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage: L, I_blockchain_api_nabu_gateway_user_external_brokerage {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage: I {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage {
+	var `migration`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration { .init("\(__).migration") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration: I {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage_migration {
+	var `complete`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete { .init("\(__).complete") }
+	var `last`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last { .init("\(__).last") }
+	var `state`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state { .init("\(__).state") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.complete", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete: I {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete {
+	var `success`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success { .init("\(__).success") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.complete.success", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success: I {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success {
+	var `message`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message { .init("\(__).message") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.complete.success.message", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message: I {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message {
+	var `shown`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message_shown { .init("\(__).shown") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message_shown: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message_shown {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.complete.success.message.shown", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_complete_success_message_shown: I_blockchain_db_type_boolean, I_blockchain_session_state_preference_value {}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.last", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last: I {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last {
+	var `known`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known { .init("\(__).known") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known: I {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known {
+	var `state`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state { .init("\(__).state") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state: I_blockchain_db_type_enum, I_blockchain_session_state_stored_value {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state {
+	var `available`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_available { .init("\(__).available") }
+	var `complete`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_complete { .init("\(__).complete") }
+	var `not_available`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_not__available { .init("\(__).not_available") }
+	var `pending`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_pending { .init("\(__).pending") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_available: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_available {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state.available", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_available: I {}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_complete: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_complete {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state.complete", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_complete: I {}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_not__available: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_not__available {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state.not_available", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_not__available: I {}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_pending: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_pending {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state.pending", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_last_known_state_pending: I {}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.state", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state: I_blockchain_db_type_enum {}
+public extension I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state {
+	var `available`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_available { .init("\(__).available") }
+	var `complete`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_complete { .init("\(__).complete") }
+	var `not_available`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_not__available { .init("\(__).not_available") }
+	var `pending`: L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_pending { .init("\(__).pending") }
+}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_available: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_available {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_available: I {}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_complete: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_complete {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.state.complete", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_complete: I {}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_not__available: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_not__available {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.state.not_available", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_not__available: I {}
+public final class L_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_pending: L, I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_pending {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_external_brokerage_migration_state_pending: I {}
+public final class L_blockchain_api_nabu_gateway_user_intercom: L, I_blockchain_api_nabu_gateway_user_intercom {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.intercom", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_intercom: I {}
+public extension I_blockchain_api_nabu_gateway_user_intercom {
+	var `identity`: L_blockchain_api_nabu_gateway_user_intercom_identity { .init("\(__).identity") }
+}
+public final class L_blockchain_api_nabu_gateway_user_intercom_identity: L, I_blockchain_api_nabu_gateway_user_intercom_identity {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.intercom.identity", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_intercom_identity: I {}
+public extension I_blockchain_api_nabu_gateway_user_intercom_identity {
+	var `user`: L_blockchain_api_nabu_gateway_user_intercom_identity_user { .init("\(__).user") }
+}
+public final class L_blockchain_api_nabu_gateway_user_intercom_identity_user: L, I_blockchain_api_nabu_gateway_user_intercom_identity_user {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.intercom.identity.user", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_intercom_identity_user: I {}
+public extension I_blockchain_api_nabu_gateway_user_intercom_identity_user {
+	var `digest`: L_blockchain_api_nabu_gateway_user_intercom_identity_user_digest { .init("\(__).digest") }
+}
+public final class L_blockchain_api_nabu_gateway_user_intercom_identity_user_digest: L, I_blockchain_api_nabu_gateway_user_intercom_identity_user_digest {
+	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.intercom.identity.user.digest", comment: "") }
+}
+public protocol I_blockchain_api_nabu_gateway_user_intercom_identity_user_digest: I_blockchain_db_type_string {}
 public final class L_blockchain_api_nabu_gateway_user_products: L, I_blockchain_api_nabu_gateway_user_products {
 	public override class var localized: String { NSLocalizedString("blockchain.api.nabu.gateway.user.products", comment: "") }
 }
@@ -7614,8 +7755,20 @@ public final class L_blockchain_ux_asset_bio: L, I_blockchain_ux_asset_bio {
 }
 public protocol I_blockchain_ux_asset_bio: I {}
 public extension I_blockchain_ux_asset_bio {
+	var `copy`: L_blockchain_ux_asset_bio_copy { .init("\(__).copy") }
 	var `visit`: L_blockchain_ux_asset_bio_visit { .init("\(__).visit") }
 }
+public final class L_blockchain_ux_asset_bio_copy: L, I_blockchain_ux_asset_bio_copy {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.copy", comment: "") }
+}
+public protocol I_blockchain_ux_asset_bio_copy: I {}
+public extension I_blockchain_ux_asset_bio_copy {
+	var `contract`: L_blockchain_ux_asset_bio_copy_contract { .init("\(__).contract") }
+}
+public final class L_blockchain_ux_asset_bio_copy_contract: L, I_blockchain_ux_asset_bio_copy_contract {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.copy.contract", comment: "") }
+}
+public protocol I_blockchain_ux_asset_bio_copy_contract: I_blockchain_ui_type_action, I_blockchain_ui_device_haptic_feedback_impact_medium {}
 public final class L_blockchain_ux_asset_bio_visit: L, I_blockchain_ux_asset_bio_visit {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset.bio.visit", comment: "") }
 }
@@ -8535,6 +8688,7 @@ public extension I_blockchain_ux_dashboard {
 	var `asset`: L_blockchain_ux_dashboard_asset { .init("\(__).asset") }
 	var `defi`: L_blockchain_ux_dashboard_defi { .init("\(__).defi") }
 	var `empty`: L_blockchain_ux_dashboard_empty { .init("\(__).empty") }
+	var `external`: L_blockchain_ux_dashboard_external { .init("\(__).external") }
 	var `fiat`: L_blockchain_ux_dashboard_fiat { .init("\(__).fiat") }
 	var `is`: L_blockchain_ux_dashboard_is { .init("\(__).is") }
 	var `kyc`: L_blockchain_ux_dashboard_kyc { .init("\(__).kyc") }
@@ -8661,6 +8815,31 @@ public final class L_blockchain_ux_dashboard_empty_receive: L, I_blockchain_ux_d
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.empty.receive", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_empty_receive: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_dashboard_external: L, I_blockchain_ux_dashboard_external {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external: I {}
+public extension I_blockchain_ux_dashboard_external {
+	var `trading`: L_blockchain_ux_dashboard_external_trading { .init("\(__).trading") }
+}
+public final class L_blockchain_ux_dashboard_external_trading: L, I_blockchain_ux_dashboard_external_trading {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading: I {}
+public extension I_blockchain_ux_dashboard_external_trading {
+	var `migration`: L_blockchain_ux_dashboard_external_trading_migration { .init("\(__).migration") }
+}
+public final class L_blockchain_ux_dashboard_external_trading_migration: L, I_blockchain_ux_dashboard_external_trading_migration {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_dashboard_external_trading_migration {
+	var `start`: L_blockchain_ux_dashboard_external_trading_migration_start { .init("\(__).start") }
+}
+public final class L_blockchain_ux_dashboard_external_trading_migration_start: L, I_blockchain_ux_dashboard_external_trading_migration_start {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.start", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_start: I_blockchain_ux_type_task {}
 public final class L_blockchain_ux_dashboard_fiat: L, I_blockchain_ux_dashboard_fiat {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat", comment: "") }
 }
@@ -9401,7 +9580,7 @@ public extension I_blockchain_ux_finproms_disclaimer {
 public final class L_blockchain_ux_finproms_disclaimer_tap: L, I_blockchain_ux_finproms_disclaimer_tap {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.tap", comment: "") }
 }
-public protocol I_blockchain_ux_finproms_disclaimer_tap: I_blockchain_ux_type_action {}
+public protocol I_blockchain_ux_finproms_disclaimer_tap: I_blockchain_session_configuration_value, I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_finproms_disclaimer_text: L, I_blockchain_ux_finproms_disclaimer_text {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.text", comment: "") }
 }

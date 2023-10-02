@@ -1,10 +1,15 @@
 import BlockchainUI
+import FeatureExternalTradingMigrationUI
 import FeatureQuickActions
 import SwiftUI
 
 public struct CustodialOnboardingDashboardView: View {
-
+    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
     @ObservedObject var onboarding: CustodialOnboardingService
+    @State private var externalTradingMigrationState: Tag?
+    var externalTradingMigrationIsAvailable: Bool {
+        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]
+    }
 
     public init(service: CustodialOnboardingService) {
         self.onboarding = service
@@ -17,8 +22,12 @@ public struct CustodialOnboardingDashboardView: View {
             if onboarding.isRejected {
                 RejectedVerificationView()
             } else {
-                QuickActionsView(tag: blockchain.ux.user.custodial.onboarding.dashboard.quick.action)
-                    .padding(.vertical)
+                if externalTradingMigrationIsAvailable {
+                    DashboardExternalMigrateView()
+                } else {
+                    QuickActionsView(tag: blockchain.ux.user.custodial.onboarding.dashboard.quick.action)
+                        .padding(.vertical)
+                }
                 CustodialOnboardingProgressView(progress: onboarding.progress)
                 CustodialOnboardingTaskListView(service: onboarding)
                 FinancialPromotionDisclaimerView()
@@ -28,6 +37,9 @@ public struct CustodialOnboardingDashboardView: View {
             }
         }
         .padding(.horizontal)
+        .bindings {
+            subscribe($externalTradingMigrationState, to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state)
+        }
     }
 }
 

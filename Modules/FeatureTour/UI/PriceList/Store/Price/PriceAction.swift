@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum PriceAction: Equatable {
+public enum PriceAction: Equatable {
     case currencyDidAppear
     case currencyDidDisappear
     case priceValuesDidLoad(price: String, delta: Double)

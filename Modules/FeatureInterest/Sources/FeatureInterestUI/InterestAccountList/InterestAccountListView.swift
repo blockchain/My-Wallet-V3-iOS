@@ -100,17 +100,18 @@ struct InterestAccountListView_Previews: PreviewProvider {
                     interestAccountDetails: .init(uniqueElements: testCurrencyPairs),
                     loadingStatus: .loaded
                 ),
-                reducer: interestAccountListReducer,
-                environment: .init(
-                    fiatCurrencyService: NoOpFiatCurrencyPublisher(),
-                    accountOverviewRepository: NoOpInterestAccountOverviewRepository(),
-                    accountBalanceRepository: NoOpInterestAccountBalanceRepository(),
-                    priceService: NoOpPriceService(),
-                    blockchainAccountRepository: NoOpBlockchainAccountRepository(),
-                    kycVerificationService: NoOpKYCVerificationService(),
-                    transactionRouterAPI: NoOpTransactionsRouter(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    mainQueue: .main
+                reducer: InterestAccountListReducer(
+                    environment: .init(
+                        fiatCurrencyService: NoOpFiatCurrencyPublisher(),
+                        accountOverviewRepository: NoOpInterestAccountOverviewRepository(),
+                        accountBalanceRepository: NoOpInterestAccountBalanceRepository(),
+                        priceService: NoOpPriceService(),
+                        blockchainAccountRepository: NoOpBlockchainAccountRepository(),
+                        kycVerificationService: NoOpKYCVerificationService(),
+                        transactionRouterAPI: NoOpTransactionsRouter(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        mainQueue: .main
+                    )
                 )
             ),
             embeddedInNavigationView: true

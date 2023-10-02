@@ -13,7 +13,6 @@ import XCTest
 
 final class EmailVerificationSnapshotTests: XCTestCase {
 
-    private var environment: EmailVerificationEnvironment!
     private var rootStore: Store<EmailVerificationState, EmailVerificationAction>!
     private var mockEmailVerificationService: MockEmailVerificationService!
 
@@ -23,21 +22,11 @@ final class EmailVerificationSnapshotTests: XCTestCase {
         isRecording = false
 
         mockEmailVerificationService = MockEmailVerificationService()
-        environment = EmailVerificationEnvironment(
-            analyticsRecorder: MockAnalyticsRecorder(),
-            emailVerificationService: mockEmailVerificationService,
-            flowCompletionCallback: { _ in },
-            openMailApp: { .none },
-            app: App.test,
-            mainQueue: .immediate,
-            pollingQueue: .immediate
-        )
         rebuildRootStore()
     }
 
     override func tearDownWithError() throws {
         mockEmailVerificationService = nil
-        environment = nil
         rootStore = nil
         try super.tearDownWithError()
     }
@@ -135,8 +124,15 @@ final class EmailVerificationSnapshotTests: XCTestCase {
     private func rebuildRootStore(emailAddress: String = "test@example.com") {
         rootStore = Store(
             initialState: EmailVerificationState(emailAddress: emailAddress),
-            reducer: emailVerificationReducer,
-            environment: environment
+            reducer: EmailVerificationReducer(
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    emailVerificationService: mockEmailVerificationService,
+                    flowCompletionCallback: { _ in },
+                    openMailApp: { .none },
+                    app: App.test,
+                    mainQueue: .immediate,
+                    pollingQueue: .immediate
+            )
         )
     }
 

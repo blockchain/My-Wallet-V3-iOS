@@ -25,7 +25,6 @@ struct SuperAppContentView: View {
     @Binding var isRefreshing: Bool
 
     @State private var hideBalanceAfterRefresh = false
-
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
@@ -39,6 +38,7 @@ struct SuperAppContentView: View {
             )
             .onAppear {
                 viewStore.send(.onAppear)
+
             }
             .onDisappear {
                 viewStore.send(.onDisappear)
@@ -67,7 +67,7 @@ struct SuperAppContentView: View {
                 {
                     subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
                     subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
-                    subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
+                    subscribe($isExternalTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product["USE_EXTERNAL_TRADING_ACCOUNT"].is.eligible)
                 }
             )
             .onChange(of: isTradingEnabled) { newValue in

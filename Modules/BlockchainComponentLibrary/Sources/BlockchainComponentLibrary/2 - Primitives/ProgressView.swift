@@ -53,8 +53,8 @@ public struct BlockchainCircularProgressViewStyle: ProgressViewStyle {
     public var lineCap: CGLineCap
 
     public init(
-        stroke: Color = Color.blue,
-        background: Color = Color.blue.opacity(0.3),
+        stroke: Color = Color.semantic.primary,
+        background: Color = Color.white,
         lineWidth: Length = (100 / 6).pmin,
         duration: TimeInterval = 1,
         indeterminate: Bool = true,

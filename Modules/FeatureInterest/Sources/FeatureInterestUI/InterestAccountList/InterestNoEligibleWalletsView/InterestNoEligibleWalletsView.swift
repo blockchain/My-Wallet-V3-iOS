@@ -60,8 +60,7 @@ struct InterestNoEligibleWalletsView_Previews: PreviewProvider {
                         rate: 4.0
                     )
                 ),
-                reducer: interestNoEligibleWalletsReducer,
-                environment: .init()
+                reducer: InterestNoEligibleWalletsReducer()
             )
         )
     }

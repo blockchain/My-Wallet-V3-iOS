@@ -7,6 +7,7 @@ import FeatureCustodialOnboarding
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
+import FeatureExternalTradingMigrationUI
 import FeatureKYCUI
 import FeatureQRCodeScannerUI
 import FeatureQuickActions
@@ -27,6 +28,7 @@ import RemoteNotificationsKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
+import FeatureExternalTradingMigrationUI
 
 @MainActor
 public struct SiteMap {
@@ -142,9 +144,9 @@ public struct SiteMap {
             let model = try context[blockchain.ux.referral.details.screen.info].decode(Referral.self)
             ReferFriendView(store: .init(
                 initialState: .init(referralInfo: model),
-                reducer: ReferFriendModule.reducer,
-                environment: .init(
-                    mainQueue: .main
+                reducer: ReferFriendReducer(
+                    mainQueue: .main,
+                    analyticsRecorder: resolve()
                 )
             ))
             .identity(blockchain.ux.referral)
@@ -196,6 +198,18 @@ public struct SiteMap {
         case blockchain.ux.sweep.imported.addresses.no.action:
             SweepImportedAddressesNoActionView()
                 .app(app)
+
+        case blockchain.ux.dashboard.external.trading.migration:
+            ExternalTradingMigrationView(
+                store: .init(
+                    initialState: .init(),
+                    reducer: ExternalTradingMigration(
+                        app: app,
+                        externalTradingMigrationService: resolve()
+                    )
+                )
+            )
+
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

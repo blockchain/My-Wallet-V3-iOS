@@ -3,10 +3,6 @@ import ComposableArchitecture
 import CustomDump
 import Foundation
 
-public protocol BlockchainNamespaceAppEnvironment {
-    var app: AppProtocol { get }
-}
-
 public protocol BlockchainNamespaceObservationAction {
     static func observation(_ action: BlockchainNamespaceObservation) -> Self
 }
@@ -38,34 +34,39 @@ public struct BlockchainNamespaceEvent: Equatable {
     }
 }
 
-extension Reducer where Action: BlockchainNamespaceObservationAction, Environment: BlockchainNamespaceAppEnvironment {
+public struct BlockchainNamespaceReducer<State, Action>: ReducerProtocol where Action: BlockchainNamespaceObservationAction {
 
-    public func on(_ first: Tag.Event, _ rest: Tag.Event...) -> Self {
-        on([first] + rest)
+    private let app: AppProtocol
+    private let events: [Tag.Event]
+    private let keys: [Tag.Reference]
+
+    public init(app: AppProtocol, events: [Tag.Event]) {
+        self.app = app
+        self.events = events
+        self.keys = events.map { $0.key() }
     }
 
-    public func on(_ events: some Collection<Tag.Event>) -> Self {
-        Reducer { _, action, environment -> EffectTask in
-            if let observation = (/Action.observation).extract(from: action) {
-                let keys = events.map { $0.key() }
-                switch observation {
-                case .start:
-                    let observers = keys.map { event in
-                        environment.app.on(event)
-                            .eraseToEffect()
-                            .map { Action.observation(.event($0.reference, context: $0.context)) }
-                            .cancellable(id: event)
-                    }
-                    return .merge(observers)
-                case .stop:
-                    return .merge(keys.map(EffectTask.cancel(id:)))
-                case .event:
-                    break
-                }
-            }
+    public func reduce(
+        into state: inout State,
+        action: Action
+    ) -> EffectTask<Action> {
+        guard let observation = (/Action.observation).extract(from: action) else {
             return .none
         }
-        .combined(with: self)
+        switch observation {
+        case .start:
+            let observers = keys.map { event in
+                app.on(event)
+                    .eraseToEffect()
+                    .map { Action.observation(.event($0.reference, context: $0.context)) }
+                    .cancellable(id: event)
+            }
+            return .merge(observers)
+        case .stop:
+            return .merge(keys.map(EffectTask.cancel(id:)))
+        case .event:
+            return .none
+        }
     }
 }
 

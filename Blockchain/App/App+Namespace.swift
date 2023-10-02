@@ -9,6 +9,7 @@ import FeatureAuthenticationDomain
 import FeatureCoinUI
 import FeatureCustomerSupportUI
 import FeatureDashboardDomain
+import FeatureExternalTradingMigrationDomain
 import FeatureKYCDomain
 import FeatureKYCUI
 import FeatureProductsDomain
@@ -25,6 +26,7 @@ import FirebaseInstallations
 import FirebaseProtocol
 import FirebaseRemoteConfig
 import FraudIntelligence
+import NetworkKit
 import ObservabilityKit
 import PlatformKit
 import ToolKit
@@ -121,9 +123,18 @@ extension AppProtocol {
                 try await WireTransferNAPI(self).register()
                 try await TradingPairsNAPI().register()
                 try await UserProductsRepository(app: self).register()
+                try await ExternalTradingMigrationRepository().register()
                 let kycRepository: KYCSSNRepository = DIKit.resolve()
                 try await kycRepository.register()
+                try await ExternalTradingMigrationNAPI(app: self).register()
                 try await registerGeolocationNAPI()
+                try await IntercomIdentityNAPI(
+                    client: GetIntercomIdentity(
+                        adapter: resolve(tag: DIKitContext.retail),
+                        request: resolve(tag: DIKitContext.retail)
+                    )
+                )
+                .register()
             } catch {
                 post(error: error)
                 #if DEBUG

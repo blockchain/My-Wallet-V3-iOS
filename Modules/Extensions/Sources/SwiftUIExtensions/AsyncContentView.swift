@@ -1,16 +1,37 @@
 import SwiftUI
 
-public enum LoadingState<Value, Failure: Error> {
+public enum AsyncState<Value, Failure: Error> {
+
     case idle
     case loading
-    case failed(Failure)
-    case loaded(Value)
+    case success(Value)
+    case failure(Failure)
+
+    @inlinable public var isIdle: Bool {
+        if case .idle = self { return true } else { return false }
+    }
+
+    @inlinable public var isLoading: Bool {
+        if case .loading = self { return true } else { return false }
+    }
+
+    @inlinable public var isSuccess: Bool {
+        if case .success = self { return true } else { return false }
+    }
+
+    @inlinable public var isFailure: Bool {
+        if case .failure = self { return true } else { return false }
+    }
+}
+
+extension AsyncState where Value == Void {
+    @inlinable public static var success: Self { .success(()) }
 }
 
 public protocol LoadableObject<Output, Failure>: ObservableObject {
     associatedtype Output
     associatedtype Failure: Error
-    var state: LoadingState<Output, Failure> { get }
+    var state: AsyncState<Output, Failure> { get }
     func load()
 }
 
@@ -44,9 +65,9 @@ public struct AsyncContentView<
             Color.clear.onAppear(perform: source.load)
         case .loading:
             loadingView
-        case .failed(let error):
+        case .failure(let error):
             errorView(error)
-        case .loaded(let output):
+        case .success(let output):
             content(output)
         }
     }
@@ -54,7 +75,7 @@ public struct AsyncContentView<
 
 public class ConcurrencyLoadableObject<Success>: LoadableObject {
 
-    @Published public private(set) var state = LoadingState<Success, Error>.idle
+    @Published public private(set) var state = AsyncState<Success, Error>.idle
 
     private var create: () -> Task<Success, Error>
     private var subscription: Task<Void, Never>?
@@ -72,11 +93,11 @@ public class ConcurrencyLoadableObject<Success>: LoadableObject {
             do {
                 let value = try await create().value
                 withAnimation(animation) {
-                    state = .loaded(value)
+                    state = .success(value)
                 }
             } catch {
                 withAnimation(animation) {
-                    state = .failed(error)
+                    state = .failure(error)
                 }
             }
         }
@@ -88,7 +109,7 @@ import Combine
 
 public class PublishedObject<Wrapped: Publisher, S: Scheduler>: LoadableObject {
 
-    @Published public private(set) var state = LoadingState<Wrapped.Output, Wrapped.Failure>.idle
+    @Published public private(set) var state = AsyncState<Wrapped.Output, Wrapped.Failure>.idle
 
     private let publisher: Wrapped
     private var subscription: AnyCancellable?
@@ -104,9 +125,9 @@ public class PublishedObject<Wrapped: Publisher, S: Scheduler>: LoadableObject {
     public func load() {
         state = .loading
         subscription = publisher
-            .map(LoadingState.loaded)
+            .map(AsyncState.success)
             .catch { error in
-                Just(LoadingState.failed(error))
+                Just(AsyncState.failure(error))
             }
             .receive(on: scheduler.animation(animation))
             .sink { [weak self] state in

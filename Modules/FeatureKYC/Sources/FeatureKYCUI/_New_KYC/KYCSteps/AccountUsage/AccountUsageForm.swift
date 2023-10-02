@@ -80,8 +80,7 @@ struct AccountUsageForm_Previews: PreviewProvider {
                 initialState: AccountUsage.Form.State(
                     form: FeatureFormDomain.Form(nodes: AccountUsage.previewQuestions)
                 ),
-                reducer: AccountUsage.Form.reducer,
-                environment: AccountUsage.Form.Environment(
+                reducer: AccountUsage.Form.Reducer(
                     submitForm: { _ in .empty() },
                     mainQueue: .main
                 )
@@ -94,8 +93,7 @@ struct AccountUsageForm_Previews: PreviewProvider {
                 initialState: AccountUsage.Form.State(
                     form: Form(nodes: [])
                 ),
-                reducer: AccountUsage.Form.reducer,
-                environment: AccountUsage.Form.Environment(
+                reducer: AccountUsage.Form.Reducer(
                     submitForm: { _ in .empty() },
                     mainQueue: .main
                 )

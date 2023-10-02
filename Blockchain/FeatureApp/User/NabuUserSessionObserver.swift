@@ -8,7 +8,6 @@ import PlatformKit
 import ToolKit
 
 final class NabuUserSessionObserver: Client.Observer {
-
     unowned let app: AppProtocol
 
     private var bag: Set<AnyCancellable> = []

@@ -76,8 +76,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
             rootView: AvailableBalanceView(
                 store: .init(
                     initialState: .init(),
-                    reducer: availableBalanceViewReducer,
-                    environment: AvailableBalanceViewEnvironment(
+                    reducer: AvailableBalanceViewReducer(
                         app: app,
                         balancePublisher: presenter.interactor.accountBalancePublisher,
                         availableBalancePublisher: presenter.maxLimitPublisher,
@@ -120,8 +119,7 @@ public final class AmountTranslationView: UIView, AmountViewable {
             rootView: RecurringBuyButton(
                 store: .init(
                     initialState: .init(),
-                    reducer: recurringBuyButtonReducer,
-                    environment: .init(
+                    reducer: RecurringBuyButtonReducer(
                         app: app,
                         recurringBuyButtonTapped: {
                             presenter.interactor.recurringBuyButtonTapped()

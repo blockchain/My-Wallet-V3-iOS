@@ -12,7 +12,7 @@ final class InstitutionListTests: OpenBankingTestCase {
         InstitutionListAction,
         InstitutionListState,
         InstitutionListAction,
-        OpenBankingEnvironment
+        Void
     >
 
     private var store: Store!
@@ -21,8 +21,7 @@ final class InstitutionListTests: OpenBankingTestCase {
         try super.setUpWithError()
         store = .init(
             initialState: .init(),
-            reducer: institutionListReducer,
-            environment: environment
+            reducer: InstitutionListReducer(environment: environment)
         )
     }
 

@@ -133,8 +133,7 @@ struct NotificationPreferencesDetailsViewView_Previews: PreviewProvider {
             NotificationPreferencesDetailsView(
                 store: .init(
                     initialState: .init(notificationPreference: notificationPreference),
-                    reducer: notificationPreferencesDetailsReducer,
-                    environment: NotificationPreferencesDetailsEnvironment()
+                    reducer: NotificationPreferencesDetailsReducer()
                 )
             )
         }

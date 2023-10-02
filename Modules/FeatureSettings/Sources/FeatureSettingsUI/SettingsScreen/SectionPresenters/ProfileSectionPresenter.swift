@@ -55,27 +55,16 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
         self.mobileVerificationPresenter = mobileVerificationPresenter
         let blockchainDomainsPresenter = BlockchainDomainsCommonCellPresenter(provider: blockchainDomainsAdapter)
         // handle limits here
-        self.state = app.publisher(for: blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible, as: Bool.self)
-            .replaceError(with: true)
-            .combineLatest(externalBrokerageActivePublisher)
-            .map { isEligible, isExternalBrokerageActivePublisher -> SettingsSectionLoadingState in
-                if isEligible {
-                    return .loaded(
-                        next: .some(
-                            SettingsSectionViewModel(
-                                sectionType: .profile,
-                                items: [
-                                    isExternalBrokerageActivePublisher ? nil : .init(cellType: .badge(.limits, limitsPresenter)),
-                                    .init(cellType: .clipboard(.walletID)),
-                                    .init(cellType: .badge(.emailVerification, emailVerificationPresenter)),
-                                    .init(cellType: .badge(.mobileVerification, mobileVerificationPresenter)),
-                                    .init(cellType: .common(.blockchainDomains, blockchainDomainsPresenter)),
-                                    .init(cellType: .common(.webLogin))
-                                ].compactMap { $0 }
-                            )
-                        )
-                    )
-                } else {
+        self.state = Publishers
+            .CombineLatest3(
+                app
+                    .publisher(for: blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible, as: Bool.self)
+                    .replaceError(with: true),
+                externalBrokerageActivePublisher,
+                app.publisher(for: blockchain.user.is.verified, as: Bool.self).replaceError(with: false)
+            )
+            .map { isEligible, isExternalBrokerage, isVerified -> SettingsSectionLoadingState in
+                guard isVerified else {
                     return .loaded(
                         next: .some(
                             SettingsSectionViewModel(
@@ -83,7 +72,6 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
                                 items: [
                                     .init(cellType: .clipboard(.walletID)),
                                     .init(cellType: .badge(.emailVerification, emailVerificationPresenter)),
-                                    .init(cellType: .badge(.mobileVerification, mobileVerificationPresenter)),
                                     .init(cellType: .common(.blockchainDomains, blockchainDomainsPresenter)),
                                     .init(cellType: .common(.webLogin))
                                 ]
@@ -91,6 +79,22 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
                         )
                     )
                 }
+                
+                return .loaded(
+                    next: .some(
+                        SettingsSectionViewModel(
+                            sectionType: .profile,
+                            items: [
+                                isEligible && !isExternalBrokerage ? .init(cellType: .badge(.limits, limitsPresenter)) : nil,
+                                .init(cellType: .clipboard(.walletID)),
+                                .init(cellType: .badge(.emailVerification, emailVerificationPresenter)),
+                                .init(cellType: .badge(.mobileVerification, mobileVerificationPresenter)),
+                                .init(cellType: .common(.blockchainDomains, blockchainDomainsPresenter)),
+                                .init(cellType: .common(.webLogin))
+                            ].compactMap { $0 }
+                        )
+                    )
+                )
             }
             .asObservable()
     }

@@ -132,8 +132,7 @@ public final class PlaidLinkObserver: Client.Observer {
 
         let view = PlaidView(store: .init(
             initialState: PlaidState(accountId: accountId),
-            reducer: PlaidModule.reducer,
-            environment: .init(
+            reducer: PlaidReducer(
                 app: app,
                 mainQueue: .main,
                 plaidRepository: DIKit.resolve(),

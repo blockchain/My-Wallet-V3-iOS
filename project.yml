@@ -178,7 +178,7 @@ packages:
     version: 0.56.0
   Intercom:
     url: https://github.com/intercom/intercom-ios.git
-    version: 15.1.0
+    version: 15.2.3
   DIKit:
     url: https://github.com/dchatzieleftheriou-bc/DIKit.git
     version: 1.0.1
@@ -337,6 +337,8 @@ packages:
     path: Modules/FeatureTopMoversCrypto
   FeatureReceive:
     path: Modules/FeatureReceive
+  FeatureExternalTradingMigration:
+    path: Modules/FeatureExternalTradingMigration
 
 targets:
   BlockchainApp:
@@ -548,6 +550,8 @@ targets:
         product: FeatureAnnouncements
       - package: FeatureTopMoversCrypto
         product: FeatureTopMoversCrypto
+      - package: FeatureExternalTradingMigration
+        product: FeatureExternalTradingMigration
 
     platform: iOS
     postBuildScripts:

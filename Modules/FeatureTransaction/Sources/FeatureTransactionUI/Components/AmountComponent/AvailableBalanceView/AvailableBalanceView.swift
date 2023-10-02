@@ -49,9 +49,13 @@ public enum AvailableBalanceViewAction: Equatable {
     case viewTapped
 }
 
-// MARK: - Environment
+// MARK: - Reducer
 
-public struct AvailableBalanceViewEnvironment {
+public struct AvailableBalanceViewReducer: ReducerProtocol {
+    
+    public typealias State = AvailableBalanceViewState
+    public typealias Action = AvailableBalanceViewAction
+
     let app: AppProtocol
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let balancePublisher: AnyPublisher<FiatValue, Never>
@@ -79,7 +83,7 @@ public struct AvailableBalanceViewEnvironment {
     }
 
     static var preview: Self {
-        AvailableBalanceViewEnvironment(
+        AvailableBalanceViewReducer(
             app: App.preview,
             balancePublisher: .empty(),
             availableBalancePublisher: .empty(),
@@ -87,61 +91,57 @@ public struct AvailableBalanceViewEnvironment {
             transactionIsFeeLessPublisher: .empty()
         )
     }
-}
+    
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
 
-// MARK: - Reducer
+                return .merge(
+                    balancePublisher
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
+                        .map(AvailableBalanceViewAction.updateBalance),
 
-public let availableBalanceViewReducer = Reducer<
-    AvailableBalanceViewState,
-    AvailableBalanceViewAction,
-    AvailableBalanceViewEnvironment
-> { state, action, environment in
-    switch action {
-    case .onAppear:
+                    availableBalancePublisher
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
+                        .map(AvailableBalanceViewAction.updateAvailableBalance),
 
-        return .merge(
-            environment.balancePublisher
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .map(AvailableBalanceViewAction.updateBalance),
+                    feesPublisher
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
+                        .map(AvailableBalanceViewAction.updateFees),
 
-            environment.availableBalancePublisher
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .map(AvailableBalanceViewAction.updateAvailableBalance),
+                    app
+                        .publisher(for: blockchain.ux.transaction.id, as: String.self)
+                        .compactMap(\.value)
+                        .compactMap { AssetAction(rawValue: $0) }
+                        .eraseToEffect()
+                        .map(AvailableBalanceViewAction.updateAssetAction)
+                )
 
-            environment.feesPublisher
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .map(AvailableBalanceViewAction.updateFees),
+            case .updateAvailableBalance(let fiatValue):
+                state.availableBalance = fiatValue
+                return .none
 
-            environment.app
-                .publisher(for: blockchain.ux.transaction.id, as: String.self)
-                .compactMap(\.value)
-                .compactMap { AssetAction(rawValue: $0) }
-                .eraseToEffect()
-                .map(AvailableBalanceViewAction.updateAssetAction)
-        )
+            case .updateBalance(let fiatValue):
+                state.balance = fiatValue
+                return .none
 
-    case .updateAvailableBalance(let fiatValue):
-        state.availableBalance = fiatValue
-        return .none
+            case .updateAssetAction(let action):
+                state.action = action
+                return .none
 
-    case .updateBalance(let fiatValue):
-        state.balance = fiatValue
-        return .none
+            case .updateFees(let fiatValue):
+                state.fees = fiatValue
+                return .none
 
-    case .updateAssetAction(let action):
-        state.action = action
-        return .none
-
-    case .updateFees(let fiatValue):
-        state.fees = fiatValue
-        return .none
-
-    case .viewTapped:
-        return .fireAndForget {
-            environment.onViewTapped?()
+            case .viewTapped:
+                return .fireAndForget {
+                    onViewTapped?()
+                }
+            }
         }
     }
 }
@@ -198,8 +198,7 @@ struct AvailableBalanceView_Previews: PreviewProvider {
         AvailableBalanceView(
             store: .init(
                 initialState: .init(),
-                reducer: availableBalanceViewReducer,
-                environment: .preview
+                reducer: AvailableBalanceViewReducer.preview
             )
         )
     }

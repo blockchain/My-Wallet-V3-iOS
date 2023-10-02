@@ -150,8 +150,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             rootView: RecurringBuyFrequencySelectorView(
                 store: .init(
                     initialState: .init(),
-                    reducer: recurringBuyFrequencySelectorReducer,
-                    environment: .init(
+                    reducer: RecurringBuyFrequencySelectorReducer(
                         app: app,
                         dismiss: {
                             transactionModel.process(action: .returnToPreviousStep)
@@ -596,8 +595,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let view = PlaidView(
             store: .init(
                 initialState: PlaidState(),
-                reducer: PlaidModule.reducer,
-                environment: .init(
+                reducer: PlaidReducer(
                     app: app,
                     mainQueue: .main,
                     plaidRepository: DIKit.resolve(),

@@ -1,34 +1,38 @@
+import AnalyticsKit
 import Combine
 import ComposableArchitecture
 import ComposableNavigation
 import FeatureUserDeletionDomain
 import Foundation
 
-public enum DeletionConfirmModule {}
+public struct DeletionConfirmReducer: ReducerProtocol {
 
-extension DeletionConfirmModule {
-    public static var reducer = Reducer<DeletionConfirmState, DeletionConfirmAction, DeletionConfirmEnvironment>
-        .combine(
-            DeletionResultModule
-                .reducer
-                .optional()
-                .pullback(
-                    state: \.resultViewState,
-                    action: /DeletionConfirmAction.onConfirmViewChanged,
-                    environment: { env in
-                        DeletionResultEnvironment(
-                            mainQueue: .main,
-                            analyticsRecorder: env.analyticsRecorder,
-                            dismissFlow: env.dismissFlow,
-                            logoutAndForgetWallet: env.logoutAndForgetWallet
-                        )
-                    }
-                ),
-            deletionConfirmReducer
-        )
+    public typealias State = DeletionConfirmState
+    public typealias Action = DeletionConfirmAction
 
-    public static var deletionConfirmReducer: Reducer<DeletionConfirmState, DeletionConfirmAction, DeletionConfirmEnvironment> {
-        .init { state, action, environment in
+    public let mainQueue: AnySchedulerOf<DispatchQueue>
+    public let userDeletionRepository: UserDeletionRepositoryAPI
+    public let analyticsRecorder: AnalyticsEventRecorderAPI
+    public let logoutAndForgetWallet: () -> Void
+    public let dismissFlow: () -> Void
+
+    public init(
+        mainQueue: AnySchedulerOf<DispatchQueue>,
+        userDeletionRepository: UserDeletionRepositoryAPI,
+        analyticsRecorder: AnalyticsEventRecorderAPI,
+        dismissFlow: @escaping () -> Void,
+        logoutAndForgetWallet: @escaping () -> Void
+    ) {
+        self.mainQueue = mainQueue
+        self.userDeletionRepository = userDeletionRepository
+        self.analyticsRecorder = analyticsRecorder
+        self.dismissFlow = dismissFlow
+        self.logoutAndForgetWallet = logoutAndForgetWallet
+    }
+
+    public var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
             switch action {
             case .showResultScreen(let result):
                 state.resultViewState = DeletionResultState(success: result.isSuccess)
@@ -39,17 +43,16 @@ extension DeletionConfirmModule {
                     return EffectTask(value: .validateConfirmationInput)
                 }
                 state.isLoading = true
-                return environment
-                    .userDeletionRepository
+                return userDeletionRepository
                     .deleteUser(with: nil)
-                    .receive(on: environment.mainQueue)
+                    .receive(on: mainQueue)
                     .catchToEffect()
                     .map(DeletionConfirmAction.showResultScreen)
             case .validateConfirmationInput:
                 state.validateConfirmationInputField()
                 return .none
             case .dismissFlow:
-                environment.dismissFlow()
+                dismissFlow()
                 return .none
             case .route(let routeItent):
                 state.route = routeItent
@@ -62,43 +65,59 @@ extension DeletionConfirmModule {
                 return .none
             }
         }
-        .binding()
-        .analytics()
+        .ifLet(\.resultViewState, action: /Action.onConfirmViewChanged) {
+            DeletionResultReducer(
+                mainQueue: .main,
+                analyticsRecorder: analyticsRecorder,
+                dismissFlow: dismissFlow,
+                logoutAndForgetWallet: logoutAndForgetWallet
+            )
+        }
+        DeletionConfirmAnalytics(analyticsRecorder: analyticsRecorder)
     }
 }
 
 // MARK: - Private
 
-extension Reducer where
-    Action == DeletionConfirmAction,
-    State == DeletionConfirmState,
-    Environment == DeletionConfirmEnvironment
-{
-    /// Helper function for analytics tracking
-    fileprivate func analytics() -> Self {
-        combined(
-            with: Reducer<
-                DeletionConfirmState,
-                DeletionConfirmAction,
-                DeletionConfirmEnvironment
-            > { _, action, environment in
-                switch action {
-                case .showResultScreen(.success):
-                    environment.analyticsRecorder.record(
-                        event: .accountDeletionSuccess
+struct DeletionConfirmAnalytics: ReducerProtocol {
+
+    typealias State = DeletionConfirmState
+    typealias Action = DeletionConfirmAction
+
+    let analyticsRecorder: AnalyticsEventRecorderAPI
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .showResultScreen(.success):
+                analyticsRecorder.record(
+                    event: .accountDeletionSuccess
+                )
+                return .none
+            case .showResultScreen(.failure(let error)):
+                analyticsRecorder.record(
+                    event: .accountDeletionFailure(
+                        errorMessage: error.localizedDescription
                     )
-                    return .none
-                case .showResultScreen(.failure(let error)):
-                    environment.analyticsRecorder.record(
-                        event: .accountDeletionFailure(
-                            errorMessage: error.localizedDescription
-                        )
-                    )
-                    return .none
-                default:
-                    return .none
-                }
+                )
+                return .none
+            default:
+                return .none
             }
-        )
+        }
     }
 }
+
+#if DEBUG
+
+extension DeletionConfirmReducer {
+    static let preview = DeletionConfirmReducer(
+        mainQueue: .main,
+        userDeletionRepository: NoOpUserDeletionRepository(),
+        analyticsRecorder: AnalyticsEventRecorder(analyticsServiceProviders: []),
+        dismissFlow: {},
+        logoutAndForgetWallet: {}
+    )
+}
+
+#endif

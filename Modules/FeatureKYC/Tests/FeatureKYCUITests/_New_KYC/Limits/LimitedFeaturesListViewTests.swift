@@ -70,8 +70,7 @@ final class LimitedFeaturesListViewTests: XCTestCase {
                     features: [.init(id: .send, enabled: false, limit: nil)],
                     kycTiers: .init(tiers: [])
                 ),
-                reducer: limitedFeaturesListReducer,
-                environment: LimitedFeaturesListEnvironment(
+                reducer: LimitedFeaturesListReducer(
                     openURL: { _ in },
                     presentKYCFlow: { _ in }
                 )

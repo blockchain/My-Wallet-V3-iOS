@@ -7,7 +7,7 @@ import ComposableArchitectureExtensions
 import FeatureCoinDomain
 import Foundation
 
-public struct CoinViewEnvironment: BlockchainNamespaceAppEnvironment {
+public struct CoinViewEnvironment {
 
     public let app: AppProtocol
     public let mainQueue: AnySchedulerOf<DispatchQueue>

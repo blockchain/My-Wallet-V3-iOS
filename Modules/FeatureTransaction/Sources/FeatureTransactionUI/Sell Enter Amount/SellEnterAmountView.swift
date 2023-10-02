@@ -109,7 +109,6 @@ public struct SellEnterAmountView: View {
                 .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
-
             inputSectionFlipButton(viewStore)
         }
     }

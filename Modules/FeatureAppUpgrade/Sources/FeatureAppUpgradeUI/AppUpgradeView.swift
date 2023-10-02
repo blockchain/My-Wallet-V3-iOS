@@ -91,36 +91,31 @@ struct AppUpgradeView_Previews: PreviewProvider {
         AppUpgradeView(
             store: .init(
                 initialState: AppUpgradeState(style: .unsupportedOS, url: ""),
-                reducer: appUpgradeReducer,
-                environment: ()
+                reducer: AppUpgradeReducer()
             )
         )
         AppUpgradeView(
             store: .init(
                 initialState: AppUpgradeState(style: .maintenance, url: ""),
-                reducer: appUpgradeReducer,
-                environment: ()
+                reducer: AppUpgradeReducer()
             )
         )
         AppUpgradeView(
             store: .init(
                 initialState: AppUpgradeState(style: .appMaintenance, url: ""),
-                reducer: appUpgradeReducer,
-                environment: ()
+                reducer: AppUpgradeReducer()
             )
         )
         AppUpgradeView(
             store: .init(
                 initialState: AppUpgradeState(style: .softUpgrade, url: ""),
-                reducer: appUpgradeReducer,
-                environment: ()
+                reducer: AppUpgradeReducer()
             )
         )
         AppUpgradeView(
             store: .init(
                 initialState: AppUpgradeState(style: .hardUpgrade, url: ""),
-                reducer: appUpgradeReducer,
-                environment: ()
+                reducer: AppUpgradeReducer()
             )
         )
     }

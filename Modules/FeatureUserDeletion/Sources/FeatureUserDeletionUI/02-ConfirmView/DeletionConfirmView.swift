@@ -61,7 +61,7 @@ public struct DeletionConfirmView: View {
         VStack(spacing: 16) {
             Text(LocalizedString.explanaition)
                 .typography(.paragraph1)
-                .foregroundColor(.textBody)
+                .foregroundColor(.semantic.text)
 
             let shouldShowError = viewStore.shouldShowInvalidInputUI
             Input(
@@ -93,3 +93,18 @@ public struct DeletionConfirmView: View {
         }
     }
 }
+
+#if DEBUG
+
+struct DeletionConfirm_Previews: PreviewProvider {
+    static var previews: some View {
+        DeletionConfirmView(
+            store: Store(
+                initialState: DeletionConfirmState(),
+                reducer: DeletionConfirmReducer.preview
+            )
+        )
+    }
+}
+
+#endif

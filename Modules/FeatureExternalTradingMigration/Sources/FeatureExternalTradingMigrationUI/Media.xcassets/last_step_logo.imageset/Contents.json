@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "one_more_thing_log.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

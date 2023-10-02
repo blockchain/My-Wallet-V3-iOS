@@ -39,8 +39,7 @@ final class EnterAmountViewController: BaseScreenViewController,
     private lazy var withdrawalLocksHostingController: UIHostingController<WithdrawalLocksView> = {
         let store = Store<WithdrawalLocksState, WithdrawalLocksAction>(
             initialState: .init(),
-            reducer: withdrawalLocksReducer,
-            environment: WithdrawalLocksEnvironment { [weak self] isVisible in
+            reducer: WithdrawalLocksReducer { [weak self] isVisible in
                 self?.withdrawalLocksVisible.onNext(isVisible)
             }
         )
@@ -393,8 +392,7 @@ final class EnterAmountViewController: BaseScreenViewController,
     func presentWithdrawalLocks(amountAvailable: String) {
         let store = Store<WithdrawalLocksInfoState, WithdrawalLocksInfoAction>(
             initialState: WithdrawalLocksInfoState(amountAvailable: amountAvailable),
-            reducer: withdrawalLockInfoReducer,
-            environment: WithdrawalLocksInfoEnvironment { [weak self] in
+            reducer: WithdrawalLockInfoReducer { [weak self] in
                 self?.dismiss(animated: true, completion: nil)
             }
         )
@@ -410,8 +408,7 @@ final class EnterAmountViewController: BaseScreenViewController,
     func presentAvailableBalanceDetailView(_ availableBalanceDetails: AvailableBalanceDetails) {
         let store = Store<AvailableBalanceDetailViewState, AvailableBalanceDetailViewAction>(
             initialState: .init(),
-            reducer: availableBalanceDetailViewReducer,
-            environment: AvailableBalanceDetailViewEnvironment(
+            reducer: AvailableBalanceDetailViewReducer(
                 app: app,
                 balancePublisher: availableBalanceDetails.balance,
                 availableBalancePublisher: availableBalanceDetails.availableBalance,

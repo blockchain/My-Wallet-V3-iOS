@@ -179,8 +179,7 @@ struct InterestAccountDetailsView_Previews: PreviewProvider {
         InterestAccountDetailsView(
             store: .init(
                 initialState: state,
-                reducer: interestAccountDetailsReducer,
-                environment: .default
+                reducer: InterestAccountDetailsReducer()
             )
         )
     }

@@ -47,8 +47,7 @@ struct AccountUsageView_Previews: PreviewProvider {
         AccountUsageView(
             store: .init(
                 initialState: AccountUsage.State.loading,
-                reducer: AccountUsage.reducer,
-                environment: .preview
+                reducer: AccountUsage.Reducer.preview
             )
         )
         .previewDisplayName("Account Usage View - loading")
@@ -60,8 +59,7 @@ struct AccountUsageView_Previews: PreviewProvider {
                         form: FeatureFormDomain.Form(nodes: AccountUsage.previewQuestions)
                     )
                 ),
-                reducer: AccountUsage.reducer,
-                environment: .preview
+                reducer: AccountUsage.Reducer.preview
             )
         )
         .previewDisplayName("Account Usage View - success")
@@ -84,8 +82,7 @@ struct AccountUsageView_Previews: PreviewProvider {
                         ]
                     )
                 ),
-                reducer: AccountUsage.reducer,
-                environment: .preview
+                reducer: AccountUsage.Reducer.preview
             )
         )
         .previewDisplayName("Account Usage View - failure")

@@ -105,7 +105,3 @@ public enum NotificationPreferencesDetailsAction: Equatable, BindableAction {
     case onAppear
     case binding(BindingAction<NotificationPreferencesDetailsState>)
 }
-
-public struct NotificationPreferencesDetailsEnvironment {
-    public init() {}
-}

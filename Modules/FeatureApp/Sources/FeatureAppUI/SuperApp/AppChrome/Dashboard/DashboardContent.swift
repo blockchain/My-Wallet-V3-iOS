@@ -134,17 +134,16 @@ struct DashboardContent: ReducerProtocol {
                 return .run { [state] send in
                     switch state.appMode {
                     case .trading:
-                        for await externalTradingEnabled in app.stream(blockchain.app.is.external.brokerage, as: Bool.self) {
-
+                        let stream = app.stream(blockchain.app.is.external.brokerage, as: Bool.self).flatMap { externalTradingEnabled in
                             if externalTradingEnabled.value == true {
-                                for await event in app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self) {
-                                    await send(DashboardContent.Action.tabs(event.value?.tabs))
-                                }
+                                return app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self)
                             } else {
-                                for await event in app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self) {
-                                    await send(DashboardContent.Action.tabs(event.value?.tabs))
-                                }
+                                return app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self)
                             }
+                        }
+                        
+                        for await event in stream {
+                            await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }
                     case .pkw:
                         for await event in app.stream(blockchain.app.configuration.superapp.defi.tabs, as: TabConfig.self) {

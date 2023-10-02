@@ -83,18 +83,10 @@ struct RecurringBuyFrequencySelectorView_Previews: PreviewProvider {
         RecurringBuyFrequencySelectorView(
             store: .init(
                 initialState: .init(eligibleRecurringBuyFrequenciesAndNextDates: []),
-                reducer: recurringBuyFrequencySelectorReducer,
-                environment: RecurringBuyFrequencySelectorEnvironment(app: App.preview, dismiss: {})
+                reducer: RecurringBuyFrequencySelectorReducer(app: App.preview, dismiss: {})
             )
         )
     }
-}
-
-// MARK: - Environment
-
-struct RecurringBuyFrequencySelectorEnvironment {
-    let app: AppProtocol
-    let dismiss: (() -> Void)?
 }
 
 // MARK: - State
@@ -125,54 +117,59 @@ enum RecurringBuyFrequencySelectorAction: Equatable, BindableAction {
 
 // MARK: - Reducer
 
-let recurringBuyFrequencySelectorReducer = Reducer<
-    RecurringBuyFrequencySelectorState,
-    RecurringBuyFrequencySelectorAction,
-    RecurringBuyFrequencySelectorEnvironment
-> { state, action, environment in
-    switch action {
-    case .refresh:
-        return .merge(
-            environment
-                .app.publisher(for: blockchain.ux.transaction.checkout.recurring.buy.frequency, as: String.self)
-                .receive(on: DispatchQueue.main)
-                .compactMap(\.value)
-                .compactMap(RecurringBuy.Frequency.init(rawValue:))
-                .eraseToEffect()
-                .map { .binding(.set(\.$recurringBuyFrequency, $0)) },
+struct RecurringBuyFrequencySelectorReducer: ReducerProtocol {
+    
+    typealias State = RecurringBuyFrequencySelectorState
+    typealias Action = RecurringBuyFrequencySelectorAction
 
-            environment
-                .app.publisher(for: blockchain.ux.transaction.event.did.fetch.recurring.buy.frequencies, as: [EligibleAndNextPaymentRecurringBuy].self)
-                .receive(on: DispatchQueue.main)
-                .compactMap(\.value)
-                .eraseToEffect()
-                .map { .binding(.set(\.$eligibleRecurringBuyFrequenciesAndNextDates, $0)) }
-        )
+    let app: AppProtocol
+    let dismiss: (() -> Void)?
 
-    case .update(let frequency):
-        state.recurringBuyFrequency = frequency
-        return .none
-    case .recurringBuyFrequencySelected(let frequency):
-        state.recurringBuyFrequency = frequency
-        return .none
-    case .binding:
-        return .none
-    case .okTapped:
-        guard let frequency = state.recurringBuyFrequency else { return .none }
-        environment.app.state.transaction { appState in
-            appState.set(blockchain.ux.transaction.action.select.recurring.buy.frequency, to: frequency.rawValue)
-        }
-        environment.app.post(event: blockchain.ux.transaction.checkout.recurring.buy.frequency)
-        return .fireAndForget {
-            environment.dismiss?()
-        }
-    case .closeButtonTapped:
-        return .fireAndForget {
-            environment.dismiss?()
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .refresh:
+                return .merge(
+                    app.publisher(for: blockchain.ux.transaction.checkout.recurring.buy.frequency, as: String.self)
+                        .receive(on: DispatchQueue.main)
+                        .compactMap(\.value)
+                        .compactMap(RecurringBuy.Frequency.init(rawValue:))
+                        .eraseToEffect()
+                        .map { .binding(.set(\.$recurringBuyFrequency, $0)) },
+
+                    app.publisher(for: blockchain.ux.transaction.event.did.fetch.recurring.buy.frequencies, as: [EligibleAndNextPaymentRecurringBuy].self)
+                        .receive(on: DispatchQueue.main)
+                        .compactMap(\.value)
+                        .eraseToEffect()
+                        .map { .binding(.set(\.$eligibleRecurringBuyFrequenciesAndNextDates, $0)) }
+                )
+
+            case .update(let frequency):
+                state.recurringBuyFrequency = frequency
+                return .none
+            case .recurringBuyFrequencySelected(let frequency):
+                state.recurringBuyFrequency = frequency
+                return .none
+            case .binding:
+                return .none
+            case .okTapped:
+                guard let frequency = state.recurringBuyFrequency else { return .none }
+                app.state.transaction { appState in
+                    appState.set(blockchain.ux.transaction.action.select.recurring.buy.frequency, to: frequency.rawValue)
+                }
+                app.post(event: blockchain.ux.transaction.checkout.recurring.buy.frequency)
+                return .fireAndForget {
+                    dismiss?()
+                }
+            case .closeButtonTapped:
+                return .fireAndForget {
+                    dismiss?()
+                }
+            }
         }
     }
 }
-.binding()
 
 extension EligibleAndNextPaymentRecurringBuy {
     typealias LocalizationId = LocalizationConstants.Transaction.Buy.Recurring

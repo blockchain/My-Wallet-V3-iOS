@@ -129,8 +129,7 @@ struct EmailVerificationView_Previews: PreviewProvider {
         EmailVerificationView(
             store: .init(
                 initialState: .init(emailAddress: "test@example.com"),
-                reducer: emailVerificationReducer,
-                environment: EmailVerificationEnvironment(
+                reducer: EmailVerificationReducer(
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     emailVerificationService: NoOpEmailVerificationService(),
                     flowCompletionCallback: nil,

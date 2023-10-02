@@ -7,7 +7,12 @@ public struct TransactionBinding<Value>: DynamicProperty {
     @State private var _derived: Value
     @Binding private var _source: Value
 
-    fileprivate init(source: Binding<Value>) {
+    public init(source: Value) {
+        __source = .constant(source)
+        __derived = State(wrappedValue: source)
+    }
+
+    public init(source: Binding<Value>) {
         __source = source
         __derived = State(wrappedValue: source.wrappedValue)
     }

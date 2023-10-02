@@ -22,96 +22,93 @@ enum AccountUsage {
         case form(AccountUsage.Form.Action)
     }
 
-    struct Environment {
+    struct Reducer: ReducerProtocol {
+
+        typealias State = AccountUsage.State
+        typealias Action = AccountUsage.Action
+
         let onComplete: () -> Void
         let dismiss: () -> Void
         let loadForm: () -> AnyPublisher<FeatureFormDomain.Form, NabuNetworkError>
         let submitForm: (FeatureFormDomain.Form) -> AnyPublisher<Void, NabuNetworkError>
         let analyticsRecorder: AnalyticsEventRecorderAPI
         let mainQueue: AnySchedulerOf<DispatchQueue> = .main
-    }
 
-    static let reducer = Reducer.combine(
-        Reducer<State, Action, Environment> { state, action, environment in
-            switch action {
-            case .onAppear:
-                environment.analyticsRecorder.record(event: Events.accountInfoScreenViewed)
-                return EffectTask(value: .loadForm)
-
-            case .onComplete:
-                return .fireAndForget(environment.onComplete)
-
-            case .dismiss:
-                return .fireAndForget(environment.dismiss)
-
-            case .loadForm:
-                state = .loading
-                return environment.loadForm()
-                    .catchToEffect()
-                    .map(Action.formDidLoad)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-
-            case .formDidLoad(let result):
-                switch result {
-                case .success(let form) where form.isEmpty:
-                    return EffectTask(value: .onComplete)
-                case .success(let form):
-                    state = .success(AccountUsage.Form.State(form: form))
-                case .failure(let error):
-                    let ux = UX.Error(nabu: error)
-                    state = .failure(
-                        FailureState(
-                            title: ux.title,
-                            message: ux.message,
-                            buttons: [
-                                .primary(
-                                    title: LocalizationConstants.NewKYC.GenericError.retryButtonTitle,
-                                    action: .loadForm
-                                ),
-                                .destructive(
-                                    title: LocalizationConstants.NewKYC.GenericError.cancelButtonTitle,
-                                    action: .dismiss
-                                )
-                            ]
-                        )
-                    )
-                }
-                return .none
-
-            case .form(let action):
+        var body: some ReducerProtocol<State, Action> {
+            Reduce { state, action in
                 switch action {
-                case .submit:
-                    return .fireAndForget {
-                        environment.analyticsRecorder.record(event: Events.accountInfoSubmitted)
-                    }
+                case .onAppear:
+                    analyticsRecorder.record(event: Events.accountInfoScreenViewed)
+                    return EffectTask(value: .loadForm)
 
                 case .onComplete:
-                    return EffectTask(value: .onComplete)
+                    return .fireAndForget(onComplete)
 
-                default:
+                case .dismiss:
+                    return .fireAndForget(dismiss)
+
+                case .loadForm:
+                    state = .loading
+                    return loadForm()
+                        .catchToEffect()
+                        .map(Action.formDidLoad)
+                        .receive(on: mainQueue)
+                        .eraseToEffect()
+
+                case .formDidLoad(let result):
+                    switch result {
+                    case .success(let form) where form.isEmpty:
+                        return EffectTask(value: .onComplete)
+                    case .success(let form):
+                        state = .success(AccountUsage.Form.State(form: form))
+                    case .failure(let error):
+                        let ux = UX.Error(nabu: error)
+                        state = .failure(
+                            FailureState(
+                                title: ux.title,
+                                message: ux.message,
+                                buttons: [
+                                    .primary(
+                                        title: LocalizationConstants.NewKYC.GenericError.retryButtonTitle,
+                                        action: .loadForm
+                                    ),
+                                    .destructive(
+                                        title: LocalizationConstants.NewKYC.GenericError.cancelButtonTitle,
+                                        action: .dismiss
+                                    )
+                                ]
+                            )
+                        )
+                    }
                     return .none
+
+                case .form(let action):
+                    switch action {
+                    case .submit:
+                        return .fireAndForget {
+                            analyticsRecorder.record(event: Events.accountInfoSubmitted)
+                        }
+
+                    case .onComplete:
+                        return EffectTask(value: .onComplete)
+
+                    default:
+                        return .none
+                    }
                 }
             }
-        },
-        AccountUsage.Form.reducer.pullback(
-            state: /AccountUsage.State.success,
-            action: /AccountUsage.Action.form,
-            environment: {
-                AccountUsage.Form.Environment(
-                    submitForm: $0.submitForm,
-                    mainQueue: $0.mainQueue
-                )
+            Scope(state: /AccountUsage.State.success, action: /AccountUsage.Action.form) {
+                AccountUsage.Form.Reducer(submitForm: submitForm, mainQueue: mainQueue)
             }
-        )
-    )
+        }
+    }
 }
 
 // MARK: SwiftUI Preview Helpers
 
-extension AccountUsage.Environment {
+extension AccountUsage.Reducer {
 
-    static let preview = AccountUsage.Environment(
+    static let preview = AccountUsage.Reducer(
         onComplete: {},
         dismiss: {},
         loadForm: { .empty() },

@@ -186,6 +186,35 @@ blockchain:
 						+ blockchain.db.type.array.of.strings
 				user:
 				+ blockchain.namespace.napi
+					external:
+						brokerage:
+							migration:
+								complete:
+									success:
+										message:
+											shown:
+											+ blockchain.db.type.boolean
+											+ blockchain.session.state.preference.value
+								last:
+									known:
+										state:
+										+ blockchain.db.type.enum
+										+ blockchain.session.state.stored.value
+											available:
+											complete:
+											not_available:
+											pending:
+								state:
+								+ blockchain.db.type.enum
+									available:
+									complete:
+									not_available:
+									pending:
+					intercom:
+						identity:
+							user:
+								digest:
+								+ blockchain.db.type.string
 					products:
 						product:
 						+ blockchain.db.collection
@@ -1208,6 +1237,9 @@ blockchain:
 					code:
 					+ blockchain.db.type.string
 					+ blockchain.session.state.shared.value
+					identifier:
+					+ blockchain.db.type.string
+					+ blockchain.session.state.shared.value
 			os:
 				name:
 				+ blockchain.db.type.string
@@ -2009,6 +2041,10 @@ blockchain:
 			+ blockchain.db.collection
 			+ blockchain.ux.type.story
 			bio:
+				copy:
+					contract:
+					+ blockchain.ui.device.haptic.feedback.impact.medium
+					+ blockchain.ui.type.action
 				visit:
 					website:
 					+ blockchain.ux.type.action
@@ -2298,6 +2334,12 @@ blockchain:
 					+ blockchain.ux.type.task
 				receive:
 				+ blockchain.ux.type.task
+			external:
+				trading:
+					migration:
+					+ blockchain.ux.type.story
+						start:
+						+ blockchain.ux.type.task
 			fiat:
 				account:
 					action:

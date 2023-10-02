@@ -13,7 +13,7 @@ final class BankLinkTests: OpenBankingTestCase {
         BankAction,
         BankState,
         BankAction,
-        OpenBankingEnvironment
+        Void
     >
 
     private var store: Store!
@@ -29,8 +29,7 @@ final class BankLinkTests: OpenBankingTestCase {
         try super.setUpWithError()
         store = .init(
             initialState: initialState,
-            reducer: bankReducer,
-            environment: environment
+            reducer: BankReducer(environment: environment)
         )
     }
 
@@ -113,7 +112,7 @@ final class BankPaymentTests: OpenBankingTestCase {
         BankAction,
         BankState,
         BankAction,
-        OpenBankingEnvironment
+        Void
     >
 
     private var store: Store!
@@ -143,8 +142,7 @@ final class BankPaymentTests: OpenBankingTestCase {
         try super.setUpWithError()
         store = .init(
             initialState: initialState,
-            reducer: bankReducer,
-            environment: environment
+            reducer: BankReducer(environment: environment)
         )
     }
 
