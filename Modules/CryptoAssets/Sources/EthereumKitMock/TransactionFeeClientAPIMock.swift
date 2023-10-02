@@ -19,7 +19,6 @@ final class TransactionFeeClientAPIMock: TransactionFeeClientAPI {
         NewTransactionFeeResponse(
             gasLimit: "21000",
             gasLimitContract: "75000",
-            low: "1000000000",
             normal: "2000000000",
             high: "3000000000"
         )

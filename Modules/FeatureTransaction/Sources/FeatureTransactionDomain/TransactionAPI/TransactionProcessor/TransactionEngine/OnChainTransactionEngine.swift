@@ -5,9 +5,7 @@ import MoneyKit
 import PlatformKit
 import RxSwift
 
-public protocol OnChainTransactionEngine: TransactionEngine {
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> { get }
-}
+public protocol OnChainTransactionEngine: TransactionEngine {}
 
 extension OnChainTransactionEngine {
 
@@ -70,7 +68,7 @@ extension OnChainTransactionEngine {
                 self.validateAmount(pendingTransaction: updatedTransaction)
             }
             .flatMap(weak: self) { (self, validatedTransaction) -> Single<PendingTransaction> in
-                self.doBuildConfirmations(pendingTransaction: validatedTransaction)
+                self.doBuildConfirmations(pendingTransaction: validatedTransaction).asSingle()
             }
     }
 

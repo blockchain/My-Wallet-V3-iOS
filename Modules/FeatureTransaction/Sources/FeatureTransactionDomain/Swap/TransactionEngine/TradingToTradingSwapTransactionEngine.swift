@@ -25,8 +25,8 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
     // Used to check product eligibility
     private let productsService: FeatureProductsDomain.ProductsServiceAPI
 
-    private var actionableBalance: Single<MoneyValue> {
-        sourceAccount.actionableBalance.asSingle()
+    private var actionableBalance: AnyPublisher<MoneyValue, Error> {
+        sourceAccount.actionableBalance
     }
 
     init(
@@ -52,28 +52,32 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
     }
 
     func initializeTransaction() -> Single<PendingTransaction> {
-        Single.zip(
-            walletCurrencyService.displayCurrency.asSingle(),
-            actionableBalance
-        )
-        .map(weak: self) { (self, payload) -> PendingTransaction in
-            let (fiatCurrency, actionableBalance) = payload
-            return PendingTransaction(
-                amount: .zero(currency: self.sourceAsset),
-                available: actionableBalance,
-                feeAmount: .zero(currency: self.sourceAsset),
-                feeForFullAvailable: .zero(currency: self.sourceAsset),
-                feeSelection: .empty(asset: self.sourceAsset),
-                selectedFiatCurrency: fiatCurrency
-            )
-        }
-        .flatMap(weak: self) { (self, pendingTransaction) -> Single<PendingTransaction> in
-            self.updateLimits(
-                pendingTransaction: pendingTransaction,
-                quote: .zero(self.sourceAccount.currencyType.code, self.target.currencyType.code)
-            )
-            .handlePendingOrdersError(initialValue: pendingTransaction)
-        }
+        walletCurrencyService.displayCurrency.eraseError().prefix(1)
+            .zip(actionableBalance)
+            .tryMap { [weak self] (fiatCurrency, actionableBalance) -> PendingTransaction in
+                guard let self else {
+                    throw ToolKitError.nullReference(Self.self)
+                }
+                return PendingTransaction(
+                    amount: .zero(currency: self.sourceAsset),
+                    available: actionableBalance,
+                    feeAmount: .zero(currency: self.sourceAsset),
+                    feeForFullAvailable: .zero(currency: self.sourceAsset),
+                    feeSelection: .empty(asset: self.sourceAsset),
+                    selectedFiatCurrency: fiatCurrency
+                )
+            }
+            .flatMap { [weak self] pendingTransaction -> AnyPublisher<PendingTransaction, Error> in
+                guard let self else {
+                    return .failure(ToolKitError.nullReference(Self.self))
+                }
+                return self.updateLimits(
+                    pendingTransaction: pendingTransaction,
+                    quote: .zero(self.sourceAccount.currencyType.code, self.target.currencyType.code)
+                )
+                .handlePendingOrdersError(initialValue: pendingTransaction)
+            }
+            .asSingle()
     }
 
     func execute(pendingTransaction: PendingTransaction) -> Single<TransactionResult> {
@@ -92,16 +96,15 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
     }
 
     func update(amount: MoneyValue, pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        Single.zip(
-            validateUpdateAmount(amount),
-            actionableBalance
-        )
-        .map { (normalized: MoneyValue, balance: MoneyValue) -> PendingTransaction in
-            pendingTransaction.update(amount: normalized, available: balance)
-        }
-        .map(weak: self) { (self, pendingTransaction) -> PendingTransaction in
-            self.clearConfirmations(pendingTransaction: pendingTransaction)
-        }
+        validateUpdateAmount(amount).eraseError()
+            .zip(actionableBalance)
+            .map { (normalized: MoneyValue, balance: MoneyValue) -> PendingTransaction in
+                pendingTransaction.update(amount: normalized, available: balance)
+            }
+            .map { pendingTransaction -> PendingTransaction in
+                pendingTransaction.update(confirmations: [])
+            }
+            .asSingle()
     }
 
     func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {

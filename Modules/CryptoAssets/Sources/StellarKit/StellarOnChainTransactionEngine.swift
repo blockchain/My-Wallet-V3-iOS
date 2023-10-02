@@ -13,17 +13,6 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
 
     // MARK: - Properties
 
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
-    }
-
     let walletCurrencyService: FiatCurrencyServiceAPI
     let currencyConversionService: CurrencyConversionServiceAPI
     var askForRefreshConfirmation: AskForRefreshConfirmation!
@@ -34,12 +23,12 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
 
     // MARK: - Private properties
 
-    private var receiveAddress: Single<ReceiveAddress> {
+    private var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
         switch transactionTarget {
         case let target as ReceiveAddress:
             return .just(target)
         case let target as CryptoAccount:
-            return target.receiveAddress.asSingle()
+            return target.receiveAddress
         default:
             fatalError("Engine requires transactionTarget to be a ReceiveAddress or CryptoAccount.")
         }
@@ -50,14 +39,17 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
             .asSingle()
     }
 
-    private var sourceExchangeRatePair: Single<MoneyValuePair> {
-        userFiatCurrency
-            .flatMap { [currencyConversionService, sourceAsset] fiatCurrency -> Single<MoneyValuePair> in
+    private var sourceExchangeRatePair: AnyPublisher<MoneyValuePair, Error> {
+        walletCurrencyService.displayCurrency
+            .eraseError()
+            .flatMap { [currencyConversionService, sourceAsset] fiatCurrency in
                 currencyConversionService
                     .conversionRate(from: sourceAsset, to: fiatCurrency.currencyType)
-                    .asSingle()
+                    .eraseError()
                     .map { MoneyValuePair(base: .one(currency: sourceAsset), quote: $0) }
+                    .prefix(1)
             }
+            .eraseToAnyPublisher()
     }
 
     private var absoluteFee: Single<CryptoValue> {
@@ -93,9 +85,11 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
         precondition(sourceCryptoCurrency == .stellar)
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        Single
-            .zip(sourceExchangeRatePair, receiveAddress)
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
+        sourceExchangeRatePair
+            .zip(receiveAddress)
             .map { [sourceAccount] exchangeRate, receiveAddress -> [TransactionConfirmation] in
                 let from = TransactionConfirmations.Source(value: sourceAccount?.label ?? "")
                 let to = TransactionConfirmations.Destination(value: receiveAddress.label)
@@ -127,11 +121,12 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
             .map { confirmations in
                 pendingTransaction.update(confirmations: confirmations)
             }
+            .eraseToAnyPublisher()
     }
 
     func initializeTransaction() -> Single<PendingTransaction> {
         Single.zip(
-            receiveAddress,
+            receiveAddress.asSingle(),
             userFiatCurrency,
             actionableBalance
         )
@@ -188,6 +183,7 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
 
     func execute(pendingTransaction: PendingTransaction) -> Single<TransactionResult> {
         createTransaction(pendingTransaction: pendingTransaction)
+            .asSingle()
             .flatMap(weak: self) { (self, sendDetails) -> Single<SendConfirmationDetails> in
                 self.transactionDispatcher.sendFunds(sendDetails: sendDetails, secondPassword: nil)
             }
@@ -216,13 +212,10 @@ extension StellarOnChainTransactionEngine {
             .asCompletable()
     }
 
-    private func createTransaction(pendingTransaction: PendingTransaction) -> Single<SendDetails> {
+    private func createTransaction(pendingTransaction: PendingTransaction) -> AnyPublisher<SendDetails, Error> {
         let label = sourceAccount.label
-        return Single
-            .zip(
-                sourceAccount.receiveAddress.asSingle(),
-                receiveAddress
-            )
+        return sourceAccount.receiveAddress
+            .zip(receiveAddress)
             .map { fromAddress, receiveAddress -> SendDetails in
                 SendDetails(
                     fromAddress: fromAddress.address,
@@ -234,10 +227,12 @@ extension StellarOnChainTransactionEngine {
                     memo: receiveAddress.memo
                 )
             }
+            .eraseToAnyPublisher()
     }
 
     private func validateDryRun(pendingTransaction: PendingTransaction) -> Completable {
         createTransaction(pendingTransaction: pendingTransaction)
+            .asSingle()
             .flatMapCompletable(weak: self) { (self, sendDetails) -> Completable in
                 self.transactionDispatcher.dryRunTransaction(sendDetails: sendDetails)
             }
@@ -246,7 +241,7 @@ extension StellarOnChainTransactionEngine {
 
     private func validateTargetAddress() -> Completable {
         receiveAddress
-            .map { [transactionDispatcher] receiveAddress in
+            .tryMap { [transactionDispatcher] receiveAddress in
                 guard transactionDispatcher.isAddressValid(address: receiveAddress.address) else {
                     throw TransactionValidationFailure(state: .invalidAddress)
                 }

@@ -12,8 +12,14 @@ extension CoincoreAPI {
         with account: BlockchainAccount,
         target: TransactionTarget,
         action: AssetAction
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         switch account {
+        case let account as CryptoDelegatedCustodyAccount:
+            return createDelegatedCustodyProcessor(
+                with: account,
+                target: target,
+                action: action
+            )
         case let account as CryptoNonCustodialAccount:
             return createOnChainProcessor(
                 with: account,
@@ -55,12 +61,6 @@ extension CoincoreAPI {
                 with: account,
                 target: target
             )
-        case let account as CryptoDelegatedCustodyAccount:
-            return createDelegatedCustodyProcessor(
-                with: account,
-                target: target,
-                action: action
-            )
         case let account as CryptoStakingAccount:
             return createStakingWithdrawTradingProcessor(
                 with: account,
@@ -76,7 +76,7 @@ extension CoincoreAPI {
         with account: CryptoNonCustodialAccount,
         target: TransactionTarget,
         action: AssetAction
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         let factory = account.createTransactionEngine() as! OnChainTransactionEngineFactory
         let interestOnChainFactory: InterestOnChainTransactionEngineFactoryAPI = resolve()
         switch (target, action) {
@@ -185,10 +185,41 @@ extension CoincoreAPI {
         with account: CryptoDelegatedCustodyAccount,
         target: TransactionTarget,
         action: AssetAction
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
+        let onChainEngine = DelegatedSelfCustodyTransactionEngine(
+            currencyConversionService: resolve(),
+            transactionService: resolve(),
+            walletCurrencyService: resolve()
+        )
         switch action {
         case .send:
-            return createDelegatedCustodyProcessorSend(with: account, target: target)
+            return receiveAddress(from: target)
+                .map { receiveAddress in
+                    return TransactionProcessor(
+                        sourceAccount: account,
+                        transactionTarget: receiveAddress,
+                        engine: onChainEngine
+                    )
+                }
+                .eraseToAnyPublisher()
+        case .swap:
+            let processor = TransactionProcessor(
+                sourceAccount: account,
+                transactionTarget: target,
+                engine: OnChainSwapTransactionEngine(
+                    onChainEngine: onChainEngine
+                )
+            )
+            return .just(processor)
+        case .sell:
+            let processor = TransactionProcessor(
+                sourceAccount: account,
+                transactionTarget: target,
+                engine: NonCustodialSellTransactionEngine(
+                    onChainEngine: onChainEngine
+                )
+            )
+            return .just(processor)
         case .buy,
                 .deposit,
                 .interestTransfer,
@@ -196,14 +227,12 @@ extension CoincoreAPI {
                 .stakingDeposit,
                 .stakingWithdraw,
                 .receive,
-                .sell,
                 .sign,
-                .swap,
                 .viewActivity,
                 .withdraw,
                 .activeRewardsWithdraw,
                 .activeRewardsDeposit:
-            unimplemented()
+            unimplemented("createDelegatedCustodyProcessor \(action)")
         }
     }
 
@@ -211,7 +240,7 @@ extension CoincoreAPI {
         with account: CryptoTradingAccount,
         target: TransactionTarget,
         action: AssetAction
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         switch action {
         case .sell:
             return createTradingProcessorSell(with: account, target: target)
@@ -224,7 +253,7 @@ extension CoincoreAPI {
         with account: CryptoTradingAccount,
         target: TransactionTarget,
         action: AssetAction
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         switch action {
         case .swap:
             return createTradingProcessorSwap(with: account, target: target)
@@ -255,7 +284,7 @@ extension CoincoreAPI {
     private func createBuyProcessor(
         with source: BlockchainAccount,
         destination: TransactionTarget
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         .just(
             TransactionProcessor(
                 sourceAccount: source,
@@ -268,8 +297,8 @@ extension CoincoreAPI {
     private func createFiatWithdrawalProcessor(
         with account: FiatAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
-        Single.just(
+    ) -> AnyPublisher<TransactionProcessor, Error> {
+        .just(
             TransactionProcessor(
                 sourceAccount: account,
                 transactionTarget: target,
@@ -281,8 +310,8 @@ extension CoincoreAPI {
     private func createFiatDepositProcessor(
         with account: LinkedBankAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
-        Single.just(
+    ) -> AnyPublisher<TransactionProcessor, Error> {
+        .just(
             TransactionProcessor(
                 sourceAccount: account,
                 transactionTarget: target,
@@ -294,11 +323,11 @@ extension CoincoreAPI {
     private func createTradingProcessorSwap(
         with account: CryptoTradingAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
-        Single.just(
+    ) -> AnyPublisher<TransactionProcessor, Error> {
+        .just(
             TransactionProcessor(
                 sourceAccount: account,
-                transactionTarget: target as! CryptoTradingAccount,
+                transactionTarget: target,
                 engine: TradingToTradingSwapTransactionEngine()
             )
         )
@@ -307,7 +336,7 @@ extension CoincoreAPI {
     private func createInterestTransferTradingProcessor(
         with account: CryptoTradingAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         guard target is CryptoInterestAccount else {
             impossible()
         }
@@ -327,7 +356,7 @@ extension CoincoreAPI {
     private func createStakingDepositTradingProcessor(
         with account: CryptoTradingAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         guard target is CryptoStakingAccount else {
             impossible()
         }
@@ -347,7 +376,7 @@ extension CoincoreAPI {
     private func createActiveRewardsDepositTradingProcessor(
         with account: CryptoTradingAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         guard target is CryptoActiveRewardsAccount else {
             impossible()
         }
@@ -367,11 +396,11 @@ extension CoincoreAPI {
     private func createActiveRewardsWithdrawTradingProcessor(
         with account: CryptoActiveRewardsAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         let tradingFactory: InterestTradingTransactionEngineFactoryAPI = resolve()
         switch target {
         case is CryptoActiveRewardsWithdrawTarget:
-            return Single.just(
+            return .just(
                 TransactionProcessor(
                     sourceAccount: account,
                     transactionTarget: target,
@@ -390,12 +419,12 @@ extension CoincoreAPI {
         with account: CryptoInterestAccount,
         target: TransactionTarget,
         action: AssetAction
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         let tradingFactory: InterestTradingTransactionEngineFactoryAPI = resolve()
         let onChainFactory: InterestOnChainTransactionEngineFactoryAPI = resolve()
         switch target {
         case is CryptoTradingAccount:
-            return Single.just(
+            return .just(
                 TransactionProcessor(
                     sourceAccount: account,
                     transactionTarget: target,
@@ -420,7 +449,7 @@ extension CoincoreAPI {
                             )
                     )
                 }
-                .asSingle()
+                .eraseToAnyPublisher()
         default:
             unimplemented()
         }
@@ -430,11 +459,11 @@ extension CoincoreAPI {
         with account: CryptoStakingAccount,
         target: TransactionTarget,
         action: AssetAction
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         let tradingFactory: InterestTradingTransactionEngineFactoryAPI = resolve()
         switch target {
         case is CryptoTradingAccount:
-            return Single.just(
+            return .just(
                 TransactionProcessor(
                     sourceAccount: account,
                     transactionTarget: target,
@@ -449,29 +478,10 @@ extension CoincoreAPI {
         }
     }
 
-    private func createDelegatedCustodyProcessorSend(
-        with account: CryptoDelegatedCustodyAccount,
-        target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
-        receiveAddress(from: target)
-            .map { receiveAddress in
-                TransactionProcessor(
-                    sourceAccount: account,
-                    transactionTarget: receiveAddress,
-                    engine: DelegatedSelfCustodyTransactionEngine(
-                        currencyConversionService: resolve(),
-                        transactionService: resolve(),
-                        walletCurrencyService: resolve()
-                    )
-                )
-            }
-            .asSingle()
-    }
-
     private func createTradingProcessorSend(
         with account: CryptoTradingAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         receiveAddress(from: target)
             .map { receiveAddress in
                 TransactionProcessor(
@@ -480,13 +490,13 @@ extension CoincoreAPI {
                     engine: TradingToOnChainTransactionEngine()
                 )
             }
-            .asSingle()
+            .eraseToAnyPublisher()
     }
 
     private func createTradingProcessorSell(
         with account: CryptoAccount,
         target: TransactionTarget
-    ) -> Single<TransactionProcessor> {
+    ) -> AnyPublisher<TransactionProcessor, Error> {
         .just(
             TransactionProcessor(
                 sourceAccount: account,

@@ -805,7 +805,7 @@ class MockCurrencyConversionService: PlatformKit.CurrencyConversionServiceAPI {
 }
 
 class MockOnChainTxEngine: OnChainTransactionEngine {
-    var fiatExchangeRatePairs: RxSwift.Observable<FeatureTransactionDomain.TransactionMoneyValuePairs> = .empty()
+
     var walletCurrencyService: MoneyKit.FiatCurrencyServiceAPI = MockFiatCurrencyService()
     var currencyConversionService: PlatformKit.CurrencyConversionServiceAPI = MockCurrencyConversionService()
     var askForRefreshConfirmation: AskForRefreshConfirmation!
@@ -824,8 +824,8 @@ class MockOnChainTxEngine: OnChainTransactionEngine {
 
     func assertInputsValid() {}
 
-    func doBuildConfirmations(pendingTransaction: FeatureTransactionDomain.PendingTransaction) -> RxSwift.Single<FeatureTransactionDomain.PendingTransaction> {
-        RxSwift.Single<FeatureTransactionDomain.PendingTransaction>.just(mockPendingTx)
+    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> AnyPublisher<PendingTransaction, Error> {
+        .just(mockPendingTx)
     }
 
     var startCalled: Bool = false

@@ -140,7 +140,7 @@ public final class InterestWithdrawTradingTransactionEngine: InterestTransaction
 
     public func doBuildConfirmations(
         pendingTransaction: PendingTransaction
-    ) -> Single<PendingTransaction> {
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let source = sourceAccount.label
         let destination = transactionTarget.label
         return fiatAmountAndFees(from: pendingTransaction)
@@ -159,6 +159,7 @@ public final class InterestWithdrawTradingTransactionEngine: InterestTransaction
                         ]
                     )
             }
+            .eraseToAnyPublisher()
     }
 
     public func update(
@@ -372,7 +373,7 @@ public final class EarnWithdrawTradingTransactionEngine: InterestTransactionEngi
 
     public func doBuildConfirmations(
         pendingTransaction: PendingTransaction
-    ) -> Single<PendingTransaction> {
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let source = sourceAccount.label
         let destination = transactionTarget.label
         return fiatAmountAndFees(from: pendingTransaction)
@@ -391,6 +392,7 @@ public final class EarnWithdrawTradingTransactionEngine: InterestTransactionEngi
                         ]
                     )
             }
+            .eraseToAnyPublisher()
     }
 
     public func update(

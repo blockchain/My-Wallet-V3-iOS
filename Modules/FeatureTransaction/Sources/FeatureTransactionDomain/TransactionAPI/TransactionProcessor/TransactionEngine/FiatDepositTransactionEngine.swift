@@ -11,13 +11,8 @@ import ToolKit
 
 final class FiatDepositTransactionEngine: TransactionEngine {
 
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        .empty()
-    }
-
     let currencyConversionService: CurrencyConversionServiceAPI
     let walletCurrencyService: FiatCurrencyServiceAPI
-
     let canTransactFiat: Bool = true
     var askForRefreshConfirmation: AskForRefreshConfirmation!
     var sourceAccount: BlockchainAccount!
@@ -87,7 +82,9 @@ final class FiatDepositTransactionEngine: TransactionEngine {
             .asSingle()
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         .just(
             pendingTransaction.update(
                 sourceBankAccount: sourceBankAccount,

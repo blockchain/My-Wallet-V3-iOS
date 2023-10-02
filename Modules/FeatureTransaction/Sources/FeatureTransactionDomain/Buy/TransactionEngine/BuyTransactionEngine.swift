@@ -76,24 +76,9 @@ final class BuyTransactionEngine: TransactionEngine {
         self.eligibilityService = eligibilityService
     }
 
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        transactionExchangeRatePair
-            .map { quote in
-                TransactionMoneyValuePairs(
-                    source: quote,
-                    destination: quote.inverseExchangeRate
-                )
-            }
-    }
-
-    var fiatExchangeRatePairsSingle: Single<TransactionMoneyValuePairs> {
-        fiatExchangeRatePairs
-            .take(1)
-            .asSingle()
-    }
-
-    var transactionExchangeRatePair: Observable<MoneyValuePair> {
-        app.publisher(for: blockchain.ux.transaction.source.target.quote.price)
+    private var transactionExchangeRatePair: AnyPublisher<MoneyValuePair, Never> {
+        app
+            .publisher(for: blockchain.ux.transaction.source.target.quote.price)
             .compactMap { [sourceAsset] result -> MoneyValue? in
                 guard let price = result.decode(BrokerageQuote.Price.self).value?.price else {
                     return .zero(currency: sourceAsset)
@@ -103,8 +88,7 @@ final class BuyTransactionEngine: TransactionEngine {
             .map { [crypto = transactionTarget.currencyType] rate -> MoneyValuePair in
                 MoneyValuePair(base: .one(currency: crypto), exchangeRate: rate)
             }
-            .asObservable()
-            .share(replay: 1, scope: .whileConnected)
+            .eraseToAnyPublisher()
     }
 
     // Unused but required by `TransactionEngine` protocol
@@ -226,7 +210,9 @@ final class BuyTransactionEngine: TransactionEngine {
             .observe(on: MainScheduler.asyncInstance)
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let sourceAccountLabel = sourceAccount.label
         let isQuoteRefreshEnabled = app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.quote.refresh.is.enabled)
         let isCheckoutEnabled = app.remoteConfiguration.yes(if: blockchain.ux.transaction.checkout.is.enabled)
@@ -240,7 +226,7 @@ final class BuyTransactionEngine: TransactionEngine {
                 }
                 return order
             }
-            .map { order -> PendingTransaction in
+            .tryMap { order -> PendingTransaction in
                 let fiatAmount = order.inputValue
                 let cryptoAmount = order.outputValue
                 let exchangeRate = MoneyValuePair(base: cryptoAmount, quote: fiatAmount).exchangeRate
@@ -270,9 +256,10 @@ final class BuyTransactionEngine: TransactionEngine {
 
                 return pendingTransaction.update(confirmations: confirmations)
             }
+            .eraseToAnyPublisher()
     }
 
-    func createOrderFromPendingTransaction(_ pendingTransaction: PendingTransaction) -> Single<TransactionOrder?> {
+    func createOrderFromPendingTransaction(_ pendingTransaction: PendingTransaction) -> AnyPublisher<TransactionOrder?, Error> {
         if let quote = pendingTransaction.quote {
             return createOrderFromPendingTransaction(pendingTransaction, quoteId: quote.id, amount: quote.amount)
         } else {
@@ -281,14 +268,18 @@ final class BuyTransactionEngine: TransactionEngine {
             }
             return fetchQuote(for: pendingTransaction.amount)
                 .filter(\.quoteId.isNotNilOrEmpty)
-                .timeout(.seconds(5), scheduler: MainScheduler.asyncInstance)
-                .flatMap(weak: self) { (self, quote) in
-                    self.createOrderFromPendingTransaction(
+                .timeout(.seconds(5), scheduler: DispatchQueue.main)
+                .flatMap { [weak self] quote -> AnyPublisher<TransactionOrder?, Error> in
+                    guard let self else {
+                        return .failure(ToolKitError.nullReference(Self.self))
+                    }
+                    return self.createOrderFromPendingTransaction(
                         pendingTransaction,
                         quoteId: quote.quoteId!,
                         amount: quote.estimatedSourceAmount
                     )
                 }
+                .eraseToAnyPublisher()
         }
     }
 
@@ -296,21 +287,24 @@ final class BuyTransactionEngine: TransactionEngine {
         _ pendingTransaction: PendingTransaction,
         quoteId: String,
         amount: MoneyValue
-    ) -> Single<TransactionOrder?> {
+    ) -> AnyPublisher<TransactionOrder?, Error> {
         isRecurringBuyEnabled
-            .asSingle()
-            .flatMap(weak: self) { (self, isRecurringBuyEnabled) -> Single<TransactionOrder?> in
+            .eraseError()
+            .tryMap { [weak self] isRecurringBuyEnabled -> CandidateOrderDetails in
+                guard let self else {
+                    throw ToolKitError.nullReference(Self.self)
+                }
                 guard let sourceAccount = self.sourceAccount as? PaymentMethodAccount else {
-                    return .error(TransactionValidationFailure(state: .optionInvalid))
+                    throw TransactionValidationFailure(state: .optionInvalid)
                 }
                 guard let destinationAccount = self.transactionTarget as? CryptoTradingAccount else {
-                    return .error(TransactionValidationFailure(state: .optionInvalid))
+                    throw TransactionValidationFailure(state: .optionInvalid)
                 }
                 guard let crypto = destinationAccount.currencyType.cryptoCurrency else {
-                    return .error(TransactionValidationFailure(state: .optionInvalid))
+                    throw TransactionValidationFailure(state: .optionInvalid)
                 }
                 guard let fiatValue = amount.fiatValue else {
-                    return .error(TransactionValidationFailure(state: .incorrectSourceCurrency))
+                    throw TransactionValidationFailure(state: .incorrectSourceCurrency)
                 }
                 let paymentMethodId: String?
                 if sourceAccount.paymentMethod.type.isFunds || sourceAccount.paymentMethod.type.isApplePay {
@@ -318,7 +312,7 @@ final class BuyTransactionEngine: TransactionEngine {
                 } else {
                     paymentMethodId = sourceAccount.paymentMethodType.id
                 }
-                let orderDetails = CandidateOrderDetails.buy(
+                return CandidateOrderDetails.buy(
                     quoteId: quoteId,
                     paymentMethod: sourceAccount.paymentMethodType,
                     fiatValue: fiatValue,
@@ -326,23 +320,32 @@ final class BuyTransactionEngine: TransactionEngine {
                     paymentMethodId: paymentMethodId,
                     recurringBuyFrequency: isRecurringBuyEnabled ? pendingTransaction.recurringBuyFrequency.rawValue : nil
                 )
-                return self.orderCreationService.create(using: orderDetails)
-                    .do(
-                        onSuccess: { [weak self] checkoutData in
-                            Logger.shared.info("[BUY] Order creation successful \(String(describing: checkoutData))")
-                            self?.pendingCheckoutData = checkoutData
+            }
+            .flatMap { [weak self, orderCreationService] orderDetails in
+                orderCreationService
+                    .create(using: orderDetails)
+                    .handleEvents(
+                        receiveOutput: { [weak self] output in
+                            Logger.shared.info("[BUY] Order creation output: \(String(describing: output))")
+                            self?.pendingCheckoutData = output
                         },
-                        onError: { error in
-                            Logger.shared.error("[BUY] Order creation failed \(String(describing: error))")
+                        receiveCompletion: { completion in
+                            switch completion {
+                            case .finished:
+                                break
+                            case .failure(let error):
+                                Logger.shared.error("[BUY] Order creation failure: \(String(describing: error))")
+                            }
                         }
                     )
                     .map(\.order)
                     .map(Optional.some)
             }
+            .eraseToAnyPublisher()
     }
 
     func createOrder(pendingTransaction: PendingTransaction) -> Single<TransactionOrder?> {
-        createOrderFromPendingTransaction(pendingTransaction)
+        createOrderFromPendingTransaction(pendingTransaction).asSingle()
     }
 
     func cancelOrder(with identifier: String) -> Single<Void> {
@@ -358,7 +361,6 @@ final class BuyTransactionEngine: TransactionEngine {
         func execute(_ order: OrderDetails) -> Single<TransactionResult> {
             // Execute the order
             orderConfirmationService.confirm(checkoutData: CheckoutData(order: order))
-                .asSingle()
             // Map order to Transaction Result
                 .map { checkoutData -> TransactionResult in
                     TransactionResult.unHashed(
@@ -367,11 +369,20 @@ final class BuyTransactionEngine: TransactionEngine {
                         order: checkoutData.order
                     )
                 }
-                .do(onSuccess: { checkoutData in
-                    Logger.shared.info("[BUY] Order confirmation successful \(String(describing: checkoutData))")
-                }, onError: { error in
-                    Logger.shared.error("[BUY] Order confirmation failed \(String(describing: error))")
-                })
+                .handleEvents(
+                    receiveOutput: { output in
+                        Logger.shared.info("[BUY] Order confirmation output: \(String(describing: output))")
+                    },
+                    receiveCompletion: { completion in
+                        switch completion {
+                        case .finished:
+                            break
+                        case .failure(let error):
+                            Logger.shared.error("[BUY] Order confirmation failure: \(String(describing: error))")
+                        }
+                    }
+                )
+                .asSingle()
         }
 
         if let order = pendingOrder as? OrderDetails {
@@ -381,6 +392,7 @@ final class BuyTransactionEngine: TransactionEngine {
             return execute(order)
         } else {
             return createOrderFromPendingTransaction(pendingTransaction)
+                .asSingle()
                 .flatMap { order in execute(order as! OrderDetails) }
         }
     }
@@ -526,42 +538,54 @@ extension BuyTransactionEngine {
         .observe(on: MainScheduler.asyncInstance)
     }
 
-    private func fetchQuote(for amount: MoneyValue) -> Single<Quote> {
+    private func fetchQuote(for amount: MoneyValue) -> AnyPublisher<Quote, Error> {
         guard let source = sourceAccount as? FiatAccount else {
-            return .error(TransactionValidationFailure(state: .uninitialized))
+            return .failure(TransactionValidationFailure(state: .uninitialized))
         }
         guard let destination = transactionTarget as? CryptoAccount else {
-            return .error(TransactionValidationFailure(state: .uninitialized))
+            return .failure(TransactionValidationFailure(state: .uninitialized))
         }
         let paymentMethod = (sourceAccount as? PaymentMethodAccount)?.paymentMethodType.method
         let paymentMethodId = (sourceAccount as? PaymentMethodAccount)?.paymentMethodType.id
         return convertAmountIntoTradingCurrency(amount)
-            .flatMap { [orderQuoteService] fiatValue in
-                orderQuoteService.getQuote(
-                    query: QuoteQuery(
-                        profile: .simpleBuy,
-                        sourceCurrency: source.fiatCurrency,
-                        destinationCurrency: destination.asset,
-                        amount: MoneyValue(fiatValue: fiatValue),
-                        paymentMethod: paymentMethod?.requestType,
-                        // the endpoint only accepts paymentMethodId parameter if paymentMethod is bank transfer
-                        // refactor this by gracefully handle at the model level
-                        paymentMethodId: (paymentMethod?.isBankTransfer ?? false) ? paymentMethodId : nil
-                    )
+            .map { fiatValue in
+                QuoteQuery(
+                    profile: .simpleBuy,
+                    sourceCurrency: source.fiatCurrency,
+                    destinationCurrency: destination.asset,
+                    amount: MoneyValue(fiatValue: fiatValue),
+                    paymentMethod: paymentMethod?.requestType,
+                    // the endpoint only accepts paymentMethodId parameter if paymentMethod is bank transfer
+                    // refactor this by gracefully handle at the model level
+                    paymentMethodId: (paymentMethod?.isBankTransfer ?? false) ? paymentMethodId : nil
                 )
             }
+            .flatMap { [orderQuoteService] quoteQuery in
+                orderQuoteService.getQuote(
+                    query: quoteQuery
+                )
+            }
+            .eraseToAnyPublisher()
     }
 
-    private func convertAmountIntoTradingCurrency(_ amount: MoneyValue) -> Single<FiatValue> {
-        fiatExchangeRatePairsSingle
-            .map { moneyPair in
-                guard !amount.isFiat else {
-                    return amount.fiatValue!
-                }
-                return try amount
+    private func convertAmountIntoTradingCurrency(_ amount: MoneyValue) -> AnyPublisher<FiatValue, Error>  {
+        guard amount.isFiat.isNo else {
+            return .just(amount.fiatValue!)
+        }
+        return transactionExchangeRatePair
+            .map { pair -> TransactionMoneyValuePairs in
+                TransactionMoneyValuePairs(
+                    source: pair,
+                    destination: pair
+                )
+            }
+            .tryMap { moneyPair in
+                try amount
                     .convert(using: moneyPair.source)
                     .fiatValue!
             }
+            .prefix(1)
+            .eraseToAnyPublisher()
     }
 
     private func convertSourceBalance(to currency: CurrencyType) -> AnyPublisher<MoneyValue, MakeTransactionError> {
