@@ -57,7 +57,7 @@ public protocol OrderQuoteServiceAPI: AnyObject {
 
     func getQuote(
         query: QuoteQuery
-    ) -> Single<Quote>
+    ) -> AnyPublisher<Quote, Error>
 }
 
 final class OrderQuoteService: OrderQuoteServiceAPI {
@@ -78,11 +78,11 @@ final class OrderQuoteService: OrderQuoteServiceAPI {
 
     func getQuote(
         query: QuoteQuery
-    ) -> Single<Quote> {
+    ) -> AnyPublisher<Quote, Error> {
         client
             .getQuote(queryRequest: QuoteQueryRequest(from: query))
-            .asSingle()
-            .map { response in
+            .eraseError()
+            .tryMap { response in
                 try Quote(
                     sourceCurrency: query.sourceCurrency,
                     destinationCurrency: query.destinationCurrency,
@@ -90,5 +90,6 @@ final class OrderQuoteService: OrderQuoteServiceAPI {
                     response: response
                 )
             }
+            .eraseToAnyPublisher()
     }
 }

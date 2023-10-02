@@ -43,11 +43,11 @@ public struct AnnouncementCard<Leading: View, Background: View>: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .typography(.caption1)
-                        .foregroundColor(.palette.grey100)
+                        .foregroundColor(.semantic.muted)
                     Text(message)
                         .lineLimit(3)
-                        .typography(.body2)
-                        .foregroundColor(.palette.white)
+                        .typography(.title3)
+                        .foregroundColor(.semantic.title)
                 }
             }
             Spacer()

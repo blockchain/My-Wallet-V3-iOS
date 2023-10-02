@@ -213,6 +213,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
 
     func update(amount: MoneyValue, pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateUpdateAmount(amount)
+            .asSingle()
             .flatMap { [weak self] amount -> Single<PendingTransaction> in
                 guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
                 return onChainEngine
@@ -258,9 +259,11 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
         guard let quote = pendingTransaction.quote else {
             return .error("Cannot create an order with no quote")
         }
-        return sourceAccount.receiveAddress.asSingle()
-            .flatMap { [weak self] refundAddress throws -> Single<SellOrder> in
-                guard let self else { return .never() }
+        return sourceAccount.receiveAddress
+            .flatMap { [weak self] refundAddress -> AnyPublisher<SellOrder, Error> in
+                guard let self else {
+                    return .failure(ToolKitError.nullReference(Self.self))
+                }
                 return orderCreationRepository
                     .createOrder(
                         direction: orderDirection,
@@ -269,11 +272,15 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                         ccy: target.currencyType.code,
                         refundAddress: refundAddress.address
                     )
-                    .asSingle()
+                    .eraseError()
+                    .eraseToAnyPublisher()
             }
+            .asSingle()
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         guard let pricedQuote = pendingTransaction.quote else {
             return .just(pendingTransaction.update(confirmations: []))
         }

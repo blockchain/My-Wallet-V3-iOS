@@ -29,7 +29,7 @@ public final class ExternalTradingMigrationService: ExternalTradingMigrationServ
 
         let response = try await repository.fetchMigrationInfo()
 
-        try await app.set(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, to: blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state[][response.state.rawValue.lowercased()])
+        try await app.set(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state[][response.state.rawValue.lowercased()])
 
         return response
     }
@@ -41,8 +41,8 @@ public final class ExternalTradingMigrationService: ExternalTradingMigrationServ
 
 extension Tag {
     fileprivate var migrationComplete: Bool {
-        self == blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state.not_available
+        self == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.not_available
         ||
-        self == blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state.complete
+        self == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.complete
     }
 }

@@ -34,6 +34,7 @@ struct ExternalTradingDashboardView: View {
     @StateObject private var onboarding = CustodialOnboardingService()
 
     @State private var externalTradingMigrationState: Tag?
+    @State private var externalTradingMigrationAnnouncementCardDismissed: Bool = false
     var externalTradingMigrationIsPending: Bool {
         guard let externalTradingMigrationState else {
             return false
@@ -41,8 +42,19 @@ struct ExternalTradingDashboardView: View {
         return externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
     }
 
+    var externalTradingMigrationIsComplete: Bool {
+        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.complete[]
+    }
+
+    var shouldDisplayMigrationCompleteSuccessCard: Bool {
+        guard externalTradingMigrationIsComplete == true else {
+            return false
+        }
+
+        return !externalTradingMigrationAnnouncementCardDismissed
+    }
+
     struct ViewState: Equatable {
-        @BindingViewState var migrationInfo: ExternalTradingMigrationInfo?
         let balance: BalanceInfo?
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
@@ -51,7 +63,6 @@ struct ExternalTradingDashboardView: View {
         init(state: BindingViewStore<ExternalTradingDashboard.State>) {
             self.balance = state.tradingBalance
             self.getStartedBuyCryptoAmmounts = state.getStartedBuyCryptoAmmounts
-            self._migrationInfo = state.$migrationInfo
         }
     }
 
@@ -96,6 +107,10 @@ struct ExternalTradingDashboardView: View {
                 to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state
             )
             subscribe(
+                $externalTradingMigrationAnnouncementCardDismissed,
+                to: blockchain.ux.dashboard.external.trading.migration.success.message.dismissed
+            )
+            subscribe(
                 $kycState,
                 to: blockchain.user.account.kyc.state
             )
@@ -124,11 +139,13 @@ struct ExternalTradingDashboardView: View {
     var dashboardView: some View {
         VStack(spacing: Spacing.padding3) {
             Group {
-                DashboardMainBalanceView(
-                    info: .constant(viewStore.balance),
-                    isPercentageHidden: viewStore.isZeroBalance
-                )
-                .padding([.top], Spacing.padding3)
+                if !(externalTradingMigrationIsPending && viewStore.isZeroBalance) {
+                    DashboardMainBalanceView(
+                        info: .constant(viewStore.balance),
+                        isPercentageHidden: viewStore.isZeroBalance
+                    )
+                    .padding([.top], Spacing.padding3)
+                }
 
                 if !isRejected {
                     QuickActionsView(
@@ -143,6 +160,8 @@ struct ExternalTradingDashboardView: View {
 
             if externalTradingMigrationIsPending {
                 externalTradingMigrationInProgressView
+            } else if shouldDisplayMigrationCompleteSuccessCard {
+                migrationSuccessAnnouncementCard
             }
 
             if !viewStore.isZeroBalance {
@@ -205,6 +224,26 @@ struct ExternalTradingDashboardView: View {
             isBordered: true
         )
         .padding(.horizontal)
+    }
+
+    var migrationSuccessAnnouncementCard: some View {
+        AnnouncementCard(
+            title: L10n.bakktMigrationSuccessAnnouncementCardTitle,
+            message: L10n.bakktMigrationSuccessAnnouncementCardMessage,
+            background: {
+                Color.semantic.background
+            },
+            onCloseTapped: {
+                Task {
+                    try? await app.set(blockchain.ux.dashboard.external.trading.migration.success.message.dismissed,
+                                       to: true)
+                }
+            },
+            leading: {
+                Icon.user
+            }
+        )
+        .padding(.horizontal, Spacing.padding2)
     }
 
     @State private var supportURL: URL?

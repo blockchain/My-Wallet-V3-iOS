@@ -24,8 +24,8 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
     // Used to check product eligibility
     private let productsService: FeatureProductsDomain.ProductsServiceAPI
 
-    private var actionableBalance: Single<MoneyValue> {
-        sourceAccount.actionableBalance.asSingle()
+    private var actionableBalance: AnyPublisher<MoneyValue, Error> {
+        sourceAccount.actionableBalance
     }
 
     init(
@@ -64,13 +64,12 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
     }
 
     func initializeTransaction() -> Single<PendingTransaction> {
-        Single
-            .zip(
-                walletCurrencyService.displayCurrency.asSingle(),
-                actionableBalance
-            )
-            .flatMap(weak: self) { (self, payload) -> Single<PendingTransaction> in
-                let (fiatCurrency, actionableBalance) = payload
+        actionableBalance
+            .zip(walletCurrencyService.displayCurrency.eraseError())
+            .flatMap { [weak self] (actionableBalance, fiatCurrency) -> AnyPublisher<PendingTransaction, Error> in
+                guard let self else {
+                    return .failure(ToolKitError.nullReference(Self.self))
+                }
                 let pendingTransaction = PendingTransaction(
                     amount: .zero(currency: self.sourceAsset),
                     available: actionableBalance,
@@ -85,6 +84,7 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
                 )
                 .handlePendingOrdersError(initialValue: pendingTransaction)
             }
+            .asSingle()
     }
 
     func execute(pendingTransaction: PendingTransaction) -> Single<TransactionResult> {
@@ -103,16 +103,15 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
     }
 
     func update(amount: MoneyValue, pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        Single.zip(
-            validateUpdateAmount(amount),
-            actionableBalance
-        )
-        .map { (normalized: MoneyValue, balance: MoneyValue) -> PendingTransaction in
-            pendingTransaction.update(amount: normalized, available: balance)
-        }
-        .map(weak: self) { (self, pendingTransaction) -> PendingTransaction in
-            self.clearConfirmations(pendingTransaction: pendingTransaction)
-        }
+        validateUpdateAmount(amount).eraseError()
+            .zip(actionableBalance)
+            .map { (normalized: MoneyValue, balance: MoneyValue) -> PendingTransaction in
+                pendingTransaction.update(amount: normalized, available: balance)
+            }
+            .map { pendingTransaction -> PendingTransaction in
+                pendingTransaction.update(confirmations: [])
+            }
+            .asSingle()
     }
 
     func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
@@ -123,7 +122,9 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
         validateAmount(pendingTransaction: pendingTransaction)
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         guard let pricedQuote = pendingTransaction.quote else {
             return .just(pendingTransaction.update(confirmations: []))
         }
@@ -162,7 +163,7 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
             let updatedTransaction = pendingTransaction.update(confirmations: confirmations)
             return updateLimits(pendingTransaction: updatedTransaction, quote: pricedQuote)
         } catch {
-            return .error(error)
+            return .failure(error)
         }
     }
 }

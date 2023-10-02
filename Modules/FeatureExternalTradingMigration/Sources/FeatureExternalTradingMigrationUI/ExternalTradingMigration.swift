@@ -58,7 +58,8 @@ public struct ExternalTradingMigration: ReducerProtocol {
             switch action {
             case .initialize:
                 return .run { send in
-                    if let migrationInfo = try? await externalTradingMigrationService.fetchMigrationInfo() {
+                    if let migrationInfo = try? await externalTradingMigrationService
+                        .fetchMigrationInfo() {
                         await send(.fetchMigrationState(migrationInfo))
                     }
                 }

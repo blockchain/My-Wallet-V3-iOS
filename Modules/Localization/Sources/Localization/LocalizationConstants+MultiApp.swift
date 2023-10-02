@@ -287,7 +287,17 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
         "We are upgrading your account. This process might take up to 24 hours.",
         comment: "Blocked: We are upgrading your account. This process might take up to 24 hours."
     )
-    
+
+    public static let bakktMigrationSuccessAnnouncementCardTitle = NSLocalizedString(
+        "Account sucessfully upgraded",
+        comment: "Bakkt Migration: Account sucessfully upgraded"
+    )
+
+    public static let bakktMigrationSuccessAnnouncementCardMessage = NSLocalizedString(
+        "You're all set up! 🥳\nContinue trading today",
+        comment: "Bakkt Migration: You're all set up! 🥳\nContinue trading today"
+    )
+
     public static let blockedContactSupport = NSLocalizedString(
         "Contact Support",
         comment: "Blocked: Contact Support"

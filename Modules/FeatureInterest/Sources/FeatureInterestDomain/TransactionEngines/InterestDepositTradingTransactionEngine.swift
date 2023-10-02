@@ -180,7 +180,7 @@ public final class InterestDepositTradingTransactionEngine: InterestTransactionE
 
     public func doBuildConfirmations(
         pendingTransaction: PendingTransaction
-    ) -> Single<PendingTransaction> {
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let source = sourceAccount.label
         let destination = transactionTarget.label
         let termsChecked = getTermsOptionValueFromPendingTransaction(pendingTransaction)
@@ -211,6 +211,7 @@ public final class InterestDepositTradingTransactionEngine: InterestTransactionE
                     agreementChecked: agreementChecked
                 )
             }
+            .eraseToAnyPublisher()
     }
 
     public func execute(
@@ -376,7 +377,7 @@ public final class EarnDepositTradingTransactionEngine: InterestTransactionEngin
 
     public func doBuildConfirmations(
         pendingTransaction: PendingTransaction
-    ) -> Single<PendingTransaction> {
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let source = sourceAccount.label
         let destination = transactionTarget.label
         let termsChecked = getTermsOptionValueFromPendingTransaction(pendingTransaction)
@@ -404,6 +405,7 @@ public final class EarnDepositTradingTransactionEngine: InterestTransactionEngin
                     agreementChecked: agreementChecked
                 )
             }
+            .eraseToAnyPublisher()
     }
 
     public func execute(

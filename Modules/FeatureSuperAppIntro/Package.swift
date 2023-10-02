@@ -21,7 +21,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "0.56.0"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "0.59.0"),
         .package(path: "../Tool"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),

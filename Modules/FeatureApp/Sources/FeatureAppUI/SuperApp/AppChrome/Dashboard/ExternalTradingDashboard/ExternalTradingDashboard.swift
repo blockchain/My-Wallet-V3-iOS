@@ -44,7 +44,6 @@ public struct ExternalTradingDashboard: ReducerProtocol {
 
     public struct State: Equatable {
         var context: Tag.Context?
-        @BindingState var migrationInfo: ExternalTradingMigrationInfo?
         public var tradingBalance: BalanceInfo?
         public var getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue] = []
         public var assetsState: DashboardAssetsSection.State = .init(presentedAssetsType: .custodial)

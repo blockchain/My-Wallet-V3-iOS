@@ -48,8 +48,8 @@ public final class ExternalTradingMigrationRepository {
 
 extension Tag {
     fileprivate var migrationComplete: Bool {
-        self == blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state.not_available
+        self == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.not_available
         ||
-        self == blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state.complete
+        self == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.complete
     }
 }

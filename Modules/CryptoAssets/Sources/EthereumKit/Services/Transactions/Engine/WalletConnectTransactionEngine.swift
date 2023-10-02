@@ -21,17 +21,6 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
     var sourceAccount: BlockchainAccount!
     var transactionTarget: TransactionTarget!
 
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
-    }
-
     // MARK: - Private Properties
 
     private let ethereumTransactionDispatcher: EthereumTransactionDispatcherAPI
@@ -110,33 +99,39 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
     func initializeTransaction() -> Single<PendingTransaction> {
         walletCurrencyService
             .displayCurrency
-            .asSingle()
+            .prefix(1)
             .map { [walletConnectTarget] fiatCurrency -> PendingTransaction in
                 walletConnectTarget.pendingTransacation(fiatCurrency: fiatCurrency)
             }
-            .flatMap(weak: self) { (self, pendingTransaction) in
-                Single.zip(
-                    self.sourceAccount.actionableBalance.asSingle(),
-                    self.calculateFee(with: pendingTransaction.feeLevel)
-                )
-                .map { actionableBalance, fees -> PendingTransaction in
-                    let available = try actionableBalance - fees.fee.moneyValue
-                    let zero: MoneyValue = .zero(currency: actionableBalance.currency)
-                    let max: MoneyValue = try .max(available, zero)
-                    var pendingTransaction = pendingTransaction.update(
-                        amount: pendingTransaction.amount,
-                        available: max,
-                        fee: fees.fee.moneyValue,
-                        feeForFullAvailable: fees.fee.moneyValue
-                    )
-                    pendingTransaction.gasPrice = fees.gasPrice
-                    pendingTransaction.gasLimit = fees.gasLimit
-                    return pendingTransaction
+            .flatMap { [weak self] pendingTransaction -> AnyPublisher<PendingTransaction, Error> in
+                guard let self else {
+                    return .failure(ToolKitError.nullReference(Self.self))
                 }
+                return self.sourceAccount.actionableBalance
+                    .zip(self.calculateFee(with: pendingTransaction.feeLevel).asPublisher())
+                    .tryMap { actionableBalance, fees -> PendingTransaction in
+                        let available = try actionableBalance - fees.fee.moneyValue
+                        let zero: MoneyValue = .zero(currency: actionableBalance.currency)
+                        let max: MoneyValue = try .max(available, zero)
+                        var pendingTransaction = pendingTransaction.update(
+                            amount: pendingTransaction.amount,
+                            available: max,
+                            fee: fees.fee.moneyValue,
+                            feeForFullAvailable: fees.fee.moneyValue
+                        )
+                        pendingTransaction.gasPrice = fees.gasPrice
+                        pendingTransaction.gasLimit = fees.gasLimit
+                        return pendingTransaction
+                    }
+                    .eraseToAnyPublisher()
             }
-            .flatMap(weak: self) { (self, pendingTransaction) in
-                self.doBuildConfirmations(pendingTransaction: pendingTransaction)
+            .flatMap { [weak self] pendingTransaction -> AnyPublisher<PendingTransaction, Error> in
+                guard let self else {
+                    return .failure(ToolKitError.nullReference(Self.self))
+                }
+                return self.doBuildConfirmations(pendingTransaction: pendingTransaction)
             }
+            .asSingle()
             .flatMap(weak: self) { (self, pendingTransaction) in
                 // NOTE: Some WalletConnect transactions, specificallly listing
                 // an NFT for sale on OpenSea has a tx amount of `0.00` and a fee.
@@ -161,21 +156,22 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
 
     func doBuildConfirmations(
         pendingTransaction: PendingTransaction
-    ) -> Single<PendingTransaction> {
-        Single
-            .zip(
-                fiatAmountAndFees(from: pendingTransaction),
-                getFeeState(pendingTransaction: pendingTransaction).asSingle()
-            )
-            .map(weak: self) { (self, payload) -> PendingTransaction in
-                let ((amount, fees), feeState) = payload
+    ) -> AnyPublisher<PendingTransaction, Error> {
+        fiatAmountAndFees(from: pendingTransaction)
+            .zip(getFeeState(pendingTransaction: pendingTransaction))
+            .tryMap { [weak self] (fiatAmountAndFees, feeState) -> PendingTransaction in
+                guard let self else {
+                    throw ToolKitError.nullReference(Self.self)
+                }
                 return self.doBuildConfirmations(
                     pendingTransaction: pendingTransaction,
-                    amountInFiat: amount.moneyValue,
-                    feesInFiat: fees.moneyValue,
+                    amountInFiat: fiatAmountAndFees.amount.moneyValue,
+                    feesInFiat: fiatAmountAndFees.fees.moneyValue,
                     feeState: feeState
                 )
             }
+            .prefix(1)
+            .eraseToAnyPublisher()
     }
 
     func update(
@@ -434,30 +430,23 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
 
     private func fiatAmountAndFees(
         from pendingTransaction: PendingTransaction
-    ) -> Single<(amount: FiatValue, fees: FiatValue)> {
-        Single.zip(
-            sourceExchangeRatePair,
-            .just(pendingTransaction.amount.cryptoValue ?? .zero(currency: network.nativeAsset)),
-            .just(pendingTransaction.feeAmount.cryptoValue ?? .zero(currency: network.nativeAsset))
-        )
-        .map { sourceExchangeRatePair, amount, feeAmount in
-            (
-                quote: sourceExchangeRatePair.quote.fiatValue ?? .zero(currency: .USD),
-                amount: amount,
-                fees: feeAmount
-            )
-        }
-        .map { (quote: FiatValue, amount: CryptoValue, fees: CryptoValue) -> (FiatValue, FiatValue) in
-            let fiatAmount = amount.convert(using: quote)
-            let fiatFees = fees.convert(using: quote)
-            return (
-                amount: fiatAmount,
-                fees: fiatFees
-            )
-        }
+    ) -> AnyPublisher<(amount: FiatValue, fees: FiatValue), Error> {
+        let amount = pendingTransaction.amount.cryptoValue ?? .zero(currency: network.nativeAsset)
+        let feeAmount = pendingTransaction.feeAmount.cryptoValue ?? .zero(currency: network.nativeAsset)
+        return sourceExchangeRatePair
+            .map { sourceExchangeRatePair -> (FiatValue, FiatValue) in
+                let quote = sourceExchangeRatePair.quote.fiatValue ?? .zero(currency: .USD)
+                let fiatAmount = amount.convert(using: quote)
+                let fiatFees = feeAmount.convert(using: quote)
+                return (
+                    amount: fiatAmount,
+                    fees: fiatFees
+                )
+            }
+            .eraseToAnyPublisher()
     }
 
-    private var sourceExchangeRatePair: Single<MoneyValuePair> {
+    private var sourceExchangeRatePair: AnyPublisher<MoneyValuePair, Error> {
         walletCurrencyService
             .displayCurrency
             .flatMap { [priceService, sourceAsset] fiatCurrency in
@@ -466,7 +455,9 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
                     .map(\.moneyValue)
                     .map { MoneyValuePair(base: .one(currency: sourceAsset), quote: $0) }
             }
-            .asSingle()
+            .eraseError()
+            .eraseToAnyPublisher()
+
     }
 }
 

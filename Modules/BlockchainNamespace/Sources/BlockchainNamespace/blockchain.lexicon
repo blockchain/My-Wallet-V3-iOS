@@ -200,10 +200,6 @@ blockchain:
 										state:
 										+ blockchain.db.type.enum
 										+ blockchain.session.state.stored.value
-											available:
-											complete:
-											not_available:
-											pending:
 								state:
 								+ blockchain.db.type.enum
 									available:
@@ -2340,6 +2336,11 @@ blockchain:
 					+ blockchain.ux.type.story
 						start:
 						+ blockchain.ux.type.task
+						success:
+							message:
+								dismissed:
+								+ blockchain.db.type.boolean
+								+ blockchain.session.state.stored.value
 			fiat:
 				account:
 					action:

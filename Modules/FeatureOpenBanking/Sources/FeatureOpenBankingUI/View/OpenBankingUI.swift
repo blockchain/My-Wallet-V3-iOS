@@ -104,17 +104,21 @@ public struct OpenBankingView: View {
     }
 
     public var body: some View {
-        SwitchStore(store) {
-            CaseLet(
-                state: /OpenBankingState.institutionList,
-                action: OpenBankingAction.institutionList,
-                then: InstitutionList.init(store:)
-            )
-            CaseLet(
-                state: /OpenBankingState.bank,
-                action: OpenBankingAction.bank,
-                then: BankView.init(store:)
-            )
+        SwitchStore(store) { state in
+            switch state {
+            case .institutionList:
+                CaseLet(
+                    /OpenBankingState.institutionList,
+                     action: OpenBankingAction.institutionList,
+                     then: InstitutionList.init(store:)
+                )
+            case .bank:
+                CaseLet(
+                    /OpenBankingState.bank,
+                     action: OpenBankingAction.bank,
+                     then: BankView.init(store:)
+                )
+            }
         }
     }
 }

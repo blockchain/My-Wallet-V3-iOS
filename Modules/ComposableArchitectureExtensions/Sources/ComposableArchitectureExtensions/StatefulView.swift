@@ -167,9 +167,13 @@ private struct LoadingSwitchView<
     let loading: (Store<Void, LoadingAction>) -> LoadingView
 
     var body: some View {
-        SwitchStore(store) {
-            CaseLet(state: /LoadingState<Value>.loaded, action: loadedAction, then: loaded)
-            CaseLet(state: /LoadingState<Value>.loading, action: loadingAction, then: loading)
+        SwitchStore(store) { state in
+            switch state {
+            case .loaded:
+                CaseLet(/LoadingState<Value>.loaded, action: loadedAction, then: loaded)
+            case .loading:
+                CaseLet(/LoadingState<Value>.loading, action: loadingAction, then: loading)
+            }
         }
     }
 }
@@ -206,9 +210,13 @@ private struct ResultSwitchView<
     let failure: (Store<Failure, FailureAction>) -> FailureView
 
     var body: some View {
-        SwitchStore(store) {
-            CaseLet(state: /Result<Success, Failure>.success, action: successAction, then: success)
-            CaseLet(state: /Result<Success, Failure>.failure, action: failureAction, then: failure)
+        SwitchStore(store) { state in
+            switch state {
+            case .success:
+                CaseLet(/Result<Success, Failure>.success, action: successAction, then: success)
+            case .failure:
+                CaseLet(/Result<Success, Failure>.failure, action: failureAction, then: failure)
+            }
         }
     }
 }

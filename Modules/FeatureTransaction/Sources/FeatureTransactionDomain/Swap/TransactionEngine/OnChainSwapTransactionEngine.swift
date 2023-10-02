@@ -97,6 +97,7 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
                     quote: .zero(self.sourceAccount.currencyType.code, self.target.currencyType.code)
                 )
                 .handlePendingOrdersError(initialValue: pendingTransaction)
+                .asSingle()
             }
     }
 
@@ -258,6 +259,7 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
 
     func update(amount: MoneyValue, pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateUpdateAmount(amount)
+            .asSingle()
             .flatMap { [onChainEngine] amount -> Single<PendingTransaction> in
                 onChainEngine
                     .update(amount: amount, pendingTransaction: pendingTransaction)
