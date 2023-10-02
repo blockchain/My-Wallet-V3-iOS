@@ -561,10 +561,7 @@ struct TableRow_Previews: PreviewProvider {
             title: {
                 HStack {
                     TableRowTitle("Left Title")
-                    IconButton(
-                        icon: .question.circle().micro(),
-                        action: {}
-                    )
+                    Icon.questionFilled.micro()
                 }
             },
             byline: {

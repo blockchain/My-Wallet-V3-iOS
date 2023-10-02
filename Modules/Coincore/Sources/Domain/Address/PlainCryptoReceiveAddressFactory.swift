@@ -18,6 +18,7 @@ public final class PlainCryptoReceiveAddressFactory: ExternalAssetAddressFactory
 
     public func makeExternalAssetAddress(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping TxCompleted
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
@@ -32,6 +33,12 @@ public final class PlainCryptoReceiveAddressFactory: ExternalAssetAddressFactory
         guard firstMatch != nil else {
             return .failure(.invalidAddress)
         }
-        return .success(PlainCryptoReceiveAddress(address: address, asset: asset, label: label))
+        let address = PlainCryptoReceiveAddress(
+            address: address,
+            memo: memo,
+            asset: asset,
+            label: label
+        )
+        return .success(address)
     }
 }

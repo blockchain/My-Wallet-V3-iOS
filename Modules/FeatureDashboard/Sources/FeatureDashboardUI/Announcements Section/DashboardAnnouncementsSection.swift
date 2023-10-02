@@ -9,6 +9,12 @@ import Localization
 import PlatformKit
 
 public struct DashboardAnnouncementsSection: ReducerProtocol {
+    enum ViewState {
+        case idle
+        case empty
+        case data
+    }
+
     public let app: AppProtocol
     public let recoverPhraseProviding: RecoveryPhraseStatusProviding
 
@@ -32,6 +38,7 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
     }
 
     public struct State: Equatable {
+        var viewState: ViewState = .idle
         var announcementsCards: IdentifiedArrayOf<DashboardAnnouncementRow.State>
         var isEmpty: Bool {
             announcementsCards.isEmpty
@@ -51,22 +58,22 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
                     .combineLatest(
                         app
                             .publisher(
-                                for: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible,
+                                for: blockchain.app.is.DeFi.only,
                                 as: Bool.self
                             )
                             .compactMap(\.value)
                     )
                     .receive(on: DispatchQueue.main)
                     .eraseToEffect()
-                    .map { backedUp, tradingEnabled in
+                    .map { backedUp, isDeFiOnly in
                         if backedUp == false {
                             let tag = blockchain.ux.home.dashboard.announcement.backup.seed.phrase
                             let result = Result<[DashboardAnnouncement], Never>.success(
                                 [
                                     DashboardAnnouncement(
                                         id: UUID().uuidString,
-                                        title: tradingEnabled ? L10n.recoveryPhraseBackupTitle : L10n.DeFiOnly.title,
-                                        message: tradingEnabled ? L10n.recoveryPhraseBackupMessage : L10n.DeFiOnly.message,
+                                        title: isDeFiOnly ? L10n.DeFiOnly.title : L10n.recoveryPhraseBackupTitle,
+                                        message: isDeFiOnly ? L10n.DeFiOnly.message : L10n.recoveryPhraseBackupMessage,
                                         action: tag
                                     )
                                 ]
@@ -81,12 +88,17 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
                 return .none
 
             case .onDashboardAnnouncementFetched(.success(let announcements)):
+                guard announcements.isNotEmpty else {
+                    state.viewState = .empty
+                    return .none
+                }
                 let items = announcements
                     .map {
                         DashboardAnnouncementRow.State(
                             announcement: $0
                         )
                     }
+                state.viewState = .data
                 state.announcementsCards = IdentifiedArrayOf(uniqueElements: items)
                 return .none
             }

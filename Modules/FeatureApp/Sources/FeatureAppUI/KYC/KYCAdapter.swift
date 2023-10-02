@@ -8,8 +8,6 @@ import FeatureAddressSearchDomain
 import FeatureKYCDomain
 import FeatureKYCUI
 import FeatureOnboardingUI
-import FeatureProveDomain
-import FeatureProveUI
 import FeatureSettingsUI
 import Localization
 import PlatformKit
@@ -197,63 +195,10 @@ extension KYCAdapter: FeatureOnboardingUI.KYCRouterAPI {
     }
 }
 
-final class FlowKYCInfoService: FeatureKYCDomain.FlowKYCInfoServiceAPI {
-
-    private let flowKYCInfoService: FeatureProveDomain.FlowKYCInfoServiceAPI
-
-    init(flowKYCInfoService: FeatureProveDomain.FlowKYCInfoServiceAPI = resolve()) {
-        self.flowKYCInfoService = flowKYCInfoService
-    }
-
-    func isProveFlow() async throws -> Bool? {
-        let flowKYCInfo = try await flowKYCInfoService.getFlowKYCInfo()
-        return flowKYCInfo?.nextFlow == .prove
-    }
-}
-
 extension KYCAdapter: FeatureSettingsUI.KYCRouterAPI {
 
     public func presentLimitsOverview(from presenter: UIViewController) {
         router.presentLimitsOverview(from: presenter)
-    }
-}
-
-final class KYCProveFlowPresenter: FeatureKYCUI.KYCProveFlowPresenterAPI {
-
-    private let router: FeatureProveDomain.ProveRouterAPI
-
-    init(
-        router: FeatureProveDomain.ProveRouterAPI
-    ) {
-        self.router = router
-    }
-
-    func presentFlow(
-        country: String,
-        state: String?
-    ) -> AnyPublisher<KYCProveResult, Never> {
-        router.presentFlow(
-            proveConfig: .init(
-                country: country,
-                state: state
-            )
-        )
-        .eraseToEffect()
-        .map { KYCProveResult(result: $0) }
-        .eraseToAnyPublisher()
-    }
-}
-
-extension KYCProveResult {
-    fileprivate init(result: VerificationResult) {
-        switch result {
-        case .success:
-            self = .success
-        case .abandoned:
-            self = .abandoned
-        case .failure(let errorCode):
-            self = .failure(errorCode)
-        }
     }
 }
 
@@ -340,14 +285,16 @@ final class AddressSearchFlowPresenter: FeatureKYCUI.AddressSearchFlowPresenterA
         state: String?
     ) -> AnyPublisher<UserAddressSearchResult, Never> {
         typealias Localization = LocalizationConstants.NewKYC.AddressVerification
-        let title = Localization.title
         return addressSearchRouterRouter.presentSearchAddressFlow(
             prefill: Address(state: state, country: country),
             config: .init(
-                addressSearchScreen: .init(title: title),
+                addressSearchScreen: .init(
+                    title: Localization.title,
+                    subtitle: Localization.subtitle
+                ),
                 addressEditScreen: .init(
-                    title: title,
-                    saveAddressButtonTitle: Localization.saveButtonTitle
+                    title: Localization.title,
+                    saveAddressButtonTitle: Localization.nextButtonTitle
                 )
             )
         )
@@ -378,8 +325,7 @@ public final class LaunchKYCClientObserver: Client.Observer {
         subscription = app.on(blockchain.ux.kyc.launch.verification)
             .receive(on: DispatchQueue.main)
             .map { [router, window] _ -> AnyPublisher<FeatureKYCUI.FlowResult, FeatureKYCUI.RouterError> in
-                guard let topMostViewController = window.topMostViewController else { return .empty() }
-                return router.presentEmailVerificationAndKYCIfNeeded(from: topMostViewController, requireEmailVerification: false, requiredTier: .verified)
+                router.presentEmailVerificationAndKYCIfNeeded(from: window.findTopViewController(allowBeingDismissed: false), requireEmailVerification: true, requiredTier: .verified)
             }
             .switchToLatest()
             .subscribe()

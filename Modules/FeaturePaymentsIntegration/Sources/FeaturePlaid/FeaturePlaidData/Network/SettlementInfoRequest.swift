@@ -2,8 +2,8 @@
 
 public struct SettlementInfoRequest: Encodable {
     public struct SettlementRequest: Encodable {
-        let product = "SIMPLEBUY"
-        let amount: String
+        var amount: String
+        var product = "SIMPLEBUY"
     }
 
     public struct Attributes: Encodable {
@@ -12,7 +12,7 @@ public struct SettlementInfoRequest: Encodable {
 
     public let attributes: Attributes
 
-    public init(amount: String) {
-        self.attributes = .init(settlementRequest: .init(amount: amount))
+    public init(amount: String, product: String) {
+        self.attributes = .init(settlementRequest: .init(amount: amount, product: product))
     }
 }

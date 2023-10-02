@@ -21,10 +21,11 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.54.1"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "0.56.0"),
         .package(path: "../Tool"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
+        .package(path: "../Blockchain"),
         .package(path: "../Localization")
     ],
     targets: [
@@ -33,6 +34,7 @@ let package = Package(
             dependencies: [
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(

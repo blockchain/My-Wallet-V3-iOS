@@ -64,6 +64,7 @@ final class ERC20ReceiveAddressTests: XCTestCase {
         let receiveAddress = try factory
             .makeExternalAssetAddress(
                 address: address,
+                memo: nil,
                 label: "Label",
                 onTxCompleted: { _ in AnyPublisher.just(()) }
             )

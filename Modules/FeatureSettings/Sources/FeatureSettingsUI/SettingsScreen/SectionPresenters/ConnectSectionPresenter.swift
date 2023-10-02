@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
+import FeatureProductsDomain
 import FeatureSettingsDomain
 import Localization
 import PlatformKit
@@ -11,8 +13,13 @@ final class ConnectSectionPresenter: SettingsSectionPresenting {
     typealias State = SettingsSectionLoadingState
 
     let sectionType: SettingsSectionType = .connect
+    var state: Observable<State>
+    var app: AppProtocol
 
-    var state: Observable<State> {
+    init(
+        app: AppProtocol
+    ) {
+        self.app = app
         let presenter = DefaultBadgeCellPresenter(
             accessibility: .id(Accessibility.Identifier.Settings.SettingsCell.ExchangeConnect.title),
             interactor: DefaultBadgeAssetInteractor(initialState: .loaded(next: .launch)),
@@ -27,8 +34,18 @@ final class ConnectSectionPresenter: SettingsSectionPresenting {
             )
         )
 
-        return .just(state)
-    }
+        let externalBrokerageActivePublisher = app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
 
-    init() {}
+        self.state = externalBrokerageActivePublisher
+            .map {
+                externalBrokerageActive in
+                guard externalBrokerageActive == false else {
+                    return .loaded(next: .empty)
+                }
+                return state
+            }
+        .asObservable()
+    }
 }

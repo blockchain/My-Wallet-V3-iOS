@@ -8,7 +8,9 @@ extension Mock {
 
         public let data: [RemoteConfigurationSource: [String: RemoteConfigurationValue]]
 
-        public init(_ data: [RemoteConfigurationSource: [String: RemoteConfigurationValue]] = [:]) {
+        public init(
+            _ data: [RemoteConfigurationSource: [String: RemoteConfigurationValue]] = [:]
+        ) {
             self.data = data
         }
 
@@ -36,6 +38,20 @@ extension Mock {
         public subscript(key: String) -> RemoteConfigurationValue {
             __data[key] ?? .init(dataValue: Data())
         }
+
+        public func addOnConfigUpdateListener(
+            remoteConfigUpdateCompletion listener: @escaping (RemoteConfigUpdate?, Error?) -> Void
+        ) -> ConfigUpdateListenerRegistration {
+            ConfigUpdateListenerRegistration()
+        }
+    }
+
+    public struct RemoteConfigUpdate: RemoteConfigUpdate_p {
+        public var updatedKeys: Set<String>
+    }
+
+    public class ConfigUpdateListenerRegistration: ConfigUpdateListenerRegistration_p {
+        public func remove() { }
     }
 
     public struct RemoteConfigurationValue: RemoteConfigurationValue_p {

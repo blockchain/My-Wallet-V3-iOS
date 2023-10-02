@@ -8,12 +8,15 @@ import ComposableArchitecture
 import ComposableNavigation
 import ErrorsUI
 import FeatureAuthenticationDomain
+import Foundation
 import Localization
+import Security
 import SwiftUI
 import ToolKit
 import UIComponentsKit
 import WalletPayloadKit
 
+private let domain = "blockchain.com" as CFString
 private typealias L10n = LocalizationConstants.FeatureAuthentication.CreateAccount
 
 public enum CreateAccountStepTwoRoute: NavigationRoute {
@@ -47,7 +50,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
 
     public enum InputValidationError: Equatable {
         case invalidEmail
-        case weakPassword
+        case weakPassword([PasswordValidationRule])
         case termsNotAccepted
         case passwordsDontMatch
     }
@@ -84,20 +87,19 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
     public var country: SearchableItem<String>
     public var countryState: SearchableItem<String>?
     public var referralCode: String
-
     // User Input
     @BindingState public var emailAddress: String
     @BindingState public var password: String
     @BindingState public var passwordConfirmation: String
-    @BindingState public var termsAccepted: Bool = false
+    @BindingState public var bakktTermsAccepted: Bool = false
     @BindingState public var fatalError: UX.Error?
-
+    @BindingState public var shouldDisplayBakktTermsAndConditions: Bool = false
     // Form interaction
     @BindingState public var passwordFieldTextVisible: Bool = false
 
     // Validation
     public var validatingInput: Bool = false
-    public var passwordStrength: PasswordValidationScore
+    public var passwordRulesBreached: [PasswordValidationRule]
     public var inputValidationState: InputValidationState
     public var inputConfirmationValidationState: InputValidationState
     public var failureAlert: AlertState<CreateAccountStepTwoAction>?
@@ -110,7 +112,10 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
         || inputConfirmationValidationState.isInvalid
         || isCreatingWallet
         || fatalError != nil
-        || !termsAccepted
+        || !bakktTermsAccepted && shouldDisplayBakktTermsAndConditions
+        || emailAddress.isEmpty
+        || password.isEmpty
+        || passwordConfirmation.isEmpty
     }
 
     public init(
@@ -126,7 +131,7 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
         self.emailAddress = ""
         self.password = ""
         self.passwordConfirmation = ""
-        self.passwordStrength = .none
+        self.passwordRulesBreached = []
         self.inputValidationState = .unknown
         self.inputConfirmationValidationState = .unknown
     }
@@ -147,7 +152,7 @@ public enum CreateAccountStepTwoAction: Equatable, NavigationAction, BindableAct
     case importAccount(_ mnemonic: String)
     case createButtonTapped
     case didValidateAfterFormSubmission
-    case didUpdatePasswordStrenght(PasswordValidationScore)
+    case didUpdatePasswordRules([PasswordValidationRule])
     case didUpdateInputValidation(CreateAccountStepTwoState.InputValidationState)
     case openExternalLink(URL)
     case onWillDisappear
@@ -158,12 +163,19 @@ public enum CreateAccountStepTwoAction: Equatable, NavigationAction, BindableAct
     case accountImported(Result<Either<WalletCreatedContext, EmptyValue>, WalletCreationServiceError>)
     case walletFetched(Result<Either<EmptyValue, WalletFetchedContext>, WalletFetcherServiceError>)
     case informWalletFetched(WalletFetchedContext)
+    case saveToCloud
     // required for legacy flow
     case triggerAuthenticate
     case none
 }
 
-struct CreateAccountStepTwoEnvironment {
+typealias CreateAccountStepTwoLocalization = LocalizationConstants.FeatureAuthentication.CreateAccount
+
+struct CreateAccountStepTwoReducer: ReducerProtocol {
+
+    typealias State = CreateAccountStepTwoState
+    typealias Action = CreateAccountStepTwoAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let passwordValidator: PasswordValidatorAPI
     let externalAppOpener: ExternalAppOpener
@@ -198,284 +210,297 @@ struct CreateAccountStepTwoEnvironment {
         self.recaptchaService = recaptchaService
         self.app = app
     }
-}
 
-typealias CreateAccountStepTwoLocalization = LocalizationConstants.FeatureAuthentication.CreateAccount
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .binding(\.$emailAddress):
+                return EffectTask(value: .didUpdateInputValidation(.unknown))
 
-let createAccountStepTwoReducer = Reducer<
-    CreateAccountStepTwoState,
-    CreateAccountStepTwoAction,
-    CreateAccountStepTwoEnvironment
-> { state, action, environment in
-    switch action {
-    case .binding(\.$emailAddress):
-        return EffectTask(value: .didUpdateInputValidation(.unknown))
-
-    case .binding(\.$password):
-        return .merge(
-            EffectTask(value: .didUpdateInputValidation(.unknown)),
-            EffectTask(value: .validatePasswordStrength)
-        )
-
-    case .binding(\.$passwordConfirmation):
-        guard state.passwordConfirmation.isNotEmpty else {
-            state.inputConfirmationValidationState = .unknown
-            return .none
-        }
-        state.inputConfirmationValidationState = state.password != state.passwordConfirmation ? .invalid(.passwordsDontMatch) : .valid
-        return .none
-
-    case .binding(\.$termsAccepted):
-        return EffectTask(value: .didUpdateInputValidation(.unknown))
-
-    case .createAccount(.success(let recaptchaToken)):
-        // by this point we have validated all the fields neccessary
-        state.isCreatingWallet = true
-        let accountName = NonLocalizedConstants.defiWalletTitle
-        return .merge(
-            EffectTask(value: .triggerAuthenticate),
-            .cancel(id: CreateAccountStepTwoIds.RecaptchaId()),
-            environment.walletCreationService
-                .createWallet(
-                    state.emailAddress,
-                    state.password,
-                    accountName,
-                    recaptchaToken
+            case .binding(\.$password):
+                return .merge(
+                    EffectTask(value: .didUpdateInputValidation(.unknown)),
+                    EffectTask(value: .validatePasswordStrength)
                 )
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .cancellable(id: CreateAccountStepTwoIds.CreationId(), cancelInFlight: true)
-                .map(CreateAccountStepTwoAction.accountCreation)
-        )
 
-    case .createAccount(.failure(let error)):
-        state.isCreatingWallet = false
-        state.fatalError = UX.Error(
-            source: error,
-            title: L10n.FatalError.title,
-            message: String(describing: error),
-            actions: [UX.Action(title: L10n.FatalError.action)]
-        )
-        return .cancel(id: CreateAccountStepTwoIds.RecaptchaId())
-    case .createOrImportWallet(.createWallet):
-        guard state.inputValidationState == .valid else {
-            return .none
-        }
+            case .binding(\.$passwordConfirmation):
+                guard state.passwordConfirmation.isNotEmpty else {
+                    state.inputConfirmationValidationState = .unknown
+                    return .none
+                }
+                state.inputConfirmationValidationState = state.password != state.passwordConfirmation ? .invalid(.passwordsDontMatch) : .valid
+                return .none
 
-        return environment.recaptchaService.verifyForSignup()
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .cancellable(id: CreateAccountStepTwoIds.RecaptchaId(), cancelInFlight: true)
-            .map(CreateAccountStepTwoAction.createAccount)
+            case .binding(\.$bakktTermsAccepted):
+                return EffectTask(value: .didUpdateInputValidation(.unknown))
 
-    case .createOrImportWallet(.importWallet(let mnemonic)):
-        guard state.inputValidationState == .valid else {
-            return .none
-        }
-        return EffectTask(value: .importAccount(mnemonic))
-
-    case .importAccount(let mnemonic):
-        state.isCreatingWallet = true
-        let accountName = NonLocalizedConstants.defiWalletTitle
-        return .merge(
-            EffectTask(value: .triggerAuthenticate),
-            environment.walletCreationService
-                .importWallet(
-                    state.emailAddress,
-                    state.password,
-                    accountName,
-                    mnemonic
+            case .createAccount(.success(let recaptchaToken)):
+                // by this point we have validated all the fields neccessary
+                state.isCreatingWallet = true
+                let accountName = NonLocalizedConstants.defiWalletTitle
+                return .merge(
+                    EffectTask(value: .triggerAuthenticate),
+                    .cancel(id: CreateAccountStepTwoIds.RecaptchaId()),
+                    walletCreationService
+                        .createWallet(
+                            state.emailAddress,
+                            state.password,
+                            accountName,
+                            recaptchaToken
+                        )
+                        .receive(on: mainQueue)
+                        .catchToEffect()
+                        .cancellable(id: CreateAccountStepTwoIds.CreationId(), cancelInFlight: true)
+                        .map(CreateAccountStepTwoAction.accountCreation)
                 )
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .cancellable(id: CreateAccountStepTwoIds.ImportId(), cancelInFlight: true)
-                .map(CreateAccountStepTwoAction.accountImported)
-        )
 
-    case .accountCreation(.failure(let error)),
-         .accountImported(.failure(let error)):
-        state.isCreatingWallet = false
+            case .createAccount(.failure(let error)):
+                state.isCreatingWallet = false
+                state.fatalError = UX.Error(
+                    source: error,
+                    title: L10n.FatalError.title,
+                    message: String(describing: error),
+                    actions: [UX.Action(title: L10n.FatalError.action)]
+                )
+                return .cancel(id: CreateAccountStepTwoIds.RecaptchaId())
+            case .createOrImportWallet(.createWallet):
+                guard state.inputValidationState == .valid else {
+                    return .none
+                }
 
-        guard error.walletCreateError != .accountCreationFailure else {
-            state.fatalError = UX.Error(
-                source: error,
-                title: L10n.FatalError.title,
-                message: L10n.FatalError.description,
-                actions: [UX.Action(title: L10n.FatalError.action)]
-            )
-            return .merge(
-                .cancel(id: CreateAccountStepTwoIds.CreationId()),
-                .cancel(id: CreateAccountStepTwoIds.ImportId())
-            )
-        }
-
-        let message = error.errorDescription ?? error.localizedDescription
-        state.fatalError = UX.Error(
-            source: error,
-            title: L10n.FatalError.title,
-            message: message,
-            actions: [UX.Action(title: L10n.FatalError.action)]
-        )
-        return .merge(
-            .cancel(id: CreateAccountStepTwoIds.CreationId()),
-            .cancel(id: CreateAccountStepTwoIds.ImportId())
-        )
-
-    case .accountCreation(.success(let context)),
-         .accountImported(.success(.left(let context))):
-
-        return .concatenate(
-            EffectTask(value: .triggerAuthenticate),
-            environment
-                .saveReferral(with: state.referralCode)
-                .fireAndForget(),
-            .merge(
-                .cancel(id: CreateAccountStepTwoIds.CreationId()),
-                .cancel(id: CreateAccountStepTwoIds.ImportId()),
-                environment
-                    .walletCreationService
-                    .setResidentialInfo(state.country.id, state.countryState?.id)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-                    .fireAndForget(),
-                environment.walletCreationService
-                    .updateCurrencyForNewWallets(state.country.id, context.guid, context.sharedKey)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-                    .fireAndForget(),
-                environment.walletFetcherService
-                    .fetchWallet(context.guid, context.sharedKey, context.password)
-                    .receive(on: environment.mainQueue)
+                return recaptchaService.verifyForSignup()
+                    .receive(on: mainQueue)
                     .catchToEffect()
-                    .map(CreateAccountStepTwoAction.walletFetched)
-            )
-        )
+                    .cancellable(id: CreateAccountStepTwoIds.RecaptchaId(), cancelInFlight: true)
+                    .map(CreateAccountStepTwoAction.createAccount)
 
-    case .walletFetched(.success(.left(.noValue))):
-        // do nothing, this for the legacy JS, to be removed
-        return .none
+            case .createOrImportWallet(.importWallet(let mnemonic)):
+                guard state.inputValidationState == .valid else {
+                    return .none
+                }
+                return EffectTask(value: .importAccount(mnemonic))
 
-    case .walletFetched(.success(.right(let context))):
-        return EffectTask(value: .informWalletFetched(context))
+            case .importAccount(let mnemonic):
+                state.isCreatingWallet = true
+                let accountName = NonLocalizedConstants.defiWalletTitle
+                return .merge(
+                    EffectTask(value: .triggerAuthenticate),
+                    walletCreationService
+                        .importWallet(
+                            state.emailAddress,
+                            state.password,
+                            accountName,
+                            mnemonic
+                        )
+                        .receive(on: mainQueue)
+                        .catchToEffect()
+                        .cancellable(id: CreateAccountStepTwoIds.ImportId(), cancelInFlight: true)
+                        .map(CreateAccountStepTwoAction.accountImported)
+                )
 
-    case .walletFetched(.failure(let error)):
-        state.isCreatingWallet = false
-        let message = error.errorDescription ?? LocalizationConstants.ErrorAlert.message
-        state.fatalError = UX.Error(
-            source: error,
-            title: L10n.FatalError.title,
-            message: message,
-            actions: [UX.Action(title: L10n.FatalError.action)]
-        )
-        return .none
+            case .accountCreation(.failure(let error)),
+                 .accountImported(.failure(let error)):
+                state.isCreatingWallet = false
 
-    case .informWalletFetched:
-        return .none
+                guard error.walletCreateError != .accountCreationFailure else {
+                    state.fatalError = UX.Error(
+                        source: error,
+                        title: L10n.FatalError.title,
+                        message: L10n.FatalError.description,
+                        actions: [UX.Action(title: L10n.FatalError.action)]
+                    )
+                    return .merge(
+                        .cancel(id: CreateAccountStepTwoIds.CreationId()),
+                        .cancel(id: CreateAccountStepTwoIds.ImportId())
+                    )
+                }
 
-    case .accountImported(.success(.right(.noValue))):
-        // this will only be true in case of legacy wallet
-        return .cancel(id: CreateAccountStepTwoIds.ImportId())
+                let message = error.errorDescription ?? error.localizedDescription
+                state.fatalError = UX.Error(
+                    source: error,
+                    title: L10n.FatalError.title,
+                    message: message,
+                    actions: [UX.Action(title: L10n.FatalError.action)]
+                )
+                return .merge(
+                    .cancel(id: CreateAccountStepTwoIds.CreationId()),
+                    .cancel(id: CreateAccountStepTwoIds.ImportId())
+                )
 
-    case .createButtonTapped:
-        state.validatingInput = true
+            case .accountCreation(.success(let context)),
+                 .accountImported(.success(.left(let context))):
 
-        return .concatenate(
-            environment
-                .validateInputs(state: state)
-                .map(CreateAccountStepTwoAction.didUpdateInputValidation)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect(),
+                return .concatenate(
+                    EffectTask(value: .triggerAuthenticate),
+                    EffectTask(value: .saveToCloud),
+                    saveReferral(with: state.referralCode).fireAndForget(),
+                    .merge(
+                        .cancel(id: CreateAccountStepTwoIds.CreationId()),
+                        .cancel(id: CreateAccountStepTwoIds.ImportId()),
+                        walletCreationService
+                            .updateCurrencyForNewWallets(state.country.id, context.guid, context.sharedKey)
+                            .receive(on: mainQueue)
+                            .eraseToEffect()
+                            .fireAndForget(),
+                        walletFetcherService
+                            .fetchWallet(context.guid, context.sharedKey, context.password)
+                            .receive(on: mainQueue)
+                            .catchToEffect()
+                            .map(CreateAccountStepTwoAction.walletFetched)
+                    )
+                )
 
-            EffectTask(value: .didValidateAfterFormSubmission)
-        )
+            case .walletFetched(.success(.left(.noValue))):
+                // do nothing, this for the legacy JS, to be removed
+                return .none
 
-    case .didValidateAfterFormSubmission:
-        guard !state.inputValidationState.isInvalid
-        else {
-            return .none
-        }
+            case .walletFetched(.success(.right(let context))):
+                return EffectTask(value: .informWalletFetched(context))
 
-        return EffectTask(value: .createOrImportWallet(state.context))
+            case .walletFetched(.failure(let error)):
+                state.isCreatingWallet = false
+                let message = error.errorDescription ?? LocalizationConstants.ErrorAlert.message
+                state.fatalError = UX.Error(
+                    source: error,
+                    title: L10n.FatalError.title,
+                    message: message,
+                    actions: [UX.Action(title: L10n.FatalError.action)]
+                )
+                return .none
 
-    case .didUpdatePasswordStrenght(let score):
-        state.passwordStrength = score
-        return .none
+            case .informWalletFetched:
+                return .fireAndForget {
+                    app?.post(event: blockchain.ux.user.authentication.sign.up.address.submit)
+                }
 
-    case .didUpdateInputValidation(let validationState):
-        state.validatingInput = false
-        state.inputValidationState = validationState
-        state.inputConfirmationValidationState = (state.password != state.passwordConfirmation && state.passwordConfirmation.isNotEmpty) ? .invalid(.passwordsDontMatch) : .valid
-        return .none
+            case .accountImported(.success(.right(.noValue))):
+                // this will only be true in case of legacy wallet
+                return .cancel(id: CreateAccountStepTwoIds.ImportId())
 
-    case .openExternalLink(let url):
-        environment.externalAppOpener.open(url)
-        return .none
+            case .createButtonTapped:
+                state.validatingInput = true
 
-    case .onWillDisappear:
-        return .none
+                if case .importWallet = state.context {
+                    analyticsRecorder.record(
+                        event: .importWalletConfirmed
+                    )
+                }
 
-    case .route(let route):
-        state.route = route
-        return .none
+                return .concatenate(
+                    EffectTask(value: .didUpdateInputValidation(validateInputs(state: state))),
+                    EffectTask(value: .didValidateAfterFormSubmission)
+                )
 
-    case .validatePasswordStrength:
-        return environment
-            .passwordValidator
-            .validate(password: state.password)
-            .map(CreateAccountStepTwoAction.didUpdatePasswordStrenght)
-            .receive(on: environment.mainQueue)
-            .eraseToEffect()
+            case .didValidateAfterFormSubmission:
+                guard !state.inputValidationState.isInvalid
+                else {
+                    return .none
+                }
 
-    case .accountRecoveryFailed(let error):
-        state.isCreatingWallet = false
-        state.fatalError = UX.Error(
-            source: error,
-            title: L10n.FatalError.title,
-            message: error.localizedDescription,
-            actions: [UX.Action(title: L10n.FatalError.action)]
-        )
-        return .none
+                return EffectTask(value: .createOrImportWallet(state.context))
 
-    case .triggerAuthenticate:
-        return .none
+            case .didUpdatePasswordRules(let rules):
+                state.passwordRulesBreached = rules
+                return .none
 
-    case .none:
-        return .none
+            case .didUpdateInputValidation(let validationState):
+                state.validatingInput = false
+                state.inputValidationState = validationState
+                state.inputConfirmationValidationState = (state.password != state.passwordConfirmation && state.passwordConfirmation.isNotEmpty) ? .invalid(.passwordsDontMatch) : .valid
+                return .none
 
-    case .binding:
-        return .none
+            case .openExternalLink(let url):
+                externalAppOpener.open(url)
+                return .none
 
-    case .onAppear:
-        return .fireAndForget {[country = state.country, countryState = state.countryState] in
-            environment.app?.state.set(blockchain.user.address.country.code, to: country.id)
-            environment.app?.state.set(blockchain.user.address.country.state, to: countryState)
+            case .onWillDisappear:
+                return .none
+
+            case .route(let route):
+                state.route = route
+                return .none
+
+            case .validatePasswordStrength:
+                return EffectTask(
+                    value: CreateAccountStepTwoAction.didUpdatePasswordRules(
+                        passwordValidator.validate(password: state.password)
+                    )
+                )
+
+            case .accountRecoveryFailed(let error):
+                state.isCreatingWallet = false
+                state.fatalError = UX.Error(
+                    source: error,
+                    title: L10n.FatalError.title,
+                    message: error.localizedDescription,
+                    actions: [UX.Action(title: L10n.FatalError.action)]
+                )
+                return .none
+
+            case .saveToCloud:
+                if BuildFlag.isAlpha || BuildFlag.isProduction {
+                    SecAddSharedWebCredential(
+                        domain,
+                        state.emailAddress as CFString,
+                        state.password as CFString?,
+                        { _ in }
+                    )
+                }
+                return .none
+
+            case .triggerAuthenticate:
+                return .none
+
+            case .none:
+                return .none
+
+            case .binding:
+                return .none
+
+            case .onAppear:
+                return .merge(
+                    app?.publisher(
+                        for: blockchain.app.configuration.external.trading.areas,
+                        as: [String].self
+                    )
+                    .compactMap { [country = state.country, countryState = state.countryState] element -> Bool? in
+                        guard let listOfStates = element.value, let stateId = countryState?.id else {
+                            return nil
+                        }
+                        return listOfStates.contains("\(country.id)-\(stateId)")
+                    }
+                    .receive(on: mainQueue)
+                    .eraseToEffect()
+                    .map {
+                        .binding(.set(\.$shouldDisplayBakktTermsAndConditions, $0))
+                    } ?? .none,
+
+                    .fireAndForget { [country = state.country, countryState = state.countryState] in
+                        app?.state.set(blockchain.user.address.country.code, to: country.id)
+                        app?.state.set(blockchain.user.address.country.state, to: countryState)
+                    }
+                )
+            }
         }
     }
 }
-.binding()
-.analytics()
 
-extension CreateAccountStepTwoEnvironment {
-
+extension CreateAccountStepTwoReducer {
     fileprivate func validateInputs(
         state: CreateAccountStepTwoState
-    ) -> AnyPublisher<CreateAccountStepTwoState.InputValidationState, Never> {
+    ) -> CreateAccountStepTwoState.InputValidationState {
         guard state.emailAddress.isEmail else {
-            return .just(.invalid(.invalidEmail))
+            return .invalid(.invalidEmail)
         }
-        let didAcceptTerm = state.termsAccepted
-        return passwordValidator
-            .validate(password: state.password)
-            .map { passwordStrength -> CreateAccountStepTwoState.InputValidationState in
-                guard passwordStrength.isValid else {
-                    return .invalid(.weakPassword)
-                }
-                guard didAcceptTerm else {
-                    return .invalid(.termsNotAccepted)
-                }
-                return .valid
-            }
-            .eraseToAnyPublisher()
+        let didAcceptBakktTerms = state.shouldDisplayBakktTermsAndConditions == false || state.bakktTermsAccepted
+        let errors = passwordValidator.validate(password: state.password)
+
+        guard errors.isEmpty else {
+            return .invalid(.weakPassword(errors))
+        }
+
+        return didAcceptBakktTerms ? .valid : .invalid(.termsNotAccepted)
     }
 
     func saveReferral(with code: String) -> EffectTask<Void> {
@@ -483,36 +508,5 @@ extension CreateAccountStepTwoEnvironment {
             app?.post(value: code, of: blockchain.user.creation.referral.code)
         }
         return .none
-    }
-}
-
-// MARK: - Private
-
-extension Reducer where
-    Action == CreateAccountStepTwoAction,
-    State == CreateAccountStepTwoState,
-    Environment == CreateAccountStepTwoEnvironment
-{
-    /// Helper function for analytics tracking
-    fileprivate func analytics() -> Self {
-        combined(
-            with: Reducer<
-                CreateAccountStepTwoState,
-                CreateAccountStepTwoAction,
-                CreateAccountStepTwoEnvironment
-            > { state, action, environment in
-                switch action {
-                case .createButtonTapped:
-                    if case .importWallet = state.context {
-                        environment.analyticsRecorder.record(
-                            event: .importWalletConfirmed
-                        )
-                    }
-                    return .none
-                default:
-                    return .none
-                }
-            }
-        )
     }
 }

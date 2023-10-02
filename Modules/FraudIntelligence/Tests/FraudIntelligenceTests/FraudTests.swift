@@ -113,7 +113,7 @@ final class FraudIntelligenceTests: XCTestCase {
         XCTAssertEqual(Test.MobileIntelligence.options?.flow, "ach")
     }
 
-    func test_trigger() throws {
+    func test_trigger() async throws {
 
         let triggers: [Tag.Event] = [
             blockchain.session.event.did.sign.in,
@@ -125,19 +125,22 @@ final class FraudIntelligenceTests: XCTestCase {
         var count = 0
         let subscription = app.on(blockchain.app.fraud.sardine.submit) { _ in count += 1 }
         subscription.start()
-        defer { subscription.stop() }
+        addTeardownBlock { subscription.stop() }
 
         app.state.set(blockchain.app.fraud.sardine.current.flow, to: "TEST")
 
         app.post(event: blockchain.session.event.will.sign.in)
+        await Task.megaYield()
         XCTAssertEqual(count, 1)
         XCTAssertEqual(Test.MobileIntelligence.count, 1)
 
         app.post(event: blockchain.session.event.did.sign.in)
+        await Task.megaYield()
         XCTAssertEqual(count, 2)
         XCTAssertEqual(Test.MobileIntelligence.count, 2)
 
         app.post(event: blockchain.ux.transaction.event.did.finish)
+        await Task.megaYield()
         XCTAssertEqual(count, 3)
         XCTAssertEqual(Test.MobileIntelligence.count, 3)
     }
@@ -158,7 +161,7 @@ enum Test {
         }
 
         static func start(withOptions options: Options) -> AnyObject {
-            Self.count = 0
+            count = 0
             Self.options = options
             return MobileIntelligence()
         }
@@ -248,50 +251,61 @@ extension Test.MobileIntelligence {
 
         var options = Options()
 
-        init() { }
+        init() {}
 
         func setClientId(with clientId: String) -> OptionsBuilder {
             options.clientId = clientId
             return self
         }
+
         func setSessionKey(with sessionKey: String) -> OptionsBuilder {
             options.sessionKey = sessionKey
             return self
         }
+
         func setUserIdHash(with userIdHash: String) -> OptionsBuilder {
             options.userIdHash = userIdHash
             return self
         }
+
         func setEnvironment(with environment: String) -> OptionsBuilder {
             options.environment = environment
             return self
         }
+
         func setFlow(with flow: String) -> OptionsBuilder {
             options.flow = flow
             return self
         }
+
         func setPartnerId(with partnerId: String) -> OptionsBuilder {
             options.partnerId = partnerId
             return self
         }
+
         func enableBehaviorBiometrics(with enableBehaviorBiometrics: Bool) -> OptionsBuilder {
             options.enableBehaviorBiometrics = enableBehaviorBiometrics
             return self
         }
+
         func enableClipboardTracking(with enableClipboardTracking: Bool) -> OptionsBuilder {
             options.enableClipboardTracking = enableClipboardTracking
             return self
         }
+
         func enableFieldTracking(with enableFieldTracking: Bool) -> OptionsBuilder {
             options.enableFieldTracking = enableFieldTracking
             return self
         }
+
         func setShouldAutoSubmitOnInit(with shouldAutoSubmitOnInit: Bool) -> OptionsBuilder {
-            return self
+            self
         }
+
         func setSourcePlatform(with sourcePlatform: String) -> OptionsBuilder {
-            return self
+            self
         }
+
         func build() -> Options { options }
     }
 }

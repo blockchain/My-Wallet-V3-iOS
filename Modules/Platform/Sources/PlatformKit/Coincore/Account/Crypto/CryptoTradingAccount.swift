@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DIKit
 import FeatureStakingDomain
@@ -8,6 +9,8 @@ import ToolKit
 
 /// Named `CustodialTradingAccount` on Android
 public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
+
+    @Dependency(\.app) var app
 
     private enum CryptoTradingAccountError: LocalizedError {
         case loadingFailed(asset: String, label: String, action: AssetAction, error: String)
@@ -28,13 +31,19 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
     public let isDefault: Bool = false
     public var accountType: AccountType = .trading
 
+    public private(set) var isExternalTradingAccount: Bool = false
+
+    lazy var bindings = app.binding(self)
+        .subscribe(\.isExternalTradingAccount, to: blockchain.app.is.external.brokerage)
+        .bindings()
     public var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
-        custodialAddressService
+        let _receiveAddress: AnyPublisher<ReceiveAddress, Error> = custodialAddressService
             .receiveAddress(for: asset)
             .eraseError()
             .flatMap { [cryptoReceiveAddressFactory, label, onTxCompleted] address in
                 cryptoReceiveAddressFactory.makeExternalAssetAddress(
                     address: address,
+                    memo: nil,
                     label: label,
                     onTxCompleted: onTxCompleted
                 )
@@ -42,6 +51,15 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
                 .eraseError()
                 .publisher
                 .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+        return isExternalBrokerage
+            .replaceError(with: true)
+            .flatMap { isExternalBrokerage -> AnyPublisher<ReceiveAddress, Error> in
+                guard isExternalBrokerage.isNo else {
+                    return .failure(ReceiveAddressError.notSupported)
+                }
+                return _receiveAddress
             }
             .eraseToAnyPublisher()
     }
@@ -119,13 +137,13 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
             guard let amount, amount.isCrypto else {
                 return .failure(PlatformKitError.default)
             }
-            return receiveAddress
-                .flatMap { [custodialPendingDepositService] receiveAddress -> AnyPublisher<Void, Error> in
+            return receiveAddress.zip(isExternalBrokerage)
+                .flatMap { [custodialPendingDepositService] receiveAddress, isExternalBrokerage -> AnyPublisher<Void, Error> in
                     custodialPendingDepositService.createPendingDeposit(
                         value: amount,
                         destination: receiveAddress.address,
                         transactionHash: hash,
-                        product: "SIMPLEBUY"
+                        product: isExternalBrokerage ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY"
                     )
                     .eraseError()
                     .eraseToAnyPublisher()
@@ -135,10 +153,27 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
     }
 
     public var disabledReason: AnyPublisher<InterestAccountIneligibilityReason, Error> {
-        interestEligibilityRepository
-            .fetchInterestAccountEligibilityForCurrencyCode(currencyType)
-            .map(\.ineligibilityReason)
+        isExternalBrokerage
+            .flatMap { [interestEligibilityRepository, currencyType] isExternalBrokerage in
+                guard isExternalBrokerage.isNo else {
+                    return AnyPublisher<InterestAccountIneligibilityReason, Error>.failure("Not Supported")
+                }
+                return interestEligibilityRepository
+                    .fetchInterestAccountEligibilityForCurrencyCode(currencyType)
+                    .map(\.ineligibilityReason)
+                    .eraseError()
+            }
+            .eraseToAnyPublisher()
+    }
+
+    private var isExternalBrokerage: AnyPublisher<Bool, Error> {
+        app
+            .publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+            .map(\.value)
             .eraseError()
+            .onNil("Not Supported")
+            .first()
+            .eraseToAnyPublisher()
     }
 
     private let balanceService: TradingBalanceServiceAPI
@@ -188,6 +223,7 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
         self.kycTiersService = kycTiersService
         self.errorRecorder = errorRecorder
         self.supportedPairsInteractorService = supportedPairsInteractorService
+        bindings.request()
     }
 
     private var isPairToFiatAvailable: AnyPublisher<Bool, Never> {
@@ -301,7 +337,8 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
                 isFunded
             )
             .map { isEligible, isFunded in
-                isEligible && isFunded
+                print("CryptoTradingAccount: canPerformInterestTransfer: isEligible: \(isEligible), isFunded: \(isFunded)")
+                return isEligible && isFunded
             }
             .mapError { [label, asset] error in
                 CryptoTradingAccountError.loadingFailed(

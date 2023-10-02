@@ -14,12 +14,12 @@ public struct SuperAppContainerChrome: View {
     @State private var isRefreshing: Bool = false
 
     private var app: AppProtocol
-    private let __isSmallDevice: Bool
+    private let isSmallDevice: Bool
     private let store: StoreOf<SuperAppContent>
 
     init(app: AppProtocol, isSmallDevice: Bool) {
         self.app = app
-        self.__isSmallDevice = isSmallDevice
+        self.isSmallDevice = isSmallDevice
         self.store = Store(
             initialState: .init(),
             reducer: SuperAppContent(
@@ -29,32 +29,34 @@ public struct SuperAppContainerChrome: View {
         self.currentModeSelection = app.currentMode
     }
 
+    @ViewBuilder
     public var body: some View {
-        if #available(iOS 16, *) {
-            SuperAppContentView(
-                store: store,
-                currentModeSelection: $currentModeSelection,
-                contentOffset: $contentOffset,
-                isRefreshing: $isRefreshing
-            )
-            .app(app)
-        } else if __isSmallDevice {
+        if isIos15, isSmallDevice {
             SuperAppContentViewSmallDevice(
                 store: store,
                 currentModeSelection: $currentModeSelection,
                 contentOffset: $contentOffset,
                 isRefreshing: $isRefreshing
             )
-            .isSmallDevice(__isSmallDevice)
+            .isSmallDevice(isSmallDevice)
             .app(app)
         } else {
-            SuperAppContentView(
-                store: store,
-                currentModeSelection: $currentModeSelection,
-                contentOffset: $contentOffset,
-                isRefreshing: $isRefreshing
-            )
-            .app(app)
+            AppLoaderView {
+                SuperAppContentView(
+                    store: store,
+                    currentModeSelection: $currentModeSelection,
+                    contentOffset: $contentOffset,
+                    isRefreshing: $isRefreshing
+                )
+                .app(app)
+            }
         }
+    }
+
+    private var isIos15: Bool {
+        if #available(iOS 16, *) {
+            return false
+        }
+        return true
     }
 }

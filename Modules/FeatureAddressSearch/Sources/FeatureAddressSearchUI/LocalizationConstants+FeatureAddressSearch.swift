@@ -80,7 +80,7 @@ extension LocalizationConstants.AddressSearch {
     enum Form {
 
         static let addressLine1 = NSLocalizedString(
-            "Home Address",
+            "Home address",
             comment: "Address Search: Form Address Line 1"
         )
 
@@ -100,7 +100,7 @@ extension LocalizationConstants.AddressSearch {
         )
 
         static let zip = NSLocalizedString(
-            "ZIP code",
+            "ZIP Code",
             comment: "Address Search: Form Zip"
         )
 

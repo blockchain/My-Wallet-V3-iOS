@@ -22,7 +22,7 @@ public struct LoadingStateView: View {
                 .foregroundColor(.semantic.text)
             ProgressView(value: 0.25)
                 .progressViewStyle(
-                    IndeterminateProgressStyle(lineWidth: layout.lineWidth)
+                    BlockchainCircularProgressViewStyle(lineWidth: layout.lineWidth)
                 )
                 .frame(width: 28, height: 28)
         }

@@ -18,6 +18,7 @@ public protocol ExternalAssetAddressServiceAPI {
     func makeExternalAssetAddress(
         asset: CryptoCurrency,
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping TxCompleted
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError>
@@ -34,6 +35,7 @@ final class ExternalAssetAddressService: ExternalAssetAddressServiceAPI {
     func makeExternalAssetAddress(
         asset: CryptoCurrency,
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
@@ -43,6 +45,7 @@ final class ExternalAssetAddressService: ExternalAssetAddressServiceAPI {
         return asset
             .parse(
                 address: address,
+                memo: memo,
                 label: label,
                 onTxCompleted: onTxCompleted
             )

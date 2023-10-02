@@ -17,11 +17,19 @@ public struct BitcoinEntry: Equatable {
         public let xpubs: [XPub]
     }
 
+    public struct ImportedAddress: Equatable {
+        public let addr: String
+        public let priv: String?
+        public let archived: Bool
+        public let label: String?
+    }
+
     private let payload: BitcoinEntryPayload
 
     public let defaultAccountIndex: Int
 
     public let accounts: [BitcoinEntry.Account]
+    public let importedAddresses: [BitcoinEntry.ImportedAddress]
 
     init(payload: BitcoinEntryPayload, wallet: NativeWallet) {
         self.payload = payload
@@ -46,5 +54,14 @@ public struct BitcoinEntry: Equatable {
                     xpubs: xpubs
                 )
             }
+
+        self.importedAddresses = wallet.addresses.map { address in
+            BitcoinEntry.ImportedAddress(
+                addr: address.addr,
+                priv: address.priv,
+                archived: address.isArchived,
+                label: address.label
+            )
+        }
     }
 }

@@ -49,12 +49,13 @@ extension AppProtocol {
 
     func perform(_ action: L_blockchain_ui_type_action, event: Session.Event, with data: ActionData) throws {
         var json = try data.then.dictionary().or(throw: "Expected [String: Any]")
+        let context = Tag.Context(data.context?.compactMapKeys { try? Tag.Reference(id: $0, in: language) } ?? [:])
         var emit: (tag: Tag, value: Tag.Reference)?
         defer {
             if let emit {
                 post(
                     event: emit.value,
-                    context: event.context + [blockchain.ui.type.action: Action(tag: action, event: emit.value, data: nil)],
+                    context: event.context + context + [blockchain.ui.type.action: Action(tag: action, event: emit.value, data: nil)],
                     file: event.source.file,
                     line: event.source.line
                 )
@@ -70,7 +71,7 @@ extension AppProtocol {
         let key = tag.ref(to: event.reference.context, in: self)
         post(
             event: key,
-            context: event.context + [blockchain.ui.type.action: Action(tag: action, event: key, data: data)],
+            context: event.context + context + [blockchain.ui.type.action: Action(tag: action, event: key, data: data)],
             file: event.source.file,
             line: event.source.line
         )
@@ -80,6 +81,7 @@ extension AppProtocol {
 public struct ActionData: Decodable, Equatable {
     public let then: AnyJSON
     public let policy: Policy?
+    public let context: [String: AnyJSON]?
 }
 
 extension ActionData {

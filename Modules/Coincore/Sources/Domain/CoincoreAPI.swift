@@ -25,7 +25,10 @@ public protocol CoincoreAPI {
     var cryptoAssets: [CryptoAsset] { get }
 
     /// Initialize any assets prior being available
-    func initialize() -> AnyPublisher<Void, CoincoreError>
+    func initialize() -> AnyPublisher<Void, Never>
+
+    /// Injects external ERC20 asset loading logic so CoinCore can load them whenever necessary.
+    func registerNonCustodialAssetLoader(handler: @escaping () -> AnyPublisher<[CryptoCurrency], Never>)
 
     /// Provides an array of `SingleAccount` instances for the specified source account and the given action.
     /// - Parameters:

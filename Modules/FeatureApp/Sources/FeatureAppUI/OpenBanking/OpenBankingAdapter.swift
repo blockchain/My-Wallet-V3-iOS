@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import BlockchainNamespace
 import Combine
 import DIKit
@@ -24,7 +25,7 @@ struct FiatCurrencyFormatter: FeatureOpenBankingUI.FiatCurrencyFormatter {
         return fiat.displayString
     }
 
-    func displayImage(currency: String) -> ImageResource? {
+    func displayImage(currency: String) -> ImageLocation? {
         fiat(code: currency)?.logoResource
     }
 
@@ -43,7 +44,7 @@ struct CryptoCurrencyFormatter: FeatureOpenBankingUI.CryptoCurrencyFormatter {
         return crypto.displayString
     }
 
-    func displayImage(currency: String) -> ImageResource? {
+    func displayImage(currency: String) -> ImageLocation? {
         crypto(code: currency)?.logoResource
     }
 

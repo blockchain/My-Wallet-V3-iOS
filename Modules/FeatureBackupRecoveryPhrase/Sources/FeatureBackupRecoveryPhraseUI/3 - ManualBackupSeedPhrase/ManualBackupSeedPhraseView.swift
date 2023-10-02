@@ -50,7 +50,7 @@ extension ManualBackupSeedPhraseView {
             }
         }
         .frame(maxWidth: .infinity)
-        .border(Color.WalletSemantic.medium, width: 1)
+        .border(Color.semantic.medium, width: 1)
         .padding(.horizontal, Spacing.padding3)
         .padding(.top, Spacing.padding2)
     }
@@ -68,7 +68,7 @@ extension ManualBackupSeedPhraseView {
             Text("\(index)")
                 .foregroundColor(.WalletSemantic.muted)
         Text("\(word.label)")
-             .foregroundColor(Color.WalletSemantic.title)
+             .foregroundColor(Color.semantic.title)
         }
             .typography(.paragraph2)
             .fixedSize()
@@ -83,7 +83,7 @@ extension ManualBackupSeedPhraseView {
             viewStore.send(.onCopyTap)
         } label: {
             Text(viewStore.recoveryPhraseCopied ? Localization.copiedButton : Localization.copyButton)
-                .foregroundColor(viewStore.recoveryPhraseCopied ? Color.WalletSemantic.success : Color.WalletSemantic.primary)
+                .foregroundColor(viewStore.recoveryPhraseCopied ? Color.semantic.success : Color.semantic.primary)
         }
         .padding(.top, Spacing.padding2)
     }
@@ -104,8 +104,7 @@ struct ManualBackupSeedPhraseView_Previews: PreviewProvider {
         PrimaryNavigationView {
             ManualBackupSeedPhraseView(store: .init(
                 initialState: .init(),
-                reducer: ManualBackupSeedPhraseModule.reducer,
-                environment: .init(
+                reducer: ManualBackupSeedPhrase(
                     onNext: {},
                     recoveryPhraseVerifyingService: resolve()
                 )

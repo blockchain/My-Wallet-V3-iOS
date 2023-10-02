@@ -124,36 +124,11 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
 
 extension SuperAppRootController {
     func subscribeFrequentActions(to app: AppProtocol) {
-        let observers = [
-            app.on(blockchain.ux.frequent.action.buy)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    handleBuyCrypto(account: nil)
-                }),
-            app.on(blockchain.ux.frequent.action.sell)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    handleSellCrypto(account: nil)
-                }),
+        let observers: [AnyCancellable] = [
             app.on(blockchain.ux.frequent.action.currency.exchange.router)
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
                     handleFrequentActionCurrencyExchangeRouter()
-                }),
-            app.on(blockchain.ux.frequent.action.swap)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    handleFrequentActionSwap()
-                }),
-            app.on(blockchain.ux.frequent.action.send)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    handleSendCrypto()
-                }),
-            app.on(blockchain.ux.frequent.action.rewards)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    handleRewards()
                 }),
             app.on(blockchain.ux.frequent.action.deposit)
                 .receive(on: DispatchQueue.main)
@@ -169,11 +144,6 @@ extension SuperAppRootController {
                 .receive(on: DispatchQueue.main)
                 .sink(receiveValue: { [unowned self] _ in
                     handleWithdraw()
-                }),
-            app.on(blockchain.ux.frequent.action.nft)
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [unowned self] _ in
-                    handleNFTAssetView()
                 })
         ]
 
@@ -188,9 +158,13 @@ extension SuperAppRootController {
             .filter(\.self)
             .sink(to: My.handleSendCrypto, on: self)
 
-        displayPostSignUpOnboardingFlow = viewStore.publisher
-            .displayPostSignUpOnboardingFlow
-            .filter(\.self)
+        displayPostSignUpOnboardingFlow = Publishers
+            .CombineLatest(
+                app.on(blockchain.ux.home.dashboard).first(),
+                viewStore.publisher
+                    .displayPostSignUpOnboardingFlow
+                    .filter(\.self)
+            )
             .delay(for: .seconds(4), scheduler: DispatchQueue.main)
             .handleEvents(receiveOutput: { _ in
                 // reset onboarding state

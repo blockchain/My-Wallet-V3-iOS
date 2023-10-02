@@ -25,7 +25,8 @@ public enum ERC20CryptoAssetServiceError: LocalizedError, Equatable {
 
 /// Service to initialise required ERC20 CryptoAsset.
 public protocol ERC20CryptoAssetServiceAPI {
-    func initialize() -> AnyPublisher<Void, ERC20CryptoAssetServiceError>
+
+    func setupCoincore()
 }
 
 final class ERC20CryptoAssetService: ERC20CryptoAssetServiceAPI {
@@ -47,45 +48,49 @@ final class ERC20CryptoAssetService: ERC20CryptoAssetServiceAPI {
         self.enabledCurrenciesService = enabledCurrenciesService
     }
 
-    func initialize() -> AnyPublisher<Void, ERC20CryptoAssetServiceError> {
-        let publishers: [AnyPublisher<Result<Void, ERC20CryptoAssetServiceError>, Never>] = enabledCurrenciesService
-            .allEnabledEVMNetworks
+    func setupCoincore() {
+        coincore.registerNonCustodialAssetLoader(handler: { [initialize] in
+            initialize()
+        })
+    }
+
+    private func initialize() -> AnyPublisher<[CryptoCurrency], Never> {
+        let networks = enabledCurrenciesService.allEnabledEVMNetworks
+        let publishers = networks
             .map(initializeNetwork)
-            .map { $0.result() }
+            .map { $0.replaceError(with: []) }
         return publishers
             .zip()
-            .flatMap { results -> AnyPublisher<Void, ERC20CryptoAssetServiceError> in
-                guard let error: ERC20CryptoAssetServiceError = results.map(\.failure).compacted().first else {
-                    return .just(())
-                }
-                return .failure(error)
+            .map { values -> [CryptoCurrency] in
+                values.flatMap { $0 }
             }
             .eraseToAnyPublisher()
     }
 
-    private func initializeNetwork(_ evmNetwork: EVMNetwork) -> AnyPublisher<Void, ERC20CryptoAssetServiceError> {
+    private func initializeNetwork(_ evmNetwork: EVMNetwork) -> AnyPublisher<[CryptoCurrency], ERC20CryptoAssetServiceError> {
         guard enabledCurrenciesService.allEnabledCryptoCurrencies.contains(evmNetwork.nativeAsset) else {
-            return .just(())
+            return .just([])
         }
         return Deferred { [coincore] in
             Just(coincore[evmNetwork.nativeAsset])
         }
-        .flatMap { asset in
-            asset?
+        .flatMap { [initializeAsset] asset -> AnyPublisher<[CryptoCurrency], ERC20CryptoAssetServiceError> in
+            guard let asset else { return .just([]) }
+            return asset
                 .defaultAccount
                 .replaceError(with: ERC20CryptoAssetServiceError.failedToLoadDefaultAccount)
-                .flatMap { account -> AnyPublisher<Void, ERC20CryptoAssetServiceError> in
-                    self.initialize(account: account, network: evmNetwork.networkConfig).eraseToAnyPublisher()
+                .flatMap { account -> AnyPublisher<[CryptoCurrency], ERC20CryptoAssetServiceError> in
+                    initializeAsset(account, evmNetwork.networkConfig)
                 }
-                .eraseToAnyPublisher() ?? .just(())
+                .eraseToAnyPublisher()
         }
         .eraseToAnyPublisher()
     }
 
-    private func initialize(
+    private func initializeAsset(
         account: SingleAccount,
         network: EVMNetworkConfig
-    ) -> AnyPublisher<Void, ERC20CryptoAssetServiceError> {
+    ) -> AnyPublisher<[CryptoCurrency], ERC20CryptoAssetServiceError> {
         account.receiveAddress
             .replaceError(with: ERC20CryptoAssetServiceError.failedToLoadReceiveAddress)
             .flatMap { [accountsRepository] receiveAddress in
@@ -93,16 +98,7 @@ final class ERC20CryptoAssetService: ERC20CryptoAssetServiceAPI {
                     .tokens(for: receiveAddress.address, network: network, forceFetch: false)
                     .replaceError(with: ERC20CryptoAssetServiceError.failedToFetchTokens)
             }
-            .handleEvents(
-                receiveOutput: { [coincore] response -> Void in
-                    // For each ERC20 token present in the response.
-                    response.keys.forEach { currency in
-                        // Gets its CryptoAsset from CoinCore to allow it to be preloaded.
-                        _ = coincore[currency]
-                    }
-                }
-            )
-            .mapToVoid()
+            .map(\.keys.array)
             .eraseToAnyPublisher()
     }
 }

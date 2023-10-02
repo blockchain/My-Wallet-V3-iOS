@@ -5,8 +5,8 @@ struct BankTransferPaymentRequest: Encodable {
         let callback: String?
     }
 
-    let amountMinor: String
-    let currency: String
-    let product: String = "SIMPLEBUY"
-    let attributes: BankTransferPaymentAttributes?
+    var amountMinor: String
+    var currency: String
+    var product: String = "SIMPLEBUY"
+    var attributes: BankTransferPaymentAttributes?
 }

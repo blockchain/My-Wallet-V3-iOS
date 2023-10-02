@@ -99,7 +99,7 @@ public struct ExplainedActionViewModel {
         self.isEnabled = isEnabled
     }
 
-    func capabilities(capabilities: [PaymentMethod.Capability]?, eligible: Bool) -> Self {
+    public func capabilities(capabilities: [PaymentMethod.Capability]?, eligible: Bool) -> Self {
         var it = self
         if let capabilities {
             it.isEnabled = eligible && (capabilities.contains(.withdrawal) || capabilities.contains(.deposit))

@@ -4,6 +4,7 @@
 import Combine
 import WalletCore
 import XCTest
+import YenomBitcoinKit
 
 final class GetAccountKeysTests: XCTestCase {
 

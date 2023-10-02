@@ -12,6 +12,7 @@ public struct BuyCheckout: Equatable {
     public var input: MoneyValue
     public var purchase: MoneyValuePair
     public var fee: Fee?
+    public var exchangeRate: FiatValue
     public var total: FiatValue
     public var paymentMethod: PaymentMethod
     public var recurringBuyDetails: RecurringBuyDetails?
@@ -24,6 +25,7 @@ public struct BuyCheckout: Equatable {
         input: MoneyValue,
         purchase: MoneyValuePair,
         fee: Fee?,
+        exchangeRate: FiatValue,
         total: FiatValue,
         paymentMethod: BuyCheckout.PaymentMethod,
         quoteExpiration: Date?,
@@ -35,6 +37,7 @@ public struct BuyCheckout: Equatable {
         self.input = input
         self.purchase = purchase
         self.fee = fee
+        self.exchangeRate = exchangeRate
         self.total = total
         self.recurringBuyDetails = recurringBuyDetails
         self.paymentMethod = paymentMethod
@@ -80,8 +83,6 @@ extension BuyCheckout {
 }
 
 extension BuyCheckout {
-
-    public var exchangeRate: MoneyValue { purchase.inverseExchangeRate.quote }
 
     public var crypto: MoneyValue { purchase.quote }
     public var fiat: MoneyValue { purchase.base }
@@ -133,6 +134,7 @@ extension BuyCheckout {
             fee: .init(
                 value: .create(major: 2.00, currency: .USD)
             ),
+            exchangeRate: .create(major: 47410.61, currency: .USD),
             total: .create(
                 major: 100.00,
                 currency: .USD

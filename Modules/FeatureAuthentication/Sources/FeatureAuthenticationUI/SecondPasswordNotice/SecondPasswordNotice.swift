@@ -8,7 +8,7 @@ import SwiftUI
 import ToolKit
 import UIComponentsKit
 
-public enum SecondPasswordNotice {
+public struct SecondPasswordNoticeReducer: ReducerProtocol {
     public enum URLContent: Equatable {
         case loginOnWeb
         case twoFASupport
@@ -30,25 +30,21 @@ public enum SecondPasswordNotice {
         case returnTapped
     }
 
-    struct Environment {
-        let externalAppOpener: ExternalAppOpener
-    }
-}
+    let externalAppOpener: ExternalAppOpener
 
-let secondPasswordNoticeReducer = Reducer<
-    SecondPasswordNotice.State,
-    SecondPasswordNotice.Action,
-    SecondPasswordNotice.Environment
-> { _, action, environment in
-    switch action {
-    case .open(let urlContent):
-        guard let url = urlContent.url else {
-            return .none
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .open(let urlContent):
+                guard let url = urlContent.url else {
+                    return .none
+                }
+                externalAppOpener.open(url)
+                return .none
+            case .returnTapped:
+                return .none
+            }
         }
-        environment.externalAppOpener.open(url)
-        return .none
-    case .returnTapped:
-        return .none
     }
 }
 
@@ -68,9 +64,9 @@ public struct SecondPasswordNoticeView: View {
         static let buttonSpacing: CGFloat = 10
     }
 
-    private let store: Store<SecondPasswordNotice.State, SecondPasswordNotice.Action>
+    private let store: Store<SecondPasswordNoticeReducer.State, SecondPasswordNoticeReducer.Action>
 
-    public init(store: Store<SecondPasswordNotice.State, SecondPasswordNotice.Action>) {
+    public init(store: Store<SecondPasswordNoticeReducer.State, SecondPasswordNoticeReducer.Action>) {
         self.store = store
     }
 
@@ -137,8 +133,7 @@ struct SecondPasswordNoticeView_Previews: PreviewProvider {
         SecondPasswordNoticeView(
             store: Store(
                 initialState: .init(),
-                reducer: secondPasswordNoticeReducer,
-                environment: SecondPasswordNotice.Environment(
+                reducer: SecondPasswordNoticeReducer(
                     externalAppOpener: ToLogAppOpener()
                 )
             )

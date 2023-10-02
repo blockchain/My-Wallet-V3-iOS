@@ -32,7 +32,7 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
 
     public var value: Any = NSNull()
 
-    internal var `super`: Decoder?
+    var `super`: Decoder?
 
     public required init(codingPath: [CodingKey] = [], userInfo: [CodingUserInfoKey: Any] = [:]) {
         self.codingPath = codingPath

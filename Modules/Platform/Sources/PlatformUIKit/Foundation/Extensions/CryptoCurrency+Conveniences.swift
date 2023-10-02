@@ -8,7 +8,7 @@ extension CryptoCurrency {
 
     // MARK: UIColor
 
-    public var brandColor: SwiftUI.Color {
+    public var brandColor: Color {
         assetModel.brandColor
     }
 
@@ -19,15 +19,5 @@ extension CryptoCurrency {
     /// Defaults to brand color with 15% opacity.
     public var accentColor: UIColor {
         assetModel.accentColor
-    }
-
-    // MARK: Logo Image `ImageResource`
-
-    public var image: Image {
-        logoResource.image ?? Image("crypto-placeholder", bundle: .platformUIKit)
-    }
-
-    public var logoResource: ImageResource {
-        assetModel.logoResource
     }
 }

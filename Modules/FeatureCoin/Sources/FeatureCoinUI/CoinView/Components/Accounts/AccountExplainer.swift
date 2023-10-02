@@ -19,15 +19,14 @@ struct AccountExplainer: View {
 
     var body: some View {
         VStack(alignment: .trailing) {
-            IconButton(icon: Icon.closev2.circle(), action: onClose)
+            IconButton(icon: .navigationCloseButton(), action: onClose)
                 .frame(width: 24.pt, height: 24.pt)
                 .padding(.trailing, 8.pt)
             VStack(alignment: .center, spacing: 20) {
                 let explainer = account.accountType.explainer
 
                 account
-                    .icon(color: .semantic.primary)
-                    .frame(width: 48.pt, height: 48.pt)
+                    .icon(color: .semantic.primary, size: 48.pt)
                 VStack(spacing: 8) {
                     Text(explainer.title)
                         .typography(.title3)

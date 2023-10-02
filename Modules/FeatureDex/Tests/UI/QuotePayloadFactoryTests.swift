@@ -1,13 +1,13 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainNamespace
 import BigInt
+import BlockchainNamespace
 import Combine
 @testable import FeatureDexDomain
 @testable import FeatureDexUI
-import XCTest
-import MoneyKit
 import Foundation
+import MoneyKit
+import XCTest
 
 final class QuotePayloadFactoryTests: XCTestCase {
 
@@ -15,10 +15,11 @@ final class QuotePayloadFactoryTests: XCTestCase {
         _ = App.preview
         let quote = DexQuoteOutput(
             buyAmount: DexQuoteOutput.BuyAmount(amount: ether(major: 2), minimum: ether(major: 1)),
-            sellAmount: bitcoin(major: 1),
-            productFee: ether(major: 0.1),
-            networkFee: bitcoin(major: 0.01),
+            field: .source,
             isValidated: true,
+            networkFee: bitcoin(major: 0.01),
+            productFee: ether(major: 0.1),
+            sellAmount: bitcoin(major: 1),
             slippage: "0.1234",
             response: mockResponse
         )
@@ -45,10 +46,11 @@ final class QuotePayloadFactoryTests: XCTestCase {
                 amount: ether("2123456789123456789"),
                 minimum: ether("1123456789123456789")
             ),
-            sellAmount: bitcoin("112345678"),
-            productFee: ether("123456789123456789"),
-            networkFee: bitcoin("1234567"),
+            field: .source,
             isValidated: true,
+            networkFee: bitcoin("1234567"),
+            productFee: ether("123456789123456789"),
+            sellAmount: bitcoin("112345678"),
             slippage: "0.123456789",
             response: mockResponse
         )
@@ -87,9 +89,9 @@ final class QuotePayloadFactoryTests: XCTestCase {
     private var mockResponse: DexQuoteResponse {
         DexQuoteResponse(
             quote: .init(
-                buyAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
-                sellAmount: .init(amount: "0", chainId: 1, symbol: "USDT"),
-                buyTokenFee: "111000",
+                buyAmount: .init(amount: "0", symbol: "USDT"),
+                sellAmount: .init(amount: "0", symbol: "USDT"),
+                bcdcFee: .init(amount: "111000", symbol: "USDT"),
                 gasFee: "777000000"
             ),
             tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),

@@ -2,6 +2,21 @@
 
 import Foundation
 
+public struct FailableDecodable<T: Decodable>: Decodable {
+
+    public let value: T?
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        do {
+            self.value = try container.decode(T.self)
+        } catch {
+            self.value = nil
+            print("FailableDecodable: \(error)")
+        }
+    }
+}
+
 extension Decodable {
 
     public init(json any: Any, using decoder: JSONDecoder = .init()) throws {

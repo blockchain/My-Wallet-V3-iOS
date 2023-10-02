@@ -5,7 +5,7 @@ import XCTest
 
 final class SessionObserverTests: XCTestCase {
 
-    var app: AppProtocol = App.test
+    var app: App.Test = App.test
 
     var the: (
         notification: BlockchainEventSubscription,
@@ -19,9 +19,9 @@ final class SessionObserverTests: XCTestCase {
         app = App.test
 
         the = (
-            app.on(blockchain.app.dynamic["event"].ux.action).start(),
-            app.on(blockchain.app.dynamic["user"].ux.action).start(),
-            app.on(blockchain.app.dynamic["ctx-action"].ux.action).start()
+            app.on(.sync, blockchain.app.dynamic["event"].ux.action).start(),
+            app.on(.sync, blockchain.app.dynamic["user"].ux.action).start(),
+            app.on(.sync, blockchain.app.dynamic["ctx-action"].ux.action).start()
         )
 
         app.remoteConfiguration.override(
@@ -55,31 +55,32 @@ final class SessionObserverTests: XCTestCase {
         )
     }
 
-    func test() {
+    func test() async {
 
         XCTAssertEqual(the.notification.count, 0)
         XCTAssertEqual(the.bindings.count, 0)
         XCTAssertEqual(the.context.count, 0)
 
         app.signIn(userId: "Dorothy")
+        await Task.megaYield()
 
         XCTAssertEqual(the.notification.count, 0)
         XCTAssertEqual(the.bindings.count, 1)
         XCTAssertEqual(the.context.count, 0)
 
-        app.post(event: blockchain.app.dynamic["test"].ux.analytics.event)
+        await app.post(event: blockchain.app.dynamic["test"].ux.analytics.event)
 
         XCTAssertEqual(the.notification.count, 1)
         XCTAssertEqual(the.bindings.count, 1)
         XCTAssertEqual(the.context.count, 0)
 
-        app.post(event: blockchain.app.dynamic["test"].ux.analytics.event)
+        await app.post(event: blockchain.app.dynamic["test"].ux.analytics.event)
 
         XCTAssertEqual(the.notification.count, 2)
         XCTAssertEqual(the.bindings.count, 1)
         XCTAssertEqual(the.context.count, 0)
 
-        app.post(event: blockchain.app.dynamic["ctx-event"].ux.analytics.event)
+        await app.post(event: blockchain.app.dynamic["ctx-event"].ux.analytics.event)
 
         XCTAssertEqual(the.notification.count, 2)
         XCTAssertEqual(the.bindings.count, 1)

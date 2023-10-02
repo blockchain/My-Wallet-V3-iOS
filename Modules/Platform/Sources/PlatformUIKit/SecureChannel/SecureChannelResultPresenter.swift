@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Errors
 import Localization
 import PlatformKit
@@ -65,7 +66,7 @@ extension SecureChannelResultPresenter {
             }
         }
 
-        var sideImage: ImageResource {
+        var sideImage: ImageLocation {
             switch self {
             case .approved:
                 return PendingStateViewModel.Image.success.imageResource

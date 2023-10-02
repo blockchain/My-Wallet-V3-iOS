@@ -41,7 +41,6 @@ final class QRCodeScannerOverlayViewModel {
     /// Closure for handling camera tap events
     var cameraButtonTapped: (() -> Void)?
 
-
     private let analyticsEventRecorder: AnalyticsEventRecorderAPI
     private let qrCodeFlashService = QRCodeScannerFlashService()
     private let cameraRollButtonVisibilityRelay = CurrentValueSubject<Visibility, Never>(.hidden)

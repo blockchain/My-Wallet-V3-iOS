@@ -57,7 +57,7 @@ final class RetryDelayTests: XCTestCase {
     func test_after_seconds() throws {
 
         publisher
-            .retry(max: 5, delay: .seconds(1), scheduler: scheduler)
+            .retry(max: 5, delay: .seconds(1), scheduler: scheduler, timeout: Test.explicitFail)
             .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
             .store(in: &bag)
 
@@ -81,7 +81,7 @@ final class RetryDelayTests: XCTestCase {
         let scheduler = DispatchQueue.test
 
         publisher
-            .retry(max: 5, delay: .never, scheduler: scheduler)
+            .retry(max: 5, delay: .never, scheduler: scheduler, timeout: Test.explicitFail)
             .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
             .store(in: &bag)
 
@@ -107,7 +107,7 @@ final class RetryDelayTests: XCTestCase {
         )
 
         publisher
-            .retry(max: 5, delay: .exponential(unit: 1, using: &rng), scheduler: scheduler)
+            .retry(max: 5, delay: .exponential(unit: 1, using: &rng), scheduler: scheduler, timeout: Test.explicitFail)
             .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
             .store(in: &bag)
 
@@ -171,7 +171,7 @@ final class RetryDelayTests: XCTestCase {
     func test_fail_condition_match_retries_max_attempts() throws {
 
         publisher
-            .retry(max: 5, delay: .zero, if: { SwiftExtensions.isEqual($0, Test.explicitFail) }, scheduler: scheduler)
+            .retry(max: 5, delay: .zero, if: { SwiftExtensions.isEqual($0, Test.explicitFail) }, scheduler: scheduler, timeout: Test.explicitFail)
             .sink(completion: My.sink(completion:), receiveValue: My.sink(receiveValue:), on: self)
             .store(in: &bag)
 

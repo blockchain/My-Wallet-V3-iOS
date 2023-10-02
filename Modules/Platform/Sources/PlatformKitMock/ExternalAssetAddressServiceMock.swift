@@ -13,6 +13,7 @@ final class ExternalAssetAddressServiceMock: ExternalAssetAddressServiceAPI {
     func makeExternalAssetAddress(
         asset: CryptoCurrency,
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {

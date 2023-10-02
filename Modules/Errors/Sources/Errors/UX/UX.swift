@@ -188,7 +188,15 @@ extension [UX.Action] {
 extension UX.Error: TimeoutFailure {
 
     public static var timeout: UX.Error {
+        UX.Error(title: L10n.timeout.title, message: L10n.timeout.message)
+    }
+
+    public static var unknown: UX.Error {
         UX.Error(error: nil)
+    }
+
+    public static var notSupported: UX.Error {
+        UX.Error(title: L10n.notSupported.title, message: L10n.notSupported.message)
     }
 }
 

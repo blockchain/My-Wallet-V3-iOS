@@ -9,114 +9,22 @@
     "blockchain.app.configuration.customer.support.is.enabled": true,
     "blockchain.app.configuration.new.swap.flow.is.enabled": false,
     "blockchain.app.configuration.new.sell.flow.is.enabled": false,
-    "blockchain.app.configuration.frequent.action": {
-        "list": [
-            {
-                "tag": "blockchain.ux.frequent.action.swap",
-                "name": "Swap",
-                "description": "Exchange for Another Crypto",
-                "icon": {
-                    "name": "Wallet Swap"
-                }
-            },
-            {
-                "tag": "blockchain.ux.frequent.action.send",
-                "name": "Send",
-                "description": "Send to Any Wallet",
-                "icon": {
-                    "name": "Wallet Send"
-                }
-            },
-            {
-                "tag": "blockchain.ux.frequent.action.receive",
-                "name": "Receive",
-                "description": "Copy Your Addresses & QR Codes",
-                "icon": {
-                    "name": "Wallet Receive"
-                }
-            },
-            {
-                "tag": "blockchain.ux.frequent.action.rewards",
-                "name": "Rewards",
-                "description": "Earn Rewards on Your Crypto",
-                "icon": {
-                    "name": "Wallet Percent"
-                }
-            }
-        ],
-        "buttons": [
-            {
-                "tag": "blockchain.ux.frequent.action.sell",
-                "name": "Sell",
-                "description": "Sell Crypto",
-                "icon": {
-                    "name": "Sell"
-                }
-            },
-            {
-                "tag": "blockchain.ux.frequent.action.buy",
-                "name": "Buy",
-                "description": "Buy Crypto",
-                "icon": {
-                    "name": "Cart"
-                }
-            }
-        ]
-    },
     "blockchain.app.configuration.kyc.email.confirmation.announcement.is.enabled": true,
     "blockchain.app.configuration.kyc.integration.prove.is.enabled": false,
     "blockchain.app.configuration.kyc.integration.prove.begin.verification.privacy.url": "https://www.blockchain.com/legal/privacy",
     "blockchain.app.configuration.profile.kyc.is.enabled": false,
     "blockchain.app.configuration.request.console.logging": false,
     "blockchain.app.configuration.SSL.pinning.is.enabled": true,
-    "blockchain.app.configuration.stx.airdrop.users.is.enabled": false,
-    "blockchain.app.configuration.stx.all.users.is.enabled": false,
-    "blockchain.app.configuration.tabs": [
-        {
-            "tag": "blockchain.ux.user.portfolio",
-            "name": "Home",
-            "icon": {
-                "name": "Home"
-            }
-        },
-        {
-            "tag": "blockchain.ux.prices",
-            "name": "Prices",
-            "icon": {
-                "name": "Chart Bar"
-            }
-        },
-        {
-            "tag": "blockchain.ux.frequent.action",
-            "name": "FAB",
-            "icon": {
-                "name": ""
-            }
-        },
-        {
-            "tag": "blockchain.ux.buy_and_sell",
-            "name": "Buy & Sell",
-            "icon": {
-                "name": "Cart"
-            }
-        },
-        {
-            "tag": "blockchain.ux.user.activity",
-            "name": "Activity",
-            "icon": {
-                "name": "Pending"
-            }
-        }
-    ],
     "blockchain.app.configuration.unified.sign_in.is.enabled": false,
     "blockchain.ux.transaction[swap].checkout.is.enabled": true,
     "blockchain.ux.transaction[buy].checkout.is.enabled": true,
     "blockchain.ux.transaction[swap].checkout.exchange.rate.disclaimer.url": "https://support.blockchain.com/hc/en-us/articles/360061672651",
     "blockchain.ux.transaction[swap].checkout.fee.disclaimer.url": "https://support.blockchain.com/hc/en-us/articles/360000939903-Transaction-fees",
     "blockchain.ux.transaction[swap].checkout.refund.policy.disclaimer.url": "https://support.blockchain.com/hc/en-us/articles/4417063009172",
-    "blockchain.app.configuration.ui.payments.improvements.is.enabled": false,
-    "blockchain.app.configuration.ui.payments.improvements.wallet.balances.is.enabled": false,
-    "blockchain.app.configuration.ui.payments.improvements.assets.balances.is.enabled": false,
+    "blockchain.ux.bakkt.authorization.url":
+    "https://www.blockchain.com/legal/bakkt/authorization",
+    "blockchain.ux.bakkt.terms.url":
+    "https://www.blockchain.com/legal/bakkt/terms",
     "blockchain.ux.transaction[buy].checkout.terms.of.withdraw": "https://support.blockchain.com/hc/en-us/articles/360051018131-Trading-Account-Withdrawal-Holds",
     "blockchain.ux.earn.portfolio.product[staking].asset[ETH].summary.learn.more.url": "https://support.blockchain.com",
     "blockchain.ux.earn.portfolio.product[earn_cc1w].asset[BTC].summary.learn.more.url": "https://support.blockchain.com/hc/en-us/articles/6868823856540-How-do-I-withdraw-crypto-from-my-Active-Rewards-Account-",

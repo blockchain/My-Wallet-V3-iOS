@@ -16,7 +16,10 @@ final class NabuTokenRepository: NabuTokenRepositoryAPI {
     }
 
     var requiresRefresh: AnyPublisher<Bool, Never> {
-        .just(sessionTokenData.value == nil)
+        guard let value = sessionTokenData.value else {
+            return .just(true)
+        }
+        return .just(value.isValid.isNo)
     }
 
     private let sessionTokenData = Atomic<NabuSessionToken?>(nil)

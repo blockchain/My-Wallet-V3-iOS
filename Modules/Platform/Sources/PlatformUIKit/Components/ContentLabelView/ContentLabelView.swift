@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformKit
 import RxCocoa
 import RxSwift
@@ -8,7 +9,7 @@ import ToolKit
 /// A `UIView` containing two `UILabel`, one on top of the other, an a `UIButton` on top to intercept touch events.
 public final class ContentLabelView: UIView {
 
-    var presenter: ContentLabelViewPresenter! {
+    public var presenter: ContentLabelViewPresenter! {
         willSet {
             disposeBag = DisposeBag()
         }
@@ -54,7 +55,7 @@ public final class ContentLabelView: UIView {
 
         titleLabel.layoutToSuperview(.top, .leading, .trailing)
         descriptionLabel.layoutToSuperview(.bottom, .leading, .trailing)
-        descriptionLabel.layout(edge: .top, to: .bottom, of: titleLabel, offset: Spacing.standard)
+        descriptionLabel.layout(edge: .top, to: .bottom, of: titleLabel, offset: Spacing.padding1)
         button.fillSuperview()
     }
 

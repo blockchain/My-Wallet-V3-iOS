@@ -5,7 +5,7 @@ import Extensions
 import Foundation
 import OptionalSubscripts
 
-var isInTest: Bool { NSClassFromString("XCTestCase") != nil }
+public var isInTest: Bool { NSClassFromString("XCTestCase") != nil }
 
 extension App {
 
@@ -23,10 +23,9 @@ extension App {
         public var deepLinks: DeepLink { app.deepLinks }
         public var local: Optional<Any>.Store { app.local }
         public var napis: NAPI.Store { app.napis }
-        public var isInTransaction: Bool { app.isInTransaction }
 
         public init() {
-            app = App.debug(scheduler: scheduler.eraseToAnyScheduler())
+            self.app = App.debug(scheduler: scheduler.eraseToAnyScheduler())
         }
 
         public func register(

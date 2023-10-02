@@ -65,12 +65,15 @@ extension Observable {
         private var downstream: Downstream
         private var disposable: Disposable?
 
+        private var demand: Subscribers.Demand = .none
+
         init(upstream: Upstream, downstream: Downstream) {
             self.observable = upstream.asObservable()
             self.downstream = downstream
         }
 
         func request(_ demand: Subscribers.Demand) {
+            lock.withLock { self.demand += demand }
             guard disposable == nil else { return }
             disposable = observable.subscribe { [weak self] event in
                 guard let self else { return }
@@ -78,11 +81,15 @@ extension Observable {
                 defer { self.lock.unlock() }
                 switch event {
                 case .next(let element):
+                    guard self.demand > 0 else { break }
+                    self.demand -= 1
                     _ = downstream.receive(element)
                 case .error(let error):
                     downstream.receive(completion: .failure(error))
+                    cancel()
                 case .completed:
                     downstream.receive(completion: .finished)
+                    cancel()
                 }
             }
         }
@@ -90,6 +97,7 @@ extension Observable {
         func cancel() {
             disposable?.dispose()
             disposable = nil
+            demand = .none
         }
     }
 }

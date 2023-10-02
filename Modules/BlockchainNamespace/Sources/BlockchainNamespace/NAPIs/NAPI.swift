@@ -205,7 +205,11 @@ extension NAPI {
 
 extension NAPI {
 
-    public actor Domain {
+    public actor Domain: CustomDebugStringConvertible {
+
+        public nonisolated var debugDescription: String {
+            "NAPI.Domain.\(id)"
+        }
 
         fileprivate weak var root: Root?
 
@@ -287,7 +291,10 @@ extension NAPI {
                 guard let app = await domain?.root?.store?.app else { return }
                 isSynchronized = false
                 for await result in app.stream(src) {
-                    let instance = result.decode(Instance.self)
+                    let instance: FetchResult.Value<NAPI.Instance> = result.decode(Instance.self)
+                    if let it = instance.value?.policy {
+                        await policy(it)
+                    }
                     if let fn = instance.value?.data.value as? (Tag.Reference) async -> AnyJSON {
                         await self.on(.value(.init(data: fn(dst), policy: instance.value?.policy), src.metadata(.napi)))
                     } else if let stream = instance.value?.data.value as? (Tag.Reference) -> AsyncStream<AnyJSON> {
@@ -321,13 +328,16 @@ extension NAPI {
             switch result {
             case .value(let instance, _):
                 isSynchronized = true
-                do {
-                    try await domain?.root?.store?.data.merge(dst.route(app: domain?.root?.store?.app), with: instance.data.any)
-                    await fulfill()
-                    guard let it = instance.policy else { return }
-                    await policy(it)
-                } catch {
+                if let error = instance.data as? any Error {
                     await domain?.root?.store?.app?.post(error: error)
+                    await handle(error: error)
+                } else {
+                    do {
+                        try await domain?.root?.store?.data.merge(dst.route(app: domain?.root?.store?.app), with: instance.data.any)
+                        await fulfill()
+                    } catch {
+                        await domain?.root?.store?.app?.post(error: error)
+                    }
                 }
             case .error(let error, _):
                 await domain?.root?.store?.app?.post(error: error)
@@ -375,6 +385,13 @@ extension NAPI {
             self.intents.removeAll(keepingCapacity: true)
             for intent in intents {
                 intent.fulfill()
+            }
+        }
+
+        func handle(error: Error) async {
+            guard isSynchronized else { return }
+            for intent in intents {
+                intent.handle(error)
             }
         }
     }

@@ -26,7 +26,7 @@ struct InterestIdentityVerificationView: View {
                         badgeImageViewWithViewModel(
                             .init(theme:
                                 .init(
-                                    backgroundColor: .defaultBadge,
+                                    backgroundColor: .primary,
                                     cornerRadius: .round,
                                     imageViewContent: .init(
                                         imageResource: .local(
@@ -100,7 +100,7 @@ struct NumberedBadgeView: View {
         HStack(alignment: .top, spacing: 16.0) {
             Text(badgeText)
                 .textStyle(.heading)
-                .foregroundColor(Color.buttonSecondaryText)
+                .foregroundColor(Color.semantic.primary)
                 .padding()
                 .background(Color.badgeBackgroundInfo)
                 .clipShape(Circle())

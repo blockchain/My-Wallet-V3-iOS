@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import BlockchainComponentLibrary
 import ComposableArchitecture
 import ComposableNavigation
@@ -47,7 +48,6 @@ struct SkipUpgradeView: View {
 
         static let imageSideLength: CGFloat = 72
         static let imageBottomPadding: CGFloat = 16
-        static let descriptionFontSize: CGFloat = 16
         static let descriptionLineSpacing: CGFloat = 4
         static let buttonSpacing: CGFloat = 10
     }
@@ -73,8 +73,8 @@ struct SkipUpgradeView: View {
                         .accessibility(identifier: AccessibilityIdentifiers.SkipUpgradeScreen.skipUpgradeTitleText)
 
                     Text(LocalizedString.message)
-                        .font(Font(weight: .medium, size: Layout.descriptionFontSize))
-                        .foregroundColor(.textSubheading)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.text)
                         .lineSpacing(Layout.descriptionLineSpacing)
                         .accessibility(identifier: AccessibilityIdentifiers.SkipUpgradeScreen.skipUpgradeMessageText)
                     Spacer()
@@ -121,8 +121,8 @@ struct SkipUpgradeView_Previews: PreviewProvider {
                 initialState: .init(
                     walletInfo: .empty
                 ),
-                reducer: skipUpgradeReducer,
-                environment: SkipUpgradeEnvironment(
+                reducer: SkipUpgradeReducer(
+                    app: App.preview,
                     mainQueue: .main,
                     deviceVerificationService: NoOpDeviceVerificationService(),
                     errorRecorder: NoOpErrorRecoder(),
@@ -131,7 +131,16 @@ struct SkipUpgradeView_Previews: PreviewProvider {
                     walletCreationService: .noop,
                     walletFetcherService: .noop,
                     accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService()
+                    recaptchaService: NoOpGoogleRecatpchaService(),
+                    sessionTokenService: NoOpSessionTokenService(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
+                    externalAppOpener: NoOpExternalAppOpener(),
+                    seedPhraseValidator: NoOpValidator(),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: NoOpSignupCountryService(),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
                 )
             )
         )

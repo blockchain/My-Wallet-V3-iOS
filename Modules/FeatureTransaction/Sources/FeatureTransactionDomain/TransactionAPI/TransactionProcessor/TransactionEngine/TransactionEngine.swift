@@ -467,10 +467,6 @@ extension TransactionEngine {
 
 extension TransactionEngine {
 
-    public func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        defaultValidateAmount(pendingTransaction: pendingTransaction)
-    }
-
     public func defaultValidateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         guard pendingTransaction.amount.isNotZero else {
             return .just(pendingTransaction)

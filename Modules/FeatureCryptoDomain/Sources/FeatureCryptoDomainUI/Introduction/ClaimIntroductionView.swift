@@ -9,6 +9,7 @@ import FeatureCryptoDomainDomain
 import Localization
 import SwiftUI
 import ToolKit
+import UIKit
 
 // MARK: - ComposableArchitecture
 
@@ -45,54 +46,50 @@ struct ClaimIntroductionState: NavigationState {
     var isModalOpen: Bool = true
 }
 
-struct ClaimIntroductionEnvironment {
-    let mainQueue: AnySchedulerOf<DispatchQueue>
+struct ClaimIntroduction: ReducerProtocol {
+    typealias State = ClaimIntroductionState
+    typealias Action = ClaimIntroductionAction
+
+    @Dependency(\.mainQueue) var mainQueue
     let analyticsRecorder: AnalyticsEventRecorderAPI
     let externalAppOpener: ExternalAppOpener
     let searchDomainRepository: SearchDomainRepositoryAPI
     let orderDomainRepository: OrderDomainRepositoryAPI
     let userInfoProvider: () -> AnyPublisher<OrderDomainUserInfo, Error>
-}
 
-let claimIntroductionReducer = Reducer.combine(
-    searchCryptoDomainReducer
-        .optional()
-        .pullback(
-            state: \ClaimIntroductionState.searchState,
-            action: /ClaimIntroductionAction.searchAction,
-            environment: { env in
-                SearchCryptoDomainEnvironment(
-                    mainQueue: env.mainQueue,
-                    analyticsRecorder: env.analyticsRecorder,
-                    externalAppOpener: env.externalAppOpener,
-                    searchDomainRepository: env.searchDomainRepository,
-                    orderDomainRepository: env.orderDomainRepository,
-                    userInfoProvider: env.userInfoProvider
-                )
-            }
-        ),
-    Reducer<ClaimIntroductionState, ClaimIntroductionAction, ClaimIntroductionEnvironment> { state, action, _ in
-        switch action {
-        case .route(.some(let route)):
-            switch route.route {
-            case .searchDomain:
-                state.searchState = .init()
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .route(.some(let route)):
+                switch route.route {
+                case .searchDomain:
+                    state.searchState = .init()
+                    return .none
+                case .benefits:
+                    return .none
+                }
+            case .route(nil):
                 return .none
-            case .benefits:
+            case .searchAction(.checkoutAction(.dismissFlow)),
+                    .closeButtonTapped:
+                state.isModalOpen = false
+                return .none
+            case .searchAction:
                 return .none
             }
-        case .route(nil):
-            return .none
-        case .searchAction(.checkoutAction(.dismissFlow)),
-             .closeButtonTapped:
-            state.isModalOpen = false
-            return .none
-        case .searchAction:
-            return .none
         }
+        .ifLet(\.searchState, action: /ClaimIntroductionAction.searchAction) {
+            SearchCryptoDomain(
+                analyticsRecorder: analyticsRecorder,
+                externalAppOpener: externalAppOpener,
+                searchDomainRepository: searchDomainRepository,
+                orderDomainRepository: orderDomainRepository,
+                userInfoProvider: userInfoProvider
+            )
+        }
+        .routing()
     }
-    .routing()
-)
+}
 
 // MARK: - ClaimIntroductionView
 
@@ -128,9 +125,7 @@ public final class ClaimIntroductionHostingController: UIViewController {
         self.userInfoProvider = userInfoProvider
         self.store = .init(
             initialState: ClaimIntroductionState(),
-            reducer: claimIntroductionReducer,
-            environment: ClaimIntroductionEnvironment(
-                mainQueue: mainQueue,
+            reducer: ClaimIntroduction(
                 analyticsRecorder: analyticsRecorder,
                 externalAppOpener: externalAppOpener,
                 searchDomainRepository: searchDomainRepository,
@@ -284,9 +279,7 @@ struct ClaimIntroductionView_Previews: PreviewProvider {
         ClaimIntroductionView(
             store: .init(
                 initialState: .init(),
-                reducer: claimIntroductionReducer,
-                environment: ClaimIntroductionEnvironment(
-                    mainQueue: .main,
+                reducer: ClaimIntroduction(
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     externalAppOpener: ToLogAppOpener(),
                     searchDomainRepository: SearchDomainRepository(

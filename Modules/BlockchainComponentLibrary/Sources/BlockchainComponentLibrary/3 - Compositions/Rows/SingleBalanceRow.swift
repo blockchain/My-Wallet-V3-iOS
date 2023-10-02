@@ -95,7 +95,7 @@ public struct SingleBalanceRow<Leading: View>: View {
     @ViewBuilder private var leadingTitleView: some View {
         Text(leadingTitle)
             .typography(.paragraph2)
-            .foregroundColor(Color.WalletSemantic.title)
+            .foregroundColor(Color.semantic.title)
     }
 
     @ViewBuilder private var trailingTitleView: some View {

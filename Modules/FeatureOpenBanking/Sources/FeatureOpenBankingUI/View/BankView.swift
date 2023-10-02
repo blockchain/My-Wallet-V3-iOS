@@ -231,7 +231,7 @@ public struct BankView: View {
                 }
             } else {
                 ProgressView(value: 0.25)
-                    .progressViewStyle(IndeterminateProgressStyle())
+                    .progressViewStyle(.indeterminate)
                     .onAppear {
                         viewStore.send(.request)
                     }

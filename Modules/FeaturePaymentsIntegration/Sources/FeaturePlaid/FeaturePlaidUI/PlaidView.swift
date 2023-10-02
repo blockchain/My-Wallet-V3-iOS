@@ -19,12 +19,14 @@ public struct PlaidView: View {
         WithViewStore(store.scope(state: \.uxError)) { viewStore in
             switch viewStore.state {
             case .some(let uxError):
-                ErrorView(
-                    ux: uxError,
-                    dismiss: {
-                        viewStore.send(.finished(success: false))
-                    }
-                )
+                PrimaryNavigationView {
+                    ErrorView(
+                        ux: uxError,
+                        dismiss: {
+                            viewStore.send(.finished(success: false))
+                        }
+                    )
+                }
             default:
                 EmptyView()
             }

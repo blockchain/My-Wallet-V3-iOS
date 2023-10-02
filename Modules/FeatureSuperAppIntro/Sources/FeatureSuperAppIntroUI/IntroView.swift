@@ -1,19 +1,18 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
 import BlockchainNamespace
+import BlockchainUI
 import CoreMotion
-import Localization
 import Foundation
+import Localization
 import SwiftUI
 
-fileprivate typealias L10n = LocalizationConstants.SuperAppIntro.V2
+private typealias L10n = LocalizationConstants.SuperAppIntro.V2
 
 public struct IntroView: View {
-
+    @State private var isExternalTradingEnabled = false
     @Environment(\.dismiss) var dismiss
     @Environment(\.openURL) var openURL
-
     @ObservedObject private var motionManager: MotionManager
     private let actionTitle: String
     private let span: Double = 150
@@ -33,27 +32,32 @@ public struct IntroView: View {
         GeometryReader { proxy in
             ScrollView {
                 VStack(spacing: 0) {
-                    VStack(spacing: 8) {
+                    VStack(alignment: .center, spacing: 8) {
                         TagView(
                             text: appMode.tag,
                             foregroundColor: appMode.tagColor
                         )
                         .padding(.bottom, 12)
-                        .shadow(color: Color.black.opacity(0.12),radius: 8, y: 3)
-                        Text(appMode.title)
+                        .shadow(color: Color.black.opacity(0.12), radius: 8, y: 3)
+                        Text(title)
                             .typography(.title1)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
-                        Text(LocalizedStringKey(appMode.byline))
-                            .typography(.body1)
-                            .foregroundColor(.white)
-                            .multilineTextAlignment(.center)
+                        if let byline {
+                            Text(LocalizedStringKey(byline))
+                                .typography(.body1)
+                                .foregroundColor(.white)
+                                .multilineTextAlignment(.center)
+                        }
                     }
                     .padding(16)
+                    .padding(.vertical, byline.isNil ? Spacing.padding4 : 0)
                     VStack {
                         rows
+                        FinancialPromotionDisclaimerView()
+                            .padding(.top)
                         Spacer()
-                        Text(appMode.footer)
+                        Text(footer)
                             .typography(.caption1)
                             .foregroundColor(.semantic.text)
                             .multilineTextAlignment(.center)
@@ -101,6 +105,9 @@ public struct IntroView: View {
                 .ignoresSafeArea()
             )
         }
+        .bindings {
+            subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
+        }
     }
 
     @ViewBuilder var rows: some View {
@@ -114,6 +121,12 @@ public struct IntroView: View {
                     bylineImage: "logos"
                 )
                 row(icon: Icon.link, title: L10n.DeFi.row3)
+            }
+        case .trading where isExternalTradingEnabled:
+            VStack {
+                row(icon: Icon.security, title: L10n.External.row1)
+                row(icon: Icon.cart, title: L10n.External.row2)
+                row(icon: Icon.bank, title: L10n.External.row3)
             }
         default:
             VStack {
@@ -170,13 +183,44 @@ public struct IntroView: View {
             .regularMaterial,
             in: RoundedRectangle(cornerRadius: 8, style: .continuous)
         )
-        .shadow(color: Color.black.opacity(0.12),radius: 8, y: 3)
+        .shadow(color: Color.black.opacity(0.12), radius: 8, y: 3)
+    }
+
+    private var title: String {
+        switch appMode {
+        case .pkw:
+            return L10n.DeFi.title
+        case .trading where isExternalTradingEnabled:
+            return L10n.External.title
+        default:
+            return L10n.Trading.title
+        }
+    }
+
+    private var byline: String? {
+        switch appMode {
+        case .trading where !isExternalTradingEnabled:
+            return L10n.Trading.byline
+        default:
+            return nil
+        }
+    }
+
+    private var footer: String {
+        switch appMode {
+        case .pkw where isExternalTradingEnabled:
+            return L10n.DeFi.externalFooter
+        case .pkw:
+            return L10n.DeFi.footer
+        default:
+            return L10n.Trading.footer
+        }
     }
 }
 
 struct IntroView_Previews: PreviewProvider {
     static var previews: some View {
-        IntroView(.pkw)
+        IntroView(.trading)
     }
 }
 
@@ -189,10 +233,10 @@ class MotionManager: ObservableObject {
 
     init() {
         self.manager = CMMotionManager()
-        self.manager.deviceMotionUpdateInterval = 1/Double(UIScreen.main.maximumFramesPerSecond)
+        manager.deviceMotionUpdateInterval = 1 / Double(UIScreen.main.maximumFramesPerSecond)
 
-        var attitude = self.manager.deviceMotion?.attitude
-        self.manager.startDeviceMotionUpdates(to: .main) { (motionData, error) in
+        var attitude = manager.deviceMotion?.attitude
+        manager.startDeviceMotionUpdates(to: .main) { motionData, error in
             guard error == nil, let attitude, let motionData else {
                 attitude = motionData?.attitude
                 return
@@ -204,9 +248,9 @@ class MotionManager: ObservableObject {
     }
 }
 
-fileprivate extension AppMode {
+extension AppMode {
 
-    var tag: String {
+    fileprivate var tag: String {
         switch self {
         case .pkw:
             return L10n.DeFi.tag
@@ -215,34 +259,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var title: String {
-        switch self {
-        case .pkw:
-            return L10n.DeFi.title
-        default:
-            return L10n.Trading.title
-        }
-    }
-
-    var byline: String {
-        switch self {
-        case .pkw:
-            return L10n.DeFi.byline
-        default:
-            return L10n.Trading.byline
-        }
-    }
-
-    var footer: String {
-        switch self {
-        case .pkw:
-            return L10n.DeFi.footer
-        default:
-            return L10n.Trading.footer
-        }
-    }
-
-    var button: String {
+    fileprivate var button: String {
         switch self {
         case .pkw:
             return L10n.DeFi.button
@@ -251,7 +268,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var tagColor: Color {
+    fileprivate var tagColor: Color {
         switch self {
         case .pkw:
             return Color(red: 0.42, green: 0.22, blue: 0.74)
@@ -260,7 +277,7 @@ fileprivate extension AppMode {
         }
     }
 
-    var gradient: [Color] {
+    fileprivate var gradient: [Color] {
         switch self {
         case .pkw:
             return [
@@ -272,6 +289,23 @@ fileprivate extension AppMode {
                 Color(red: 1.0, green: 0, blue: 0.59),
                 Color(red: 0.49, green: 0.20, blue: 0.73)
             ]
+        }
+    }
+}
+
+extension IntroView {
+    public init(_ flow: IntroViewFlow, pkwOnly: Bool) {
+        switch flow {
+        case .defiFirst:
+            self.init(.pkw, actionTitle: LocalizationConstants.okString)
+        case .tradingFirst:
+            self.init(.trading, actionTitle: LocalizationConstants.okString)
+        default:
+            if pkwOnly {
+                self.init(.pkw)
+            } else {
+                self.init(.trading)
+            }
         }
     }
 }

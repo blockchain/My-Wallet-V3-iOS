@@ -47,20 +47,11 @@ final class ConfirmationPageInteractor: PresentableInteractor<ConfirmationPagePr
             .map { Action.load($0) }
             .asDriver(onErrorJustReturn: .empty)
 
-        var isMemoInvalid = false
-        presenter.memoFieldStateIsInvalid
-            .asObservable()
-            .subscribe(onNext: { isInvalid in
-                isMemoInvalid = isInvalid
-            })
-            .disposeOnDeactivate(interactor: self)
-
         presenter.continueButtonTapped
             .throttle(.seconds(5), latest: false)
-            .delay(.milliseconds(300)) // give time to update pending changes (memo) on confirm button tap
+            .delay(.milliseconds(300))
             .asObservable()
             .subscribe(onNext: { [app, transactionModel] in
-                guard !isMemoInvalid else { return }
                 transactionModel.process(action: .executeTransaction)
                 app.post(event: blockchain.ux.transaction.checkout.confirmed)
             })
@@ -80,9 +71,6 @@ final class ConfirmationPageInteractor: PresentableInteractor<ConfirmationPagePr
         case .back:
             listener?.checkoutDidTapBack()
             app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
-        case .updateMemo(let memo, let oldModel):
-            let model = TransactionConfirmations.Memo(textMemo: memo, required: oldModel.required)
-            transactionModel.process(action: .modifyTransactionConfirmation(model))
         case .toggleTermsOfServiceAgreement(let value):
             let model = TransactionConfirmations.AnyBoolOption<Bool>(
                 value: value,
@@ -115,7 +103,6 @@ extension ConfirmationPageInteractor {
         case none
         case close
         case back
-        case updateMemo(String?, oldModel: TransactionConfirmations.Memo)
         case tappedHyperlink(TitledLink)
         case toggleTermsOfServiceAgreement(Bool)
         case toggleHoldPeriodAgreement(Bool)

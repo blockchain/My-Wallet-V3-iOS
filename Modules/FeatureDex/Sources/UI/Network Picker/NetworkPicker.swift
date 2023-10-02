@@ -33,9 +33,9 @@ struct NetworkPicker: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return dexService.availableNetworks()
-                    .map(\.success)
-                    .replaceNil(with: [])
+                return dexService.availableChainsService
+                    .availableEvmChains()
+                    .replaceError(with: [])
                     .receive(on: mainQueue)
                     .eraseToEffect(Action.onAvailableNetworksFetched)
 
@@ -47,7 +47,7 @@ struct NetworkPicker: ReducerProtocol {
                 state.currentNetwork = network.networkConfig.networkTicker
                 return .run { _ in
                     try await app.set(
-                        tag.selected.network.ticker,
+                        tag.selected.network.ticker.value,
                         to: network.networkConfig.networkTicker
                     )
                     try await app.set(

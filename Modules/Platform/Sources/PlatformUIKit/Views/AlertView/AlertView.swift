@@ -222,7 +222,7 @@ public class AlertView: UIView {
                     string: title,
                     attributes: [
                         .font: font,
-                        .foregroundColor: UIColor.primaryButton
+                        .foregroundColor: UIColor.primary
                     ]
                 )
                 defaultButton.setAttributedTitle(attributedTitle, for: .normal)
@@ -232,9 +232,9 @@ public class AlertView: UIView {
         }
         [confirmButton, defaultButton].forEach { $0?.layer.cornerRadius = 4.0 }
 
-        defaultButton.layer.borderColor = UIColor.primaryButton.cgColor
+        defaultButton.layer.borderColor = UIColor.primary.cgColor
         defaultButton.layer.borderWidth = 1.0
-        confirmButton.backgroundColor = .primaryButton
+        confirmButton.backgroundColor = .primary
 
         if model.dismissable, model.style == .sheet {
             setupDynamicBehavior()

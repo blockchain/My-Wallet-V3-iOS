@@ -37,7 +37,7 @@ public struct TradingDashboard: ReducerProtocol {
         case assetsAction(DashboardAssetsSection.Action)
         case activityAction(DashboardActivitySection.Action)
         case allActivityAction(AllActivityScene.Action)
-        case announcementsAction(FeatureAnnouncements.Action)
+        case announcementsAction(Announcements.Action)
         case topMoversAction(TopMoversSection.Action)
         case binding(BindingAction<TradingDashboard.State>)
         case balanceFetched(Result<BalanceInfo, BalanceInfoError>)
@@ -51,7 +51,7 @@ public struct TradingDashboard: ReducerProtocol {
         public var allAssetsState: AllAssetsScene.State = .init(with: .custodial)
         public var allActivityState: AllActivityScene.State = .init(with: .custodial)
         public var activityState: DashboardActivitySection.State = .init(with: .custodial)
-        public var announcementsState: FeatureAnnouncements.State = .init()
+        public var announcementsState: Announcements.State = .init()
         public var topMoversState: TopMoversSection.State = .init(presenter: .dashboard)
     }
 
@@ -97,12 +97,14 @@ public struct TradingDashboard: ReducerProtocol {
             )
         }
 
-        Scope(state: \.announcementsState, action: /Action.announcementsAction) { () -> FeatureAnnouncements in
-            FeatureAnnouncements(
+        Scope(state: \.announcementsState, action: /Action.announcementsAction) { () -> Announcements in
+            let iterable: AnnouncementsServiceAPI = resolve()
+            let apns = RemoteNotificationAnnouncementService()
+            return Announcements(
                 app: app,
                 mainQueue: mainQueue,
                 mode: .trading,
-                service: resolve()
+                services: [iterable, apns]
             )
         }
 

@@ -8,7 +8,7 @@ import RxCocoa
 import RxSwift
 import ToolKit
 
-final class SendAuxiliaryViewInteractor: SendAuxiliaryViewInteractorAPI {
+final class SendAuxiliaryViewInteractor {
 
     private let contentLabelViewInteractor = ContentLabelViewInteractor()
     private let networkLabelViewInteractor = ContentLabelViewInteractor()
@@ -38,6 +38,23 @@ final class SendAuxiliaryViewInteractor: SendAuxiliaryViewInteractorAPI {
             .map(\.displayString)
             .map { ValueCalculationState.value($0) }
             .bindAndCatch(to: networkLabelViewInteractor.stateSubject)
+    }
+
+    /// Streams reset to max events
+    var resetToMaxAmount: Observable<Void> {
+        resetToMaxAmountRelay
+            .asObservable()
+    }
+
+    /// Streams network fee tap events
+    var networkFeeTapped: Observable<Void> {
+        networkFeeTappedRelay
+            .asObservable()
+    }
+
+    var availableBalanceTapped: Observable<Void> {
+        availableBalanceTappedRelay
+            .asObservable()
     }
 }
 

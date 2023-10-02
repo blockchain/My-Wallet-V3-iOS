@@ -35,7 +35,7 @@ extension View {
             $0.navigationBar.titleTextAttributes = [
                 .foregroundColor: UIColor.semantic.title
             ]
-            $0.navigationBar.tintColor = UIColor.blue600
+            $0.navigationBar.tintColor = UIColor.primary
             $0.navigationBar.shadowImage = UIImage() // remove shadow
         }
     }
@@ -47,7 +47,7 @@ extension View {
             $0.navigationBar.titleTextAttributes = [
                 .foregroundColor: UIColor.semantic.title
             ]
-            $0.navigationBar.tintColor = UIColor.blue600
+            $0.navigationBar.tintColor = UIColor.primary
             $0.navigationBar.shadowImage = UIImage() // remove shadow
         }
     }

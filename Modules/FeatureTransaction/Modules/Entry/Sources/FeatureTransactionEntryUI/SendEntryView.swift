@@ -22,7 +22,7 @@ public struct SendEntryView: View {
 
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3,
+            icon: .navigationCloseButton(),
             action: { $app.post(event: blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {
@@ -173,7 +173,7 @@ struct SendEntryRow: View {
 
                             if app.currentMode == .pkw {
                                 HStack {
-                                    Text(label ?? currency.code)
+                                    Text(label ?? currency.displaySymbol)
                                         .typography(.caption1)
                                         .foregroundColor(.semantic.body)
                                     if let networkName {
@@ -188,7 +188,7 @@ struct SendEntryRow: View {
                             Group {
                                 if let price, price.isPositive {
                                     Text(price.toDisplayString(includeSymbol: true))
-                                } else {
+                                } else if balance == nil {
                                     Text("..........").redacted(reason: .placeholder)
                                 }
                             }

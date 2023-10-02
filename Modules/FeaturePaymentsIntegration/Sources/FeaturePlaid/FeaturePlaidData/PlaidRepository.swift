@@ -1,14 +1,18 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import Errors
 import FeaturePlaidDomain
 import MoneyKit
 
 public struct PlaidRepository: PlaidRepositoryAPI {
+
+    private let app: AppProtocol
     private let client: PlaidClientAPI
 
-    public init(client: PlaidClientAPI) {
+    public init(app: AppProtocol, client: PlaidClientAPI) {
+        self.app = app
         self.client = client
     }
 
@@ -113,11 +117,16 @@ public struct PlaidRepository: PlaidRepositoryAPI {
         accountId: String,
         amount: MoneyValue
     ) -> AnyPublisher<SettlementInfo, NabuError> {
-        client
-            .getSettlementInfo(
-                accountId: accountId,
-                amount: amount.toDisplayString(includeSymbol: false, locale: .Posix)
-            )
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+            .replaceError(with: false)
+            .flatMap { isEligible in
+                client
+                    .getSettlementInfo(
+                        accountId: accountId,
+                        amount: amount.toDisplayString(includeSymbol: false, locale: .Posix),
+                        product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY"
+                    )
+            }
             .map { response in
                 let settlement = response.attributes.settlementResponse
                 return SettlementInfo(

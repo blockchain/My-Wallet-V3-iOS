@@ -116,8 +116,8 @@ extension FetchResult {
 
     public func value<Value>(as: Value.Type = Value.self) throws -> Value {
         switch self {
-        case let .value(o, _): return try (o as? Value).or(throw: "Failed to cast \(o) as \(Value.self)")
-        case let .error(o, _): throw o
+        case .value(let o, _): return try (o as? Value).or(throw: "Failed to cast \(o) as \(Value.self)")
+        case .error(let o, _): throw o
         }
     }
 }

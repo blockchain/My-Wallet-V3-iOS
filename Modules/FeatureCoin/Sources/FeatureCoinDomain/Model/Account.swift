@@ -33,12 +33,12 @@ public struct Account: Identifiable {
     public let fiatCurrency: FiatCurrency
     public let actionsPublisher: () -> AnyPublisher<OrderedSet<Account.Action>, Error>
     public let cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>
-    public let fiatBalancePublisher: AnyPublisher<MoneyValue, Never>
-    public let receiveAddressPublisher: AnyPublisher<String, Never>
+    public let fiatBalancePublisher: AnyPublisher<MoneyValue?, Never>
+    public let receiveAddressPublisher: AnyPublisher<String?, Never>
 
     /// `true` if the accountType is not fully supported
     public var isComingSoon: Bool {
-        false // accountType == .staking
+        false
     }
 
     public init(
@@ -50,8 +50,8 @@ public struct Account: Identifiable {
         fiatCurrency: FiatCurrency,
         actionsPublisher: @escaping () -> AnyPublisher<OrderedSet<Account.Action>, Error>,
         cryptoBalancePublisher: AnyPublisher<MoneyValue, Never>,
-        fiatBalancePublisher: AnyPublisher<MoneyValue, Never>,
-        receiveAddressPublisher: AnyPublisher<String, Never>
+        fiatBalancePublisher: AnyPublisher<MoneyValue?, Never>,
+        receiveAddressPublisher: AnyPublisher<String?, Never>
     ) {
         self.id = id
         self.name = name
@@ -310,6 +310,17 @@ extension Collection<Account.Snapshot> {
         first(where: { account in account.actions.contains(.swap) }) != nil
     }
 
+    public var canSell: Bool {
+        first(where: { account in account.actions.contains(.sell) }) != nil
+    }
+
+    public var canSwapOnDex: Bool {
+        guard let currency = first?.cryptoCurrency else {
+            return false
+        }
+        return EnabledCurrenciesService.default.network(for: currency) != nil
+    }
+
     public var hasPositiveBalanceForSelling: Bool {
         first(where: { account in account.accountType == .trading })?.fiat?.isPositive
             ?? first(where: { account in account.accountType == .privateKey })?.fiat?.isPositive
@@ -326,11 +337,27 @@ extension Account.Snapshot {
             accountType: .privateKey,
             actions: [.send, .receive, .activity]
         ),
+        privateKeyNoBalance: Account.Snapshot.stub(
+            id: "PrivateKey",
+            name: "DeFi Wallet",
+            accountType: .privateKey,
+            actions: [.send, .receive, .activity, .swap, .sell],
+            crypto: .zero(currency: .USD),
+            fiat: .zero(currency: .USD)
+        ),
         trading: Account.Snapshot.stub(
             id: "Trading",
             name: "Blockchain.com Account",
             accountType: .trading,
             actions: [.buy, .sell, .send, .receive, .swap, .activity]
+        ),
+        tradingNoBalance: Account.Snapshot.stub(
+            id: "Trading",
+            name: "Blockchain.com Account",
+            accountType: .trading,
+            actions: [.buy, .sell, .send, .receive, .swap, .activity],
+            crypto: .zero(currency: .USD),
+            fiat: .zero(currency: .USD)
         ),
         rewards: Account.Snapshot.stub(
             id: "Rewards",

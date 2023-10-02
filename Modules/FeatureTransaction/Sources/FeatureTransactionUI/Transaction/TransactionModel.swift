@@ -20,8 +20,8 @@ public final class TransactionModel {
     // MARK: - Private Properties
 
     private var mviModel: MviModel<TransactionState, TransactionAction>!
-    internal let interactor: TransactionInteractor
-    internal private(set) var hasInitializedTransaction = false
+    let interactor: TransactionInteractor
+    private(set) var hasInitializedTransaction = false
 
     private let app: AppProtocol
     private let analyticsHook: TransactionAnalyticsHook
@@ -78,7 +78,7 @@ public final class TransactionModel {
             return streamQuotes()
 
         case .initialiseWithSourceAndTargetAccount(let action, let sourceAccount, let target):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+            if action == .swap, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return processTargetSelectionConfirmed(
                     sourceAccount: sourceAccount,
                     transactionTarget: target,
@@ -87,7 +87,7 @@ public final class TransactionModel {
                 )
             }
 
-            if action == .sell && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled) {
+            if action == .sell, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled) {
                 return Disposables.create(
                     processTargetSelectionConfirmed(
                         sourceAccount: sourceAccount,
@@ -105,7 +105,7 @@ public final class TransactionModel {
                     )
                 )
             }
- 
+
             return processTargetSelectionConfirmed(
                 sourceAccount: sourceAccount,
                 transactionTarget: target,
@@ -122,7 +122,7 @@ public final class TransactionModel {
             )
 
         case .initialiseWithNoSourceOrTargetAccount(let action):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+            if action == .swap, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
 
@@ -132,7 +132,7 @@ public final class TransactionModel {
             )
 
         case .initialiseWithTargetAndNoSource(let action, let target):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+            if action == .swap, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
 
@@ -179,7 +179,7 @@ public final class TransactionModel {
             return nil
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
-            if action == .swap && app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
+            if action == .swap, app.remoteConfiguration.yes(if: blockchain.app.configuration.new.swap.flow.is.enabled) {
                 return nil
             }
             return processTargetAccountsListUpdate(fromAccount: sourceAccount, action: action)
@@ -293,7 +293,7 @@ public final class TransactionModel {
                 // For Buy, though we can simply use the amount we have in `previousState`, so the transaction ca be re-validated.
                 // This also fixes an issue where the enter amount screen has the "next" button disabled after user switches source account in Buy.
                 let newAmount: MoneyValue?
-                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap && previousState.action != .sell {
+                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap, previousState.action != .sell {
                     newAmount = amount
                 } else {
                     newAmount = nil
@@ -496,7 +496,7 @@ public final class TransactionModel {
                     if action == .buy, let first = sourceAccounts.first(
                         where: { ($0 as? PaymentMethodAccount)?.paymentMethodType.method.rawType == preferredMethod }
                     ) ?? sourceAccounts.first(
-                        where: { account in (account.identifier as? String) == previousMethod }
+                        where: { account in account.identifier == previousMethod }
                     ) ?? sourceAccounts.first {
                         // For buy, we don't want to display the list of possible sources straight away.
                         // Instead, we want to select the default payment method returned by the API.
@@ -820,10 +820,14 @@ public final class TransactionModel {
             .subscribe(
                 onNext: { [weak self] transaction in
                     guard let self else { return }
-                    Task {
-                        try await self.app.set(blockchain.ux.transaction.source.account.id, to: sourceAccount.identifier)
-                        try await self.app.set(blockchain.ux.transaction.source.target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
-                        self.process(action: .pendingTransactionUpdated(transaction))
+                    Task { [app] in
+                        do {
+                            try await self.app.set(blockchain.ux.transaction[action.string].source[sourceAccount.currencyType.code].account.id, to: sourceAccount.identifier)
+                            try await self.app.set(blockchain.ux.transaction[action.string].source[sourceAccount.currencyType.code].target.account.id, to: (transactionTarget as? BlockchainAccount)?.identifier)
+                            self.process(action: .pendingTransactionUpdated(transaction))
+                        } catch {
+                            app.post(error: error)
+                        }
                     }
                 },
                 onError: { [weak self] error in
@@ -834,7 +838,7 @@ public final class TransactionModel {
     }
 
     private func onFirstUpdate(amount: MoneyValue) {
-        process(action: .pendingTransactionStarted(allowFiatInput: interactor.canTransactFiat))
+        process(action: .pendingTransactionStarted(engineCanTransactFiat: interactor.canTransactFiat))
         process(action: .fetchTransactionExchangeRates)
         process(action: .fetchUserKYCInfo)
         if amount.isPositive {
@@ -940,11 +944,18 @@ extension TransactionState {
     var profile: BrokerageQuote.Profile? {
         switch action {
         case .buy:
-            return .buy
+            switch destination {
+            case let tradingAccount as CryptoTradingAccount where tradingAccount.isExternalTradingAccount:
+                return .externalBuy
+            default:
+                return .buy
+            }
         case .sell:
             switch source {
             case is NonCustodialAccount:
                 return .swapPKWToTrading
+            case let tradingAccount as CryptoTradingAccount where tradingAccount.isExternalTradingAccount:
+                return .externalTradingToTrading
             case is TradingAccount:
                 return .swapTradingToTrading
             default:

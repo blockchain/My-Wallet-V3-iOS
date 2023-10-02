@@ -23,10 +23,6 @@ let package = Package(
             from: "5.3.0"
         ),
         .package(
-            url: "https://github.com/danielgindi/Charts.git",
-            from: "4.1.0"
-        ),
-        .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
@@ -47,15 +43,12 @@ let package = Package(
             from: "3.5.6"
         ),
         .package(
-            url: "https://github.com/oliveratkinson-bc/zxcvbn-ios.git",
-            branch: "swift-package-manager"
-        ),
-        .package(
             url: "https://github.com/apple/swift-algorithms.git",
             from: "1.0.0"
         ),
         .package(path: "../Analytics"),
         .package(path: "../AnyCoding"),
+        .package(path: "../Blockchain"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../CommonCrypto"),
@@ -84,6 +77,7 @@ let package = Package(
             dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "Blockchain", package: "Blockchain"),
                 .product(name: "AnyCoding", package: "AnyCoding"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "RxCocoa", package: "RxSwift"),
@@ -130,10 +124,8 @@ let package = Package(
                 .product(name: "RIBs", package: "RIBs"),
                 .product(name: "RxDataSources", package: "RxDataSources"),
                 .product(name: "RxAnalyticsKit", package: "RxAnalytics"),
-                .product(name: "Charts", package: "Charts"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "PhoneNumberKit", package: "PhoneNumberKit"),
-                .product(name: "Zxcvbn", package: "zxcvbn-ios"),
                 .product(name: "FeatureOpenBankingUI", package: "FeatureOpenBanking"),
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),

@@ -45,46 +45,47 @@ class CustodialActivityService: CustodialActivityServiceAPI {
 
     func getActivity(fiatCurrency: FiatCurrency) -> AsyncStream<[ActivityEntry]> {
         let assets = coincore.cryptoAssets
-        var streams: [AsyncStream<[ActivityEntry]>] = [
-            AsyncStream(
+        var streams: [(String, AnyPublisher<[ActivityEntry], Never>)] = [
+            (
+                "fiat \(fiatCurrency)",
                 ordersActivity.activity(fiatCurrency: fiatCurrency).replaceError(with: [])
-                    .mapEach(ActivityEntryAdapter.createEntry)
-                    .prepend([]).values)
+                .mapEach(ActivityEntryAdapter.createEntry)
+            )
         ]
 
         for asset in assets {
             streams.append(
-                AsyncStream(buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
+                ("buy & sell \(asset.asset)", buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item)
-                }.values)
+                })
             )
 
             streams.append(
-                AsyncStream(ordersActivity.activity(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
+                ("orders \(asset.asset)", ordersActivity.activity(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item)
-                }.values)
+                })
             )
 
             streams.append(
-                AsyncStream(stakingActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                ("staking \(asset.asset)", stakingActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item, type: .staking)
-                }.values)
+                })
             )
 
             streams.append(
-                AsyncStream(savingsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                ("savings \(asset.asset)", savingsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item, type: .saving)
-                }.values)
+                })
             )
 
             streams.append(
-                AsyncStream(activeRewardsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                ("active rewards \(asset.asset)", activeRewardsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
                     ActivityEntryAdapter.createEntry(with: item, type: .activeRewards)
-                }.values)
+                })
             )
 
             streams.append(
-                AsyncStream(swapActivity.fetchActivity(cryptoCurrency: asset.asset, directions: [.internal]).replaceError(with: []).mapEach { item in
+                ("swap \(asset.asset)", swapActivity.fetchActivity(cryptoCurrency: asset.asset, directions: [.internal]).replaceError(with: []).mapEach { item in
                     if item.pair.outputCurrencyType.isFiatCurrency {
                         let buySellActivityEntry = BuySellActivityItemEvent(swapActivityItemEvent: item)
                         return ActivityEntryAdapter.createEntry(
@@ -94,15 +95,18 @@ class CustodialActivityService: CustodialActivityServiceAPI {
                         )
                     }
                     return ActivityEntryAdapter.createEntry(with: item)
-                }.values)
+                })
             )
         }
 
-        return combineLatest(streams, bufferingPolicy: .unbounded)
-            .map { items in
-                items.flatMap({ $0 }).sorted(by: { $0.timestamp > $1.timestamp })
-            }
-            .eraseToStream()
+        return combineLatest(
+            streams.map { _, stream in stream.values },
+            bufferingPolicy: .unbounded
+        )
+        .map { items in
+            items.flatMap { $0 }.sorted(by: { $0.timestamp > $1.timestamp })
+        }
+        .eraseToStream()
     }
 
     func activity() -> AnyPublisher<[ActivityEntry], Never> {
@@ -118,5 +122,16 @@ extension Publisher where Output: Sequence {
 
     func mapEach<T>(_ transform: @escaping (Output.Element) -> T) -> AnyPublisher<[T], Failure> {
         map { sequence in sequence.map(transform) }.eraseToAnyPublisher()
+    }
+}
+
+extension Publisher {
+
+    func recordFailure(to app: AppProtocol, _ file: String = #file, _ line: Int = #line) -> AnyPublisher<Output, Failure> {
+        `catch` { error in
+            app.post(error: error, file: file, line: line)
+            return Fail(outputType: Output.self, failure: error)
+        }
+        .eraseToAnyPublisher()
     }
 }

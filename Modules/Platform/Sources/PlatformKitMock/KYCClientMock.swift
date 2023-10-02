@@ -115,17 +115,25 @@ final class KYCClientMock: KYCClientAPI {
         stubbedResults.fetchLimitsOverview
     }
 
-    func fetchExtraKYCQuestions(context: String) -> AnyPublisher<Form, NabuNetworkError> {
+    func fetchExtraKYCQuestions(context: String, version: [String] = []) -> AnyPublisher<Form, NabuNetworkError> {
         stubbedResults.fetchExtraKYCQuestions
     }
 
-    func submitExtraKYCQuestions(_ form: Form) -> AnyPublisher<Void, NabuNetworkError> {
+    func submitExtraKYCQuestions(_ form: Form, version: [String] = []) -> AnyPublisher<Void, NabuNetworkError> {
         stubbedResults.submitExtraKYCQuestions
     }
 
     func setTradingCurrency(
         _ currency: String
     ) -> AnyPublisher<Void, Nabu.Error> {
+        .just(())
+    }
+
+    func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error> {
+        .empty()
+    }
+
+    func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error> {
         .just(())
     }
 }

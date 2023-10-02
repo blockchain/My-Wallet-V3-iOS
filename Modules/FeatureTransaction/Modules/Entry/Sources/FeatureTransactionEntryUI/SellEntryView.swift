@@ -23,7 +23,7 @@ public struct SellEntryView: View {
 
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3,
+            icon: .navigationCloseButton(),
             action: { $app.post(event: blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {
@@ -33,7 +33,7 @@ public struct SellEntryView: View {
 
     var isEmpty: Bool {
         guard let accounts else { return false }
-        return accounts.allSatisfy({ account in isAllowedToSell[account] == false })
+        return accounts.allSatisfy { account in isAllowedToSell[account] == false }
     }
 
     var content: some View {

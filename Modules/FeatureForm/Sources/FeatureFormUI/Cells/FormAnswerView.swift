@@ -24,7 +24,7 @@ struct FormRecursiveAnswerView<Content: View>: View {
                     showAnswersState: $showAnswerState,
                     fieldConfiguration: fieldConfiguration
                 )
-                .padding([.leading, .vertical], Spacing.padding2)
+                .padding([.leading], Spacing.padding2)
             }
         }
     }
@@ -67,16 +67,13 @@ struct FormOpenEndedAnswerView: View {
                 prefix: answer.prefixInputText,
                 prefixConfig: fieldConfiguration.inputPrefixConfig,
                 state: showAnswerState ? answer.inputState : .default,
-                configuration: { textField in
-                    let config = fieldConfiguration
-                    textField.autocorrectionType = config.textAutocorrectionType
-                    textField.keyboardType = config.keyboardType
-                    textField.textContentType = config.textContentType
-                },
                 onFieldTapped: fieldConfiguration.onFieldTapped
             )
             .disabled(!isEnabled)
             .accessibilityIdentifier(answer.id)
+            .autocorrectionDisabled(fieldConfiguration.textAutocorrectionType == .no)
+            .keyboardType(fieldConfiguration.keyboardType)
+            .textContentType(fieldConfiguration.textContentType)
 
             if let bottomButton = fieldConfiguration.bottomButton {
                 FormAnswerBottomButtonView(
@@ -124,17 +121,15 @@ struct FormSingleSelectionAnswerView: View {
             showAnswerState: $showAnswerState,
             fieldConfiguration: fieldConfiguration
         ) {
-            HStack(spacing: Spacing.padding1) {
+            HStack {
+                Radio(isOn: $answer.checked ?? false)
                 if let text = answer.text {
                     Text(text)
                         .typography(.paragraph2)
-                        .foregroundColor(.semantic.body)
+                        .foregroundColor(.semantic.title)
                 }
-
-                Spacer()
-
-                Radio(isOn: $answer.checked ?? false)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(Spacing.padding2)
             .background(
                 RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
@@ -147,6 +142,43 @@ struct FormSingleSelectionAnswerView: View {
             .accessibilityIdentifier(answer.id)
             .accessibilityElement(children: .contain)
         }
+    }
+}
+
+struct FormMultipleSelectionAnswerSingleTileView: View {
+
+    let title: String
+    @Binding var answer: FormAnswer
+    @Binding var showAnswerState: Bool
+    let fieldConfiguration: PrimaryFormFieldConfiguration
+
+    var body: some View {
+       Group {
+           if let text = answer.text {
+               if answer.checked == true {
+                   Text(text).typography(.paragraph2).foregroundColor(.white)
+               } else {
+                   Text(text).typography(.paragraph2).foregroundColor(.semantic.primary)
+               }
+           }
+       }
+       .padding(8.pt)
+       .background(
+           Group {
+               let background = RoundedRectangle(cornerRadius: 4)
+               if answer.checked == true {
+                   background.fill(Color.semantic.primary)
+               } else {
+                   background.fill(Color.semantic.background)
+               }
+           }
+       )
+       .contentShape(Rectangle())
+       .onTapGesture {
+           answer.checked = !answer.checked.or(default: false)
+       }
+       .accessibilityElement(children: .combine)
+       .accessibilityIdentifier(answer.id)
     }
 }
 
@@ -164,17 +196,15 @@ struct FormMultipleSelectionAnswerView: View {
             showAnswerState: $showAnswerState,
             fieldConfiguration: fieldConfiguration
         ) {
-            HStack(spacing: Spacing.padding1) {
+            HStack {
+                Checkbox(isOn: $answer.checked ?? false)
                 if let text = answer.text {
                     Text(text)
                         .typography(.paragraph2)
-                        .foregroundColor(.semantic.body)
+                        .foregroundColor(.semantic.title)
                 }
-
-                Spacer()
-
-                Checkbox(isOn: $answer.checked ?? false)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(Spacing.padding2)
             .background(
                 RoundedRectangle(cornerRadius: Spacing.buttonBorderRadius)
@@ -182,10 +212,10 @@ struct FormMultipleSelectionAnswerView: View {
             )
             .contentShape(Rectangle())
             .onTapGesture {
-                answer.checked?.toggle()
+                answer.checked = true
             }
-            .accessibilityElement(children: .combine)
             .accessibilityIdentifier(answer.id)
+            .accessibilityElement(children: .contain)
         }
     }
 }
@@ -193,78 +223,144 @@ struct FormMultipleSelectionAnswerView: View {
 struct FormAnswerView_Previews: PreviewProvider {
 
     static var previews: some View {
-        PreviewHelper(
-            answer: FormAnswer(
-                id: "a1",
-                type: .openEnded,
-                text: "Answer 1",
-                children: nil,
-                input: nil,
-                hint: "Placeholder",
-                regex: nil,
-                checked: nil
+        FormOpenEndedAnswerView(
+            answer: .constant(
+                FormAnswer(
+                    id: "a1",
+                    type: .openEnded,
+                    text: "Answer 1",
+                    children: nil,
+                    input: nil,
+                    hint: "Placeholder",
+                    regex: nil,
+                    checked: nil
+                )
             ),
-            showAnswerState: false
+            showAnswerState: .constant(false),
+            fieldConfiguration: defaultFieldConfiguration
         )
 
         PreviewHelper(
-            answer: FormAnswer(
-                id: "q1-a1",
-                type: .openEnded,
-                text: "Answer 1",
-                children: [
-                    FormAnswer(
-                        id: "q1-a1-a1",
-                        type: .selection,
-                        text: "Child Answer 1",
-                        children: nil,
-                        input: nil,
-                        hint: nil,
-                        regex: nil,
-                        checked: nil
-                    ),
-                    FormAnswer(
-                        id: "q1-a1-a2",
-                        type: .selection,
-                        text: "Child Answer 2",
-                        children: nil,
-                        input: nil,
-                        hint: nil,
-                        regex: nil,
-                        checked: nil
-                    )
-                ],
-                input: nil,
-                hint: nil,
-                regex: nil,
-                checked: true
-            ),
             showAnswerState: false
         )
     }
 
     struct PreviewHelper: View {
 
-        @State var answer: FormAnswer
+        @State var answer1 = FormAnswer(
+            id: "a1",
+            type: .openEnded,
+            text: "Answer 1",
+            children: nil,
+            input: nil,
+            hint: "Placeholder",
+            regex: nil,
+            checked: nil
+        )
+
+        @State var answer2 = FormAnswer(
+            id: "q1-a2",
+            type: .openEnded,
+            text: "Answer 2",
+            children: [
+                FormAnswer(
+                    id: "q1-a2-a1",
+                    type: .selection,
+                    text: "Child Answer 2.1",
+                    children: nil,
+                    input: nil,
+                    hint: nil,
+                    regex: nil,
+                    checked: nil
+                ),
+                FormAnswer(
+                    id: "q1-a2-a2",
+                    type: .selection,
+                    text: "Child Answer 2.2",
+                    children: nil,
+                    input: nil,
+                    hint: nil,
+                    regex: nil,
+                    checked: nil
+                )
+            ],
+            input: nil,
+            hint: nil,
+            regex: nil,
+            checked: true
+        )
+
+        @State var answer3 = FormAnswer(
+            id: "q1-a3",
+            type: .selection,
+            text: "Answer 3",
+            children: [
+                FormAnswer(
+                    id: "q1-a3-a1",
+                    type: .selection,
+                    text: "Child Answer 3.1",
+                    children: nil,
+                    input: nil,
+                    hint: nil,
+                    regex: nil,
+                    checked: nil
+                ),
+                FormAnswer(
+                    id: "q1-a3-a2",
+                    type: .selection,
+                    text: "Child Answer 3.2",
+                    children: nil,
+                    input: nil,
+                    hint: nil,
+                    regex: nil,
+                    checked: nil
+                ),
+                FormAnswer(
+                    id: "q1-a3-a3",
+                    type: .selection,
+                    text: "3.3",
+                    children: nil,
+                    input: nil,
+                    hint: nil,
+                    regex: nil,
+                    checked: nil
+                ),
+                FormAnswer(
+                    id: "q1-a3-a4",
+                    type: .selection,
+                    text: "Answer 3.4",
+                    children: nil,
+                    input: nil,
+                    hint: nil,
+                    regex: nil,
+                    checked: nil
+                )
+            ],
+            input: nil,
+            hint: nil,
+            regex: nil,
+            checked: true
+        )
+
         @State var showAnswerState: Bool
 
         var body: some View {
             VStack(spacing: Spacing.padding1) {
                 FormOpenEndedAnswerView(
-                    answer: $answer,
+                    answer: $answer1,
                     showAnswerState: $showAnswerState,
                     fieldConfiguration: defaultFieldConfiguration
                 )
                 FormSingleSelectionAnswerView(
                     title: "Title",
-                    answer: $answer,
+                    answer: $answer2,
                     showAnswerState: $showAnswerState,
                     fieldConfiguration: defaultFieldConfiguration
                 )
-                FormMultipleSelectionAnswerView(
-                    title: "Title",
-                    answer: $answer,
-                    showAnswerState: $showAnswerState,
+                FormMultipleSelectionAnswersView(
+                    title: answer3.text ?? "Title",
+                    answers: $answer3.children.or(default: []),
+                    showAnswersState: $showAnswerState,
                     fieldConfiguration: defaultFieldConfiguration
                 )
             }

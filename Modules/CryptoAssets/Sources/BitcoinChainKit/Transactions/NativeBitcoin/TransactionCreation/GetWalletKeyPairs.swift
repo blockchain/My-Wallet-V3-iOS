@@ -9,7 +9,7 @@ import WalletPayloadKit
 
 func getWalletKeyPairs(
     unspentOutputs: [UnspentOutput],
-    accountKeyContext: AccountKeyContext
+    accountKeyContext: AccountKeyContextProtocol
 ) -> [WalletKeyPair] {
     unspentOutputs
         .compactMap { utxo -> (UnspentOutput, WalletCoreKeyPair)? in
@@ -57,13 +57,13 @@ public struct WalletCoreKeyPair {
 
 private func walletCoreKeyPair(
     for unspentOutput: UnspentOutput,
-    context: AccountKeyContext
+    context: AccountKeyContextProtocol
 ) -> Result<WalletCoreKeyPair, GetWalletKeysError> {
     derivationPathComponents(for: unspentOutput)
         .map { childKeyPath -> WalletCoreKeyPair in
             let derivation = context.derivations.all
                 .first(where: { derivation in
-                    derivation.xpub == unspentOutput.xpub.m
+                    derivation.xpub == unspentOutput.xpub?.m
                 })!
             return WalletCoreKeyPair(
                 privateKey: derivation.childKey(with: childKeyPath),
@@ -80,7 +80,10 @@ enum GetWalletKeysError: Error {
 func derivationPathComponents(
     for unspentOutput: UnspentOutput
 ) -> Result<[WalletCore.DerivationPath.Index], GetWalletKeysError> {
-    .success(unspentOutput.xpub.walletCoreComponents)
+    guard let xpub = unspentOutput.xpub else {
+        return .failure(.failedToReadDerivationPath)
+    }
+    return .success(xpub.walletCoreComponents)
 }
 
 extension UnspentOutput.XPub {

@@ -34,13 +34,19 @@ public struct DexCellView: View {
         .onChange(of: viewStore.availableBalances) { _ in
             viewStore.send(.onAvailableBalancesChanged)
         }
-        .onChange(of: viewStore.currentNetwork) { _ in
-            viewStore.send(.onCurrentNetworkChanged)
+        .onChange(of: viewStore.parentNetwork) { value in
+            viewStore.send(.onCurrentNetworkChanged(value))
         }
         .bindings {
             subscribe(
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
+            )
+        }
+        .bindings {
+            subscribe(
+                viewStore.binding(\.$quoteByOutputEnabled),
+                to: blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled
             )
         }
         .sheet(isPresented: viewStore.binding(\.$showAssetPicker), content: { assetPickerView })
@@ -66,17 +72,16 @@ extension DexCellView {
             .disableAutocorrection(true)
             .typography(.title2.slashedZero())
             .foregroundColor(.semantic.title)
-            .disabled(viewStore.style.isDestination)
             .focused($textFieldIsFocused)
             .textInputAutocapitalization(.never)
             .synchronize(viewStore.binding(\.$textFieldIsFocused), $textFieldIsFocused)
+            .disabled(viewStore.textFieldDisabled)
     }
 
     private var amountViewText: Binding<String> {
-        switch viewStore.style {
-        case .source:
+        if viewStore.isCurrentInput {
             return viewStore.binding(\.$inputText).removeDuplicates()
-        case .destination:
+        } else {
             return .constant(viewStore.amount?.toDisplayString(includeSymbol: false) ?? "")
         }
     }
@@ -113,7 +118,7 @@ extension DexCellView {
         if let balance = viewStore.balance {
             balanceBodyLabel(balance.value)
         } else if viewStore.amount == nil {
-            Text(" ")
+            Text(" ").typography(.micro)
         } else {
             ProgressView()
         }

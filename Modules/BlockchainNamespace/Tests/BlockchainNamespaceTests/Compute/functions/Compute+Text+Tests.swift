@@ -52,9 +52,9 @@ final class ComputeTextTests: ComputeTestCase {
                 ]
             ]
         ]
-        app.signIn(userId: "paulo-bc")
-        try await app.set(blockchain.user.name.first, to: "Paulo")
-        try await app.set(blockchain.user.name.last, to: "Lopes")
-        try await assert(json, equals: "Good Morning Paulo!")
+        app.signIn(userId: "mock-user-id")
+        try await app.set(blockchain.user.name.first, to: "FirstName")
+        try await app.set(blockchain.user.name.last, to: "LastName")
+        try await assert(json, equals: "Good Morning FirstName!")
     }
 }

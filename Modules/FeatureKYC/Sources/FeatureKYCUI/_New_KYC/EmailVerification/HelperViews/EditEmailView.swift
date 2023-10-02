@@ -133,15 +133,16 @@ struct EditEmailView: View {
                                 isFirstResponder: $isEmailFieldFirstResponder,
                                 label: L10n.EditEmail.editEmailFieldLabel,
                                 state: .default,
-                                configuration: {
-                                    $0.textContentType = .emailAddress
-                                    $0.returnKeyType = .done
-                                },
                                 onReturnTapped: {
                                     isEmailFieldFirstResponder = false
                                 }
                             )
                             .accessibility(identifier: "KYC.EmailVerification.edit.email.group")
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .keyboardType(.emailAddress)
+                            .textContentType(.emailAddress)
+                            .submitLabel(.done)
 
                             if !viewStore.isEmailValid {
                                 BadgeView(

@@ -17,7 +17,7 @@ public struct SimplifiedDueDiligenceVerificationResponse: Codable, Equatable {
     let taskComplete: Bool
 }
 
-public protocol KYCClientAPI: AnyObject {
+public protocol KYCClientAPI: AnyObject, KYCSSNClientAPI {
 
     func tiers() -> AnyPublisher<KYC.UserTiers, NabuNetworkError>
 
@@ -67,9 +67,14 @@ public protocol KYCClientAPI: AnyObject {
 
     func fetchLimitsOverview() -> AnyPublisher<KYCLimitsOverviewResponse, NabuNetworkError>
 
-    func fetchExtraKYCQuestions(context: String) -> AnyPublisher<Form, NabuNetworkError>
+    func fetchExtraKYCQuestions(context: String, version: [String]) -> AnyPublisher<Form, NabuNetworkError>
 
-    func submitExtraKYCQuestions(_ form: Form) -> AnyPublisher<Void, NabuNetworkError>
+    func submitExtraKYCQuestions(_ form: Form, version: [String]) -> AnyPublisher<Void, NabuNetworkError>
+}
+
+public protocol KYCSSNClientAPI {
+    func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error>
+    func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error>
 }
 
 final class KYCClient: KYCClientAPI {
@@ -85,7 +90,6 @@ final class KYCClient: KYCClientAPI {
         static let credentiasForVeriff = ["kyc", "credentials", "veriff"]
         static let currentUser = ["users", "current"]
         static let tierTradingLimitsOverview = ["limits", "overview"]
-        static let accountUsage = ["kyc", "extra-questions"]
 
         static func supportedDocuments(for country: String) -> [String] {
             ["kyc", "supported-documents", country]
@@ -321,22 +325,42 @@ final class KYCClient: KYCClientAPI {
         return networkAdapter.perform(request: request)
     }
 
-    func fetchExtraKYCQuestions(context: String) -> AnyPublisher<Form, Nabu.Error> {
-        let request = requestBuilder.get(
-            path: Path.accountUsage,
-            parameters: [URLQueryItem(name: "context", value: context)],
-            authenticated: true
-        )!
-        return networkAdapter.perform(request: request, responseType: Form.self)
-            .eraseToAnyPublisher()
+    func fetchExtraKYCQuestions(context: String, version: [String]) -> AnyPublisher<Form, Nabu.Error> {
+        networkAdapter.perform(
+            request: requestBuilder.get(
+                path: version + ["kyc", "extra-questions"],
+                parameters: [URLQueryItem(name: "context", value: context)],
+                authenticated: true
+            )!
+        )
     }
 
-    func submitExtraKYCQuestions(_ form: Form) -> AnyPublisher<Void, NabuNetworkError> {
-        let request = requestBuilder.put(
-            path: Path.accountUsage,
-            body: try? form.encode(),
-            authenticated: true
-        )!
-        return networkAdapter.perform(request: request)
+    func submitExtraKYCQuestions(_ form: Form, version: [String]) -> AnyPublisher<Void, Nabu.Error> {
+        networkAdapter.perform(
+            request: requestBuilder.put(
+                path: version + ["kyc", "extra-questions"],
+                body: try? form.encode(),
+                authenticated: true
+            )!
+        )
+    }
+
+    func checkSSN() -> AnyPublisher<KYC.SSN, Nabu.Error> {
+        networkAdapter.perform(
+            request: requestBuilder.get(
+                path: ["onboarding", "ssn"],
+                authenticated: true
+            )!
+        )
+    }
+
+    func submitSSN(_ ssn: String) -> AnyPublisher<Void, Nabu.Error> {
+        networkAdapter.perform(
+            request: requestBuilder.post(
+                path: ["onboarding", "ssn"],
+                body: try? ["ssn": ssn].encode(),
+                authenticated: true
+            )!
+        )
     }
 }

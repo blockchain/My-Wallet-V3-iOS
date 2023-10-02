@@ -20,6 +20,11 @@ extension LocalizationConstants {
                 comment: "A generic alert's retry button"
             )
 
+            static let featureIsNotAvailableMessage = NSLocalizedString(
+                "Feature is not available",
+                comment: "Feature is not available."
+            )
+
             static let cancelButtonTitle = NSLocalizedString(
                 "Cancel",
                 comment: "A generic alert's cancel button"
@@ -30,17 +35,17 @@ extension LocalizationConstants {
 
         public enum AddressVerification {
             public static let title = NSLocalizedString(
-                "Address Verification",
+                "Enter your address",
                 comment: "KYC Address Verification title"
             )
 
-            public static let saveButtonTitle = NSLocalizedString(
-                "Save",
-                comment: "KYC Address Verification save address button title"
+            public static let subtitle = NSLocalizedString(
+                "This should be where you currently live",
+                comment: "KYC Address Verification subtitle"
             )
 
-            public static let continueButtonTitle = NSLocalizedString(
-                "Continue",
+            public static let nextButtonTitle = NSLocalizedString(
+                "Next",
                 comment: "KYC Address Verification Continue button title"
             )
         }

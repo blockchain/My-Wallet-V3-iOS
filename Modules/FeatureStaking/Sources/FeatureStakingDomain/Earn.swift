@@ -26,6 +26,142 @@ extension EarnUserRates {
     }
 }
 
+public struct EarnBondingTxsRequest: Decodable {
+    public let bondingDeposits: [EarnBondingDeposits]
+    public let unbondingWithdrawals: [EarnUnbondingWithdrawals]
+
+    public var isEmpty: Bool {
+        bondingDeposits.isEmpty && unbondingWithdrawals.isEmpty
+    }
+}
+
+public struct EarnBondingUnbondingRequests: Equatable, Hashable {
+    public enum RequestType: Equatable {
+        case bonding
+        case unbonding
+    }
+
+    public let type: RequestType
+    public let product: String
+    public let currency: String
+    public let userId: String
+    /// bonding or unbonding days
+    public let daysLeft: Int
+    /// bonding or unbonding start date
+    public let startDate: Date?
+    /// bonding or unbonding expiry date
+    public let expiryDate: Date?
+    public let amount: MoneyValue?
+
+    public init(bonding: EarnBondingDeposits) {
+        self.type = .bonding
+        self.product = bonding.product
+        self.currency = bonding.currency
+        self.userId = bonding.userId
+        self.daysLeft = bonding.bondingDays
+        self.startDate = bonding.bondingStartDate
+        self.expiryDate = bonding.bondingExpiryDate
+        self.amount = bonding.amount
+    }
+
+    public init(unbonding: EarnUnbondingWithdrawals) {
+        self.type = .unbonding
+        self.product = unbonding.product
+        self.currency = unbonding.currency
+        self.userId = unbonding.userId
+        self.daysLeft = unbonding.unbondingDays
+        self.startDate = unbonding.unbondingStartDate
+        self.expiryDate = unbonding.unbondingExpiryDate
+        self.amount = unbonding.amount
+    }
+}
+
+public struct EarnUnbondingWithdrawals: Decodable {
+    public let product: String
+    public let currency: String
+    public let userId: String
+    public let unbondingDays: Int
+    public let unbondingStartDate: Date?
+    public let unbondingExpiryDate: Date?
+    public let amount: MoneyValue?
+
+    enum CodingKeys: CodingKey {
+        case product
+        case currency
+        case userId
+        case unbondingDays
+        case unbondingStartDate
+        case unbondingExpiryDate
+        case isCustodialTransfer
+        case amount
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.product = try container.decode(String.self, forKey: .product)
+        self.currency = try container.decode(String.self, forKey: .currency)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.unbondingDays = try container.decode(Int.self, forKey: .unbondingDays)
+        self.amount = try? MoneyValue(from: decoder)
+
+        self.unbondingStartDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .unbondingStartDate)) ?? ""
+            )
+
+        self.unbondingExpiryDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .unbondingExpiryDate)) ?? ""
+            )
+    }
+}
+
+public struct EarnBondingDeposits: Decodable {
+    public let product: String
+    public let currency: String
+    public let userId: String
+    public let bondingDays: Int
+    public let bondingStartDate: Date?
+    public let bondingExpiryDate: Date?
+    public let amount: MoneyValue?
+
+    enum CodingKeys: CodingKey {
+        case product
+        case currency
+        case userId
+        case bondingDays
+        case bondingStartDate
+        case bondingExpiryDate
+        case isCustodialTransfer
+        case amount
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.product = try container.decode(String.self, forKey: .product)
+        self.currency = try container.decode(String.self, forKey: .currency)
+        self.userId = try container.decode(String.self, forKey: .userId)
+        self.bondingDays = try container.decode(Int.self, forKey: .bondingDays)
+        self.amount = try? MoneyValue(from: decoder)
+
+        self.bondingStartDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .bondingStartDate)) ?? ""
+            )
+
+        self.bondingExpiryDate = DateFormatter
+            .iso8601Format
+            .date(
+                from: (try? container.decodeIfPresent(String.self, forKey: .bondingExpiryDate)) ?? ""
+            )
+    }
+}
+
 public struct EarnWithdrawalPendingRequest {
 
     public init(

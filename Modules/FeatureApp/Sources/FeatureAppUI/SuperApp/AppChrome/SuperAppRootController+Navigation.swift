@@ -35,7 +35,7 @@ extension SuperAppRootController {
     }
 
     func dismissTop(animated: Bool = true, completion: (() -> Void)? = nil) {
-        let top = currentTopMostViewController
+        let top = UIKitExtensions.findTopViewController(of: self, allowBeingDismissed: true)
         if top.isBeingDismissed {
             return app.post(error: NavigationError.isBeingDismissedError(top))
         }
@@ -126,6 +126,8 @@ extension SuperAppRootController {
                     app.post(event: story, context: context)
                 }
         )
+
+        viewController.view.backgroundColor = .semantic.background
 
         if
             let sheet = viewController.sheetPresentationController,
@@ -312,8 +314,8 @@ class InvalidateDetentsHostingController<V: View>: UIHostingController<V>, Infor
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        if shouldInvalidateDetents, let sheet = viewController.sheetPresentationController {
-            sheet.performDetentInvalidation()
+        if shouldInvalidateDetents, let sheetPresentationController {
+            sheetPresentationController.performDetentInvalidation()
         }
     }
 

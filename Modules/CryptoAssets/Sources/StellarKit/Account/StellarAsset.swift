@@ -127,16 +127,17 @@ final class StellarAsset: CryptoAsset, SubscriptionEntriesAsset {
         cryptoAssetRepository.accountGroup(filter: filter)
     }
 
-    func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never> {
-        cryptoAssetRepository.parse(address: address)
+    func parse(address: String, memo: String?) -> AnyPublisher<ReceiveAddress?, Never> {
+        cryptoAssetRepository.parse(address: address, memo: memo)
     }
 
     func parse(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
-        cryptoAssetRepository.parse(address: address, label: label, onTxCompleted: onTxCompleted)
+        cryptoAssetRepository.parse(address: address, memo: memo, label: label, onTxCompleted: onTxCompleted)
     }
 }
 

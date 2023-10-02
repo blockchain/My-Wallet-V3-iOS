@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import Blockchain
 import Combine
 import DIKit
 import Errors
@@ -77,6 +78,7 @@ final class OrdersService: OrdersServiceAPI {
     // MARK: - Setup
 
     init(
+        app: AppProtocol = resolve(),
         analyticsRecorder: AnalyticsEventRecorderAPI = resolve(),
         client: OrderDetailsClientAPI = resolve()
     ) {
@@ -111,10 +113,18 @@ final class OrdersService: OrdersServiceAPI {
         self.cachedAccumulatedTrades = CachedValueNew(
             cache: cacheAccumulatedTrades,
             fetch: { _ in
-                client
-                    .fetchAccumulatedTradeAmounts()
-                    .mapError(OrdersServiceError.network)
-                    .eraseToAnyPublisher()
+                app.publisher(
+                    for: blockchain.app.is.external.brokerage,
+                    as: Bool.self
+                )
+                .replaceError(with: false)
+                .flatMap { isEligible in
+                    client
+                        .fetchAccumulatedTradeAmounts(products: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
+                        .mapError(OrdersServiceError.network)
+                        .eraseToAnyPublisher()
+                }
+                .eraseToAnyPublisher()
             }
         )
     }

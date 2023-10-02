@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import DIKit
 import PlatformKit
 import PlatformUIKit
@@ -56,10 +57,10 @@ final class RemovePaymentMethodScreenPresenter {
             accessibility: .id(AccessibilityIDs.description)
         )
 
-        let imageResource: ImageResource
+        let imageResource: ImageLocation
         switch interactor.data.type {
         case .beneficiary:
-            imageResource = interactor.data.icon.map(ImageResource.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
+            imageResource = interactor.data.icon.map(ImageLocation.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
         case .card(let type):
             imageResource = type.thumbnail ?? .local(name: "icon-card", bundle: .platformUIKit)
         }
@@ -67,7 +68,7 @@ final class RemovePaymentMethodScreenPresenter {
             image: imageResource,
             accessibilityIdSuffix: AccessibilityIDs.badge
         )
-        badgeImageViewModel.marginOffsetRelay.accept(Spacing.standard)
+        badgeImageViewModel.marginOffsetRelay.accept(Spacing.padding1)
 
         self.removeButtonViewModel = .destructive(with: buttonLocalizedString)
     }

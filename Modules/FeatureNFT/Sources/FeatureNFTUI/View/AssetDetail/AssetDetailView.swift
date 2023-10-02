@@ -69,7 +69,7 @@ public struct AssetDetailView: View {
                     .primaryNavigation(
                         title: viewStore.asset.name,
                         trailing: {
-                            IconButton(icon: .closev2.circle()) {
+                            IconButton(icon: .navigationCloseButton()) {
                                 webViewPresented = false
                             }
                             .frame(width: 24.pt, height: 24.pt)
@@ -80,7 +80,7 @@ public struct AssetDetailView: View {
     }
 
     @ViewBuilder func dismiss() -> some View {
-        IconButton(icon: .closev2.circle()) {
+        IconButton(icon: .navigationCloseButton()) {
             presentationMode.wrappedValue.dismiss()
         }
         .frame(width: 24.pt, height: 24.pt)
@@ -109,7 +109,7 @@ public struct AssetDetailView: View {
                     }
                     .frame(minHeight: proxy.size.width - Spacing.padding4)
                     .padding([.top, .leading], Spacing.padding2)
-                PrimaryWhiteButton(
+                MinimalButton(
                     title: LocalizationId.viewOnOpenSea,
                     leadingView: {
                         Icon
@@ -200,7 +200,7 @@ public struct AssetDetailView: View {
                                     )
                                     .offset(x: 4.0, y: 4.0)
                             }
-                    }
+                        }
                     },
                     title: TableRowTitle(asset.creatorDisplayValue),
                     byline: TableRowByline(LocalizationId.creator)

@@ -22,13 +22,17 @@ public struct HistoricalPriceRepository: HistoricalPriceRepositoryAPI {
         series: Series,
         relativeTo: Date
     ) -> AnyPublisher<GraphData, NetworkError> {
-
         client.fetchPriceIndexes(base: base, quote: quote, series: series, relativeTo: relativeTo)
-            .flatMap { [prices] data in
-                prices.publisher(for: .init(base: base, quote: quote))
-                    .compacted()
+            .flatMap { [prices] data -> AnyPublisher<[PriceIndex], Never> in
+                guard data.isNotEmpty else {
+                    return .just([])
+                }
+                return prices.publisher(for: .init(base: base, quote: quote))
                     .map { price -> [PriceIndex] in
-                        [PriceIndex(price: price.price ?? 0, timestamp: price.timestamp)]
+                        guard let price else {
+                            return []
+                        }
+                        return [PriceIndex(price: price.price ?? 0, timestamp: price.timestamp)]
                     }
                     .map { today in data + today }
                     .eraseToAnyPublisher()

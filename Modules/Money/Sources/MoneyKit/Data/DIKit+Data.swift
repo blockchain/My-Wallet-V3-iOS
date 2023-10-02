@@ -13,6 +13,10 @@ extension DependencyContainer {
             EnabledCurrenciesService.default
         }
 
+        factory { () -> NetworkConfigRepositoryAPI in
+            NetworkConfigRepository.default
+        }
+
         factory { () -> FilePathProviderAPI in
             FilePathProvider(
                 fileManager: .default
@@ -28,8 +32,7 @@ extension DependencyContainer {
 
         factory { () -> AssetsRepositoryAPI in
             AssetsRepository(
-                fileLoader: DIKit.resolve(),
-                evmSupport: DIKit.resolve()
+                fileLoader: DIKit.resolve()
             )
         }
 
@@ -67,10 +70,6 @@ extension DependencyContainer {
                 client: DIKit.resolve(),
                 refreshControl: PerpetualCacheRefreshControl()
             )
-        }
-
-        factory { () -> EVMSupportAPI in
-            EVMSupport(app: DIKit.resolve())
         }
     }
 }

@@ -15,20 +15,12 @@ extension DexMain {
             }
         }
 
-        var isLoadingState: Bool {
-            availableBalances == nil
-        }
-
-        var isEmptyState: Bool {
-            availableBalances?.isEmpty == true
-        }
-
         var availableNetworks: [EVMNetwork] = []
         var currentNetwork: EVMNetwork? {
             didSet {
                 currentSelectedNetworkTicker = currentNetwork?.networkConfig.networkTicker
-                source.currentNetwork = currentNetwork
-                destination.currentNetwork = currentNetwork
+                source.parentNetwork = currentNetwork
+                destination.parentNetwork = currentNetwork
             }
         }
 
@@ -38,7 +30,15 @@ extension DexMain {
         var quoteFetching: Bool = false
         var quote: Result<DexQuoteOutput, UX.Error>? {
             didSet {
-                destination.overrideAmount = quote?.success?.buyAmount.amount
+                switch quote {
+                case .success(let output) where output.field == .source:
+                    destination.overrideAmount = output.buyAmount.amount
+                case .success(let output) where output.field == .destination:
+                    source.overrideAmount = output.sellAmount
+                default:
+                    source.overrideAmount = nil
+                    destination.overrideAmount = nil
+                }
             }
         }
 
@@ -51,7 +51,8 @@ extension DexMain {
         @BindingState var isConfirmationShown: Bool = false
         @BindingState var isEligible: Bool = true
         @BindingState var inegibilityReason: String?
-        @BindingState var currentSelectedNetworkTicker: String? = nil
+        @BindingState var currentSelectedNetworkTicker: String?
+        @BindingState var quoteByOutputEnabled: Bool = false
 
         init(
             availableBalances: [DexBalance]? = nil,
@@ -105,6 +106,26 @@ extension DexMain {
                 base = result
             }
             return (try? base > feeCurrencyBalance.value) ?? false
+        }
+
+        var status: Status {
+            if isEligible.isNo {
+                return .notEligible
+            }
+            if availableBalances == nil || currentNetwork == nil {
+                return .loading
+            }
+            if availableBalances?.isEmpty == true {
+                return .noBalance
+            }
+            return .ready
+        }
+
+        enum Status {
+            case loading
+            case notEligible
+            case noBalance
+            case ready
         }
     }
 }
@@ -194,7 +215,7 @@ extension DexMain.State {
         guard destination.currency != nil else {
             return .selectToken
         }
-        guard source.amount?.isPositive == true else {
+        guard source.inputAmountIsPositive || destination.inputAmountIsPositive else {
             return .enterAmount
         }
         switch quote {
@@ -216,7 +237,7 @@ extension DexMain.State {
     var extraButtonState: ExtraButtonState? {
         guard
             let source = source.currency,
-            case let .error(error) = continueButtonState
+            case .error(let error) = continueButtonState
         else {
             return nil
         }
@@ -232,7 +253,6 @@ extension DexMain.State {
         }
     }
 }
-
 
 enum ExtraButtonState: Hashable {
     case deposit(CryptoCurrency)
@@ -260,4 +280,3 @@ enum DexQuoteErrorId {
     static let insufficientFundsForGas = "dex.quote.insufficient.funds.for.gas"
     static let insufficientFunds = "dex.quote.insufficient.funds"
 }
-

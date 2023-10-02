@@ -75,6 +75,7 @@ public struct SellCheckoutLoadedView: View {
 
     @State private var quote: MoneyValue?
     @State private var remainingTime: TimeInterval = .hour
+    @State private var isExternalTradingEnabled: Bool = false
 
     public init(checkout: SellCheckout, confirm: (() -> Void)? = nil) {
         self.checkout = checkout
@@ -88,15 +89,23 @@ extension SellCheckoutView.Loaded {
         VStack(alignment: .center) {
             ScrollView {
                 sell()
-                rows()
-                quoteExpiry()
-                disclaimer()
+                if isExternalTradingEnabled {
+                    bakktRows()
+                    bakktBottomView()
+                } else {
+                    rows()
+                    quoteExpiry()
+                    disclaimer()
+                }
             }
             .padding(.horizontal)
             Spacer()
             footer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .bindings {
+            subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
+        }
         .batch {
             set(blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.tooltip)
         }
@@ -113,7 +122,8 @@ extension SellCheckoutView.Loaded {
                 blockchain.ui.type.action.then.enter.into.detents: [
                     blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
                 ]
-            ])
+            ]
+        )
     }
 
     @ViewBuilder func sell() -> some View {
@@ -127,14 +137,16 @@ extension SellCheckoutView.Loaded {
         }
         .padding(.vertical)
     }
-    
+
     @ViewBuilder func rows() -> some View {
-        DividedVStack(spacing:0) {
+        DividedVStack(spacing: 0) {
             TableRow(
                 title: {
                     HStack {
                         TableRowTitle(L10n.Label.exchangeRate).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.muted)
+                        Icon.questionFilled
+                            .micro()
+                            .color(.semantic.muted)
                     }
                 },
                 trailing: {
@@ -168,13 +180,16 @@ extension SellCheckoutView.Loaded {
             )
 
             if let networkFee = checkout.networkFee,
-               let networkFeeFiatValue = checkout.feeFiatValue {
+               let networkFeeFiatValue = checkout.feeFiatValue
+            {
                 TableRow(
                     title: {
                         HStack {
                             TableRowTitle(L10n.Label.networkFee)
                                 .foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.muted)
+                            Icon.questionFilled
+                                .micro()
+                                .color(.semantic.muted)
                         }
                     },
                     trailing: {
@@ -212,6 +227,53 @@ extension SellCheckoutView.Loaded {
         )
     }
 
+    @ViewBuilder func bakktRows() -> some View {
+        DividedVStack(spacing: 0) {
+            TableRow(
+                title: {
+                    HStack {
+                        TableRowTitle(L10n.Label.price(checkout.exchangeRate.base.code)).foregroundColor(.semantic.body)
+                        Icon.questionFilled
+                            .micro().color(.semantic.muted)
+                    }
+                },
+                trailing: {
+                    TableRowTitle("~\(checkout.exchangeRate.quote.displayString)")
+                }
+            )
+            .background(Color.semantic.background)
+            .onTapGesture {
+                showTooltip(
+                    title: L10n.Label.exchangeRate,
+                    message: L10n.Label.exchangeRateDisclaimer.interpolating(checkout.exchangeRate.quote.code, checkout.exchangeRate.base.code)
+                )
+            }
+            TableRow(
+                title: {
+                    TableRowTitle(L10n.Label.from)
+                        .foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    TableRowTitle(checkout.value.currency.name)
+                }
+            )
+
+            TableRow(
+                title: {
+                    TableRowTitle(L10n.Label.to).foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    TableRowTitle(checkout.quote.currency.name)
+                }
+            )
+        }
+        .padding(.vertical, 6.pt)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.semantic.background)
+        )
+    }
+
     @ViewBuilder func quoteExpiry() -> some View {
         if let expiration = checkout.expiresAt {
             CountdownView(deadline: expiration, remainingTime: $remainingTime)
@@ -234,6 +296,45 @@ extension SellCheckoutView.Loaded {
             }
             .batch {
                 set(blockchain.ux.transaction.checkout.refund.policy.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.refund.policy.disclaimer.url })
+            }
+    }
+
+    @ViewBuilder func bakktBottomView() -> some View {
+        VStack {
+            VStack(alignment: .leading) {
+                bakktDisclaimer()
+                SmallMinimalButton(title: L10n.Button.viewDisclosures) {
+                    $app.post(event: blockchain.ux.bakkt.view.disclosures)
+                }
+                .batch {
+                    set(blockchain.ux.bakkt.view.disclosures.then.launch.url, to: "https://bakkt.com/disclosures")
+                }
+            }
+
+            Image("bakkt-logo", bundle: .componentLibrary)
+                .foregroundColor(.semantic.title)
+                .padding(.top, Spacing.padding2)
+        }
+    }
+
+    @ViewBuilder
+    func bakktDisclaimer() -> some View {
+        let label = L10n.Label.sellDisclaimerBakkt(
+            amount: checkout.value.toDisplayString(includeSymbol: true),
+            asset: checkout.value.currencyType.displayCode
+        )
+
+        Text(rich: label)
+            .typography(.caption1)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.leading)
+            .padding(.horizontal, Spacing.padding1)
+            .padding(.top, Spacing.padding3)
+            .onTapGesture {
+                $app.post(event: blockchain.ux.bakkt.authorization)
+            }
+            .batch {
+                set(blockchain.ux.bakkt.authorization.then.launch.url, to: { blockchain.ux.bakkt.authorization.url })
             }
     }
 

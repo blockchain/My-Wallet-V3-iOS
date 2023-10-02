@@ -58,19 +58,19 @@ public struct EthereumJsonRpcTransaction: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: Keys.self)
-        from = try container.decode(String.self, forKey: .from)
-        to = try container.decodeIfPresent(String.self, forKey: .to)
-        data = try container.decode(String.self, forKey: .data).sanizeHexString
-        gas = try container.decodeIfPresent(String.self, forKey: .gas)?.sanizeHexString.withoutLeadingZeroes
-        gasPrice = try container.decodeIfPresent(String.self, forKey: .gasPrice)?.sanizeHexString.withoutLeadingZeroes
-        value = try container.decodeIfPresent(String.self, forKey: .value)?.sanizeHexString.withoutLeadingZeroes
-        nonce = try container.decodeIfPresent(String.self, forKey: .nonce)?.sanizeHexString.withoutLeadingZeroes
+        self.from = try container.decode(String.self, forKey: .from)
+        self.to = try container.decodeIfPresent(String.self, forKey: .to)
+        self.data = try container.decode(String.self, forKey: .data).sanizeHexString
+        self.gas = try container.decodeIfPresent(String.self, forKey: .gas)?.sanizeHexString.withoutLeadingZeroes
+        self.gasPrice = try container.decodeIfPresent(String.self, forKey: .gasPrice)?.sanizeHexString.withoutLeadingZeroes
+        self.value = try container.decodeIfPresent(String.self, forKey: .value)?.sanizeHexString.withoutLeadingZeroes
+        self.nonce = try container.decodeIfPresent(String.self, forKey: .nonce)?.sanizeHexString.withoutLeadingZeroes
     }
 }
 
 extension String {
     var sanizeHexString: String {
-        var hex = hasHexPrefix ? self.withoutHex : self
+        var hex = hasHexPrefix ? withoutHex : self
         if hex.isEmpty {
             return ""
         }

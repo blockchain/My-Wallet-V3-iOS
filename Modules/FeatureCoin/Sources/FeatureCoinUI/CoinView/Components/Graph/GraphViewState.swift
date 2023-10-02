@@ -7,19 +7,21 @@ import Foundation
 
 public struct GraphViewState: Equatable {
     @BindingState var selected: Int?
-    var interval: Series = .day
+    var interval: Series
 
     var result: Result<GraphData, NetworkError>?
-    var isFetching: Bool = false
+    var isFetching: Bool
 
-    var tolerance: Int = 2
-    var density: Int = 250
-    var date = Date()
+    var hideOnFailure: Bool
+    var tolerance: Int
+    var density: Int
+    var date: Date
 
     public init(
         interval: Series = .day,
         result: Result<GraphData, NetworkError>? = nil,
         isFetching: Bool = false,
+        hideOnFailure: Bool = false,
         tolerance: Int = 2,
         density: Int = 250,
         date: Date = Date()
@@ -27,6 +29,7 @@ public struct GraphViewState: Equatable {
         self.interval = interval
         self.result = result
         self.isFetching = isFetching
+        self.hideOnFailure = hideOnFailure
         self.tolerance = tolerance
         self.density = density
         self.date = date

@@ -73,7 +73,6 @@ final class SendRootRouter: ViewableRouter<SendRootInteractable, SendRootViewCon
             navigationModel = nil
         }
         let builder = AccountPickerBuilder(
-            singleAccountsOnly: true,
             action: .send
         )
         let didSelect: AccountPickerDidSelect = { [weak self] account in

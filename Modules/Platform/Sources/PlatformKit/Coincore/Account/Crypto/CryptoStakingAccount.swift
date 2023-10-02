@@ -47,6 +47,7 @@ public final class CryptoStakingAccount: CryptoAccount, StakingAccount {
             .tryMap { [asset, cryptoReceiveAddressFactory, onTxCompleted] address throws -> ReceiveAddress in
                 try cryptoReceiveAddressFactory.makeExternalAssetAddress(
                     address: address.accountRef,
+                    memo: nil,
                     label: "\(asset.code) \(LocalizationConstants.stakingAccount)",
                     onTxCompleted: onTxCompleted
                 )

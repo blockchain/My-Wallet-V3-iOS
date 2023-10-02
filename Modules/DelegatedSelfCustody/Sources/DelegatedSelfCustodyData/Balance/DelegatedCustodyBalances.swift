@@ -70,7 +70,8 @@ private func mockBalance(
 ) -> DelegatedCustodyBalances.Balance? {
     guard
         let value,
-        let currency = CryptoCurrency(code: value.code, service: service) else {
+        let currency = CryptoCurrency(code: value.code, service: service)
+    else {
         return nil
     }
     return DelegatedCustodyBalances.Balance(

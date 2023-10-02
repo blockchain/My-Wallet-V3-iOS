@@ -8,16 +8,27 @@ final class StellarCryptoReceiveAddressFactory: ExternalAssetAddressFactory {
 
     func makeExternalAssetAddress(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping TxCompleted
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         guard !address.isEmpty else {
             return .failure(.invalidAddress)
         }
-        if let fromSimpleAddress = parseFromSimpleAddress(address: address, label: label, onTxCompleted: onTxCompleted) {
+        if let fromSimpleAddress = parseFromSimpleAddress(
+            address: address,
+            memo: memo,
+            label: label,
+            onTxCompleted: onTxCompleted
+        ) {
             return .success(fromSimpleAddress)
         }
-        if let fromStellarURL = parseFromStellarURL(address: address, label: label, onTxCompleted: onTxCompleted) {
+        if let fromStellarURL = parseFromStellarURL(
+            address: address,
+            memo: memo,
+            label: label,
+            onTxCompleted: onTxCompleted
+        ) {
             return .success(fromStellarURL)
         }
         return .failure(.invalidAddress)
@@ -26,6 +37,7 @@ final class StellarCryptoReceiveAddressFactory: ExternalAssetAddressFactory {
     /// Try parsing address in format 'web+stellar:pay?destination=<address>&memo=<memo>'
     private func parseFromStellarURL(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping TxCompleted
     ) -> CryptoReceiveAddress? {
@@ -38,7 +50,7 @@ final class StellarCryptoReceiveAddressFactory: ExternalAssetAddressFactory {
         return validateAndCreate(
             address: urlPayload.address,
             label: label,
-            memo: urlPayload.memo ?? "",
+            memo: urlPayload.memo ?? memo ?? "",
             onTxCompleted: onTxCompleted
         )
     }
@@ -46,6 +58,7 @@ final class StellarCryptoReceiveAddressFactory: ExternalAssetAddressFactory {
     /// Try parsing address in format '<address>:<memo>'
     private func parseFromSimpleAddress(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping TxCompleted
     ) -> CryptoReceiveAddress? {
@@ -59,7 +72,8 @@ final class StellarCryptoReceiveAddressFactory: ExternalAssetAddressFactory {
             return nil
         }
         // If we have two components, the second one will be the memo.
-        let memo: String = components.count == 2 ? String(components.last ?? "") : ""
+        let memoComponent: Substring? = components.count == 2 ? components.last : nil
+        let memo: String = memoComponent.flatMap(String.init) ?? memo ?? ""
         return validateAndCreate(
             address: String(addressComponent),
             label: label,

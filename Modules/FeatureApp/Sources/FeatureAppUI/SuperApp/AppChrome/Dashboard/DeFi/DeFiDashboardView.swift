@@ -7,9 +7,11 @@ import ComposableArchitecture
 import DIKit
 import FeatureAnnouncementsUI
 import FeatureAppDomain
+import FeatureCoinUI
 import FeatureDashboardUI
 import FeatureProductsDomain
 import FeatureQuickActions
+import FeatureTopMoversCryptoUI
 import FeatureWalletConnectUI
 import Localization
 import SwiftUI
@@ -22,6 +24,9 @@ struct DeFiDashboardView: View {
     @State var scrollOffset: CGPoint = .zero
     @State var isBlocked: Bool = false
     @State var showsWalletConnect: Bool = false
+    @State var isDeFiOnly = true
+
+    var isTradingEnabled: Bool { !isDeFiOnly }
 
     struct ViewState: Equatable {
         let balance: BalanceInfo?
@@ -54,7 +59,7 @@ struct DeFiDashboardView: View {
                         tag: blockchain.ux.user.defi.dashboard.quick.action
                     )
 
-                    FeatureAnnouncementsView(
+                    AnnouncementsView(
                         store: store.scope(
                             state: \.announcementsState,
                             action: DeFiDashboard.Action.announcementsAction
@@ -74,6 +79,7 @@ struct DeFiDashboardView: View {
 
                     if viewStore.isZeroBalance {
                         DeFiDashboardToGetStartedView()
+                        FinancialPromotionDisclaimerView()
                     } else {
                         DashboardAssetSectionView(
                             store: store.scope(
@@ -87,6 +93,14 @@ struct DeFiDashboardView: View {
                         DAppDashboardListView()
                     }
 
+                    TopMoversSectionView(
+                        store: store.scope(
+                            state: \.topMoversState,
+                            action: DeFiDashboard.Action.topMoversAction
+                        )
+                    )
+                    .padding(.horizontal, Spacing.padding2)
+
                     DashboardActivitySectionView(
                         store: store.scope(
                             state: \.activityState,
@@ -94,7 +108,13 @@ struct DeFiDashboardView: View {
                         )
                     )
 
-                    DashboardHelpSectionView()
+                    Group {
+                        if isTradingEnabled == false {
+                            NewsSectionView(api: blockchain.api.news.all)
+                        }
+
+                        DashboardHelpSectionView()
+                    }
                 }
                 .scrollOffset($scrollOffset)
                 .task {
@@ -122,6 +142,10 @@ struct DeFiDashboardView: View {
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
             subscribe($showsWalletConnect, to: blockchain.app.configuration.wallet.connect.is.enabled)
+            subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
+        }
+        .onAppear {
+            $app.post(event: blockchain.ux.home.dashboard)
         }
     }
 
@@ -157,7 +181,9 @@ struct DeFiDashboardView: View {
 struct DeFiDashboardToGetStartedView: View {
     private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Pkw
     @BlockchainApp var app
-    @State var isTradingEnabled = true
+    @State var isDeFiOnly = true
+
+    var isTradingEnabled: Bool { !isDeFiOnly }
 
     var body: some View {
         VStack {
@@ -184,12 +210,12 @@ struct DeFiDashboardToGetStartedView: View {
                 }
                 .batch {
                     set(
-                        blockchain.ux.dashboard.empty.receive.paragraph.row.event.select.then.emit,
-                        to: blockchain.ux.frequent.action.receive
+                        blockchain.ux.dashboard.empty.receive.paragraph.row.event.select.then.enter.into,
+                        to: blockchain.ux.currency.receive.select.asset
                     )
                 }
                 .bindings {
-                    subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
+                    subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
                 }
                 .padding([.vertical], Spacing.padding3)
                 .padding([.horizontal], Spacing.padding2)

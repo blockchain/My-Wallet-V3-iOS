@@ -62,7 +62,7 @@ public final class BadgeView: UIView {
             case .progress(let model):
                 updateAccessoryView(visibility: .visible)
                 let backgroundCircle = BadgeCircleView(
-                    strokeColor: .defaultBadge,
+                    strokeColor: .primary,
                     strokeBackgroundColor: .lightBadgeBackground,
                     fillColor: .white,
                     strokeWidth: 6

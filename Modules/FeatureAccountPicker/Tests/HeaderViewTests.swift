@@ -8,7 +8,7 @@ import SwiftUI
 import UIComponentsKit
 import XCTest
 
-class HeaderViewTests: XCTestCase {
+final class HeaderViewTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
@@ -20,7 +20,7 @@ class HeaderViewTests: XCTestCase {
             viewModel: .normal(
                 title: "Send Crypto Now",
                 subtitle: "Choose a Wallet to send cypto from.",
-                image: ImageAsset.iconSend.image,
+                image: ImageAsset.iconSend.imageResource,
                 tableTitle: "Select a Wallet",
                 searchable: false
             ),
@@ -56,7 +56,7 @@ class HeaderViewTests: XCTestCase {
             viewModel: .normal(
                 title: "Send Crypto Now",
                 subtitle: "Choose a Wallet to send cypto from.",
-                image: ImageAsset.iconSend.image,
+                image: ImageAsset.iconSend.imageResource,
                 tableTitle: nil,
                 searchable: false
             ),
@@ -74,7 +74,7 @@ class HeaderViewTests: XCTestCase {
             viewModel: .normal(
                 title: "Send Crypto Now",
                 subtitle: "Choose a Wallet to send cypto from.",
-                image: ImageAsset.iconSend.image,
+                image: ImageAsset.iconSend.imageResource,
                 tableTitle: nil,
                 searchable: true
             ),
@@ -87,12 +87,12 @@ class HeaderViewTests: XCTestCase {
         assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
-    func x_testNormalSearchCollapsed() {
+    func testNormalSearchCollapsed() {
         let view = HeaderView(
             viewModel: .normal(
                 title: "Send Crypto Now",
                 subtitle: "Choose a Wallet to send cypto from.",
-                image: ImageAsset.iconSend.image,
+                image: ImageAsset.iconSend.imageResource,
                 tableTitle: nil,
                 searchable: true
             ),
@@ -100,7 +100,6 @@ class HeaderViewTests: XCTestCase {
             isSearching: .constant(true),
             segmentedControlSelection: .constant(blockchain.ux.asset.account.swap.segment.filter.defi[])
         )
-        .animation(nil)
         .frame(width: 375)
 
         assertSnapshot(matching: view, as: .image)

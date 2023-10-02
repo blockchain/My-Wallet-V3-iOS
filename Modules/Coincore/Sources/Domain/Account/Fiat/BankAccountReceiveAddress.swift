@@ -9,6 +9,7 @@ public final class BankAccountReceiveAddress: ReceiveAddress {
     public let assetName: String
     public let currencyType: CurrencyType
     public var accountType: AccountType
+    public let memo: String? = nil
 
     public init(address: String, label: String, assetName: String, currencyType: CurrencyType) {
         self.address = address

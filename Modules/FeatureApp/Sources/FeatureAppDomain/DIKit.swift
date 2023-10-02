@@ -66,7 +66,8 @@ extension DependencyContainer {
 
         factory {
             ReferralsAdapter(
-                referralService: DIKit.resolve()
+                referralService: DIKit.resolve(),
+                app: DIKit.resolve()
             ) as ReferralAdapterAPI
         }
     }

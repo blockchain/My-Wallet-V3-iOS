@@ -1,9 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKitMock
+import BlockchainNamespace
 import ComposableArchitecture
 import ComposableNavigation
-import BlockchainNamespace
 @testable import FeatureAuthenticationDomain
 @testable import FeatureAuthenticationMock
 @testable import FeatureAuthenticationUI
@@ -18,7 +18,7 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
         CreateAccountStepOneAction,
         CreateAccountStepOneState,
         CreateAccountStepOneAction,
-        CreateAccountStepOneEnvironment
+        Void
     >!
     private let mainScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
 
@@ -26,8 +26,7 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
         try super.setUpWithError()
         testStore = TestStore(
             initialState: CreateAccountStepOneState(context: .createWallet),
-            reducer: createAccountStepOneReducer,
-            environment: CreateAccountStepOneEnvironment(
+            reducer: CreateAccountStepOneReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 passwordValidator: PasswordValidator(),
                 externalAppOpener: MockExternalAppOpener(),
@@ -87,8 +86,7 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
     func test_tapping_next_goes_to_next_step_form() throws {
         testStore = TestStore(
             initialState: CreateAccountStepOneState(context: .createWallet),
-            reducer: createAccountStepOneReducer,
-            environment: CreateAccountStepOneEnvironment(
+            reducer: CreateAccountStepOneReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 passwordValidator: PasswordValidator(),
                 externalAppOpener: MockExternalAppOpener(),

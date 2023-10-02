@@ -12,11 +12,10 @@ extension CryptoCurrency {
 
     public var color: Color {
         assetModel.spotColor.map(Color.init(hex:))
-            ?? (CustodialCoinCode(rawValue: code)?.spotColor).map(Color.init(hex:))
-            ?? Color(hex: ERC20Code.spotColor(code: code))
+        ?? (CustodialCoinCode(rawValue: code)?.spotColor).map(Color.init(hex:))
+        ?? Color(hex: ERC20Code.spotColor(code: code))
     }
 
-    // TODO: Make use of logoResource (move it in from PlatformKit).
     public func logo(
         size: Length = 24.pt,
         showNetworkLogo: Bool? = nil
@@ -38,7 +37,7 @@ extension CryptoCurrency {
         var showNetworkLogo: Bool?
 
         var isShowingNetworkLogo: Bool {
-            if let showNetworkLogo  {
+            if let showNetworkLogo {
                 return showNetworkLogo
             }
 
@@ -55,9 +54,10 @@ extension CryptoCurrency {
             self.showNetworkLogo = showNetworkLogo
         }
 
+        @ViewBuilder
         public var body: some View {
             ZStack(alignment: .bottomTrailing) {
-                AsyncMedia(url: currency.assetModel.logoPngUrl)
+                currency.logoResource.image
                 if isShowingNetworkLogo, let network = currency.network(), network.nativeAsset != currency {
                     Circle()
                         .fill(Color.semantic.background)

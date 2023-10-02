@@ -17,7 +17,7 @@ final class ProductsClientMock: ProductsClientAPI {
     private(set) var recordedInvocations = RecordedInvocations()
     var stubbedResults = StubbedResults()
 
-    func fetchProductsData() -> AnyPublisher<[String: ProductValue?], NabuNetworkError> {
+    func fetchProductsData(product: String) -> AnyPublisher<[String: ProductValue?], NabuNetworkError> {
         recordedInvocations.fetchProductsData.append(())
         return stubbedResults.fetchProductsData
     }

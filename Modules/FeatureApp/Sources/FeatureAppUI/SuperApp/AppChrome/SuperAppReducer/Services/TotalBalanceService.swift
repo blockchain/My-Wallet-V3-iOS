@@ -62,32 +62,32 @@ extension TotalBalanceService {
         }
 
         func totalBalance() -> AsyncStream<Result<TotalBalanceInfo, Error>> {
-            AsyncStream { continuation in
-                for await (trading, defi) in combineLatest(
-                    tradingBalanceService.fetchTotalBalance().values,
-                    defiBalanceService.fetchTotalBalance().values
-                ) {
-                    if let trading = trading.success {
-                        app.state.set(blockchain.ux.dashboard.total.trading.balance.info, to: trading)
-                    }
+            AsyncStream(
+                tradingBalanceService.fetchTotalBalance()
+                    .combineLatest(defiBalanceService.fetchTotalBalance())
+                    .map { trading, defi -> Result<TotalBalanceInfo, Error> in
 
-                    if let defi = defi.success {
-                        app.state.set(blockchain.ux.dashboard.total.defi.balance, to: defi)
-                    }
+                        if let trading = trading.success {
+                            app.state.set(blockchain.ux.dashboard.total.trading.balance.info, to: trading)
+                        }
 
-                    guard let trading = trading.success, let defi = defi.success else {
-                        continuation.yield(.failure(BalanceInfoError.unableToRetrieve))
-                        return
+                        if let defi = defi.success {
+                            app.state.set(blockchain.ux.dashboard.total.defi.balance, to: defi)
+                        }
+
+                        guard let trading = trading.success, let defi = defi.success else {
+                            return .failure(BalanceInfoError.unableToRetrieve)
+                        }
+                        do {
+                            let total = try trading.balance + defi.balance
+                            app.state.set(blockchain.ux.dashboard.total.balance, to: total)
+                            return .success(TotalBalanceInfo(total: total))
+                        } catch {
+                            return .failure(error)
+                        }
                     }
-                    do {
-                        let total = try trading.balance + defi.balance
-                        app.state.set(blockchain.ux.dashboard.total.balance, to: total)
-                        continuation.yield(.success(TotalBalanceInfo(total: total)))
-                    } catch {
-                        continuation.yield(.failure(error))
-                    }
-                }
-            }
+                    .values
+            )
         }
     }
 }

@@ -27,7 +27,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/combine-schedulers",
-            from: "0.9.1"
+            from: "0.11.0"
         ),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",

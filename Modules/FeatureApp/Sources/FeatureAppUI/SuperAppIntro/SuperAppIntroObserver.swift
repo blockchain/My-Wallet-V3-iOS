@@ -27,9 +27,9 @@ public final class SuperAppIntroObserver: Client.Observer {
     var observers: [AnyCancellable] {
         [
             userDidSignIn,
-            userDidSignOut,
             tradingTutorial,
-            deFiTutorial
+            deFiTutorial,
+            onAppModeDeFi
         ]
     }
 
@@ -43,31 +43,40 @@ public final class SuperAppIntroObserver: Client.Observer {
         cancellables = []
     }
 
-    lazy var userDidSignIn = Publishers.Merge3(
-        app.on(blockchain.session.event.did.sign.in),
-        app.on(blockchain.ux.onboarding.intro.event.show.sign.up),
-        app.on(blockchain.ux.onboarding.intro.event.show.sign.in)
-    )
+    lazy var userDidSignIn = Publishers
+        .Zip(
+            app
+                .on(blockchain.ux.home.dashboard)
+                .first(),
+            Publishers.Merge3(
+                app.on(blockchain.ux.dashboard),
+                app.on(blockchain.ux.onboarding.intro.event.show.sign.up),
+                app.on(blockchain.ux.onboarding.intro.event.show.sign.in)
+            )
+        )
+        .map {
+            $1
+        }
+        .delay(for: .seconds(1), scheduler: DispatchQueue.main)
         .receive(on: DispatchQueue.main)
         .sink(to: SuperAppIntroObserver.showSuperAppIntro(_:), on: self)
 
-    lazy var userDidSignOut = app.on(blockchain.session.event.did.sign.out)
-        .receive(on: DispatchQueue.main)
-        .sink(to: SuperAppIntroObserver.reset, on: self)
+    lazy var tradingTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.trading) { [weak self] _ in
+        self?.presentSuperAppIntro(.tradingFirst)
+    }
+    .subscribe()
 
-    lazy var tradingTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.trading)
-        .receive(on: DispatchQueue.main)
-        .map { _ -> FeatureSuperAppIntro.State.Flow in
-            .tradingFirst
-        }
-        .sink(to: SuperAppIntroObserver.presentSuperAppIntro, on: self)
+    lazy var deFiTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.defi) { [weak self] _ in
+        self?.presentSuperAppIntro(.defiFirst)
+    }
+    .subscribe()
 
-    lazy var deFiTutorial = app.on(blockchain.ux.onboarding.intro.event.show.tutorial.defi)
-        .receive(on: DispatchQueue.main)
-        .map { _ -> FeatureSuperAppIntro.State.Flow in
-            .defiFirst
-        }
-        .sink(to: SuperAppIntroObserver.presentSuperAppIntro, on: self)
+    lazy var onAppModeDeFi = app.on(blockchain.ux.multiapp.chrome.switcher.defi.paragraph.button.minimal.event.select) { [weak self] _ in
+        if self?.app.state.yes(if: blockchain.app.mode.defi.has.been.activated) == true { return }
+        self?.app.state.set(blockchain.app.mode.defi.has.been.activated, to: true)
+        self?.presentSuperAppIntro(.defiFirst)
+    }
+    .subscribe()
 
     func showSuperAppIntro(_ event: Session.Event) {
         Task {
@@ -100,11 +109,7 @@ public final class SuperAppIntroObserver: Client.Observer {
         }
     }
 
-    func reset() {
-        app.state.set(blockchain.ux.onboarding.intro.did.show, to: false)
-    }
-
-    func presentSuperAppIntro(_ flow: FeatureSuperAppIntro.State.Flow) {
+    func presentSuperAppIntro(_ flow: IntroViewFlow) {
         let pkwOnly = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
         let intro = IntroView(flow, pkwOnly: pkwOnly)
 
@@ -119,22 +124,5 @@ public final class SuperAppIntroObserver: Client.Observer {
 
     private func dismissView() {
         topViewController.topMostViewController?.dismiss(animated: true)
-    }
-}
-
-extension IntroView {
-    init(_ flow: FeatureSuperAppIntro.State.Flow, pkwOnly: Bool) {
-        switch flow {
-        case .defiFirst:
-            self.init(.pkw, actionTitle: LocalizationConstants.okString)
-        case .tradingFirst:
-            self.init(.trading, actionTitle: LocalizationConstants.okString)
-        default:
-            if pkwOnly {
-                self.init(.pkw)
-            } else {
-                self.init(.trading)
-            }
-        }
     }
 }

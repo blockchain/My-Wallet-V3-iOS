@@ -97,9 +97,7 @@ private struct CreateAccountForm: View {
     var body: some View {
         VStack(spacing: Spacing.padding2) {
             countryAndStatePickers
-            if viewStore.state.referralFieldEnabled {
-                referralCodeField
-            }
+            referralCodeField
         }
     }
 
@@ -181,22 +179,20 @@ private struct CreateAccountForm: View {
             placeholder: LocalizedString.TextFieldPlaceholder.referralCode,
             characterLimit: 8,
             state: shouldShowError ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .allCharacters
-                $0.keyboardType = .default
-            },
             onReturnTapped: {
                 viewStore.send(.set(\.$selectedInputField, nil))
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.referralGroup)
+        .textInputAutocapitalization(.characters)
+        .autocorrectionDisabled()
+        .keyboardType(.default)
     }
 }
 
 #if DEBUG
-import BlockchainNamespace
 import AnalyticsKit
+import BlockchainNamespace
 import ToolKit
 
 struct CreateAccountStepOneView_Previews: PreviewProvider {
@@ -208,8 +204,7 @@ struct CreateAccountStepOneView_Previews: PreviewProvider {
                     initialState: .init(
                         context: .createWallet
                     ),
-                    reducer: createAccountStepOneReducer,
-                    environment: .init(
+                    reducer: CreateAccountStepOneReducer(
                         mainQueue: .main,
                         passwordValidator: NoOpPasswordValidator(),
                         externalAppOpener: ToLogAppOpener(),

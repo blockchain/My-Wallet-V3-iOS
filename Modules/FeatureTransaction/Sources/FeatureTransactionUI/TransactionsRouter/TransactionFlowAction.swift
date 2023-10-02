@@ -14,7 +14,7 @@ public enum TransactionFlowAction {
     /// Performs a sell. If `CryptoCurrency` is `nil`, the users will be presented with a crypto currency selector.
     case sell(CryptoAccount?)
     /// Performs a swap. If `CryptoCurrency` is `nil`, the users will be presented with a crypto currency selector.
-    case swap(CryptoAccount?)
+    case swap(source: CryptoAccount?, target: CryptoAccount?)
     /// Performs a send. If `BlockchainAccount` is `nil`, the users will be presented with a crypto account selector.
     case send(BlockchainAccount?, TransactionTarget?)
     /// Performs a receive. If `CryptoAccount` is `nil`, the users will be presented with a crypto account selector.
@@ -42,9 +42,10 @@ public enum TransactionFlowAction {
 extension TransactionFlowAction: Equatable {
     public static func == (lhs: TransactionFlowAction, rhs: TransactionFlowAction) -> Bool {
         switch (lhs, rhs) {
+        case (.swap(let lhsSourceAccount, let lhsTargetAccount), .swap(let rhsSourceAccount, let rhsTargetAccount)):
+            return lhsSourceAccount?.identifier == rhsSourceAccount?.identifier && lhsTargetAccount?.identifier == rhsTargetAccount?.identifier
         case (.buy(let lhsAccount), .buy(let rhsAccount)),
-             (.sell(let lhsAccount), .sell(let rhsAccount)),
-             (.swap(let lhsAccount), .swap(let rhsAccount)):
+            (.sell(let lhsAccount), .sell(let rhsAccount)):
             return lhsAccount?.identifier == rhsAccount?.identifier
         case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)):
             return lhsAccount.identifier == rhsAccount.identifier
@@ -141,9 +142,10 @@ extension TransactionFlowAction {
 extension TransactionFlowAction {
     var currencyCode: String? {
         switch self {
+        case .swap(let sourceAccount, _):
+            return sourceAccount?.currencyType.code
         case .buy(let account),
              .sell(let account),
-             .swap(let account),
              .receive(let account):
             return account?.currencyType.code
         case .interestTransfer(let account):

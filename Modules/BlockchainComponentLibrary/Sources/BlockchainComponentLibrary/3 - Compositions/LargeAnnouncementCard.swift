@@ -157,7 +157,7 @@ public struct LargeAnnouncementCard<Leading: View>: View {
             Button(
                 action: onCloseTapped,
                 label: {
-                    Icon.closev2
+                    Icon.close
                         .circle(
                             backgroundColor: Color(
                                 light: .semantic.medium,

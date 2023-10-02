@@ -115,6 +115,10 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
         }
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateAmount(pendingTransaction: pendingTransaction)
     }
@@ -128,15 +132,15 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
             let resultValue = try FiatValue.create(
                 minor: pricedQuote.price,
                 currency: targetAsset
-            ).or(throw: "No price").moneyValue
+            ).or(throw: "No price".error()).moneyValue
             let baseValue = MoneyValue.one(currency: sellSourceValue.currency)
             let sellDestinationValue: MoneyValue = sellSourceValue.convert(using: resultValue)
 
-            var confirmations: [TransactionConfirmation] = try [
-                TransactionConfirmations.QuoteExpirationTimer(
-                    expirationDate: pricedQuote.date.expiresAt.or(throw: "No expiry")
-                )
-            ]
+            var confirmations: [TransactionConfirmation] = []
+
+            if let expiresAt = pricedQuote.date.expiresAt {
+                confirmations.append(TransactionConfirmations.QuoteExpirationTimer(expirationDate: expiresAt))
+            }
             if let sellSourceCryptoValue = sellSourceValue.cryptoValue {
                 confirmations.append(TransactionConfirmations.SellSourceValue(cryptoValue: sellSourceCryptoValue))
             }

@@ -5,7 +5,7 @@ public struct BeforeYouContinuePleaseVerifyView: View {
 
     @BlockchainApp var app
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack(spacing: 16.pt) {
@@ -24,7 +24,7 @@ public struct BeforeYouContinuePleaseVerifyView: View {
                 }
                 .multilineTextAlignment(.center)
                 HStack {
-                    Icon.clock.micro().color(.semantic.primary)
+                    Icon.clockFilled.micro().color(.semantic.primary)
                     Text(L10n.completeIn2Minutes)
                         .typography(.paragraph2)
                         .foregroundColor(.semantic.primary)
@@ -44,7 +44,7 @@ public struct BeforeYouContinuePleaseVerifyView: View {
         .padding(.top, 40.pt)
         .overlay(
             IconButton(
-                icon: .closev2.small().color(.semantic.muted).circle(backgroundColor: .semantic.light),
+                icon: .close.small().color(.semantic.muted).circle(backgroundColor: .semantic.light),
                 action: { $app.post(event: blockchain.ux.user.custodial.onboarding.before.you.continue.article.plain.navigation.bar.button.close.tap) }
             ),
             alignment: .topTrailing

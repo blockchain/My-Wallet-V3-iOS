@@ -3,9 +3,9 @@
 import Combine
 import UserNotifications
 
-public typealias RemoteNotificationAuthorizing = RemoteNotificationRegistering
-    & RemoteNotificationAuthorizationRequesting
+public typealias RemoteNotificationAuthorizing = RemoteNotificationAuthorizationRequesting
     & RemoteNotificationAuthorizationStatusProviding
+    & RemoteNotificationRegistering
 
 /// Any potential error that may be risen during authorization request
 public enum RemoteNotificationAuthorizerError: Error {
@@ -42,6 +42,12 @@ public protocol RemoteNotificationRegistering: AnyObject {
 
 /// A protocol that defines remote-notification authorization / registration methods
 public protocol RemoteNotificationAuthorizationRequesting: AnyObject {
+    /// Explicitely request authorization for remote notifications.
+    func requestAuthorization() -> AnyPublisher<
+        Void,
+        RemoteNotificationAuthorizerError
+    >
+
     /// Request authorization for remote notifications if the status is not yet determined.
     func requestAuthorizationIfNeeded() -> AnyPublisher<
         Void,

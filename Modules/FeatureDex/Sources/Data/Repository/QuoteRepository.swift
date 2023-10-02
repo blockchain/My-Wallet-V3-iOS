@@ -50,39 +50,57 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
                             .quote(product: product, quote: request)
                             .mapError(Nabu.Error.from(_:))
                             .await()
-                    } catch {
-                        guard await backoff.count() < 4 else { throw error }
+                    } catch let error as Nabu.Error {
+                        guard error.ux.isNil else {
+                            // We got a scalable error, stop retrying.
+                            throw error
+                        }
+                        guard await backoff.count() < 4 else {
+                            throw error
+                        }
                         try await backoff.next()
                         continue
+                    } catch let error as AsyncSequenceNextError {
+                        throw error
+                    } catch {
+                        assertionFailure("Unknown error: '\(type(of: error))' '\(error)'")
+                        throw error
                     }
 
+                    let expiresAt = expiration(response)
                     let output = DexQuoteOutput(
                         request: request,
                         response: response,
                         currenciesService: currenciesService
                     )
 
-                    let expiresAt = Date(timeIntervalSinceNow: response.quoteTtl / Double(1000))
-
                     try Task.checkCancellation()
-                    if let output {
-                        subject.send(.success(output))
-                    } else {
-                        subject.send(.failure(UX.Error(error: QuoteError.notSupported)))
+
+                    guard let output else {
+                        throw QuoteError.notSupported
                     }
 
-                    if expiresAt.timeIntervalSinceNow > 0 {
-                        try await scheduler.sleep(until: .init(.now() + .seconds(expiresAt.timeIntervalSinceNow)))
+                    subject.send(.success(output))
+
+                    if expiresAt > .now() {
+                        try await scheduler.sleep(until: .init(expiresAt))
                         try Task.checkCancellation()
                         await backoff.reset()
                     } else {
                         try await backoff.next()
                     }
-                } while !Task.isCancelled
+                } while Task.isCancelled.isNo
             } catch is CancellationError {
-                // Ignore CancellationError.
+                // Ignore CancellationError
             } catch {
-                subject.send(.failure(UX.Error(error: error)))
+                switch error {
+                case let error as UX.Error:
+                    subject.send(.failure(error))
+                case let error as Nabu.Error:
+                    subject.send(.failure(UX.Error(nabu: error)))
+                default:
+                    subject.send(.failure(UX.Error(error: error)))
+                }
             }
             subject.send(completion: .finished)
         }
@@ -90,6 +108,10 @@ final class DexQuoteRepository: DexQuoteRepositoryAPI {
             .handleEvents(receiveCancel: task.cancel)
             .eraseToAnyPublisher()
     }
+}
+
+private func expiration(_ value: DexQuoteResponse) -> DispatchTime {
+    DispatchTime.now() + TimeInterval.miliseconds(value.quoteTtl)
 }
 
 private func dexQuoteRequest(
@@ -107,7 +129,6 @@ private func dexQuoteRequest(
         skipValidation: input.skipValidation
     )
     return DexQuoteRequest(
-        venue: .zeroX,
         fromCurrency: fromCurrency,
         toCurrency: toCurrency,
         takerAddress: input.takerAddress,
@@ -124,7 +145,7 @@ private func currencyParams(
         return nil
     }
     let address = cryptoCurrency.assetModel.kind.erc20ContractAddress
-    guard let network = cryptoCurrency.network(enabledCurrenciesService: currenciesService) else {
+    guard let network = cryptoCurrency.network(currenciesService: currenciesService) else {
         return nil
     }
     return DexQuoteRequest.CurrencyParams(

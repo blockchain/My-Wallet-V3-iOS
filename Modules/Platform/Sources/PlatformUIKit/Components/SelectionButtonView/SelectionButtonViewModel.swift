@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxDataSources
 import RxRelay
@@ -65,16 +66,16 @@ public final class SelectionButtonViewModel: IdentifiableType {
 
     public enum LeadingContentType {
         public struct Image {
-            let image: ImageResource
-            let background: Color
+            let image: ImageLocation
+            let background: UIColor
             let cornerRadius: BadgeImageViewModel.CornerRadius
             let offset: CGFloat
             let size: CGSize
             let renderingMode: ImageViewContent.RenderingMode
 
             public init(
-                image: ImageResource,
-                background: Color,
+                image: ImageLocation,
+                background: UIColor,
                 offset: CGFloat = 4,
                 cornerRadius: BadgeImageViewModel.CornerRadius,
                 size: CGSize,

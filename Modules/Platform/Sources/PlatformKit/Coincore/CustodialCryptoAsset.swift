@@ -69,19 +69,18 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
     // MARK: - Asset
 
     func initialize() -> AnyPublisher<Void, AssetError> {
-        Just(())
-            .mapError(to: AssetError.self)
-            .eraseToAnyPublisher()
+        .just(())
     }
 
     func accountGroup(filter: AssetFilter) -> AnyPublisher<AccountGroup?, Never> {
         cryptoAssetRepository.accountGroup(filter: filter)
     }
 
-    func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never> {
+    func parse(address: String, memo: String?) -> AnyPublisher<ReceiveAddress?, Never> {
         addressFactory
             .makeExternalAssetAddress(
                 address: address,
+                memo: memo,
                 label: address,
                 onTxCompleted: { _ in AnyPublisher.just(()) }
             )
@@ -95,11 +94,13 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
 
     func parse(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         addressFactory.makeExternalAssetAddress(
             address: address,
+            memo: memo,
             label: label,
             onTxCompleted: onTxCompleted
         )

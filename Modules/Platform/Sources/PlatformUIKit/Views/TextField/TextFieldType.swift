@@ -293,7 +293,7 @@ extension TextFieldType {
         case .cryptoAddress:
             return ""
         case .memo:
-            return LocalizedString.memo
+            return ""
         }
     }
 

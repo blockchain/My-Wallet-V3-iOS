@@ -31,22 +31,22 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
                 guard let self else { return }
 
                 let presenter = topMostViewControllerProvider.topMostViewController
-                let env = AddressSearchEnvironment(
-                    mainQueue: .main,
-                    config: config,
-                    addressService: addressService,
-                    addressSearchService: resolve(),
-                    onComplete: { address in
-                        presenter?.dismiss(animated: true) {
-                            promise(.success(address))
-                        }
-                    }
-                )
                 let view = AddressSearchView(
                     store: .init(
                         initialState: .init(address: prefill, error: nil),
-                        reducer: addressSearchReducer,
-                        environment: env
+                        reducer: AddressSearchReducer(
+                            mainQueue: .main,
+                            config: config,
+                            addressService: addressService,
+                            addressSearchService: resolve(),
+                            onComplete: { address in
+                                self.topMostViewControllerProvider
+                                    .topMostViewController?
+                                    .dismiss(animated: true) {
+                                    promise(.success(address))
+                                    }
+                            }
+                        )
                     )
                 )
                 presenter?.present(view)
@@ -64,22 +64,20 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
                 guard let self else { return }
 
                 let presenter = topMostViewControllerProvider.topMostViewController
-                let env = AddressModificationEnvironment(
-                    mainQueue: .main,
-                    config: config,
-                    addressService: addressService,
-                    addressSearchService: resolve(),
-                    onComplete: { addressResult in
-                        presenter?.dismiss(animated: true) {
-                            promise(.success(addressResult))
-                        }
-                    }
-                )
                 let view = AddressModificationView(
                     store: .init(
                         initialState: .init(isPresentedFromSearchView: isPresentedFromSearchView),
-                        reducer: addressModificationReducer,
-                        environment: env
+                        reducer: AddressModificationReducer(
+                            mainQueue: .main,
+                            config: config,
+                            addressService: addressService,
+                            addressSearchService: resolve(),
+                            onComplete: { addressResult in
+                                presenter?.dismiss(animated: true) {
+                                    promise(.success(addressResult))
+                                }
+                            }
+                        )
                     )
                 )
                 presenter?.present(view)
@@ -97,22 +95,20 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
                 guard let self else { return }
 
                 let presenter = topMostViewControllerProvider.topMostViewController
-                let env = AddressModificationEnvironment(
-                    mainQueue: .main,
-                    config: config,
-                    addressService: addressService,
-                    addressSearchService: resolve(),
-                    onComplete: { addressResult in
-                        presenter?.dismiss(animated: true) {
-                            promise(.success(addressResult))
-                        }
-                    }
-                )
                 let view = AddressModificationView(
                     store: .init(
                         initialState: .init(address: address),
-                        reducer: addressModificationReducer,
-                        environment: env
+                        reducer: AddressModificationReducer(
+                            mainQueue: .main,
+                            config: config,
+                            addressService: addressService,
+                            addressSearchService: resolve(),
+                            onComplete: { addressResult in
+                                presenter?.dismiss(animated: true) {
+                                    promise(.success(addressResult))
+                                }
+                            }
+                        )
                     )
                 )
                 presenter?.present(view)

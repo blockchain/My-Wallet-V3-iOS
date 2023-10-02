@@ -42,39 +42,71 @@ extension CacheConfiguration {
 
     /// Creates a cache configuration that flushes the cache on user logout.
     public static func onLogout() -> CacheConfiguration {
-        CacheConfiguration(flushNotificationNames: [.logout])
+        .on(blockchain.session.event.did.sign.out)
     }
 
     /// Creates a cache configuration that flushes the cache on user login and logout.
     public static func onLoginLogout() -> CacheConfiguration {
-        CacheConfiguration(flushNotificationNames: [.login, .logout])
+        .on(
+            blockchain.session.event.did.sign.in,
+            blockchain.session.event.did.sign.out
+        )
     }
 
     public static func onLoginLogoutTransaction() -> CacheConfiguration {
-        CacheConfiguration(flushNotificationNames: [.login, .logout, .transaction])
+        .on(
+            blockchain.session.event.did.sign.in,
+            blockchain.ux.transaction.event.did.finish,
+            blockchain.session.event.did.sign.out
+        )
     }
 
     public static func onLoginLogoutTransactionAndDashboardRefresh() -> CacheConfiguration {
-        CacheConfiguration(flushNotificationNames: [.login, .logout, .transaction, .dashboardPullToRefresh])
+        .on(
+            blockchain.session.event.did.sign.in,
+            blockchain.ux.transaction.event.did.finish,
+            blockchain.ux.home.event.did.pull.to.refresh,
+            blockchain.session.event.did.sign.out
+        )
     }
 
     public static func onLoginLogoutTransactionAndKYCStatusChanged() -> CacheConfiguration {
-        CacheConfiguration(flushNotificationNames: [.login, .logout, .transaction, .kycStatusChanged])
+        .on(
+            blockchain.session.event.did.sign.in,
+            blockchain.ux.transaction.event.did.finish,
+            blockchain.ux.kyc.event.status.did.change,
+            blockchain.session.event.did.sign.out
+        )
     }
 
     public static func onLoginLogoutKYCChanged() -> CacheConfiguration {
-        CacheConfiguration(flushNotificationNames: [.login, .logout, .kycFinished])
+        .on(
+            blockchain.session.event.did.sign.in,
+            blockchain.ux.kyc.event.status.did.change,
+            blockchain.session.event.did.sign.out
+        )
     }
 
     public static func onUserStateChanged() -> CacheConfiguration {
-        CacheConfiguration(
-            flushNotificationNames: [.login, .logout, .kycStatusChanged, .transaction, .dashboardPullToRefresh]
+        .on(
+            blockchain.session.event.did.sign.in,
+            blockchain.ux.transaction.event.did.finish,
+            blockchain.ux.kyc.event.status.did.change,
+            blockchain.ux.home.event.did.pull.to.refresh,
+            blockchain.session.event.did.sign.out
         )
     }
 
     public static func onLoginLogoutDebitCardRefresh() -> CacheConfiguration {
         CacheConfiguration(
-            flushNotificationNames: [.debitCardRefresh, .login, .logout, .kycStatusChanged]
+            flushNotificationNames: [.debitCardRefresh]
+        )
+        .combined(
+            with: .on(
+                blockchain.session.event.did.sign.in,
+                blockchain.ux.kyc.event.status.did.change,
+                blockchain.session.event.did.sign.out
+            )
         )
     }
 

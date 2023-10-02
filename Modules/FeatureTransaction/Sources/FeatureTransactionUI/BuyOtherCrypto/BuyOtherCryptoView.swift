@@ -40,7 +40,7 @@ public struct BuyOtherCryptoView: View {
         .primaryNavigation(
             trailing: {
                 IconButton(
-                    icon: .closeCirclev3.small(),
+                    icon: .navigationCloseButton(),
                     action: {
                         $app.post(event: blockchain.ux.buy.another.asset.article.plain.navigation.bar.button.close.tap)
                     }
@@ -219,11 +219,11 @@ struct BuyEntryRow: View {
 extension Decimal {
     var color: Color {
         if isSignMinus {
-            return Color.WalletSemantic.pink
+            return .semantic.negative
         } else if isZero {
-            return Color.WalletSemantic.body
+            return .semantic.body
         } else {
-            return Color.WalletSemantic.success
+            return .semantic.success
         }
     }
 

@@ -21,6 +21,7 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(path: "../Blockchain"),
         .package(path: "../Network"),
         .package(path: "../Errors"),
         .package(path: "../Test"),
@@ -30,6 +31,7 @@ let package = Package(
         .target(
             name: "FeatureProductsData",
             dependencies: [
+                .product(name: "Blockchain", package: "Blockchain"),
                 .product(name: "Errors", package: "Errors"),
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "ToolKit", package: "Tool"),

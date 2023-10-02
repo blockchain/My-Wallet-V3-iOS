@@ -72,6 +72,7 @@ public struct SwapCheckoutLoadedView: View {
 
     @State private var isShowingFeeDetails = false
     @State private var remainingTime: TimeInterval = .hour
+    @State private var feeExplainerDismissed = false
 
     public init(checkout: SwapCheckout, confirm: (() -> Void)? = nil) {
         self.checkout = checkout
@@ -85,8 +86,8 @@ extension SwapCheckoutView.Loaded {
         VStack(alignment: .center) {
             ScrollView {
                 swap()
+                feeExplainSection()
                 rate()
-                fees()
                 quoteExpiry()
                 disclaimer()
             }
@@ -97,53 +98,156 @@ extension SwapCheckoutView.Loaded {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
         .primaryNavigation(title: L10n.NavigationTitle.swap)
-    }
-
-    @ViewBuilder func swap() -> some View {
-        ZStack {
-            VStack {
-                target(checkout.from)
-                target(checkout.to)
-            }
-            Icon.arrowDown
-                .color(.semantic.title)
-                .circle(backgroundColor: .semantic.background)
-                .frame(width: 24.pt, height: 24.pt)
-                .background(Circle().fill(Color.semantic.light).scaleEffect(1.5))
+        .bindings {
+            subscribe(
+                $feeExplainerDismissed.animation(),
+                to: blockchain.ux
+                    .transaction.checkout.fee.explainer.dismissed
+            )
+        }
+        .batch {
+            set(
+                blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into,
+                to: blockchain.ux.tooltip
+            )
         }
     }
 
-    @ViewBuilder func target(_ target: SwapCheckout.Target) -> some View {
+    @ViewBuilder func swap() -> some View {
+        VStack(spacing: 0) {
+            sourceSection()
+                .padding(.bottom, -Spacing.padding1)
+                .zIndex(0)
+            Icon.arrowDown
+                .small()
+                .color(.semantic.title)
+                .circle(backgroundColor: .semantic.background)
+                .background(Circle().fill(Color.semantic.light).scaleEffect(1.5))
+                .zIndex(1)
+            targetSection()
+                .padding(.top, -Spacing.padding1)
+                .zIndex(0)
+        }
+    }
+
+    @ViewBuilder
+    func sourceSection() -> some View {
+        let target = checkout.from
         let cryptoValue = target.cryptoValue
-        TableRow(
-            leading: {
-                cryptoValue.currency.logo()
-            },
-            title: {
-                Text(cryptoValue.currency.name)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.title)
-            },
-            byline: {
-                Text(target.name)
-                    .typography(.caption1)
-                    .foregroundColor(.semantic.body)
-            },
-            trailing: {
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text(cryptoValue.displayString)
+        DividedVStack {
+            TableRow(
+                leading: {
+                    cryptoValue.currency.logo()
+                },
+                title: {
+                    Text(cryptoValue.currency.name)
                         .typography(.paragraph2)
                         .foregroundColor(.semantic.title)
-                    if let fiatValue = target.fiatValue {
-                        Text(fiatValue.displayString)
+                },
+                byline: {
+                    Text(target.name)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        if let fiatValue = target.fiatValue {
+                            Text(fiatValue.displayString)
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                                .padding(.top, 2)
+                        }
+                        Text(cryptoValue.displayString)
                             .typography(.caption1)
                             .foregroundColor(.semantic.body)
-                            .padding(.top, 2)
                     }
                 }
+            )
+
+            if !target.fee.isZero {
+                fee(
+                    crypto: target.fee,
+                    fiat: target.feeFiatValue
+                )
+
+                TableRow(
+                    title: {
+                        Text("Subtotal")
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.body)
+                    },
+                    trailing: {
+                        VStack(alignment: .trailing, spacing: 4) {
+                            Text("~ " + (target.amountFiatValueAddFee?.displayString ?? ""))
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                        }
+                    }
+                )
             }
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.semantic.background)
         )
-        .padding(.vertical, 4.pt)
+    }
+
+    @ViewBuilder
+    func targetSection() -> some View {
+        let target = checkout.to
+        let cryptoValue = target.cryptoValue
+        DividedVStack {
+            TableRow(
+                leading: {
+                    cryptoValue.currency.logo()
+                },
+                title: {
+                    Text(cryptoValue.currency.name)
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.title)
+                },
+                byline: {
+                    Text(target.name)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.body)
+                },
+                trailing: {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        if let fiatValue = target.fiatValue {
+                            Text("~ " + fiatValue.displayString)
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                                .padding(.top, 2)
+                        }
+                        Text("~ " + cryptoValue.displayString)
+                            .typography(.caption1)
+                            .foregroundColor(.semantic.body)
+                    }
+                }
+            )
+
+            if !target.fee.isZero {
+                fee(
+                    crypto: target.fee,
+                    fiat: target.feeFiatValue
+                )
+
+                TableRow(
+                    title: {
+                        Text(L10n.Label.amountToBeReceivedTitle)
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.body)
+                    },
+                    trailing: {
+                        VStack(alignment: .trailing, spacing: 4) {
+                            Text("~ " + (target.amountFiatValueSubtractFee?.displayString ?? ""))
+                                .typography(.paragraph2)
+                                .foregroundColor(.semantic.title)
+                        }
+                    }
+                )
+            }
+        }
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.semantic.background)
@@ -152,13 +256,36 @@ extension SwapCheckoutView.Loaded {
 
     @ViewBuilder func rate() -> some View {
         TableRow(
-            title: TableRowTitle(L10n.Label.exchangeRate),
+            title: {
+                HStack {
+                    Text(L10n.Label.exchangeRate)
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.body)
+
+                    Icon
+                        .questionFilled
+                        .color(.semantic.muted)
+                        .micro()
+                }
+            },
             trailingTitle: "\(checkout.exchangeRate.base.displayString) = \(checkout.exchangeRate.quote.displayString)"
         )
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.semantic.background)
         )
+        .onTapGesture {
+            $app.post(
+                event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
+                context: [
+                    blockchain.ux.tooltip.title: L10n.Tooltip.rateTitle,
+                    blockchain.ux.tooltip.body: L10n.Tooltip.rateMessage(code1: checkout.from.code, code2: checkout.to.code),
+                    blockchain.ui.type.action.then.enter.into.detents: [
+                        blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                    ]
+                ]
+            )
+        }
     }
 
     @ViewBuilder func quoteExpiry() -> some View {
@@ -172,91 +299,100 @@ extension SwapCheckoutView.Loaded {
     }
 
     @ViewBuilder
-    func fees() -> some View {
-        if app.currentMode == .pkw {
-            VStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    HStack {
-                        Text(L10n.Label.networkFees)
-                        Spacer()
-                        if let fee = checkout.totalFeesInFiat {
-                            Text("~ \(fee.displayString)")
-                        } else {
-                            Text(L10n.Label.noNetworkFee)
-                        }
-
-                        if isShowingFeeDetails {
-                            IconButton(icon: .chevronDown, action: {
-                                withAnimation { isShowingFeeDetails.toggle() }
-                            })
-                            .frame(width: 16.pt, height: 16.pt)
-                        } else {
-                            IconButton(icon: .chevronRight, action: {
-                                withAnimation { isShowingFeeDetails.toggle() }
-                            })
-                            .frame(width: 16.pt, height: 16.pt)
-                        }
-
-                    }
-                    .typography(.paragraph2)
-                    .padding()
-
-                    if isShowingFeeDetails {
-                        Group {
-                            PrimaryDivider()
-                            fee(
-                                crypto: checkout.from.fee,
-                                fiat: checkout.from.feeFiatValue
-                            )
-                            PrimaryDivider()
-                            fee(
-                                crypto: checkout.to.fee,
-                                fiat: checkout.to.feeFiatValue
-                            )
-                        }
-                    }
-                }
-                PrimaryDivider()
-                RichText(L10n.Label.feesDisclaimer.interpolating(checkout.from.code, checkout.to.code))
-                    .typography(.caption1)
-                    .padding(16.pt)
+    func feeExplainSection() -> some View {
+        if checkout.to.isPrivateKey, feeExplainerDismissed == false {
+            ZStack(alignment: .topTrailing) {
+                closeButton
+                    .zIndex(1)
+                    .padding(.top, Spacing.padding1)
+                    .padding(.trailing, Spacing.padding1)
                     .onTapGesture {
-                        $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
+                        $app.post(value: true, of: blockchain.ux.transaction.checkout.fee.explainer.dismissed)
                     }
+
+                VStack(alignment: .leading) {
+                    VStack(
+                        alignment: .leading,
+                        spacing: Spacing.padding1
+                    ) {
+                        Text(L10n.Label.networkFeesTitle)
+                            .typography(.paragraph2)
+                            .foregroundColor(.semantic.title)
+
+                        Text(L10n.Label.networkFeesSubtitle)
+                            .typography(.caption1)
+                            .foregroundColor(.semantic.title)
+
+                        SmallSecondaryButton(
+                            title: L10n.Button.learnMore,
+                            action: {
+                                $app.post(event: blockchain.ux.transaction.checkout.fee.disclaimer)
+                            }
+                        )
+                        .padding(.top, Spacing.padding2)
+                    }
+                    .padding(.vertical, Spacing.padding2)
+                }
+                .zIndex(0)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.semantic.background)
+                )
             }
             .batch {
                 set(blockchain.ux.transaction.checkout.fee.disclaimer.then.launch.url, to: { blockchain.ux.transaction.checkout.fee.disclaimer.url })
             }
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.semantic.background)
-            )
         }
     }
 
+    var closeButton: some View {
+        Icon
+            .close
+            .color(.semantic.muted)
+            .circle(backgroundColor: .semantic.light)
+            .frame(width: 24, height: 24)
+    }
+
+    @ViewBuilder
     func fee(crypto: CryptoValue, fiat: FiatValue?) -> some View {
-        TableRow(
-            title: TableRowTitle(L10n.Label.assetNetworkFees.interpolating(crypto.code)),
-            trailing: {
-                VStack(alignment: .trailing, spacing: 4) {
-                    Group {
-                        if crypto.isZero {
-                            Text(L10n.Label.noNetworkFee)
-                        } else {
-                            Text("~ \(crypto.displayString)")
-                        }
-                    }
+        TableRow(title: {
+            HStack {
+                Text(L10n.Label.assetNetworkFees.interpolating(crypto.code))
                     .typography(.paragraph2)
-                    .foregroundColor(.semantic.title)
-                    if let fiatValue = fiat, !crypto.isZero {
-                        Text(fiatValue.displayString)
-                            .typography(.caption1)
-                            .foregroundColor(.semantic.body)
-                            .padding(.top, 2)
-                    }
-                }
+                    .foregroundColor(.semantic.body)
+
+                Icon
+                    .questionFilled
+                    .color(.semantic.muted)
+                    .micro()
             }
-        )
+        }, trailing: {
+            VStack(alignment: .trailing, spacing: 4) {
+                if let fiatValue = fiat, !crypto.isZero {
+                    Text("~ \(fiatValue.displayString)")
+                        .typography(.paragraph2)
+                        .foregroundColor(.semantic.title)
+                        .padding(.top, 2)
+                }
+
+                Text("~ " + "\(crypto.displayString)")
+                    .typography(.caption1)
+                    .foregroundColor(.semantic.body)
+            }
+        })
+        .onTapGesture {
+            $app.post(
+                event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
+                context: [
+                    blockchain.ux.tooltip.title: L10n.Tooltip.feeTitle,
+                    blockchain.ux.tooltip.body: L10n.Tooltip.feeMessage,
+                    blockchain.ui.type.action.then.enter.into.detents: [
+                        blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                    ]
+                ]
+            )
+        }
     }
 
     func disclaimer() -> some View {
@@ -300,6 +436,11 @@ struct SwapCheckoutView_Previews: PreviewProvider {
             .context([blockchain.ux.transaction.id: "swap"])
             .previewDisplayName("Private Key -> Private Key Swap")
 
+        SwapCheckoutLoadedView(checkout: .previewPrivateKeyToPrivateKeyNoTargetFees)
+            .app(App.preview)
+            .context([blockchain.ux.transaction.id: "swap"])
+            .previewDisplayName("Private Key -> Private Key Swap No Fees")
+
         SwapCheckoutLoadedView(checkout: .previewPrivateKeyToTrading)
             .app(App.preview)
             .context([blockchain.ux.transaction.id: "swap"])
@@ -309,5 +450,10 @@ struct SwapCheckoutView_Previews: PreviewProvider {
             .app(App.preview)
             .context([blockchain.ux.transaction.id: "swap"])
             .previewDisplayName("Trading -> Trading Swap")
+
+        SwapCheckoutLoadedView(checkout: .previewTradingToTradingNoFees)
+            .app(App.preview)
+            .context([blockchain.ux.transaction.id: "swap"])
+            .previewDisplayName("Trading -> Trading Swap No Fees")
     }
 }

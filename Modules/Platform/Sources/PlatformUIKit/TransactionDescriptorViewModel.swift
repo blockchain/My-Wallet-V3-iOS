@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import MoneyKit
 import PlatformKit
 import RxCocoa
@@ -7,7 +8,7 @@ import RxRelay
 import RxSwift
 
 struct BadgeImageAttributes {
-    let imageResource: ImageResource
+    let imageResource: ImageLocation
     let brandColor: UIColor
     let isFiat: Bool
 
@@ -23,7 +24,7 @@ struct BadgeImageAttributes {
         self.isFiat = currencyType.isFiatCurrency
     }
 
-    init(imageResource: ImageResource, brandColor: UIColor, isFiat: Bool) {
+    init(imageResource: ImageLocation, brandColor: UIColor, isFiat: Bool) {
         self.imageResource = imageResource
         self.brandColor = brandColor
         self.isFiat = isFiat
@@ -35,7 +36,7 @@ public struct TransactionDescriptorViewModel {
         guard adjustActionIconColor else {
             return Driver.just(
                 provideBadgeImageViewModel(
-                    accentColor: .primaryButton,
+                    accentColor: .primary,
                     backgroundColor: .lightBlueBackground
                 )
             )

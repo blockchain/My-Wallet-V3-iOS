@@ -103,4 +103,8 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
             self.clearConfirmations(pendingTransaction: pendingTransaction)
         }
     }
+
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
 }

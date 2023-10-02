@@ -121,9 +121,7 @@ final class TransactionsRouter: TransactionsRouterAPI {
     func presentTransactionFlow(
         to action: TransactionFlowAction
     ) -> AnyPublisher<TransactionFlowResult, Never> {
-        guard let viewController = topMostViewControllerProvider.topMostViewController else {
-            fatalError("Expected a UIViewController")
-        }
+        let viewController = topMostViewControllerProvider.findTopViewController(allowBeingDismissed: false)
         return presentTransactionFlow(to: action, from: viewController)
     }
 
@@ -376,7 +374,7 @@ extension TransactionsRouter {
             mimicRIBAttachment(router: router)
             return listener.publisher
 
-        case .swap(let cryptoAccount):
+        case .swap(let sourceAccount, let targetAccount):
             guard presenter.presentedViewController == nil else {
                 return .empty()
             }
@@ -384,8 +382,8 @@ extension TransactionsRouter {
             let router = transactionFlowBuilder.build(
                 withListener: interactor,
                 action: .swap,
-                sourceAccount: cryptoAccount,
-                target: nil
+                sourceAccount: sourceAccount,
+                target: targetAccount
             )
             presenter.present(router.viewControllable.uiviewController, animated: true)
             mimicRIBAttachment(router: router)
@@ -452,35 +450,6 @@ extension TransactionsRouter {
                 await startRouterOnMainThread(target: nil)
             }
         }
-    }
-
-    private func presentTooManyPendingOrders(
-        count: Int,
-        from presenter: UIViewController
-    ) -> AnyPublisher<TransactionFlowResult, Never> {
-        let subject = PassthroughSubject<TransactionFlowResult, Never>()
-
-        func dismiss() {
-            presenter.dismiss(animated: true) {
-                subject.send(.abandoned)
-            }
-        }
-
-        presenter.present(
-            PrimaryNavigationView {
-                TooManyPendingOrdersView(
-                    count: count,
-                    viewActivityAction: { [tabSwapping] in
-                        tabSwapping.switchToActivity()
-                        dismiss()
-                    },
-                    okAction: dismiss
-                )
-                .whiteNavigationBarStyle()
-                .trailingNavigationButton(.close, action: dismiss)
-            }
-        )
-        return subject.eraseToAnyPublisher()
     }
 
     /// Checks if the user has a valid trading currency set. If not, it presents a modal asking the user to select one.

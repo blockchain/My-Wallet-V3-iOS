@@ -4,23 +4,36 @@ import Combine
 import Errors
 import ToolKit
 import WalletCore
+import YenomBitcoinKit
 
 struct NativeBitcoinTransactionContext {
-    let accountKeyContext: AccountKeyContext
+    let accountKeyContext: AccountKeyContextProtocol
     let unspentOutputs: [UnspentOutput]
     let multiAddressItems: [AddressItem]
     let coin: BitcoinChainCoin
     let keyPairs: [WalletKeyPair]
+    let imported: Bool
 
-    init(accountKeyContext: AccountKeyContext, unspentOutputs: [UnspentOutput], multiAddressItems: [AddressItem], coin: BitcoinChainCoin) {
+    init(accountKeyContext: AccountKeyContextProtocol, unspentOutputs: [UnspentOutput], multiAddressItems: [AddressItem], coin: BitcoinChainCoin, imported: Bool) {
         self.accountKeyContext = accountKeyContext
         self.unspentOutputs = unspentOutputs
         self.multiAddressItems = multiAddressItems
         self.coin = coin
-        self.keyPairs = getWalletKeyPairs(
-            unspentOutputs: unspentOutputs,
-            accountKeyContext: accountKeyContext
-        )
+        self.imported = imported
+        if !imported {
+            self.keyPairs = getWalletKeyPairs(
+                unspentOutputs: unspentOutputs,
+                accountKeyContext: accountKeyContext
+            )
+        } else {
+            self.keyPairs = [
+                WalletKeyPair(
+                    xpriv: accountKeyContext.defaultDerivation(coin: coin).xpriv,
+                    privateKeyData: WalletCore.Base58.decodeNoCheck(string: accountKeyContext.defaultDerivation(coin: coin).xpriv) ?? Data(),
+                    xpub: XPub(address: accountKeyContext.defaultDerivation(coin: coin).xpub, derivationType: .legacy)
+                )
+            ]
+        }
     }
 }
 
@@ -40,8 +53,8 @@ func getTransactionContextProvider(
     fetchMultiAddressFor: @escaping FetchMultiAddressFor
 ) -> (BitcoinChainAccount) -> AnyPublisher<NativeBitcoinTransactionContext, Error> {
     { [walletMnemonicProvider] account in
-        getAccountKeys(
-            for: account,
+        getAccountKeysOrImportedAddressContext(
+            account: account,
             walletMnemonicProvider: walletMnemonicProvider
         )
         .flatMap { context -> AnyPublisher<NativeBitcoinTransactionContext, Error> in
@@ -59,9 +72,50 @@ func getTransactionContextProvider(
                 .map { unspentOutputs, addressItems in
                     (context, unspentOutputs, addressItems, account.coin)
                 }
-                .map(NativeBitcoinTransactionContext.init)
+                .map { context, unspentOutputs, addressItems, coin in
+                    NativeBitcoinTransactionContext(
+                        accountKeyContext: context,
+                        unspentOutputs: unspentOutputs,
+                        multiAddressItems: addressItems,
+                        coin: coin,
+                        imported: account.isImported
+                    )
+                }
                 .eraseToAnyPublisher()
         }
+        .eraseToAnyPublisher()
+    }
+}
+
+enum ImportedAccountContextError: Error {
+    case missingPrivateKey
+    case missingXpub
+}
+
+private func getAccountKeysOrImportedAddressContext(
+    account: BitcoinChainAccount,
+    walletMnemonicProvider: @escaping WalletMnemonicProvider
+) -> AnyPublisher<AccountKeyContextProtocol, Error> {
+    if account.isImported {
+        guard let priv = account.importedPrivateKey, priv.isNotEmpty else {
+            return .failure(ImportedAccountContextError.missingPrivateKey)
+        }
+        guard let xpub = account.xpub else {
+            return .failure(ImportedAccountContextError.missingXpub)
+        }
+        return .just(
+            ImportedAccountKeyContext(
+                coin: account.coin.derivationCoinType,
+                accountIndex: UInt32(account.index),
+                xPub: xpub,
+                priv: priv
+            )
+        )
+    } else {
+        return getAccountKeys(
+            for: account,
+            walletMnemonicProvider: walletMnemonicProvider
+        )
         .eraseToAnyPublisher()
     }
 }

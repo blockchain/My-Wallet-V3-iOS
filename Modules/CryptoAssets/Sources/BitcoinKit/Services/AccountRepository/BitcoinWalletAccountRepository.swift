@@ -25,8 +25,12 @@ final class BitcoinWalletAccountRepository {
     // MARK: - Properties
 
     let defaultAccount: AnyPublisher<BitcoinWalletAccount, BitcoinWalletRepositoryError>
+    /// All accounts, Defi Wallet and imported addresses (if any)
     let accounts: AnyPublisher<[BitcoinWalletAccount], BitcoinWalletRepositoryError>
+
+    /// Any active accounts, excluding imported addresses
     let activeAccounts: AnyPublisher<[BitcoinWalletAccount], BitcoinWalletRepositoryError>
+    let importedAccounts: AnyPublisher<[BitcoinWalletAccount], BitcoinWalletRepositoryError>
 
     private let cachedValue: CachedValueNew<
         Key,
@@ -58,7 +62,7 @@ final class BitcoinWalletAccountRepository {
                     .map { entry in
                         let defaultIndex = entry.defaultAccountIndex
                         let defaultAccount = btcWalletAccount(from: entry.accounts[defaultIndex])
-                        let accounts = entry.accounts.map(btcWalletAccount(from:))
+                        let accounts = entry.accounts.map(btcWalletAccount(from:)) + entry.importedAddresses.map(btcWalletAccount(from:))
                         return BTCAccounts(defaultAccount: defaultAccount, accounts: accounts)
                     }
                     .eraseToAnyPublisher()
@@ -75,7 +79,13 @@ final class BitcoinWalletAccountRepository {
 
         self.activeAccounts = accounts
             .map { accounts in
-                accounts.filter(\.isActive)
+                accounts.filter { $0.isActive && !$0.imported }
+            }
+            .eraseToAnyPublisher()
+
+        self.importedAccounts = accounts
+            .map { accounts in
+                accounts.filter { $0.isActive && $0.imported }
             }
             .eraseToAnyPublisher()
     }
@@ -118,6 +128,20 @@ private func btcWalletAccount(
         index: entry.index,
         label: entry.label,
         archived: entry.archived,
-        publicKeys: XPubs(xpubs: publicKeys)
+        publicKeys: .left(XPubs(xpubs: publicKeys))
+    )
+}
+
+private func btcWalletAccount(
+    from address: BitcoinEntry.ImportedAddress
+) -> BitcoinWalletAccount {
+    let xpub = XPub(address: address.addr, derivationType: .legacy)
+    return BitcoinWalletAccount(
+        index: 0,
+        label: address.label ?? "",
+        archived: address.archived,
+        publicKeys: .right(xpub),
+        importedPrivateKey: address.priv,
+        imported: true
     )
 }

@@ -4,6 +4,7 @@ import AnalyticsKit
 import BlockchainNamespace
 import BlockchainUI
 import DIKit
+import FeatureTransactionDomain
 import Localization
 import MoneyKit
 import PlatformKit
@@ -14,20 +15,6 @@ import RxSwift
 import SwiftUI
 import ToolKit
 import UIKit
-import FeatureTransactionDomain
-
-protocol EnterAmountPageBuildable {
-    func build(
-        listener: EnterAmountPageListener,
-        sourceAccount: SingleAccount,
-        destinationAccount: TransactionTarget,
-        action: AssetAction,
-        navigationModel: ScreenNavigationModel
-    ) -> EnterAmountPageRouter
-
-    func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>?
-    func buildNewSwapEnterAmount(with source: BlockchainAccount?, target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>?
-}
 
 public struct TransactionMinMaxValues: Equatable {
     var maxSpendableFiatValue: MoneyValue
@@ -35,10 +22,12 @@ public struct TransactionMinMaxValues: Equatable {
     var minSpendableFiatValue: MoneyValue
     var minSpendableCryptoValue: MoneyValue
 
-    init(maxSpendableFiatValue: MoneyValue,
-         maxSpendableCryptoValue: MoneyValue,
-         minSpendableFiatValue: MoneyValue,
-         minSpendableCryptoValue: MoneyValue) {
+    init(
+        maxSpendableFiatValue: MoneyValue,
+        maxSpendableCryptoValue: MoneyValue,
+        minSpendableFiatValue: MoneyValue,
+        minSpendableCryptoValue: MoneyValue
+    ) {
         self.maxSpendableFiatValue = maxSpendableFiatValue
         self.maxSpendableCryptoValue = maxSpendableCryptoValue
         self.minSpendableFiatValue = minSpendableFiatValue
@@ -46,7 +35,7 @@ public struct TransactionMinMaxValues: Equatable {
     }
 }
 
-final class EnterAmountPageBuilder: EnterAmountPageBuildable {
+final class EnterAmountPageBuilder {
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let transactionModel: TransactionModel
     private let priceService: PriceServiceAPI
@@ -76,7 +65,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
 
     func buildNewSwapEnterAmount(with source: BlockchainAccount?, target: TransactionTarget?) -> ViewableRouter<Interactable, ViewControllable>? {
         let publisher = transactionModel.state.publisher
-            .compactMap({state -> TransactionMinMaxValues? in
+            .compactMap { state -> TransactionMinMaxValues? in
                 if state.source != nil {
                     return TransactionMinMaxValues(
                         maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
@@ -87,7 +76,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                 } else {
                     return nil
                 }
-            })
+            }
             .ignoreFailure(setFailureType: Never.self)
             .eraseToAnyPublisher()
 
@@ -99,10 +88,10 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             dismiss: { [weak self] in
                 self?.transactionModel.process(action: .resetFlow)
             },
-            onPairsSelected: { source, target, amount in
+            onPairsSelected: { source, target in
                 Task {
                     if let blockchainAccount = try? await self.coincore.account(source).await(),
-                       let targetBlockchainAccount = (try? await self.coincore.account(target).await()) as? TransactionTarget
+                       let targetBlockchainAccount = await (try? self.coincore.account(target).await()) as? TransactionTarget
                     {
                         self.transactionModel.process(
                             action: .initialiseWithSourceAndTargetAccount(
@@ -113,7 +102,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                         )
                         // Workaround needed because you can't update and initialise a transaction at the same time. Update requires the transaction to be initialised beforehand. Currently, the transaction model has no callback to know when the transaction has been initalised so for the time being I am doing this delay.
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.transactionModel.process(action: .updateAmount(amount ?? .zero(currency: blockchainAccount.currencyType)))
+                            self.transactionModel.process(action: .updateAmount(.zero(currency: blockchainAccount.currencyType)))
                         }
                     }
                 }
@@ -132,15 +121,19 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         )
 
         var sourceInformation: SelectionInformation?
-        if let source = source, let currency = source.currencyType.cryptoCurrency {
-            sourceInformation = SelectionInformation(accountId: source.identifier,
-                                                     currency: currency)
+        if let source, let currency = source.currencyType.cryptoCurrency {
+            sourceInformation = SelectionInformation(
+                accountId: source.identifier,
+                currency: currency
+            )
         }
 
         var targetInformation: SelectionInformation?
         if let target = target as? BlockchainAccount, let currency = target.currencyType.cryptoCurrency {
-            targetInformation = SelectionInformation(accountId: target.identifier,
-                                                     currency: currency)
+            targetInformation = SelectionInformation(
+                accountId: target.identifier,
+                currency: currency
+            )
         }
 
         let enterAmount = SwapEnterAmountView(
@@ -154,7 +147,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 trailing: IconButton(
-                    icon: .closeCirclev3,
+                    icon: .navigationCloseButton(),
                     action: { [app] in
                         self.transactionModel.process(action: .returnToPreviousStep)
                         app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
@@ -177,7 +170,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
 
     func buildNewSellEnterAmount() -> ViewableRouter<Interactable, ViewControllable>? {
         let minMaxPublisher = transactionModel.state.publisher
-            .compactMap({state -> TransactionMinMaxValues? in
+            .compactMap { state -> TransactionMinMaxValues? in
                 if state.source != nil {
                     return TransactionMinMaxValues(
                         maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
@@ -188,15 +181,31 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                 } else {
                     return nil
                 }
-            })
+            }
             .ignoreFailure(setFailureType: Never.self)
             .eraseToAnyPublisher()
+
+        let validationStatePublisher = transactionModel.state.publisher
+            .compactMap { state -> TransactionValidationState? in
+                state.pendingTransaction?.validationState
+            }
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
+
+        let errorStatePublisher = transactionModel.state.publisher
+            .compactMap { state -> TransactionErrorState? in
+                state.errorState
+            }
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
+
+
 
         let sellEnterAmountReducer = SellEnterAmount(
             app: resolve(),
             onAmountChanged: { [weak self] amount in
                 self?.app.post(value: amount.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
-                self?.transactionModel.process(action: .fetchPrice(amount: amount))
+                self?.transactionModel.process(action: .fetchPrice(amount: .one(currency: amount.currency)))
                 self?.transactionModel.process(action: .updateAmount(amount))
             },
             onPreviewTapped: { [weak self] amount in
@@ -205,7 +214,8 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
                     self?.transactionModel.process(action: .prepareTransaction)
                 }
             },
-            minMaxAmountsPublisher: minMaxPublisher
+            minMaxAmountsPublisher: minMaxPublisher,
+            validationStatePublisher: validationStatePublisher
         )
 
         let enterAmount = SellEnterAmountView(
@@ -222,7 +232,7 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 trailing: IconButton(
-                    icon: .closeCirclev3,
+                    icon: .navigationCloseButton(),
                     action: { [app] in
                         self.transactionModel.process(action: .returnToPreviousStep)
                         app.post(event: blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back)
@@ -242,18 +252,17 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
         )
     }
 
-
     func build(
         listener: EnterAmountPageListener,
         sourceAccount: SingleAccount,
         destinationAccount: TransactionTarget,
         action: AssetAction,
-        navigationModel: ScreenNavigationModel
+        navigationModel: ScreenNavigationModel,
+        defaultFiatCurrency: FiatCurrency
     ) -> EnterAmountPageRouter {
         let displayBundle = DisplayBundle.bundle(for: action, sourceAccount: sourceAccount, destinationAccount: destinationAccount)
         let amountViewable: AmountViewable
         let amountViewInteracting: AmountViewInteracting
-        let amountViewPresenting: AmountViewPresenting
         let isQuickfillEnabled = app
             .remoteConfiguration
             .yes(if: blockchain.app.configuration.transaction.quickfill.is.enabled)
@@ -261,136 +270,109 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
             .remoteConfiguration
             .yes(if: blockchain.app.configuration.recurring.buy.is.enabled)
 
-        let state = transactionModel
-            .state
-            .publisher
-
-        let source = state.compactMap(\.source)
-        let maxLimitPublisher = source.flatMap { [fiatCurrencyService] account -> AnyPublisher<MoneyValue, Error> in
-            if let account = account as? PaymentMethodAccount {
-                return .just(account.paymentMethodType.topLimit)
-            }
-            return fiatCurrencyService
-                .tradingCurrencyPublisher
-                .flatMap { fiatCurrency in
-                    account
-                        .fiatBalance(fiatCurrency: fiatCurrency)
-                }
-                .eraseToAnyPublisher()
-        }
-            .compactMap(\.fiatValue)
-            .ignoreFailure(setFailureType: Never.self)
-            .eraseToAnyPublisher()
-
         switch action {
         case .sell:
-            guard let crypto = sourceAccount.currencyType.cryptoCurrency else {
+            guard let cryptoCurrency = sourceAccount.currencyType.cryptoCurrency else {
                 fatalError("Expected a crypto as a source account.")
             }
-            guard let fiat = destinationAccount.currencyType.fiatCurrency else {
+            guard let fiatCurrency = destinationAccount.currencyType.fiatCurrency else {
                 fatalError("Expected a fiat as a destination account.")
             }
-            amountViewInteracting = AmountTranslationInteractor(
-                fiatCurrencyClosure: { Observable.just(fiat) },
-                cryptoCurrencyService: DefaultCryptoCurrencyService(currencyType: sourceAccount.currencyType),
+            let interactor = AmountTranslationInteractor(
+                fiatCurrencyClosure: { .just(fiatCurrency) },
+                cryptoCurrency: cryptoCurrency,
                 priceProvider: AmountTranslationPriceProvider(transactionModel: transactionModel),
+                defaultFiatCurrency: fiatCurrency,
                 app: app,
-                defaultCryptoCurrency: crypto,
                 initialActiveInput: .fiat
             )
-
-            amountViewPresenting = AmountTranslationPresenter(
-                interactor: amountViewInteracting as! AmountTranslationInteractor,
+            let presenter = AmountTranslationPresenter(
+                interactor: interactor,
                 analyticsRecorder: analyticsEventRecorder,
                 displayBundle: displayBundle.amountDisplayBundle,
                 inputTypeToggleVisibility: .visible,
-                app: app,
-                maxLimitPublisher: maxLimitPublisher
+                app: app
             )
-
+            amountViewInteracting = interactor
             amountViewable = AmountTranslationView(
-                presenter: amountViewPresenting as! AmountTranslationPresenter,
+                presenter: presenter,
                 app: app,
                 prefillButtonsEnabled: isQuickfillEnabled,
                 shouldShowAvailableBalanceView: isQuickfillEnabled
             )
 
         case .swap,
-                .send,
-                .interestWithdraw,
-                .interestTransfer,
-                .stakingDeposit,
-                .stakingWithdraw,
-                .activeRewardsDeposit,
-                .activeRewardsWithdraw:
-            guard let crypto = sourceAccount.currencyType.cryptoCurrency else {
+             .send,
+             .interestWithdraw,
+             .interestTransfer,
+             .stakingDeposit,
+             .stakingWithdraw,
+             .activeRewardsDeposit,
+             .activeRewardsWithdraw:
+            guard let cryptoCurrency = sourceAccount.currencyType.cryptoCurrency else {
                 fatalError("Expected a crypto as a source account.")
             }
-            amountViewInteracting = AmountTranslationInteractor(
+            let interactor = AmountTranslationInteractor(
                 fiatCurrencyClosure: { [fiatCurrencyService] in
-                    fiatCurrencyService.tradingCurrency.asObservable()
+                    fiatCurrencyService.tradingCurrency
                 },
-                cryptoCurrencyService: DefaultCryptoCurrencyService(currencyType: sourceAccount.currencyType),
+                cryptoCurrency: cryptoCurrency,
                 priceProvider: AmountTranslationPriceProvider(transactionModel: transactionModel),
+                defaultFiatCurrency: defaultFiatCurrency,
                 app: app,
-                defaultCryptoCurrency: crypto,
                 initialActiveInput: .fiat
             )
-
-            amountViewPresenting = AmountTranslationPresenter(
-                interactor: amountViewInteracting as! AmountTranslationInteractor,
+            let presenter = AmountTranslationPresenter(
+                interactor: interactor,
                 analyticsRecorder: analyticsEventRecorder,
                 displayBundle: displayBundle.amountDisplayBundle,
                 inputTypeToggleVisibility: .visible,
-                app: app,
-                maxLimitPublisher: maxLimitPublisher
+                app: app
             )
-
+            amountViewInteracting = interactor
             amountViewable = AmountTranslationView(
-                presenter: amountViewPresenting as! AmountTranslationPresenter,
+                presenter: presenter,
                 app: app,
                 prefillButtonsEnabled: isQuickfillEnabled,
                 shouldShowAvailableBalanceView: isQuickfillEnabled
             )
 
         case .deposit,
-                .withdraw:
-            amountViewInteracting = SingleAmountInteractor(
+             .withdraw:
+            let interactor = SingleAmountInteractor(
                 currencyService: fiatCurrencyService,
                 inputCurrency: sourceAccount.currencyType
             )
-
-            amountViewPresenting = SingleAmountPresenter(
-                interactor: amountViewInteracting as! SingleAmountInteractor
+            let presenter = SingleAmountPresenter(
+                interactor: interactor
             )
-
-            amountViewable = SingleAmountView(presenter: amountViewPresenting as! SingleAmountPresenter)
+            amountViewInteracting = interactor
+            amountViewable = SingleAmountView(presenter: presenter)
 
         case .buy:
             guard let cryptoAccount = destinationAccount as? CryptoAccount else {
                 fatalError("Expected a crypto as a destination account.")
             }
-            amountViewInteracting = AmountTranslationInteractor(
+            let interactor = AmountTranslationInteractor(
                 fiatCurrencyClosure: { [fiatCurrencyService] in
-                    fiatCurrencyService.tradingCurrency.asObservable()
+                    fiatCurrencyService.tradingCurrency
                 },
-                cryptoCurrencyService: EnterAmountCryptoCurrencyProvider(transactionModel: transactionModel),
+                cryptoCurrency: cryptoAccount.asset,
                 priceProvider: AmountTranslationPriceProvider(transactionModel: transactionModel),
+                defaultFiatCurrency: defaultFiatCurrency,
                 app: app,
-                defaultCryptoCurrency: cryptoAccount.asset,
                 initialActiveInput: .fiat
             )
-
-            amountViewPresenting = AmountTranslationPresenter(
-                interactor: amountViewInteracting as! AmountTranslationInteractor,
+            let presenter = AmountTranslationPresenter(
+                interactor: interactor,
                 analyticsRecorder: analyticsEventRecorder,
                 displayBundle: displayBundle.amountDisplayBundle,
                 inputTypeToggleVisibility: .hidden,
-                app: app,
-                maxLimitPublisher: maxLimitPublisher
+                app: app
             )
+            amountViewInteracting = interactor
             amountViewable = AmountTranslationView(
-                presenter: amountViewPresenting as! AmountTranslationPresenter,
+                presenter: presenter,
                 app: app,
                 prefillButtonsEnabled: isQuickfillEnabled,
                 shouldShowRecurringBuyFrequency: isRecurringBuyEnabled
@@ -401,7 +383,9 @@ final class EnterAmountPageBuilder: EnterAmountPageBuildable {
 
         let digitPadViewModel = provideDigitPadViewModel()
         let continueButtonTitle = String(format: LocalizationConstants.Transaction.preview, action.name)
-        let continueButtonViewModel = ButtonViewModel.primary(with: continueButtonTitle)
+        let continueButtonViewModel = ButtonViewModel.transactionPrimary(
+            with: continueButtonTitle
+        )
 
         let viewController = EnterAmountViewController(
             displayBundle: displayBundle,

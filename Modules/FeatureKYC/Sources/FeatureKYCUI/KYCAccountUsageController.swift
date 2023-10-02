@@ -83,7 +83,7 @@ final class KYCAccountUsageController: KYCBaseViewController {
             )
         )
         publisher
-            .map(\.blocking)
+            .map(\.isBlocking)
             .replaceError(with: false)
             .assign(to: \.isBlocking, on: self)
             .store(in: &bag)

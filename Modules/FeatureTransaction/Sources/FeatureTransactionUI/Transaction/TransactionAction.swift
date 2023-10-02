@@ -54,7 +54,7 @@ enum TransactionAction: MviAction {
     case updateTransactionPending
     case updateTransactionComplete
     case fetchTransactionExchangeRates
-    case transactionExchangeRatesFetched(TransactionExchangeRates)
+    case transactionExchangeRatesFetched(TransactionExchangeRates?)
     case fetchUserKYCInfo
     case userKYCInfoFetched(TransactionState.KYCStatus?)
     case updateFeeLevelAndAmount(FeeLevel, MoneyValue?)
@@ -72,7 +72,7 @@ enum TransactionAction: MviAction {
     case showEnterAmount
     case showCheckout
     case returnToPreviousStep
-    case pendingTransactionStarted(allowFiatInput: Bool)
+    case pendingTransactionStarted(engineCanTransactFiat: Bool)
     case modifyTransactionConfirmation(TransactionConfirmation)
     case fatalTransactionError(Error)
     case validationError(UX.Error)
@@ -98,10 +98,10 @@ extension TransactionAction {
     // swiftlint:disable cyclomatic_complexity
     func reduce(oldState: TransactionState) -> TransactionState {
         switch self {
-        case .pendingTransactionStarted(let allowFiatInput):
+        case .pendingTransactionStarted(let engineCanTransactFiat):
             var newState = oldState
             newState.errorState = .none
-            newState.allowFiatInput = allowFiatInput
+            newState.engineCanTransactFiat = engineCanTransactFiat
             newState.nextEnabled = false
             return newState.withUpdatedBackstack(oldState: oldState)
 
@@ -144,7 +144,7 @@ extension TransactionAction {
 
             case .deposit, .withdraw:
                 var newState = oldState
-                newState.step = .selectTarget
+                newState.step = .selectSource
                 return newState.withUpdatedBackstack(oldState: oldState)
 
             default:
@@ -175,7 +175,7 @@ extension TransactionAction {
             var next: TransactionFlowStep = target is StaticTransactionTarget ? .confirmDetail : .enterAmount
             let app: AppProtocol = DIKit.resolve()
 
-            if action == .swap && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 next = .selectSourceTargetAmount
@@ -193,7 +193,7 @@ extension TransactionAction {
             var step = TransactionFlowStep.enterAmount
 
             let app: AppProtocol = DIKit.resolve()
-            if action == .swap && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 step = .selectSourceTargetAmount
@@ -213,7 +213,7 @@ extension TransactionAction {
             var step = action == .buy ? TransactionFlowStep.initial : .selectSource
 
             let app: AppProtocol = DIKit.resolve()
-            if action == .swap  && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 step = .selectSourceTargetAmount
@@ -233,7 +233,7 @@ extension TransactionAction {
             var step = action == .buy ? TransactionFlowStep.initial : .selectSource
 
             let app: AppProtocol = DIKit.resolve()
-            if action == .swap  && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 step = .selectSourceTargetAmount
@@ -247,7 +247,7 @@ extension TransactionAction {
 
         case .initialiseWithSourceAccount(let action, let sourceAccount):
             let app: AppProtocol = DIKit.resolve()
-            if action == .swap  && app.remoteConfiguration.yes(
+            if action == .swap, app.remoteConfiguration.yes(
                 if: blockchain.app.configuration.new.swap.flow.is.enabled
             ) {
                 return TransactionState(
@@ -267,7 +267,9 @@ extension TransactionAction {
             return oldState
 
         case .transactionExchangeRatesFetched(let exchangeRates):
-            return oldState.update(keyPath: \.exchangeRates, value: exchangeRates)
+            return oldState
+                .update(keyPath: \.exchangeRates, value: exchangeRates)
+                .update(keyPath: \.allowFiatInput, value: exchangeRates.isNotNil)
 
         case .fetchUserKYCInfo:
             return oldState
@@ -279,6 +281,7 @@ extension TransactionAction {
             var newState = oldState
             newState.source = sourceAccount
             newState.exchangeRates = nil
+            newState.allowFiatInput = true
 
             // The standard flow is [select source] -> [select target] -> [enter amount] -> ...
             // Therefore if we have ... -> [enter amount] -> [select source] -> ... we should go back to [enter amount]
@@ -300,6 +303,7 @@ extension TransactionAction {
             newState.nextEnabled = false
             newState.step = step
             newState.exchangeRates = nil
+            newState.allowFiatInput = true
 
             // The standard flow is [select source] -> [select target] -> [enter amount] -> ...
             // Therefore if we have ... -> [enter amount] -> [select target] -> ... we should go back to [enter amount]
@@ -462,7 +466,7 @@ extension TransactionAction {
             Logger.shared.error(error)
             var newState = oldState
             newState.nextEnabled = true
-            newState.step = .error            
+            newState.step = .error
             newState.errorState = .fatalError(FatalTransactionError(error: error))
             newState.executionStatus = .error
             return newState.withUpdatedBackstack(oldState: oldState)

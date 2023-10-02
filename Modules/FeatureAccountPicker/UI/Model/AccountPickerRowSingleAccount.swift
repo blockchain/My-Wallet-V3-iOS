@@ -14,8 +14,8 @@ extension AccountPickerRow {
 
         // MARK: - Internal properties
 
-        var title: String
-        var description: String
+        let title: String
+        let description: String
 
         // MARK: - Init
 
@@ -37,19 +37,29 @@ extension AccountPickerRow.SingleAccount {
 
     public struct Balances {
 
+        public static let loading: Self = Self(fiatBalance: .loading, cryptoBalance: .loading)
+
         // MARK: - Public Properties
 
-        public var fiatBalance: LoadingState<String>
-        public var cryptoBalance: LoadingState<String>
+        let fiatBalance: LoadingState<String>
+        let cryptoBalance: LoadingState<String>
 
         // MARK: - Init
 
-        public init(
+        init(
             fiatBalance: LoadingState<String>,
             cryptoBalance: LoadingState<String>
         ) {
             self.fiatBalance = fiatBalance
             self.cryptoBalance = cryptoBalance
+        }
+
+        public init(
+            fiatBalance: String,
+            cryptoBalance: String
+        ) {
+            self.fiatBalance = .loaded(next: fiatBalance)
+            self.cryptoBalance = .loaded(next: cryptoBalance)
         }
     }
 }

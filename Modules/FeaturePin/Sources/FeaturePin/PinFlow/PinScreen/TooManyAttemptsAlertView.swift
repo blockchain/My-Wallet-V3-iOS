@@ -12,8 +12,10 @@ class TooManyAttemptsAlertViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(contentView.view)
         addChild(contentView)
+        view.addSubview(contentView.view)
+        contentView.didMove(toParent: self)
+
         setupConstraints()
         contentView.rootView.okPressed = { [weak self] in
             self?.dismiss(animated: true, completion: nil)

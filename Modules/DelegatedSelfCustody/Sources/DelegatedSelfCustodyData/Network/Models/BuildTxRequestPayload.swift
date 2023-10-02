@@ -9,6 +9,7 @@ struct BuildTxRequestPayload: Encodable {
         let gasLimit: String
         let value: String
     }
+
     struct ExtraData: Encodable {
         let memo: String
         let feeCurrency: String

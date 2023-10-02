@@ -640,6 +640,7 @@ extension PinScreenPresenter {
 
         let okButtonAction = { [unowned self] in
             interactor.persist(pin: pin.value!)
+            _ = biometryProvider.authenticate(reason: .enterWallet).subscribe()
         }
         let okButton = AlertAction(
             style: .confirm(LocalizationConstants.okString),
@@ -677,6 +678,7 @@ extension PinScreenPresenter {
 
         let okButtonAction = { [unowned self] in
             interactor.persist(pin: pin.value!)
+            _ = biometryProvider.authenticate(reason: .enterWallet).subscribe()
         }
         let okButton = PinScreenEnableBiometricsInfoViewModel.Button(
             title: LocalizationConstants.okString,

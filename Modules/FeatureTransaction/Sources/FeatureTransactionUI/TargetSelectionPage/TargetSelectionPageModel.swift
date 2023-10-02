@@ -38,8 +38,8 @@ final class TargetSelectionPageModel {
         switch action {
         case .sourceAccountSelected(let account, let action):
             return processTargetListUpdate(sourceAccount: account, action: action)
-        case .validateAddress(let address, let account):
-            return validateCrypto(address: address, account: account)
+        case .validate(let address, let memo, let sourceAccount):
+            return validate(address: address, memo: memo, sourceAccount: sourceAccount)
         case .validateBitPayPayload(let value, let currency):
             return processBitPayValue(payload: value, currency: currency)
         case .destinationSelected,
@@ -73,15 +73,19 @@ final class TargetSelectionPageModel {
             }
     }
 
-    private func validateCrypto(address: String, account: BlockchainAccount) -> Disposable {
+    private func validate(
+        address: String,
+        memo: String?,
+        sourceAccount: BlockchainAccount
+    ) -> Disposable {
         interactor
-            .validateCrypto(address: address, account: account)
-            .map { result -> TargetSelectionInputValidation.TextInput in
+            .validateCrypto(address: address, memo: memo, account: sourceAccount)
+            .map { result -> TargetSelectionInputValidation in
                 switch result {
                 case .success(let receiveAddress):
-                    return .valid(input: address, receiveAddress: receiveAddress)
+                    return .text(.valid(address), .valid(memo ?? ""), receiveAddress)
                 case .failure:
-                    return .invalid(address)
+                    return .text(.invalid(address), .valid(memo ?? ""), nil)
                 }
             }
             .map(TargetSelectionAction.addressValidated)

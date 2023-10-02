@@ -34,7 +34,7 @@ struct ResetPasswordView: View {
     private var continueDisabled: Bool {
         viewStore.newPassword.isEmpty
             || viewStore.newPassword != viewStore.confirmNewPassword
-            || viewStore.passwordStrength == .weak
+            || viewStore.passwordRulesBreached.isNotEmpty
     }
 
     init(
@@ -52,13 +52,16 @@ struct ResetPasswordView: View {
             passwordInstruction
                 .accessibility(identifier: AccessibilityIdentifiers.ResetPasswordScreen.passwordInstructionText)
 
-            PasswordStrengthIndicatorView(
-                passwordStrength: viewStore.binding(
-                    get: \.passwordStrength,
-                    send: .none
-                )
-            )
-            .accessibility(identifier: AccessibilityIdentifiers.ResetPasswordScreen.passwordStrengthIndicatorGroup)
+            Text(PasswordValidationRule.displayString) { string in
+                string.foregroundColor = .semantic.body
+
+                for rule in viewStore.passwordRulesBreached {
+                    if let range = string.range(of: rule.accent) {
+                        string[range].foregroundColor = .semantic.error
+                    }
+                }
+            }
+            .typography(.caption1)
 
             confirmNewPasswordField
                 .padding(.top, Layout.textFieldSpacing)
@@ -128,13 +131,7 @@ struct ResetPasswordView: View {
             ),
             isFirstResponder: $isNewPasswordFieldFirstResponder,
             label: LocalizedString.TextFieldTitle.newPassword,
-            configuration: {
-                $0.isSecureTextEntry = !isPasswordVisible
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.placeholder = LocalizedString.TextFieldPlaceholder.newPassword
-                $0.textContentType = .newPassword
-            },
+            isSecure: !isPasswordVisible,
             trailing: {
                 PasswordEyeSymbolButton(isPasswordVisible: $isPasswordVisible)
             },
@@ -143,6 +140,9 @@ struct ResetPasswordView: View {
                 isConfirmNewPasswordFieldFirstResponder = true
             }
         )
+        .textContentType(.newPassword)
+        .autocorrectionDisabled()
+        .disableAutocapitalization()
     }
 
     private var passwordInstruction: some View {
@@ -160,13 +160,7 @@ struct ResetPasswordView: View {
             isFirstResponder: $isConfirmNewPasswordFieldFirstResponder,
             label: LocalizedString.TextFieldTitle.confirmNewPassword,
             state: viewStore.newPassword != viewStore.confirmNewPassword ? .error : .default,
-            configuration: {
-                $0.isSecureTextEntry = !isConfirmNewPasswordVisible
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.placeholder = LocalizedString.TextFieldPlaceholder.confirmNewPassword
-                $0.textContentType = .newPassword
-            },
+            isSecure: !isConfirmNewPasswordVisible,
             trailing: {
                 PasswordEyeSymbolButton(isPasswordVisible: $isConfirmNewPasswordVisible)
             },
@@ -175,6 +169,9 @@ struct ResetPasswordView: View {
                 isConfirmNewPasswordFieldFirstResponder = false
             }
         )
+        .textContentType(.newPassword)
+        .autocorrectionDisabled()
+        .disableAutocapitalization()
     }
 
     private var securityCallOut: some View {
@@ -204,8 +201,7 @@ struct ResetPasswordView_Previews: PreviewProvider {
         ResetPasswordView(
             store: .init(
                 initialState: .init(),
-                reducer: resetPasswordReducer,
-                environment: .init(
+                reducer: ResetPasswordReducer(
                     mainQueue: .main,
                     passwordValidator: PasswordValidator(),
                     externalAppOpener: NoOpExternalAppOpener(),

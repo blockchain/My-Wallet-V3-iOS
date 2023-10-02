@@ -19,15 +19,16 @@ public struct DexMainView: View {
 
     public var body: some View {
         ScrollView {
-            if viewStore.isEligible == false {
+            switch viewStore.status {
+            case .notEligible:
                 notEligible
-            } else if viewStore.isLoadingState {
+            case .noBalance:
+                noBalance
+            case .loading:
                 content
                     .redacted(reason: .placeholder)
                     .disabled(true)
-            } else if viewStore.isEmptyState {
-                noBalance
-            } else {
+            case .ready:
                 content
             }
         }
@@ -35,15 +36,22 @@ public struct DexMainView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
+        .onDisappear {
+            viewStore.send(.onDisappear)
+        }
         .bindings {
             subscribe(
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
+        }
+        .bindings {
             subscribe(
                 viewStore.binding(\.$isEligible),
                 to: blockchain.api.nabu.gateway.user.products.product["DEX"].is.eligible
             )
+        }
+        .bindings {
             subscribe(
                 viewStore.binding(\.$inegibilityReason),
                 to: blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.message
@@ -57,8 +65,14 @@ public struct DexMainView: View {
         }
         .bindings {
             subscribe(
+                viewStore.binding(\.$quoteByOutputEnabled),
+                to: blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled
+            )
+        }
+        .bindings {
+            subscribe(
                 viewStore.binding(\.$currentSelectedNetworkTicker),
-                to: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker
+                to: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value
             )
         }
         .bindings {
@@ -271,6 +285,7 @@ extension DexMainView {
                 )
         }
     }
+
     @ViewBuilder
     private var estimatedFeeTitle: some View {
         if viewStore.quoteFetching {
@@ -389,15 +404,24 @@ extension DexMainView {
                     )
                 )
             }
-            ZStack {
-                Circle()
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(Color.semantic.light)
-                Icon.arrowDown
-                    .small()
-                    .color(.semantic.title)
-                    .circle(backgroundColor: .semantic.background)
-            }
+            Button(
+                action: {
+                    if viewStore.quoteByOutputEnabled {
+                        viewStore.send(.didTapFlip)
+                    }
+                },
+                label: {
+                    ZStack {
+                        Circle()
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(Color.semantic.light)
+                        Icon.arrowDown
+                            .small()
+                            .color(.semantic.title)
+                            .circle(backgroundColor: .semantic.background)
+                    }
+                }
+            )
         }
     }
 }
@@ -439,7 +463,7 @@ extension DexMainView {
                 .padding(.horizontal, Spacing.padding2)
 
             PrimaryButton(title: L10n.Main.NoBalance.button, action: {
-                $app.post(event: blockchain.ux.frequent.action.receive)
+                $app.post(event: blockchain.ux.currency.exchange.dex.no.balance.show.receive.entry.paragraph.button.primary.tap)
             })
             .padding(.vertical, Spacing.padding3)
             .padding(.horizontal, Spacing.padding2)
@@ -448,6 +472,12 @@ extension DexMainView {
         .cornerRadius(Spacing.padding2)
         .padding(.horizontal, Spacing.padding3)
         .padding(.vertical, Spacing.padding3)
+        .batch {
+            set(
+                blockchain.ux.currency.exchange.dex.no.balance.show.receive.entry.paragraph.button.primary.tap.then.enter.into,
+                to: blockchain.ux.currency.receive.select.asset
+            )
+        }
     }
 
     @ViewBuilder
@@ -458,7 +488,6 @@ extension DexMainView {
         }
     }
 }
-
 
 extension DexMainView {
 
@@ -515,7 +544,6 @@ extension DexMainView {
         }
     }
 }
-
 
 struct DexMainView_Previews: PreviewProvider {
 

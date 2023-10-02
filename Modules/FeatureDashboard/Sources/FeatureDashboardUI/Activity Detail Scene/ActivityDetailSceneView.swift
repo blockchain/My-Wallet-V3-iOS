@@ -4,6 +4,7 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import BlockchainUI
 import ComposableArchitecture
+import Localization
 import SwiftUI
 import UnifiedActivityDomain
 import UnifiedActivityUI
@@ -18,9 +19,12 @@ public struct ActivityDetailSceneView: View {
     struct ViewState: Equatable {
         let items: ActivityDetail.GroupedItems?
         let isPlaceholder: Bool
+        let isExternalTradingEnabled: Bool
+
         init(state: ActivityDetailScene.State) {
             self.items = state.items
             self.isPlaceholder = state.items == state.placeholderItems
+            self.isExternalTradingEnabled = state.isExternalTradingEnabled
         }
     }
 
@@ -49,6 +53,10 @@ public struct ActivityDetailSceneView: View {
                             .padding(.bottom)
                         }
                         .redacted(reason: viewStore.isPlaceholder ? .placeholder : [])
+                    }
+
+                    if viewStore.isExternalTradingEnabled {
+                        bakktBottomView()
                     }
 
                     if let floatingActions = viewStore.items?.floatingActions {
@@ -118,13 +126,42 @@ public struct ActivityDetailSceneView: View {
     }
 
     public func navigationTrailingView() -> some View {
-        IconButton(icon: .closev2.circle()) {
+        IconButton(icon: .navigationCloseButton()) {
             $app.post(event: blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap)
         }
         .frame(width: 24.pt, height: 24.pt)
         .batch {
             set(blockchain.ux.activity.detail.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         }
+    }
+
+    @ViewBuilder
+    func bakktBottomView() -> some View {
+        VStack {
+            VStack(alignment: .leading) {
+                bakktDisclaimer()
+                SmallMinimalButton(title: LocalizationConstants.Activity.Details.Button.viewDisclosures) {
+                    $app.post(event: blockchain.ux.bakkt.view.disclosures)
+                }
+                .batch {
+                    set(blockchain.ux.bakkt.view.disclosures.then.launch.url, to: "https://bakkt.com/disclosures")
+                }
+            }
+
+            Image("bakkt-logo", bundle: .componentLibrary)
+                .foregroundColor(.semantic.title)
+                .padding(.top, Spacing.padding2)
+        }
+        .padding(.horizontal, Spacing.padding2)
+    }
+
+    @ViewBuilder
+    func bakktDisclaimer() -> some View {
+        let label = LocalizationConstants.Activity.Details.bakktDisclaimer
+        Text(rich: label)
+            .typography(.caption1)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.leading)
     }
 
     @ViewBuilder

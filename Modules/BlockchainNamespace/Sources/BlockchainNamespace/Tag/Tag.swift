@@ -711,7 +711,7 @@ extension Tag {
         public let __id: A
         public let __context: [L: AnyHashable]
 
-        internal init(id: A, context: [L: AnyHashable]) {
+        init(id: A, context: [L: AnyHashable]) {
             self.__id = id
             self.__context = context
         }
@@ -728,7 +728,22 @@ extension Tag {
 
 extension Tag.KeyTo: Tag.Event, CustomStringConvertible {
 
-    public var description: String { __id(\.id) }
+    public var description: String {
+        let context = __context.mapKeys(\.[])
+        return __id[].lineage
+            .reversed()
+            .map { info in
+                guard
+                    let collectionId = info["id"],
+                    let id = context[collectionId]
+                else {
+                    return info.name
+                }
+                return "\(info.name)[\(id)]"
+            }
+            .joined(separator: ".")
+    }
+
     public func key(to context: Tag.Context = [:]) -> Tag.Reference {
         __id[].ref(to: Tag.Context(__context) + context)
     }

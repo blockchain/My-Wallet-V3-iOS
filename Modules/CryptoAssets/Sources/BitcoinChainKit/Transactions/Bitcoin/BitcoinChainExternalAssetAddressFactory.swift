@@ -14,6 +14,7 @@ final class BitcoinChainExternalAssetAddressFactory<Token: BitcoinChainToken>: E
 
     func makeExternalAssetAddress(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping TxCompleted
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {

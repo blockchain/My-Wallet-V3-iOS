@@ -103,8 +103,10 @@ final class StellarCryptoAccount: CryptoNonCustodialAccount {
         case .activeRewardsDeposit:
             guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
             return isFunded
-        case .sell, .swap:
+        case .sell:
             return hasPositiveDisplayableBalance
+        case .swap:
+            return .just(true)
         }
     }
 

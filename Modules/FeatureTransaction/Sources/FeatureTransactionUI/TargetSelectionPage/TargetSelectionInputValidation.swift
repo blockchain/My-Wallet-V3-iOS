@@ -3,14 +3,15 @@
 import PlatformKit
 
 enum TargetSelectionInputValidation: Equatable {
+
     case empty
     case account(Account)
-    case text(TextInput)
+    case text(TextInput, MemoInput, ReceiveAddress?)
     case QR(QRInput)
 
     var textInput: TextInput? {
         switch self {
-        case .text(let value):
+        case .text(let value, _, _):
             return value
         case .empty,
              .QR,
@@ -36,7 +37,7 @@ enum TargetSelectionInputValidation: Equatable {
             return input.isValid
         case .account(let account):
             return account.isValid
-        case .text(let input):
+        case .text(let input, _, _):
             return input.isValid
         case .empty:
             return false
@@ -45,8 +46,8 @@ enum TargetSelectionInputValidation: Equatable {
 
     var text: String {
         switch self {
-        case .text(let textInput):
-            return textInput.textValue
+        case .text(let input, _, _):
+            return input.text
         case .QR(let qrInput):
             return qrInput.text
         case .account,
@@ -55,13 +56,14 @@ enum TargetSelectionInputValidation: Equatable {
         }
     }
 
-    var requiresValidation: Bool {
+    var memoText: String {
         switch self {
-        case .QR,
-             .account,
-             .empty,
-             .text:
-            return false
+        case .text(_, let memo, _):
+            return memo.text
+        case .QR(let qrInput):
+            return qrInput.memoText
+        case .account, .empty:
+            return ""
         }
     }
 
@@ -79,18 +81,42 @@ enum TargetSelectionInputValidation: Equatable {
         }
     }
 
+    enum MemoInput: Equatable {
+        case inactive
+        case invalid(String)
+        case valid(String)
+
+        var text: String {
+            switch self {
+            case .inactive:
+                return ""
+            case .invalid(let value), .valid(let value):
+                return value
+            }
+        }
+
+        var isValid: Bool {
+            switch self {
+            case .inactive, .valid:
+                return true
+            case .invalid:
+                return false
+            }
+        }
+    }
+
     enum TextInput: Equatable {
         case inactive
         case invalid(String)
-        case valid(input: String, receiveAddress: ReceiveAddress)
+        case valid(String)
 
-        var textValue: String {
+        var text: String {
             switch self {
             case .inactive:
                 return ""
             case .invalid(let value):
                 return value
-            case .valid(let input, _):
+            case .valid(let input):
                 return input
             }
         }
@@ -110,7 +136,6 @@ enum TargetSelectionInputValidation: Equatable {
     enum QRInput: Equatable {
         /// The user has not scanned anything
         case empty
-        // TODO: Accommodate an amount, memo, and the address
         case valid(CryptoReceiveAddress)
 
         var text: String {
@@ -119,6 +144,15 @@ enum TargetSelectionInputValidation: Equatable {
                 return ""
             case .valid(let value):
                 return value.address
+            }
+        }
+
+        var memoText: String {
+            switch self {
+            case .empty:
+                return ""
+            case .valid(let value):
+                return value.memo ?? ""
             }
         }
 
@@ -133,14 +167,20 @@ enum TargetSelectionInputValidation: Equatable {
     }
 }
 
-extension TargetSelectionInputValidation.TextInput {
-    static func == (lhs: TargetSelectionInputValidation.TextInput, rhs: TargetSelectionInputValidation.TextInput) -> Bool {
+extension TargetSelectionInputValidation {
+    static func == (lhs: TargetSelectionInputValidation, rhs: TargetSelectionInputValidation) -> Bool {
         switch (lhs, rhs) {
-        case (.valid(_, let leftAddress), .valid(_, let rightAddress)):
-            return leftAddress.address == rightAddress.address
-        case (.invalid, .invalid),
-             (.inactive, .inactive):
+        case (.empty, .empty):
             return true
+        case (.account(let lhs), .account(let rhs)):
+            return lhs == rhs
+        case (.QR(let lhs), .QR(let rhs)):
+            return lhs == rhs
+        case (.text(let lhsInput, let lhsMemo, let lhsAddress), .text(let rhsInput, let rhsMemo, let rhsAddress)):
+            return lhsInput == rhsInput
+                && lhsMemo == rhsMemo
+                && lhsAddress?.address == rhsAddress?.address
+                && lhsAddress?.memo == rhsAddress?.memo
         default:
             return false
         }

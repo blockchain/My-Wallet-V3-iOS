@@ -41,9 +41,7 @@ private actor CombineLatestActor<Element> {
     func insert(_ value: Element, at index: Int) -> [Element]? {
         seen.insert(index)
         values[index] = value
-        return seen.count == values.count
-        ? values.map(\.unsafelyUnwrapped)
-        : nil
+        return seen.count == values.count ? values.compacted().array : nil
     }
 
     @discardableResult

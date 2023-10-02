@@ -130,14 +130,24 @@ public struct AllAssetsScene: ReducerProtocol {
 }
 
 extension [AssetBalanceInfo] {
-    func filtered(by searchText: String, using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)) -> [Element] {
-        filter {
-            $0.currency.filter(by: searchText, using: algorithm) ||
-            ($0.fiatBalance?.quote.displayString.distance(between: searchText, using: algorithm) ?? 1) < 0.3
-        }
+    func filtered(
+        by searchText: String,
+        using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
+    ) -> [Element] {
+        filter { $0.filter(by: searchText, using: algorithm) }
     }
 
     func filtered(showSmallBalances: Bool) -> [Element] {
         showSmallBalances ? self : filter(\.hasBalance)
+    }
+}
+
+extension AssetBalanceInfo {
+    func filter(
+        by searchText: String,
+        using algorithm: StringDistanceAlgorithm
+    ) -> Bool {
+        currency.filter(by: searchText, using: algorithm) ||
+            fiatBalance.flatMap { $0.quote.displayString.distance(between: searchText, using: algorithm) < 0.3 } ?? false
     }
 }

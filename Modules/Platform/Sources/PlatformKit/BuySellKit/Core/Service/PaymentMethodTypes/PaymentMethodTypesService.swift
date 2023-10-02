@@ -250,13 +250,18 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
             .combineLatest(
                 kycTiersService.tiers
                     .map(\.isVerifiedApproved)
-                    .mapError(PaymentMethodTypesServiceError.other),
+                    .mapError(PaymentMethodTypesServiceError.other)
+                    .eraseToAnyPublisher() as AnyPublisher<Bool, PaymentMethodTypesServiceError>,
                 app.publisher(for: blockchain.ux.payment.method.open.banking.is.enabled, as: Bool.self)
                     .replaceError(with: true)
                     .setFailureType(to: PaymentMethodTypesServiceError.self)
-                    .eraseToAnyPublisher()
+                    .eraseToAnyPublisher() as AnyPublisher<Bool, PaymentMethodTypesServiceError>,
+                app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+                    .replaceError(with: false)
+                    .setFailureType(to: PaymentMethodTypesServiceError.self)
+                    .eraseToAnyPublisher() as AnyPublisher<Bool, PaymentMethodTypesServiceError>
             )
-            .flatMap { [methodTypes] fiatCurrency, isVerifiedApproved, isOpenBankingEnabled in
+            .flatMap { [methodTypes] fiatCurrency, isVerifiedApproved, isOpenBankingEnabled, isExternalBrokerage -> AnyPublisher<[PaymentMethodType], PaymentMethodTypesServiceError> in
                 // In case of no preselection we want the first eligible, if none present, check if available is only 1 and
                 // preselect it. Otherwise, don't preselect anything, this is in parallel with Android logic
                 methodTypes
@@ -265,7 +270,8 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                         types.filterValidForBuy(
                             currentWalletCurrency: fiatCurrency,
                             accountForEligibility: isVerifiedApproved,
-                            isOpenBankingEnabled: isOpenBankingEnabled
+                            isOpenBankingEnabled: isOpenBankingEnabled,
+                            isExternalBrokerage: isExternalBrokerage
                         )
                     }
                     .asPublisher()
@@ -683,7 +689,8 @@ extension [PaymentMethodType] {
     public func filterValidForBuy(
         currentWalletCurrency: FiatCurrency,
         accountForEligibility: Bool,
-        isOpenBankingEnabled: Bool
+        isOpenBankingEnabled: Bool,
+        isExternalBrokerage: Bool
     ) -> [PaymentMethodType] {
         filter { method in
             switch method {
@@ -697,6 +704,8 @@ extension [PaymentMethodType] {
                 case .bankTransfer:
                     let isFiatSupported = paymentMethod.fiatCurrency == currentWalletCurrency
                     return accountForEligibility ? (paymentMethod.isEligible && isFiatSupported) : isFiatSupported
+                case .funds where isExternalBrokerage:
+                    return false
                 case .funds(let currency):
                     guard accountForEligibility else {
                         return currency == currentWalletCurrency.currencyType

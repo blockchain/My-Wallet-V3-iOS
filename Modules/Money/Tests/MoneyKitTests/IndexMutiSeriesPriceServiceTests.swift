@@ -42,6 +42,20 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
                                 "price": 28879,
                                 "timestamp": 1680192240
                             }
+                        ],
+                        "BUSD.MATIC-USD": [
+                            {
+                                "timestamp": 1689604660,
+                                "price": null,
+                                "volume24h": null,
+                                "marketCap": null
+                            },
+                            {
+                                "timestamp": 1691423820,
+                                "price": null,
+                                "volume24h": null,
+                                "marketCap": null
+                            }
                         ]
                     }
                     """.utf8
@@ -62,7 +76,8 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
                         "ETH-USD": {
                             "price": 1446.6,
                             "timestamp": \(now.timeIntervalSince1970.i)
-                        }
+                        },
+                        "BUSD.MATIC-USD": null
                     }
                     """.utf8
                 )
@@ -80,9 +95,9 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
             cancellingGracePeriod: .seconds(5)
         )
 
-        let BTC_GBP = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)) { } }
-        let ETH_USD = Task { for await _ in await service.stream(CurrencyPairAndTime(base: ETH, quote: USD, time: nil)) { } }
-        let BTC_USD_YDAY = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: USD, time: Date().addingTimeInterval(-.day))) { } }
+        let BTC_GBP = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)) {} }
+        let ETH_USD = Task { for await _ in await service.stream(CurrencyPairAndTime(base: ETH, quote: USD, time: nil)) {} }
+        let BTC_USD_YDAY = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: USD, time: Date().addingTimeInterval(-.day))) {} }
 
         do {
             let isEmpty = await service.subscriptions.isEmpty
@@ -152,9 +167,9 @@ final class IndexMutiSeriesPriceServiceTests: XCTestCase {
             cancellingGracePeriod: .zero
         )
 
-        let BTC_GBP = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)) { } }
-        let ETH_USD = Task { for await _ in await service.stream(CurrencyPairAndTime(base: ETH, quote: USD, time: nil)) { } }
-        let BTC_USD_YDAY = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: USD, time: Date().addingTimeInterval(-.day))) { } }
+        let BTC_GBP = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: GBP, time: nil)) {} }
+        let ETH_USD = Task { for await _ in await service.stream(CurrencyPairAndTime(base: ETH, quote: USD, time: nil)) {} }
+        let BTC_USD_YDAY = Task { for await _ in await service.stream(CurrencyPairAndTime(base: BTC, quote: USD, time: Date().addingTimeInterval(-.day))) {} }
 
         do {
             let isEmpty = await service.subscriptions.isEmpty

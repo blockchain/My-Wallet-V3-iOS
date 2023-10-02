@@ -21,6 +21,7 @@ public struct CustodialOnboardingDashboardView: View {
                     .padding(.vertical)
                 CustodialOnboardingProgressView(progress: onboarding.progress)
                 CustodialOnboardingTaskListView(service: onboarding)
+                FinancialPromotionDisclaimerView()
                 if onboarding.isVerified {
                     CustodialOnboardingHelpSectionView()
                 }
@@ -169,7 +170,7 @@ struct CustodialOnboardingTaskRowView: View {
                 case .done:
                     Icon.checkCircle.small().color(.semantic.success)
                 case .pending:
-                    Icon.clock.small().color(.semantic.muted)
+                    Icon.clockFilled.small().color(.semantic.muted)
                 default:
                     Icon.chevronRight.small().color(tint)
                 }
@@ -205,7 +206,6 @@ struct CustodialOnboardingHelpSectionView: View {
             }
             .cornerRadius(16, corners: .allCorners)
         }
-        .padding(.horizontal, Spacing.padding2)
     }
 
     @ViewBuilder var trailingView: some View {

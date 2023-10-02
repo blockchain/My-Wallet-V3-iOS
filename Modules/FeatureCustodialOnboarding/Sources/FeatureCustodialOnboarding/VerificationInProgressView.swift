@@ -12,7 +12,7 @@ public struct VerificationInProgressView: View {
     @State var status: Tag = blockchain.user.account.kyc.state.none[]
     @State var countdown: Int = 60
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack(spacing: 16.pt) {
@@ -22,10 +22,9 @@ public struct VerificationInProgressView: View {
                     .iconColor(.semantic.title)
                     .frame(maxWidth: 88.pt, maxHeight: 88.pt)
                     .overlay(
-                        Icon.clock
+                        Icon.clockFilled
                             .medium()
                             .color(.semantic.muted)
-                            .circle(backgroundColor: Color.semantic.light)
                             .padding(2.pt),
                         alignment: .bottomTrailing
                     )
@@ -52,7 +51,7 @@ public struct VerificationInProgressView: View {
         .padding(.horizontal, 6.pt)
         .overlay(
             IconButton(
-                icon: .closev2.small().color(.semantic.muted).circle(backgroundColor: .semantic.background),
+                icon: .close.small().color(.semantic.muted).circle(backgroundColor: .semantic.background),
                 action: { $app.post(event: blockchain.ux.user.custodial.onboarding.verification.is.in.progress.article.plain.navigation.bar.button.close.tap) }
             ),
             alignment: .topTrailing

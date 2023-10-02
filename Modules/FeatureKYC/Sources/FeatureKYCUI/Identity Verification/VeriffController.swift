@@ -29,7 +29,7 @@ protocol VeriffController: UIViewController, VeriffSdkDelegate {
 
 extension VeriffController {
 
-    internal var veriff: VeriffSdk {
+    var veriff: VeriffSdk {
         VeriffSdk.shared
     }
 
@@ -39,12 +39,30 @@ extension VeriffController {
         veriff.startAuthentication(sessionUrl: credentials.url, configuration: configuration)
     }
 
+    // https://developers.veriff.com/#customize-user-interface-optional
     private func brandingConfiguration() -> VeriffSdk.Configuration {
-        let themeColor = UIColor.semantic.primary
-        let logo = UIImage(named: "icon_logo", in: .module, with: nil)
-        let branding = VeriffSdk.Branding(themeColor: themeColor, logo: logo)
-        branding.buttonCornerRadius = ButtonSize.Standard.cornerRadius
-        branding.buttonHeight = ButtonSize.Standard.height
+        let branding = VeriffSdk.Branding()
+        branding.logo = UIImage(named: "icon_logo", in: .module, with: nil)
+        branding.background = UIColor.semantic.background
+        branding.onBackground = UIColor.semantic.title
+        branding.onBackgroundSecondary = UIColor.semantic.text
+        branding.onBackgroundTertiary = UIColor.semantic.body
+        branding.primary = UIColor.semantic.primary
+        branding.onPrimary = UIColor.white
+        branding.secondary = UIColor.semantic.light
+        branding.onSecondary = UIColor.semantic.title
+        branding.cameraOverlay = UIColor.semantic.dark
+        branding.onCameraOverlay = UIColor.semantic.light
+        branding.error = UIColor.semantic.error
+        branding.success = UIColor.semantic.success
+        branding.outline = UIColor.semantic.border
+        branding.secondary = UIColor.semantic.body
+        branding.font = .init(
+            regular: Typography.FontResource.interRegular.rawValue,
+            medium: Typography.FontResource.interMedium.rawValue,
+            bold: Typography.FontResource.interBold.rawValue
+        )
+        branding.buttonRadius = ButtonSize.Standard.cornerRadius
         let configuration = VeriffSdk.Configuration(
             branding: branding,
             languageLocale: .current

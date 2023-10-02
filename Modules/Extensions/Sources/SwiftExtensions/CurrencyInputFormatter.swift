@@ -59,8 +59,8 @@ public struct CurrencyInputFormatter: Equatable, Hashable {
     @discardableResult
     public mutating func append(_ character: Character) -> Bool {
         guard isValid(character: character, appendingTo: input) else { return false }
-        if character == "0" && input == "0" { return false }
-        if input == "0" && character != "0" && character != decimalSeparator { input = "" }
+        if character == "0", input == "0" { return false }
+        if input == "0", character != "0", character != decimalSeparator { input = "" }
         if input == "", character == decimalSeparator { input = "0" }
         input.append(character)
         return true

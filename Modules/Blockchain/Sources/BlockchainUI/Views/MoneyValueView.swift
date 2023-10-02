@@ -166,7 +166,7 @@ public struct MoneyValueDeltaView: View {
     }
 
     private var deltaDecimal: Decimal? {
-        delta.map({ Decimal($0) })
+        delta.map { Decimal($0) }
     }
 
     private var color: Color {
@@ -186,7 +186,19 @@ public struct MoneyValueDeltaView: View {
         guard let deltaDecimal else {
             return nil
         }
-        return "\(deltaDecimal.isSignMinus ? "↓" : "↑") \(deltaDecimal.abs().formatted(.percent.precision(.fractionLength(2))))"
+
+        let arrowString = {
+            if deltaDecimal.isZero {
+                return ""
+            }
+            if deltaDecimal.isSignMinus {
+                return "↓ "
+            }
+
+            return "↑ "
+        }()
+
+        return "\(arrowString)\(deltaDecimal.abs().formatted(.percent.precision(.fractionLength(2))))"
     }
 }
 
@@ -309,7 +321,7 @@ extension MoneyValue: View {
     }
 
     @ViewBuilder
-    public func headerView<Subtitle: View>(@ViewBuilder _ subtitle: () -> Subtitle = EmptyView.init) -> some View {
+    public func headerView(@ViewBuilder _ subtitle: () -> some View = EmptyView.init) -> some View {
         MoneyValueHeaderView(title: self, subtitle: subtitle)
     }
 }
@@ -345,6 +357,7 @@ struct MoneyView_Previews: PreviewProvider {
             try await app
                 .set(blockchain.ux.dashboard.is.hiding.balance, to: true)
         }
+
     static var previews: some View {
         VStack {
             MoneyValueHeaderView(

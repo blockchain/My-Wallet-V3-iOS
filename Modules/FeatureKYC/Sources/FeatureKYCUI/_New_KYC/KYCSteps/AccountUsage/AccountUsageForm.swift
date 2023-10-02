@@ -18,7 +18,7 @@ struct AccountUsageForm: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            if viewStore.form.nodes.isEmpty {
+            if viewStore.form.isEmpty {
                 emptyFormView(viewStore)
             } else {
                 filledFormView(viewStore)

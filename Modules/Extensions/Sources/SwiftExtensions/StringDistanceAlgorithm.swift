@@ -6,7 +6,7 @@ extension String {
 
     public func distance(
         between target: String,
-        using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm()
+        using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: false)
     ) -> Double {
         algorithm.distance(between: self, and: target)
     }
@@ -18,23 +18,20 @@ public protocol StringDistanceAlgorithm {
 
 public struct FuzzyAlgorithm: StringDistanceAlgorithm {
 
-    var caseInsensitive: Bool
+    let caseInsensitive: Bool
 
-    public init(caseInsensitive: Bool = false) {
+    public init(caseInsensitive: Bool) {
         self.caseInsensitive = caseInsensitive
     }
 
     public func distance(between a: String, and b: String) -> Double {
         guard a != b else { return 0 }
-        var (a, b) = (
-            min(a, b, by: \.count),
-            max(a, b, by: \.count)
-        )
+        var (a, b) = (a, b)
         if caseInsensitive {
             (a, b) = (a.lowercased(), b.lowercased())
         }
 
-        if !a.isEmpty, b.starts(with: a[...a.index(a.startIndex, offsetBy: floor(a.count.d / 1.5).i)]) {
+        if !b.isEmpty, a.starts(with: b[...b.index(b.startIndex, offsetBy: floor(b.count.d / 1.5).i)]) {
             return 0
         }
 

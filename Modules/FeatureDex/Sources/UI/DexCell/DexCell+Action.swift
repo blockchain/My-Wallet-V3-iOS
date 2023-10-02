@@ -13,7 +13,7 @@ extension DexCell {
         case onTapBalance
         case onTapCurrencySelector
         case assetPicker(AssetPicker.Action)
-        case onCurrentNetworkChanged
+        case onCurrentNetworkChanged(EVMNetwork?)
         case onAvailableBalancesChanged
         case onPrice(FiatValue?)
     }

@@ -15,7 +15,7 @@ struct DAppManageView: View {
     @State private var scrollOffset: CGPoint = .zero
     @State private var dapps: [WalletConnectPairings]?
 
-    init() { }
+    init() {}
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -154,7 +154,7 @@ struct DAppManageView: View {
     @ViewBuilder
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3.small(),
+            icon: .navigationCloseButton(),
             action: { $app.post(event: blockchain.ux.wallet.connect.manage.sessions.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {
@@ -200,7 +200,7 @@ struct DAppManageView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 18, height: 18)
 
-            Text(network.networkConfig.name)
+            Text(network.networkConfig.shortName)
                 .typography(.caption1)
                 .foregroundColor(.semantic.title)
         }
@@ -250,7 +250,7 @@ struct DAppManageView: View {
                     } else {
                         Text(L10n.Manage.disconnectAll)
                             .typography(.title3)
-                            .foregroundColor(Color.semantic.destructive)
+                            .foregroundColor(Color.semantic.negative)
                     }
                 }
                 .background(

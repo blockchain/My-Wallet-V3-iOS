@@ -29,6 +29,7 @@ public enum LocalizationConstants {
         comment: "Search Coin: generic placeholder"
     )
 
+    public static let done = NSLocalizedString("Done", comment: "Done")
     public static let no = NSLocalizedString("No", comment: "No")
     public static let yes = NSLocalizedString("Yes", comment: "Yes")
     public static let wallet = NSLocalizedString("Wallet", comment: "Wallet")
@@ -49,7 +50,6 @@ public enum LocalizationConstants {
     public static let addEmail = NSLocalizedString("Add Email", comment: "")
     public static let newEmail = NSLocalizedString("New Email Address", comment: "")
     public static let settings = NSLocalizedString("Settings", comment: "")
-    public static let addNew = NSLocalizedString("+Add New", comment: "+Add New")
     public static let activeRewardsAccount = NSLocalizedString("Active Rewards Account", comment: "Rewards Account")
     public static let rewardsAccount = NSLocalizedString("Rewards Account", comment: "Rewards Account")
     public static let stakingAccount = NSLocalizedString("Staking Account", comment: "Staking Account")
@@ -58,6 +58,7 @@ public enum LocalizationConstants {
         comment: "Generic translation, may be used in multiple places."
     )
 
+    public static let selectDate = NSLocalizedString("Select Date", comment: "Select Date")
     public static let accountEndingIn = NSLocalizedString("Account Ending in", comment: "Account Ending in")
     public static let savingsAccount = NSLocalizedString("Savings Account", comment: "Savings Account")
     public static let maxPurchaseArg = NSLocalizedString("%@ max purchase", comment: "")
@@ -1010,4 +1011,8 @@ public enum LocalizationConstants {
 
 extension LocalizationConstants {
     public struct Accessibility {}
+}
+
+extension LocalizationConstants {
+    public struct Announcements {}
 }

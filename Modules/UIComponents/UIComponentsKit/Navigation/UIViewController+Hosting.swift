@@ -29,22 +29,23 @@ extension UIViewController {
     /// - Parameters:
     ///   - view: The `SwiftUI.View` to be presented.
     ///   - inNavigationController: If `true` the `UIViewController` hosting the `view` is wrapped within a `UINavigationController`.
-    public func present(
+    @discardableResult public func present(
         _ view: some View,
         inNavigationController: Bool = false,
         modalPresentationStyle: UIModalPresentationStyle = .automatic
-    ) {
+    ) -> UIViewController {
         let hostViewController = UIHostingController(rootView: view)
         hostViewController.isModalInPresentation = true
         hostViewController.modalPresentationStyle = modalPresentationStyle
         let destination: UIViewController
         if inNavigationController {
             let navigationController = UINavigationController(rootViewController: hostViewController)
-            navigationController.navigationBar.tintColor = .linkableText
+            navigationController.navigationBar.tintColor = .primary
             destination = navigationController
         } else {
             destination = hostViewController
         }
-        present(destination, animated: true, completion: nil)
+        enter(into: destination)
+        return destination
     }
 }

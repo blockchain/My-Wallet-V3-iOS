@@ -10,8 +10,8 @@ extension AssetModel {
 
     // MARK: - UIColor
 
-    public var brandColor: SwiftUI.Color {
-        SwiftUI.Color(brandUIColor)
+    public var brandColor: Color {
+        Color(brandUIColor)
     }
 
     /// The brand color.
@@ -35,51 +35,6 @@ extension AssetModel {
     /// Defaults to brand color with 15% opacity.
     public var accentColor: UIColor {
         brandUIColor.withAlphaComponent(0.15)
-    }
-
-    // MARK: - Logo Image `ImageResource`
-
-    public var logoResource: ImageResource {
-        switch kind {
-        case .coin:
-            switch code {
-            case NonCustodialCoinCode.bitcoin.rawValue:
-                return .local(name: "crypto-btc", bundle: .platformUIKit)
-            case NonCustodialCoinCode.bitcoinCash.rawValue:
-                return .local(name: "crypto-bch", bundle: .platformUIKit)
-            case NonCustodialCoinCode.ethereum.rawValue:
-                return .local(name: "crypto-eth", bundle: .platformUIKit)
-            case NonCustodialCoinCode.stellar.rawValue:
-                return .local(name: "crypto-xlm", bundle: .platformUIKit)
-            default:
-                return logoPngResource ?? placeholderImageResource
-            }
-        case .erc20:
-            return logoPngResource ?? placeholderImageResource
-        case .celoToken:
-            return logoPngResource ?? placeholderImageResource
-        case .fiat:
-            switch code {
-            case FiatCurrency.GBP.rawValue:
-                return .local(name: "icon-gbp", bundle: .platformUIKit)
-            case FiatCurrency.EUR.rawValue:
-                return .local(name: "icon-eur", bundle: .platformUIKit)
-            case FiatCurrency.USD.rawValue:
-                return .local(name: "icon-usd", bundle: .platformUIKit)
-            case FiatCurrency.ARS.rawValue, FiatCurrency.BRL.rawValue:
-                return .local(name: "icon-usd", bundle: .platformUIKit)
-            default:
-                return placeholderImageResource
-            }
-        }
-    }
-
-    private var placeholderImageResource: ImageResource {
-        .local(name: "crypto-placeholder", bundle: .platformUIKit)
-    }
-
-    private var logoPngResource: ImageResource? {
-        logoPngUrl.map(ImageResource.remote(url:))
     }
 
     private var spotUIColor: UIColor? {

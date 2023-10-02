@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import PlatformKit
 import RxCocoa
 import RxRelay
@@ -81,8 +82,8 @@ public final class AnnouncementCardViewModel {
         case visible(BadgeImageViewModel, CGSize)
 
         public init(
-            image: ImageResource,
-            contentColor: UIColor? = .defaultBadge,
+            image: ImageLocation,
+            contentColor: UIColor? = .primary,
             backgroundColor: UIColor = .lightBadgeBackground,
             cornerRadius: BadgeImageViewModel.CornerRadius = .roundedHigh,
             accessibilityID: String = AccessibilityId.badge,

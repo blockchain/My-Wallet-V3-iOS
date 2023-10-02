@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainUI
 import ComposableArchitecture
 import ComposableNavigation
 import ErrorsUI
@@ -16,6 +17,7 @@ struct CreateAccountViewStepTwo: View {
 
     private let store: Store<CreateAccountStepTwoState, CreateAccountStepTwoAction>
     @ObservedObject private var viewStore: ViewStore<CreateAccountStepTwoState, CreateAccountStepTwoAction>
+    @BlockchainApp var app
     @State private var focusedEmail = false
     @State private var focusedPassword = false
     @State private var focusedPasswordConfirmation = false
@@ -51,18 +53,7 @@ struct CreateAccountViewStepTwo: View {
             .dismissKeyboardOnScroll()
             // setting the frame is necessary for the Spacer inside the VStack above to work properly
         }
-        .primaryNavigation(title: "") {
-            Button {
-                viewStore.send(.createButtonTapped)
-            } label: {
-                Text(LocalizedString.nextButton)
-                    .typography(.paragraph2)
-            }
-            .disabled(viewStore.isCreateButtonDisabled)
-            // disabling the button doesn't gray it out
-            .foregroundColor(viewStore.isCreateButtonDisabled ? .semantic.muted : .semantic.title)
-            .accessibility(identifier: AccessibilityIdentifier.nextButton)
-        }
+        .primaryNavigation(title: "")
         .onAppear(perform: {
             viewStore.send(.onAppear)
         })
@@ -129,6 +120,9 @@ extension CreateAccountViewStepTwo {
             passwordConfirmationField
             Spacer()
             termsAgreementView
+            if viewStore.shouldDisplayBakktTermsAndConditions {
+                bakktTermsAgreementView
+            }
         }
     }
 
@@ -142,41 +136,50 @@ extension CreateAccountViewStepTwo {
             subText: shouldShowError ? LocalizedString.TextFieldError.invalidEmail : nil,
             subTextStyle: .error,
             placeholder: LocalizedString.TextFieldPlaceholder.email,
-            state: shouldShowError ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.keyboardType = .emailAddress
-                $0.textContentType = .emailAddress
-            }
+            state: shouldShowError ? .error : .default
         )
         .accessibility(identifier: AccessibilityIdentifier.emailGroup)
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled()
+        .keyboardType(.emailAddress)
+        .textContentType(.emailAddress)
     }
 
     private var passwordField: some View {
-        let shouldShowError = viewStore.inputValidationState == .invalid(.weakPassword)
-        return Input(
-            text: viewStore.binding(\.$password),
-            isFirstResponder: $focusedPassword,
-            shouldResignFirstResponderOnReturn: true,
-            label: LocalizedString.TextFieldTitle.password,
-            subText: viewStore.passwordStrength.displayString,
-            subTextStyle: viewStore.passwordStrength.inputSubTextStyle,
-            placeholder: LocalizedString.TextFieldPlaceholder.password,
-            state: shouldShowError ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.isSecureTextEntry = !viewStore.passwordFieldTextVisible
-                $0.textContentType = .newPassword
-            },
-            trailing: {
-                PasswordEyeSymbolButton(
-                    isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
-                )
+        let shouldShowError = viewStore.passwordRulesBreached.isNotEmpty
+        return VStack {
+            Input(
+                text: viewStore.binding(\.$password),
+                isFirstResponder: $focusedPassword,
+                shouldResignFirstResponderOnReturn: true,
+                label: LocalizedString.TextFieldTitle.password,
+                subText: viewStore.password.isEmpty ? nil : viewStore.passwordRulesBreached.hint,
+                subTextStyle: viewStore.password.isEmpty ? .primary : viewStore.passwordRulesBreached.inputSubTextStyle,
+                placeholder: LocalizedString.TextFieldPlaceholder.password,
+                state: shouldShowError ? .error : .default,
+                isSecure: !viewStore.passwordFieldTextVisible,
+                trailing: {
+                    PasswordEyeSymbolButton(
+                        isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
+                    )
+                }
+            )
+            .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .textContentType(.oneTimeCode) // Disables strong password suggestions
+
+            Text(PasswordValidationRule.displayString) { string in
+                string.foregroundColor = .semantic.body
+
+                for rule in viewStore.passwordRulesBreached {
+                    if let range = string.range(of: rule.accent) {
+                        string[range].foregroundColor = .semantic.error
+                    }
+                }
             }
-        )
-        .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
+            .typography(.caption1)
+        }
     }
 
     private var passwordConfirmationField: some View {
@@ -186,16 +189,11 @@ extension CreateAccountViewStepTwo {
             isFirstResponder: $focusedPasswordConfirmation,
             shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.passwordConfirmation,
-            subText: shouldShowError ?  LocalizedString.TextFieldError.passwordsDontMatch : nil,
+            subText: shouldShowError ? LocalizedString.TextFieldError.passwordsDontMatch : nil,
             subTextStyle: .error,
             placeholder: LocalizedString.TextFieldPlaceholder.passwordConfirmation,
             state: shouldShowError ? .error : .default,
-            configuration: {
-                $0.autocorrectionType = .no
-                $0.autocapitalizationType = .none
-                $0.isSecureTextEntry = !viewStore.passwordFieldTextVisible
-                $0.textContentType = .password
-            },
+            isSecure: !viewStore.passwordFieldTextVisible,
             trailing: {
                 PasswordEyeSymbolButton(
                     isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
@@ -203,55 +201,54 @@ extension CreateAccountViewStepTwo {
             }
         )
         .accessibility(identifier: AccessibilityIdentifier.passwordGroup)
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled()
+        .textContentType(.password)
     }
 
     private var termsAgreementView: some View {
+        Text(LocalizedStringKey(LocalizedString.agreementPrompt))
+            .typography(.micro)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.center)
+            .accessibility(identifier: AccessibilityIdentifier.agreementPromptText)
+            // fixing the size prevents the view from collapsing when the keyboard is on screen
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var bakktTermsAgreementView: some View {
         HStack(spacing: Spacing.baseline) {
-            Toggle(isOn: viewStore.binding(\.$termsAccepted)) {}
+            Toggle(isOn: viewStore.binding(\.$bakktTermsAccepted)) {}
                 .labelsHidden()
-                .accessibility(identifier: AccessibilityIdentifier.termsOfServiceButton)
-            agreementText
+                .accessibility(identifier: AccessibilityIdentifier.bakktTermsOfServiceButton)
+            bakktAgreementText
                 .typography(.micro)
-                .accessibility(identifier: AccessibilityIdentifier.agreementPromptText)
+                .accessibility(identifier: AccessibilityIdentifier.bakktAgreementPromptText)
         }
         // fixing the size prevents the view from collapsing when the keyboard is on screen
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    private var agreementText: some View {
+    private var bakktAgreementText: some View {
         HStack {
             VStack(alignment: .leading, spacing: .zero) {
                 let promptText = Text(
-                    rich: LocalizedString.agreementPrompt
+                    rich: LocalizedString.bakktAgreementPrompt
                 )
                 promptText
                     .foregroundColor(.semantic.body)
                     .accessibility(identifier: AccessibilityIdentifier.agreementPromptText)
 
                 HStack(alignment: .firstTextBaseline, spacing: .zero) {
-                    Text(LocalizedString.termsOfServiceLink)
+                    Text(LocalizedString.bakktUserAgreementLink)
                         .foregroundColor(.semantic.primary)
                         .onTapGesture {
-                            guard let url = URL(string: Constants.HostURL.terms) else { return }
-                            viewStore.send(.openExternalLink(url))
+                            $app.post(event: blockchain.ux.bakkt.terms)
                         }
                         .accessibility(identifier: AccessibilityIdentifier.termsOfServiceButton)
-
-                    Text(" " + LocalizedString.and + " ")
-                        .foregroundColor(.semantic.body)
-
-                    let privacyPolicyComponent = Text(LocalizedString.privacyPolicyLink)
-                        .foregroundColor(.semantic.primary)
-                    let fullStopComponent = Text(".")
-                        .foregroundColor(.semantic.body)
-                    let privacyPolicyText = privacyPolicyComponent + fullStopComponent
-
-                    privacyPolicyText
-                        .onTapGesture {
-                            guard let url = URL(string: Constants.HostURL.privacyPolicy) else { return }
-                            viewStore.send(.openExternalLink(url))
+                        .batch {
+                            set(blockchain.ux.bakkt.terms.then.launch.url, to: { blockchain.ux.bakkt.terms.url })
                         }
-                        .accessibility(identifier: AccessibilityIdentifier.privacyPolicyButton)
                 }
             }
             Spacer()
@@ -259,29 +256,59 @@ extension CreateAccountViewStepTwo {
     }
 }
 
-extension PasswordValidationScore {
-    fileprivate var displayString: String? {
+extension PasswordValidationRule {
+    public var displayString: String {
         switch self {
-        case .none:
-            return nil
-        case .normal:
-            return LocalizedString.PasswordStrengthIndicator.regularPassword
-        case .strong:
-            return LocalizedString.PasswordStrengthIndicator.strongPassword
-        case .weak:
-            return LocalizedString.PasswordStrengthIndicator.weakPassword
+        case .lowercaseLetter:
+            return LocalizedString.Password.Rules.Lowercase.display
+        case .uppercaseLetter:
+            return LocalizedString.Password.Rules.Uppercase.display
+        case .number:
+            return LocalizedString.Password.Rules.Number.display
+        case .specialCharacter:
+            return LocalizedString.Password.Rules.SpecialCharacter.display
+        case .length:
+            return LocalizedString.Password.Rules.Length.display
         }
     }
 
-    fileprivate var inputSubTextStyle: InputSubTextStyle {
+    public var accent: String {
         switch self {
-        case .none, .normal:
-            return .primary
-        case .strong:
-            return .success
-        case .weak:
-            return .error
+        case .lowercaseLetter:
+            return LocalizedString.Password.Rules.Lowercase.display
+        case .uppercaseLetter:
+            return LocalizedString.Password.Rules.Uppercase.display
+        case .number:
+            return LocalizedString.Password.Rules.Number.display
+        case .specialCharacter:
+            return LocalizedString.Password.Rules.SpecialCharacter.display
+        case .length:
+            return LocalizedString.Password.Rules.Length.accent
         }
+    }
+
+    public static let displayString: String = {
+        let rules = PasswordValidationRule.all.map(\.displayString).joined(separator: ", ")
+        return LocalizedString.Password.Rules.prefix + rules
+    }()
+}
+
+extension Text {
+    public init(_ string: String, configure: (inout AttributedString) -> Void) {
+        var attributedString = AttributedString(string) /// create an `AttributedString`
+        configure(&attributedString) /// configure using the closure
+        self.init(attributedString) /// initialize a `Text`
+    }
+}
+
+extension Collection<PasswordValidationRule> {
+
+    public var hint: String {
+        isEmpty ? LocalizedString.Password.Rules.secure : LocalizedString.Password.Rules.insecure
+    }
+
+    public var inputSubTextStyle: InputSubTextStyle {
+        isEmpty ? .success : .error
     }
 }
 
@@ -318,8 +345,7 @@ struct CreateAccountViewStepTwo_Previews: PreviewProvider {
                     countryState: SearchableItem(id: "1", title: "State"),
                     referralCode: "id1"
                 ),
-                reducer: createAccountStepTwoReducer,
-                environment: .init(
+                reducer: CreateAccountStepTwoReducer(
                     mainQueue: .main,
                     passwordValidator: PasswordValidator(),
                     externalAppOpener: ToLogAppOpener(),

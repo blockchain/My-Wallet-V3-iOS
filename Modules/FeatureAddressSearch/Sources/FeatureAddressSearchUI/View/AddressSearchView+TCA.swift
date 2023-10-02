@@ -50,6 +50,7 @@ struct AddressSearchState: Equatable, NavigationState {
     var addressModificationState: AddressModificationState?
     var loading = false
     var screenTitle: String = ""
+    var screenSubtitle: String = ""
     var containerSearch: ContainerSearch?
     var error: Nabu.Error?
 
@@ -66,7 +67,9 @@ struct AddressSearchState: Equatable, NavigationState {
     }
 }
 
-struct AddressSearchEnvironment {
+struct AddressSearchEnvironment {}
+
+struct AddressSearchReducer: ReducerProtocol {
 
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let config: AddressSearchFeatureConfig
@@ -87,188 +90,182 @@ struct AddressSearchEnvironment {
         self.addressSearchService = addressSearchService
         self.onComplete = onComplete
     }
-}
 
-let addressSearchReducer = Reducer.combine(
-    addressModificationReducer.optional().pullback(
-        state: \.addressModificationState,
-        action: /AddressSearchAction.addressModificationAction,
-        environment: {
-            AddressModificationEnvironment(
-                mainQueue: $0.mainQueue,
-                config: $0.config.addressEditScreen,
-                addressService: $0.addressService,
-                addressSearchService: $0.addressSearchService
-            )
-        }
-    ),
-    Reducer<
-        AddressSearchState,
-        AddressSearchAction,
-        AddressSearchEnvironment
-    > { state, action, env in
+    typealias State = AddressSearchState
+    typealias Action = AddressSearchAction
 
-        switch action {
-        case .binding(\.$searchText):
-            return EffectTask(
-                value: .searchAddresses(
-                    searchText: state.searchText,
-                    country: state.address?.country
-                )
-            )
-
-        case .selectAddress(let searchAddressResult):
-            if searchAddressResult.isAddressType {
-                return EffectTask(value: .modifySelectedAddress(addressId: searchAddressResult.addressId))
-            } else {
-                let searchText = (searchAddressResult.text ?? "") + " "
-                state.searchText = searchText
-                state.containerSearch = .init(
-                    containerId: searchAddressResult.addressId,
-                    searchText: searchText
-                )
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .binding(\.$searchText):
                 return EffectTask(
                     value: .searchAddresses(
                         searchText: state.searchText,
                         country: state.address?.country
                     )
                 )
-            }
 
-        case .modifySelectedAddress(let addressId):
-            return EffectTask(
-                value: .navigate(to: .modifyAddress(
-                    selectedAddressId: addressId,
-                    address: state.address
-                ))
-            )
-
-        case .modifyAddress:
-            return EffectTask(
-                value: .navigate(to: .modifyAddress(
-                    selectedAddressId: nil,
-                    address: state.address
-                ))
-            )
-
-        case .onAppear:
-            state.screenTitle = env.config.addressSearchScreen.title
-            guard state.address == .none else {
-                if state.searchResults.isEmpty {
-                    state.containerSearch = nil
+            case .selectAddress(let searchAddressResult):
+                if searchAddressResult.isAddressType {
+                    return EffectTask(value: .modifySelectedAddress(addressId: searchAddressResult.addressId))
+                } else {
+                    let searchText = (searchAddressResult.text ?? "") + " "
+                    state.searchText = searchText
+                    state.containerSearch = .init(
+                        containerId: searchAddressResult.addressId,
+                        searchText: searchText
+                    )
                     return EffectTask(
                         value: .searchAddresses(
-                            searchText: state.address?.searchText,
+                            searchText: state.searchText,
                             country: state.address?.country
                         )
                     )
+                }
+
+            case .modifySelectedAddress(let addressId):
+                return EffectTask(
+                    value: .navigate(to: .modifyAddress(
+                        selectedAddressId: addressId,
+                        address: state.address
+                    ))
+                )
+
+            case .modifyAddress:
+                return EffectTask(
+                    value: .navigate(to: .modifyAddress(
+                        selectedAddressId: nil,
+                        address: state.address
+                    ))
+                )
+
+            case .onAppear:
+                state.screenTitle = config.addressSearchScreen.title
+                state.screenSubtitle = config.addressSearchScreen.subtitle
+                guard state.address == .none else {
+                    if state.searchResults.isEmpty {
+                        state.containerSearch = nil
+                        return EffectTask(
+                            value: .searchAddresses(
+                                searchText: state.address?.searchText,
+                                country: state.address?.country
+                            )
+                        )
+                    } else {
+                        return .none
+                    }
+                }
+                return .none
+
+            case .route(let route):
+                if let routeValue = route?.route {
+                    switch routeValue {
+                    case .modifyAddress(let selectedAddressId, let address):
+                        state.addressModificationState = .init(
+                            addressDetailsId: selectedAddressId,
+                            country: address?.country,
+                            state: address?.state,
+                            isPresentedFromSearchView: true
+                        )
+                        state.route = route
+                    }
                 } else {
+                    state.addressModificationState = nil
+                    state.route = route
+                }
+                return .none
+
+            case .closeError:
+                state.error = nil
+                return .none
+
+            case .binding:
+                return .none
+
+            case .updateSelectedAddress(let address):
+                state.address = address
+                return EffectTask(value: .complete(.saved(address)))
+
+            case .cancelSearch:
+                return EffectTask(value: .complete(.abandoned))
+
+            case .complete(let addressResult):
+                return .fireAndForget {
+                    onComplete(addressResult)
+                }
+
+            case .searchAddresses(let searchText, let country):
+                guard let searchText, searchText.isNotEmpty,
+                      let country, country.isNotEmpty
+                else {
+                    state.searchResults = []
+                    state.isSearchResultsLoading = false
+                    state.containerSearch = nil
+                    return .cancel(id: AddressSearchIdentifier())
+                }
+                if let containerSearchText = state.containerSearch?.searchText {
+                    if !searchText.hasPrefix(containerSearchText) {
+                        state.containerSearch = nil
+                    }
+                }
+                state.isSearchResultsLoading = true
+                return addressSearchService
+                    .fetchAddresses(
+                        searchText: searchText,
+                        containerId: state.containerSearch?.containerId,
+                        countryCode: country,
+                        sateCode: state.address?.state
+                    )
+                    .receive(on: mainQueue)
+                    .catchToEffect()
+                    .debounce(
+                        id: AddressSearchIdentifier(),
+                        for: .milliseconds(AddressSearchDebounceInMilliseconds),
+                        scheduler: mainQueue
+                    )
+                    .map { result in
+                            .didReceiveAddressesResult(result)
+                    }
+
+            case .didReceiveAddressesResult(let result):
+                state.isSearchResultsLoading = false
+                switch result {
+                case .success(let searchedAddresses):
+                    state.searchResults = searchedAddresses
+                case .failure(let error):
+                    state.error = error.nabuError
+                }
+                return .none
+
+            case .addressModificationAction(let modificationAction):
+                switch modificationAction {
+                case .updateAddressResponse(.success(let address)):
+                    state.address = address
+                    return .merge(
+                        EffectTask(value: .dismiss()),
+                        EffectTask(value: .updateSelectedAddress(address))
+                    )
+                case .cancelEdit:
+                    return .none
+                case .stateDoesNotMatch:
+                    state.route = nil
+                    return .none
+                default:
                     return .none
                 }
             }
-            return .none
-
-        case .route(let route):
-            if let routeValue = route?.route {
-                switch routeValue {
-                case .modifyAddress(let selectedAddressId, let address):
-                    state.addressModificationState = .init(
-                        addressDetailsId: selectedAddressId,
-                        country: address?.country,
-                        state: address?.state,
-                        isPresentedFromSearchView: true
-                    )
-                    state.route = route
-                }
-            } else {
-                state.addressModificationState = nil
-                state.route = route
-            }
-            return .none
-
-        case .closeError:
-            state.error = nil
-            return .none
-
-        case .binding:
-            return .none
-
-        case .updateSelectedAddress(let address):
-            state.address = address
-            return EffectTask(value: .complete(.saved(address)))
-
-        case .cancelSearch:
-            return EffectTask(value: .complete(.abandoned))
-
-        case .complete(let addressResult):
-            return .fireAndForget {
-                env.onComplete(addressResult)
-            }
-
-        case .searchAddresses(let searchText, let country):
-            guard let searchText, searchText.isNotEmpty,
-                  let country, country.isNotEmpty
-            else {
-                state.searchResults = []
-                state.isSearchResultsLoading = false
-                state.containerSearch = nil
-                return .cancel(id: AddressSearchIdentifier())
-            }
-            if let containerSearchText = state.containerSearch?.searchText {
-                if !searchText.hasPrefix(containerSearchText) {
-                    state.containerSearch = nil
-                }
-            }
-            state.isSearchResultsLoading = true
-            return env
-                .addressSearchService
-                .fetchAddresses(
-                    searchText: searchText,
-                    containerId: state.containerSearch?.containerId,
-                    countryCode: country,
-                    sateCode: state.address?.state
-                )
-                .receive(on: env.mainQueue)
-                .catchToEffect()
-                .debounce(
-                    id: AddressSearchIdentifier(),
-                    for: .milliseconds(AddressSearchDebounceInMilliseconds),
-                    scheduler: env.mainQueue
-                )
-                .map { result in
-                    .didReceiveAddressesResult(result)
-                }
-
-        case .didReceiveAddressesResult(let result):
-            state.isSearchResultsLoading = false
-            switch result {
-            case .success(let searchedAddresses):
-                state.searchResults = searchedAddresses
-            case .failure(let error):
-                state.error = error.nabuError
-            }
-            return .none
-
-        case .addressModificationAction(let modificationAction):
-            switch modificationAction {
-            case .updateAddressResponse(.success(let address)):
-                state.address = address
-                return .merge(
-                    EffectTask(value: .dismiss()),
-                    EffectTask(value: .updateSelectedAddress(address))
-                )
-            case .cancelEdit:
-                return .none
-            case .stateDoesNotMatch:
-                state.route = nil
-                return .none
-            default:
-                return .none
-            }
+        }
+        .ifLet(\.addressModificationState, action: /Action.addressModificationAction) {
+            AddressModificationReducer(
+                mainQueue: mainQueue,
+                config: config.addressEditScreen,
+                addressService: addressService,
+                addressSearchService: addressSearchService
+            )
         }
     }
-    .binding()
-)
+}
 
 extension Address {
     var searchText: String {

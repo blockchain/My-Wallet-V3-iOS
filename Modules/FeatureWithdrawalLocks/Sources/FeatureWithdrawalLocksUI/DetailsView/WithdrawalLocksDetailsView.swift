@@ -35,7 +35,8 @@ public struct WithdrawalLocksDetailsView: View {
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Icon.closeCircle
+                    Icon.close
+                        .circle()
                         .color(.semantic.muted)
                         .frame(height: 24.pt)
                 }
@@ -72,22 +73,7 @@ public struct WithdrawalLocksDetailsView: View {
                     Section {
                         ForEach(withdrawalLocks.items) { item in
                             TableRow(
-                                leading: {
-                                    if let boughtCryptoCurrency = item.boughtCryptoCurrency,
-                                       let boughtCryptoCurrencyType = try? CurrencyType(code: boughtCryptoCurrency)
-                                    {
-                                        boughtCryptoCurrencyType.image
-                                            .resizable()
-                                            .frame(width: 26, height: 26)
-                                    } else if let depositedCurrencyType = try? CurrencyType(code: item.amountCurrency) {
-                                        depositedCurrencyType
-                                            .image
-                                            .resizable()
-                                            .background(Color.semantic.fiatGreen)
-                                            .frame(width: 26, height: 26)
-                                            .cornerRadius(4)
-                                    }
-                                },
+                                leading: { currencyLogo(item) },
                                 title: .init(rowTitle(item: item)),
                                 byline: .init(
                                     String(
@@ -153,6 +139,15 @@ public struct WithdrawalLocksDetailsView: View {
             Color.semantic.light
                 .ignoresSafeArea()
         )
+    }
+
+    @ViewBuilder
+    private func currencyLogo(_ item: WithdrawalLocks.Item) -> some View {
+        if let currency = item.boughtCryptoCurrency.flatMap({ try? CurrencyType(code: $0) }) {
+            currency.logo(size: 26.pt, showNetworkLogo: false)
+        } else if let currency = try? CurrencyType(code: item.amountCurrency) {
+            currency.logo(size: 26.pt, showNetworkLogo: false)
+        }
     }
 
     private func rowTitle(item: WithdrawalLocks.Item) -> String {

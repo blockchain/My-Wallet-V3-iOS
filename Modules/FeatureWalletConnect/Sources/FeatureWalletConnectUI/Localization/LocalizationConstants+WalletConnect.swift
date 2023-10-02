@@ -103,6 +103,7 @@ extension LocalizationConstants.WalletConnect.Dashboard {
             comment: "See all"
         )
     }
+
     enum Empty {
         static let title = "WalletConnect"
 

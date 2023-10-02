@@ -249,6 +249,7 @@ public final class InterestDepositOnChainTransactionEngine: InterestTransactionE
                 return receiveAddressFactory.makeExternalAssetAddress(
                     asset: sourceCryptoCurrency,
                     address: hotWalletAddress,
+                    memo: nil,
                     label: hotWalletAddress,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )
@@ -506,6 +507,7 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
                 return receiveAddressFactory.makeExternalAssetAddress(
                     asset: sourceCryptoCurrency,
                     address: hotWalletAddress,
+                    memo: nil,
                     label: hotWalletAddress,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )

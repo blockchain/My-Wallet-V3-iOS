@@ -20,12 +20,13 @@ struct DashboardAssetRowView: View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
             Group {
                 if let balance = viewStore.asset.balance {
-                    balance.rowView(viewStore.type.isCustodial ? .delta : .quote,
-                                                     byline: {
-                        if viewStore.type == .nonCustodial {
-                            viewStore.asset.networkTag
+                    balance.rowView(
+                        viewStore.type.isCustodial ? .delta : .quote,
+                        byline: {
+                            if viewStore.type == .nonCustodial {
+                                viewStore.asset.networkTag
+                            }
                         }
-                    }
                     )
                     .onTapGesture {
                         if viewStore.type == .fiat {

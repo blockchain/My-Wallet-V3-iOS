@@ -8,7 +8,7 @@ public protocol Recordable {
 }
 
 /// Composition of all recording types
-public typealias Recording = MessageRecording & ErrorRecording & UIOperationRecording
+public typealias Recording = ErrorRecording & MessageRecording & UIOperationRecording
 
 /// Can be used to record any `String` message
 public protocol MessageRecording {

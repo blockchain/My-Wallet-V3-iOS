@@ -1,12 +1,13 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import FeatureCardPaymentDomain
 import Localization
 import PlatformKit
 
 extension CardType {
 
-    public var thumbnail: ImageResource? {
+    public var thumbnail: ImageLocation? {
         switch self {
         case .visa:
             return .local(name: "logo-visa", bundle: .platformUIKit)

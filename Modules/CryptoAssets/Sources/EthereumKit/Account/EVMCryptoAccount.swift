@@ -135,7 +135,9 @@ final class EVMCryptoAccount: CryptoNonCustodialAccount {
         case .activeRewardsDeposit:
             guard asset.supports(product: .activeRewardsBalance) else { return .just(false) }
             return isFunded
-        case .sell, .swap:
+        case .swap:
+            return .just(asset.supports(product: .custodialWalletBalance))
+        case .sell:
             guard asset.supports(product: .custodialWalletBalance) else {
                 return .just(false)
             }

@@ -9,7 +9,7 @@ public final class WebSocketConnection {
     private let url: URL
     public var handler: ((Event) -> Void)?
 
-    private(set) public var isConnected: Bool = false
+    public private(set) var isConnected: Bool = false
     private var task: URLSessionWebSocketTask?
     private var pingTimer: Timer?
     private var loggerURLRequest: URLRequest?
@@ -70,7 +70,12 @@ public final class WebSocketConnection {
 
     public func send(_ message: Message, onCompletion: (() -> Void)?) {
         consoleLogger?("WebSocketConnection: Send \(message)")
-        task?.send(message.sessionMessage) { [weak self, consoleLogger] error in
+        guard let task else {
+            handleEvent(.connnectionError(.unknown))
+            onCompletion?()
+            return
+        }
+        task.send(message.sessionMessage) { [weak self, consoleLogger] error in
             if let error {
                 consoleLogger?("WebSocketConnection: Send failed \(message)")
                 self?.handleEvent(.connnectionError(.failed(error)))
@@ -211,10 +216,15 @@ extension WebSocketConnection {
 
     public enum WebSocketError: Error, Equatable {
         case failed(Error)
+        case unknown
 
         public static func == (lhs: WebSocketConnection.WebSocketError, rhs: WebSocketConnection.WebSocketError) -> Bool {
             switch (lhs, rhs) {
             case (.failed, .failed):
+                return false
+            case (.unknown, _):
+                return false
+            case (_, .unknown):
                 return false
             }
         }

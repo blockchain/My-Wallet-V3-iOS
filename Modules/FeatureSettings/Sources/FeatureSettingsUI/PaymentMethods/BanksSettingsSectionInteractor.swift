@@ -1,6 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
 import DIKit
+import FeatureProductsDomain
 import FeatureSettingsDomain
 import MoneyKit
 import PlatformKit
@@ -11,7 +13,7 @@ import ToolKit
 final class BanksSettingsSectionInteractor {
 
     typealias State = ValueCalculationState<[Beneficiary]>
-
+    var app: AppProtocol
     var state: Observable<State> {
         _ = setup
         return stateRelay
@@ -21,14 +23,27 @@ final class BanksSettingsSectionInteractor {
 
     let addPaymentMethodInteractors: [AddPaymentMethodInteractor]
 
-    private lazy var setup: Void = beneficiaries
-        .map { .value($0) }
+    private lazy var setup: Void =
+    Observable.combineLatest(beneficiaries, tradingAccountEnabled)
+        .map { beneficiaries, tradingAccountEnabled in
+            guard tradingAccountEnabled == true else {
+                return .invalid(.empty)
+            }
+            return .value(beneficiaries)
+        }
         .startWith(.calculating)
         .bindAndCatch(to: stateRelay)
         .disposed(by: disposeBag)
 
     private let stateRelay = BehaviorRelay<State>(value: .invalid(.empty))
     private let disposeBag = DisposeBag()
+
+    private var tradingAccountEnabled: Observable<Bool> {
+        app.publisher(for: blockchain.app.is.DeFi.only, as: Bool.self)
+            .replaceError(with: true)
+            .map(\.not)
+            .asObservable()
+    }
 
     private var beneficiaries: Observable<[Beneficiary]> {
         beneficiariesService.beneficiaries
@@ -46,12 +61,13 @@ final class BanksSettingsSectionInteractor {
         beneficiariesService: BeneficiariesServiceAPI = resolve(),
         paymentMethodTypesService: PaymentMethodTypesServiceAPI,
         enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve(),
-        tierLimitsProvider: TierLimitsProviding
+        tierLimitsProvider: TierLimitsProviding,
+        app: AppProtocol = resolve()
     ) {
         self.beneficiariesService = beneficiariesService
         self.paymentMethodTypesService = paymentMethodTypesService
         self.tierLimitsProvider = tierLimitsProvider
-
+        self.app = app
         self.addPaymentMethodInteractors = enabledCurrenciesService.allEnabledFiatCurrencies
             .map {
                 AddPaymentMethodInteractor(

@@ -197,6 +197,10 @@ extension BitcoinOnChainTransactionEngine: OnChainTransactionEngine {
         .asSingle()
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateAmounts(pendingTransaction: pendingTransaction)
             .andThen(validateSufficientFunds(pendingTransaction: pendingTransaction))
@@ -423,7 +427,10 @@ extension BitcoinOnChainTransactionEngine {
         let feeLevel = pendingTransaction.feeLevel.bitcoinChainFeeLevel
         let source = BitcoinChainAccount(
             index: Int32(bitcoinChainCryptoAccount.hdAccountIndex),
-            coin: Token.coin
+            coin: Token.coin,
+            xpub: bitcoinChainCryptoAccount.xPub,
+            importedPrivateKey: bitcoinChainCryptoAccount.importedPrivateKey,
+            isImported: bitcoinChainCryptoAccount.isImported
         )
 
         func fee(
@@ -574,7 +581,7 @@ extension TransactionOutcome {
     }
 }
 
-private func fetchFee(
+func fetchFee(
     for feeLevel: BitcoinChainPendingTransaction.FeeLevel,
     feeRepository: AnyCryptoFeeRepository<BitcoinChainTransactionFee<some BitcoinChainToken>>
 ) -> AnyPublisher<MoneyValue, Never> {

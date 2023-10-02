@@ -33,13 +33,12 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.54.1"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", exact: "0.56.0"),
         .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
+        .package(path: "../Blockchain"),
         .package(path: "../Tool"),
         .package(path: "../Network"),
         .package(path: "../Errors"),
-        .package(path: "../BlockchainComponentLibrary"),
-        .package(path: "../BlockchainNamespace"),
         .package(path: "../Localization"),
         .package(path: "../Platform")
     ],
@@ -50,20 +49,17 @@ let package = Package(
                 .target(name: "FeatureAnnouncementsDomain"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
-                .product(name: "Localization", package: "Localization"),
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(
-                    name: "BlockchainComponentLibrary",
-                    package: "BlockchainComponentLibrary"
-                )
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
+                .product(name: "Localization", package: "Localization")
             ]
         ),
         .target(
             name: "FeatureAnnouncementsDomain",
             dependencies: [
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "BlockchainNamespace", package: "BlockchainNamespace")
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "BlockchainUI", package: "Blockchain")
             ]
         ),
         .target(

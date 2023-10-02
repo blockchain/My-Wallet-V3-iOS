@@ -4,7 +4,6 @@ import AnalyticsKit
 import Combine
 import ComposableArchitecture
 import ComposableNavigation
-import DIKit
 import FeatureAuthenticationDomain
 import ToolKit
 
@@ -37,92 +36,63 @@ struct SupportViewState: Equatable {
     }
 }
 
-let supportViewReducer = Reducer<
-    SupportViewState,
-    SupportViewAction,
-    SupportViewEnvironment
-> { state, action, environment in
-    switch action {
-    case .loadAppStoreVersionInformation:
-        return environment
-            .appStoreInformationRepository
-            .verifyTheCurrentAppVersionIsTheLatestVersion(
-                state.applicationVersion,
-                bundleId: "com.rainydayapps.Blockchain"
-            )
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result -> SupportViewAction in
-                guard let applicationInfo = result.success else {
-                    return .failedToRetrieveAppStoreInfo
-                }
-                return .appStoreVersionInformationReceived(applicationInfo)
-            }
-    case .appStoreVersionInformationReceived(let applicationInfo):
-        state.isApplicationUpdated = applicationInfo.isApplicationUpToDate
-        state.appStoreVersion = applicationInfo.version
-        return .none
-    case .failedToRetrieveAppStoreInfo:
-        return .none
-    case .openURL(let content):
-        switch content {
-        case .contactUs:
-            environment.externalAppOpener.open(URL(string: Constants.SupportURL.PIN.contactUs)!)
-        case .viewFAQ:
-            environment.externalAppOpener.open(URL(string: Constants.SupportURL.PIN.viewFAQ)!)
-        }
-        return .none
-    }
-}
-.analytics()
+struct SupportViewReducer: ReducerProtocol {
 
-struct SupportViewEnvironment {
+    typealias State = SupportViewState
+    typealias Action = SupportViewAction
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let appStoreInformationRepository: AppStoreInformationRepositoryAPI
     let analyticsRecorder: AnalyticsEventRecorderAPI
     let externalAppOpener: ExternalAppOpener
-}
 
-extension SupportViewEnvironment {
-    static let `default`: SupportViewEnvironment = .init(
-        mainQueue: .main,
-        appStoreInformationRepository: resolve(),
-        analyticsRecorder: resolve(),
-        externalAppOpener: resolve()
-    )
-}
+    init(
+        mainQueue: AnySchedulerOf<DispatchQueue> = .main,
+        appStoreInformationRepository: AppStoreInformationRepositoryAPI,
+        analyticsRecorder: AnalyticsEventRecorderAPI,
+        externalAppOpener: ExternalAppOpener
+    ) {
+        self.mainQueue = mainQueue
+        self.appStoreInformationRepository = appStoreInformationRepository
+        self.analyticsRecorder = analyticsRecorder
+        self.externalAppOpener = externalAppOpener
+    }
 
-// MARK: - Private
-
-extension Reducer where
-    Action == SupportViewAction,
-    State == SupportViewState,
-    Environment == SupportViewEnvironment
-{
-    /// Helper reducer for analytics tracking
-    fileprivate func analytics() -> Self {
-        combined(
-            with: Reducer<
-                SupportViewState,
-                SupportViewAction,
-                SupportViewEnvironment
-            > { _, action, environment in
-                switch action {
-                case .loadAppStoreVersionInformation:
-                    environment.analyticsRecorder.record(event: .customerSupportClicked)
-                    return .none
-                case .openURL(let content):
-                    switch content {
-                    case .contactUs:
-                        environment.analyticsRecorder.record(event: .contactUsClicked)
-                    case .viewFAQ:
-                        environment.analyticsRecorder.record(event: .viewFAQsClicked)
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .loadAppStoreVersionInformation:
+                analyticsRecorder.record(event: .customerSupportClicked)
+                return appStoreInformationRepository
+                    .verifyTheCurrentAppVersionIsTheLatestVersion(
+                        state.applicationVersion,
+                        bundleId: "com.rainydayapps.Blockchain"
+                    )
+                    .receive(on: mainQueue)
+                    .catchToEffect()
+                    .map { result -> SupportViewAction in
+                        guard let applicationInfo = result.success else {
+                            return .failedToRetrieveAppStoreInfo
+                        }
+                        return .appStoreVersionInformationReceived(applicationInfo)
                     }
-                    return .none
-                default:
-                    return .none
+            case .appStoreVersionInformationReceived(let applicationInfo):
+                state.isApplicationUpdated = applicationInfo.isApplicationUpToDate
+                state.appStoreVersion = applicationInfo.version
+                return .none
+            case .failedToRetrieveAppStoreInfo:
+                return .none
+            case .openURL(let content):
+                switch content {
+                case .contactUs:
+                    analyticsRecorder.record(event: .contactUsClicked)
+                    externalAppOpener.open(URL(string: Constants.SupportURL.PIN.contactUs)!)
+                case .viewFAQ:
+                    analyticsRecorder.record(event: .viewFAQsClicked)
+                    externalAppOpener.open(URL(string: Constants.SupportURL.PIN.viewFAQ)!)
                 }
+                return .none
             }
-        )
+        }
     }
 }

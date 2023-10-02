@@ -67,3 +67,36 @@ public struct EVMNetwork: Hashable, Equatable, Codable {
         lhs.networkConfig == rhs.networkConfig
     }
 }
+
+extension EVMNetworkConfig {
+
+    static func validType(_ value: NetworkConfigResponse.NetworkType) -> Bool {
+        value == .evm
+    }
+
+    static func from(response: NetworkConfigResponse) -> [EVMNetworkConfig] {
+        response.networks
+            .compactMap { Self(response: $0) }
+    }
+
+    init?(response: NetworkConfigResponse.Network) {
+        guard Self.validType(response.type) else {
+            return nil
+        }
+        guard case .dictionary(let identifiers) = response.identifiers else {
+            return nil
+        }
+        guard case .number(let chainID) = identifiers["chainId"] else {
+            return nil
+        }
+        self.init(
+            name: response.name,
+            chainID: BigUInt(chainID),
+            nativeAsset: response.nativeAsset,
+            explorerUrl: response.explorerUrl,
+            networkTicker: response.networkTicker,
+            nodeURL: response.nodeUrls?.first,
+            shortName: response.shortName
+        )
+    }
+}

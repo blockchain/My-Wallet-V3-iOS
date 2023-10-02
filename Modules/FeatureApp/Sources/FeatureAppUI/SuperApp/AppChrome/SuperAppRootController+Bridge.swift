@@ -207,28 +207,16 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
         }
     }
 
-    func handleFrequentActionSwap() {
-        handleSwapCrypto(account: nil)
-    }
-
-    public func handleSwapCrypto(account: CryptoAccount?) {
+    func handleSwapCrypto(account: CryptoAccount?) {
         let transactionsRouter = transactionsRouter
-        let onboardingRouter = onboardingRouter
         coincore.hasPositiveDisplayableBalanceAccounts(for: .crypto)
             .prefix(1)
             .receive(on: DispatchQueue.main)
-            .flatMap { positiveBalance -> AnyPublisher<TransactionFlowResult, Never> in
-                if !positiveBalance {
-                    guard let viewController = UIApplication.shared.topMostViewController else {
-                        fatalError("Top most view controller cannot be nil")
-                    }
-                    return onboardingRouter
-                        .presentRequiredCryptoBalanceView(from: viewController)
-                        .map(TransactionFlowResult.init)
-                        .eraseToAnyPublisher()
-                } else {
-                    return transactionsRouter.presentTransactionFlow(to: .swap(account))
-                }
+            .flatMap { _ -> AnyPublisher<TransactionFlowResult, Never> in
+                transactionsRouter.presentTransactionFlow(to: .swap(
+                    source: account,
+                    target: nil
+                ))
             }
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")
@@ -236,24 +224,8 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
             .store(in: &bag)
     }
 
-    public func handleSendCrypto() {
+    func handleSendCrypto() {
         transactionsRouter.presentTransactionFlow(to: .send(nil, nil))
-            .sink { result in
-                "\(result)".peek("🧾 \(#function)")
-            }
-            .store(in: &bag)
-    }
-
-    public func handleReceiveCrypto() {
-        transactionsRouter.presentTransactionFlow(to: .receive(nil))
-            .sink { result in
-                "\(result)".peek("🧾 \(#function)")
-            }
-            .store(in: &bag)
-    }
-
-    public func handleSellCrypto(account: CryptoAccount?) {
-        transactionsRouter.presentTransactionFlow(to: .sell(account))
             .sink { result in
                 "\(result)".peek("🧾 \(#function)")
             }
@@ -308,6 +280,7 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
     public func handleDeposit() {
         currentFiatAccount()
             .prefix(1)
+            .receive(on: DispatchQueue.main)
             .sink(to: My.deposit(into:), on: self)
             .store(in: &bag)
     }
@@ -315,22 +288,16 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
     public func handleWithdraw() {
         currentFiatAccount()
             .prefix(1)
+            .receive(on: DispatchQueue.main)
             .sink(to: My.withdraw(from:), on: self)
             .store(in: &bag)
     }
 
-    public func handleRewards() {
+    func handleRewards() {
         let interestAccountList = InterestAccountListHostingController(embeddedInNavigationView: true)
         interestAccountList.delegate = self
         topMostViewController?.present(
             interestAccountList,
-            animated: true
-        )
-    }
-
-    public func handleNFTAssetView() {
-        topMostViewController?.present(
-            AssetListHostingViewController(),
             animated: true
         )
     }

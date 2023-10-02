@@ -19,15 +19,15 @@ import WalletPayloadKit
 
 /// Used for canceling publishers
 enum WalletCancelations {
-    struct FetchId: Hashable {}
-    struct InitializationId: Hashable {}
-    struct UpgradeId: Hashable {}
-    struct CreateId: Hashable {}
-    struct RestoreId: Hashable {}
-    struct RestoreFailedId: Hashable {}
-    struct AssetInitializationId: Hashable {}
-    struct SecondPasswordId: Hashable {}
-    struct ForegroundInitCheckId: Hashable {}
+    case FetchId
+    case InitializationId
+    case UpgradeId
+    case CreateId
+    case RestoreId
+    case RestoreFailedId
+    case AssetInitializationId
+    case SecondPasswordId
+    case ForegroundInitCheckId
 }
 
 public enum WalletAction: Equatable {
@@ -47,14 +47,14 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
                     return environment.walletService.fetch(password)
                         .receive(on: environment.mainQueue)
                         .catchToEffect()
-                        .cancellable(id: WalletCancelations.FetchId(), cancelInFlight: true)
+                        .cancellable(id: WalletCancelations.FetchId, cancelInFlight: true)
                         .map { CoreAppAction.wallet(.walletFetched($0)) }
 
                 case .wallet(.walletFetched(.success(let context))):
                     // the cancellations are here because we still call the legacy actions
                     // and we need to cancel those operation - (remove after JS removal)
                     return .concatenate(
-                        .cancel(id: WalletCancelations.FetchId()),
+                        .cancel(id: WalletCancelations.FetchId),
                         EffectTask(value: .wallet(.walletBootstrap(context))),
                         EffectTask(value: .wallet(.walletSetup))
                     )
@@ -124,7 +124,7 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
                         )
                         return .merge(
                             EffectTask(value: .alert(alertAction)),
-                            .cancel(id: WalletCancelations.FetchId())
+                            .cancel(id: WalletCancelations.FetchId)
                         )
                     }
                     return .none
@@ -147,7 +147,7 @@ extension Reducer where State == CoreAppState, Action == CoreAppAction, Environm
                     )
                     return .merge(
                         EffectTask(value: .alert(alertAction)),
-                        .cancel(id: WalletCancelations.FetchId()),
+                        .cancel(id: WalletCancelations.FetchId),
                         EffectTask(value: .onboarding(.handleWalletDecryptionError))
                     )
 

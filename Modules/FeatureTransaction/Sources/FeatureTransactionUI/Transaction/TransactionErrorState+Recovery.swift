@@ -6,6 +6,7 @@ import FeatureTransactionDomain
 import Localization
 import MoneyKit
 import PlatformKit
+import SwiftUI
 import ToolKit
 import UIComponentsKit
 
@@ -13,7 +14,7 @@ extension TransactionErrorState {
 
     private typealias Localization = LocalizationConstants.Transaction.Error
 
-    var recoveryWarningHint: String {
+    public var recoveryWarningHint: String {
         let text: String
         switch self {
         case .none:
@@ -71,49 +72,46 @@ extension TransactionErrorState {
 
     // swiftlint:disable cyclomatic_complexity
     func recoveryWarningTitle(for action: AssetAction) -> String? {
-        let text: String?
         switch self {
-        case .fatalError(let fatalError):
-            switch fatalError {
-            case .generic(let error):
-                if let error = error as? OpenBanking.Error {
-                    let ui = BankState.UI.errors[error, default: BankState.UI.defaultError]
-                    return ui.info.title
-                } else if
-                    let error = error as? OrderConfirmationServiceError,
-                    case .nabu(let networkError) = error
-                {
-                    text = transactionErrorTitle(
-                        for: networkError.code,
-                        action: action
-                    ) ?? Localization.nextworkErrorShort
-                } else if let networkError = error as? NabuNetworkError {
-                    text = transactionErrorTitle(
-                        for: networkError.code,
-                        action: action
-                    ) ?? Localization.nextworkErrorShort
-                } else if let error = error as? TransactionValidationFailure {
-                    text = error.title(action)
-                } else {
-                    fallthrough
-                }
+        case .fatalError(.generic(let genericError)):
+            switch genericError {
+            case let error as OpenBanking.Error:
+                let ui = BankState.UI.errors[error, default: BankState.UI.defaultError]
+                return ui.info.title
+            case OrderConfirmationServiceError.nabu(let error):
+                return transactionErrorTitle(
+                    for: error.code,
+                    action: action
+                ) ?? Localization.nextworkErrorShort
+            case let error as NabuNetworkError:
+                return transactionErrorTitle(
+                    for: error.code,
+                    action: action
+                ) ?? Localization.nextworkErrorShort
+            case let error as TransactionValidationFailure:
+                return error.title(action)
             default:
-                text = nil
+                return nil
             }
+        case .fatalError(.message), .fatalError(.rxError):
+            return nil
         case .nabuError(let error):
-            text = transactionErrorTitle(for: error.code, action: action) ?? Localization.nextworkErrorShort
+            return transactionErrorTitle(
+                for: error.code,
+                action: action
+            ) ?? Localization.nextworkErrorShort
         case .insufficientFunds(let balance, _, _, _) where action == .swap:
-            text = String.localizedStringWithFormat(
+            return String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryTitle_swap,
                 balance.displayString
             )
         case .insufficientFunds(_, _, let sourceCurrency, _):
-            text = String.localizedStringWithFormat(
+            return String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryTitle,
-                sourceCurrency.code
+                sourceCurrency.displayCode
             )
         case .belowFees(let fees, let balance):
-            text = String.localizedStringWithFormat(
+            return String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryTitle,
                 fees.shortDisplayString,
                 balance.shortDisplayString
@@ -121,45 +119,44 @@ extension TransactionErrorState {
         case .ux(let error):
             return error.title
         case .belowMinimumLimit(let minimum):
-            text = String.localizedStringWithFormat(
+            return String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryTitle,
                 minimum.shortDisplayString
             )
         case .overMaximumSourceLimit(let availableAmount, _, _) where action == .send:
-            text = String.localizedStringWithFormat(
+            return String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryTitle,
                 availableAmount.currencyType.displayCode
             )
         case .overMaximumSourceLimit(let maximum, _, _):
-            text = String.localizedStringWithFormat(
+            return String.localizedStringWithFormat(
                 Localization.overMaximumSourceLimitRecoveryTitle,
                 maximum.shortDisplayString
             )
         case .overMaximumPersonalLimit:
-            text = Localization.overMaximumPersonalLimitRecoveryTitle
+            return Localization.overMaximumPersonalLimitRecoveryTitle
         case .none:
             if BuildFlag.isInternal {
                 Logger.shared.error("Unsupported API error thrown or an internal error thrown")
             }
             return nil
         case .addressIsContract:
-            text = Localization.addressIsContract
+            return Localization.addressIsContract
         case .invalidAddress:
-            text = Localization.invalidAddress
+            return Localization.invalidAddress
         case .invalidPassword:
-            text = Localization.invalidPassword
+            return Localization.invalidPassword
         case .optionInvalid:
-            text = Localization.optionInvalid
+            return Localization.optionInvalid
         case .pendingOrdersLimitReached:
-            text = Localization.pendingOrderLimitReached
+            return Localization.pendingOrderLimitReached
         case .transactionInFlight:
-            text = Localization.transactionInFlight
+            return Localization.transactionInFlight
         case .unknownError:
-            text = nil
+            return nil
         case .sourceRequiresUpdate:
-            text = nil
+            return nil
         }
-        return text
     }
 
     func recoveryWarningMessage(for action: AssetAction) -> String {
@@ -196,16 +193,19 @@ extension TransactionErrorState {
     }
 
     func recoveryWarningCallouts(for action: AssetAction) -> [ErrorRecoveryState.Callout] {
-        let callouts: [ErrorRecoveryState.Callout]
         switch self {
         case .belowFees(let fees, let balance) where action == .send:
-            callouts = [
+            let currency = fees.currency
+            guard currency.cryptoCurrency?.supports(product: .custodialWalletBalance) == true else {
+                return []
+            }
+            return [
                 ErrorRecoveryState.Callout(
                     id: ErrorRecoveryCalloutIdentifier.buy.rawValue,
-                    image: fees.currency.image,
+                    image: currency.logoResource,
                     title: String.localizedStringWithFormat(
                         Localization.belowFeesRecoveryCalloutTitle_send,
-                        fees.displayCode
+                        currency.displayCode
                     ),
                     message: String.localizedStringWithFormat(
                         Localization.belowFeesRecoveryCalloutMessage_send,
@@ -215,34 +215,37 @@ extension TransactionErrorState {
                 )
             ]
         case .insufficientFunds(_, let desiredAmount, let sourceCurrency, let targetCurrency) where action == .send:
-            callouts = [
+            guard sourceCurrency.cryptoCurrency?.supports(product: .custodialWalletBalance) == true else {
+                return []
+            }
+            let displayCode = sourceCurrency.displayCode
+            let displayString = desiredAmount.displayString
+            return [
                 ErrorRecoveryState.Callout(
                     id: ErrorRecoveryCalloutIdentifier.buy.rawValue,
-                    image: targetCurrency.image,
-                    title: String.localizedStringWithFormat(
-                        Localization.overMaximumSourceLimitRecoveryCalloutTitle_send,
-                        sourceCurrency.displayCode
-                    ),
-                    message: String.localizedStringWithFormat(
-                        Localization.overMaximumSourceLimitRecoveryCalloutMessage_send,
-                        desiredAmount.displayString
-                    ),
+                    image: targetCurrency.logoResource,
+                    title: Localization.overMaximumSourceLimitRecoveryCalloutTitle_send
+                        .interpolating(displayCode),
+                    message: Localization.overMaximumSourceLimitRecoveryCalloutMessage_send
+                        .interpolating(displayString),
                     callToAction: Localization.overMaximumSourceLimitRecoveryCalloutCTA_send
                 )
             ]
         case .overMaximumSourceLimit(let availableAmount, _, let desiredAmount) where action == .send:
-            callouts = [
+            let currency = availableAmount.currency
+            guard currency.cryptoCurrency?.supports(product: .custodialWalletBalance) == true else {
+                return []
+            }
+            let displayCode = currency.displayCode
+            let desiredString = desiredAmount.displayString
+            return [
                 ErrorRecoveryState.Callout(
                     id: ErrorRecoveryCalloutIdentifier.buy.rawValue,
-                    image: availableAmount.currency.image,
-                    title: String.localizedStringWithFormat(
-                        Localization.overMaximumSourceLimitRecoveryCalloutTitle_send,
-                        availableAmount.displayCode
-                    ),
-                    message: String.localizedStringWithFormat(
-                        Localization.overMaximumSourceLimitRecoveryCalloutMessage_send,
-                        desiredAmount.displayString
-                    ),
+                    image: availableAmount.currency.logoResource,
+                    title: Localization.overMaximumSourceLimitRecoveryCalloutTitle_send
+                        .interpolating(displayCode),
+                    message: Localization.overMaximumSourceLimitRecoveryCalloutMessage_send
+                        .interpolating(desiredString),
                     callToAction: Localization.overMaximumSourceLimitRecoveryCalloutCTA_send
                 )
             ]
@@ -258,22 +261,18 @@ extension TransactionErrorState {
             default:
                 calloutTitle = Localization.overMaximumPersonalLimitRecoveryCalloutTitle_other
             }
-            callouts = suggestedUpgrade == nil ? [] : [
+            return suggestedUpgrade == nil ? [] : [
                 ErrorRecoveryState.Callout(
                     id: ErrorRecoveryCalloutIdentifier.upgradeKYCTier.rawValue,
-                    image: ImageResource.local(
-                        name: "kyc-gold",
-                        bundle: .main
-                    ).image!,
+                    image: .local(name: "kyc-gold", bundle: .main),
                     title: calloutTitle,
                     message: Localization.overMaximumPersonalLimitRecoveryCalloutMessage,
                     callToAction: Localization.overMaximumPersonalLimitRecoveryCalloutCTA
                 )
             ]
         default:
-            callouts = []
+            return []
         }
-        return callouts
     }
 }
 
@@ -434,21 +433,21 @@ extension TransactionErrorState {
         case .buy:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_buy,
-                targetCurrency.code,
-                sourceCurrency.code,
+                targetCurrency.displayCode,
+                sourceCurrency.displayCode,
                 balance.displayString
             )
         case .sell:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_sell,
-                sourceCurrency.code,
+                sourceCurrency.displayCode,
                 balance.displayString
             )
         case .swap:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_swap,
-                sourceCurrency.code,
-                targetCurrency.code,
+                sourceCurrency.displayCode,
+                targetCurrency.displayCode,
                 balance.displayString
             )
         case .send,
@@ -457,7 +456,7 @@ extension TransactionErrorState {
              .activeRewardsDeposit:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_send,
-                sourceCurrency.code,
+                sourceCurrency.displayCode,
                 balance.displayString
             )
         case .withdraw,
@@ -466,7 +465,7 @@ extension TransactionErrorState {
              .activeRewardsWithdraw:
             text = String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryMessage_withdraw,
-                sourceCurrency.code,
+                sourceCurrency.displayCode,
                 balance.displayString
             )
         case .receive,

@@ -50,7 +50,7 @@ public struct EarnSummaryView: View {
             if let model = object.model {
                 Loaded(
                     json: model,
-                    pendingWithdrawalRequests: object.pendingRequests,
+                    bondingTxsRequests: object.pendingBondingRequests,
                     sheetModel: $sheetModel
                 ).id(model)
             } else {
@@ -62,34 +62,36 @@ public struct EarnSummaryView: View {
 
     @MainActor @ViewBuilder
     func navigationTitleView(title: String?, iconUrl: URL?) -> some View {
-        if let url = iconUrl {
-            AsyncMedia(
-                url: url,
-                content: { media in
-                    media.cornerRadius(12)
-                },
-                placeholder: {
-                    Color.semantic.muted
-                        .opacity(0.3)
-                        .overlay(
-                            ProgressView()
-                                .progressViewStyle(.circular)
-                        )
-                        .clipShape(Circle())
-                }
-            )
-            .resizingMode(.aspectFit)
-            .frame(width: 24.pt, height: 24.pt)
-        }
+        HStack(spacing: Spacing.padding1) {
+            if let url = iconUrl {
+                AsyncMedia(
+                    url: url,
+                    content: { media in
+                        media.cornerRadius(12)
+                    },
+                    placeholder: {
+                        Color.semantic.muted
+                            .opacity(0.3)
+                            .overlay(
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                            )
+                            .clipShape(Circle())
+                    }
+                )
+                .resizingMode(.aspectFit)
+                .frame(width: 24.pt, height: 24.pt)
+            }
 
-        Text(title ?? "")
-            .typography(.body2)
-            .foregroundColor(.WalletSemantic.title)
+            Text(title ?? "")
+                .typography(.body2)
+                .foregroundColor(.WalletSemantic.title)
+        }
     }
 
     @MainActor @ViewBuilder
     func dismiss() -> some View {
-        IconButton(icon: .closeCirclev3) {
+        IconButton(icon: .navigationCloseButton()) {
             $app.post(event: id.article.plain.navigation.bar.button.close.tap)
         }
         .frame(width: 24.pt)
@@ -101,11 +103,9 @@ public struct EarnSummaryView: View {
                 Text(model.title)
                     .typography(.body2)
                 Spacer()
-                Icon.closeCirclev2
-                    .frame(width: 24, height: 24)
-                    .onTapGesture {
-                        sheetModel = nil
-                    }
+                IconButton(icon: .navigationCloseButton()) {
+                    sheetModel = nil
+                }
             }
             HStack(spacing: .zero) {
                 Text(model.description)
@@ -132,7 +132,7 @@ extension EarnSummaryView {
         @Environment(\.context) var context
 
         let my: L_blockchain_user_earn_product_asset.JSON
-        let pendingWithdrawalRequests: [EarnWithdrawalPendingRequest]
+        var bondingTxsRequests: [EarnBondingUnbondingRequests] = []
 
         var dayFormatter: DateComponentsFormatter = {
             let formatter = DateComponentsFormatter()
@@ -146,11 +146,11 @@ extension EarnSummaryView {
 
         init(
             json: L_blockchain_user_earn_product_asset.JSON,
-            pendingWithdrawalRequests: [EarnWithdrawalPendingRequest],
+            bondingTxsRequests: [EarnBondingUnbondingRequests],
             sheetModel: Binding<SheetModel?>
         ) {
             self.my = json
-            self.pendingWithdrawalRequests = pendingWithdrawalRequests
+            self.bondingTxsRequests = bondingTxsRequests
             _sheetModel = sheetModel
         }
 
@@ -193,7 +193,7 @@ extension EarnSummaryView {
 
         @ViewBuilder var buttons: some View {
             VStack(spacing: Spacing.padding1) {
-                if product == .staking, let countdownDate = pendingWithdrawalRequests.withdrawalLockDate {
+                if product == .staking, let countdownDate = bondingTxsRequests.withdrawalLockDate {
                     CountDownView(
                         secondsRemaining: countdownDate.timeIntervalSinceNow,
                         onComplete: {
@@ -219,7 +219,7 @@ extension EarnSummaryView {
                         .disabled(
                             my.limit.withdraw.is.disabled ?? false
                             || countDownLock
-                            || (product == .active && !pendingWithdrawalRequests.isEmpty)
+                            || (product == .active && !bondingTxsRequests.isEmpty)
                             || (product == .active && earningBalance?.isZero ?? false)
                         )
                         SecondaryButton(
@@ -497,23 +497,18 @@ extension EarnSummaryView {
                         trailing: { TableRowByline(L10n.PendingWithdrawal.date).foregroundColor(.semantic.muted) }
                     )
                 } else if product == .staking {
-                    ForEach(pendingWithdrawalRequests.indexed(), id: \.index) { _, request in
-                        TableRow(
-                            leading: { Icon.walletSend.circle().small().color(.semantic.title) },
-                            title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(currency.displayCode)),
-                            byline: { TableRowByline(L10n.PendingWithdrawal.unbonding).foregroundColor(.semantic.primary) },
-                            trailing: {
-                                VStack(alignment: .trailing, spacing: 6) {
-                                    if let expiry = request.unbondingExpiry {
-                                        TableRowByline(DateFormatter.medium.string(from: expiry))
-                                    }
-                                    TableRowByline(request.amount?.displayString ?? "")
-                                }
-                            }
-                        )
-                        .frame(minHeight: 80.pt)
-                        .backport
-                        .listDivider()
+                    ForEach(bondingTxsRequests, id: \.self) { request in
+                        if request.type == .bonding {
+                            pendingBondingRow(request)
+                                .frame(minHeight: 80.pt)
+                                .backport
+                                .listDivider()
+                        } else {
+                            pendingUnbondingRow(request)
+                                .frame(minHeight: 80.pt)
+                                .backport
+                                .listDivider()
+                        }
                     }
                 }
             }
@@ -522,9 +517,53 @@ extension EarnSummaryView {
             .listRowInsets(.zero)
         }
 
+        @ViewBuilder func pendingBondingRow(_ request: EarnBondingUnbondingRequests) -> some View {
+            TableRow(
+                leading: { Icon.walletReceive.circle().small().color(.semantic.title) },
+                title: TableRowTitle(L10n.PendingWithdrawal.staked.interpolating(request.currency)),
+                byline: {
+                    TableRowByline(L10n.PendingWithdrawal.bondingPeriod.interpolating("\(request.daysLeft)"))
+                        .typography(.caption1)
+                },
+                trailing: {
+                    VStack(alignment: .trailing, spacing: 6) {
+                        if let expiry = request.expiryDate {
+                            TableRowTitle(DateFormatter.medium.string(from: expiry))
+                        }
+                        if let amount = request.amount {
+                            TableRowByline(amount.displayString)
+                                .typography(.caption1)
+                        }
+                    }
+                }
+            )
+        }
+
+        @ViewBuilder func pendingUnbondingRow(_ request: EarnBondingUnbondingRequests) -> some View {
+            TableRow(
+                leading: { Icon.walletSend.circle().small().color(.semantic.title) },
+                title: TableRowTitle(L10n.PendingWithdrawal.title.interpolating(request.currency)),
+                byline: {
+                    TableRowByline(L10n.PendingWithdrawal.unbondingPeriod.interpolating("\(request.daysLeft)"))
+                        .typography(.caption1)
+                },
+                trailing: {
+                    VStack(alignment: .trailing, spacing: 6) {
+                        if let expiry = request.expiryDate {
+                            TableRowTitle(DateFormatter.medium.string(from: expiry))
+                        }
+                        if let amount = request.amount {
+                            TableRowByline("-\(amount.displayString)")
+                                .typography(.caption1)
+                        }
+                    }
+                }
+            )
+        }
+
         @ViewBuilder var footer: some View {
             Group {
-                if !pendingWithdrawalRequests.isEmpty, product != .savings {
+                if !bondingTxsRequests.isEmpty, product != .savings {
                     pendingRequestsSection
                 } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
                     Section {
@@ -582,7 +621,7 @@ extension EarnSummaryView {
     class Object: ObservableObject {
 
         @Published var model: L_blockchain_user_earn_product_asset.JSON?
-        @Published var pendingRequests: [EarnWithdrawalPendingRequest] = []
+        @Published var pendingBondingRequests: [EarnBondingUnbondingRequests] = []
 
         private var cancellables: Set<AnyCancellable> = []
 
@@ -598,23 +637,28 @@ extension EarnSummaryView {
                 .receive(on: DispatchQueue.main)
                 .assign(to: &$model)
 
-            service
-                .pendingWithdrawalRequests(currency: currency)
-                .ignoreFailure()
-                .receive(on: DispatchQueue.main)
-                .assign(to: &$pendingRequests)
-
             app.on(
                 blockchain.ux.transaction.event.execution.status.completed,
                 blockchain.ux.transaction.event.execution.status.pending
             )
+            .mapToVoid()
+            .prepend(())
             .flatMap { _ in
-                service
-                    .pendingWithdrawalRequests(currency: currency)
+                service.bondingTxs(currency: currency)
                     .ignoreFailure()
             }
+            .map { requests -> [EarnBondingUnbondingRequests] in
+                let bonding = requests.bondingDeposits.map(EarnBondingUnbondingRequests.init(bonding:))
+                let unbonding = requests.unbondingWithdrawals.map(EarnBondingUnbondingRequests.init(unbonding:))
+                return (bonding + unbonding).sorted(
+                    by: { lhs, rhs -> Bool in
+                        guard let left = lhs.expiryDate, let right = rhs.expiryDate else { return false }
+                        return left < right
+                    }
+                )
+            }
             .receive(on: DispatchQueue.main)
-            .assign(to: &$pendingRequests)
+            .assign(to: &$pendingBondingRequests)
         }
     }
 }
@@ -634,7 +678,7 @@ struct EarnSummaryView_Previews: PreviewProvider {
             .previewDisplayName("Loading")
         EarnSummaryView.Loaded(
             json: preview,
-            pendingWithdrawalRequests: [],
+            bondingTxsRequests: [],
             sheetModel: .constant(nil)
         )
             .context(
@@ -684,9 +728,10 @@ extension Optional<MoneyValue> {
     }
 }
 
-extension Collection<EarnWithdrawalPendingRequest> {
+extension Collection<EarnBondingUnbondingRequests> {
     var withdrawalLockDate: Date? {
-        compactMap { $0.unbondingStartDate?.addingTimeInterval(5 * 60) }
+        filter { $0.type == .unbonding }
+            .compactMap { $0.startDate?.addingTimeInterval(5 * 60) }
             .first(where: { $0 > Date() })
     }
 }

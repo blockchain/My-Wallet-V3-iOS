@@ -8,6 +8,7 @@ public enum PriceResponse {
     public enum IndexMulti {}
     public enum IndexMultiSeries {}
     public enum Symbols {}
+    public enum TopMovers {}
 }
 
 // MARK: - IndexMulti
@@ -79,4 +80,19 @@ public struct Price: Decodable, Equatable {
     public let timestamp: Date
     public let volume24h: Double?
     public let marketCap: Double?
+}
+
+// MARK: - Top Movers
+
+extension PriceResponse.TopMovers {
+    public struct Response: Decodable, Equatable {
+        public let topMoversDescending: [TopMoverData]
+
+        public struct TopMoverData: Decodable, Equatable {
+            public let currency: String
+            public let fiatDelta: Double
+            public let percentageDelta: Decimal
+            public let lastPrice: Double
+        }
+    }
 }

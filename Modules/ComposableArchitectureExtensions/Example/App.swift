@@ -10,10 +10,9 @@ struct Demo: App {
         WindowGroup {
             NavigationView {
                 ContentView(
-                    store: .init(
+                    store: Store(
                         initialState: ExampleState(name: "Root"),
-                        reducer: exampleReducer,
-                        environment: ()
+                        reducer: ExampleReducer()
                     )
                 )
             }
@@ -33,16 +32,6 @@ indirect enum ExampleAction: NavigationAction {
     case end(EndAction)
 }
 
-let exampleReducer = Reducer<ExampleState, ExampleAction, Void> { _, action, _ in
-    switch action {
-    case .route:
-        return .none
-    case .end:
-        return .fireAndForget { print("✅") }
-    }
-}
-.routing()
-
 enum ExampleRoute: NavigationRoute, CaseIterable {
 
     case a
@@ -61,16 +50,16 @@ enum ExampleRoute: NavigationRoute, CaseIterable {
                         name: String(describing: self),
                         lineage: viewStore.lineage + [viewStore.name]
                     ),
-                    reducer: exampleReducer,
-                    environment: ()
+                    reducer: ExampleReducer()
                 )
             )
         case .end:
             EndContentView(
                 store: .init(
-                    initialState: .init(name: "End"),
-                    reducer: endReducer,
-                    environment: .init(dismiss: { viewStore.send(.dismiss()) })
+                    initialState: EndState(name: "End"),
+                    reducer: EndReducer(
+                        dismiss: { viewStore.send(.dismiss()) }
+                    )
                 )
             )
         }
@@ -109,10 +98,6 @@ struct ContentView: View {
     }
 }
 
-struct EndEnvironment {
-    var dismiss: () -> Void
-}
-
 struct EndState: Equatable {
     var name: String
 }
@@ -120,15 +105,6 @@ struct EndState: Equatable {
 enum EndAction {
     case dismiss
     case onAppear
-}
-
-let endReducer = Reducer<EndState, EndAction, EndEnvironment> { _, action, environment in
-    switch action {
-    case .dismiss:
-        return .fireAndForget(environment.dismiss)
-    case .onAppear:
-        return .none
-    }
 }
 
 struct EndContentView: View {
@@ -141,24 +117,60 @@ struct EndContentView: View {
 
     var body: some View {
         WithViewStore(store) { view in
-            Text(view.name)
-                .onAppear {
-                    view.send(.onAppear)
+            VStack(spacing: 24) {
+                Text(view.name)
+                    .onAppear {
+                        view.send(.onAppear)
+                    }
+                Button("dismiss") {
+                    view.send(.dismiss)
                 }
-            Button("dismiss") {
-                view.send(.dismiss)
             }
         }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct ExampleReducer: ReducerProtocol {
+    typealias Action = ExampleAction
+    typealias State = ExampleState
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .route:
+                return .none
+            case .end:
+                return .fireAndForget { print("✅") }
+            }
+        }
+        .routing()
+    }
+}
+
+struct EndReducer: ReducerProtocol {
+    typealias Action = EndAction
+    typealias State = EndState
+
+    let dismiss: () -> Void
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .dismiss:
+                return .fireAndForget(dismiss)
+            case .onAppear:
+                return .none
+            }
+        }
+    }
+}
+
+struct ReducerContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(
-            store: .init(
+            store: Store(
                 initialState: ExampleState(name: "Root"),
-                reducer: exampleReducer,
-                environment: ()
+                reducer: ExampleReducer()
             )
         )
     }

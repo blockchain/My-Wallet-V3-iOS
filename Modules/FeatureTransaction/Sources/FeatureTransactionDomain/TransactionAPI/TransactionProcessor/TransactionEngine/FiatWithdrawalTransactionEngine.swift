@@ -110,6 +110,10 @@ final class FiatWithdrawalTransactionEngine: TransactionEngine {
         .just(pendingTransaction.update(amount: amount))
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateAmount(pendingTransaction: pendingTransaction)
             .updateTxValiditySingle(pendingTransaction: pendingTransaction)
@@ -120,15 +124,11 @@ final class FiatWithdrawalTransactionEngine: TransactionEngine {
             .receiveAddress
             .asSingle()
             .map(\.address)
-            .flatMapCompletable { [fiatWithdrawRepository] address -> Completable in
+            .flatMap { [fiatWithdrawRepository] address -> Single<TransactionResult> in
                 fiatWithdrawRepository
                     .createWithdrawOrder(id: address, amount: pendingTransaction.amount)
-                    .asObservable()
-                    .ignoreElements()
-                    .asCompletable()
-            }
-            .flatMapSingle {
-                .just(TransactionResult.unHashed(amount: pendingTransaction.amount, orderId: nil))
+                    .map { _ in TransactionResult.unHashed(amount: pendingTransaction.amount, orderId: nil) }
+                    .asSingle()
             }
     }
 

@@ -23,6 +23,12 @@ public final class CoincoreNAPI {
 
     public func register() async throws {
 
+        var refresh = L_blockchain_namespace_napi_napi_policy.JSON()
+        refresh.invalidate.on = [
+            blockchain.ux.home.event.did.pull.to.refresh[],
+            blockchain.ux.transaction.event.execution.status.completed[]
+        ]
+
         func filter(
             _ filter: AssetFilter,
             predicate: ((SingleAccount) -> Bool)? = nil
@@ -62,6 +68,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.all,
+            policy: refresh,
             repository: { _ in filter(.custodial) }
         )
 
@@ -94,7 +101,7 @@ public final class CoincoreNAPI {
                         let allERC20 = Set(currenciesService.allEnabledCryptoCurrencies.filter(\.isERC20))
                         let present: Set<CryptoCurrency> = Set(accounts.map(\.currencyType).compactMap(\.cryptoCurrency))
                         let all = present.union(allERC20)
-                        return .just(AnyJSON(all.map({ $0.code })))
+                        return .just(AnyJSON(all.map(\.code)))
                     }
                     .eraseToAnyPublisher()
             }
@@ -103,24 +110,28 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.interest.all,
+            policy: refresh,
             repository: { _ in filter(.interest) }
         )
 
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.staking.all,
+            policy: refresh,
             repository: { _ in filter(.staking) }
         )
 
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.active.rewards.all,
+            policy: refresh,
             repository: { _ in filter(.activeRewards) }
         )
 
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.crypto.all.identifiers,
+            policy: refresh,
             repository: { _ in
                 filter(.custodial) { $0 is CryptoAccount }
             }
@@ -129,12 +140,13 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.crypto.all.currencies,
+            policy: refresh,
             repository: { [coincore] _ in
                 coincore.allAccounts(filter: .custodial)
                     .map(\.accounts)
                     .replaceError(with: [])
                     .flatMapLatest { (accounts: [SingleAccount]) -> AnyPublisher<AnyJSON, Never> in
-                        .just(AnyJSON(accounts.compactMap({ $0.currencyType.cryptoCurrency?.code })))
+                        .just(AnyJSON(accounts.compactMap { $0.currencyType.cryptoCurrency?.code }))
                     }
                     .eraseToAnyPublisher()
             }
@@ -142,9 +154,29 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.accounts.custodial.fiat,
+            domain: blockchain.coin.core.accounts.custodial.fiat.all,
+            policy: refresh,
             repository: { _ in
                 filter(.custodial) { $0 is FiatAccount }
+            }
+        )
+
+        try await app.register(
+            napi: blockchain.coin.core,
+            domain: blockchain.coin.core.accounts.custodial.fiat.with.balance,
+            policy: refresh,
+            repository: { [coincore] _ in
+                coincore.accounts(filter: .custodial, where: \.currencyType.isFiatCurrency)
+                    .replaceError(with: [])
+                    .flatMap { accounts in
+                        accounts.map { account in
+                            account.balance.replaceError(with: .zero(currency: account.currencyType)).map { (account, $0) }
+                        }.combineLatest()
+                    }
+                    .map { accounts in
+                        AnyJSON(accounts.filter { _, money in money.isPositive }.map(\.0.identifier))
+                    }
+                    .eraseToAnyPublisher()
             }
         )
 
@@ -161,6 +193,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.asset,
+            policy: refresh,
             repository: { tag in
                 filter(.custodial, tag[blockchain.coin.core.accounts.custodial.asset.id])
                     .map { json in AnyJSON(json.array()?.first) } // custodial only have a single associated acount per asset
@@ -203,6 +236,7 @@ public final class CoincoreNAPI {
         try await app.register(
             napi: blockchain.coin.core,
             domain: blockchain.coin.core.accounts.custodial.crypto.with.balance,
+            policy: refresh,
             repository: { [app, coincore] _ -> AnyPublisher<AnyJSON, Never> in
                 coincore.allAccounts(filter: .custodial)
                     .combineLatest(
@@ -210,12 +244,13 @@ public final class CoincoreNAPI {
                             .compactMap(\.value)
                             .setFailureType(to: CoincoreError.self)
                     )
-                    .map { group, currency -> AnyPublisher<AnyJSON, Never> in
+                    .map { group, fiatCurrency -> AnyPublisher<AnyJSON, Never> in
                         group.accounts
                             .filter { $0 is CryptoAccount }
                             .map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
-                                account.fiatBalance(fiatCurrency: currency)
-                                    .replaceError(with: .zero(currency: currency))
+                                account.balancePair(fiatCurrency: fiatCurrency)
+                                    .map(\.quote)
+                                    .replaceError(with: .zero(currency: fiatCurrency))
                                     .map { balance in (account, balance) }
                                     .eraseToAnyPublisher()
                             }
@@ -258,27 +293,30 @@ public final class CoincoreNAPI {
                             .compactMap(\.value)
                             .setFailureType(to: CoincoreError.self)
                     )
-                    .map { group, currency -> AnyPublisher<AnyJSON, Never> in
-                        group.accounts.map { account -> AnyPublisher<(BlockchainAccount, MoneyValue), Never> in
-                            account.fiatBalance(fiatCurrency: currency)
-                                .replaceError(with: .zero(currency: currency))
-                                .map { balance in (account, balance) }
-                                .eraseToAnyPublisher()
-                        }
-                        .combineLatest()
-                        .map { each -> AnyJSON in
-                            do {
-                                return try AnyJSON(
-                                    each
-                                        .filter { _, balance in balance.isPositive }
-                                        .sorted { l, r in try l.1 > r.1 }
-                                        .map(\.0.identifier)
-                                )
-                            } catch {
-                                return .empty
+                    .map { group, fiatCurrency -> AnyPublisher<AnyJSON, Never> in
+                        typealias AccountData = (account: SingleAccount, isCryptoBalancePositive: Bool, fiatBalance: MoneyValue)
+                        let publishers: [AnyPublisher<AccountData, Never>] = group.accounts
+                            .map { account -> AnyPublisher<AccountData, Never> in
+                                account.safeBalancePair(fiatCurrency: fiatCurrency)
+                                    .map { balance, quote -> AccountData in
+                                        let isPositive = balance?.isPositive ?? false
+                                        let quote: MoneyValue = quote ?? .zero(currency: .fiat(fiatCurrency))
+                                        return (account, isPositive, quote)
+                                    }
+                                    .eraseToAnyPublisher()
                             }
-                        }
-                        .eraseToAnyPublisher()
+                        return publishers
+                            .combineLatest()
+                            .map { data -> AnyJSON in
+                                var value = data
+                                    .filter(\.isCryptoBalancePositive)
+                                do {
+                                    value = try value
+                                        .sorted { l, r in try l.fiatBalance > r.fiatBalance }
+                                } catch {}
+                                return AnyJSON(value.map(\.account.identifier))
+                            }
+                            .eraseToAnyPublisher()
                     }
                     .switchToLatest()
                     .replaceError(with: .empty)
@@ -343,13 +381,6 @@ public final class CoincoreNAPI {
                 }
             }
         )
-
-        var refresh = L_blockchain_namespace_napi_napi_policy.JSON()
-
-        refresh.invalidate.on = [
-            blockchain.ux.home.event.did.pull.to.refresh[],
-            blockchain.ux.transaction.event.execution.status.completed[]
-        ]
 
         try await app.register(
             napi: blockchain.coin.core,
@@ -460,7 +491,7 @@ public final class CoincoreNAPI {
 
         try await app.register(
             napi: blockchain.coin.core,
-            domain: blockchain.coin.core.account.receive.address,
+            domain: blockchain.coin.core.account.receive,
             repository: { tag in
                 do {
                     return try account(tag).map { account -> AnyPublisher<AnyJSON, Error> in

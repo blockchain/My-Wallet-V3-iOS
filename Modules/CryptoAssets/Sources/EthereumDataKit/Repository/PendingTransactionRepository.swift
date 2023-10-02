@@ -24,7 +24,8 @@ final class PendingTransactionRepository: PendingTransactionRepositoryAPI {
             .pendingActivity
             .map { (activity: [ActivityEntry]) -> Bool in
                 activity.contains(where: { entry in
-                    entry.network == network.networkTicker
+                    let hourDiff = Calendar.current.dateComponents([.hour], from: entry.date, to: Date()).hour ?? 0
+                    return entry.network == network.networkTicker && hourDiff <= 2
                 })
             }
             .first()

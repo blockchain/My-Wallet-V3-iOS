@@ -24,7 +24,6 @@ struct DebugView: View {
             DividedVStack {
                 PrimaryNavigationLink(
                     destination: FeatureFlags()
-                        .primaryNavigation(title: "⛳️ Feature Flags")
                 ) {
                     PrimaryRow(title: "⛳️ Feature Flags")
                 }
@@ -250,6 +249,22 @@ extension DebugView {
             .bindings {
                 subscribe($observations, to: blockchain.app.configuration.debug.observers)
             }
+            .primaryNavigation(title: "⛳️ Feature Flags", trailing: {
+                Button("📋") {
+                    Task {
+                        do {
+                            let dictionary = try await observations.compacted().async.reduce(into: [String: String]()) { sum, next async throws in
+                                sum[next.string] = try? await app.get(next)
+                            }
+                            let encoder = JSONEncoder()
+                            encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+                            UIPasteboard.general.string = try String(decoding: encoder.encode(dictionary), as: UTF8.self)
+                        } catch {
+                            app.post(error: error)
+                        }
+                    }
+                }
+            })
         }
     }
 }

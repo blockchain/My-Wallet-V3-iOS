@@ -116,7 +116,7 @@ extension BadgeImageViewModel {
     /// It uses the standard `background` color and does not apply a tintColor to the image.
     /// It has rounded corners.
     public static func `default`(
-        image: ImageResource?,
+        image: ImageLocation?,
         backgroundColor: UIColor = UIColor.semantic.light,
         cornerRadius: CornerRadius = .roundedHigh,
         accessibilityIdSuffix: String
@@ -134,7 +134,7 @@ extension BadgeImageViewModel {
     }
 
     public static func template(
-        image: ImageResource,
+        image: ImageLocation,
         templateColor: UIColor,
         backgroundColor: UIColor,
         cornerRadius: CornerRadius,
@@ -157,8 +157,8 @@ extension BadgeImageViewModel {
     /// It uses the standard `defaultBadge` color for the content and applies a `lightBadgeBackground` to the background.
     /// It has rounded corners, though you can apply a `cornerRadius`
     public static func primary(
-        image: ImageResource,
-        contentColor: UIColor = .init(light: .defaultBadge, dark: .tertiary),
+        image: ImageLocation,
+        contentColor: UIColor = .init(light: .primary, dark: .primaryMuted),
         backgroundColor: UIColor = .lightBadgeBackground,
         cornerRadius: CornerRadius = .roundedHigh,
         accessibilityIdSuffix: String

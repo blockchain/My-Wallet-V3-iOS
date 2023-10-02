@@ -9,7 +9,7 @@ extension WalletConnectSession {
     /// Returns a `Session` from `WalletConnect`
     ///
     /// This searches the `getSessions()` method on `Web3Wallet`
-    /// 
+    ///
     public func session() -> WalletConnectSign.Session? {
         Web3Wallet.instance
             .getSessions()
@@ -21,7 +21,7 @@ extension WalletConnectSession {
 
 extension WalletConnectSign.Session.Proposal: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
-        hasher.combine(self.pairingTopic)
+        hasher.combine(id)
+        hasher.combine(pairingTopic)
     }
 }

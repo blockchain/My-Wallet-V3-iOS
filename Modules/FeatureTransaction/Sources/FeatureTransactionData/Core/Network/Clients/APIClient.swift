@@ -1,6 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import Combine
+import Dependencies
 import DIKit
 import Errors
 import FeatureTransactionDomain
@@ -9,21 +11,21 @@ import NetworkKit
 import PlatformKit
 import ToolKit
 
-typealias FeatureTransactionDomainClientAPI = CustodialQuoteAPI &
-    OrderCreationClientAPI &
+typealias FeatureTransactionDomainClientAPI =
     AvailablePairsClientAPI &
-    TransactionLimitsClientAPI &
-    OrderFetchingClientAPI &
-    OrderUpdateClientAPI &
-    CustodialTransferClientAPI &
+    BankTransferClientAPI &
     BitPayClientAPI &
     BlockchainNameResolutionClientAPI &
-    BankTransferClientAPI &
-    WithdrawalLocksCheckClientAPI &
-    CreateRecurringBuyClientAPI &
     CancelRecurringBuyClientAPI &
+    CreateRecurringBuyClientAPI & CustodialQuoteAPI &
+    CustodialTransferClientAPI &
+    EligiblePaymentMethodRecurringBuyClientAPI &
+    OrderCreationClientAPI &
+    OrderFetchingClientAPI &
+    OrderUpdateClientAPI &
     RecurringBuyProviderClientAPI &
-    EligiblePaymentMethodRecurringBuyClientAPI
+    TransactionLimitsClientAPI &
+    WithdrawalLocksCheckClientAPI
 
 /// FeatureTransactionDomain network client
 final class APIClient: FeatureTransactionDomainClientAPI {
@@ -41,6 +43,7 @@ final class APIClient: FeatureTransactionDomainClientAPI {
         static let orderDirection = "orderDirection"
         static let payment = "payment"
         static let simpleBuy = "SIMPLEBUY"
+        static let externalBrokerage = "EXTERNAL_BROKERAGE"
         static let swap = "SWAP"
         static let sell = "SELL"
         static let `default` = "DEFAULT"
@@ -80,6 +83,8 @@ final class APIClient: FeatureTransactionDomainClientAPI {
             static let invoice: String = "i/"
         }
     }
+
+    @Dependency(\.app) var app
 
     private let retailNetworkAdapter: NetworkAdapterAPI
     private let retailRequestBuilder: RequestBuilder
@@ -300,11 +305,13 @@ extension APIClient {
 
     func startBankTransfer(
         id: String,
-        amount: MoneyValue
+        amount: MoneyValue,
+        product: String
     ) -> AnyPublisher<BankTranferPaymentResponse, NabuNetworkError> {
         let model = BankTransferPaymentRequest(
             amountMinor: amount.minorString,
             currency: amount.code,
+            product: product,
             attributes: nil
         )
         let request = retailRequestBuilder.post(
@@ -315,8 +322,12 @@ extension APIClient {
         return retailNetworkAdapter.perform(request: request)
     }
 
-    func createWithdrawOrder(id: String, amount: MoneyValue) -> AnyPublisher<Void, NabuNetworkError> {
-        let headers = [HttpHeaderField.blockchainOrigin: HttpHeaderValue.simpleBuy]
+    func createWithdrawOrder(
+        id: String,
+        amount: MoneyValue,
+        product: String
+    ) -> AnyPublisher<Void, NabuNetworkError> {
+        let headers = [HttpHeaderField.blockchainOrigin: product]
         let body = WithdrawRequestBody(
             beneficiary: id,
             currency: amount.code,
@@ -426,42 +437,46 @@ extension APIClient {
         currency: CurrencyType,
         product: TransactionLimitsProduct
     ) -> AnyPublisher<TradeLimitsResponse, NabuNetworkError> {
-        var parameters: [URLQueryItem] = [
-            URLQueryItem(
-                name: Parameter.currency,
-                value: currency.code
-            ),
-            URLQueryItem(
-                name: Parameter.minor,
-                value: "true"
-            )
-        ]
-        switch product {
-        case .swap(let orderDirection):
-            parameters.append(
-                URLQueryItem(name: Parameter.product, value: Parameter.swap)
-            )
-            parameters.append(
-                URLQueryItem(name: Parameter.orderDirection, value: orderDirection.rawValue)
-            )
-        case .sell(let orderDirection):
-            parameters.append(
-                URLQueryItem(name: Parameter.product, value: Parameter.sell)
-            )
-            parameters.append(
-                URLQueryItem(name: Parameter.orderDirection, value: orderDirection.rawValue)
-            )
-        case .simplebuy:
-            parameters.append(
-                URLQueryItem(name: Parameter.product, value: Parameter.simpleBuy)
-            )
-        }
-        let request = retailRequestBuilder.get(
-            path: Path.limits,
-            parameters: parameters,
-            authenticated: true
-        )!
-        return retailNetworkAdapter.perform(request: request)
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+            .flatMap { [retailNetworkAdapter, retailRequestBuilder] isEligible -> AnyPublisher<TradeLimitsResponse, NabuNetworkError> in
+                var parameters: [URLQueryItem] = [
+                    URLQueryItem(
+                        name: Parameter.currency,
+                        value: currency.code
+                    ),
+                    URLQueryItem(
+                        name: Parameter.minor,
+                        value: "true"
+                    )
+                ]
+                switch product {
+                case .swap(let orderDirection):
+                    parameters.append(
+                        URLQueryItem(name: Parameter.product, value: Parameter.swap)
+                    )
+                    parameters.append(
+                        URLQueryItem(name: Parameter.orderDirection, value: orderDirection.rawValue)
+                    )
+                case .sell(let orderDirection):
+                    parameters.append(
+                        URLQueryItem(name: Parameter.product, value: Parameter.sell)
+                    )
+                    parameters.append(
+                        URLQueryItem(name: Parameter.orderDirection, value: orderDirection.rawValue)
+                    )
+                case .simplebuy:
+                    parameters.append(
+                        URLQueryItem(name: Parameter.product, value: isEligible.value == true ? Parameter.externalBrokerage : Parameter.simpleBuy)
+                    )
+                }
+                let request = retailRequestBuilder.get(
+                    path: Path.limits,
+                    parameters: parameters,
+                    authenticated: true
+                )!
+                return retailNetworkAdapter.perform(request: request)
+            }
+            .eraseToAnyPublisher()
     }
 
     func fetchCrossBorderLimits(

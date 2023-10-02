@@ -18,7 +18,7 @@ public protocol MobileIntelligence_p: AnyObject {
     static func trackFieldFocus(forKey key: String, hasFocus: Bool)
 }
 
-public protocol MobileIntelligenceOptions_p: Codable {
+public protocol MobileIntelligenceOptions_p {
 
     var clientId: String? { get set }
     var sessionKey: String? { get set }
@@ -32,8 +32,6 @@ public protocol MobileIntelligenceOptions_p: Codable {
 
     static var ENV_SANDBOX: String { get }
     static var ENV_PRODUCTION: String { get }
-
-    init()
 }
 
 public protocol MobileIntelligenceUpdateOptions_p: Codable {

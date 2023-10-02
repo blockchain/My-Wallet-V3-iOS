@@ -29,10 +29,10 @@ struct TopMoverView: View {
                 .padding(.bottom, 4.pt)
                 Text(topMover.priceChangeString ?? "")
                     .typography(.body2)
-                    .truncationMode(.middle)
+                    .minimumScaleFactor(0.8)
                     .foregroundColor(topMover.priceChangeColor)
 
-                Text(topMover.price.toDisplayString(includeSymbol: true))
+                Text(topMover.lastPrice.toDisplayString(includeSymbol: true))
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
             }
@@ -79,18 +79,18 @@ extension TopMoverInfo {
             return nil
         }
         if delta.isSignMinus {
-            return Color.WalletSemantic.pink
+            return .semantic.negative
         } else if delta.isZero {
-            return Color.WalletSemantic.body
+            return .semantic.body
         } else {
-            return Color.WalletSemantic.success
+            return .semantic.success
         }
     }
 }
 
 struct TopMoverView_Previews: PreviewProvider {
     static var previews: some View {
-        let topMover = TopMoverInfo(currency: .bitcoin, delta: 30, price: .one(currency: .EUR))
+        let topMover = TopMoverInfo(currency: .bitcoin, delta: 30, lastPrice: .one(currency: .EUR))
 
         TopMoverView(
             presenter: .accountPicker,

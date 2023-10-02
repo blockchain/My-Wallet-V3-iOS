@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxSwift
 
@@ -19,7 +20,7 @@ public struct LabelContent: Equatable {
     public var text: String
 
     let font: UIFont
-    let color: Color
+    let color: UIColor
     let alignment: NSTextAlignment
     let lineSpacing: CGFloat
     let lineBreakMode: NSLineBreakMode

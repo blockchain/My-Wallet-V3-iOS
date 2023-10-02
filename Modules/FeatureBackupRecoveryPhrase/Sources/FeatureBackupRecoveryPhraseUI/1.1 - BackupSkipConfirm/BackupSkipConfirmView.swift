@@ -52,8 +52,7 @@ struct BackupSkipConfirmView_Previews: PreviewProvider {
     static var previews: some View {
         BackupSkipConfirmView(store: .init(
             initialState: .init(),
-            reducer: BackupSkipConfirmModule.reducer,
-            environment: .init(
+            reducer: BackupSkipConfirm(
                 onConfirm: {}
             )
         ))

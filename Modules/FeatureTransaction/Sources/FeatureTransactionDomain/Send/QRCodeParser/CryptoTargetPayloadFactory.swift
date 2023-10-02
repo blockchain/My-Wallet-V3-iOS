@@ -67,6 +67,7 @@ final class CryptoTargetPayloadFactory: CryptoTargetPayloadFactoryAPI {
             .makeExternalAssetAddress(
                 asset: asset,
                 address: string,
+                memo: nil,
                 label: string,
                 onTxCompleted: { _ in AnyPublisher.just(()) }
             )

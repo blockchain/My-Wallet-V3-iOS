@@ -13,6 +13,8 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
 
     public typealias NonCustodialAccountsProvider = () -> AnyPublisher<[SingleAccount], CryptoAssetError>
 
+    public typealias ImportedAddressesAccountsProvider = () -> AnyPublisher<[SingleAccount], CryptoAssetError>
+
     public typealias ExchangeAccountProvider = () -> AnyPublisher<CryptoExchangeAccount?, Never>
 
     // MARK: - Properties
@@ -41,6 +43,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
     private let errorRecorder: ErrorRecording
     private let kycTiersService: KYCTiersServiceAPI
     private let nonCustodialAccountsProvider: NonCustodialAccountsProvider
+    private let importedAddressesAccountsProvider: ImportedAddressesAccountsProvider?
     private let exchangeAccountsProvider: ExchangeAccountsProviderAPI
     private let addressFactory: ExternalAssetAddressFactory
 
@@ -52,6 +55,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         errorRecorder: ErrorRecording,
         kycTiersService: KYCTiersServiceAPI,
         nonCustodialAccountsProvider: @escaping NonCustodialAccountsProvider,
+        importedAddressesAccountsProvider: ImportedAddressesAccountsProvider? = nil,
         exchangeAccountsProvider: ExchangeAccountsProviderAPI,
         addressFactory: ExternalAssetAddressFactory
     ) {
@@ -60,6 +64,7 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         self.errorRecorder = errorRecorder
         self.kycTiersService = kycTiersService
         self.nonCustodialAccountsProvider = nonCustodialAccountsProvider
+        self.importedAddressesAccountsProvider = importedAddressesAccountsProvider
         self.exchangeAccountsProvider = exchangeAccountsProvider
         self.addressFactory = addressFactory
     }
@@ -68,60 +73,86 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
 
     /// For each option in the `filter: AssetFilter` option set, we will gather the correct accounts and add to the result AllAccountsGroup.
     public func accountGroup(filter: AssetFilter) -> AnyPublisher<AccountGroup?, Never> {
+        app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+            .replaceError(with: false)
+            .flatMap { [self] useExternalTradingAccount -> AnyPublisher<AccountGroup?, Never> in
 
-        var stream: [AnyPublisher<[SingleAccount], Never>] = []
+                var stream: [AnyPublisher<[SingleAccount], Never>] = []
 
-        if filter.contains(.custodial) {
-            stream.append(custodialAccounts)
-        }
+                if filter.contains(.nonCustodial) {
+                    let publisher: AnyPublisher<[SingleAccount], Never> = nonCustodialAccountsProvider()
+                        .recordErrors(on: errorRecorder)
+                        .replaceError(with: [])
+                        .eraseToAnyPublisher()
+                    stream.append(publisher)
+                }
 
-        if filter.contains(.interest) {
-            stream.append(interestAccounts)
-        }
+                if filter.contains(.nonCustodialImported), let importedAddressesAccountsProvider {
+                    let publisher: AnyPublisher<[SingleAccount], Never> = importedAddressesAccountsProvider()
+                        .recordErrors(on: errorRecorder)
+                        .replaceError(with: [])
+                        .eraseToAnyPublisher()
+                    stream.append(publisher)
+                }
 
-        if filter.contains(.nonCustodial) {
-            let publisher: AnyPublisher<[SingleAccount], Never> = nonCustodialAccountsProvider()
-                .recordErrors(on: errorRecorder)
-                .replaceError(with: [])
-                .eraseToAnyPublisher()
-            stream.append(publisher)
-        }
+                if useExternalTradingAccount {
+                    if filter.contains(.custodial) {
+                        stream.append(custodialAccounts)
+                    }
+                } else {
 
-        if filter.contains(.staking) {
-            stream.append(stakingAccounts)
-        }
+                    if filter.contains(.custodial) {
+                        stream.append(custodialAccounts)
+                    }
 
-        if filter.contains(.exchange) {
-            stream.append(exchangeAccounts)
-        }
+                    if filter.contains(.interest) {
+                        stream.append(interestAccounts)
+                    }
 
-        if filter.contains(.activeRewards) {
-            stream.append(activeRewardsAccounts)
-        }
+                    if filter.contains(.staking) {
+                        stream.append(stakingAccounts)
+                    }
 
-        return stream
-            .combineLatest()
-            .map { accounts in AllAccountsGroup(accounts: accounts.flatMap { $0 }) }
+                    if filter.contains(.exchange) {
+                        stream.append(exchangeAccounts)
+                    }
+
+                    if filter.contains(.activeRewards) {
+                        stream.append(activeRewardsAccounts)
+                    }
+                }
+
+                return stream
+                    .combineLatest()
+                    .map { accounts in AllAccountsGroup(accounts: accounts.flatMap { $0 }) }
+                    .eraseToAnyPublisher()
+            }
             .eraseToAnyPublisher()
     }
 
-    public func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never> {
+    public func parse(
+        address: String,
+        memo: String?
+    ) -> AnyPublisher<ReceiveAddress?, Never> {
         let receiveAddress = try? parse(
             address: address,
+            memo: memo,
             label: address,
             onTxCompleted: { _ in AnyPublisher.just(()) }
         )
-            .get()
+        .get()
         return .just(receiveAddress)
     }
 
     public func parse(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
         addressFactory.makeExternalAssetAddress(
             address: address,
+            memo: memo,
             label: label,
             onTxCompleted: onTxCompleted
         )
@@ -192,13 +223,6 @@ public final class CryptoAssetRepository: CryptoAssetRepositoryAPI {
         guard asset.supports(product: .custodialWalletBalance) else {
             return .just([])
         }
-        return .just(
-            [
-                CryptoTradingAccount(
-                    asset: asset,
-                    cryptoReceiveAddressFactory: addressFactory
-                )
-            ]
-        )
+        return .just([CryptoTradingAccount(asset: asset, cryptoReceiveAddressFactory: addressFactory)])
     }
 }

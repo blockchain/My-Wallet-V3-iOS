@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 @testable import AnalyticsKitMock
+import Blockchain
 import ComposableArchitecture
 @testable import FeatureKYCDomain
 @testable import FeatureKYCDomainMock
@@ -447,6 +448,7 @@ final class EmailVerificationReducerTests: XCTestCase {
                 openMailApp: { [unowned self] in
                     EffectTask(value: stubbedResults.canOpenMailApp)
                 },
+                app: App.test,
                 mainQueue: .immediate,
                 pollingQueue: testPollingQueue.eraseToAnyScheduler()
             )

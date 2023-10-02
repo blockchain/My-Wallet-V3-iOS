@@ -1,4 +1,4 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
@@ -20,7 +20,7 @@ public struct SellEnterAmountView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store) { viewStore in
+        WithViewStore(store) { viewStore in
             ZStack {
                 Color.semantic.light
                 VStack {
@@ -28,8 +28,10 @@ public struct SellEnterAmountView: View {
                     valuesContainer(viewStore)
                     Spacer()
                     PrefillButtonsView(store:
-                                        store.scope(state: \.prefillButtonsState,
-                                                    action: SellEnterAmount.Action.prefillButtonAction)
+                                        store.scope(
+                                            state: \.prefillButtonsState,
+                                            action: SellEnterAmount.Action.prefillButtonAction
+                                        )
                     )
                     .frame(width: 375, height: 60)
 
@@ -81,7 +83,7 @@ public struct SellEnterAmountView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     func valuesContainer(
         _ viewStore: ViewStoreOf<SellEnterAmount>
@@ -158,11 +160,8 @@ public struct SellEnterAmountView: View {
             })
 
             viewStore.defaultFiatCurrency?
-                .image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 24, height: 24)
-                .background(Color.WalletSemantic.fiatGreen)
+                .logo()
+                .background(Color.semantic.fiatGreen)
                 .cornerRadius(8, corners: .allCorners)
         }
         .frame(height: 77.pt)
@@ -193,10 +192,10 @@ public struct SellEnterAmountView: View {
 
     @ViewBuilder
     private var previewSwapButton: some View {
-        if viewStore.transactionDetails.forbidden {
-            SecondaryButton(title: viewStore.transactionDetails.ctaLabel, action: {})
+        if viewStore.continueDisabled == true, let ctaLabel = viewStore.ctaLabel {
+            SecondaryButton(title: ctaLabel, action: {})
         } else {
-            PrimaryButton(title: viewStore.transactionDetails.ctaLabel, action: {
+            PrimaryButton(title: viewStore.ctaLabel ?? "", action: {
                 viewStore.send(.onPreviewTapped)
             })
             .disabled(viewStore.previewButtonDisabled)

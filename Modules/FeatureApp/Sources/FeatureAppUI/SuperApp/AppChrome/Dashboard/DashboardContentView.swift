@@ -142,6 +142,18 @@ func dashboardTrailingItem(app: AppProtocol) -> some View {
 func tabViews(using tabs: OrderedSet<Tab>?, store: StoreOf<DashboardContent>, appMode: AppMode) -> some View {
     ForEach(tabs ?? []) { tab in
         switch tab.tag {
+        case blockchain.ux.user.external.portfolio:
+            provideExternalTradingDashboard(
+                tab: tab,
+                store: store
+            )
+
+        case blockchain.ux.user.external.prices:
+            provideExternalTradingPricesTab(
+                tab: tab,
+                store: store
+            )
+
         case blockchain.ux.user.portfolio where appMode == .trading:
             provideTradingDashboard(
                 tab: tab,

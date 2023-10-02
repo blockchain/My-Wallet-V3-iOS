@@ -8,7 +8,7 @@ import SwiftUI
 struct TotalBalanceView: View {
     @Environment(\.isSmallDevice) var isSmallDevice
     let balance: MoneyValue?
-
+    let hasError: Bool
     var body: some View {
         if let balance {
             HStack {
@@ -27,6 +27,16 @@ struct TotalBalanceView: View {
                     .stroke(.white, lineWidth: 1)
                     .opacity(0.4)
             )
+        } else if hasError {
+            HStack {
+                Icon
+                    .refresh
+                    .micro()
+                    .color(.white)
+                Text(LocalizationConstants.SuperApp.AppChrome.errorLoadingBalanceMessage)
+                    .typography(.paragraph2)
+                    .foregroundColor(.white)
+            }
         }
     }
 }
@@ -37,12 +47,22 @@ struct TotalBalanceView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             TotalBalanceView(
-                balance: .create(major: 11000.00, currency: .fiat(.GBP))
+                balance: .create(major: 11000.00, currency: .fiat(.GBP)),
+                hasError: false
             )
             .padding()
             .background(Color.gray)
+
             TotalBalanceView(
-                balance: .create(major: 11000.00, currency: .fiat(.GBP))
+                balance: nil,
+                hasError: true
+            )
+            .padding()
+            .background(Color.gray)
+
+            TotalBalanceView(
+                balance: .create(major: 11000.00, currency: .fiat(.GBP)),
+                hasError: false
             )
             .preferredColorScheme(.dark)
         }

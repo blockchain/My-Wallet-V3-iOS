@@ -9,7 +9,8 @@ final class CardsSectionPresenter: SettingsSectionPresenting {
     let sectionType: SettingsSectionType = .cards
 
     var state: Observable<SettingsSectionLoadingState> {
-        interactor.state
+        interactor
+            .state
             .map(weak: self) { (self, state) -> SettingsSectionLoadingState in
                 switch state {
                 case .invalid:

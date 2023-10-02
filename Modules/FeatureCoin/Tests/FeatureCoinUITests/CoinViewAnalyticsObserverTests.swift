@@ -8,7 +8,7 @@ import XCTest
 
 final class CoinViewAnalyticsObserverTests: XCTestCase {
 
-    var app: AppProtocol!
+    var app: App.Test!
     var analytics: AnalyticsEventRecorder!
     var sut: CoinViewAnalyticsObserver! {
         didSet { sut?.start() }
@@ -27,67 +27,67 @@ final class CoinViewAnalyticsObserverTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_chart_selected() {
-        app.post(
+    func test_chart_selected() async {
+        await app.post(
             event: blockchain.ux.asset["BTC"].chart.selected,
             context: [blockchain.ux.asset.chart.interval: Series.week]
         )
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_chart_deselected() {
-        app.post(
+    func test_chart_deselected() async {
+        await app.post(
             event: blockchain.ux.asset["BTC"].chart.deselected,
             context: [blockchain.ux.asset.chart.interval: Series.week]
         )
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_chart_interval() {
-        app.post(value: Series.week, of: blockchain.ux.asset["BTC"].chart.interval)
+    func test_chart_interval() async {
+        await app.post(value: Series.week, of: blockchain.ux.asset["BTC"].chart.interval)
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_receive() {
-        app.post(event: blockchain.ux.asset["BTC"].receive)
+    func test_receive() async {
+        await app.post(event: blockchain.ux.asset["BTC"].receive)
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_explainer() {
-        app.post(
+    func test_explainer() async {
+        await app.post(
             event: blockchain.ux.asset["BTC"].account["Trading"].explainer,
             context: [blockchain.ux.asset.account: Account.Snapshot.preview.trading]
         )
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_explainer_accept() {
-        app.post(
+    func test_explainer_accept() async {
+        await app.post(
             event: blockchain.ux.asset["BTC"].account["Trading"].explainer.accept,
             context: [blockchain.ux.asset.account: Account.Snapshot.preview.trading]
         )
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_website() {
-        app.post(event: blockchain.ux.asset["BTC"].bio.visit.website)
+    func test_website() async {
+        await app.post(event: blockchain.ux.asset["BTC"].bio.visit.website)
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_account_sheet() {
-        app.post(
+    func test_account_sheet() async {
+        await app.post(
             event: blockchain.ux.asset["BTC"].account["Trading"].sheet,
             context: [blockchain.ux.asset.account: Account.Snapshot.preview.trading]
         )
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_exchange_connect() {
-        app.post(event: blockchain.ux.asset["BTC"].account["Trading"].exchange.connect)
+    func test_exchange_connect() async {
+        await app.post(event: blockchain.ux.asset["BTC"].account["Trading"].exchange.connect)
         XCTAssertTrue(analytics.session.isNotEmpty)
     }
 
-    func test_transaction() {
+    func test_transaction() async {
 
         let events: [Tag.Event] = [
             blockchain.ux.asset["BTC"].account["Trading"].activity,
@@ -104,16 +104,16 @@ final class CoinViewAnalyticsObserverTests: XCTestCase {
         ]
 
         for event in events {
-            app.post(event: event, context: [blockchain.ux.asset.account: Account.Snapshot.preview.trading])
+            await app.post(event: event, context: [blockchain.ux.asset.account: Account.Snapshot.preview.trading])
         }
 
         XCTAssertEqual(analytics.session.count, events.count)
     }
 
-    func test_watchlist() {
-        app.post(event: blockchain.ux.asset["BTC"].watchlist.add)
+    func test_watchlist() async {
+        await app.post(event: blockchain.ux.asset["BTC"].watchlist.add)
         XCTAssertEqual(analytics.session.count, 1)
-        app.post(event: blockchain.ux.asset["BTC"].watchlist.remove)
+        await app.post(event: blockchain.ux.asset["BTC"].watchlist.remove)
         XCTAssertEqual(analytics.session.count, 2)
     }
 }

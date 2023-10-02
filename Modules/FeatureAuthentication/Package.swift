@@ -34,18 +34,15 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/oliveratkinson-bc/zxcvbn-ios.git",
-            branch: "swift-package-manager"
-        ),
-        .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.54.1"
+            exact: "0.56.0"
         ),
         .package(path: "../Analytics"),
+        .package(path: "../Blockchain"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../Localization"),
@@ -61,11 +58,11 @@ let package = Package(
         .target(
             name: "FeatureAuthenticationDomain",
             dependencies: [
+                .product(name: "Blockchain", package: "Blockchain"),
                 .product(name: "NetworkKit", package: "Network"),
                 .product(name: "MoneyKit", package: "Money"),
                 .product(name: "Errors", package: "Errors"),
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "Zxcvbn", package: "zxcvbn-ios"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload")
             ]
         ),
@@ -84,13 +81,14 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureAuthenticationDomain"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ErrorsUI", package: "Errors"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "ToolKit", package: "Tool"),
-                .product(name: "UIComponents", package: "UIComponents"),
+                .product(name: "UIComponents", package: "UIComponents")
             ]
         ),
         .target(

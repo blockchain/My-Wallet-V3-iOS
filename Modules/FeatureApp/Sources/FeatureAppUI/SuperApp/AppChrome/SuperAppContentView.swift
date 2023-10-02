@@ -16,7 +16,9 @@ struct SuperAppContentView: View {
     /// The content offset for the modal sheet
     @Binding var contentOffset: ModalSheetContext
 
-    @State private var isTradingEnabled = true
+    @State private var isDeFiOnly = true
+    @State private var isExternalTradingEnabled = false
+    private var isTradingEnabled: Bool { !isDeFiOnly }
 
     @State private var selectedDetent: UISheetPresentationController.Detent.Identifier = AppChromeDetents.collapsed.identifier
     /// `True` when a pull to refresh is triggered, otherwise `false`
@@ -56,10 +58,18 @@ struct SuperAppContentView: View {
                     hideBalanceAfterRefresh.toggle()
                 }
             }
-            .bindings {
-                subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
-                subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible)
-            }
+            .bindings(
+                managing: { update in
+                    if case .didSynchronize = update, isDeFiOnly {
+                        currentModeSelection = .pkw
+                    }
+                },
+                {
+                    subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
+                    subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
+                    subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
+                }
+            )
             .onChange(of: isTradingEnabled) { newValue in
                 if currentModeSelection == .trading, newValue == false {
                     currentModeSelection = .pkw
@@ -81,7 +91,8 @@ struct SuperAppContentView: View {
             .sheet(isPresented: .constant(true), content: {
                 SuperAppDashboardContentView(
                     currentModeSelection: $currentModeSelection,
-                    isTradingEnabled: viewStore.state.tradingEnabled,
+                    isTradingEnabled: isTradingEnabled,
+                    isExternalTradingEnabled: isExternalTradingEnabled,
                     store: store
                 )
                 .background(
@@ -90,8 +101,8 @@ struct SuperAppContentView: View {
                 .frame(maxWidth: .infinity)
                 .presentationDetents(
                     selectedDetent: $selectedDetent,
-                    largestUndimmedDetentIdentifier: largestUndimmedDetentIdentifier(isTradingEnabled: viewStore.state.tradingEnabled),
-                    limitDetents: .constant(!viewStore.tradingEnabled),
+                    largestUndimmedDetentIdentifier: largestUndimmedDetentIdentifier(isTradingEnabled: isTradingEnabled),
+                    limitDetents: .constant(!isTradingEnabled),
                     modalOffset: $contentOffset
                 )
             })

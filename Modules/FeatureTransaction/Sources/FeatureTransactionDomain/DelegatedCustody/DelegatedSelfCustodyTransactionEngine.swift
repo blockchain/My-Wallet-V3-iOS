@@ -52,41 +52,53 @@ final class DelegatedSelfCustodyTransactionEngine: TransactionEngine {
         precondition(sourceAsset == targetAsset)
     }
 
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
+    }
+
     func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        delegatedCustodyTransactionOutput(pendingTransaction: pendingTransaction)
-            .zip(sourceExchangeRatePair)
-            .tryMap { [sourceAccount, transactionTarget] output, sourceExchangeRate
-                -> (DelegatedCustodyTransactionOutput, [TransactionConfirmation]) in
-                let responseAmount: MoneyValue? = output.amount.flatMap { value in
-                    MoneyValue.create(
-                        minor: value,
-                        currency: sourceAccount!.currencyType
-                    )
-                }
-                let amount = responseAmount ?? .zero(currency: sourceAccount!.currencyType)
-                let absoluteFeeEstimate = MoneyValue.create(
-                    minor: output.absoluteFeeEstimate,
-                    currency: sourceAccount!.currencyType
-                )!
-                let confirmations: [TransactionConfirmation] = [
-                    TransactionConfirmations.SendDestinationValue(value: amount),
-                    TransactionConfirmations.Source(value: sourceAccount!.label),
-                    TransactionConfirmations.Destination(value: transactionTarget!.label),
-                    try TransactionConfirmations.FeedTotal(
-                        amount: amount,
-                        amountInFiat: amount.convert(using: sourceExchangeRate),
-                        fee: absoluteFeeEstimate,
-                        feeInFiat: absoluteFeeEstimate.convert(using: sourceExchangeRate)
-                    )
-                ]
-                return (output, confirmations)
+        Publishers.Zip3(
+            delegatedCustodyTransactionOutput(pendingTransaction: pendingTransaction),
+            sourceExchangeRatePair,
+            receiveAddress
+        )
+        .first()
+        .tryMap { [sourceAccount] output, sourceExchangeRate, receiveAddress -> (DelegatedCustodyTransactionOutput, [TransactionConfirmation]) in
+            let sourceCurrencyType = sourceAccount!.currencyType
+            let responseAmount: MoneyValue? = output.amount.flatMap { value in
+                MoneyValue.create(
+                    minor: value,
+                    currency: sourceCurrencyType
+                )
             }
-            .map { output, confirmations in
-                var pendingTransaction = pendingTransaction.update(confirmations: confirmations)
-                pendingTransaction.setDelegatedCustodyTransactionOutput(output)
-                return pendingTransaction
+            let amount = responseAmount ?? .zero(currency: sourceCurrencyType)
+            let absoluteFeeEstimate = MoneyValue.create(
+                minor: output.absoluteFeeEstimate,
+                currency: sourceCurrencyType
+            )!
+            let feedTotal = try TransactionConfirmations.FeedTotal(
+                amount: amount,
+                amountInFiat: amount.convert(using: sourceExchangeRate),
+                fee: absoluteFeeEstimate,
+                feeInFiat: absoluteFeeEstimate.convert(using: sourceExchangeRate)
+            )
+            var confirmations: [TransactionConfirmation] = [
+                TransactionConfirmations.SendDestinationValue(value: amount),
+                TransactionConfirmations.Source(value: sourceAccount!.label),
+                TransactionConfirmations.Destination(value: receiveAddress.label),
+                feedTotal
+            ]
+            if TransactionMemoSupport.supportsMemo(sourceCurrencyType) {
+                confirmations.append(TransactionConfirmations.Memo(textMemo: receiveAddress.memo))
             }
-            .asSingle()
+            return (output, confirmations)
+        }
+        .map { output, confirmations in
+            var pendingTransaction = pendingTransaction.update(confirmations: confirmations)
+            pendingTransaction.setDelegatedCustodyTransactionOutput(output)
+            return pendingTransaction
+        }
+        .asSingle()
     }
 
     // MARK: - Private Functions
@@ -274,5 +286,19 @@ extension PendingTransaction {
 
     private var delegatedeCustodySendMax: Bool {
         engineState.value[.delegatedeCustodySendMax] as? Bool ?? false
+    }
+}
+
+public enum TransactionMemoSupport {
+
+    public static func supportsMemo(
+        _ currency: CurrencyType
+    ) -> Bool {
+        switch currency.cryptoCurrency?.code {
+        case "XLM", "STX":
+            return true
+        default:
+            return false
+        }
     }
 }

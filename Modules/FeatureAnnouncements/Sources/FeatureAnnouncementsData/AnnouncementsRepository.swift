@@ -36,17 +36,33 @@ final class AnnouncementsRepository: AnnouncementsRepositoryAPI {
     }
 
     func setRead(announcement: Announcement) -> AnyPublisher<Void, NabuNetworkError> {
-        client.setRead(announcement: announcement)
+        cachedValue
+            .get(key: Key())
+            .flatMap { [client] announcements -> AnyPublisher<Void, NabuNetworkError> in
+                guard announcements.contains(announcement) else {
+                    return .just(())
+                }
+                return client.setRead(announcement: announcement)
+            }
+            .eraseToAnyPublisher()
     }
 
     func setTapped(announcement: Announcement) -> AnyPublisher<Void, NabuNetworkError> {
-        client
-            .setTapped(announcement: announcement)
-            .flatMap { [weak self] _ -> AnyPublisher<Void, NabuNetworkError> in
-                guard let self else {
-                    return .empty()
+        cachedValue
+            .get(key: Key())
+            .flatMap { [weak self] announcements -> AnyPublisher<Void, NabuNetworkError> in
+                guard let self, announcements.contains(announcement) else {
+                    return .just(())
                 }
-                return remove(announcement: announcement)
+                return client
+                    .setTapped(announcement: announcement)
+                    .flatMap { [weak self] _ -> AnyPublisher<Void, NabuNetworkError> in
+                        guard let self else {
+                            return .empty()
+                        }
+                        return setDismissed(announcement, with: .open)
+                    }
+                    .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
@@ -55,13 +71,22 @@ final class AnnouncementsRepository: AnnouncementsRepositoryAPI {
         _ announcement: Announcement,
         with action: Announcement.Action
     ) -> AnyPublisher<Void, NabuNetworkError> {
-        client
-            .setDismissed(announcement, with: action)
-            .flatMap { [weak self] _ -> AnyPublisher<Void, NabuNetworkError> in
-                guard let self else {
-                    return .empty()
+        cachedValue
+            .get(key: Key())
+            .flatMap { [weak self] announcements -> AnyPublisher<Void, NabuNetworkError> in
+                guard let self, announcements.contains(announcement) else {
+                    return .just(())
                 }
-                return remove(announcement: announcement)
+
+                return client
+                    .setDismissed(announcement, with: action)
+                    .flatMap { [weak self] _ -> AnyPublisher<Void, NabuNetworkError> in
+                        guard let self else {
+                            return .empty()
+                        }
+                        return remove(announcement: announcement)
+                    }
+                    .eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }

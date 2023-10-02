@@ -5,9 +5,11 @@ import ErrorsUI
 import FeatureAppDomain
 import FeatureAppUI
 import FeatureAttributionDomain
+import FeatureAuthenticationDomain
 import FeatureCoinUI
 import FeatureCustomerSupportUI
 import FeatureDashboardDomain
+import FeatureKYCDomain
 import FeatureKYCUI
 import FeatureProductsDomain
 import FeatureReferralDomain
@@ -28,14 +30,18 @@ import PlatformKit
 import ToolKit
 import UIKit
 
-let app: AppProtocol = try! App(
+let app: AppProtocol = App(
     remoteConfiguration: Session.RemoteConfiguration(
         remote: FirebaseRemoteConfig.RemoteConfig.remoteConfig(),
-        default: .init(blockchain.app.configuration.json(in: .main) as Any) + [
+        default: embbedAppConfiguration + [
             blockchain.app.configuration.manual.login.is.enabled: BuildFlag.isInternal
         ]
     )
 )
+
+private var embbedAppConfiguration: Session.RemoteConfiguration.Default {
+    try! Session.RemoteConfiguration.Default(blockchain.app.configuration.json(in: .main) as Any)
+}
 
 extension AppProtocol {
 
@@ -51,18 +57,18 @@ extension AppProtocol {
         clientObservers.insert(ApplicationStateObserver(app: self))
         clientObservers.insert(AppHapticObserver(app: self))
         clientObservers.insert(AppAnalyticsObserver(app: self))
+        clientObservers.insert(AppNotificationCenterObservation(app: self))
         clientObservers.insert(resolve() as AppAnalyticsTraitRepository)
         clientObservers.insert(KYCExtraQuestionsObserver(app: self))
         clientObservers.insert(NabuUserSessionObserver(app: self))
         clientObservers.insert(CoinViewAnalyticsObserver(app: self, analytics: recorder))
         clientObservers.insert(CoinViewObserver(app: self))
         clientObservers.insert(BuyOtherCryptoObserver(app: self))
-        clientObservers.insert(UpsellPassiveRewardsObserver(app:self))
+        clientObservers.insert(UpsellPassiveRewardsObserver(app: self))
         clientObservers.insert(ReferralAppObserver(app: self, referralService: referralService))
         clientObservers.insert(AttributionAppObserver(app: self, attributionService: attributionService))
         clientObservers.insert(UserTagObserver(app: self, userTagSyncService: userTagService))
         clientObservers.insert(SuperAppIntroObserver(app: self))
-        clientObservers.insert(DefiModeChangeObserver(app: self))
         clientObservers.insert(PlaidLinkObserver(app: self))
         clientObservers.insert(DefaultAppModeObserver(app: self, productsService: resolve()))
         clientObservers.insert(deepLink)
@@ -77,6 +83,8 @@ extension AppProtocol {
         clientObservers.insert(SimpleBuyPairsNAPIRepository(self))
         clientObservers.insert(WalletConnectPairingsObserver(app: self))
         clientObservers.insert(LaunchKYCClientObserver())
+        clientObservers.insert(SweepAddressesObserver(app: self))
+        clientObservers.insert(ResubmitResidentialInformation())
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,
@@ -113,6 +121,9 @@ extension AppProtocol {
                 try await WireTransferNAPI(self).register()
                 try await TradingPairsNAPI().register()
                 try await UserProductsRepository(app: self).register()
+                let kycRepository: KYCSSNRepository = DIKit.resolve()
+                try await kycRepository.register()
+                try await registerGeolocationNAPI()
             } catch {
                 post(error: error)
                 #if DEBUG
@@ -129,16 +140,18 @@ extension AppProtocol {
 }
 
 extension FirebaseRemoteConfig.RemoteConfig: RemoteConfiguration_p {}
+extension FirebaseRemoteConfig.ConfigUpdateListenerRegistration: ConfigUpdateListenerRegistration_p {}
+extension FirebaseRemoteConfig.RemoteConfigUpdate: RemoteConfigUpdate_p {}
 extension FirebaseRemoteConfig.RemoteConfigValue: RemoteConfigurationValue_p {}
 extension FirebaseRemoteConfig.RemoteConfigFetchStatus: RemoteConfigurationFetchStatus_p {}
 extension FirebaseRemoteConfig.RemoteConfigSource: RemoteConfigurationSource_p {}
 
 #if canImport(MobileIntelligence)
 import class MobileIntelligence.MobileIntelligence
-import struct MobileIntelligence.Options
+import class MobileIntelligence.Options
+import class MobileIntelligence.OptionsBuilder
 import struct MobileIntelligence.Response
 import struct MobileIntelligence.UpdateOptions
-import class MobileIntelligence.OptionsBuilder
 
 public typealias _OptionsBuilder = OptionsBuilder
 

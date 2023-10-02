@@ -7,6 +7,7 @@ public final class BitPayInvoiceTarget: CryptoReceiveAddress, StaticTransactionT
 
     // MARK: - Public Properties
 
+    public let memo: String? = nil
     public let asset: CryptoCurrency
     public let address: String
     public let amount: CryptoValue

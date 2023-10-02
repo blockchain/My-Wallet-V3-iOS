@@ -57,7 +57,7 @@ extension ViewRecoveryPhraseView {
         }
         .frame(maxWidth: .infinity)
         .blur(radius: viewStore.shouldBlurBackupPhrase ? 7 : 0)
-        .border(Color.WalletSemantic.medium, width: 1)
+        .border(Color.semantic.medium, width: 1)
         .padding(.horizontal, Spacing.padding3)
         .padding(.top, Spacing.padding2)
         .gesture(DragGesture(minimumDistance: 0)
@@ -95,7 +95,7 @@ extension ViewRecoveryPhraseView {
             Text("\(index)")
                 .foregroundColor(.WalletSemantic.muted)
         Text("\(word.label)")
-             .foregroundColor(Color.WalletSemantic.title)
+             .foregroundColor(Color.semantic.title)
         }
             .typography(.paragraph2)
             .fixedSize()
@@ -132,7 +132,7 @@ extension ViewRecoveryPhraseView {
             viewStore.send(.onCopyTap)
         } label: {
             Text(viewStore.recoveryPhraseCopied ? Localization.copiedButton : Localization.copyButton)
-                .foregroundColor(viewStore.recoveryPhraseCopied ? Color.WalletSemantic.success : Color.WalletSemantic.primary)
+                .foregroundColor(viewStore.recoveryPhraseCopied ? Color.semantic.success : Color.semantic.primary)
         }
     }
 
@@ -153,8 +153,7 @@ struct ViewRecoveryPhraseView_Previews: PreviewProvider {
         PrimaryNavigationView {
             ViewRecoveryPhraseView(store: .init(
                 initialState: .init(recoveryPhraseBackedUp: false),
-                reducer: ViewRecoveryPhraseModule.reducer,
-                environment: .init(
+                reducer: ViewRecoveryPhrase(
                     recoveryPhraseRepository: resolve(),
                     recoveryPhraseService: resolve(),
                     cloudBackupService: resolve(),

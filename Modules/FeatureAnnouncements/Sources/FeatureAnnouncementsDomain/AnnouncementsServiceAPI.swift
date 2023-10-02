@@ -12,6 +12,7 @@ public protocol AnnouncementsServiceAPI {
         _ announcement: Announcement,
         with action: Announcement.Action
     ) -> AnyPublisher<Void, NabuNetworkError>
+    func handle(_ announcement: Announcement) -> AnyPublisher<Void, Never>
 }
 
 extension AnnouncementsServiceAPI {

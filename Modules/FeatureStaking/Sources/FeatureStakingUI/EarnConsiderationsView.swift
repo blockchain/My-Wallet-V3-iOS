@@ -5,7 +5,7 @@ import BlockchainUI
 import FeatureStakingDomain
 import SwiftUI
 
-typealias L10n = LocalizationConstants.Staking
+typealias L10n = Localization.Staking
 
 @MainActor
 public struct EarnConsiderationsView: View {
@@ -44,7 +44,7 @@ public struct EarnConsiderationsView: View {
         }
         .primaryNavigation(
             trailing: {
-                IconButton(icon: .closeCirclev2) {
+                IconButton(icon: .navigationCloseButton()) {
                     app.post(event: story.article.plain.navigation.bar.button.close.tap[].ref(to: context), context: context)
                 }
             }
@@ -158,8 +158,8 @@ public let activeRewardsConsiderations = [
     EarnConsiderationsView.Page(
         id: blockchain.ux.transaction["active_rewards_deposit"].disclaimer.explain["welcome"].key(),
         image: "https://login.blockchain.com/img/bars.svg",
-        title: LocalizationConstants.ActiveRewards.title,
-        message: LocalizationConstants.ActiveRewards.description
+        title: Localization.ActiveRewards.title,
+        message: Localization.ActiveRewards.description
     )
 ]
 

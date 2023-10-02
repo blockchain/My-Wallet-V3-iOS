@@ -24,15 +24,15 @@ struct DexConfirmationView: View {
             VStack(alignment: .center) {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .center, spacing: 24) {
-                        swap()
+                        swap
                             .padding(.top, Spacing.padding2)
-                        rows()
-                        disclaimer()
+                        rows
+                        disclaimer
                     }
                 }
                 .padding(.horizontal)
                 Spacer()
-                footer()
+                footer
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.semantic.light.ignoresSafeArea())
@@ -52,6 +52,12 @@ struct DexConfirmationView: View {
                 subscribe(
                     viewStore.binding(\.$toFiatExchangeRate),
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.to.currency.code].fiat.quote.value
+                )
+            }
+            .bindings {
+                subscribe(
+                    viewStore.binding(\.$productFeeFiatExchangeRate),
+                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.productFee?.currency.code].fiat.quote.value
                 )
             }
             PrimaryNavigationLink(
@@ -78,19 +84,13 @@ struct DexConfirmationView: View {
 
     @ViewBuilder
     private var closeButton: some View {
-        Button(
-            action: { presentationMode.wrappedValue.dismiss() },
-            label: {
-                Icon
-                    .closev2
-                    .circle(backgroundColor: .semantic.light)
-                    .frame(width: 24, height: 24)
-            }
-        )
+        IconButton(icon: .navigationCloseButton()) {
+            presentationMode.wrappedValue.dismiss()
+        }
     }
 
     @ViewBuilder
-    private func swap() -> some View {
+    private var swap: some View {
         ZStack {
             VStack {
                 target(
@@ -114,13 +114,13 @@ struct DexConfirmationView: View {
 
     @ViewBuilder
     private func target(
-        _ target: DexConfirmation.State.Target,
+        _ cryptoValue: CryptoValue,
         exchangeRate: MoneyValue?,
         balance: DexBalance?
     ) -> some View {
         TableRow(
             title: {
-                Text(target.value.toDisplayString(includeSymbol: false))
+                Text(cryptoValue.toDisplayString(includeSymbol: false))
                     .typography(.title2.slashedZero())
                     .foregroundColor(.semantic.title)
                     .lineLimit(1)
@@ -128,7 +128,7 @@ struct DexConfirmationView: View {
             },
             byline: {
                 if let exchangeRate {
-                    Text(target.value.convert(using: exchangeRate).displayString)
+                    Text(cryptoValue.convert(using: exchangeRate).displayString)
                         .typography(.body1)
                         .foregroundColor(.semantic.body)
                         .lineLimit(1)
@@ -138,7 +138,7 @@ struct DexConfirmationView: View {
             trailing: {
                 HStack(alignment: .center) {
                     VStack(alignment: .trailing, spacing: 8.pt) {
-                        balancePill(target.value.currency)
+                        balancePill(cryptoValue.currency)
                         balanceLabel(balance)
                     }
                 }
@@ -185,111 +185,62 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    private func rows() -> some View {
+    private var rows: some View {
         DividedVStack {
-            TableRow(
-                title: {
-                    TableRowTitle(L10n.network)
-                        .foregroundColor(.semantic.body)
+            tableRow(
+                title: L10n.network,
+                value: {
+                    tableRowTitle(viewStore.quote.from.currency.network()?.networkConfig.shortName ?? "")
                 },
-                trailing: {
-                    TableRowTitle("\(viewStore.quote.from.currency.network()?.nativeAsset.name)")
-                }
+                tooltip: nil
             )
-            TableRow(
-                title: {
-                    TableRowTitle(L10n.exchangeRate)
-                        .foregroundColor(.semantic.body)
+            tableRow(
+                title: L10n.exchangeRate,
+                value: {
+                    tableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
                 },
-                trailing: {
-                    TableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
-                }
+                tooltip: nil
             )
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.allowedSlippage).foregroundColor(.semantic.body)
-                        Icon.questionCircle
-                            .micro()
-                            .color(.semantic.muted)
-                    }
+            tableRow(
+                title: L10n.allowedSlippage,
+                value: {
+                    tableRowTitle(formatSlippage(viewStore.quote.slippage))
                 },
-                trailing: {
-                    TableRowTitle(formatSlippage(viewStore.quote.slippage))
-                }
+                tooltip: (L10n.allowedSlippage, FeatureDexUI.L10n.Settings.body)
             )
-            .onTapGesture {
-                showTooltip(
-                    title: L10n.allowedSlippage,
-                    message: FeatureDexUI.L10n.Settings.body
-                )
-            }
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.minAmount).foregroundColor(.semantic.body)
-                        Icon.questionCircle
-                            .micro()
-                            .color(.semantic.muted)
-                    }
-                },
-                trailing: {
+            tableRow(
+                title: L10n.minAmount,
+                value: {
                     valueWithQuote(
                         viewStore.quote.minimumReceivedAmount,
                         using: viewStore.toFiatExchangeRate,
                         isEstimated: false
                     )
-                }
-            )
-            .onTapGesture {
-                showTooltip(title: L10n.minAmount, message: L10n.minAmountDescription)
-            }
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.networkFee)
-                            .foregroundColor(.semantic.body)
-                        Icon.questionCircle
-                            .micro()
-                            .color(.semantic.muted)
-                    }
                 },
-                trailing: {
+                tooltip: (title: L10n.minAmount, message: L10n.minAmountDescription)
+            )
+            tableRow(
+                title: L10n.networkFee,
+                value: {
                     valueWithQuote(
                         viewStore.quote.networkFee,
                         using: viewStore.networkFiatExchangeRate
                     )
-                }
-            )
-            .onTapGesture {
-                showTooltip(
-                    title: L10n.networkFee,
-                    message: L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode)
-                )
-            }
-            TableRow(
-                title: {
-                    HStack {
-                        TableRowTitle(L10n.blockchainFee).foregroundColor(.semantic.body)
-                        Icon.questionCircle
-                            .micro()
-                            .color(.semantic.muted)
-                    }
                 },
-                trailing: {
-                    valueWithQuote(
-                        viewStore.quote.productFee,
-                        using: viewStore.toFiatExchangeRate
-                    )
-                }
+                tooltip: (L10n.networkFee, L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode))
             )
-            .onTapGesture {
-                showTooltip(
+            if let productFee = viewStore.quote.productFee {
+                tableRow(
                     title: L10n.blockchainFee,
-                    message: L10n.blockchainFeeDescription
+                    value: {
+                        valueWithQuote(
+                            productFee,
+                            using: viewStore.productFeeFiatExchangeRate
+                        )
+                    },
+                    tooltip: (L10n.blockchainFee, L10n.blockchainFeeDescription)
                 )
+
             }
         }
         .padding(.vertical, 6.pt)
@@ -333,7 +284,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    private func disclaimer() -> some View {
+    private var disclaimer: some View {
         Text(L10n.disclaimer.interpolating(viewStore.quote.minimumReceivedAmount.displayString))
             .typography(.caption1)
             .foregroundColor(.semantic.body)
@@ -341,7 +292,7 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    private func footer() -> some View {
+    private var footer: some View {
         VStack(spacing: Spacing.padding2) {
             if viewStore.priceUpdated {
                 HStack {
@@ -388,16 +339,47 @@ struct DexConfirmationView: View {
         }
     }
 
-    func showTooltip(title: String, message: String) {
-        $app.post(
-            event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
-            context: [
-                blockchain.ux.tooltip.title: title,
-                blockchain.ux.tooltip.body: message,
-                blockchain.ui.type.action.then.enter.into.detents: [
-                    blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
-                ]
-            ])
+    @ViewBuilder
+    private func tableRowTitle(_ string: String) -> some View {
+        TableRowTitle(string)
+            .lineLimit(1)
+            .minimumScaleFactor(0.1)
+    }
+
+    @ViewBuilder
+    private func tableRow(
+        title: String,
+        value: () -> some View,
+        tooltip: (title: String, message: String)?
+    ) -> some View {
+        TableRow(
+            title: {
+                HStack {
+                    TableRowTitle(title)
+                        .foregroundColor(.semantic.body)
+                    if tooltip != nil {
+                        Icon.questionFilled
+                            .micro()
+                            .color(.semantic.muted)
+                    }
+                }
+            },
+            trailing: value
+        )
+        .onTapGesture {
+            if let (title, body) = tooltip {
+                $app.post(
+                    event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
+                    context: [
+                        blockchain.ux.tooltip.title: title,
+                        blockchain.ux.tooltip.body: body,
+                        blockchain.ui.type.action.then.enter.into.detents: [
+                            blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                        ]
+                    ]
+                )
+            }
+        }
     }
 }
 

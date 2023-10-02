@@ -1,6 +1,6 @@
 import BlockchainUI
-import DIKit
 import Dependencies
+import DIKit
 import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
@@ -23,6 +23,7 @@ import FeatureWireTransfer
 import FeatureWithdrawalLocksDomain
 import FeatureWithdrawalLocksUI
 import PlatformKit
+import RemoteNotificationsKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
@@ -70,12 +71,13 @@ public struct SiteMap {
             )
         case blockchain.ux.user.assets.all:
             let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
-            AllAssetsSceneView(store: .init(
+            let reducer = AllAssetsScene(
+                assetBalanceInfoRepository: resolve(),
+                app: app
+            )
+            AllAssetsSceneView(store: Store(
                 initialState: initialState,
-                reducer: AllAssetsScene(
-                    assetBalanceInfoRepository: resolve(),
-                    app: app
-                )
+                reducer: reducer
             ))
         case blockchain.ux.activity.detail:
             let initialState = try ActivityDetailScene.State(activityEntry: context.decode(blockchain.ux.activity.detail.model))
@@ -114,9 +116,7 @@ public struct SiteMap {
             try Earn(app).view(for: ref, in: context)
         case blockchain.ux.dashboard.fiat.account.action.sheet:
             let balanceInfo = try context[blockchain.ux.dashboard.fiat.account.action.sheet.asset].decode(AssetBalanceInfo.self)
-            FiatActionSheetView(
-                assetBalanceInfo: balanceInfo
-            )
+            FiatActionSheet(assetBalanceInfo: balanceInfo)
         case blockchain.ux.frequent.action.brokerage.more:
             let quickActions = try context[blockchain.ux.frequent.action.brokerage.more.actions].decode([QuickAction].self)
             MoreQuickActionSheet(tag: blockchain.ux.frequent.action.brokerage.more, actionsList: quickActions)
@@ -130,7 +130,7 @@ public struct SiteMap {
             .identity(blockchain.ux.scan.QR)
             .ignoresSafeArea()
         case blockchain.ux.currency.receive.select.asset:
-            ReceiveEntryView()
+              ReceiveEntryView()
                 .app(app)
         case blockchain.ux.currency.receive.address:
             ReceiveAddressView()
@@ -186,8 +186,16 @@ public struct SiteMap {
             try FeatureKYCUI.SiteMap(app: app).view(for: ref, in: context)
         case blockchain.ux.settings, isDescendant(of: blockchain.ux.settings):
             try FeatureSettingsUI.SettingsSiteMap().view(for: ref, in: context)
-        case isDescendant(of: blockchain.ux.user.custodial.onboarding):
+        case isDescendant(of: blockchain.ux.user.custodial):
             try FeatureCustodialOnboarding.SiteMap().view(for: ref, in: context)
+        case blockchain.ux.onboarding.notification.authorization.display, isDescendant(of: blockchain.ux.onboarding.notification.authorization.display):
+            RemoteNotificationAuthorizationView()
+        case blockchain.ux.sweep.imported.addresses.transfer:
+            SweepImportedAddressesView()
+                .app(app)
+        case blockchain.ux.sweep.imported.addresses.no.action:
+            SweepImportedAddressesNoActionView()
+                .app(app)
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

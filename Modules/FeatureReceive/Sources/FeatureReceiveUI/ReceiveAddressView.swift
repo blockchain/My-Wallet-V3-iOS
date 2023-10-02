@@ -211,7 +211,7 @@ public struct ReceiveAddressView: View {
     @ViewBuilder
     var networkWarning: some View {
         if let network = model.network {
-            if let name = network.name, name.isNotEmpty, let code = currency?.code {
+            if let name = network.name, name.isNotEmpty, let code = currency?.displaySymbol {
                 HStack(spacing: Spacing.textSpacing) {
                     Icon.alert.micro()
                         .iconColor(Color.semantic.warning)
@@ -230,7 +230,9 @@ public struct ReceiveAddressView: View {
 
     var close: some View {
         IconButton(
-            icon: .closeCirclev3.small(),
+            icon: .close
+                .circle()
+                .small(),
             action: { $app.post(event: blockchain.ux.currency.receive.address.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {
@@ -291,7 +293,7 @@ extension ReceiveAddressView {
         func prepare(app: AppProtocol, context: Tag.Context) {
 
             app.publisher(
-                for: blockchain.coin.core.account.receive.address[].ref(to: context, in: app),
+                for: blockchain.coin.core.account.receive[].ref(to: context, in: app),
                 as: L_blockchain_coin_core_account_receive.JSON.self
             )
             .zip(app.publisher(for: blockchain.coin.core.account[].ref(to: context, in: app), as: L_blockchain_coin_core_account.JSON.self))
@@ -312,21 +314,21 @@ extension ReceiveAddressView {
             .assign(to: &$domain)
 
             app.publisher(
-                for: blockchain.coin.core.account.receive.address[].ref(to: context, in: app),
+                for: blockchain.coin.core.account.receive[].ref(to: context, in: app),
                 as: L_blockchain_coin_core_account_receive.JSON.self
             )
             .map(\.value)
-            .receive(on: DispatchQueue.main)
             .map { [qrCodeProvider] value -> UIImage? in
                 guard let content = value?.qr.metadata.content else {
                     return nil
                 }
                 return qrCodeProvider(content)
             }
+            .receive(on: DispatchQueue.main)
             .assign(to: &$qrCode)
 
             app.publisher(
-                for: blockchain.coin.core.account.receive.address[].ref(to: context, in: app),
+                for: blockchain.coin.core.account.receive[].ref(to: context, in: app),
                 as: L_blockchain_coin_core_account_receive.JSON.self
             )
             .map(\.value)

@@ -276,13 +276,9 @@ extension stellarsdk.TransactionPostResponseEnum {
 
 extension SendDetails {
     fileprivate var horizonMemo: stellarsdk.Memo {
-        switch memo {
-        case nil:
+        guard let value = memo?.nilIfEmpty else {
             return .none
-        case .id(let id):
-            return .id(id)
-        case .text(let text):
-            return .text(text)
         }
+        return .text(value)
     }
 }

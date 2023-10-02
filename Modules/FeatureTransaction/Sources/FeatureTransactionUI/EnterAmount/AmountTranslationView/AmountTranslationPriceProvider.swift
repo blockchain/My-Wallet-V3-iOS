@@ -6,6 +6,22 @@ import PlatformUIKit
 import RxSwift
 import ToolKit
 
+public protocol AmountTranslationPriceProviding {
+    // Amount is in Fiat, must return an MoneyValuePair of base `amount` in `fiatCurrency` and the quoted crypto value.
+    func pairFromFiatInput(
+        cryptoCurrency: CryptoCurrency,
+        fiatCurrency: FiatCurrency,
+        amount: String
+    ) -> Single<MoneyValuePair>
+
+    // Amount is in Crypto, must return an MoneyValuePair of base `amount` in `cryptoCurrency` and the quoted fiat value.
+    func pairFromCryptoInput(
+        cryptoCurrency: CryptoCurrency,
+        fiatCurrency: FiatCurrency,
+        amount: String
+    ) -> Single<(base: MoneyValue, quote: MoneyValue?)>
+}
+
 final class AmountTranslationPriceProvider: AmountTranslationPriceProviding {
 
     private let transactionModel: TransactionModel
@@ -14,7 +30,11 @@ final class AmountTranslationPriceProvider: AmountTranslationPriceProviding {
         self.transactionModel = transactionModel
     }
 
-    func pairFromFiatInput(cryptoCurrency: CryptoCurrency, fiatCurrency: FiatCurrency, amount: String) -> Single<MoneyValuePair> {
+    func pairFromFiatInput(
+        cryptoCurrency: CryptoCurrency,
+        fiatCurrency: FiatCurrency,
+        amount: String
+    ) -> Single<MoneyValuePair> {
         transactionModel
             .state
             .map(\.sourceToFiatPair)
@@ -33,40 +53,22 @@ final class AmountTranslationPriceProvider: AmountTranslationPriceProviding {
             .asSingle()
     }
 
-    func pairFromCryptoInput(cryptoCurrency: CryptoCurrency, fiatCurrency: FiatCurrency, amount: String) -> Single<MoneyValuePair> {
+    func pairFromCryptoInput(
+        cryptoCurrency: CryptoCurrency,
+        fiatCurrency: FiatCurrency,
+        amount: String
+    ) -> Single<(base: MoneyValue, quote: MoneyValue?)> {
         transactionModel
             .state
             .map(\.sourceToFiatPair)
-            .filter { $0 != nil }
-            .compactMap { $0 }
-            .map { sourceToFiatPair -> MoneyValuePair in
+            .map { sourceToFiatPair -> (base: MoneyValue, quote: MoneyValue?) in
                 let amount = amount.isEmpty ? "0" : amount
-                return MoneyValuePair(
-                    base: CryptoValue.create(majorDisplay: amount, currency: cryptoCurrency)!.moneyValue,
-                    exchangeRate: sourceToFiatPair.quote
-                )
+                let base = CryptoValue
+                    .create(majorDisplay: amount, currency: cryptoCurrency)!
+                    .moneyValue
+                return (base: base, quote: sourceToFiatPair?.quote)
             }
             .take(1)
             .asSingle()
-    }
-}
-
-extension TransactionState {
-
-    var exchangeRate: MoneyValuePair? {
-        guard let source, let destination else { return nil }
-        guard let price else {
-            return MoneyValuePair(
-                base: MoneyValue.zero(currency: source.currencyType),
-                quote: MoneyValue.zero(currency: destination.currencyType)
-            )
-        }
-        do {
-            let amount = try MoneyValue.create(minor: price.amount, currency: source.currencyType).or(throw: "No amount")
-            let result = try MoneyValue.create(minor: price.result, currency: destination.currencyType).or(throw: "No result")
-            return MoneyValuePair(base: amount, quote: result).exchangeRate
-        } catch {
-            return nil
-        }
     }
 }

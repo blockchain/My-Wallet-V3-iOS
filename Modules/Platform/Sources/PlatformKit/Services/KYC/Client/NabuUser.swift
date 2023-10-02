@@ -186,6 +186,10 @@ extension NabuUser {
         tags?.cowboys != nil
     }
 
+    public var isExternalBrokerage: Bool {
+        tags?.externalBrokerage != nil
+    }
+
     public var isSuperAppUser: Bool? {
         tags?.isSuperAppMvp
     }
@@ -239,6 +243,7 @@ struct Tags: Decodable, Equatable {
         case isSuperAppV1True = "is_superapp_v1_true"
         case isSuperAppV1False = "is_superapp_v1_false"
         case cassyCardAlpha = "CARD_CASSY_ALPHA"
+        case externalBrokerage = "EXTERNAL_BROKERAGE"
     }
 
     let blockstack: Blockstack?
@@ -246,11 +251,13 @@ struct Tags: Decodable, Equatable {
     var isSuperAppMvp: Bool?
     var isSuperAppV1: Bool?
     var isCassyCardAlpha: CodableVoid?
+    var externalBrokerage: CodableVoid?
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         self.blockstack = try values.decodeIfPresent(Blockstack.self, forKey: .blockstack)
         self.cowboys = try values.decodeIfPresent(CodableVoid.self, forKey: .cowboys)
+        self.externalBrokerage = try values.decodeIfPresent(CodableVoid.self, forKey: .externalBrokerage)
         let isSuperAppMvpTrue = try values.decodeIfPresent(CodableVoid.self, forKey: .isSuperAppMvpTrue)
         let isSuperAppMvpFalse = try values.decodeIfPresent(CodableVoid.self, forKey: .isSuperAppMvpFalse)
         if isSuperAppMvpTrue != nil {

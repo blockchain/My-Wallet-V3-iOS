@@ -172,7 +172,7 @@ final class PriceService: PriceServiceAPI {
         .eraseToAnyPublisher()
     }
 
-    func new_stream(
+    private func new_stream(
         of base: Currency,
         in quote: Currency,
         at time: PriceTime
@@ -180,29 +180,24 @@ final class PriceService: PriceServiceAPI {
         multiSeries.publisher(for: .init(base: base.currencyType, quote: quote.currencyType, time: time.isNow ? nil : time.date))
             .flatMap { price -> AnyPublisher<Result<PriceQuoteAtTime, PriceServiceError>, Never> in
                 if let price {
-                    return Just(
-                        .success(
-                            PriceQuoteAtTime(
-                                timestamp: price.timestamp,
-                                moneyValue: MoneyValue.create(
-                                    major: price.price ?? 0,
-                                    currency: quote.currencyType
-                                ),
-                                marketCap: price.marketCap,
-                                volume24h: price.volume24h
-                            )
-                        )
+                    let value = PriceQuoteAtTime(
+                        timestamp: price.timestamp,
+                        moneyValue: MoneyValue.create(
+                            major: price.price ?? 0,
+                            currency: quote.currencyType
+                        ),
+                        marketCap: price.marketCap,
+                        volume24h: price.volume24h
                     )
-                    .eraseToAnyPublisher()
+                    return .just(.success(value))
                 } else {
-                    return Just(.failure(PriceServiceError.missingPrice("\(base)-\(quote)")))
-                        .eraseToAnyPublisher()
+                    return .just(.failure(PriceServiceError.missingPrice("\(base)-\(quote)")))
                 }
             }
             .eraseToAnyPublisher()
     }
 
-    func old_stream(
+    private func old_stream(
         of base: Currency,
         in quote: Currency,
         at time: PriceTime
@@ -262,7 +257,7 @@ final class PriceService: PriceServiceAPI {
         .eraseToAnyPublisher()
     }
 
-    func new_price(
+    private func new_price(
         of base: Currency,
         in quote: Currency,
         at time: PriceTime
@@ -270,31 +265,24 @@ final class PriceService: PriceServiceAPI {
         multiSeries.publisher(for: .init(base: base.currencyType, quote: quote.currencyType, time: time.isNow ? nil : time.date))
             .flatMap { price -> AnyPublisher<PriceQuoteAtTime, PriceServiceError> in
                 if let price {
-                    return Just(
-                        PriceQuoteAtTime(
-                            timestamp: price.timestamp,
-                            moneyValue: MoneyValue.create(
-                                major: price.price ?? 0,
-                                currency: quote.currencyType
-                            ),
-                            marketCap: price.marketCap,
-                            volume24h: price.volume24h
-                        )
+                    let value = PriceQuoteAtTime(
+                        timestamp: price.timestamp,
+                        moneyValue: MoneyValue.create(
+                            major: price.price ?? 0,
+                            currency: quote.currencyType
+                        ),
+                        marketCap: price.marketCap,
+                        volume24h: price.volume24h
                     )
-                    .setFailureType(to: PriceServiceError.self)
-                    .eraseToAnyPublisher()
+                    return .just(value)
                 } else {
-                    return Fail(
-                        outputType: PriceQuoteAtTime.self,
-                        failure: PriceServiceError.missingPrice("\(base)-\(quote)")
-                    )
-                    .eraseToAnyPublisher()
+                    return .failure(PriceServiceError.missingPrice("\(base)-\(quote)"))
                 }
             }
             .eraseToAnyPublisher()
     }
 
-    func old_price(
+    private func old_price(
         of base: Currency,
         in quote: Currency,
         at time: PriceTime

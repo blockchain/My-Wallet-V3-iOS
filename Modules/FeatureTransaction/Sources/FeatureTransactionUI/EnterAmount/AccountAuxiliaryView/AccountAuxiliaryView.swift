@@ -106,10 +106,10 @@ final class AccountAuxiliaryView: UIView {
 
         button.fillSuperview()
         badgeImageView.layoutToSuperview(.centerY)
-        badgeImageView.layout(size: .init(edge: Sizing.badge))
-        badgeImageView.layoutToSuperview(.leading, offset: Spacing.inner)
+        badgeImageView.layout(size: .init(edge: Spacing.padding4))
+        badgeImageView.layoutToSuperview(.leading, offset: Spacing.padding2)
 
-        disclosureImageView.layoutToSuperview(.trailing, offset: -Spacing.inner)
+        disclosureImageView.layoutToSuperview(.trailing, offset: -Spacing.padding2)
         disclosureImageView.layoutToSuperview(.centerY)
         disclosureImageView.layout(size: CGSize(width: 14, height: 24))
         disclosureImageView.contentMode = .scaleAspectFit
@@ -120,13 +120,13 @@ final class AccountAuxiliaryView: UIView {
             edge: .leading,
             to: .trailing,
             of: badgeImageView,
-            offset: Spacing.inner
+            offset: Spacing.padding2
         )
         stackView.layout(
             edge: .trailing,
             to: .leading,
             of: disclosureImageView,
-            offset: -Spacing.inner
+            offset: -Spacing.padding2
         )
 
         stackView.axis = .vertical
@@ -147,7 +147,7 @@ final class AccountAuxiliaryView: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         layer.borderColor = UIColor.semantic.light.cgColor
-        self.setNeedsDisplay()
+        setNeedsDisplay()
     }
 
     // MARK: - Private Functions

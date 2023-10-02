@@ -19,6 +19,9 @@ extension SiteMap {
         switch ref {
         case blockchain.ux.transaction:
             IfEligible { TransactionView() }
+                .onAppear {
+                    app.state.set(blockchain.ux.transaction.id, to: ref[blockchain.ux.transaction.id])
+                }
                 .ignoresSafeArea()
                 .navigationBarHidden(true)
         case blockchain.ux.transaction.disclaimer:
@@ -131,11 +134,14 @@ struct TransactionView: UIViewControllerRepresentable {
                 // maybe we already have the source set
                 let transactionSourceAccount = (context[blockchain.ux.transaction.source] as? AnyJSON)?.value as? BlockchainAccount
 
+                // maybe we already have the target set
+                let transactionTarget = (context[blockchain.ux.transaction.source.target] as? AnyJSON)?.value as? TransactionTarget
+
                 let router = builder.build(
                     withListener: interactor,
                     action: .swap,
                     sourceAccount: transactionSourceAccount,
-                    target: context[blockchain.ux.transaction.source.target] as? TransactionTarget
+                    target: transactionTarget
                 )
                 return (router.viewControllable.uiviewController, router, interactor)
             case .deposit:

@@ -247,7 +247,7 @@ extension Typography: ViewModifier {
     }
 
     var font: Font {
-        loadCustomFonts()
+        FontLoader.loadCustomFonts()
         let size = size.in(CGRect.screen)
 
         #if canImport(UIKit)
@@ -268,7 +268,7 @@ extension Typography: ViewModifier {
 
     #if canImport(UIKit)
     var uiFont: UIFont? {
-        loadCustomFonts()
+        FontLoader.loadCustomFonts()
         let size = size.in(CGRect.screen)
 
         guard let descriptor = UIFont(name: fontName.rawValue, size: size)?.fontDescriptor else {

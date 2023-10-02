@@ -47,6 +47,7 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
             .tryMap { [asset, cryptoReceiveAddressFactory, onTxCompleted] address throws -> ReceiveAddress in
                 try cryptoReceiveAddressFactory.makeExternalAssetAddress(
                     address: address.accountRef,
+                    memo: nil,
                     label: "\(asset.code) \(LocalizationConstants.activeRewardsAccount)",
                     onTxCompleted: onTxCompleted
                 )

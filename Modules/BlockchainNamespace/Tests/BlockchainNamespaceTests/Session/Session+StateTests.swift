@@ -284,7 +284,7 @@ final class SessionStateTests: XCTestCase {
         let mock = Mock.UserDefaults()
         let encoded = try AnyEncoder().encode(TestEnum.one)
         let json = try JSONSerialization.data(withJSONObject: encoded as Any, options: .fragmentsAllowed)
-        let rawPreferences: [String: [String: Any?]?] = ["ø":["blockchain.app.settings.theme.mode": json]]
+        let rawPreferences: [String: [String: Any?]?] = ["ø": ["blockchain.app.settings.theme.mode": json]]
         UserDefaults.standard.set(rawPreferences, forKey: "blockchain.session.state")
         mock.set(rawPreferences, forKey: "blockchain.session.state")
         state.data.preferences = mock

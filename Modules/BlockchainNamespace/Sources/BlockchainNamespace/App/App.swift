@@ -10,7 +10,16 @@ import OptionalSubscripts
 import AppKit
 #endif
 
-public private(set) var runningApp: AppProtocol!
+public var runningApp: AppProtocol {
+    if let lastRunningApp { return lastRunningApp }
+    #if DEBUG
+    return isInTest ? App.test : App.preview
+    #else
+    fatalError("Unexpected reference to `runningApp` without having an instance of App")
+    #endif
+}
+
+private var lastRunningApp: AppProtocol?
 
 public protocol AppProtocol: AnyObject, CustomStringConvertible {
 
@@ -25,8 +34,6 @@ public protocol AppProtocol: AnyObject, CustomStringConvertible {
 
     var clientObservers: Client.Observers { get }
     var sessionObservers: Session.Observers { get }
-
-    var isInTransaction: Bool { get }
 
     func register(
         napi root: I_blockchain_namespace_napi,
@@ -89,7 +96,7 @@ public class App: AppProtocol {
         self.state = state
         self.clientObservers = clientObservers
         self.remoteConfiguration = remoteConfiguration
-        runningApp = self
+        lastRunningApp = self
     }
 
     deinit {
@@ -137,7 +144,8 @@ public class App: AppProtocol {
         aliases,
         copyItems,
         sets,
-        urls
+        urls,
+        currentAnalyticsState
     ]
 
     private lazy var actions = on(blockchain.ui.type.action) { [weak self] event async throws in
@@ -149,6 +157,10 @@ public class App: AppProtocol {
         } catch {
             if ProcessInfo.processInfo.environment["BLOCKCHAIN_DEBUG_NAMESPACE_ACTION"] == "TRUE" {
                 post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+            } else {
+#if DEBUG
+                post(error: error, context: event.context, file: event.source.file, line: event.source.line)
+#endif
             }
             return
         }
@@ -173,6 +185,10 @@ public class App: AppProtocol {
         } catch {
             post(error: error, context: event.context, file: event.source.file, line: event.source.line)
         }
+    }
+
+    private lazy var currentAnalyticsState = on(blockchain.ux.type.story) { event async throws in
+        try await self.set(blockchain.ux.type.analytics.current.state, to: event.reference)
     }
 
     private lazy var urls = on(blockchain.ui.type.action.then.launch.url) { [weak self] event throws in
@@ -226,14 +242,7 @@ public class App: AppProtocol {
     }
 }
 
-var _lock: NSRecursiveLock = NSRecursiveLock()
-var _isInTransaction: DefaultingDictionary<ObjectIdentifier, Bool> = [:].defaulting(to: false)
-
 extension AppProtocol {
-
-    public var isInTransaction: Bool {
-        state.data.isInTransaction || _lock.withLock { _isInTransaction[ObjectIdentifier(self)] }
-    }
 
     public func signIn(userId: String) {
         post(event: blockchain.session.event.will.sign.in)
@@ -506,13 +515,19 @@ extension AppProtocol {
     }
 
     public func publisher(for event: Tag.Event) -> AnyPublisher<FetchResult, Never> {
+        publisher(for: event, computeConfiguration: true)
+    }
+
+    func publisher(for event: Tag.Event, computeConfiguration: Bool) -> AnyPublisher<FetchResult, Never> {
 
         func makePublisher(_ ref: Tag.Reference) -> AnyPublisher<FetchResult, Never> {
             switch ref.tag {
             case blockchain.session.state.value, blockchain.db.collection.id:
                 return state.publisher(for: ref)
-            case blockchain.session.configuration.value:
+            case blockchain.session.configuration.value where computeConfiguration:
                 return remoteConfiguration.publisher(for: ref).computed(in: self)
+            case blockchain.session.configuration.value:
+                return remoteConfiguration.publisher(for: ref)
             case _ where ref.tag.isNAPI:
                 return napis.publisher(for: ref)
             default:
@@ -616,8 +631,6 @@ extension AppProtocol {
 
     @discardableResult
     public func transaction(_ body: (Self) async throws -> Void) async rethrows -> Self {
-        _lock.withLock { _isInTransaction[ObjectIdentifier(self)] = true }
-        defer { _lock.withLock { _isInTransaction[ObjectIdentifier(self)] = false } }
         try await local.transaction { _ in
             try await body(self)
         }

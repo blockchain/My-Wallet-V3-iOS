@@ -17,6 +17,7 @@ final class SectionHeaderTests: XCTestCase {
         let view = VStack(spacing: Spacing.baseline) {
             SectionHeader_Previews.previews
         }
+        .background(Color.pink)
         .fixedSize()
 
         assertSnapshots(

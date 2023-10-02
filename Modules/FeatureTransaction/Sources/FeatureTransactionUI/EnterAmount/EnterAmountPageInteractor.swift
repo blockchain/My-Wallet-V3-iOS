@@ -213,18 +213,27 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             .debounce(.milliseconds(250), scheduler: MainScheduler.asyncInstance)
             .distinctUntilChanged()
             .flatMap { amount -> Observable<MoneyValue> in
-                transactionState
+                guard amount.isFiat else {
+                    // Amount is Crypto, use it.
+                    return .just(amount)
+                }
+                // Amount is Fiat, check if we can use Fiat first.
+                return transactionState
                     .take(1)
                     .asSingle()
                     .map { state in
-                        if let fiatValue = amount.fiatValue, !state.allowFiatInput {
-                            // Fiat Input but state does not allow fiat
-                            guard let exchangeRate = state.exchangeRates?.fiatTradingCurrencyToSourceRate else {
-                                return .zero(currency: state.asset)
-                            }
-                            return fiatValue.convert(using: exchangeRate)
+                        guard let fiatValue = amount.fiatValue, state.engineCanTransactFiat.isNo else {
+                            return amount
                         }
-                        return amount
+                        // Fiat Input but state does not allow fiat.
+                        if let exchangeRate = state.exchangeRates?.fiatTradingCurrencyToSourceRate {
+                            // Exchange Rate available.
+                            // Convert to crypto and use that instead.
+                            return fiatValue.convert(using: exchangeRate)
+                        } else {
+                            // Exchange Rate not available.
+                            return .zero(currency: state.asset)
+                        }
                     }
                     .asObservable()
             }
@@ -330,6 +339,14 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             .share(scope: .whileConnected)
 
         transactionState
+            .map(\.allowFiatInput)
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] allowFiatInput in
+                self?.amountViewInteractor.setCanTransactFiat(allowFiatInput)
+            })
+            .disposeOnDeactivate(interactor: self)
+
+        transactionState
             .distinctUntilChanged(\.feeSelection, comparer: { $0 == $1 })
             .filter { $0.feeSelection.selectedLevel != .none }
             .subscribe(onNext: { [analyticsHook] state in
@@ -414,6 +431,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
                 guard let userKYCTier, action == .buy && userKYCTier < .verified else {
                     return !accounts.isEmpty
                 }
+
                 // users will have a set of suggested accounts they can link, so the button should be enabled.
                 let suggestedPaymentMethods: [Account] = accounts
                     .compactMap { $0 as? PaymentMethodAccount }
@@ -429,10 +447,19 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
             )
             .disposeOnDeactivate(interactor: self)
 
+        let combinedStateWithExternalBrokerage = Observable.combineLatest(
+            app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+                .map(\.value).asObservable(),
+            transactionState
+        )
+
         accountAuxiliaryViewInteractor
             .auxiliaryViewTapped
-            .withLatestFrom(transactionState)
-            .subscribe(onNext: { [weak self] state in
+            .withLatestFrom(combinedStateWithExternalBrokerage)
+            .subscribe(onNext: { [weak self] isExternalBrokerage, state in
+                guard isExternalBrokerage == false else {
+                    return
+                }
                 self?.handleBottomAuxiliaryViewTapped(state: state)
             })
             .disposeOnDeactivate(interactor: self)
@@ -614,8 +641,6 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
 
     private func handleTopAuxiliaryViewTapped(state: TransactionState) {
         switch state.action {
-        case .buy:
-            transactionModel.process(action: .showTargetSelection)
         case .withdraw:
             presenter.presentWithdrawalLocks(amountAvailable: state.maxSpendable.displayString)
         default:
@@ -661,13 +686,7 @@ final class EnterAmountPageInteractor: PresentableInteractor<EnterAmountPagePres
 
     private func topAuxiliaryView(for transactionState: TransactionState) -> AuxiliaryViewPresenting? {
         var presenter: AuxiliaryViewPresenting?
-        if transactionState.action.supportsTopAccountsView {
-            presenter = TargetAuxiliaryViewPresenter(
-                delegate: self,
-                transactionState: transactionState,
-                eventsRecorder: eventsRecorder
-            )
-        } else if transactionState.action.supportsInfoAuxiliaryView {
+        if transactionState.action.supportsInfoAuxiliaryView {
             presenter = InfoAuxiliaryViewPresenter(
                 transactionState: transactionState,
                 delegate: self
@@ -832,10 +851,6 @@ extension TransactionState {
 }
 
 extension AssetAction {
-
-    fileprivate var supportsTopAccountsView: Bool {
-        false
-    }
 
     fileprivate var supportsInfoAuxiliaryView: Bool {
         self == .buy ? false : true

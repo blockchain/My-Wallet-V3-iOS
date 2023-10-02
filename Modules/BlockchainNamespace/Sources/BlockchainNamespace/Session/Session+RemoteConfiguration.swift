@@ -41,6 +41,7 @@ extension Session {
         var session: URLSessionProtocol
         var scheduler: AnySchedulerOf<DispatchQueue>
         var preferences: Preferences
+        var realtimeListener: AnyObject?
 
         private var experiments: Experiments!
         private unowned var app: AppProtocol!
@@ -62,7 +63,7 @@ extension Session {
                     forKey: blockchain.session.configuration(\.id)
                 ) as? [String: Any] ?? [:]
 
-                self._override.send(cached.mapKeys { important + $0 })
+                _override.send(cached.mapKeys { important + $0 })
 
                 var configuration: [String: Any?] = defaultValue.dictionary.mapKeys { key in
                     key.idToFirebaseConfigurationKeyDefault()
@@ -84,11 +85,17 @@ extension Session {
                     }
                 }
 
-                remote.fetch(withExpirationDuration: expiration) { [self] _, error in
-                    guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                func activate(keys: [String]) {
                     remote.activate { [self] _, error in
                         guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
-                        let keys = remote.allKeys(from: .remote)
+                        if keys.isEmpty {
+                            #if DEBUG
+                            app.post(error: "remote configuration keys is empty! ‼️‼️‼️‼️")
+                            if !isInTest { return errored() }
+                            #else
+                            return errored()
+                            #endif
+                        }
                         for key in keys {
                             do {
                                 configuration[key] = try JSONSerialization.jsonObject(
@@ -99,9 +106,19 @@ extension Session {
                                 configuration[key] = String(decoding: remote[key].dataValue, as: UTF8.self)
                             }
                         }
-                        _fetched = configuration
+                        self._fetched = configuration
                         app.state.set(blockchain.app.configuration.remote.is.stale, to: false)
                     }
+                }
+
+                remote.fetch(withExpirationDuration: expiration) { _, error in
+                    guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                    activate(keys: remote.allKeys(from: .remote))
+                }
+
+                realtimeListener = remote.addOnConfigUpdateListener { update, error in
+                    guard let update, error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                    activate(keys: update.updatedKeys.array)
                 }
             }
         }
@@ -447,12 +464,13 @@ private actor ExponentialBackoff {
     }
 
     func next() async throws {
-        n += 1
+        n = min(n + 1, 15)
+        let time = unit * TimeInterval.random(
+            in: 1...pow(2, n.d),
+            using: &rng
+        )
         try await Task.sleep(
-            nanoseconds: UInt64(TimeInterval.random(
-                in: unit...unit * pow(2, TimeInterval(n - 1)),
-                using: &rng
-            ) * 1_000_000)
+            nanoseconds: min(time * NSEC_PER_SEC.d, UInt64.max.d).u64
         )
     }
 }

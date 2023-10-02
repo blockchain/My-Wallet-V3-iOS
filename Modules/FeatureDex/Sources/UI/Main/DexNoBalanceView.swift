@@ -13,7 +13,7 @@ struct DexNoBalanceView: View {
     private var id = blockchain.ux.currency.exchange.dex.no.balance.sheet
 
     init(networkTicker: String) {
-        model = Model(networkTicker: networkTicker)
+        self.model = Model(networkTicker: networkTicker)
     }
 
     @ViewBuilder
@@ -21,7 +21,7 @@ struct DexNoBalanceView: View {
         VStack(spacing: 32) {
             HStack(alignment: .top) {
                 Spacer()
-                IconButton(icon: .closeCirclev2.small()) {
+                IconButton(icon: .navigationCloseButton()) {
                     $app.post(event: id.entry.paragraph.button.icon.tap)
                 }
                 .batch {
@@ -67,7 +67,7 @@ struct DexNoBalanceView: View {
             set(id.paragraph.row.tap.then.close, to: true)
             set(id.paragraph.row.tap.then.emit, to: blockchain.ux.currency.exchange.dex.no.balance.show.receive)
             set(
-                blockchain.ux.currency.exchange.dex.no.balance.show.receive.then.enter.into,
+                blockchain.ux.currency.exchange.dex.no.balance.show.receive.entry.paragraph.button.primary.tap.then.enter.into,
                 to: blockchain.ux.currency.receive.address
             )
         }
@@ -97,7 +97,7 @@ extension DexNoBalanceView {
 
         init(networkTicker: String) {
             let service = EnabledCurrenciesService.default
-            network = service
+            self.network = service
                 .allEnabledEVMNetworks
                 .first(where: { $0.networkConfig.networkTicker == networkTicker })
         }

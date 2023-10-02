@@ -5,16 +5,6 @@ import UIKit
 
 extension UITableView {
 
-    // MARK: - Mutating accessors
-
-    public func insertFirst(with animation: RowAnimation = .automatic) {
-        insertRows(at: [.firstRowInFirstSection], with: animation)
-    }
-
-    public func deleteFirst(with animation: RowAnimation = .automatic) {
-        deleteRows(at: [.firstRowInFirstSection], with: animation)
-    }
-
     // MARK: - Register header / footer
 
     public func register(_ headerType: (some UITableViewHeaderFooterView).Type) {
@@ -42,12 +32,6 @@ extension UITableView {
     public func registerNibCell(_ type: UITableViewCell.Type, in bundle: Bundle) {
         let name = type.objectName
         register(UINib(nibName: name, bundle: bundle), forCellReuseIdentifier: name)
-    }
-
-    public func registerNibCells(_ types: UITableViewCell.Type..., in bundle: Bundle) {
-        for type in types {
-            registerNibCell(type, in: bundle)
-        }
     }
 
     // MARK: - Dequeue accessors

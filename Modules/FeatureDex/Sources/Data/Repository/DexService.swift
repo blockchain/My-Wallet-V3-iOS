@@ -16,6 +16,7 @@ public struct DexService {
 
     @Dependency(\.transactionCreationService) var transactionCreationService
     @Dependency(\.dexAllowanceRepository) var dexAllowanceRepository
+    @Dependency(\.availableChainsService) public var availableChainsService
 
     public func executeTransaction(
         quote: DexQuoteOutput
@@ -104,7 +105,6 @@ public struct DexService {
     public var quote: (DexQuoteInput) -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never>
     public var receiveAddressProvider: (AppProtocol, CryptoCurrency) -> AnyPublisher<String, Error>
     public var supportedTokens: () -> AnyPublisher<Result<[CryptoCurrency], UX.Error>, Never>
-    public var availableNetworks: () -> AnyPublisher<Result<[EVMNetwork], UX.Error>, Never>
     public var pendingActivity: (EVMNetwork) -> AnyPublisher<Bool, Never>
 }
 
@@ -146,26 +146,6 @@ extension DexService: DependencyKey {
                 let supported = service.allEnabledCryptoCurrencies
                 return .just(.success(supported))
             },
-            availableNetworks: {
-                let chainsService = AvailableChainsService(chainsClient: Client(
-                    networkAdapter: DIKit.resolve(),
-                    requestBuilder: DIKit.resolve(tag: DIKitContext.dex)
-                ))
-
-                return chainsService
-                    .availableChains()
-                    .map { chains -> [EVMNetwork] in
-                        let currenciesService = EnabledCurrenciesService.default
-                        return chains.compactMap { chain -> EVMNetwork? in
-                            currenciesService
-                                .allEnabledEVMNetworks
-                                .first(where: { $0.networkConfig.chainID == chain.chainId })
-                        }
-                    }
-                    .mapError(UX.Error.init(error:))
-                    .result()
-                    .eraseToAnyPublisher()
-            },
             pendingActivity: { network -> AnyPublisher<Bool, Never> in
                 let service: UnifiedActivityRepositoryAPI = DIKit.resolve()
                 return service
@@ -200,9 +180,6 @@ extension DexService {
             },
             receiveAddressProvider: { _, _ in .just("0x00000000000000000000000000000000DEADBEEF") },
             supportedTokens: { .just(.success(currencies)) },
-            availableNetworks: {
-                .just(.success([EVMNetwork(networkConfig: .ethereum, nativeAsset: .ethereum)]))
-            },
             pendingActivity: { _ in .just(true) }
         )
     }
@@ -268,7 +245,7 @@ private func address(
 ) -> AnyPublisher<String, Error> {
     app
         .publisher(
-            for: blockchain.coin.core.account[accoundId].receive.address,
+            for: blockchain.coin.core.account[accoundId].receive,
             as: L_blockchain_coin_core_account_receive.JSON.self
         )
         .first()

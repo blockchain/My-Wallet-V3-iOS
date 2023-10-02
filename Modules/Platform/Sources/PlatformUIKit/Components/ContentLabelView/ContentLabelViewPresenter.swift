@@ -8,7 +8,7 @@ import RxSwift
 import ToolKit
 
 /// Presenter for `ContentLabelView`.
-final class ContentLabelViewPresenter {
+public final class ContentLabelViewPresenter {
 
     // MARK: - Types
 
@@ -17,7 +17,7 @@ final class ContentLabelViewPresenter {
     // MARK: - Title LabelContent
 
     /// An input relay for the title.
-    let titleRelay: BehaviorRelay<String>
+    public let titleRelay: BehaviorRelay<String>
 
     /// Driver emitting the title `LabelContent`.
     let titleLabelContent: Driver<LabelContent>
@@ -26,7 +26,7 @@ final class ContentLabelViewPresenter {
 
     let descriptionLabelContent: Driver<LabelContent>
 
-    var containsDescription: Driver<Bool> {
+    public var containsDescription: Driver<Bool> {
         interactor.contentCalculationState
             .map(\.isValue)
             .asDriver(onErrorJustReturn: false)
@@ -34,7 +34,7 @@ final class ContentLabelViewPresenter {
 
     // MARK: - Tap Interaction
 
-    var tap: Signal<Void> {
+    public var tap: Signal<Void> {
         tapRelay.asSignal()
     }
 
@@ -46,7 +46,7 @@ final class ContentLabelViewPresenter {
 
     // MARK: - Init
 
-    init(
+    public init(
         title: String,
         alignment: NSTextAlignment,
         adjustsFontSizeToFitWidth: LabelContent.FontSizeAdjustment = .false,

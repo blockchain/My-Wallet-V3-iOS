@@ -111,7 +111,7 @@ struct KYCProgressInformationView: View {
                     }
                     .padding()
                     .multilineTextAlignment(.center)
-                    .foregroundColor(Color.textTitle)
+                    .foregroundColor(Color.semantic.title)
 
                     if let bottomDescriptionTitle = viewModel?.bottomDescriptionTitle {
                         VStack(spacing: 5) {
@@ -121,7 +121,7 @@ struct KYCProgressInformationView: View {
                             if let bottomDescription = viewModel?.bottomDescription {
                                 Text(bottomDescription)
                                     .typography(.paragraph1)
-                                    .foregroundColor(Color.textDetail)
+                                    .foregroundColor(.semantic.text)
                             }
                         }
                         .padding()

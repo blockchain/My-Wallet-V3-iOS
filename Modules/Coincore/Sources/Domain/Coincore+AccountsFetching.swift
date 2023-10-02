@@ -118,7 +118,13 @@ extension Publisher where Output == [SingleAccount], Failure == Error {
                 // Check if account can perform action
                 account.can(perform: action)
                     // If account can perform, return itself, else return nil
-                    .map { $0 ? account : nil }
+                    .map { canPerform in
+                        if canPerform {
+                            return account
+                        } else {
+                            return nil
+                        }
+                    }
                     .tryCatch { error -> AnyPublisher<SingleAccount?, Failure> in
                         Logger.shared.error(
                             "[Coincore] Error checking if account can perform '\(action)' => \(error)"

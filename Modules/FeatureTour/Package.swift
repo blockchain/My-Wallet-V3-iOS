@@ -27,7 +27,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.54.1"
+            exact: "0.56.0"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
@@ -37,7 +37,9 @@ let package = Package(
         .package(path: "../Localization"),
         .package(path: "../Platform"),
         .package(path: "../UIComponents"),
-        .package(path: "../ComposableArchitectureExtensions")
+        .package(path: "../BlockchainNamespace"),
+        .package(path: "../ComposableArchitectureExtensions"),
+        .package(path: "../BlockchainComponentLibrary")
     ],
     targets: [
         .target(
@@ -58,6 +60,7 @@ let package = Package(
             name: "FeatureTourUI",
             dependencies: [
                 .target(name: "FeatureTourDomain"),
+                .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "PlatformUIKit", package: "Platform"),
@@ -73,6 +76,7 @@ let package = Package(
                 .target(name: "FeatureTourData"),
                 .target(name: "FeatureTourDomain"),
                 .target(name: "FeatureTourUI"),
+                .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "DIKit", package: "DIKit")

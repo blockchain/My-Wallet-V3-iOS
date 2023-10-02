@@ -201,6 +201,29 @@ public struct ButtonViewModel {
 extension ButtonViewModel {
 
     /// Returns a primary button with text only
+    public static func transactionPrimary(
+        with text: String,
+        background: UIColor = .primary,
+        contentColor: UIColor = .white,
+        borderColor: UIColor = .clear,
+        font: UIFont = .main(.semibold, 16),
+        accessibilityId: String = Accessibility.Identifier.General.mainCTAButton
+    ) -> ButtonViewModel {
+
+        var viewModel = ButtonViewModel(
+            font: font,
+            accessibility: .id(accessibilityId)
+        )
+        viewModel.theme = Theme(
+            backgroundColor: background,
+            borderColor: borderColor,
+            contentColor: contentColor,
+            text: text
+        )
+        return viewModel
+    }
+
+    /// Returns a primary button with text only
     public static func primary(
         with text: String,
         background: UIColor = .semantic.primary,

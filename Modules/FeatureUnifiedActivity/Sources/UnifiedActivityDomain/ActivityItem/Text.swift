@@ -118,33 +118,33 @@ public enum ActivityColor: String, Codable, Hashable {
     public func uiColor() -> Color {
         switch self {
         case .title:
-            return Color.WalletSemantic.title
+            return Color.semantic.title
         case .body:
-            return Color.WalletSemantic.body
+            return Color.semantic.body
         case .text:
-            return Color.WalletSemantic.text
+            return Color.semantic.text
         case .overlay:
-            return Color.WalletSemantic.overlay
+            return Color.semantic.overlay
         case .muted:
-            return Color.WalletSemantic.muted
+            return Color.semantic.muted
         case .dark:
-            return Color.WalletSemantic.dark
+            return Color.semantic.dark
         case .medium:
-            return Color.WalletSemantic.medium
+            return Color.semantic.medium
         case .light:
-            return Color.WalletSemantic.light
+            return Color.semantic.light
         case .background:
-            return Color.WalletSemantic.background
+            return Color.semantic.background
         case .primary:
-            return Color.WalletSemantic.primary
+            return Color.semantic.primary
         case .primaryMuted:
-            return Color.WalletSemantic.primaryMuted
+            return Color.semantic.primaryMuted
         case .success:
-            return Color.WalletSemantic.success
+            return Color.semantic.success
         case .warning:
-            return Color.WalletSemantic.warning
+            return Color.semantic.warning
         case .error:
-            return Color.WalletSemantic.error
+            return Color.semantic.error
         case .unknown:
             return .WalletSemantic.body
         }

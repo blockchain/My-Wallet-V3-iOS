@@ -35,6 +35,7 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount {
                 cryptoReceiveAddressFactory
                     .makeExternalAssetAddress(
                         address: addressString,
+                        memo: nil,
                         label: "\(asset.code) \(LocalizationConstants.rewardsAccount)",
                         onTxCompleted: onTxCompleted
                     )

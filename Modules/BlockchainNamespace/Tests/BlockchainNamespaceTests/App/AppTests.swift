@@ -66,11 +66,8 @@ final class AppTests: XCTestCase {
 
     func test_action() {
         var count: Int = 0
-        let subscription = app.on(blockchain.ui.type.action.then.launch.url) { _ in count += 1 }
-            .subscribe()
-        addTeardownBlock {
-            subscription.cancel()
-        }
+        let subscription = app.on(.sync, blockchain.ui.type.action.then.launch.url) { _ in count += 1 }.subscribe()
+        addTeardownBlock { subscription.cancel() }
         app.post(event: blockchain.ux.error.then.launch.url)
         XCTAssertEqual(count, 1)
     }
@@ -78,11 +75,8 @@ final class AppTests: XCTestCase {
     func test_observer_to_ref() {
 
         var count: Int = 0
-        let subscription = app.on(blockchain.db.collection["test"]) { _ in count += 1 }
-            .subscribe()
-        addTeardownBlock {
-            subscription.cancel()
-        }
+        let subscription = app.on(.sync, blockchain.db.collection["test"]) { _ in count += 1 }.subscribe()
+        addTeardownBlock { subscription.cancel() }
 
         app.post(event: blockchain.db.collection["test"])
         XCTAssertEqual(count, 1)
@@ -390,7 +384,7 @@ final class AppTests: XCTestCase {
 
         await scheduler.advance(by: .seconds(30))
         await Task.megaYield()
-        
+
         do {
             let int = try await app.get(blockchain.namespace.test.napi.path.to.value, as: Int.self)
             XCTAssertEqual(int, 3)
@@ -453,7 +447,7 @@ final class AppTests: XCTestCase {
     func test_event_filtering() throws {
         var count = 0
 
-        app.on(blockchain.ux.home["test"].tab.select) { _ in
+        app.on(.sync, blockchain.ux.home["test"].tab.select) { _ in
             count += 1
         }
         .subscribe()
@@ -461,13 +455,13 @@ final class AppTests: XCTestCase {
 
         XCTAssertEqual(count, 0)
 
-        app.post(event: blockchain.ux.home["test"].tab["paulo"].select)
+        app.post(event: blockchain.ux.home["test"].tab["tab-1"].select)
         XCTAssertEqual(count, 1)
 
-        app.post(event: blockchain.ux.home["ignore"].tab["paulo"].select)
+        app.post(event: blockchain.ux.home["ignore"].tab["tab-1"].select)
         XCTAssertEqual(count, 1)
 
-        app.post(event: blockchain.ux.home["test"].tab["dimitris"].select)
+        app.post(event: blockchain.ux.home["test"].tab["tab-2"].select)
         XCTAssertEqual(count, 2)
     }
 
@@ -591,6 +585,62 @@ final class AppActionTests: XCTestCase {
 
         XCTAssertEqual(count, 1)
         XCTAssertEqual(events.last?.context[blockchain.db.type.string], "f")
+    }
+
+    func test_post_action_in_context() async throws {
+
+        try await app.set(blockchain.ux.activity.entry, to: [
+            "then": [
+                "emit": blockchain.db.type.tag.none(\.id)
+            ],
+            "context": [
+                blockchain.db.type.string(\.id): "Dorothy"
+            ]
+        ])
+
+        let promise = expectation(description: "emits action")
+        var event: Session.Event!
+        app.on(blockchain.db.type.tag.none) {
+            event = $0
+            promise.fulfill()
+        }
+        .subscribe()
+        .tearDown(after: self)
+
+        await app.post(event: blockchain.ux.activity.entry)
+        await fulfillment(of: [promise])
+
+        let actual = try event?.context[blockchain.db.type.string].decode(String.self)
+        let expected = "Dorothy"
+
+        XCTAssertEqual(event.context.count, 4)
+        XCTAssertEqual(actual, expected)
+    }
+
+    func test_post_action_with_unknown_context_is_ignored() async throws {
+
+        try await app.set(blockchain.ux.activity.entry, to: [
+            "then": [
+                "emit": blockchain.db.type.tag.none(\.id)
+            ],
+            "context": [
+                "abcdef": "Dorothy"
+            ]
+        ])
+
+        let promise = expectation(description: "emits action")
+        var event: Session.Event!
+        app.on(blockchain.db.type.tag.none) {
+            event = $0
+            promise.fulfill()
+        }
+        .subscribe()
+        .tearDown(after: self)
+
+        await app.post(event: blockchain.ux.activity.entry)
+        await fulfillment(of: [promise])
+
+        XCTAssertEqual(event.context.count, 3)
     }
 }
 

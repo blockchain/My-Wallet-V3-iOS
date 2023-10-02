@@ -24,7 +24,7 @@ struct ThemeSettingsView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 IconButton(
-                    icon: Icon.closeCircle.with(length: 20.pt)
+                    icon: .navigationCloseButton()
                 ) {
                     app.post(event: blockchain.ux.settings.theme.settings.entry.paragraph.button.icon.tap)
                 }
@@ -69,7 +69,7 @@ extension View {
                 dimensions[.leading]
             }
         } else {
-            self.introspectTableView(customize: { tableView in
+            introspectTableView(customize: { tableView in
                 tableView.separatorInset = .zero
             })
         }

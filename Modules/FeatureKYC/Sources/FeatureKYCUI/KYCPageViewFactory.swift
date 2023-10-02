@@ -88,6 +88,37 @@ class KYCPageViewFactory {
             return controller
         case .applicationComplete:
             return KYCApplicationCompleteController.make(with: coordinator)
+        case .ssn:
+            return KYCSSNController.make(with: coordinator)
         }
+    }
+}
+
+import SwiftUI
+
+final class KYCSSNController: KYCBaseViewController {
+
+    override class func make(with coordinator: KYCRouter) -> KYCSSNController {
+        let controller = KYCSSNController()
+        controller.router = coordinator
+        controller.pageType = .ssn
+        return controller
+    }
+
+    lazy var hostingViewController: UIHostingController<SSNCollectionView> = UIHostingController(
+        rootView: SSNCollectionView { _ in
+            self.router.handle(event: .nextPageFromPageType(self.pageType, nil))
+        }
+    )
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.hidesBackButton = true
+        add(child: hostingViewController)
+    }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        hostingViewController.view.frame = view.bounds
     }
 }

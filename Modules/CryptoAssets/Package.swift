@@ -40,7 +40,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Soneso/stellar-ios-mac-sdk.git",
-            exact: "2.2.5"
+            exact: "2.4.1"
         ),
         .package(
             url: "https://github.com/oliveratkinson-bc/wallet-core.git",
@@ -58,6 +58,7 @@ let package = Package(
         .package(path: "../Platform"),
         .package(path: "../FeatureCryptoDomain"),
         .package(path: "../FeatureTransaction"),
+        .package(path: "../FeatureUnifiedActivity"),
         .package(path: "../Test"),
         .package(path: "../Tool"),
         .package(path: "../WalletPayload")
@@ -133,6 +134,7 @@ let package = Package(
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "FeatureCryptoDomainDomain", package: "FeatureCryptoDomain"),
                 .product(name: "FeatureTransactionDomain", package: "FeatureTransaction"),
+                .product(name: "UnifiedActivityDomain", package: "FeatureUnifiedActivity"),
                 .product(name: "MetadataKit", package: "Metadata"),
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "RxSwift", package: "RxSwift"),
@@ -259,6 +261,7 @@ let package = Package(
             dependencies: [
                 .target(name: "EthereumKit"),
                 .target(name: "EthereumKitMock"),
+                .target(name: "EthereumDataKit"),
                 .product(name: "MoneyKitMock", package: "Money"),
                 .product(name: "PlatformKitMock", package: "Platform"),
                 .product(name: "TestKit", package: "Test")

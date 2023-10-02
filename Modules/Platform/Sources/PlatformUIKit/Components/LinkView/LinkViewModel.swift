@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxRelay
 import RxSwift
@@ -55,8 +56,8 @@ public final class LinkViewModel {
 
     public init(
         font: UIFont = .main(.medium, 14),
-        textColor: Color = .mutedText,
-        linkColor: Color = .primaryButton
+        textColor: UIColor = .mutedText,
+        linkColor: UIColor = .primary
     ) {
         self.textViewModel = InteractableTextViewModel(
             inputs: [],

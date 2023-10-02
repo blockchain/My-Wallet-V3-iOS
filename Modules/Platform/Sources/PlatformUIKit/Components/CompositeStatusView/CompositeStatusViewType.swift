@@ -1,19 +1,21 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
+
 /// Describes the type of content inside the `CompositeStatusView`
 public enum CompositeStatusViewType: Equatable {
 
     public struct Composite: Equatable {
         public enum BaseViewType: Equatable {
             case badgeImageViewModel(BadgeImageViewModel)
-            case image(ImageResource)
+            case image(ImageLocation)
             case templateImage(name: String, bundle: Bundle, templateColor: UIColor)
             case text(String)
         }
 
         public struct SideViewAttributes: Equatable {
             public enum ViewType: Equatable {
-                case image(ImageResource)
+                case image(ImageLocation)
                 case loader
                 case none
             }
@@ -38,13 +40,13 @@ public enum CompositeStatusViewType: Equatable {
 
         let baseViewType: BaseViewType
         let sideViewAttributes: SideViewAttributes
-        let backgroundColor: Color
+        let backgroundColor: UIColor
         let cornerRadiusRatio: CGFloat
 
         public init(
             baseViewType: BaseViewType,
             sideViewAttributes: SideViewAttributes,
-            backgroundColor: Color = .clear,
+            backgroundColor: UIColor = .clear,
             cornerRadiusRatio: CGFloat = 0
         ) {
             self.baseViewType = baseViewType
@@ -55,7 +57,7 @@ public enum CompositeStatusViewType: Equatable {
     }
 
     case loader
-    case image(ImageResource)
+    case image(ImageLocation)
     case composite(Composite)
     case none
 
@@ -70,7 +72,7 @@ public enum CompositeStatusViewType: Equatable {
         }
     }
 
-    var backgroundColor: Color {
+    var backgroundColor: UIColor {
         switch self {
         case .composite(let composite):
             return composite.backgroundColor

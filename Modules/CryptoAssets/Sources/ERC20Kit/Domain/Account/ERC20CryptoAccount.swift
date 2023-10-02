@@ -182,14 +182,6 @@ final class ERC20CryptoAccount: CryptoNonCustodialAccount {
             return isFunded
         case .swap:
             return isPairToCryptoAvailable
-                .flatMap { [hasPositiveDisplayableBalance] isPairToCryptoAvailable -> AnyPublisher<Bool, Never> in
-                    guard isPairToCryptoAvailable else {
-                        return .just(false)
-                    }
-                    return hasPositiveDisplayableBalance
-                        .replaceError(with: false)
-                        .eraseToAnyPublisher()
-                }
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .buy:

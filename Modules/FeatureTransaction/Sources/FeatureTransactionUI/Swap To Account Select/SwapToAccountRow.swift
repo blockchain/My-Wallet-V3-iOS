@@ -3,6 +3,7 @@
 import BlockchainUI
 import ComposableArchitecture
 import Foundation
+import SwiftUI
 
 public struct SwapToAccountRow: ReducerProtocol {
     public let app: AppProtocol
@@ -46,7 +47,7 @@ public struct SwapToAccountRow: ReducerProtocol {
             priceChangeString
         }
 
-        var trailingDescriptionColor: Color? {
+        var trailingDescriptionColor: SwiftUI.Color? {
             priceChangeColor
         }
 
@@ -148,8 +149,9 @@ extension SwapToAccountRow.State {
             return nil
         }
         if delta.isZero {
-            return Color.WalletSemantic.muted
+            return .semantic.muted
         }
-        return delta.isSignMinus ? Color.WalletSemantic.pinkHighlight : Color.WalletSemantic.success
+
+        return delta.isSignMinus ? .semantic.negative : .semantic.success
     }
 }

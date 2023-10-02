@@ -130,7 +130,11 @@ final class PinScreenViewController: BaseScreenViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        presenter.authenticateUsingBiometricsIfNeeded()
+
+        // Prevents the loop forcing the user to change their pin
+        if !presenter.flow.isChange {
+            presenter.authenticateUsingBiometricsIfNeeded()
+        }
 
         #if DEBUG
         becomeFirstResponder()
@@ -151,10 +155,10 @@ final class PinScreenViewController: BaseScreenViewController {
         serverStatusContainerView.backgroundColor = .clear
         serverStatusContainerView.isLayoutMarginsRelativeArrangement = true
         serverStatusContainerView.directionalLayoutMargins = .init(
-            top: Spacing.inner,
-            leading: Spacing.inner,
-            bottom: Spacing.inner,
-            trailing: Spacing.inner
+            top: Spacing.padding2,
+            leading: Spacing.padding2,
+            bottom: Spacing.padding2,
+            trailing: Spacing.padding2
         )
         view.addSubview(serverStatusContainerView)
 

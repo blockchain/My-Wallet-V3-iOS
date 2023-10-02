@@ -5,7 +5,6 @@ import BlockchainNamespace
 import ComposableArchitecture
 import Errors
 import ErrorsUI
-import FeatureAccountPickerDomain
 import Localization
 import MoneyKit
 import PlatformKit
@@ -87,6 +86,7 @@ struct AccountPickerRowView<
                         .backport
                         .addPrimaryDivider()
                 })
+
             case .withdrawalLocks:
                 withdrawalLocksView()
             }
@@ -175,7 +175,7 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
 
     var isDisabled: Bool {
         (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
-            || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+        || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
     }
 
     var body: some View {
@@ -209,6 +209,7 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
             subscribe($action, to: blockchain.ux.transaction.id)
         }
         .disabled(isDisabled)
+        .allowsHitTesting(!isDisabled)
         .opacity(isDisabled ? 0.5 : 1)
     }
 }
@@ -224,20 +225,16 @@ private struct PaymentMethodRow: View {
 
     var isDisabled: Bool {
         (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
-            || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+        || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .center, spacing: 0) {
                 ZStack {
-                    if let url = model.badgeURL {
-                        AsyncMedia(url: url)
+                    if let badge = model.badge {
+                        badge.image
                             .frame(width: 24, height: 24)
-                    } else {
-                        model.badgeView
-                            .frame(width: 24, height: 24)
-                            .scaledToFit()
                     }
                 }
                 .frame(width: 24, height: 24)
@@ -282,6 +279,7 @@ private struct PaymentMethodRow: View {
         }
         .padding(EdgeInsets(top: 16, leading: 18, bottom: 16, trailing: 24))
         .disabled(isDisabled)
+        .allowsHitTesting(!isDisabled)
         .opacity(isDisabled ? 0.5 : 1)
     }
 }
@@ -330,7 +328,7 @@ private struct SingleAccountRow<
 
     var descriptionString: String? {
         transactionFlowAction == .buy ?
-       priceChangeString : cryptoBalance
+        priceChangeString : cryptoBalance
     }
 
     var descriptionColor: Color? {
@@ -343,11 +341,11 @@ private struct SingleAccountRow<
         }
 
         if delta.isSignMinus {
-            return Color.semantic.pink
+            return .semantic.negative
         } else if delta.isZero {
-            return Color.semantic.body
+            return .semantic.body
         } else {
-            return Color.semantic.success
+            return .semantic.success
         }
     }
 
@@ -466,7 +464,7 @@ struct AccountPickerRowView_Previews: PreviewProvider {
             id: UUID(),
             title: "Visa •••• 0000",
             description: "$1,200",
-            badgeView: Image(systemName: "creditcard"),
+            badge: .systemName("creditcard"),
             badgeBackground: .badgeBackgroundInfo,
             capabilities: nil
         )

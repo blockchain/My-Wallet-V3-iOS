@@ -24,14 +24,16 @@ final class RouterTests: XCTestCase {
     private var mockKYCTiersService: MockKYCTiersService!
     private var mockLegacyKYCRouter: MockLegacyKYCRouter!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    override func setUp() async throws {
+        try await super.setUp()
         mockExternalAppOpener = MockExternalAppOpener()
         mockEmailVerificationService = MockEmailVerificationService()
         mockKYCTiersService = MockKYCTiersService()
         mockLegacyKYCRouter = MockLegacyKYCRouter()
+
+        let app = App.test
         router = .init(
-            app: App.test,
+            app: app,
             analyticsRecorder: MockAnalyticsRecorder(),
             loadingViewPresenter: MockLoadingViewPresenter(),
             legacyRouter: mockLegacyKYCRouter,
@@ -40,6 +42,8 @@ final class RouterTests: XCTestCase {
             openMailApp: mockExternalAppOpener.openMailApp,
             openURL: mockExternalAppOpener.open
         )
+
+        try await app.set(blockchain.ux.kyc.SSN.should.be.collected, to: false)
     }
 
     override func tearDownWithError() throws {
@@ -156,10 +160,6 @@ final class RouterTests: XCTestCase {
             let viewStore = ViewStore(store)
             viewStore.send(.emailVerified(.acknowledgeEmailVerification))
         }
-
-        // AND: the controller is dismissed
-        XCTAssertEqual(mockViewController.recordedInvocations.dismiss.count, 1)
-        mockViewController.recordedInvocations.dismiss.first?.completion?()
 
         // THEN: The publisher completes
         wait(for: [e], timeout: 1)

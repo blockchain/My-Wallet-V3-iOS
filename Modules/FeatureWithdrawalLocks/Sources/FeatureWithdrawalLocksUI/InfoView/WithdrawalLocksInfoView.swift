@@ -100,7 +100,7 @@ public struct WithdrawalLocksInfoView: View {
             ZStack(alignment: .top) {
                 HStack {
                     Spacer()
-                    IconButton(icon: .closev2.circle()) {
+                    IconButton(icon: .navigationCloseButton()) {
                         viewStore.send(.dismiss)
                     }
                     .frame(width: 24, height: 24)

@@ -12,7 +12,7 @@ public enum CoinViewAction: BlockchainNamespaceObservationAction, BindableAction
     case fetchInterestRate
     case fetchedRecurringBuys(Result<[RecurringBuy], Error>)
     case fetchedInterestRate(Result<EarnRates, NetworkError>)
-    case fetchedAssetInformation(Result<AssetInformation, NetworkError>)
+    case fetchedAssetInformation(Result<AboutAssetInformation, NetworkError>)
     case refresh
     case reset
     case graph(GraphViewAction)
@@ -23,4 +23,5 @@ public enum CoinViewAction: BlockchainNamespaceObservationAction, BindableAction
     case addToWatchlist
     case removeFromWatchlist
     case dismiss
+    case setRefresh
 }

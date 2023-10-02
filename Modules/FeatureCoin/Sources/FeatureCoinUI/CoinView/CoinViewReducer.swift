@@ -30,7 +30,7 @@ public let coinViewReducer = Reducer<
             return .merge(
                 EffectTask(value: .observation(.start)),
 
-                EffectTask(value: .refresh),
+                EffectTask(value: .setRefresh),
 
                 environment.assetInformationService
                     .fetch()
@@ -48,13 +48,40 @@ public let coinViewReducer = Reducer<
                 .map(CoinViewAction.isRecurringBuyEnabled),
 
                 environment.app.publisher(
+                    for: blockchain.api.nabu.gateway.products["DEX"].is.eligible,
+                    as: Bool.self
+                )
+                .compactMap(\.value)
+                .receive(on: environment.mainQueue)
+                .eraseToEffect()
+                .map {
+                    .binding(.set(\.$isDexEnabled, $0))
+                },
+
+                environment.app.publisher(
+                    for: blockchain.app.is.external.brokerage,
+                    as: Bool.self
+                )
+                .compactMap(\.value)
+                .receive(on: environment.mainQueue)
+                .eraseToEffect()
+                .map {
+                    .binding(.set(\.$isExternalBrokerageEnabled, $0))
+                },
+
+                environment.app.publisher(
                     for: blockchain.ux.asset[state.currency.code].watchlist.is.on,
                     as: Bool.self
                 )
                 .compactMap(\.value)
                 .receive(on: environment.mainQueue)
                 .eraseToEffect()
-                .map(CoinViewAction.isOnWatchlist),
+                .map(CoinViewAction.isOnWatchlist)
+            )
+
+        case .setRefresh:
+            return .merge(
+                EffectTask(value: .refresh),
 
                 NotificationCenter.default
                     .publisher(for: .transaction)

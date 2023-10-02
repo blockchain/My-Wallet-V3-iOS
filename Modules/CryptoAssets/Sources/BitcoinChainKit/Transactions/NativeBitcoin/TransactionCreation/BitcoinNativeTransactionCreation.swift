@@ -7,6 +7,10 @@ import MetadataHDWalletKit
 import MoneyKit
 import ToolKit
 
+enum NativeBuildTransactionError: Error {
+    case addressMissingForImportedAddress
+}
+
 struct NativeBitcoinEnvironment {
     let unspentOutputRepository: UnspentOutputRepositoryAPI
     let buildingService: BitcoinChainTransactionBuildingServiceAPI
@@ -80,9 +84,22 @@ func nativeBuildTransaction(
     let amount = pendingTransaction.amount
     let unspentOutputs = pendingTransaction.unspentOutputs
     let keyPairs = pendingTransaction.keyPairs
-    let transactionAddresses = getTransactionAddresses(
-        context: transactionContext
-    )
+    let transactionAddresses: TransactionAddresses
+    // check if this source account is an imported (address)
+    if sourceAccount.isImported {
+        if let xpub = sourceAccount.xpub {
+            transactionAddresses = TransactionAddresses(
+                changeAddress: xpub.address,
+                receiveAddress: xpub.address
+            )
+        } else {
+            return .failure(NativeBuildTransactionError.addressMissingForImportedAddress)
+        }
+    } else {
+        transactionAddresses = getTransactionAddresses(
+            context: transactionContext
+        )
+    }
     let destinationAddress = pendingTransaction.destinationAddress
     let changeAddress = transactionAddresses.changeAddress
     return buildingService

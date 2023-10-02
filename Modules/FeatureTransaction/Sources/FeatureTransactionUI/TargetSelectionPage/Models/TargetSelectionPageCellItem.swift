@@ -14,6 +14,7 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
         case radioSelection(RadioAccountCellPresenter)
         case cardView(TargetSelectionCardModel)
         case singleAccount(AccountCurrentBalanceCellPresenter)
+        case memo(TextFieldViewModel)
         case walletInputField(TextFieldViewModel)
     }
 
@@ -21,6 +22,7 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
         case singleAccountAvailableTarget(RadioAccountCellInteractor)
         case singleAccount(SingleAccount, AssetBalanceViewInteracting)
         case walletInputField(SingleAccount, TextFieldViewModel)
+        case memo(SingleAccount, TextFieldViewModel)
 
         var account: SingleAccount {
             switch self {
@@ -28,17 +30,18 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
                 return interactor.account
             case .singleAccount(let account, _):
                 return account
+            case .memo(let account, _):
+                return account
             case .walletInputField(let account, _):
                 return account
             }
         }
 
-        var isWalletInputField: Bool {
+        var isInputField: Bool {
             switch self {
-            case .walletInputField:
+            case .walletInputField, .memo:
                 return true
-            case .singleAccount,
-                 .singleAccountAvailableTarget:
+            case .singleAccount, .singleAccountAvailableTarget:
                 return false
             }
         }
@@ -54,7 +57,8 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
             return true
         case .singleAccount,
              .walletInputField,
-             .cardView:
+             .cardView,
+             .memo:
             return false
         }
     }
@@ -64,8 +68,9 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
         case .cardView(let viewModel):
             return viewModel.identifier
         case .walletInputField:
-            // we currently only support one text field
-            return "wallet-input"
+            return "wallet-input-field"
+        case .memo:
+            return "memo-field"
         case .radioSelection(let presenter):
             return presenter.identity
         case .singleAccount:
@@ -84,14 +89,14 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
         self.presenter = .cardView(cardView)
     }
 
-    init(interactor: Interactor, assetAction: AssetAction) {
+    init(interactor: Interactor) {
         switch interactor {
         case .singleAccountAvailableTarget(let interactor):
             self.account = interactor.account
             self.presenter = .radioSelection(
                 RadioAccountCellPresenter(
                     interactor: interactor,
-                    accessibilityPrefix: assetAction.accessibilityPrefix
+                    accessibilityPrefix: AssetAction.send.accessibilityPrefix
                 )
             )
         case .singleAccount(let account, let interactor):
@@ -99,7 +104,7 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
             self.presenter = .singleAccount(
                 AccountCurrentBalanceCellPresenter(
                     account: account,
-                    assetAction: assetAction,
+                    assetAction: .send,
                     interactor: interactor,
                     separatorVisibility: .hidden
                 )
@@ -107,6 +112,9 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
         case .walletInputField(let account, let viewModel):
             self.account = account
             self.presenter = .walletInputField(viewModel)
+        case .memo(let account, let viewModel):
+            self.account = account
+            self.presenter = .memo(viewModel)
         }
     }
 

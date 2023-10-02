@@ -154,14 +154,14 @@ public struct RecurringBuyListView: View {
         TableRow(
             leading: {
                 Icon.repeat
-                    .circle(backgroundColor: .semantic.primary)
-                    .with(length: 32.pt)
+                    .circle(backgroundColor: .semantic.muted)
+                    .with(length: 24.pt)
                     .iconColor(.white)
             },
             title: L10n.LearnMore.title,
             byline: L10n.LearnMore.description,
             trailing: {
-                SmallSecondaryButton(title: L10n.LearnMore.action) { }.allowsHitTesting(false)
+                SmallSecondaryButton(title: L10n.LearnMore.action) {}.allowsHitTesting(false)
             }
         )
         .onTapGesture {

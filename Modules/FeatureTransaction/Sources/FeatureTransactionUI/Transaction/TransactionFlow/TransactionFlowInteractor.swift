@@ -61,9 +61,8 @@ protocol TransactionFlowRouting: Routing {
         canAddMoreSources: Bool
     )
 
-    /// Show the target selection screen (currently only used in `Send`).
-    /// This pushes onto the prior screen.
-    func routeToTargetSelectionPicker(transactionModel: TransactionModel, action: AssetAction)
+    /// Show the target selection screen, this pushes onto the prior screen.
+    func routeToSendTargetSelection(transactionModel: TransactionModel)
 
     /// Route to the destination account picker from the target selection screen
     func routeToDestinationAccountPicker(
@@ -164,8 +163,7 @@ public protocol TransactionFlowListener: AnyObject {
 final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPresentable>,
                                        TransactionFlowInteractable,
                                        AccountPickerListener,
-                                       TransactionFlowPresentableListener,
-                                       TargetSelectionPageListener
+                                       TransactionFlowPresentableListener
 {
 
     weak var router: TransactionFlowRouting?
@@ -315,7 +313,11 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
         guard let target = blockchainAccount as? TransactionTarget else {
             fatalError("Account \(blockchainAccount.self) is not currently supported.")
         }
-        didSelect(target: target)
+        if action == .deposit, let bank = target as? LinkedBankAccount, bank.paymentType == .bankAccount {
+            transactionModel.process(action: .showBankWiringInstructions)
+        } else {
+            didSelect(target: target)
+        }
     }
 
     func didSelect(target: TransactionTarget) {
@@ -502,24 +504,16 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             }
 
         case .selectTarget:
-            /// `TargetSelectionViewController` should only be shown for `SendP2`
-            /// and `.send`. Otherwise we should show the account picker to select
-            /// the destination/target.
             switch action {
             case .send:
                 // `Send` supports the target selection screen rather than a
                 // destination selection screen.
-                router?.routeToTargetSelectionPicker(
-                    transactionModel: transactionModel,
-                    action: action
+                router?.routeToSendTargetSelection(
+                    transactionModel: transactionModel
                 )
             case .buy:
-                router?.routeToDestinationAccountPicker(
-                    transitionType: newState.stepsBackStack.contains(.enterAmount) ? .modal : .replaceRoot,
-                    transactionModel: transactionModel,
-                    action: action,
-                    state: newState
-                )
+                // Unreacheable.
+                unimplemented("Action \(action) does not support 'selectTarget'")
             case .withdraw,
                     .interestWithdraw,
                     .stakingWithdraw,
@@ -545,8 +539,8 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                     state: newState
                 )
             case .receive,
-                    .sign,
-                    .viewActivity:
+                  .sign,
+                  .viewActivity:
                 unimplemented("Action \(action) does not support 'selectTarget'")
             }
 
@@ -611,15 +605,18 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
                 )
 
             case .deposit:
-                // `Deposit` can only be reached if the user has been
-                // tier two approved. If the user has been tier two approved
-                // then they can add more sources.
-                router?.routeToSourceAccountPicker(
-                    transitionType: .replaceRoot,
-                    transactionModel: transactionModel,
-                    action: action,
-                    canAddMoreSources: true
-                )
+                Task { @MainActor in
+                    let isExternalBrokerage = await app.get(blockchain.app.is.external.brokerage, or: false)
+                    // `Deposit` can only be reached if the user has been
+                    // tier two approved. If the user has been tier two approved
+                    // then they can add more sources.
+                    router?.routeToSourceAccountPicker(
+                        transitionType: .replaceRoot,
+                        transactionModel: transactionModel,
+                        action: action,
+                        canAddMoreSources: !isExternalBrokerage || newState.availableTargets.or([]).isEmpty
+                    )
+                }
 
             case .interestTransfer,
                     .stakingDeposit,
@@ -806,7 +803,7 @@ extension TransactionFlowInteractor {
             .take(1)
             .asSingle()
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe { [app, weak self] state in
+            .subscribe { [weak self] state in
                 guard let self else { return }
                 if state.canPresentKYCUpgradeFlowAfterClosingTxFlow {
                     presentKYCUpgradePrompt(completion: closeFlow)
@@ -855,8 +852,8 @@ extension TransactionFlowInteractor {
     func onInit() {
 
         app.state.transaction { state in
-            state.set(blockchain.app.configuration.transaction.id, to: action.rawValue)
-            state.set(blockchain.ux.transaction.id, to: action.rawValue)
+            state.set(blockchain.app.configuration.transaction.id, to: action.string)
+            state.set(blockchain.ux.transaction.id, to: action.string)
             state.set(blockchain.ux.transaction.source.id, to: sourceAccount?.currencyType.code)
             state.set(blockchain.ux.transaction.source.target.id, to: target?.currencyType.code)
             state.set(blockchain.ux.buy.last.bought.asset, to: target?.currencyType.code)
@@ -873,17 +870,19 @@ extension TransactionFlowInteractor {
                     switch tx.step {
                     case .initial:
                         state.set(blockchain.ux.transaction.source.id, to: tx.source?.currencyType.code)
+                        state.set(blockchain.ux.transaction.source.account.id, to: tx.source?.identifier)
                         state.set(blockchain.ux.transaction.source.target.id, to: tx.destination?.currencyType.code)
-                    case .closed:
-                        state.clear(blockchain.ux.transaction.id)
+                        state.set(blockchain.ux.transaction.source.target.account.id, to: (tx.destination as? BlockchainAccount)?.identifier)
                     default:
                         break
                     }
                     switch action {
                     case .sourceAccountSelected(let source):
                         state.set(blockchain.ux.transaction.source.id, to: source.currencyType.code)
+                        state.set(blockchain.ux.transaction.source.account.id, to: tx.source?.identifier)
                     case .targetAccountSelected(let target):
                         state.set(blockchain.ux.transaction.source.target.id, to: target.currencyType.code)
+                        state.set(blockchain.ux.transaction.source.target.account.id, to: (tx.destination as? BlockchainAccount)?.identifier)
                     default:
                         break
                     }
@@ -1089,7 +1088,7 @@ extension TransactionFlowInteractor {
                 case .selectSource:
                     app.post(event: blockchain.ux.transaction.event.select.source)
                 case .selectSourceTargetAmount:
-                    app.post(event:blockchain.ux.transaction.event.select.amount.source.and.target)
+                    app.post(event: blockchain.ux.transaction.event.select.amount.source.and.target)
                 case .selectTarget:
                     app.post(event: blockchain.ux.transaction.event.select.target)
                 case .error:

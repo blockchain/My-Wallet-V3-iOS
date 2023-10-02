@@ -19,17 +19,17 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.54.1"
+            exact: "0.56.0"
         ),
         .package(path: "../Localization"),
         .package(path: "../BlockchainComponentLibrary"),
-        .package(path: "../Tool")
+        .package(path: "../Extensions")
     ],
     targets: [
         .target(
             name: "FeatureFormDomain",
             dependencies: [
-                .product(name: "ToolKit", package: "Tool")
+                .product(name: "Extensions", package: "Extensions")
             ]
         ),
         .target(
@@ -40,6 +40,7 @@ let package = Package(
                 .product(name: "Localization", package: "Localization"),
                 .target(name: "FeatureFormDomain")
             ]
-        )
+        ),
+        .testTarget(name: "FeatureFormDomainTests", dependencies: ["FeatureFormDomain"])
     ]
 )

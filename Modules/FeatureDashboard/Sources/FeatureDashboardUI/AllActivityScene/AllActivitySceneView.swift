@@ -26,7 +26,7 @@ public struct AllActivitySceneView: View {
                 allActivitySection(viewStore: viewStore)
                     .redacted(reason: viewStore.isLoading ? .placeholder : [])
             }
-            .background(Color.WalletSemantic.light.ignoresSafeArea())
+            .background(Color.semantic.light.ignoresSafeArea())
             .onAppear {
                 viewStore.send(.onAppear)
             }
@@ -38,7 +38,7 @@ public struct AllActivitySceneView: View {
                         .foregroundColor(.semantic.title)
                 },
                 trailing: {
-                    IconButton(icon: .closev2.circle().small()) {
+                    IconButton(icon: .navigationCloseButton()) {
                         $app.post(event: blockchain.ux.user.activity.all.article.plain.navigation.bar.button.close.tap)
                     }
                 },
@@ -57,7 +57,7 @@ public struct AllActivitySceneView: View {
                     .typography(.body2)
                     .foregroundColor(.WalletSemantic.title)
                 Spacer()
-                IconButton(icon: .closev2.circle()) {
+                IconButton(icon: .navigationCloseButton()) {
                     ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
                 }
                 .frame(width: 24.pt, height: 24.pt)
@@ -109,7 +109,7 @@ public struct AllActivitySceneView: View {
                             variant: .superapp,
                             decoration: {
                                 Icon
-                                    .questionCircle
+                                    .questionFilled
                                     .small()
                                     .color(.semantic.dark)
                             }

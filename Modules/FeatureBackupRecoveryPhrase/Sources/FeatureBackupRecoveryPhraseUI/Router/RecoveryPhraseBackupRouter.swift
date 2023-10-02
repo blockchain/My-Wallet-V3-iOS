@@ -96,8 +96,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
     @objc func onFailed() {
         let failedView = BackupRecoveryPhraseFailedView(store: .init(
             initialState: .init(),
-            reducer: BackupRecoveryPhraseFailedModule.reducer,
-            environment: .init(
+            reducer: BackupRecoveryPhraseFailed(
               onConfirm: { [weak self] in
                   self?.skipFlow()
               }
@@ -112,8 +111,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
     @objc func onSkip() {
           let confirmView = BackupSkipConfirmView(store: .init(
               initialState: .init(),
-              reducer: BackupSkipConfirmModule.reducer,
-              environment: .init(
+              reducer: BackupSkipConfirm(
                 onConfirm: { [weak self] in
                     self?.skipFlow()
                 }
@@ -177,8 +175,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
         case .backupIntro:
            let view = ViewIntroBackupView(store: .init(
                initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
-               reducer: ViewIntroBackupModule.reducer,
-               environment: .init(
+               reducer: ViewIntroBackup(
                    onSkip: { [weak self] in
                        self?.onSkip()
                    },
@@ -202,8 +199,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
         case .viewRecoveryPhrase:
            let view = ViewRecoveryPhraseView(store: .init(
                initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
-               reducer: ViewRecoveryPhraseModule.reducer,
-               environment: .init(
+               reducer: ViewRecoveryPhrase(
                    recoveryPhraseRepository: resolve(),
                    recoveryPhraseService: resolve(),
                    cloudBackupService: resolve(),
@@ -241,8 +237,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
         case .manualBackupPhrase:
             let view = ManualBackupSeedPhraseView(store: .init(
                 initialState: .init(),
-                reducer: ManualBackupSeedPhraseModule.reducer,
-                environment: .init(
+                reducer: ManualBackupSeedPhrase(
                     onNext: { [weak self] in
                         self?.onNext()
                     },
@@ -257,8 +252,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
         case .verifyBackupPhrase:
             let view = VerifyRecoveryPhraseView(store: .init(
                 initialState: .init(),
-                reducer: VerifyRecoveryPhraseModule.reducer,
-                environment: .init(
+                reducer: VerifyRecoveryPhrase(
                     recoveryPhraseRepository: resolve(),
                     recoveryPhraseService: resolve(),
                     onNext: { [weak self] in
@@ -274,8 +268,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
         case .backupPhraseSuccess:
             let view = BackupRecoveryPhraseSuccessView(store: .init(
                 initialState: .init(),
-                reducer: BackupRecoveryPhraseSuccessModule.reducer,
-                environment: .init(
+                reducer: BackupRecoveryPhraseSuccess(
                     onNext: { [weak self] in
                         self?.endFlow()
                     }

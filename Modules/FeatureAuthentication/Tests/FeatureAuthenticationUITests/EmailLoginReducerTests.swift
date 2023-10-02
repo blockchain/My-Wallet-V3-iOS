@@ -3,9 +3,11 @@
 import BlockchainNamespace
 import ComposableArchitecture
 @testable import ComposableNavigation
+@testable import FeatureAuthenticationDomain
 @testable import FeatureAuthenticationUI
 import Localization
 import ToolKit
+@testable import WalletPayloadKit
 import XCTest
 
 // Mocks
@@ -21,7 +23,7 @@ final class EmailLoginReducerTests: XCTestCase {
         EmailLoginAction,
         EmailLoginState,
         EmailLoginAction,
-        EmailLoginEnvironment
+        Void
     >!
 
     override func setUpWithError() throws {
@@ -29,8 +31,7 @@ final class EmailLoginReducerTests: XCTestCase {
         mockMainQueue = DispatchQueue.test
         testStore = TestStore(
             initialState: .init(),
-            reducer: emailLoginReducer,
-            environment: EmailLoginEnvironment(
+            reducer: EmailLoginReducer(
                 app: App.test,
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
                 sessionTokenService: MockSessionTokenService(),
@@ -42,7 +43,14 @@ final class EmailLoginReducerTests: XCTestCase {
                 walletCreationService: .mock(),
                 walletFetcherService: WalletFetcherServiceMock().mock(),
                 accountRecoveryService: MockAccountRecoveryService(),
-                recaptchaService: MockRecaptchaService()
+                recaptchaService: MockRecaptchaService(),
+                emailAuthorizationService: NoOpEmailAuthorizationService(),
+                smsService: NoOpSMSService(),
+                loginService: NoOpLoginService(),
+                seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+                passwordValidator: PasswordValidator(),
+                signUpCountriesService: MockSignUpCountriesService(),
+                appStoreInformationRepository: NoOpAppStoreInformationRepository()
             )
         )
     }

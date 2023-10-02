@@ -55,6 +55,7 @@ public final class CryptoExchangeAccount: ExchangeAccount {
         cryptoReceiveAddressFactory
             .makeExternalAssetAddress(
                 address: address,
+                memo: nil,
                 label: label,
                 onTxCompleted: onTxCompleted
             )

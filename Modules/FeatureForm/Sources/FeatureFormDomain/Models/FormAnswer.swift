@@ -1,6 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import ToolKit
+import Extensions
 
 public struct FormAnswer: Codable, Hashable, Identifiable {
 
@@ -58,6 +58,10 @@ public struct FormAnswer: Codable, Hashable, Identifiable {
     public var instructions: String?
     public let regex: String?
     public var checked: Bool?
+
+    public var isSelection: Bool {
+        type == .selection
+    }
 
     public init(
         id: String,

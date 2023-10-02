@@ -12,28 +12,30 @@ public enum ResetAccountWarningAction: Equatable {
 
 struct ResetAccountWarningState: Equatable {}
 
-struct ResetAccountWarningEnvironment {
+struct ResetAccountWarningReducer: ReducerProtocol {
+
+    typealias State = ResetAccountWarningState
+    typealias Action = ResetAccountWarningAction
+
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
     init(analyticsRecorder: AnalyticsEventRecorderAPI) {
         self.analyticsRecorder = analyticsRecorder
     }
-}
 
-let resetAccountWarningReducer = Reducer<
-    ResetAccountWarningState,
-    ResetAccountWarningAction,
-    ResetAccountWarningEnvironment
-> { _, action, environment in
-    switch action {
-    case .onDisappear:
-        environment.analyticsRecorder.record(
-            event: .resetAccountCancelled
-        )
-        return .none
-    case .retryButtonTapped:
-        return .none
-    case .continueResetButtonTapped:
-        return .none
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onDisappear:
+                analyticsRecorder.record(
+                    event: .resetAccountCancelled
+                )
+                return .none
+            case .retryButtonTapped:
+                return .none
+            case .continueResetButtonTapped:
+                return .none
+            }
+        }
     }
 }

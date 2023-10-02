@@ -3,7 +3,6 @@ import BlockchainNamespace
 import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
-import FeatureAccountPickerDomain
 import Localization
 import PlatformKit
 import SwiftUI
@@ -82,7 +81,7 @@ public struct AccountPickerView<
 
     public var body: some View {
         StatefulView(
-            store: store.scope(state: \.sections),
+            store: store.scope(state: \.sections, action: { $0 }),
             loadedAction: AccountPickerAction.rowsLoaded,
             loadingAction: AccountPickerAction.rowsLoading,
             successAction: LoadedRowsAction.success,
@@ -91,25 +90,31 @@ public struct AccountPickerView<
                 LoadingStateView(title: "")
             },
             success: { successStore in
-                WithViewStore(successStore.scope { $0.content.isEmpty }) { viewStore in
+                WithViewStore(successStore, observe: \.content.isEmpty) { viewStore in
                     if viewStore.state {
-                        EmptyStateView(
-                            title: LocalizationConstants.AccountPicker.noWallets,
-                            subHeading: "",
-                            image: ImageAsset.emptyActivity.image
-                        )
+                        emptyState
                     } else {
                         contentView(successStore: successStore)
                     }
                 }
             },
             failure: { _ in
-                ErrorStateView(title: LocalizationConstants.Errors.genericError)
+                errorStateView
             }
         )
         .onAppear {
             ViewStore(store).send(.subscribeToUpdates)
         }
+    }
+
+    @ViewBuilder
+    private var errorStateView: some View {
+        VStack(spacing: Spacing.padding2) {
+            Text(LocalizationConstants.Errors.genericError)
+                .typography(.title3)
+                .foregroundColor(.semantic.title)
+        }
+        .padding([.leading, .trailing], 24)
     }
 
     struct HeaderScope: Equatable {
@@ -122,7 +127,7 @@ public struct AccountPickerView<
         successStore: Store<Sections, SuccessRowsAction>
     ) -> some View {
         VStack(spacing: .zero) {
-            WithViewStore(store.scope { HeaderScope(header: $0.header, selected: $0.selected) }) { viewStore in
+            WithViewStore(store, observe: { HeaderScope(header: $0.header, selected: $0.selected) }) { viewStore in
                 HeaderView(
                     viewModel: viewStore.header.headerStyle,
                     searchText: Binding<String>(
@@ -183,7 +188,7 @@ public struct AccountPickerView<
     ) -> some View {
         Section {
             ForEach(rows.indexed(), id: \.element.id) { index, row in
-                WithViewStore(store.scope { $0.balances(for: row.id) }) { balancesStore in
+                WithViewStore(store, observe: { $0.balances(for: row.id) }) { balancesStore in
                     AccountPickerRowView(
                         model: row,
                         send: { action in
@@ -242,6 +247,27 @@ public struct AccountPickerView<
                 return false
             }
             return popularAssets.contains(currency) == false
+        }
+    }
+
+    @ViewBuilder
+    private var emptyState: some View {
+        VStack {
+            Text(LocalizationConstants.AccountPicker.noWallets)
+                .textStyle(.title)
+                .foregroundColor(.semantic.title)
+
+            Spacer()
+                .frame(height: 8)
+
+            Text("")
+                .textStyle(.subheading)
+                .foregroundColor(.semantic.text)
+
+            Spacer()
+                .frame(height: 24)
+
+            ImageAsset.emptyActivity.imageResource.image
         }
     }
 }
@@ -383,7 +409,7 @@ struct AccountPickerView_Previews: PreviewProvider {
         headerStyle: .normal(
             title: "Send Crypto Now",
             subtitle: "Choose a Wallet to send cypto from.",
-            image: ImageAsset.iconSend.image,
+            image: ImageAsset.iconSend.imageResource,
             tableTitle: "Select a Wallet",
             searchable: true
         ),

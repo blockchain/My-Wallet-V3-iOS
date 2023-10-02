@@ -5,6 +5,7 @@ import DIKit
 import Extensions
 import FeatureReceiveDomain
 import FeatureTransactionDomain
+import MoneyKit
 import PlatformKit
 import SwiftUI
 
@@ -17,10 +18,6 @@ struct AccountInfo: Identifiable, Hashable, Equatable {
     let name: String
     let currency: CryptoCurrency
     let network: EVMNetwork?
-
-    var filterTerm: String {
-        name + " " + currency.code + " " + (network?.networkConfig.shortName ?? "")
-    }
 }
 
 @MainActor
@@ -46,6 +43,7 @@ public struct ReceiveEntryView: View {
             search.isEmpty
                 || account.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
                 || account.currency.name.distance(between: search, using: fuzzyAlgorithm) < 0.2
+                || account.currency.code.distance(between: search, using: fuzzyAlgorithm) < 0.2
                 || account.network?.networkConfig.shortName.distance(between: search, using: fuzzyAlgorithm) == 0.0
         }
     }
@@ -76,7 +74,7 @@ public struct ReceiveEntryView: View {
 
     func close() -> some View {
         IconButton(
-            icon: .closeCirclev3.small(),
+            icon: .navigationCloseButton(),
             action: { $app.post(event: blockchain.ux.currency.receive.select.asset.article.plain.navigation.bar.button.close.tap) }
         )
         .batch {
@@ -116,7 +114,7 @@ public struct ReceiveEntryView: View {
             if filtered.isEmpty {
                 noResultsView
             } else {
-                if showCashDeposit, let tradingCurrency {
+                if showCashDeposit, let tradingCurrency, isSearching == false {
                     Section(
                         content: {
                             cashRowView(currency: tradingCurrency)
@@ -305,7 +303,7 @@ struct ReceiveEntryRow: View {
         ZStack(alignment: .bottomTrailing) {
             AsyncMedia(url: info.currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
                 .frame(width: 24.pt, height: 24.pt)
-                .background(Color.WalletSemantic.light, in: Circle())
+                .background(Color.semantic.light, in: Circle())
 
             if let network = info.network,
                 info.currency.code != network.nativeAsset.code
@@ -313,9 +311,9 @@ struct ReceiveEntryRow: View {
                 ZStack(alignment: .center) {
                     AsyncMedia(url: network.nativeAsset.assetModel.logoPngUrl, placeholder: { EmptyView() })
                         .frame(width: 12.pt, height: 12.pt)
-                        .background(Color.WalletSemantic.background, in: Circle())
+                        .background(Color.semantic.background, in: Circle())
                     Circle()
-                        .strokeBorder(Color.WalletSemantic.background, lineWidth: 1)
+                        .strokeBorder(Color.semantic.background, lineWidth: 1)
                         .frame(width: 13, height: 13)
                 }
                 .offset(x: 4, y: 4)

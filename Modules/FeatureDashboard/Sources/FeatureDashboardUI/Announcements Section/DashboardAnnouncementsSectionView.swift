@@ -21,25 +21,20 @@ public struct DashboardAnnouncementsSectionView: View {
 
     public var body: some View {
         WithViewStore(store, observe: { $0 }, content: { viewStore in
-            if !viewStore.isEmpty {
-                VStack(spacing: 0) {
-                    announcementsSection(viewStore)
-                        .onAppear {
-                            viewStore.send(.onAppear)
-                        }
-                }
-                .batch {
-                    set(
-                        blockchain.ux.user.activity.all.entry.paragraph.row.tap.then.enter.into,
-                        to: blockchain.ux.user.activity.all
-                    )
-                }
-            } else {
-                Spacer()
-                    .frame(height: 0)
+            switch viewStore.viewState {
+            case .idle:
+                ProgressView()
                     .onAppear {
                         viewStore.send(.onAppear)
                     }
+
+            case .data:
+                announcementsSection(viewStore)
+                    .onAppear {
+                        viewStore.send(.onAppear)
+                    }
+            case .empty:
+                EmptyView()
             }
         })
     }

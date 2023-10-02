@@ -106,7 +106,7 @@ public struct RecurringBuySummaryView: View {
                     }
                 },
                 trailing: {
-                    IconButton(icon: .closeCirclev3.small()) {
+                    IconButton(icon: .navigationCloseButton()) {
                         $app.post(
                             event: blockchain.ux.asset.recurring.buy.summary.entry.paragraph.button.icon.tap
                         )
@@ -144,7 +144,7 @@ public struct RecurringBuySummaryView: View {
                 ZStack {
                     Icon.repeat
                         .with(length: 12.pt)
-                        .circle(backgroundColor: .semantic.title)
+                        .circle(backgroundColor: .semantic.background)
                         .iconColor(.semantic.light)
                     Circle()
                         .strokeBorder(Color.semantic.background, lineWidth: 1)

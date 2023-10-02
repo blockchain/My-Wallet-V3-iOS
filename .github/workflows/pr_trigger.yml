@@ -1,0 +1,37 @@
+name: Check for Bitrise Comment
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  run_tests:
+    name: Trigger Build with comment
+    if: contains(github.event.comment.html_url, '/pull/')
+    runs-on: [ubuntu-latest]
+
+    steps:
+      - name: "Get PR's details"
+        id: get_pr_details
+        run: |
+          PR=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.issue.pull_request.url }})
+          echo "branch=$(echo $PR | jq -r '.head.ref')" >> "$GITHUB_OUTPUT"
+          echo "sha=$(echo $PR | jq -r '.head.sha')" >> "$GITHUB_OUTPUT"
+      - name: PR comment
+        env:
+          BITRISE_BUILD_TRIGGER_TOKEN: ${{ secrets.BITRISE_BUILD_TRIGGER_TOKEN }}
+        if: ${{ contains(fromJSON('["ci run tests", "retest", "run tests"]'), github.event.comment.body) }}
+        run: |
+          curl https://app.bitrise.io/app/84ddba31cf8de1e2/build/start.json -L --data '{
+            "hook_info":{
+              "type":"bitrise",
+              "build_trigger_token":"${{ secrets.BITRISE_BUILD_TRIGGER_TOKEN }}"
+            },
+            "build_params":{
+              "branch": "${{ steps.get_pr_details.outputs.branch }}",
+              "workflow_id": "run-tests",
+              "commit_hash": "${{ steps.get_pr_details.outputs.sha }}",
+              "pull_request_id": "${{ github.event.issue.number }}"
+            },
+            "triggered_by":"curl"
+          }'

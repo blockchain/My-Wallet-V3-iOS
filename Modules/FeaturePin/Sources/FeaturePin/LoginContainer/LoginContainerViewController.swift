@@ -95,7 +95,7 @@ final class LoginContainerViewController: UIViewController {
         collectionView.delegate = self
         collectionView.registerNibCell(LoginContainerCollectionViewCell.self, in: .module)
         pageControl.pageIndicatorTintColor = .addressPageIndicator
-        pageControl.currentPageIndicatorTintColor = .tertiary
+        pageControl.currentPageIndicatorTintColor = .primaryMuted
         pageControl.currentPage = 0
         pageControl.numberOfPages = inputs.count - 1
         pageControl.alpha = 0

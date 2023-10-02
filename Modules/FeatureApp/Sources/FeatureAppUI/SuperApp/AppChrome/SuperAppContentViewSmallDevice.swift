@@ -18,7 +18,9 @@ struct SuperAppContentViewSmallDevice: View {
     /// The content offset for the modal sheet
     @Binding var contentOffset: ModalSheetContext
 
-    @State private var isTradingEnabled = true
+    @State private var isDeFiOnly = true
+    @State private var isExternalTradingEnabled = false
+    private var isTradingEnabled: Bool { !isDeFiOnly }
 
     /// `True` when a pull to refresh is triggered, otherwise `false`
     @Binding var isRefreshing: Bool
@@ -48,7 +50,7 @@ struct SuperAppContentViewSmallDevice: View {
                     app.post(value: newValue.rawValue, of: blockchain.app.mode)
                 }
                 .bindings {
-                    subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.products[ProductIdentifier.useTradingAccount].is.eligible)
+                    subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
                 }
                 .onChange(of: isTradingEnabled) { newValue in
                     if currentModeSelection == .trading, newValue == false {
@@ -60,7 +62,8 @@ struct SuperAppContentViewSmallDevice: View {
                 }
                 SuperAppDashboardContentView(
                     currentModeSelection: $currentModeSelection,
-                    isTradingEnabled: viewStore.state.tradingEnabled,
+                    isTradingEnabled: isTradingEnabled,
+                    isExternalTradingEnabled: isExternalTradingEnabled,
                     store: store
                 )
                 .cornerRadius(Spacing.padding3, corners: [.topLeft, .topRight])

@@ -6,6 +6,7 @@ import ComposableArchitecture
 import FeatureFormDomain
 @testable import FeatureKYCDomain
 @testable import FeatureKYCUI
+import Localization
 import ToolKit
 import XCTest
 
@@ -85,7 +86,14 @@ final class PersonalInfoReducerTests: XCTestCase {
         testStore.send(.loadForm)
         testScheduler.advance()
         testStore.receive(.formDidLoad(.success(expectedQuestions))) {
-            $0.form.nodes = expectedQuestions
+            $0.form = .init(
+                header: .init(
+                    title: LocalizationConstants.NewKYC.Steps.PersonalInfo.title,
+                    description: LocalizationConstants.NewKYC.Steps.PersonalInfo.message
+                ),
+                nodes: expectedQuestions,
+                blocking: true
+            )
         }
     }
 

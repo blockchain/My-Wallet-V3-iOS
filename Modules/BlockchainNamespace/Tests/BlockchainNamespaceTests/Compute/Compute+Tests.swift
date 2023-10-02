@@ -24,6 +24,7 @@ class ComputeTestCase: XCTestCase {
 
     func assert<T: Decodable & Equatable>(_ json: Any, equals value: T, file: StaticString = #filePath, line: UInt = #line) async throws {
         try await app.set(blockchain.db.type.any, to: json)
+        await Task.megaYield()
         let result = try await app.computed(blockchain.db.type.any, as: T.self).next()
         let actual = try result.get()
         XCTAssertEqual(actual, value, file: file, line: line)
@@ -33,6 +34,7 @@ class ComputeTestCase: XCTestCase {
         let expectation = expectation(description: "\(`throws` ? "throws" : "does not throw") an error")
         do {
             try await app.set(blockchain.db.type.any, to: json)
+            await Task.megaYield()
             _ = try await app.computed(blockchain.db.type.any, as: T.self).next().get()
             if !`throws` { expectation.fulfill() }
         } catch where `throws` {
@@ -45,6 +47,7 @@ class ComputeTestCase: XCTestCase {
         let caught = expectation(description: "throws \(specific)")
         do {
             try await app.set(blockchain.db.type.any, to: json)
+            await Task.megaYield()
             _ = try await app.computed(blockchain.db.type.any, as: T.self).next().get()
         } catch let error as E {
             if error == specific {

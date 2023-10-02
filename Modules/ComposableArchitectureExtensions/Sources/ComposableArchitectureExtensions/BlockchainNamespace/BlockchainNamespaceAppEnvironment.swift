@@ -45,7 +45,7 @@ extension Reducer where Action: BlockchainNamespaceObservationAction, Environmen
     }
 
     public func on(_ events: some Collection<Tag.Event>) -> Self {
-        Reducer { _, action, environment in
+        Reducer { _, action, environment -> EffectTask in
             if let observation = (/Action.observation).extract(from: action) {
                 let keys = events.map { $0.key() }
                 switch observation {
@@ -58,7 +58,7 @@ extension Reducer where Action: BlockchainNamespaceObservationAction, Environmen
                     }
                     return .merge(observers)
                 case .stop:
-                    return .cancel(ids: keys.map(AnyHashable.init))
+                    return .merge(keys.map(EffectTask.cancel(id:)))
                 case .event:
                     break
                 }

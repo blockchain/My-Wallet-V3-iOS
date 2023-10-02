@@ -86,11 +86,11 @@ public final class PendingStateViewController: BaseScreenViewController {
         subtitleTextView.translatesAutoresizingMaskIntoConstraints = false
         let labelsStackView = UIStackView(arrangedSubviews: [titleLabel, subtitleTextView])
         labelsStackView.axis = .vertical
-        labelsStackView.spacing = Spacing.inner
+        labelsStackView.spacing = Spacing.padding2
         view.addSubview(labelsStackView)
 
-        labelsStackView.layoutToSuperview(.leading, relation: .equal, usesSafeAreaLayoutGuide: true, offset: Spacing.outer)
-        labelsStackView.layoutToSuperview(.trailing, relation: .equal, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
+        labelsStackView.layoutToSuperview(.leading, relation: .equal, usesSafeAreaLayoutGuide: true, offset: Spacing.padding3)
+        labelsStackView.layoutToSuperview(.trailing, relation: .equal, usesSafeAreaLayoutGuide: true, offset: -Spacing.padding3)
         labelsStackView.layoutToSuperview(.centerX, relation: .equal)
         labelsStackView.layoutToSuperview(.centerY, relation: .equal)
 
@@ -100,20 +100,20 @@ public final class PendingStateViewController: BaseScreenViewController {
             sideContainerViewRatio: presenter.pendingStatusViewSideContainerRatio
         )
         view.addSubview(compositeStatusView)
-        compositeStatusView.layout(edge: .bottom, to: .top, of: labelsStackView, relation: .equal, offset: -Spacing.outer)
+        compositeStatusView.layout(edge: .bottom, to: .top, of: labelsStackView, relation: .equal, offset: -Spacing.padding3)
         compositeStatusView.layoutToSuperview(.centerX)
 
         actionButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         let stackView = UIStackView(arrangedSubviews: [cancelButton, actionButton])
         stackView.axis = .vertical
-        stackView.spacing = Spacing.inner
+        stackView.spacing = Spacing.padding2
 
         view.addSubview(stackView)
         stackView.layoutToSuperview(.centerX)
-        stackView.layoutToSuperview(.leading, usesSafeAreaLayoutGuide: true, offset: Spacing.outer)
-        stackView.layoutToSuperview(.trailing, usesSafeAreaLayoutGuide: true, offset: -Spacing.outer)
-        stackView.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.inner)
+        stackView.layoutToSuperview(.leading, usesSafeAreaLayoutGuide: true, offset: Spacing.padding3)
+        stackView.layoutToSuperview(.trailing, usesSafeAreaLayoutGuide: true, offset: -Spacing.padding3)
+        stackView.layoutToSuperview(.bottom, usesSafeAreaLayoutGuide: true, offset: -Spacing.padding2)
 
         actionButton.layout(dimension: .height, to: ButtonSize.Standard.height)
         cancelButton.layout(dimension: .height, to: ButtonSize.Standard.height)

@@ -4,13 +4,14 @@ import Foundation
 
 extension TimeInterval {
 
-    private static func duration(of component: Calendar.Component, calendar: Calendar = Calendar(identifier: .gregorian)) -> TimeInterval {
-        calendar.dateInterval(of: component, for: Date())!.duration
+    /// Represents miliseconds in seconds using the Gregorian calendar
+    public static func miliseconds(_ miliseconds: TimeInterval) -> TimeInterval {
+        miliseconds / TimeInterval(1000)
     }
 
     /// Syntactic sugar for legibility
-    public static func seconds(_ interval: TimeInterval) -> TimeInterval {
-        interval
+    public static func seconds(_ seconds: TimeInterval) -> TimeInterval {
+        seconds
     }
 
     /// Represents minutes in seconds using the Gregorian calendar
@@ -24,8 +25,8 @@ extension TimeInterval {
     }
 
     /// Represents days in seconds using the Gregorian calendar
-    public static func days(_ hours: Int) -> TimeInterval {
-        TimeInterval(hours) * .duration(of: .day)
+    public static func days(_ days: Int) -> TimeInterval {
+        TimeInterval(days) * .duration(of: .day)
     }
 
     /// Represents weeks in seconds using the Gregorian calendar
@@ -57,4 +58,14 @@ extension TimeInterval {
 
     /// Represents a year from now in seconds using the Gregorian calendar
     public static let year: TimeInterval = .years(1)
+
+    private static func duration(
+        of component: Calendar.Component,
+        calendar: Calendar = Calendar(identifier: .gregorian)
+    ) -> TimeInterval {
+        guard let dateInterval = calendar.dateInterval(of: component, for: Date()) else {
+            preconditionFailure("calendar.dateInterval failed with \(calendar.identifier) and \(component)")
+        }
+        return dateInterval.duration
+    }
 }

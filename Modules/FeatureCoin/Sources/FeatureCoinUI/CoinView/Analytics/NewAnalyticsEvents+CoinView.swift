@@ -62,6 +62,7 @@ extension AnalyticsEvents.New {
             case rewardsSummary = "REWARDS_SUMMARY"
             case swap = "SWAP"
             case withdraw = "WITHDRAW"
+            case getToken = "GET_TOKEN"
 
             // swiftlint:disable cyclomatic_complexity
             init?(_ tag: Tag) {
@@ -88,6 +89,8 @@ extension AnalyticsEvents.New {
                     self = .send
                 case blockchain.ux.asset.account.swap, blockchain.ux.asset.account.currency.exchange:
                     self = .swap
+                case blockchain.ux.asset.account.currency.get.token:
+                    self = .getToken
                 default:
                     return nil
                 }

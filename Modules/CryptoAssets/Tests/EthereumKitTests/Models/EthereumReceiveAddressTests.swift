@@ -57,6 +57,7 @@ final class EthereumReceiveAddressTests: XCTestCase {
         try? factory
             .makeExternalAssetAddress(
                 address: address,
+                memo: nil,
                 label: "Label",
                 onTxCompleted: { _ in AnyPublisher.just(()) }
             )

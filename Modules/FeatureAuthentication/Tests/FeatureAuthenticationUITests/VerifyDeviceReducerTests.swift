@@ -8,6 +8,7 @@ import ComposableArchitecture
 @testable import FeatureAuthenticationUI
 import Localization
 import ToolKit
+@testable import WalletPayloadKit
 import XCTest
 
 // Mocks
@@ -23,7 +24,7 @@ final class VerifyDeviceReducerTests: XCTestCase {
         VerifyDeviceAction,
         VerifyDeviceState,
         VerifyDeviceAction,
-        VerifyDeviceEnvironment
+        Void
     >!
     private var cancellables = Set<AnyCancellable>()
 
@@ -32,8 +33,7 @@ final class VerifyDeviceReducerTests: XCTestCase {
         mockMainQueue = DispatchQueue.immediate
         testStore = TestStore(
             initialState: .init(emailAddress: ""),
-            reducer: verifyDeviceReducer,
-            environment: .init(
+            reducer: VerifyDeviceReducer(
                 app: App.test,
                 mainQueue: mockMainQueue.eraseToAnyScheduler(),
                 deviceVerificationService: MockDeviceVerificationService(),
@@ -44,7 +44,15 @@ final class VerifyDeviceReducerTests: XCTestCase {
                 walletCreationService: .mock(),
                 walletFetcherService: WalletFetcherServiceMock().mock(),
                 accountRecoveryService: MockAccountRecoveryService(),
-                recaptchaService: MockRecaptchaService()
+                recaptchaService: MockRecaptchaService(),
+                sessionTokenService: NoOpSessionTokenService(),
+                emailAuthorizationService: NoOpEmailAuthorizationService(),
+                smsService: NoOpSMSService(),
+                loginService: NoOpLoginService(),
+                seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+                passwordValidator: PasswordValidator(),
+                signUpCountriesService: MockSignUpCountriesService(),
+                appStoreInformationRepository: NoOpAppStoreInformationRepository()
             )
         )
     }

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import DIKit
+import PlatformKit
 
 extension DependencyContainer {
 
@@ -16,6 +17,8 @@ extension DependencyContainer {
 
         factory { EmailVerificationService(apiClient: DIKit.resolve()) as EmailVerificationServiceAPI }
 
-        factory { KYCAccountUsageService(apiClient: DIKit.resolve()) as KYCAccountUsageServiceAPI }
+        factory { KYCAccountUsageService(app: DIKit.resolve(), apiClient: DIKit.resolve()) as KYCAccountUsageServiceAPI }
+
+        single { KYCSSNRepository(app: DIKit.resolve(), client: (DIKit.resolve() as KYCClientAPI) as KYCSSNClientAPI) }
     }
 }

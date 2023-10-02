@@ -68,9 +68,8 @@ extension BuyCheckoutView {
         @State var isAvailableToTradeInfoPresented = false
         @State var isACHTermsInfoPresented = false
         @State var isInvestWeeklySelected = false
-
+        @State private var isExternalTradingEnabled: Bool = false
         @State private var isRecurringBuyEnabled: Bool = true
-        @State private var isUIPaymentsImprovementsEnabled: Bool = true
 
         let checkout: BuyCheckout
         let confirm: (() -> Void)?
@@ -98,9 +97,14 @@ extension BuyCheckoutView.Loaded {
             ScrollView {
                 Group {
                     header()
-                    rows()
-                    quoteExpiry()
-                    disclaimer()
+                    if isExternalTradingEnabled {
+                        bakktRows()
+                        bakktBottomView()
+                    } else {
+                        rows()
+                        quoteExpiry()
+                        disclaimer()
+                    }
                 }
                 .padding(.horizontal)
             }
@@ -116,8 +120,8 @@ extension BuyCheckoutView.Loaded {
             achTermsInfoSheet
         }
         .bindings {
+            subscribe($isExternalTradingEnabled, to: blockchain.app.is.external.brokerage)
             subscribe($isRecurringBuyEnabled, to: blockchain.app.configuration.recurring.buy.is.enabled)
-            subscribe($isUIPaymentsImprovementsEnabled, to: blockchain.app.configuration.ui.payments.improvements.is.enabled)
         }
     }
 
@@ -140,9 +144,24 @@ extension BuyCheckoutView.Loaded {
         .padding(.vertical)
     }
 
+    // views to display for bakkt buy checkout view
+    @ViewBuilder func bakktRows() -> some View {
+        DividedVStack {
+            price(toolTipInfoEnabled: false)
+            paymentMethod()
+            bakktPurchaseAmount()
+            availableDates()
+        }
+        .padding(.vertical, 8.pt)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.semantic.background)
+        )
+    }
+
     @ViewBuilder func rows() -> some View {
         DividedVStack {
-            price()
+            price(toolTipInfoEnabled: true)
             paymentMethod()
             purchaseAmount()
             fees()
@@ -193,6 +212,17 @@ extension BuyCheckoutView.Loaded {
         )
     }
 
+    @ViewBuilder func bakktPurchaseAmount() -> some View {
+        TableRow(
+            title: TableRowTitle(L10n.Label.purchase).foregroundColor(.semantic.body),
+            trailing: {
+                VStack(alignment: .trailing, spacing: .zero) {
+                    TableRowTitle("~\(checkout.crypto.displayString)")
+                }
+            }
+        )
+    }
+
     @ViewBuilder var availableToTradeInfoSheet: some View {
         VStack(alignment: .leading, spacing: 19) {
             HStack {
@@ -200,7 +230,7 @@ extension BuyCheckoutView.Loaded {
                     .typography(.body2)
                     .foregroundColor(.semantic.body)
                 Spacer()
-                IconButton(icon: .closeCirclev2) {
+                IconButton(icon: .close.circle()) {
                     isAvailableToTradeInfoPresented = false
                 }
                 .frame(width: 24.pt, height: 24.pt)
@@ -238,7 +268,7 @@ extension BuyCheckoutView.Loaded {
             .primaryNavigation(
                 title: L10n.ACHTermsInfo.title,
                 trailing: {
-                    IconButton(icon: .closeCirclev2) {
+                    IconButton(icon: .close.circle()) {
                         isACHTermsInfoPresented = false
                     }
                     .frame(width: 24.pt, height: 24.pt)
@@ -249,13 +279,16 @@ extension BuyCheckoutView.Loaded {
         }
     }
 
-    @ViewBuilder func price() -> some View {
+    @ViewBuilder func price(toolTipInfoEnabled: Bool) -> some View {
         VStack {
             TableRow(
                 title: {
                     HStack {
                         TableRowTitle(L10n.Label.price(checkout.crypto.code)).foregroundColor(.semantic.body)
-                        Icon.questionCircle.micro().color(.semantic.muted)
+                        if toolTipInfoEnabled {
+                            Icon.questionFilled
+                                .micro().color(.semantic.muted)
+                        }
                     }
                 },
                 trailing: {
@@ -264,7 +297,11 @@ extension BuyCheckoutView.Loaded {
             )
             .background(Color.semantic.background)
             .onTapGesture {
-                withAnimation { information.price.toggle() }
+                withAnimation {
+                    if toolTipInfoEnabled {
+                        information.price.toggle()
+                    }
+                }
             }
             if information.price {
                 explain(L10n.Label.priceDisclaimer)
@@ -279,7 +316,9 @@ extension BuyCheckoutView.Loaded {
                     title: {
                         HStack {
                             TableRowTitle(L10n.Label.blockchainFee).foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.muted)
+                            Icon.questionFilled
+                                .micro()
+                                .color(.semantic.muted)
                         }
                     },
                     trailing: {
@@ -329,34 +368,88 @@ extension BuyCheckoutView.Loaded {
     }
 
     @ViewBuilder func availableDates() -> some View {
-        if isUIPaymentsImprovementsEnabled {
-            if let availableToTrade = checkout.depositTerms?.availableToTrade {
-                TableRow(
-                    title: TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToTrade).foregroundColor(.semantic.body),
-                    trailing: {
-                        TableRowTitle(availableToTrade)
-                    }
-                )
-            }
-
-            if let availableToWithdraw = checkout.depositTerms?.availableToWithdraw {
-                TableRow(
-                    title: {
-                        HStack {
-                            TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw).foregroundColor(.semantic.body)
-                            Icon.questionCircle.micro().color(.semantic.muted)
-                        }
-                    },
-                    trailing: {
-                        TableRowTitle(availableToWithdraw)
-                    }
-                )
-                .background(Color.semantic.background)
-                .onTapGesture {
-                    isAvailableToTradeInfoPresented.toggle()
+        if let availableToTrade = checkout.depositTerms?.availableToTrade {
+            TableRow(
+                title: TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToTrade).foregroundColor(.semantic.body),
+                trailing: {
+                    TableRowTitle(availableToTrade)
                 }
+            )
+        }
+
+        if let availableToWithdraw = checkout.depositTerms?.availableToWithdraw {
+            TableRow(
+                title: {
+                    HStack {
+                        TableRowTitle(LocalizationConstants.Transaction.Confirmation.availableToWithdraw).foregroundColor(.semantic.body)
+                        Icon
+                            .questionFilled
+                            .micro()
+                            .color(.semantic.muted)
+                    }
+                },
+                trailing: {
+                    TableRowTitle(availableToWithdraw)
+                }
+            )
+            .background(Color.semantic.background)
+            .onTapGesture {
+                isAvailableToTradeInfoPresented.toggle()
             }
         }
+    }
+
+    @ViewBuilder func bakktBottomView() -> some View {
+        VStack {
+            VStack(alignment: .leading) {
+                bakktDisclaimer()
+                SmallMinimalButton(title: L10n.Button.viewDisclosures) {
+                    $app.post(event: blockchain.ux.bakkt.view.disclosures)
+                }
+                .batch {
+                    set(blockchain.ux.bakkt.view.disclosures.then.launch.url, to: "https://bakkt.com/disclosures")
+                }
+            }
+
+            bakktAlertCard()
+                .padding(.vertical, Spacing.padding2)
+
+            Image("bakkt-logo", bundle: .componentLibrary)
+                .foregroundColor(.semantic.title)
+        }
+    }
+
+    @ViewBuilder
+    func bakktDisclaimer() -> some View {
+        let label = L10n.Label.buyDisclaimerBakkt(
+            fiatAmount: checkout.fiat.displayString,
+            amount: checkout.crypto.displayString,
+            asset: checkout.crypto.currency.code
+        )
+
+        Text(rich: label)
+            .typography(.caption1)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.leading)
+            .padding(.horizontal, Spacing.padding1)
+            .padding(.top, Spacing.padding3)
+            .onTapGesture {
+                $app.post(event: blockchain.ux.bakkt.authorization)
+            }
+            .batch {
+                set(blockchain.ux.bakkt.authorization.then.launch.url, to: { blockchain.ux.bakkt.authorization.url })
+            }
+    }
+
+    @ViewBuilder
+    func bakktAlertCard() -> some View {
+        AlertCard(
+            title: L10n.Label.bakktAlertTitle,
+            message: L10n.Label.bakktAlertSubTitle,
+            variant: .warning,
+            isBordered: false,
+            backgroundColor: .semantic.background
+        )
     }
 
     @ViewBuilder
@@ -398,7 +491,7 @@ extension BuyCheckoutView.Loaded {
 
     @ViewBuilder func disclaimer() -> some View {
         VStack(alignment: .leading) {
-            if isUIPaymentsImprovementsEnabled, checkout.paymentMethod.isACH {
+            if checkout.paymentMethod.isACH {
                 VStack(alignment: .leading, spacing: Spacing.padding2) {
                     Text(checkout.achTransferDisclaimerText)
                     .multilineTextAlignment(.leading)

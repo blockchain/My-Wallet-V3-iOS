@@ -5,6 +5,7 @@ import BINDWithdrawUI
 import BlockchainComponentLibrary
 import BlockchainNamespace
 import Combine
+import ComposableArchitecture
 import DIKit
 import Errors
 import ErrorsUI
@@ -31,12 +32,8 @@ protocol TransactionFlowInteractable: Interactable,
     PendingTransactionPageListener,
     TargetSelectionPageListener
 {
-
     var router: TransactionFlowRouting? { get set }
     var listener: TransactionFlowListener? { get set }
-
-    func didSelectSourceAccount(account: BlockchainAccount)
-    func didSelectDestinationAccount(target: TransactionTarget)
 }
 
 public protocol TransactionFlowViewControllable: ViewControllable {
@@ -60,6 +57,7 @@ extension TransactionFlowViewControllable {
 
 typealias TransactionViewableRouter = ViewableRouter<TransactionFlowInteractable, TransactionFlowViewControllable>
 typealias TransactionFlowAnalyticsEvent = AnalyticsEvents.New.TransactionFlow
+private typealias L10n = LocalizationConstants.Transaction
 
 final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRouting {
     private var app: AppProtocol
@@ -122,11 +120,17 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     }
 
     func routeToConfirmation(transactionModel: TransactionModel, action: AssetAction) {
-        let builder = ConfirmationPageBuilder(transactionModel: transactionModel, action: action)
-        let router = builder.build(listener: interactor)
-        let viewControllable = router.viewControllable
-        attachChild(router)
-        viewController.push(viewController: viewControllable)
+        Task { @MainActor in
+            let builder = await ConfirmationPageBuilder(
+                transactionModel: transactionModel,
+                action: action,
+                isNewCheckoutEnabled: app.get(blockchain.ux.transaction[action.string].checkout.is.enabled, or: false)
+            )
+            let router = builder.build(listener: interactor)
+            let viewControllable = router.viewControllable
+            attachChild(router)
+            viewController.push(viewController: viewControllable)
+        }
     }
 
     func routeToInProgress(transactionModel: TransactionModel, action: AssetAction) {
@@ -194,9 +198,9 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                     ux: error,
                     fallback: {
                         if let destination = state.destination {
-                            destination.currencyType.logoResource.view
+                            destination.currencyType.logoResource.image
                         } else if let source = state.source {
-                            source.currencyType.logoResource.view
+                            source.currencyType.logoResource.image
                         } else {
                             Icon.error.foregroundColor(.semantic.warning)
                         }
@@ -223,7 +227,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     }
 
     func closeFlow() {
-        viewController.dismiss()
+        dismiss()
         interactor.listener?.dismissTransactionFlow()
     }
 
@@ -246,7 +250,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             presentErrorViewForDialog(error, transactionModel: transactionModel)
         default:
             presentErrorRecoveryCallout(
-                title: errorState.recoveryWarningTitle(for: action).or(Localization.Error.unknownError),
+                title: errorState.recoveryWarningTitle(for: action).or(L10n.Error.unknownError),
                 message: errorState.recoveryWarningMessage(for: action),
                 callouts: errorState.recoveryWarningCallouts(for: action),
                 onClose: { [transactionModel] in
@@ -259,14 +263,14 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
 
     func showVerifyToUnlockMoreTransactionsPrompt(action: AssetAction) {
         presentErrorRecoveryCallout(
-            title: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeTitle,
-            message: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeMessage,
+            title: L10n.Notices.verifyToUnlockMoreTradingNoticeTitle,
+            message: L10n.Notices.verifyToUnlockMoreTradingNoticeMessage,
             callouts: [
                 .init(
-                    image: Image("icon-verified", bundle: .main),
-                    title: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutTitle,
-                    message: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutMessage,
-                    callToAction: LocalizationConstants.Transaction.Notices.verifyToUnlockMoreTradingNoticeCalloutCTA
+                    image: .local(name: "icon-verified", bundle: .main),
+                    title: L10n.Notices.verifyToUnlockMoreTradingNoticeCalloutTitle,
+                    message: L10n.Notices.verifyToUnlockMoreTradingNoticeCalloutMessage,
+                    callToAction: L10n.Notices.verifyToUnlockMoreTradingNoticeCalloutCTA
                 )
             ],
             onClose: { [analyticsRecorder, presenter = topMostViewControllerProvider.topMostViewController] in
@@ -296,10 +300,9 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         onCalloutTapped: @escaping (ErrorRecoveryState.Callout) -> Void
     ) {
         let view = ErrorRecoveryView(
-            store: .init(
+            store: Store(
                 initialState: ErrorRecoveryState(title: title, message: message, callouts: callouts),
-                reducer: errorRecoveryReducer,
-                environment: ErrorRecoveryEnvironment(close: onClose, calloutTapped: onCalloutTapped)
+                reducer: ErrorRecovery(close: onClose, calloutTapped: onCalloutTapped)
             )
         )
         let viewController = UIHostingController(rootView: view)
@@ -408,25 +411,27 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         attachAndPresent(router, transitionType: transitionType)
     }
 
-    func routeToTargetSelectionPicker(transactionModel: TransactionModel, action: AssetAction) {
-        let builder = TargetSelectionPageBuilder(
-            accountProvider: TransactionModelAccountProvider(
-                transactionModel: transactionModel,
-                transform: { $0.availableTargets as? [BlockchainAccount] ?? [] }
-            ),
-            action: action,
+    func routeToSendTargetSelection(transactionModel: TransactionModel) {
+        let accountProvider = TransactionModelAccountProvider(
+            transactionModel: transactionModel,
+            transform: { $0.availableTargets as? [BlockchainAccount] ?? [] }
+        )
+        let builder: TargetSelectionBuildable = TargetSelectionPageBuilder(
+            accountProvider: accountProvider,
             cacheSuite: cacheSuite
         )
-        let router = builder.build(
-            listener: .listener(interactor),
-            navigationModel: ScreenNavigationModel.TargetSelection.navigation(
-                title: TransactionFlowDescriptor.TargetSelection.navigationTitle(action: action)
-            ),
-            backButtonInterceptor: {
-                transactionModel.state.map {
-                    ($0.step, $0.stepsBackStack, $0.isGoingBack)
-                }
+        let navigationModel: ScreenNavigationModel = .TargetSelection.navigation(
+            title: TransactionFlowDescriptor.TargetSelection.navigationTitle
+        )
+        let backButtonInterceptor: BackButtonInterceptor = {
+            transactionModel.state.map {
+                ($0.step, $0.stepsBackStack, $0.isGoingBack)
             }
+        }
+        let router = builder.build(
+            listener: interactor,
+            navigationModel: navigationModel,
+            backButtonInterceptor: backButtonInterceptor
         )
         attachAndPresent(router, transitionType: .replaceRoot)
     }
@@ -657,10 +662,10 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                     transactionModel.process(action: .bankAccountLinked(state.action))
                 }
                 .primaryNavigation(
-                    title: Localization.withdraw,
+                    title: L10n.withdraw,
                     trailing: {
                         IconButton(
-                            icon: .closeCirclev2,
+                            icon: .close,
                             action: {
                                 presentingViewController.presentedViewController?.dismiss(
                                     animated: true,
@@ -698,7 +703,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         viewController.transitioningDelegate = bottomSheetPresenter
         viewController.modalPresentationStyle = .custom
         let presenter = topMostViewControllerProvider.topMostViewController
-        presenter?.present(viewController, animated: true, completion: nil)
+        presenter?.present(PrimaryNavigationViewController(rootViewController: viewController), animated: true, completion: nil)
     }
 
     private func presentErrorViewForDialog(
@@ -723,11 +728,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
 
     func presentBankWiringInstructions(transactionModel: TransactionModel) {
         let presenter = viewController.uiviewController.topMostViewController ?? viewController.uiviewController
-        // NOTE: using [weak presenter] to avoid a memory leak
-        bankWireLinker.presentBankWireInstructions(from: presenter) { [weak presenter] in
-            presenter?.dismiss(animated: true) {
-                transactionModel.process(action: .returnToPreviousStep)
-            }
+        bankWireLinker.presentBankWireInstructions(from: presenter) {
+            transactionModel.process(action: .returnToPreviousStep)
         }
     }
 
@@ -781,6 +783,11 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         presenter.push(viewController: viewController)
     }
 
+    private var newSellFlowIsEnabled: Bool {
+        app.remoteConfiguration
+            .yes(if: blockchain.app.configuration.new.sell.flow.is.enabled)
+    }
+
     func routeToPriceInput(
         source: BlockchainAccount,
         destination: TransactionTarget,
@@ -795,7 +802,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let builder = EnterAmountPageBuilder(transactionModel: transactionModel, action: action)
         var viewControllable: ViewControllable?
 
-        if app.remoteConfiguration.yes(if: blockchain.app.configuration.new.sell.flow.is.enabled), action == .sell, let router = builder.buildNewSellEnterAmount() {
+        if action == .sell, newSellFlowIsEnabled, let router = builder.buildNewSellEnterAmount() {
             attachChild(router)
             viewControllable = router.viewControllable
         } else {
@@ -806,7 +813,8 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
                 action: action,
                 navigationModel: ScreenNavigationModel.EnterAmount.navigation(
                     allowsBackButton: action.allowsBackButton
-                )
+                ),
+                defaultFiatCurrency: .default
             )
             attachChild(router)
             viewControllable = router.viewControllable
@@ -927,11 +935,14 @@ extension TransactionFlowRouter {
                     model.availableSources
                 },
                 flatMap: { accounts in
-                    if action == .buy { return .just(accounts) }
-                    return Task<[BlockchainAccount], Error>.Publisher {
-                        try await accounts.async.reduce(into: []) { accounts, account in
-                            guard try await !account.hasSmallBalance().await() else { return }
-                            accounts.append(account)
+                    if action == .buy {
+                        return .just(accounts)
+                    }
+                    return Task<[BlockchainAccount], Never>.Publisher {
+                        await accounts.async.reduce(into: []) { accounts, account in
+                            if await account.hasSmallBalance().isNo {
+                                accounts.append(account)
+                            }
                         }
                     }
                     .asObservable()
@@ -940,9 +951,8 @@ extension TransactionFlowRouter {
             action: action
         )
         let shouldAddMoreButton = canAddMoreSources && action.supportsAddingSourceAccounts
-        let button: ButtonViewModel? = shouldAddMoreButton ? .secondary(with: LocalizationConstants.addNew) : nil
-        let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
-        let isSearchEnabled = action == .swap && searchable
+        let button: ButtonViewModel? = shouldAddMoreButton ? .secondary(with: L10n.addNew) : nil
+        let isSearchEnabled = action == .swap
         return builder.build(
             listener: .listener(interactor),
             navigationModel: ScreenNavigationModel.AccountPicker.modal(
@@ -976,17 +986,16 @@ extension TransactionFlowRouter {
         let button: ButtonViewModel?
         if action == .withdraw, app.state.yes(if: blockchain.ux.payment.method.plaid.is.available) {
             let isDisabled = state.availableTargets.as([FiatAccountCapabilities].self)?.contains(where: { $0.capabilities?.withdrawal?.enabled == false }) ?? false
-            button = isDisabled ? nil : .secondary(with: LocalizationConstants.addNew)
+            button = isDisabled ? nil : .secondary(with: L10n.addNew)
         } else {
-            button = action == .withdraw ? .secondary(with: LocalizationConstants.addNew) : nil
+            button = action == .withdraw ? .secondary(with: L10n.addNew) : nil
         }
 
-        let searchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.search.is.enabled)
         let switchable: Bool = app.remoteConfiguration.yes(if: blockchain.app.configuration.swap.switch.pkw.is.enabled)
 
-        let isSearchEnabled = (action == .swap || action == .buy) && searchable
+        let isSearchEnabled = (action == .swap || action == .buy)
         let isSwitchEnabled = action == .swap && app.currentMode == .pkw && switchable
-        let switchTitle = isSwitchEnabled ? Localization.Swap.tradingAccountsSwitchTitle : nil
+        let switchTitle = isSwitchEnabled ? L10n.Swap.tradingAccountsSwitchTitle : nil
         let initialAccountTypeFilter: AccountType? = app.currentMode == .pkw ? .nonCustodial : nil
 
         return builder.build(
@@ -1041,7 +1050,7 @@ extension PaymentMethodAccount {
                     partner: .unknown,
                     type: .unknown,
                     currency: method.fiatCurrency,
-                    label: LocalizationConstants.Transaction.Buy.applePay,
+                    label: L10n.Buy.applePay,
                     ownerName: "",
                     number: "",
                     month: "",
@@ -1057,4 +1066,20 @@ extension PaymentMethodAccount {
 extension CountryCode {
     var isArgentina: Bool { self == "AR" }
     var isAmerica: Bool { self == "US" }
+}
+
+extension BlockchainAccount {
+
+    fileprivate func hasSmallBalance(app: AppProtocol = resolve()) async -> Bool {
+        let safeBalancePair = try? await safeBalancePair(
+            fiatCurrency: app.get(blockchain.user.currency.preferred.fiat.display.currency)
+        ).await()
+        if let quote = safeBalancePair?.quote {
+            return quote.isDust
+        }
+        if let balance = safeBalancePair?.balance {
+            return balance.isZero
+        }
+        return false
+    }
 }

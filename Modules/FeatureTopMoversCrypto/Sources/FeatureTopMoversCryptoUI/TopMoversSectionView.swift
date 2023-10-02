@@ -15,7 +15,10 @@ public struct TopMoversSectionView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }, content: { viewStore in
+        WithViewStore(
+            store,
+            observe: { $0 },
+            content: { viewStore in
             VStack(spacing: 0) {
                 sectionHeader(viewStore)
                 topMoversSection(viewStore)
@@ -23,7 +26,8 @@ public struct TopMoversSectionView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-        })
+            }
+        )
     }
 
     @ViewBuilder
@@ -44,16 +48,16 @@ public struct TopMoversSectionView: View {
     @ViewBuilder
     func sectionHeader(_ viewStore: ViewStoreOf<TopMoversSection>) -> some View {
         HStack {
-            SectionHeader(title: LocalizationConstants.SuperApp.Dashboard.topMovers,
-                          variant: .superapp,
-                          decoration:  {
-                Icon
-                    .fireFilled
-                    .micro()
-                    .color(.WalletSemantic.warningMuted)
-            }
-        )
-
+            SectionHeader(
+                title: LocalizationConstants.SuperApp.Dashboard.topMovers,
+                variant: .superapp,
+                decoration: {
+                    Icon
+                        .fireFilled
+                        .micro()
+                        .color(.WalletSemantic.warningMuted)
+                }
+            )
 
             Spacer()
         }

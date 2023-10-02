@@ -1,7 +1,9 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Combine
 import Foundation
 import PlatformUIKit
+import SwiftUI
 
 class ConfrimationQuoteRefreshHeaderBuilder: HeaderBuilder {
 
@@ -23,9 +25,6 @@ class ConfrimationQuoteRefreshHeaderBuilder: HeaderBuilder {
         return uiView
     }
 }
-
-import Combine
-import SwiftUI
 
 struct CountDownView: View {
     private var initialTime: TimeInterval

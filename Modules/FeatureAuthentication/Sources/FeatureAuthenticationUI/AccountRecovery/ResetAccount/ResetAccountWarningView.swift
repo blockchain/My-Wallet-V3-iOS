@@ -88,8 +88,7 @@ struct ResetAccountWarningView_Previews: PreviewProvider {
         ResetAccountWarningView(
             store: .init(
                 initialState: .init(),
-                reducer: resetAccountWarningReducer,
-                environment: .init(
+                reducer: ResetAccountWarningReducer(
                     analyticsRecorder: NoOpAnalyticsRecorder()
                 )
             )

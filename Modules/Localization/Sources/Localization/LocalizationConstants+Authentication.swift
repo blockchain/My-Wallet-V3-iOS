@@ -497,29 +497,30 @@ extension LocalizationConstants.FeatureAuthentication {
         }
 
         public static let agreementPrompt = NSLocalizedString(
-            "I certify I am 18 years of age or older and I agree to Blockchain.com’s",
+            "By tapping \"Confirm\" you acknowledge that you have read and accept the Blockchain.com [Terms of Services](https://blockchain.com/legal/terms) & [Privacy Policy](https://blockchain.com/legal/privacy).",
             comment: "Create Account screen: I agree to Blockchain.com’s Terms of Service & Privacy Policy."
         )
+
+        public static let bakktAgreementPrompt = NSLocalizedString(
+            "By checking this box, I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided below. By so agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account.",
+            comment: "Create Account screen: By checking this box, I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided [below/above]. By so agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account."
+        )
+
         public static let recoveryPhrase = NSLocalizedString(
             "Secret Private Key Recovery Phrase",
             comment: "Create Account screen: 'Secret Private Key Recovery Phrase' text, split to add emphasis"
         )
-        public static let termsOfServiceLink = NSLocalizedString(
-            "Terms of Services",
-            comment: "Create Account screen: terms of service link"
+
+        public static let bakktUserAgreementLink = NSLocalizedString(
+            "Bakkt's User Agreement",
+            comment: "Create Account screen: bakkt user agreement link"
         )
-        public static let and = NSLocalizedString(
-            "and",
-            comment: "Create Account screen: and (connective)"
-        )
-        public static let privacyPolicyLink = NSLocalizedString(
-            "Privacy Policy",
-            comment: "Create Account screen: privacy policy link"
-        )
+
         public static let createAccountButton = NSLocalizedString(
-            "Get Started",
+            "Confirm",
             comment: "Create Account screen: create account CTA button"
         )
+
         public static let nextButton = NSLocalizedString(
             "Next",
             comment: "Create Account screen: create account CTA button in nav bar"
@@ -899,6 +900,71 @@ extension LocalizationConstants.FeatureAuthentication {
                 "Forget wallet",
                 comment: "forget wallet alert button"
             )
+        }
+    }
+}
+
+extension LocalizationConstants.FeatureAuthentication.CreateAccount {
+
+    public enum Password {
+
+        public enum Rules {
+
+            public static let secure = NSLocalizedString(
+                "Secure",
+                comment: "Password is secure"
+            )
+
+            public static let insecure = NSLocalizedString(
+                "Insecure",
+                comment: "Password is insecure"
+            )
+
+            public static let prefix = NSLocalizedString(
+                "Your password must contain at least ",
+                comment: "Password validation prefix"
+            )
+
+            public enum Lowercase {
+                public static let display = NSLocalizedString(
+                    "one lowercase letter",
+                    comment: "Password validation rule: one lowercase letter"
+                )
+            }
+
+            public enum Uppercase {
+                public static let display = NSLocalizedString(
+                    "one uppercase letter",
+                    comment: "Password validation rule: one uppercase letter"
+                )
+            }
+
+            public enum Number {
+                public static let display = NSLocalizedString(
+                    "one number",
+                    comment: "Password validation rule: one number"
+                )
+            }
+
+            public enum SpecialCharacter {
+                public static let display = NSLocalizedString(
+                    "one special character",
+                    comment: "Password validation rule: one special character"
+                )
+            }
+
+            public enum Length {
+
+                public static let display = NSLocalizedString(
+                    "and be at least 8 characters long.",
+                    comment: "Password validation rule: at least 8 characters long"
+                )
+
+                public static let accent = NSLocalizedString(
+                    "8 characters long",
+                    comment: "Password validation rule: accent for 8 characters long"
+                )
+            }
         }
     }
 }

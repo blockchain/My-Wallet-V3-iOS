@@ -2,26 +2,19 @@
 
 import BigInt
 import BlockchainNamespace
+import Combine
 import DIKit
+import Extensions
 import Foundation
 
 public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
 
     public static let `default`: EnabledCurrenciesServiceAPI = {
         let app: AppProtocol = runningApp
-        let evmSupport = EVMSupport(app: app)
         return EnabledCurrenciesService(
-            evmSupport: evmSupport,
-            app: app,
-            repository: AssetsRepository(
-                fileLoader: FileLoader(
-                    filePathProvider: FilePathProvider(
-                        fileManager: .default
-                    ),
-                    jsonDecoder: .init()
-                ),
-                evmSupport: evmSupport
-            )
+            networkConfigRepository: NetworkConfigRepository.default,
+            app: runningApp,
+            repository: AssetsRepository.default
         )
     }()
 
@@ -51,12 +44,6 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
 
     // MARK: Private Properties
 
-    private var allEnabledEVMNetworkConfig: [EVMNetworkConfig] {
-        defer { allEnabledEVMNetworkConfigLock.unlock() }
-        allEnabledEVMNetworkConfigLock.lock()
-        return allEnabledEVMNetworkConfigLazy
-    }
-
     private var nonCustodialCryptoCurrencies: [CryptoCurrency] {
         var base: [CryptoCurrency] = [
             .bitcoin,
@@ -66,7 +53,7 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
         ]
 
         // Add 'coin' items for which EVM networks are enabled. (eg Polygon/Avalanche native assets)
-        let enabledEVMs = allEnabledEVMNetworkConfig.map(\.nativeAsset)
+        let enabledEVMs = networkConfigRepository.evmConfigs.map(\.nativeAsset)
         let evms: [CryptoCurrency] = repository.coinAssets
             .filter { item in !NonCustodialCoinCode.allCases.map(\.rawValue).contains(item.code) }
             .filter { item in enabledEVMs.contains(item.code) }
@@ -106,10 +93,10 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
     }
 
     private var otherERC20Currencies: [CryptoCurrency] {
-        repository.otherERC20Assets
+        let enabledEVMs = networkConfigRepository.evmConfigs.map(\.networkTicker)
+        return repository.otherERC20Assets
             .filter { model in
-                model.kind.erc20ParentChain
-                    .flatMap(evmSupport.isEnabled(network:)) ?? false
+                model.kind.erc20ParentChain.flatMap(enabledEVMs.contains) ?? false
             }
             .compactMap(\.cryptoCurrency)
     }
@@ -126,37 +113,29 @@ public final class EnabledCurrenciesService: EnabledCurrenciesServiceAPI {
     private lazy var allEnabledCurrenciesLazy: [CurrencyType] = allEnabledCryptoCurrencies.map(CurrencyType.crypto)
     + allEnabledFiatCurrencies.map(CurrencyType.fiat)
 
-    private lazy var allEnabledEVMNetworkConfigLazy: [EVMNetworkConfig] = [EVMNetworkConfig.ethereum] + repositoryEnabledEVMs
-    private lazy var allEnabledEVMNetworksLazy: [EVMNetwork] = allEnabledEVMNetworkConfig.compactMap { network -> EVMNetwork? in
+    private lazy var allEnabledEVMNetworksLazy: [EVMNetwork] = networkConfigRepository.evmConfigs.compactMap { network -> EVMNetwork? in
         guard let nativeAsset = allEnabledCryptoCurrencies.first(where: { $0.code == network.nativeAsset }) else {
             return nil
         }
         return EVMNetwork(networkConfig: network, nativeAsset: nativeAsset)
     }
 
-    private var repositoryEnabledEVMs: [EVMNetworkConfig] {
-        repository.enabledEVMs
-            .filter { $0.networkTicker != "ETH" }
-            .filter { evmSupport.isEnabled(network: $0.networkTicker) }
-    }
-
     private let allEnabledCryptoCurrenciesLock = NSLock()
     private let allEnabledCurrenciesLock = NSLock()
-    private let allEnabledEVMNetworkConfigLock = NSLock()
     private let allEnabledEVMNetworksLock = NSLock()
 
     private let app: AppProtocol
-    private let evmSupport: EVMSupportAPI
+    private let networkConfigRepository: NetworkConfigRepositoryAPI
     private let repository: AssetsRepositoryAPI
 
     // MARK: Init
 
     init(
-        evmSupport: EVMSupportAPI,
+        networkConfigRepository: NetworkConfigRepositoryAPI,
         app: AppProtocol,
         repository: AssetsRepositoryAPI
     ) {
-        self.evmSupport = evmSupport
+        self.networkConfigRepository = networkConfigRepository
         self.app = app
         self.repository = repository
     }
@@ -201,17 +180,17 @@ extension AssetModelProduct {
     }
 }
 
-struct UnifiedBalanceMockConfig: Codable, Hashable {
-    let contract_address, name, code, logo_url: String
+public struct UnifiedBalanceMockConfig: Codable, Hashable {
+    public let contract_address, name, code, logo_url: String
 }
 
-private func unifiedBalanceMock(app: AppProtocol) -> UnifiedBalanceMockConfig? {
+public func unifiedBalanceMock(app: AppProtocol) -> UnifiedBalanceMockConfig? {
     let isEnabled: Bool = app.state.get(
         blockchain.app.configuration.unified.balances.mock.is.enabled,
         as: Bool.self,
         or: false
     )
-    guard isEnabled else {
+    guard isEnabled, BuildFlag.isInternal else {
         return nil
     }
     let config = try? app.remoteConfiguration.get(
@@ -219,4 +198,30 @@ private func unifiedBalanceMock(app: AppProtocol) -> UnifiedBalanceMockConfig? {
         as: UnifiedBalanceMockConfig.self
     )
     return config
+}
+
+public func unifiedBalanceMockPublisher(app: AppProtocol) -> AnyPublisher<UnifiedBalanceMockConfig?, Never> {
+    var isEnabled: AnyPublisher<Bool, Never> {
+        app.publisher(
+            for: blockchain.app.configuration.unified.balances.mock.is.enabled,
+            as: Bool.self
+        )
+        .map(\.value)
+        .replaceNil(with: false)
+        .prefix(1)
+        .eraseToAnyPublisher()
+    }
+    var config: AnyPublisher<UnifiedBalanceMockConfig?, Never> {
+        app.publisher(
+            for: blockchain.app.configuration.unified.balances.mock.config,
+            as: UnifiedBalanceMockConfig.self
+        )
+        .map(\.value)
+        .prefix(1)
+        .eraseToAnyPublisher()
+    }
+    guard BuildFlag.isInternal else {
+        return .just(nil)
+    }
+    return isEnabled.flatMapIf(then: config, else: .just(nil))
 }

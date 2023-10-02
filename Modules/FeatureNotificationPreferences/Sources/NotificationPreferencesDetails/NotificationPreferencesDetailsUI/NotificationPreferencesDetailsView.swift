@@ -120,7 +120,7 @@ extension NotificationPreferencesDetailsView {
 
                 Text(viewStore.notificationPreference.preferenceDescription)
                     .typography(.paragraph1)
-                    .foregroundColor(Color.WalletSemantic.body)
+                    .foregroundColor(Color.semantic.body)
             }
         }
     }

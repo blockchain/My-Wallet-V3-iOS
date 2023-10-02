@@ -23,19 +23,34 @@ public class ReferralService: ReferralServiceAPI {
         self.repository = repository
     }
 
-    public func createReferral(with code: String) -> AnyPublisher<Void, NetworkError> {
-        repository
-            .createReferral(with: code)
+    func isEnabled() -> AnyPublisher<Bool, Never> {
+        app.publisher(for: blockchain.app.configuration.referral.is.enabled, as: Bool.self)
+            .replaceError(with: false)
             .eraseToAnyPublisher()
+    }
+
+    public func createReferral(with code: String) -> AnyPublisher<Void, NetworkError> {
+        isEnabled().flatMap { [repository] isEnabled in
+            if isEnabled {
+                return repository.createReferral(with: code).eraseToAnyPublisher()
+            } else {
+                return .just(())
+            }
+        }
+        .eraseToAnyPublisher()
     }
 
     public func fetchReferralCampaign() -> AnyPublisher<Referral?, Never> {
         app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
-            .compactMap(\.value)
-            .flatMap { [repository] currency in
-                repository.fetchReferralCampaign(for: currency.code)
+            .replaceError(with: .USD)
+            .combineLatest(isEnabled())
+            .flatMap { [repository] currency, isEnabled -> AnyPublisher<Referral?, NetworkError> in
+                if isEnabled {
+                    return repository.fetchReferralCampaign(for: currency.code).optional()
+                } else {
+                    return .just(nil)
+                }
             }
-            .optional()
             .replaceError(with: nil)
             .eraseToAnyPublisher()
     }

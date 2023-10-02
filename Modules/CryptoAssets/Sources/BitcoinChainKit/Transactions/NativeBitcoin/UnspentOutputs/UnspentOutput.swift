@@ -24,24 +24,24 @@ public struct UnspentOutput: Equatable {
         value.minorAmount.magnitude
     }
 
-    public let confirmations: UInt
+    public let confirmations: UInt?
     public let hash: String
     public let hashBigEndian: String
     public let outputIndex: Int
     public let script: String
     public let transactionIndex: Int
     public let value: CryptoValue
-    public let xpub: XPub
+    public let xpub: XPub?
 
     public init(
-        confirmations: UInt,
+        confirmations: UInt? = 0,
         hash: String,
         hashBigEndian: String,
         outputIndex: Int,
         script: String,
         transactionIndex: Int,
         value: CryptoValue,
-        xpub: UnspentOutput.XPub
+        xpub: UnspentOutput.XPub? = nil
     ) {
         self.confirmations = confirmations
         self.hash = hash
@@ -56,10 +56,10 @@ public struct UnspentOutput: Equatable {
 
 extension UnspentOutput {
     public var scriptType: BitcoinScriptType {
-        guard let script = BitcoinScriptType(scriptData: Data(hex: script)) else {
+        guard let scriptType = BitcoinScriptType(scriptData: Data(hex: script)) else {
             fatalError("Misconfigured")
         }
-        return script
+        return scriptType
     }
 
     var isSegwit: Bool {
@@ -79,7 +79,11 @@ extension UnspentOutput {
         self.script = response.script
         self.transactionIndex = response.tx_index
         self.value = CryptoValue.create(minor: response.value, currency: coin.cryptoCurrency)
-        self.xpub = XPub(responseXPub: response.xpub)
+        if let xpub = response.xpub {
+            self.xpub = XPub(responseXPub: xpub)
+        } else {
+            self.xpub = nil
+        }
     }
 }
 

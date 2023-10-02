@@ -1,12 +1,17 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Combine
 import Foundation
 import SwiftUI
 
 #if canImport(UIKit)
+import UIKit
+typealias UniversalImage = UIImage
 private let makeImage = Image.init(uiImage:)
 #elseif canImport(AppKit)
+import AppKit
+typealias UniversalImage = NSImage
 private let makeImage = Image.init(nsImage:)
 #endif
 
@@ -14,13 +19,13 @@ public struct ImageResourceView<Loading: View, Placeholder: View>: View {
 
     @StateObject private var loader: ImageLoader
 
-    private let resource: ImageResource
+    private let resource: ImageLocation
     private let placeholder: () -> Placeholder
     private let loading: () -> Loading
     fileprivate var configurations: [(Image) -> Image] = []
 
     public init(
-        resource: ImageResource,
+        resource: ImageLocation,
         @ViewBuilder loading: @escaping () -> Loading,
         @ViewBuilder placeholder: @escaping () -> Placeholder
     ) {
@@ -130,7 +135,7 @@ extension ImageResourceView {
     }
 
     public init(
-        _ resource: ImageResource,
+        _ resource: ImageLocation,
         @ViewBuilder loading: @escaping () -> Loading,
         @ViewBuilder placeholder: @escaping () -> Placeholder
     ) {
@@ -170,7 +175,7 @@ extension ImageResourceView where Loading == ProgressView<EmptyView, EmptyView> 
     }
 
     public init(
-        _ resource: ImageResource,
+        _ resource: ImageLocation,
         @ViewBuilder placeholder: @escaping () -> Placeholder
     ) {
         self.init(resource: resource, loading: ProgressView.init, placeholder: placeholder)
@@ -191,7 +196,7 @@ extension ImageResourceView where Loading == ProgressView<EmptyView, EmptyView>,
         self.init(.remote(url: url))
     }
 
-    public init(_ resource: ImageResource) {
+    public init(_ resource: ImageLocation) {
         self.init(resource: resource, loading: ProgressView.init, placeholder: { Color.gray })
     }
 }
@@ -211,7 +216,7 @@ private class ImageLoader: ObservableObject {
         cancel()
     }
 
-    func load(resource: ImageResource) {
+    func load(resource: ImageLocation) {
         guard !isLoading else { return }
 
         switch resource {

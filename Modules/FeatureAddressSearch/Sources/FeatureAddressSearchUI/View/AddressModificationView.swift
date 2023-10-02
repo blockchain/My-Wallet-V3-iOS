@@ -49,8 +49,8 @@ struct AddressModificationView: View {
         WithViewStore(store) { viewStore in
             ScrollView {
                 form
-                .padding(.vertical, Spacing.padding3)
-                .primaryNavigation(title: viewStore.screenTitle)
+                .padding(.bottom, Spacing.padding3)
+                .primaryNavigation()
                 .trailingNavigationButton(.close, isVisible: !viewStore.isPresentedFromSearchView) {
                     viewStore.send(.cancelEdit)
                 }
@@ -62,13 +62,14 @@ struct AddressModificationView: View {
                     dismiss: .dismissAlert
                 )
             }
+            .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 
     private var form: some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: Spacing.padding3) {
-                subtitle
+                header
                 VStack(spacing: Spacing.padding1) {
                     Input(
                         text: viewStore.binding(\.$line1),
@@ -79,14 +80,13 @@ struct AddressModificationView: View {
                         placeholder: L10n.Form.Placeholder.line1,
                         defaultBorderColor: .clear,
                         state: viewStore.state.line1.isEmpty ? .error : .default,
-                        configuration: {
-                            $0.textContentType = .streetAddressLine1
-                            $0.autocorrectionType = .no
-                        },
                         onReturnTapped: {
                             viewStore.send(.binding(.set(\.$selectedInputField, .line2)))
                         }
                     )
+                    .textContentType(.streetAddressLine1)
+                    .autocorrectionDisabled()
+
                     Input(
                         text: viewStore.binding(\.$line2),
                         isFirstResponder: viewStore
@@ -95,14 +95,13 @@ struct AddressModificationView: View {
                         label: L10n.Form.addressLine2,
                         placeholder: L10n.Form.Placeholder.line2,
                         defaultBorderColor: .clear,
-                        configuration: {
-                            $0.textContentType = .streetAddressLine2
-                            $0.autocorrectionType = .no
-                        },
                         onReturnTapped: {
                             viewStore.send(.binding(.set(\.$selectedInputField, .city)))
                         }
                     )
+                    .textContentType(.streetAddressLine2)
+                    .autocorrectionDisabled()
+
                     Input(
                         text: viewStore.binding(\.$city),
                         isFirstResponder: viewStore
@@ -110,14 +109,13 @@ struct AddressModificationView: View {
                             .equals(.city),
                         label: L10n.Form.city,
                         defaultBorderColor: .clear,
-                        configuration: {
-                            $0.textContentType = .addressCity
-                            $0.autocorrectionType = .no
-                        },
                         onReturnTapped: {
                             viewStore.send(.binding(.set(\.$selectedInputField, .state)))
                         }
                     )
+                    .textContentType(.addressCity)
+                    .autocorrectionDisabled()
+
                     HStack(spacing: Spacing.padding2) {
                         if viewStore.isStateFieldVisible {
                             Input(
@@ -127,15 +125,13 @@ struct AddressModificationView: View {
                                     .equals(.state),
                                 label: L10n.Form.state,
                                 defaultBorderColor: .clear,
-                                configuration: {
-                                    $0.textContentType = .addressState
-                                    $0.autocorrectionType = .no
-                                },
                                 onReturnTapped: {
                                     viewStore.send(.binding(.set(\.$selectedInputField, .zip)))
                                 }
                             )
                             .disabled(true)
+                            .textContentType(.addressState)
+                            .autocorrectionDisabled()
                         }
                         Input(
                             text: viewStore.binding(\.$postcode),
@@ -144,14 +140,12 @@ struct AddressModificationView: View {
                                 .equals(.zip),
                             label: L10n.Form.zip,
                             defaultBorderColor: .clear,
-                            configuration: {
-                                $0.textContentType = .postalCode
-                                $0.autocorrectionType = .no
-                            },
                             onReturnTapped: {
                                 viewStore.send(.binding(.set(\.$selectedInputField, nil)))
                             }
                         )
+                        .textContentType(.postalCode)
+                        .autocorrectionDisabled()
                     }
                     Input(
                         text: .constant(countryName(viewStore.state.country)),
@@ -161,7 +155,7 @@ struct AddressModificationView: View {
                     )
                     .disabled(true)
                 }
-                .padding(.horizontal, Spacing.padding3)
+                .padding(.horizontal, Spacing.padding2)
             }
         }
     }
@@ -190,13 +184,18 @@ struct AddressModificationView: View {
         }
     }
 
-    private var subtitle: some View {
+    private var header: some View {
         WithViewStore(store) { viewStore in
             if let subtitle = viewStore.screenSubtitle {
                 VStack(alignment: .leading, spacing: Spacing.padding1) {
+                    HStack {
+                        Text(viewStore.screenTitle)
+                            .typography(.title3)
+                        Spacer()
+                    }
                     Text(subtitle)
-                        .typography(.paragraph1)
-                        .foregroundColor(.WalletSemantic.body)
+                        .typography(.body1)
+                        .foregroundColor(.semantic.body)
                         .multilineTextAlignment(.leading)
                 }
                 .padding(.horizontal, Spacing.padding2)
@@ -236,8 +235,7 @@ struct AddressModification_Previews: PreviewProvider {
                         addressDetailsId: MockServices.addressId,
                         isPresentedFromSearchView: false
                     ),
-                    reducer: addressModificationReducer,
-                    environment: .init(
+                    reducer: AddressModificationReducer(
                         mainQueue: .main,
                         config: .init(title: "Title", subtitle: "Subtitle"),
                         addressService: MockServices(),

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Blockchain
 import Combine
 import DelegatedSelfCustodyDomain
 import MoneyKit
@@ -9,6 +10,7 @@ public protocol SubscriptionEntriesAsset {
 }
 
 struct FiatCustodialAccountFactory: FiatCustodialAccountFactoryAPI {
+
     func fiatCustodialAccount(fiatCurrency: FiatCurrency) -> FiatAccount {
         FiatCustodialAccount(fiatCurrency: fiatCurrency)
     }
@@ -21,6 +23,7 @@ struct CustodialCryptoAssetFactory: CustodialCryptoAssetFactoryAPI {
 }
 
 struct CryptoTradingAccountFactory: CryptoTradingAccountFactoryAPI {
+
     func cryptoTradingAccount(
         cryptoCurrency: CryptoCurrency,
         addressFactory: ExternalAssetAddressFactory

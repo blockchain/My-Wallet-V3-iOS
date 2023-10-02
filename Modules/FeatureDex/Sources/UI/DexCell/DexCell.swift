@@ -12,11 +12,10 @@ public struct DexCell: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .binding(\.$inputText):
-                return .none
             case .onAvailableBalancesChanged:
                 if let activeCurrency = state.balance?.currency,
-                   let updatedBalance = state.availableBalances.first(where: { $0.currency == activeCurrency }) {
+                   let updatedBalance = state.availableBalances.first(where: { $0.currency == activeCurrency })
+                {
                     state.balance = updatedBalance
                 }
                 return EffectTask(value: .preselectCurrency)
@@ -42,7 +41,8 @@ public struct DexCell: ReducerProtocol {
                 state.showAssetPicker = true
                 return .none
 
-            case .onCurrentNetworkChanged:
+            case .onCurrentNetworkChanged(let value):
+                state.currentNetwork = value
                 dexCellClear(state: &state)
                 return .merge(
                     .cancel(id: CancellationID.price),
@@ -50,13 +50,21 @@ public struct DexCell: ReducerProtocol {
                 )
 
             case .preselectCurrency:
-                guard state.style.isSource else { return .none }
-                guard state.balance == nil else { return .none }
-                guard let balance = favoriteToken(state: state) else { return .none }
-                return .merge(
-                    .cancel(id: CancellationID.price),
-                    EffectTask(value: .didSelectCurrency(balance))
-                )
+                switch state.style {
+                case .source:
+                    guard getThatSourceCurrency(app: app).isNotNil || state.balance.isNil else {
+                        return .none
+                    }
+                    guard let balance = favoriteSourceToken(app: app, state: state) else { return .none }
+                    return EffectTask(value: .didSelectCurrency(balance))
+
+                case .destination:
+                    guard getThatDestinationCurrency(app: app).isNotNil || state.balance.isNil else {
+                        return .none
+                    }
+                    guard let balance = favoriteDestinationToken(app: app, state: state) else { return .none }
+                    return EffectTask(value: .didSelectCurrency(balance))
+                }
 
             case .didSelectCurrency(let balance):
                 if balance != state.balance {
@@ -91,7 +99,7 @@ public struct DexCell: ReducerProtocol {
                     case .balance(let dexBalance):
                         return dexBalance
                     case .token(let cryptoCurrency):
-                        return DexBalance(value: .zero(currency: cryptoCurrency))
+                        return .zero(cryptoCurrency)
                     }
                 }()
                 return .merge(
@@ -117,12 +125,45 @@ func dexCellClear(state: inout DexCell.State) {
     state.overrideAmount = nil
 }
 
-private func favoriteToken(state: DexCell.State) -> DexBalance? {
-    guard let network = state.currentNetwork else { return nil }
-    let zeroNative = DexBalance(value: .zero(currency: network.nativeAsset))
-    guard let first = state.filteredBalances.first else { return zeroNative }
-    let native = state.filteredBalances.first(where: { $0.currency == network.nativeAsset })
-    return native ?? first
+private func favoriteSourceToken(
+    app: AppProtocol,
+    state: DexCell.State
+) -> DexBalance? {
+    guard let network = state.currentNetwork else {
+        return nil
+    }
+
+    if let preselected = getThatSourceCurrency(app: app),
+       let preselectedBalance = state.filteredBalances.first(where: { $0.currency == preselected }) {
+        eraseThatCurrency(app: app)
+        return preselectedBalance
+    }
+
+    guard let first = state.filteredBalances.first else {
+        return .zero(network.nativeAsset)
+    }
+    let nativeBalance = state.filteredBalances
+        .first(where: { $0.currency == network.nativeAsset })
+    return nativeBalance ?? first
+}
+
+private func favoriteDestinationToken(
+    app: AppProtocol,
+    state: DexCell.State
+) -> DexBalance? {
+    guard let network = state.currentNetwork else {
+        return nil
+    }
+
+    if let preselected = getThatDestinationCurrency(app: app),
+       preselected.network() == network {
+        let preselectedBalance = state.filteredBalances
+            .first(where: { $0.currency == preselected }) ?? .zero(preselected)
+        eraseThatCurrency(app: app)
+        return preselectedBalance
+    }
+
+    return nil
 }
 
 extension DexCell {

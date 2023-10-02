@@ -8,7 +8,7 @@ extension Compute {
 extension Compute.Exists {
 
     public func compute() throws -> Any? {
-        guard let value = value, value.isNotError else { return false }
+        guard let value, value.isNotError else { return false }
         return true
     }
 }
@@ -16,6 +16,6 @@ extension Compute.Exists {
 extension Compute.Exists: CustomStringConvertible {
 
     public var description: String {
-        return "Exists(value: \(value ?? "nil"))"
+        "Exists(value: \(value ?? "nil"))"
     }
 }

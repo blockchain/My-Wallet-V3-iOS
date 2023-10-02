@@ -80,6 +80,7 @@ struct TradingDashboardView: View {
             subscribe($kycState, to: blockchain.user.account.kyc.state)
         }
         .onAppear {
+            $app.post(event: blockchain.ux.home.dashboard)
             onboarding.request()
         }
     }
@@ -116,7 +117,7 @@ struct TradingDashboardView: View {
                 }
             }
 
-            FeatureAnnouncementsView(
+            AnnouncementsView(
                 store: store.scope(
                     state: \.announcementsState,
                     action: TradingDashboard.Action.announcementsAction
@@ -273,12 +274,11 @@ struct DashboardMainBalanceView: View {
 }
 
 extension BalanceInfo {
-
     var foregroundColor: Color {
         guard let change, change.isNotZero else {
             return .semantic.body
         }
-        return change.isPositive ? .semantic.success : .semantic.pinkHighlight
+        return change.isPositive ? .semantic.success : .semantic.negative
     }
 
     var changePercentageTitle: String {

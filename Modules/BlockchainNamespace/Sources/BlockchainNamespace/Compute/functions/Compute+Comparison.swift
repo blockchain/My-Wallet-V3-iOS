@@ -20,14 +20,14 @@ extension Compute {
 
         init(from decoder: Decoder) throws {
             let name = try [String: CodableVoid](from: decoder).keys.firstAndOnly.or(throw: "Could not decode operation type")
-            operation = try Operation(rawValue: name).or(throw: "Unrecognised operation \(name)")
+            self.operation = try Operation(rawValue: name).or(throw: "Unrecognised operation \(name)")
             let container = try decoder.container(keyedBy: Operation.self)
             let operands = try container.decode(Operands.self, forKey: operation)
-            lhs = AnyJSON(bridgeFromObjCType(operands.lhs.any) ?? operands.lhs.any)
+            self.lhs = AnyJSON(bridgeFromObjCType(operands.lhs.any) ?? operands.lhs.any)
             if let decodable = lhs.any as? any Decodable {
-                rhs = try AnyJSON(decodable.decode(from: operands.rhs.any, using: BlockchainNamespaceDecoder()))
+                self.rhs = try AnyJSON(decodable.decode(from: operands.rhs.any, using: BlockchainNamespaceDecoder()))
             } else {
-                rhs = operands.rhs
+                self.rhs = operands.rhs
             }
         }
     }
@@ -74,6 +74,7 @@ extension NSNumber: Comparable {
 enum ComparableComparison {
     case lessThan, lessThanOrEqual, greaterThan, greaterThanOrEqual
 }
+
 extension Comparable {
 
     func compare(_ other: Any, by comparison: ComparableComparison) -> Bool? {

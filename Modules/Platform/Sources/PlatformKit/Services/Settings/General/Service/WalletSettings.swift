@@ -21,6 +21,7 @@ public struct WalletSettings: Equatable {
     public let isEmailVerified: Bool
     public let authenticator: WalletAuthenticatorType
     public let features: [Feature: Bool]
+    public let recommendImportedSweep: Bool
 
     public var displayCurrency: FiatCurrency? {
         FiatCurrency(rawValue: rawDisplayCurrency)
@@ -42,5 +43,6 @@ public struct WalletSettings: Equatable {
             }
             result[key] = data.value
         }
+        self.recommendImportedSweep = response.recommendImportedSweep
     }
 }

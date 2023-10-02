@@ -85,11 +85,12 @@ public struct WireTransferView: View {
             title: title,
             trailing: {
                 IconButton(
-                    icon: Icon.closeCirclev3.small(),
+                    icon: .navigationCloseButton(),
                     action: { $app.post(event: story.article.plain.navigation.bar.button.close.tap) }
                 )
             }
         )
+        .post(lifecycleOf: story.article.plain)
         .listStyle(.insetGrouped)
         .background(Color.semantic.light.ignoresSafeArea())
         .bindings {
@@ -287,7 +288,7 @@ extension WireTransferView {
                                         .typography(.caption1)
                                         .foregroundColor(.semantic.body)
                                     if data.help.isNotNilOrEmpty {
-                                        IconButton(icon: Icon.questionCircle) {
+                                        IconButton(icon: Icon.questionFilled) {
                                             $app.post(
                                                 event: id.button.help.tap,
                                                 context: [
@@ -386,7 +387,7 @@ public struct WireTransferRowHelp: View {
         .background(Color.semantic.light.ignoresSafeArea())
         .overlay(
             IconButton(
-                icon: Icon.closeCirclev3,
+                icon: .navigationCloseButton(),
                 action: { $app.post(event: story.article.plain.navigation.bar.button.close.tap) }
             )
             .padding(),

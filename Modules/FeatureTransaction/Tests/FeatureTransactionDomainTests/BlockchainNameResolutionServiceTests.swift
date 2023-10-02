@@ -30,7 +30,7 @@ final class BlockchainNameResolutionServiceTests: XCTestCase {
             e.fulfill()
             return .just(.init(currency: currency, address: "address"))
         }
-        let publisher = subject.validate(domainName: domain, currency: .bitcoin)
+        let publisher = subject.validate(domainName: domain, memo: nil, currency: .bitcoin)
         XCTAssertPublisherCompletion(publisher)
 
         wait(for: [e], timeout: 10)

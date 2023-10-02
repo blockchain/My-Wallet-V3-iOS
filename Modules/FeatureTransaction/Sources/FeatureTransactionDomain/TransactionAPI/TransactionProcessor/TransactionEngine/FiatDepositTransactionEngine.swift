@@ -39,14 +39,9 @@ final class FiatDepositTransactionEngine: TransactionEngine {
     private let bankTransferRepository: BankTransferRepositoryAPI
     private let plaidRepository: PlaidRepositoryAPI
 
-    private var isPaymentsImprovementsFlagEnabled: Bool {
-        app.remoteConfiguration.yes(if: blockchain.app.configuration.ui.payments.improvements.is.enabled)
-    }
-
     private var hasACHDepositTerms: Bool {
-        isPaymentsImprovementsFlagEnabled
-        && sourceBankAccount.paymentType == .bankTransfer
-        && sourceBankAccount.fiatCurrency == .USD
+        sourceBankAccount.paymentType == .bankTransfer
+            && sourceBankAccount.fiatCurrency == .USD
     }
 
     // MARK: - Init
@@ -97,7 +92,7 @@ final class FiatDepositTransactionEngine: TransactionEngine {
             pendingTransaction.update(
                 sourceBankAccount: sourceBankAccount,
                 target: target,
-                hasAvailableDates: isPaymentsImprovementsFlagEnabled,
+                hasAvailableDates: true,
                 hasACHDepositTerms: hasACHDepositTerms
             )
         )
@@ -139,24 +134,24 @@ final class FiatDepositTransactionEngine: TransactionEngine {
             .optional()
             .catchAndReturn(nil)
 
-        if isPaymentsImprovementsFlagEnabled {
-            return Single.zip(
-                getSettlementInfoSignal,
-                getPaymentsDepositTermsSignal
-            )
-            .map { [sourceBankAccount, target, isPaymentsImprovementsFlagEnabled, hasACHDepositTerms] pendingTransaction, paymentsDepositTerms -> (PendingTransaction) in
-                pendingTransaction
-                    .update(paymentsDepositTerms: paymentsDepositTerms)
-                    .update(
-                        sourceBankAccount: sourceBankAccount,
-                        target: target,
-                        hasAvailableDates: isPaymentsImprovementsFlagEnabled,
-                        hasACHDepositTerms: hasACHDepositTerms
-                    )
-            }
-        } else {
-            return getSettlementInfoSignal
+        return Single.zip(
+            getSettlementInfoSignal,
+            getPaymentsDepositTermsSignal
+        )
+        .map { [sourceBankAccount, target, hasACHDepositTerms] pendingTransaction, paymentsDepositTerms -> (PendingTransaction) in
+            pendingTransaction
+                .update(paymentsDepositTerms: paymentsDepositTerms)
+                .update(
+                    sourceBankAccount: sourceBankAccount,
+                    target: target,
+                    hasAvailableDates: true,
+                    hasACHDepositTerms: hasACHDepositTerms
+                )
         }
+    }
+
+    func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+        defaultValidateAmount(pendingTransaction: pendingTransaction)
     }
 
     func doValidateAll(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
@@ -179,10 +174,11 @@ final class FiatDepositTransactionEngine: TransactionEngine {
                         amount: pendingTransaction.amount
                     )
                     .map(\.paymentId)
-                    .asObservable()
                     .asSingle()
             }
-            .map { TransactionResult.hashed(txHash: $0, amount: pendingTransaction.amount) }
+            .map { hash in
+                TransactionResult.hashed(txHash: hash, amount: pendingTransaction.amount)
+            }
     }
 
     func doUpdateFeeLevel(

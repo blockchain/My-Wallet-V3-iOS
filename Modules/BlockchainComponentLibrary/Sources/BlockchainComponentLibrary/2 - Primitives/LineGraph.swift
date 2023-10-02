@@ -104,7 +104,7 @@ public struct LineGraph<Title: View, Minimum: View, Maximum: View>: View {
             }
             Group {
                 highlight()
-                    .animation(.none)
+                    .animation(.none, value: 0)
             }
         }
         .gesture(

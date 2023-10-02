@@ -13,7 +13,7 @@ public struct DAppDashboardListView: View {
 
     @State private var dapps: [WalletConnectPairings]?
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         VStack(spacing: 0) {
@@ -32,10 +32,10 @@ public struct DAppDashboardListView: View {
                     if dapps == nil {
                         loading()
                     }
-                    if let dapps = dapps, dapps.isEmpty {
+                    if let dapps, dapps.isEmpty {
                         card()
                     }
-                    if let dapps = dapps, dapps.isNotEmpty {
+                    if let dapps, dapps.isNotEmpty {
                         DividedVStack(spacing: 0) {
                             ForEach(dapps, id: \.self) { model in
                                 rowForDapp(model)
@@ -150,7 +150,7 @@ public struct DAppDashboardListView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 18, height: 18)
 
-            Text(network.networkConfig.name)
+            Text(network.networkConfig.shortName)
                 .typography(.caption1)
                 .foregroundColor(.semantic.title)
         }

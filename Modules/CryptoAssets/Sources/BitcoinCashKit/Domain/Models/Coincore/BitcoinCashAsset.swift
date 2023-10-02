@@ -22,7 +22,9 @@ final class BitcoinCashAsset: CryptoAsset, SubscriptionEntriesAsset {
                     xPub: account.publicKey,
                     label: account.label,
                     isDefault: true,
-                    hdAccountIndex: account.index
+                    hdAccountIndex: account.index,
+                    imported: account.imported,
+                    importedPrivateKey: account.importedPrivateKey
                 )
             }
             .mapError(CryptoAssetError.failedToLoadDefaultAccount)
@@ -41,6 +43,9 @@ final class BitcoinCashAsset: CryptoAsset, SubscriptionEntriesAsset {
         kycTiersService: kycTiersService,
         nonCustodialAccountsProvider: { [nonCustodialAccounts] in
             nonCustodialAccounts
+        },
+        importedAddressesAccountsProvider: { [importedAccounts] in
+            importedAccounts
         },
         exchangeAccountsProvider: exchangeAccountProvider,
         addressFactory: addressFactory
@@ -125,16 +130,17 @@ final class BitcoinCashAsset: CryptoAsset, SubscriptionEntriesAsset {
         cryptoAssetRepository.accountGroup(filter: filter)
     }
 
-    func parse(address: String) -> AnyPublisher<ReceiveAddress?, Never> {
-        cryptoAssetRepository.parse(address: address)
+    func parse(address: String, memo: String?) -> AnyPublisher<ReceiveAddress?, Never> {
+        cryptoAssetRepository.parse(address: address, memo: memo)
     }
 
     func parse(
         address: String,
+        memo: String?,
         label: String,
         onTxCompleted: @escaping (TransactionResult) -> AnyPublisher<Void, Error>
     ) -> Result<CryptoReceiveAddress, CryptoReceiveAddressFactoryError> {
-        cryptoAssetRepository.parse(address: address, label: label, onTxCompleted: onTxCompleted)
+        cryptoAssetRepository.parse(address: address, memo: memo, label: label, onTxCompleted: onTxCompleted)
     }
 
     private var nonCustodialAccounts: AnyPublisher<[SingleAccount], CryptoAssetError> {
@@ -146,7 +152,28 @@ final class BitcoinCashAsset: CryptoAsset, SubscriptionEntriesAsset {
                         xPub: account.publicKey,
                         label: account.label,
                         isDefault: account.publicKey == defaultAccount.publicKey,
-                        hdAccountIndex: account.index
+                        hdAccountIndex: account.index,
+                        imported: account.imported,
+                        importedPrivateKey: account.importedPrivateKey
+                    )
+                }
+            }
+            .recordErrors(on: errorRecorder)
+            .replaceError(with: CryptoAssetError.noDefaultAccount)
+            .eraseToAnyPublisher()
+    }
+
+    private var importedAccounts: AnyPublisher<[SingleAccount], CryptoAssetError> {
+        repository.importedAccounts
+            .map { accounts -> [SingleAccount] in
+                accounts.map { account in
+                    BitcoinCashCryptoAccount(
+                        xPub: account.publicKey,
+                        label: account.label,
+                        isDefault: false,
+                        hdAccountIndex: account.index,
+                        imported: account.imported,
+                        importedPrivateKey: account.importedPrivateKey
                     )
                 }
             }
@@ -182,7 +209,9 @@ extension BitcoinCashAsset: DomainResolutionRecordProviderAPI {
                     xPub: account.publicKey,
                     label: account.label ?? CryptoCurrency.bitcoinCash.defaultWalletName,
                     isDefault: false,
-                    hdAccountIndex: account.index
+                    hdAccountIndex: account.index,
+                    imported: account.imported,
+                    importedPrivateKey: account.importedPrivateKey
                 )
             }
             .eraseToAnyPublisher()

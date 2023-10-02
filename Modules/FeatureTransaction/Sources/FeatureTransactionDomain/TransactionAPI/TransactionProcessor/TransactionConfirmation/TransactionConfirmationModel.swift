@@ -26,9 +26,9 @@ extension TransactionConfirmations {
     public struct FeedTotal: TransactionConfirmation {
         public let id = UUID()
         public let amount: MoneyValue
-        public let amountInFiat: MoneyValue
+        public let amountInFiat: MoneyValue?
         public let fee: MoneyValue
-        public let feeInFiat: MoneyValue
+        public let feeInFiat: MoneyValue?
         public let type: TransactionConfirmationKind = .readOnly
 
         public var formatted: (title: String, subtitle: String)? {
@@ -37,9 +37,9 @@ extension TransactionConfirmations {
 
         public init(
             amount: MoneyValue,
-            amountInFiat: MoneyValue,
+            amountInFiat: MoneyValue?,
             fee: MoneyValue,
-            feeInFiat: MoneyValue
+            feeInFiat: MoneyValue?
         ) {
             self.amount = amount
             self.amountInFiat = amountInFiat
@@ -59,14 +59,17 @@ extension TransactionConfirmations {
             guard let total = try? amount + fee else {
                 return ""
             }
+            guard let amountInFiat, let feeInFiat else {
+                return total.displayString
+            }
             guard let totalFiat = try? amountInFiat + feeInFiat else {
-                return ""
+                return total.displayString
             }
             return "\(total.displayString) (\(totalFiat.displayString))"
         }
 
         private var amountStringDifferentCurrencies: String {
-            "\(amount.displayString) (\(amountInFiat.displayString))\n\(fee.displayString) (\(feeInFiat.displayString))"
+            "\(amount.displayString) (\(amountInFiat?.displayString ?? ""))\n\(fee.displayString) (\(feeInFiat?.displayString ?? ""))"
         }
     }
 
@@ -393,42 +396,15 @@ extension TransactionConfirmations {
 
     public struct Memo: TransactionConfirmation, Equatable {
         public let id = UUID()
-        public enum Value: Equatable {
-            case text(String)
-            case identifier(Int)
-
-            public static func == (lhs: Value, rhs: Value) -> Bool {
-                switch (lhs, rhs) {
-                case (.text(let lhs), .text(let rhs)):
-                    return lhs == rhs
-                case (.identifier(let lhs), .identifier(let rhs)):
-                    return lhs == rhs
-                default:
-                    return false
-                }
-            }
-
-            public var string: String {
-                switch self {
-                case .text(let string):
-                    return string
-                case .identifier(let identifier):
-                    return String(identifier)
-                }
-            }
-        }
-
-        public let value: Value?
-        public let required: Bool
+        public let value: String?
         public let type: TransactionConfirmationKind = .memo
 
         public var formatted: (title: String, subtitle: String)? {
             (LocalizedString.memo, value?.string ?? "")
         }
 
-        public init(textMemo: String?, required: Bool) {
-            self.value = textMemo.flatMap { Value.text($0) }
-            self.required = required
+        public init(textMemo: String?) {
+            self.value = textMemo
         }
     }
 

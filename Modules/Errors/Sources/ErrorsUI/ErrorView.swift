@@ -54,26 +54,25 @@ public struct ErrorView<Fallback: View>: View {
             )
         }
         .post(lifecycleOf: blockchain.ux.error.article.plain)
-        #if os(iOS)
+#if os(iOS)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: EmptyView(),
             trailing: Group {
                 if navigationBarClose {
-                     trailingNavigationBarItem
-                 }
-             }
+                    trailingNavigationBarItem
+                }
+            }
         )
-        #endif
+#endif
         .background(Color.semantic.background)
     }
 
     @ViewBuilder var trailingNavigationBarItem: some View {
         if let dismiss {
-            IconButton(
-                icon: Icon.closeCirclev2,
-                action: dismiss
-            )
+            IconButton(icon: .navigationCloseButton()) {
+                dismiss()
+            }
         }
     }
 

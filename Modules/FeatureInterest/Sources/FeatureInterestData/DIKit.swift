@@ -38,6 +38,13 @@ extension DependencyContainer {
             return client as InterestAccountTransferClientAPI
         }
 
+        factory { () -> BlockchainAccountRepositoryAPI in
+            BlockchainAccountRepository(
+                coincore: DIKit.resolve(),
+                app: DIKit.resolve()
+            )
+        }
+
         factory { InterestAccountWithdrawRepository() as InterestAccountWithdrawRepositoryAPI }
 
         factory { InterestAccountOverviewRepository() as InterestAccountOverviewRepositoryAPI }

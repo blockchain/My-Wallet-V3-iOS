@@ -2,19 +2,28 @@
 
 import Foundation
 
-public enum TargetSelectionHeaderType: Equatable, Identifiable {
+enum TargetSelectionHeader: Equatable {
     case none
-    case titledSection(TitledSectionHeaderModel)
-    case section(SourceTargetSectionHeaderModel)
+    case section(String)
 
-    public var id: String {
+    var defaultHeight: CGFloat {
         switch self {
         case .none:
-            return "none"
-        case .titledSection(let model):
-            return model.titleLabel.text + model.sectionTitleLabel.text
-        case .section(let model):
-            return model.sectionTitleLabel.text
+            return 0
+        case .section:
+            return 32
+        }
+    }
+
+    func view(fittingWidth width: CGFloat) -> UIView? {
+        let frame = CGRect(x: 0, y: 0, width: width, height: defaultHeight)
+        switch self {
+        case .none:
+            return nil
+        case .section(let value):
+            let headerView = TargetSelectionHeaderView(frame: frame)
+            headerView.model = value
+            return headerView
         }
     }
 }

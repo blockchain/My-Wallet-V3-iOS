@@ -3,6 +3,7 @@
 import AnalyticsKit
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import BlockchainUI
 import Combine
 import ComposableArchitecture
 import DIKit
@@ -45,7 +46,7 @@ public protocol Routing {
         from presenter: UIViewController,
         emailAddress: String,
         flowCompletion: @escaping (FlowResult) -> Void
-    )
+    ) -> UIViewController
 
     /// Uses the passed-in `ViewController`to modally present another `ViewController` wrapping the entire KYC Flow.
     /// - Parameters:
@@ -147,7 +148,7 @@ public final class Router: Routing {
         from presenter: UIViewController,
         emailAddress: String,
         flowCompletion: @escaping (FlowResult) -> Void
-    ) {
+    ) -> UIViewController {
         presenter.present(
             EmailVerificationView(
                 store: .init(
@@ -184,7 +185,8 @@ public final class Router: Routing {
                 .prefix(1)
                 .handleEvents(receiveSubscription: { [legacyRouter] _ in legacyRouter.start(tier: requiredTier, parentFlow: .simpleBuy) })
                 .replaceError(with: FlowResult.abandoned) // should not fail, but just in case
-                .eraseToAnyPublisher()
+                .eraseToAnyPublisher(),
+            presenter: presenter
         )
     }
 
@@ -195,7 +197,7 @@ public final class Router: Routing {
     ) -> AnyPublisher<FlowResult, RouterError> {
         // step 1: check email verification status and present email verification flow if email is unverified.
         presentEmailVerificationIfNeeded(from: presenter)
-            // step 2: check KYC status and present KYC flow if user has verified their email address.
+        // step 2: check KYC status and present KYC flow if user has verified their email address.
             .flatMap { [presentKYCIfNeeded] result -> AnyPublisher<FlowResult, RouterError> in
                 if requireEmailVerification {
                     switch result {
@@ -214,13 +216,13 @@ public final class Router: Routing {
         from presenter: UIViewController
     ) -> AnyPublisher<FlowResult, RouterError> {
         emailVerificationService
-            // step 1: check email verification status.
+        // step 1: check email verification status.
             .checkEmailVerificationStatus()
             .mapError { _ in
                 RouterError.emailVerificationFailed
             }
             .receive(on: DispatchQueue.main)
-            // step 2: present email verification screen, if needed.
+        // step 2: present email verification screen, if needed.
             .flatMap { response -> AnyPublisher<FlowResult, RouterError> in
                 switch response.status {
                 case .verified:
@@ -230,9 +232,10 @@ public final class Router: Routing {
                 case .unverified:
                     // The user's email address in NOT verified; present email verification flow.
                     let publisher = PassthroughSubject<FlowResult, RouterError>()
-                    self.routeToEmailVerification(from: presenter, emailAddress: response.emailAddress) { result in
+                    var viewController: UIViewController?
+                    viewController = self.routeToEmailVerification(from: presenter, emailAddress: response.emailAddress) { result in
                         // Because the caller of the API doesn't know if the flow got presented, we should dismiss it here
-                        presenter.dismiss(animated: true) {
+                        (viewController ?? UIApplication.shared.findTopViewController()).dismiss(animated: true) {
                             switch result {
                             case .abandoned:
                                 publisher.send(.abandoned)
@@ -269,7 +272,13 @@ public final class Router: Routing {
             .fetchTiers()
             .receive(on: DispatchQueue.main)
             .mapError { _ in RouterError.kycStepFailed }
-            .flatMap { [app, routeToKYC] userTiers -> AnyPublisher<FlowResult, RouterError> in
+            .combineLatest(
+                app.publisher(for: blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
+                    .replaceError(with: false)
+                    .prefix(1)
+                    .setFailureType(to: RouterError.self)
+            )
+            .flatMap { [app, routeToKYC] userTiers, isSSNMandatory -> AnyPublisher<FlowResult, RouterError> in
 
                 let presentKYC = Deferred {
                     Future<FlowResult, RouterError> { futureCompletion in
@@ -278,7 +287,11 @@ public final class Router: Routing {
                         }
                     }
                 }
-                .eraseToAnyPublisher()
+                    .eraseToAnyPublisher()
+
+                if isSSNMandatory {
+                    return presentKYC
+                }
 
                 // step 2a: if the current user has extra questions to answer, present kyc
                 do {
@@ -333,7 +346,8 @@ public final class Router: Routing {
                 .flatMap { currentTier -> AnyPublisher<FlowResult, Never> in
                     presentClosure(presenter, currentTier)
                 }
-                .eraseToAnyPublisher()
+                .eraseToAnyPublisher(),
+            presenter: presenter
         )
     }
 
@@ -371,21 +385,24 @@ public final class Router: Routing {
                         )
                     )
                 )
-                .onAppear {
-                    app.post(event: blockchain.ux.kyc.trading.limits.overview)
-                }
+                    .onAppear {
+                        app.post(event: blockchain.ux.kyc.trading.limits.overview)
+                    }
                 presenter.present(view)
             }
         }
     }
 
-    private func ifEligible<E: Error>(_ publisher: AnyPublisher<FlowResult, E>) -> AnyPublisher<FlowResult, E> {
-        app.publisher(for: blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible, as: Bool.self)
+    private func ifEligible<E: Error>(_ publisher: AnyPublisher<FlowResult, E>, presenter: UIViewController) -> AnyPublisher<FlowResult, E> {
+        let presentErrorClosure = presentKycDisabledView(from:)
+        return app.publisher(for: blockchain.api.nabu.gateway.products["KYC_VERIFICATION"].is.eligible, as: Bool.self)
             .receive(on: DispatchQueue.main)
             .replaceError(with: true)
-            .prefix(1)
             .flatMap { isEligible -> AnyPublisher<FlowResult, E> in
-                guard isEligible else { return .just(.abandoned) }
+                guard isEligible else {
+                    return presentErrorClosure(presenter)
+                        .mapError()
+                }
                 return publisher.eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
@@ -408,12 +425,13 @@ extension Router {
             emailVerificationService: emailVerificationService,
             flowCompletionCallback: flowCompletion,
             openMailApp: { [openMailApp] in
-                .future { callback in
-                    openMailApp { result in
-                        callback(.success(result))
+                    .future { callback in
+                        openMailApp { result in
+                            callback(.success(result))
+                        }
                     }
-                }
-            }
+            },
+            app: app
         )
     }
 
@@ -452,11 +470,27 @@ extension Router {
                 )
             )
         )
-        .embeddedInNavigationView()
-        .onAppear { [app] in
-            app.post(event: blockchain.ux.kyc.trading.upgrade)
-        }
+            .embeddedInNavigationView()
+            .onAppear { [app] in
+                app.post(event: blockchain.ux.kyc.trading.upgrade)
+            }
         presenter.present(view)
+        return publisher.eraseToAnyPublisher()
+    }
+
+    private func presentKycDisabledView(
+        from presenter: UIViewController
+    ) -> AnyPublisher<FlowResult, Never> {
+        let publisher = PassthroughSubject<FlowResult, Never>()
+        let errorView = ErrorView(
+            ux: UX.Error(title: L10n.GenericError.title, message: L10n.GenericError.featureIsNotAvailableMessage),
+            dismiss: {
+                publisher.send(.abandoned)
+                publisher.send(completion: .finished)
+            }
+        )
+
+        presenter.present(errorView)
         return publisher.eraseToAnyPublisher()
     }
 }

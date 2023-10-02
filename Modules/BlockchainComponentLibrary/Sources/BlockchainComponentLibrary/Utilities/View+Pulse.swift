@@ -33,13 +33,13 @@ private struct PulseView: View {
         GeometryReader { proxy in
             ZStack {
                 circle(in: proxy)
-                    .animation(animation.delay(0.0))
+                    .animation(animation.delay(0.0), value: isAnimating)
 
                 circle(in: proxy)
-                    .animation(animation.delay(0.4))
+                    .animation(animation.delay(0.4), value: isAnimating)
 
                 circle(in: proxy)
-                    .animation(animation.delay(0.8))
+                    .animation(animation.delay(0.8), value: isAnimating)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
@@ -62,7 +62,7 @@ private struct PulseView: View {
 
 struct ViewPulse_Previews: PreviewProvider {
     static var previews: some View {
-        FloatingActionButton(isOn: .constant(false))
+        Toggle("Toggle", isOn: .constant(false))
             .background(
                 Circle()
                     .fill(Color.semantic.background)

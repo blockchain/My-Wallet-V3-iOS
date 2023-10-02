@@ -3,67 +3,28 @@
 import BlockchainComponentLibrary
 import SwiftUI
 
-public enum FontWeight: String, Hashable, Codable {
-    case regular
-    case medium
-    case semibold
-    case bold
-}
-
-extension Font {
-
-    public init(weight: FontWeight, size: CGFloat) {
-        self.init(UIFont.main(weight, size))
-    }
-}
-
 extension UIFont {
 
-    private enum InterType: String {
-        case regular = "Inter-Regular"
-        case medium = "Inter-Medium"
-        case semibold = "Inter-SemiBold"
-        case bold = "Inter-Bold"
-
-        static func of(_ weight: FontWeight) -> InterType {
-            switch weight {
-            case .regular:
-                return .regular
-            case .medium:
-                return .medium
-            case .bold:
-                return .bold
-            case .semibold:
-                return .semibold
-            }
+    private static func fontName(for weight: Typography.Weight) -> String {
+        switch weight {
+        case .regular:
+            return Typography.FontResource.interRegular.rawValue
+        case .medium:
+            return Typography.FontResource.interMedium.rawValue
+        case .semibold:
+            return Typography.FontResource.interSemibold.rawValue
+        case .bold:
+            return Typography.FontResource.interBold.rawValue
         }
     }
 
-    public static func main(_ weight: FontWeight, _ size: CGFloat) -> UIFont {
-        UIFont.loadCustomFonts()
-        return UIFont(name: InterType.of(weight).rawValue, size: size) ?? UIFont.systemFont(ofSize: size)
-    }
-}
-
-extension UIFont {
-
-    static func loadCustomFonts() {
-        DispatchQueue.once {
-            registerFont(fileName: InterType.regular.rawValue)
-            registerFont(fileName: InterType.medium.rawValue)
-            registerFont(fileName: InterType.semibold.rawValue)
-            registerFont(fileName: InterType.bold.rawValue)
+    public static func main(_ weight: Typography.Weight, _ size: CGFloat) -> UIFont {
+        FontLoader.loadCustomFonts()
+        let fontName = fontName(for: weight)
+        guard let font = UIFont(name: fontName, size: size) else {
+            assertionFailure("\(fontName) font does not exist.")
+            return UIFont.systemFont(ofSize: size)
         }
-    }
-
-    static func registerFont(fileName: String, bundle: Bundle = Bundle.componentLibrary) {
-        guard let fontURL = bundle.url(forResource: fileName, withExtension: "ttf") else {
-            print("No font named \(fileName).ttf was found in the module bundle")
-            return
-        }
-
-        var error: Unmanaged<CFError>?
-        CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, &error)
-        print(error ?? "Successfully registered font: \(fileName)")
+        return font
     }
 }

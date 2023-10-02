@@ -86,9 +86,10 @@ final class Coincore: CoincoreAPI {
     private let app: AppProtocol
     private let reactiveWallet: ReactiveWalletAPI
     private let delegatedCustodySubscriptionsService: DelegatedCustodySubscriptionsServiceAPI
+    private var externalNonCustodialAssetLoader: [() -> AnyPublisher<[CryptoCurrency], Never>] = []
     private let queue: DispatchQueue
 
-    private var pkw: AnyCancellable?
+    private var pkwCancellable: AnyCancellable?
 
     // MARK: - Setup
 
@@ -106,12 +107,16 @@ final class Coincore: CoincoreAPI {
         self.delegatedCustodySubscriptionsService = delegatedCustodySubscriptionsService
         self.queue = queue
         self.app = app
-        self.pkw = assetLoader.pkw
+        self.pkwCancellable = assetLoader.nonCustodialAssetsDidLoad
             .flatMap { [load] in load($0) }
             .handleEvents(receiveOutput: { [app] _ in
                 app.post(event: blockchain.app.coin.core.pkw.assets.loaded)
             })
             .subscribe()
+    }
+
+    func registerNonCustodialAssetLoader(handler: @escaping () -> AnyPublisher<[CryptoCurrency], Never>) {
+        externalNonCustodialAssetLoader = [handler]
     }
 
     func accounts(where isIncluded: @escaping (BlockchainAccount) -> Bool) -> AnyPublisher<[BlockchainAccount], Error> {
@@ -129,19 +134,39 @@ final class Coincore: CoincoreAPI {
     }
 
     /// Gives a chance for all assets to initialize themselves.
-    func initialize() -> AnyPublisher<Void, CoincoreError> {
+    func initialize() -> AnyPublisher<Void, Never> {
         assetLoader
             .initAndPreload()
             .subscribe(on: queue)
             .receive(on: queue)
-            .mapError(to: CoincoreError.self)
-            .flatMap { [load, assetLoader] _ -> AnyPublisher<Void, CoincoreError> in
-                load(assetLoader.loadedAssets)
+            .eraseToAnyPublisher()
+    }
+
+    private func load(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
+        externalNonCustodialAssetLoader
+            .map { handler -> AnyPublisher<[CryptoCurrency], Never> in
+                handler()
+            }
+            .zip()
+            .zip(unifiedBalanceMockPublisher(app: app).prefix(1))
+            .flatMap { [assetLoader] values, mockConfig -> AnyPublisher<[CryptoAsset], Never> in
+                var cryptoCurrencies: [CryptoCurrency] = values.flatMap { $0 }
+                if let mockConfig, let mockCurrency = CryptoCurrency(code: mockConfig.code) {
+                    cryptoCurrencies.append(mockCurrency)
+                }
+                return assetLoader.loadNonCustodial(cryptoCurrencies: cryptoCurrencies.unique)
+            }
+            .map { moreAssets -> [CryptoAsset] in
+                (assets + moreAssets).uniqued(on: \.asset)
+            }
+            .setFailureType(to: CoincoreError.self)
+            .flatMap { [loadInitialize] assets in
+                loadInitialize(assets)
             }
             .eraseToAnyPublisher()
     }
 
-    func load(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
+    private func loadInitialize(assets: [CryptoAsset]) -> AnyPublisher<Void, CoincoreError> {
         assets.map { asset -> AnyPublisher<Void, CoincoreError> in
             asset.initialize()
                 .mapError { error in .failedToInitializeAsset(error: error) }
@@ -317,8 +342,14 @@ final class Coincore: CoincoreAPI {
         action: AssetAction
     ) -> Bool {
         guard destinationAccount.currencyType == sourceAccount.currencyType else { return false }
-        return (sourceAccount is CryptoTradingAccount || sourceAccount is CryptoNonCustodialAccount)
-        && destinationAccount is CryptoStakingAccount
+        switch (sourceAccount, destinationAccount) {
+        case (let tradingAccount as CryptoTradingAccount, is CryptoStakingAccount):
+            return tradingAccount.isExternalTradingAccount == false
+        case (is CryptoNonCustodialAccount, is CryptoStakingAccount):
+            return true
+        default:
+            return false
+        }
     }
 
     private static func activeRewardsDepositFilter(
@@ -327,8 +358,14 @@ final class Coincore: CoincoreAPI {
         action: AssetAction
     ) -> Bool {
         guard destinationAccount.currencyType == sourceAccount.currencyType else { return false }
-        return (sourceAccount is CryptoTradingAccount || sourceAccount is CryptoNonCustodialAccount)
-        && destinationAccount is CryptoActiveRewardsAccount
+        switch (sourceAccount, destinationAccount) {
+        case (let tradingAccount as CryptoTradingAccount, is CryptoActiveRewardsAccount):
+            return tradingAccount.isExternalTradingAccount == false
+        case (is CryptoNonCustodialAccount, is CryptoActiveRewardsAccount):
+            return true
+        default:
+            return false
+        }
     }
 
     private static func activeRewardsWithdrawFilter(
@@ -337,7 +374,12 @@ final class Coincore: CoincoreAPI {
         action: AssetAction
     ) -> Bool {
         guard destinationAccount.currencyType == sourceAccount.currencyType else { return false }
-        return sourceAccount is CryptoActiveRewardsAccount && destinationAccount is CryptoTradingAccount
+        switch (sourceAccount, destinationAccount) {
+        case (is CryptoActiveRewardsAccount, let tradingAccount as CryptoTradingAccount):
+            return tradingAccount.isExternalTradingAccount == false
+        default:
+            return false
+        }
     }
 
     private static func interestTransferFilter(
@@ -349,8 +391,9 @@ final class Coincore: CoincoreAPI {
             return false
         }
         switch (sourceAccount, destinationAccount) {
-        case (is CryptoTradingAccount, is CryptoInterestAccount),
-            (is CryptoNonCustodialAccount, is CryptoInterestAccount):
+        case (let tradingAccount as CryptoTradingAccount, is CryptoInterestAccount):
+            return tradingAccount.isExternalTradingAccount == false
+        case (is CryptoNonCustodialAccount, is CryptoInterestAccount):
             return true
         default:
             return false
@@ -366,8 +409,9 @@ final class Coincore: CoincoreAPI {
             return false
         }
         switch (sourceAccount, destinationAccount) {
-        case (is CryptoInterestAccount, is CryptoTradingAccount),
-            (is CryptoInterestAccount, is CryptoNonCustodialAccount):
+        case (is CryptoInterestAccount, let tradingAccount as CryptoTradingAccount):
+            return tradingAccount.isExternalTradingAccount == false
+        case (is CryptoInterestAccount, is CryptoNonCustodialAccount):
             return true
         default:
             return false
@@ -383,8 +427,8 @@ final class Coincore: CoincoreAPI {
             return false
         }
         switch (sourceAccount, destinationAccount) {
-        case (is CryptoStakingAccount, is CryptoTradingAccount):
-            return true
+        case (is CryptoStakingAccount, let tradingAccount as CryptoTradingAccount):
+            return tradingAccount.isExternalTradingAccount == false
         default:
             return false
         }
@@ -399,9 +443,11 @@ final class Coincore: CoincoreAPI {
             return false
         }
         switch (sourceAccount, destinationAccount) {
-        case (is CryptoTradingAccount, is CryptoTradingAccount),
-            (is CryptoNonCustodialAccount, is CryptoTradingAccount),
-            (is CryptoNonCustodialAccount, is CryptoNonCustodialAccount):
+        case (let t0 as CryptoTradingAccount, let t1 as CryptoTradingAccount):
+            return t0.isExternalTradingAccount == false && t1.isExternalTradingAccount == false
+        case (is CryptoNonCustodialAccount, let tradingAccount as CryptoTradingAccount):
+            return tradingAccount.isExternalTradingAccount == false
+        case (is CryptoNonCustodialAccount, is CryptoNonCustodialAccount):
             return true
         default:
             return false
@@ -417,9 +463,11 @@ final class Coincore: CoincoreAPI {
             return false
         }
         switch destinationAccount {
-        case is CryptoTradingAccount,
-            is CryptoExchangeAccount,
-            is CryptoNonCustodialAccount:
+        case let tradingAccount as CryptoTradingAccount:
+            return tradingAccount.isExternalTradingAccount == false
+        case is CryptoExchangeAccount:
+            return true
+        case is CryptoNonCustodialAccount:
             return true
         default:
             return false

@@ -21,29 +21,30 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
         SearchCryptoDomainAction,
         SearchCryptoDomainState,
         SearchCryptoDomainAction,
-        SearchCryptoDomainEnvironment
+        Void
     >!
     private var searchClient: SearchDomainClientAPI!
     private var orderClient: OrderDomainClientAPI!
+    private var searchDomainRepository: SearchDomainRepository!
+    private var orderDomainRepository: OrderDomainRepository!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         (searchClient, _) = SearchDomainClient.test()
         (orderClient, _) = OrderDomainClient.test()
         mockMainQueue = DispatchQueue.immediate
-        testStore = TestStore(
-            initialState: .init(),
-            reducer: searchCryptoDomainReducer,
-            environment: SearchCryptoDomainEnvironment(
-                mainQueue: mockMainQueue.eraseToAnyScheduler(),
+        searchDomainRepository = SearchDomainRepository(
+            apiClient: searchClient
+        )
+        orderDomainRepository = OrderDomainRepository(
+            apiClient: orderClient
+        )
+        testStore = TestStore(initialState: SearchCryptoDomain.State()) {
+            SearchCryptoDomain(
                 analyticsRecorder: MockAnalyticsRecorder(),
                 externalAppOpener: ToLogAppOpener(),
-                searchDomainRepository: SearchDomainRepository(
-                    apiClient: searchClient
-                ),
-                orderDomainRepository: OrderDomainRepository(
-                    apiClient: orderClient
-                ),
+                searchDomainRepository: searchDomainRepository,
+                orderDomainRepository: orderDomainRepository,
                 userInfoProvider: {
                     .just(
                         OrderDomainUserInfo(
@@ -54,7 +55,8 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
                     )
                 }
             )
-        )
+            .dependency(\.mainQueue, mockMainQueue.eraseToAnyScheduler())
+        }
     }
 
     override func tearDownWithError() throws {
@@ -81,9 +83,7 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
     }
 
     func test_on_appear_should_search_domains_by_firstname() throws {
-        let expectedResults = try testStore
-            .environment
-            .searchDomainRepository
+        let expectedResults = try searchDomainRepository
             .searchResults(searchKey: "Firstname", freeOnly: true)
             .wait()
         testStore.send(.onAppear)
@@ -98,9 +98,7 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
     }
 
     func test_empty_search_text_should_search_domains_by_username() throws {
-        let expectedResults = try testStore
-            .environment
-            .searchDomainRepository
+        let expectedResults = try searchDomainRepository
             .searchResults(searchKey: "Firstname", freeOnly: true)
             .wait()
         testStore.send(.set(\.$searchText, ""))
@@ -116,9 +114,7 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
     }
 
     func test_valid_search_text_should_search_domains() throws {
-        let expectedResults = try testStore
-            .environment
-            .searchDomainRepository
+        let expectedResults = try searchDomainRepository
             .searchResults(searchKey: "Searchkey", freeOnly: false)
             .wait()
         testStore.send(.set(\.$searchText, "Searchkey")) { state in
@@ -159,9 +155,7 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
     }
 
     func test_select_premium_domain_should_open_bottom_sheet() throws {
-        let expectedResult = try testStore
-            .environment
-            .orderDomainRepository
+        let expectedResult = try orderDomainRepository
             .createDomainOrder(
                 isFree: false,
                 domainName: "premium",

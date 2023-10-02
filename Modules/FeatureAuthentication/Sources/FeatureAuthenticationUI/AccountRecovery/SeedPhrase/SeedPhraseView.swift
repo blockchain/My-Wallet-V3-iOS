@@ -295,7 +295,7 @@ public struct SeedPhraseView: View {
 
 extension View {
     func disableAutocapitalization() -> some View {
-        self.textInputAutocapitalization(.never)
+        textInputAutocapitalization(.never)
     }
 }
 
@@ -305,8 +305,7 @@ struct SeedPhraseView_Previews: PreviewProvider {
         SeedPhraseView(
             store: .init(
                 initialState: .init(context: .restoreWallet, emailAddress: ""),
-                reducer: seedPhraseReducer,
-                environment: .init(
+                reducer: SeedPhraseReducer(
                     mainQueue: .main,
                     externalAppOpener: ToLogAppOpener(),
                     analyticsRecorder: NoOpAnalyticsRecorder(),
@@ -316,6 +315,9 @@ struct SeedPhraseView_Previews: PreviewProvider {
                     accountRecoveryService: NoOpAccountRecoveryService(),
                     errorRecorder: NoOpErrorRecoder(),
                     recaptchaService: NoOpGoogleRecatpchaService(),
+                    validator: NoOpValidator(),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: NoOpSignupCountryService(),
                     app: App.preview
                 )
             )

@@ -13,82 +13,36 @@ struct AccountSheet: View {
     @BlockchainApp var app
     @Environment(\.context) var context
 
-    let account: Account.Snapshot
-    var isVerified: Bool
-    let onClose: () -> Void
+    private let account: Account.Snapshot
+    private let onClose: () -> Void
+    private let isVerified: Bool
+    private let allActions: OrderedSet<Account.Action>
+    private let actionsToDisplay: OrderedSet<Account.Action>
+    private let maxHeight: Length
 
-    private var isNotVerified: Bool { !isVerified }
-
-    var actions: [Account.Action] {
-        account.actions
+    init(account: Account.Snapshot, isVerified: Bool, onClose: @escaping () -> Void) {
+        self.account = account
+        self.isVerified = isVerified
+        self.onClose = onClose
+        let allActionsArray: [Account.Action] = account.actions
             .union(account.importantActions)
             .intersection(account.allowedActions)
-            .sorted(like: account.allowedActions)
+            .sorted(like: account.allowedActions.array)
+        self.allActions = OrderedSet(allActionsArray)
+
+        self.actionsToDisplay = isVerified.isNo && account.isPrivateKey ? account.allowedActions : allActions
+        self.maxHeight = (85 / max(1, actionsToDisplay.count))
+            .clamped(to: 8..<11).vh
     }
 
-    var maxHeight: Length {
-        (85 / actions.count).clamped(to: 8..<11).vh
-    }
-
+    @ViewBuilder
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                account.cryptoCurrency.logo()
-                Text(account.assetName)
-                    .typography(.body2)
-                    .foregroundColor(.semantic.title)
-                Spacer()
-                IconButton(icon: Icon.closev2.circle(), action: onClose)
-                    .frame(width: 24.pt, height: 24.pt)
-            }
-            .padding(.horizontal, Spacing.padding2)
-            .padding(.bottom, Spacing.padding3)
-            Group {
-                if let fiat = account.fiat, let crypto = account.crypto {
-                    BalanceSectionHeader(
-                        title: fiat.displayString,
-                        subtitle: crypto.displayString
-                    )
-                } else {
-                    BalanceSectionHeader(
-                        title: "......",
-                        subtitle: "............"
-                    )
-                    .redacted(reason: .placeholder)
-                }
-            }
-            .padding([.top, .bottom], 8.pt)
-            let resolved = isNotVerified && account.isPrivateKey
-                ? [.send, .receive, .swap, .sell, .activity]
-                : actions
-            ForEach(resolved) { action in
-                PrimaryDivider()
-                if actions.contains(action) {
-                    PrimaryRow(
-                        title: action.title,
-                        subtitle: action.description.interpolating(account.cryptoCurrency.displayCode),
-                        leading: {
-                            action.icon.circle()
-                                .accentColor(.semantic.title)
-                                .frame(maxHeight: 24.pt)
-                        },
-                        action: {
-                            onClose()
-                            app.post(event: action.id[].ref(to: context), context: context)
-                        }
-                    )
-                    .accessibility(identifier: action.id(\.id))
-                    .frame(maxHeight: maxHeight)
-                } else {
-                    LockedAccountRow(
-                        title: action.title,
-                        subtitle: action.description.interpolating(account.cryptoCurrency.displayCode),
-                        icon: action.icon.circle()
-                    )
-                    .accessibility(identifier: action.id(\.id))
-                    .frame(maxHeight: maxHeight)
-                }
-            }
+            header
+                .padding(.horizontal, Spacing.padding2)
+            balance
+                .padding([.top, .bottom], Spacing.padding3)
+            actions
         }
         .batch {
             set(
@@ -105,41 +59,65 @@ struct AccountSheet: View {
             )
         }
     }
-}
 
-extension Account.Snapshot {
-
-    var color: Color {
-        cryptoCurrency.color
-    }
-
-    var allowedActions: [Account.Action] {
-        switch accountType {
-        case .interest:
-            return [.rewards.withdraw, .rewards.deposit, .rewards.summary]
-        case .privateKey:
-            return [.send, .receive, .swap, .sell, .activity]
-        case .trading:
-            return [.buy, .sell, .swap, .send, .receive]
-        case .exchange:
-            return [.exchange.withdraw, .exchange.deposit]
-        case .staking:
-            return [.staking.deposit, .staking.summary]
-        case .activeRewards:
-            return [.active.withdraw, .active.deposit, .active.summary]
+    @ViewBuilder
+    private var header: some View {
+        HStack {
+            account.cryptoCurrency.logo()
+            Text(account.assetName)
+                .typography(.body2.slashedZero())
+                .foregroundColor(.semantic.title)
+            Spacer()
+            IconButton(icon: .navigationCloseButton(), action: onClose)
+                .frame(width: 24.pt, height: 24.pt)
         }
     }
 
-    var importantActions: [Account.Action] {
-        switch accountType {
-        case .interest:
-            return [.rewards.withdraw, .rewards.deposit, .rewards.summary]
-        case .staking:
-            return [.staking.deposit, .staking.summary]
-        case .activeRewards:
-            return [.active.deposit, .active.summary]
-        default:
-            return []
+    @ViewBuilder
+    private var balance: some View {
+        if account.fiat.isNil, account.crypto.isNil {
+            BalanceSectionHeader(
+                title: "......",
+                subtitle: "............"
+            )
+            .redacted(reason: .placeholder)
+        } else {
+            BalanceSectionHeader(
+                title: account.fiat?.displayString,
+                subtitle: account.crypto?.displayString
+            )
+        }
+    }
+
+    @ViewBuilder
+    private var actions: some View {
+        ForEach(actionsToDisplay) { action in
+            PrimaryDivider()
+            if allActions.contains(action) {
+                PrimaryRow(
+                    title: action.title,
+                    subtitle: action.description.interpolating(account.cryptoCurrency.displayCode),
+                    leading: {
+                        action.icon.circle()
+                            .accentColor(.semantic.title)
+                            .frame(maxHeight: 24.pt)
+                    },
+                    action: {
+                        onClose()
+                        app.post(event: action.id[].ref(to: context), context: context)
+                    }
+                )
+                .accessibility(identifier: action.id(\.id))
+                .frame(maxHeight: maxHeight)
+            } else {
+                LockedAccountRow(
+                    title: action.title,
+                    subtitle: action.description.interpolating(account.cryptoCurrency.displayCode),
+                    icon: action.icon.circle()
+                )
+                .accessibility(identifier: action.id(\.id))
+                .frame(maxHeight: maxHeight)
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Errors
 import FeatureCardPaymentDomain
 import PlatformKit
@@ -33,7 +34,7 @@ public final class CardTextFieldViewModel: TextFieldViewModel {
                 /// Show the disclaimer icon should either of the above be true.
                 if isBlocked || isConceivable {
                     let content = ImageViewContent(
-                        imageResource: ImageResource.local(name: "disclaimer-icon", bundle: .platformUIKit),
+                        imageResource: ImageLocation.local(name: "disclaimer-icon", bundle: .platformUIKit),
                         renderingMode: .template(isBlocked ? .destructive : .warning)
                     )
                     let theme = BadgeImageViewModel.Theme(

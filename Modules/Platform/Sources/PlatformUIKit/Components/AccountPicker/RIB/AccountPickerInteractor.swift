@@ -98,7 +98,7 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                 let isFiltering = searchString
                     .flatMap { !$0.isEmpty } ?? false
 
-                var interactors = accounts
+                var interactors: [AccountPickerCellItem.Interactor] = accounts
                     .filter { snapshot in
                         snapshot.account.currencyType.matchSearch(searchString)
                     }
@@ -110,11 +110,7 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                     }
                     .sorted(by: >)
                     .map(\.account)
-                    .map(\.accountPickerCellItemInteractor)
-
-                if interactors.isEmpty {
-                    interactors.append(.emptyState)
-                }
+                    .compactMap(\.accountPickerCellItemInteractor)
 
                 let action = try app.state.get(blockchain.ux.transaction.id, as: AssetAction.self)
 
@@ -124,6 +120,8 @@ public final class AccountPickerInteractor: PresentableInteractor<AccountPickerP
                     paymentMethods.contains(where: { method in action != .withdraw || method.capabilities?.contains(.withdrawal) != false })
                 {
                     interactors.append(.button(button))
+                } else if interactors.isEmpty {
+                     interactors.append(.emptyState)
                 }
 
                 return State(
@@ -185,30 +183,23 @@ extension AccountPickerInteractor {
 
 extension BlockchainAccount {
 
-    fileprivate var accountPickerCellItemInteractor: AccountPickerCellItem.Interactor {
+    fileprivate var accountPickerCellItemInteractor: AccountPickerCellItem.Interactor? {
         switch self {
-        case is PaymentMethodAccount:
-            return .paymentMethodAccount(self as! PaymentMethodAccount)
+        case let value as PaymentMethodAccount:
+            return .paymentMethodAccount(value)
 
-        case is LinkedBankAccount:
-            let account = self as! LinkedBankAccount
-            return .linkedBankAccount(account)
+        case let value as LinkedBankAccount:
+            return .linkedBankAccount(value)
 
-        case is SingleAccount:
-            let singleAccount = self as! SingleAccount
-            return .singleAccount(singleAccount, AccountAssetBalanceViewInteractor(account: singleAccount))
+        case let value as SingleAccount:
+            return .singleAccount(value)
 
-        case is AccountGroup:
-            let accountGroup = self as! AccountGroup
-            return .accountGroup(
-                accountGroup,
-                AccountGroupBalanceCellInteractor(
-                    balanceViewInteractor: WalletBalanceViewInteractor(account: accountGroup)
-                )
-            )
+        case let value as AccountGroup:
+            return .accountGroup(value)
 
         default:
-            impossible()
+            assertionFailure("Type not valid: \(type(of: self))")
+            return nil
         }
     }
 }
@@ -305,7 +296,7 @@ extension Collection<BlockchainAccount> {
                 let currentId: String? = try? await app.get(
                     blockchain.ux.transaction.source.target.id
                 )
-                let balance = try? await account.fiatBalance(fiatCurrency: currency).await()
+                let balance = try? await account.balancePair(fiatCurrency: currency).map(\.quote).await()
                 let volume24h: BigInt? = usdPrices[account.identifier].flatMap { currency -> BigInt? in
                     guard let currency else { return nil }
                     return try? currency.quote.value.amount(BigInt.self) * BigInt(currency.volume(Double?.self).or(.zero))

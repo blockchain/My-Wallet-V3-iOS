@@ -12,14 +12,15 @@ class CannotLoginAlertViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(contentView.view)
         addChild(contentView)
+        view.addSubview(contentView.view)
+        contentView.didMove(toParent: self)
         setupConstraints()
     }
 
     private func setupConstraints() {
         contentView.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView.view.heightAnchor.constraint(equalToConstant: 500).isActive = true
+        contentView.view.heightAnchor.constraint(equalToConstant: 400).isActive = true
         contentView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         contentView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         contentView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -29,29 +30,34 @@ class CannotLoginAlertViewController: UIViewController {
 private struct CannotLoginAlertView: View {
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(LocalizationConstants.Pin.CannotLoginTitle)
-                .textStyle(.title)
-                .padding(.top, 25)
-            Text(LocalizationConstants.Pin.CannotLoginMessage)
-                .textStyle(.body)
-                .padding(.bottom, 5)
-            InstructionList(instructions: createInstructions())
-                .padding(.bottom, 5)
-            Text(LocalizationConstants.Pin.CannotLoginRemarkMessage)
-                .font(Font(weight: .medium, size: 12.0))
-                .foregroundColor(.textBody)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .multilineTextAlignment(.center)
+        VStack {
+            VStack(alignment: .leading, spacing: 5) {
+                Text(LocalizationConstants.Pin.CannotLoginTitle)
+                    .typography(.title3)
+                    .foregroundColor(.semantic.title)
+                Text(LocalizationConstants.Pin.CannotLoginMessage)
+                    .typography(.paragraph1)
+                    .foregroundColor(.semantic.body)
+                InstructionList(instructions: createInstructions())
+                    .padding(.top, Spacing.padding3)
+                Text(LocalizationConstants.Pin.CannotLoginRemarkMessage)
+                    .typography(.caption1)
+                    .foregroundColor(.semantic.muted)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.top, Spacing.padding2)
+            .padding(.bottom, Spacing.padding3)
+            Spacer()
+            PrimaryButton(
+                title: LocalizationConstants.Pin.Button.toWebLogin,
+                action: {
+                    UIApplication.shared.open(URL(string: "https://login.blockchain.com")!)
+                }
+            )
         }
-        .frame(maxWidth: .infinity, alignment: .center)
-        .padding([.leading, .trailing], 24)
-
-        Spacer()
-
-        PrimaryButton(title: LocalizationConstants.Pin.Button.toWebLogin, action: {
-            UIApplication.shared.open(URL(string: "https://login.blockchain.com")!)
-        }).padding([.leading, .trailing], 24)
+        .padding([.leading, .trailing], Spacing.padding3)
     }
 
     private struct Instruction: Identifiable {
@@ -88,9 +94,11 @@ private struct CannotLoginAlertView: View {
                     .padding(.trailing, 5)
                 VStack(alignment: .leading) {
                     Text(instruction.title)
-                        .textStyle(.heading)
+                        .typography(.body2)
+                        .foregroundColor(.semantic.title)
                     Text(instruction.detailedMessage)
-                        .textStyle(.body)
+                        .typography(.paragraph1)
+                        .foregroundColor(.semantic.body)
                 }
             }
         }

@@ -85,9 +85,10 @@ public final class PlaidClient: PlaidClientAPI {
 
     public func getSettlementInfo(
         accountId: String,
-        amount: String
+        amount: String,
+        product: String
     ) -> AnyPublisher<SettlementInfoResponse, NabuError> {
-        let body = SettlementInfoRequest(amount: amount)
+        let body = SettlementInfoRequest(amount: amount, product: product)
         let request = requestBuilder.post(
             path: "/payments/banktransfer/\(accountId)/update",
             body: try? JSONEncoder().encode(body),

@@ -158,7 +158,7 @@ extension LocalizationConstants {
                 public enum LimitView {}
             }
 
-            public enum UpsellAfterSwap{}
+            public enum UpsellAfterSwap {}
         }
 
         public enum AvailableBalance {}
@@ -310,7 +310,7 @@ extension LocalizationConstants.Transaction.Swap.UpsellAfterSwap {
         "Start Earning",
         comment: "Star Earning"
     )
-    
+
     public static let maybeLater = NSLocalizedString(
         "Maybe Later",
         comment: "Maybe Later"
@@ -419,6 +419,7 @@ extension LocalizationConstants.Transaction {
     public static let swap = NSLocalizedString("Swap", comment: "Swap")
     public static let withdraw = NSLocalizedString("Withdraw", comment: "Withdraw")
     public static let buy = NSLocalizedString("Buy", comment: "Buy")
+    public static let addNew = NSLocalizedString("+Add New", comment: "+Add New")
 
     public static let max = NSLocalizedString("Max", comment: "Max")
 
@@ -459,13 +460,17 @@ extension LocalizationConstants.Transaction {
         "To",
         comment: "To"
     )
+    public static let memo = NSLocalizedString(
+        "Memo",
+        comment: "Memo"
+    )
     public static let selectAWallet = NSLocalizedString(
         "Select a Wallet",
         comment: "Select a Wallet"
     )
-    public static let orSelectAWallet = NSLocalizedString(
-        "or Select a Wallet",
-        comment: "Select a Wallet"
+    public static let accountsAndWallets = NSLocalizedString(
+        "Accounts and wallets",
+        comment: "Accounts and wallets"
     )
     public static let wireTransferEmptyTitle = NSLocalizedString(
         "Oops! Something Went Wrong.",
@@ -753,8 +758,8 @@ extension LocalizationConstants.Transaction.InterestWithdraw {
 extension LocalizationConstants.Transaction.InterestWithdraw.Completion.Pending {
     public static let title = NSLocalizedString("Withdrawing %@", comment: "Withdrawing %@")
     public static let description = NSLocalizedString(
-        "We're completing your withdraw now.",
-        comment: "We're completing your withdraw now."
+        "We're completing your withdrawal now.",
+        comment: "We're completing your withdrawal now."
     )
 }
 
@@ -961,6 +966,12 @@ extension LocalizationConstants.Transaction.Deposit.Confirmation.DepositACHTerms
         "By placing this order, you authorize Blockchain.com, Inc. to debit %@ from your bank account.",
         comment: "Terms located in the bottom of the deposit confirmation screen"
     )
+
+    public static let descriptionBakkt = NSLocalizedString(
+        "By placing this order, you authorize Bakkt to debit %@ from your bank account.",
+        comment: "Terms located in the bottom of the deposit confirmation screen"
+    )
+
     public static let readMoreButton = NSLocalizedString(
         "Read more",
         comment: "Read More Button to open details of terms and conditions from Deposit Screen"
@@ -1182,10 +1193,26 @@ extension LocalizationConstants.Transaction.Buy.Completion.Success {
         "Success! 🚀",
         comment: "Success! 🚀"
     )
-    public static let description = NSLocalizedString(
-        "Your %@ is now available in your Blockchain.com Account.",
-        comment: "Your %@ is now available in your Blockchain.com Account."
+
+    public static func description(externalTradingAccount: Bool) -> String {
+        if externalTradingAccount {
+            return NSLocalizedString(
+                "Your %@ is now available in your account.",
+                comment: "Your %@ is now available in your account."
+            )
+        } else {
+            return NSLocalizedString(
+                "Your %@ is now available in your Blockchain.com Account.",
+                comment: "Your %@ is now available in your Blockchain.com Account."
+            )
+        }
+    }
+
+    public static let descriptionBakkt = NSLocalizedString(
+        "Your %@ is now available in your account.",
+        comment: "Your %@ is now available in your account."
     )
+
     public static let action = NSLocalizedString(
         "OK",
         comment: "OK"

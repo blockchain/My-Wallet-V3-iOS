@@ -78,18 +78,41 @@ extension Currency {
     }
 
     public func filter(by searchText: String, using algorithm: StringDistanceAlgorithm) -> Bool {
-        name.distance(between: searchText, using: algorithm) == 0 ||
-            code.distance(between: searchText, using: algorithm) == 0 ||
-            displayCode.distance(between: searchText, using: algorithm) == 0
+        let values: [String]
+        switch currencyType {
+        case .crypto(let value):
+            values = value.searcheableParameters
+        case .fiat(let value):
+            values = value.searcheableParameters
+        }
+        for value in values {
+            if value.distance(between: searchText, using: algorithm) == 0 {
+                return true
+            }
+        }
+        return false
     }
 }
 
+extension FiatCurrency {
+    fileprivate var searcheableParameters: [String] {
+        [name, displaySymbol, displayCode]
+    }
+}
 
-public extension Either where A: Currency, B: Currency {
-    var currency: CurrencyType {
+extension CryptoCurrency {
+    fileprivate var searcheableParameters: [String] {
+        [name, displayCode, assetModel.kind.erc20ContractAddress].compactMap { $0 }
+    }
+}
+
+extension Either where A: Currency, B: Currency {
+    public var currency: CurrencyType {
         switch self {
-        case .left(let a): return a.currencyType
-        case .right(let b): return b.currencyType
+        case .left(let a):
+            return a.currencyType
+        case .right(let b):
+            return b.currencyType
         }
     }
 }

@@ -1,12 +1,12 @@
-import BlockchainComponentLibrary
+import BlockchainUI
 import BlockchainNamespace
 import ComposableArchitecture
 import FeatureStakingDomain
 import Foundation
-import Localization
 import SwiftUI
 
 public struct EarnIntroView: View {
+
     let store: StoreOf<EarnIntro>
 
     public init(store: StoreOf<EarnIntro>) {
@@ -21,7 +21,8 @@ public struct EarnIntroView: View {
                         Button {
                             viewStore.send(.onDismiss)
                         } label: {
-                            Icon.close
+                            Icon
+                                .navigationCloseButton()
                         }
                     })
             }
@@ -55,8 +56,8 @@ extension EarnIntro.State.Step {
                 image: {
                     Image("earn-intro", bundle: .featureStaking)
                 },
-                title: LocalizationConstants.Earn.Intro.Intro.title,
-                text: LocalizationConstants.Earn.Intro.Intro.description
+                title: Localization.Earn.Intro.Intro.title,
+                text: Localization.Earn.Intro.Intro.description
             )
             .tag(self)
         case .passive:
@@ -64,8 +65,8 @@ extension EarnIntro.State.Step {
                 image: {
                     Image("earn-intro-passive", bundle: .featureStaking)
                 },
-                title: LocalizationConstants.Earn.Intro.Passive.title,
-                text: LocalizationConstants.Earn.Intro.Passive.description
+                title: Localization.Earn.Intro.Passive.title,
+                text: Localization.Earn.Intro.Passive.description
             )
             .tag(self)
         case .staking:
@@ -73,8 +74,8 @@ extension EarnIntro.State.Step {
                 image: {
                     Image("earn-intro-staking", bundle: .featureStaking)
                 },
-                title: LocalizationConstants.Earn.Intro.Staking.title,
-                text: LocalizationConstants.Earn.Intro.Staking.description
+                title: Localization.Earn.Intro.Staking.title,
+                text: Localization.Earn.Intro.Staking.description
             )
             .tag(self)
         case .active:
@@ -82,8 +83,8 @@ extension EarnIntro.State.Step {
                 image: {
                     Image("earn-intro-active", bundle: .featureStaking)
                 },
-                title: LocalizationConstants.Earn.Intro.Active.title,
-                text: LocalizationConstants.Earn.Intro.Active.description
+                title: Localization.Earn.Intro.Active.title,
+                text: Localization.Earn.Intro.Active.description
             )
             .tag(self)
         }
@@ -191,7 +192,7 @@ extension EarnIntroView {
                     )
                 )
                 PrimaryButton(
-                    title: LocalizationConstants.Earn.Intro.button,
+                    title: Localization.Earn.Intro.button,
                     action: {
                         viewStore.send(.onDismiss)
                     }
@@ -202,6 +203,8 @@ extension EarnIntroView {
                     radius: 8,
                     y: 3
                 )
+                FinancialPromotionDisclaimerView()
+                    .padding(.top)
             }
             .padding(.horizontal, Spacing.padding3)
             .opacity(viewStore.gradientBackgroundOpacity)

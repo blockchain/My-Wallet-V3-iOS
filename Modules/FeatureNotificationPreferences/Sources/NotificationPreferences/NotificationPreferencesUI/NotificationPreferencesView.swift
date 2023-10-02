@@ -59,7 +59,7 @@ extension FeatureNotificationPreferencesView {
                 .typography(.title3)
             Text(LocalizationConstants.NotificationPreferences.NotificationScreen.Description.descriptionString)
                 .typography(.paragraph1)
-                .foregroundColor(Color.WalletSemantic.body)
+                .foregroundColor(Color.semantic.body)
         }
         .padding(.horizontal, Spacing.padding3)
     }
@@ -96,13 +96,13 @@ extension FeatureNotificationPreferencesView {
                     .multilineTextAlignment(.center)
                     .typography(.title3)
                     .padding(.horizontal, Spacing.padding3)
-                    .foregroundColor(Color.WalletSemantic.title)
+                    .foregroundColor(Color.semantic.title)
 
                 Text(LocalizationConstants.NotificationPreferences.Error.Description.descriptionString)
                     .multilineTextAlignment(.center)
                     .typography(.caption1)
                     .padding(.horizontal, Spacing.padding3)
-                    .foregroundColor(Color.WalletSemantic.muted)
+                    .foregroundColor(Color.semantic.muted)
                 Spacer()
                 PrimaryButton(title: LocalizationConstants.NotificationPreferences.Error.RetryButton.tryAgainString) {
                     viewStore.send(.onReloadTap)

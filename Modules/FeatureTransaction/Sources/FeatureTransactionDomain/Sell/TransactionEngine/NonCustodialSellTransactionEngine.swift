@@ -82,7 +82,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                 self.startOnChainEngine(sampleDepositAddress: account.address)
                     .flatMap { [weak self] _ -> Single<PendingTransaction> in
                         guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
-                        return self.onChainEngine.initializeTransaction()
+                        return onChainEngine.initializeTransaction()
                     }
                     .map(weak: self) { (self, pendingTransaction) -> PendingTransaction in
                         pendingTransaction.update(
@@ -103,6 +103,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                     .makeExternalAssetAddress(
                         asset: sourceAsset,
                         address: depositAddress,
+                        memo: nil,
                         label: depositAddress,
                         onTxCompleted: { _ in AnyPublisher.just(()) }
                     )
@@ -155,6 +156,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
         let depositAddress = receiveAddressFactory.makeExternalAssetAddress(
             asset: sourceAsset,
             address: sellOrderDepositAddress,
+            memo: nil,
             label: sellOrderDepositAddress,
             onTxCompleted: { _ in AnyPublisher.just(()) }
         )
@@ -187,6 +189,7 @@ final class NonCustodialSellTransactionEngine: SellTransactionEngine {
                 return receiveAddressFactory.makeExternalAssetAddress(
                     asset: sourceAsset,
                     address: hotWalletAddress,
+                    memo: nil,
                     label: hotWalletAddress,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )

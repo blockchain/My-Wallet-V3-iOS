@@ -126,24 +126,6 @@ extension BadgeViewModel {
         return viewModel
     }
 
-    /// Returns a affirmative badge with text
-    public static func progress(
-        with text: String,
-        model: BadgeCircleViewModel,
-        accessibilityId: String = Accessibility.Identifier.General.affirmativeBadgeView
-    ) -> BadgeViewModel {
-        var viewModel = BadgeViewModel(
-            accessory: .progress(model),
-            accessibility: .id(accessibilityId)
-        )
-        viewModel.theme = Theme(
-            backgroundColor: .white,
-            contentColor: .defaultBadge,
-            text: text
-        )
-        return viewModel
-    }
-
     /// Returns a default badgeViewModel with text only
     public static func warning(
         with text: String,
@@ -157,7 +139,7 @@ extension BadgeViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: UIColor(light: .badgeBackgroundWarning, dark: .tertiary),
+            backgroundColor: UIColor(light: .badgeBackgroundWarning, dark: .primaryMuted),
             contentColor: UIColor(light: .warningBadge, dark: .darkTitleText),
             text: text
         )
@@ -177,8 +159,8 @@ extension BadgeViewModel {
             accessibility: .id(accessibilityId)
         )
         viewModel.theme = Theme(
-            backgroundColor: UIColor(light: .defaultBadgeBackground, dark: .idleBorder), // idleBorder is blue400 :(
-            contentColor: UIColor(light: .defaultBadge, dark: .darkTitleText),
+            backgroundColor: UIColor(light: .defaultBadgeBackground, dark: .primaryMuted),
+            contentColor: UIColor(light: .primary, dark: .darkTitleText),
             text: text
         )
         return viewModel

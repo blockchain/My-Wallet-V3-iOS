@@ -19,7 +19,7 @@ struct StellarReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
         asset.name
     }
 
-    private let sep7URI: SEP7URI
+    private var sep7URI: SEP7URI { SEP7URI(address: address, amount: nil, memo: memo) }
 
     init(
         address: String,
@@ -31,6 +31,5 @@ struct StellarReceiveAddress: CryptoReceiveAddress, QRCodeMetadataProvider {
         self.label = label
         self.memo = memo
         self.onTxCompleted = onTxCompleted
-        self.sep7URI = SEP7URI(address: address, amount: nil, memo: memo)
     }
 }

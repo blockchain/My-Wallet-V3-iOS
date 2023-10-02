@@ -11,6 +11,7 @@ extension LocalizationConstants {
                 public enum Trading {}
                 public enum Pkw {}
             }
+
             public enum BalancesFailing {}
         }
 
@@ -45,12 +46,16 @@ extension LocalizationConstants.SuperApp.AppChrome {
         "Total Balance",
         comment: "Total Balance title"
     )
+    public static let errorLoadingBalanceMessage = NSLocalizedString(
+        "Error loading total balance",
+        comment: "Error loading total balance"
+    )
 }
 
 extension LocalizationConstants.SuperApp.AllAssets {
     public static let title = NSLocalizedString(
-        "All assets",
-        comment: "All assets"
+        "Assets",
+        comment: "Assets"
     )
 
     public static let searchPlaceholder = NSLocalizedString(
@@ -226,7 +231,6 @@ extension LocalizationConstants.SuperApp.Dashboard.QuickActions {
 }
 
 extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
-
 
     public static let weCouldNotVerify = NSLocalizedString("Your account is now a DeFi Wallet only account.", comment: "Your account is now a DeFi Wallet only account.")
 

@@ -5,7 +5,7 @@ import RxSwift
 import SwiftUI
 import UIKit
 
-class MultiBadgeView: UIView {
+public class MultiBadgeView: UIView {
 
     // MARK: Private Properties
 
@@ -19,7 +19,7 @@ class MultiBadgeView: UIView {
 
     // MARK: - Public Properties
 
-    var model: MultiBadgeViewModel? {
+    public var model: MultiBadgeViewModel? {
         willSet {
             disposeBag = DisposeBag()
             stackView.removeSubviews()
@@ -58,17 +58,17 @@ class MultiBadgeView: UIView {
 
     // MARK: Init
 
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         super.init(coder: coder)
         setup()
     }
 
-    override var intrinsicContentSize: CGSize {
+    override public var intrinsicContentSize: CGSize {
         let margins = verticalConstraints?.leading.constant ?? 0 + -(verticalConstraints?.trailing.constant ?? 0)
         return CGSize(width: UIView.noIntrinsicMetric, height: heightConstraint.constant + margins)
     }

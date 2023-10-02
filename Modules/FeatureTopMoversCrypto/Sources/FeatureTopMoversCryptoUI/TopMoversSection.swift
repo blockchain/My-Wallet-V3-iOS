@@ -4,6 +4,7 @@ import BlockchainNamespace
 import ComposableArchitecture
 import FeatureTopMoversCryptoDomain
 import Foundation
+import MoneyKit
 
 public enum TopMoversPresenter {
     case dashboard, prices, accountPicker
@@ -37,6 +38,7 @@ public struct TopMoversSection: ReducerProtocol {
         case onFilteredDataFetched([TopMoverInfo])
         case onPricesDataFetched([TopMoverInfo])
         case onFastRisingCalculated(Bool)
+        case onAppModeFetched(AppMode)
     }
 
     public struct State: Equatable {
@@ -60,15 +62,10 @@ public struct TopMoversSection: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { send in
-                    do {
-                        for try await topMovers in topMoversService.getTopMovers() {
-                            await send(.onPricesDataFetched(topMovers))
-                        }
-                    } catch {
-
-                    }
-                }
+                return app
+                    .modePublisher()
+                    .eraseToEffect()
+                    .map(TopMoversSection.Action.onAppModeFetched)
 
             case .onPricesDataFetched(let topMoversData):
                 return .run { send in
@@ -76,15 +73,6 @@ public struct TopMoversSection: ReducerProtocol {
                     let fastRisingMinDelta = await (try? app.get(blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)) ?? 4
 
                     let filteredData = topMoversData
-                        .sorted(by: { price1, price2 in
-                        guard let delta1 = price1.delta?.doubleValue,
-                               let delta2 = price2.delta?.doubleValue
-                        else {
-                            return false
-                        }
-                        return abs(delta1) >= abs(delta2)
-                    })
-                    .uniqued(on: \.id)
                     .prefix(totalNumberOfMovers)
                     .array
 
@@ -101,6 +89,16 @@ public struct TopMoversSection: ReducerProtocol {
                 state.topMovers = topMoversData
 
             return .none
+
+            case .onAppModeFetched(let appMode):
+                return .run { send in
+                    do {
+                        let currency = try await app.get(blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self)
+                            for try await topMovers in topMoversService.topMovers(for: appMode, with: currency) {
+                                await send(.onPricesDataFetched(topMovers))
+                            }
+                    } catch {}
+                }
             }
         }
     }

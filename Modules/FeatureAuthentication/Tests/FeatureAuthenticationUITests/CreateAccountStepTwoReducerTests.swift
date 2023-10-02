@@ -18,7 +18,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         CreateAccountStepTwoAction,
         CreateAccountStepTwoState,
         CreateAccountStepTwoAction,
-        CreateAccountStepTwoEnvironment
+        Void
     >!
     private let mainScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
 
@@ -31,8 +31,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
                 countryState: SearchableItem(id: "FL", title: "Florida"),
                 referralCode: ""
             ),
-            reducer: createAccountStepTwoReducer,
-            environment: CreateAccountStepTwoEnvironment(
+            reducer: CreateAccountStepTwoReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 passwordValidator: PasswordValidator(),
                 externalAppOpener: MockExternalAppOpener(),
@@ -78,29 +77,24 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         // THEN: The form is validated
         mainScheduler.advance() // let the validation complete
         // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.invalid(.weakPassword))) {
+        testStore.receive(
+            .didUpdateInputValidation(
+                .invalid(
+                    .weakPassword(
+                        [
+                            .lowercaseLetter,
+                            .uppercaseLetter,
+                            .number,
+                            .specialCharacter,
+                            .length
+                        ]
+                    )
+                )
+            )
+        ) {
             $0.validatingInput = false
-            $0.inputValidationState = .invalid(.weakPassword)
+            $0.inputValidationState = .invalid(.weakPassword([.lowercaseLetter, .uppercaseLetter, .number, .specialCharacter, .length]))
             $0.inputConfirmationValidationState = .valid
-        }
-        testStore.receive(.didValidateAfterFormSubmission)
-    }
-
-    func test_tapping_next_validates_input_termsNotAccepted() throws {
-        // GIVEN: The form is invalid
-        fillFormEmailField()
-        fillFormPasswordField()
-        // WHEN: The user taps on the Next button in either part of the UI
-        testStore.send(.createButtonTapped) {
-            $0.validatingInput = true
-            $0.inputConfirmationValidationState = .valid
-        }
-        // THEN: The form is validated
-        mainScheduler.advance() // let the validation complete
-        // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.invalid(.termsNotAccepted))) {
-            $0.validatingInput = false
-            $0.inputValidationState = .invalid(.termsNotAccepted)
         }
         testStore.receive(.didValidateAfterFormSubmission)
     }
@@ -113,8 +107,7 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
                 countryState: SearchableItem(id: "FL", title: "Florida"),
                 referralCode: ""
             ),
-            reducer: createAccountStepTwoReducer,
-            environment: CreateAccountStepTwoEnvironment(
+            reducer: CreateAccountStepTwoReducer(
                 mainQueue: mainScheduler.eraseToAnyScheduler(),
                 passwordValidator: PasswordValidator(),
                 externalAppOpener: MockExternalAppOpener(),
@@ -163,7 +156,6 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
     private func fillFormWithValidData() {
         fillFormEmailField()
         fillFormPasswordField()
-        fillFormAcceptanceOfTermsAndConditions()
     }
 
     private func fillFormEmailField(email: String = "test@example.com") {
@@ -176,8 +168,8 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
     }
 
     private func fillFormPasswordField(
-        password: String = "MyPass124)",
-        expectedScore: PasswordValidationScore = .normal
+        password: String = "MyPass124(",
+        expectedScore: [PasswordValidationRule] = []
     ) {
         testStore.send(.binding(.set(\.$password, password))) {
             $0.password = password
@@ -185,15 +177,13 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         testStore.receive(.didUpdateInputValidation(.unknown))
         testStore.receive(.validatePasswordStrength)
         mainScheduler.advance()
-        testStore.receive(.didUpdatePasswordStrenght(expectedScore)) {
-            $0.passwordStrength = expectedScore
-        }
-    }
 
-    private func fillFormAcceptanceOfTermsAndConditions(termsAccepted: Bool = true) {
-        testStore.send(.binding(.set(\.$termsAccepted, termsAccepted))) {
-            $0.termsAccepted = termsAccepted
+        if expectedScore.isEmpty {
+            testStore.receive(.didUpdatePasswordRules(expectedScore))
+        } else {
+            testStore.receive(.didUpdatePasswordRules(expectedScore)) {
+                $0.passwordRulesBreached = expectedScore
+            }
         }
-        testStore.receive(.didUpdateInputValidation(.unknown))
     }
 }

@@ -11,9 +11,9 @@ public actor IndexMutiSeriesPriceService {
     public typealias BufferingPolicy = AsyncStream<Price?>.Continuation.BufferingPolicy
 
     public class Source {
-        internal var fetched: Bool = false
-        internal var error: Error?
-        internal var errorCount: Int = 0
+        var fetched: Bool = false
+        var error: Error?
+        var errorCount: Int = 0
         fileprivate(set) var cancelTimestamp: DispatchTime?
         fileprivate(set) var referenceCount: Int = 0
         fileprivate(set) var pendingContinuations: [PendingContinuation]?
@@ -61,7 +61,8 @@ public actor IndexMutiSeriesPriceService {
     }
 
     func observe() {
-        self.observation = Task {
+        let maximumNumberOfRetriesBeforeWaiting = 2
+        observation = Task {
             try await withThrowingTaskGroup(of: Void.self) { [self] group in
                 group.addTask {
                     for try await _ in self.scheduler.timer(interval: .seconds(1)) {
@@ -69,7 +70,7 @@ public actor IndexMutiSeriesPriceService {
                         guard fetch.isNotEmpty else { continue }
                         for (_, value) in fetch { value.fetched = true }
                         do {
-                            try await self.request(fetch.filter(\.value.errorCount < 2).map(\.key))
+                            try await self.request(fetch.filter(\.value.errorCount < maximumNumberOfRetriesBeforeWaiting).map(\.key))
                         } catch {
                             for (pair, source) in fetch {
                                 source.fetched = false
@@ -79,6 +80,12 @@ public actor IndexMutiSeriesPriceService {
                                 source.pendingContinuations = nil
                                 for pending in pendingContinuations.or(default: []) {
                                     await self.yield(pair, to: pending.continuation, bufferingPolicy: pending.bufferingPolicy, with: source)
+                                }
+                                if source.errorCount >= maximumNumberOfRetriesBeforeWaiting {
+                                    Task {
+                                        try await self.scheduler.sleep(for: .seconds(30))
+                                        source.errorCount = 0
+                                    }
                                 }
                             }
                             self.app.post(error: error)
@@ -101,7 +108,7 @@ public actor IndexMutiSeriesPriceService {
         }
     }
 
-    nonisolated public func publisher(for currencyPair: CurrencyPairAndTime, bufferingPolicy limit: BufferingPolicy = .unbounded) -> AnyPublisher<Price?, Never> {
+    public nonisolated func publisher(for currencyPair: CurrencyPairAndTime, bufferingPolicy limit: BufferingPolicy = .unbounded) -> AnyPublisher<Price?, Never> {
         Task.Publisher { await stream(currencyPair, bufferingPolicy: limit).publisher() }
             .switchToLatest()
             .eraseToAnyPublisher()

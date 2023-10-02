@@ -155,4 +155,26 @@ public final class EarnClient {
                 )!
         )
     }
+
+    public func bondingStakingTxs(
+        currencyCode: String
+    ) -> AnyPublisher<EarnBondingTxsRequest, Nabu.Error> {
+        networkAdapter.perform(
+            request: requestBuilder
+                .get(
+                    path: ["earn", "bonding-txs"],
+                    parameters: [
+                        URLQueryItem(
+                            name: "ccy",
+                            value: currencyCode
+                        ),
+                        URLQueryItem(
+                            name: "product",
+                            value: product
+                        )
+                    ],
+                    authenticated: true
+                )!
+        )
+    }
 }

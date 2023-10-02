@@ -5,7 +5,7 @@ public struct SiteMap {
 
     @StateObject var service = CustodialOnboardingService()
 
-    public init() { }
+    public init() {}
 
     @ViewBuilder public func view(for tag: Tag.Reference, in context: Tag.Context) throws -> some View {
         switch tag {
@@ -15,6 +15,8 @@ public struct SiteMap {
             BeforeYouContinuePleaseVerifyView()
         case blockchain.ux.user.custodial.onboarding.verification.is.in.progress:
             VerificationInProgressView()
+        case blockchain.ux.user.custodial.dashboard.no.fiat.balance:
+            YouDontHaveAnyBalanceView()
         default:
             throw "Unhandled \(tag)".error()
         }

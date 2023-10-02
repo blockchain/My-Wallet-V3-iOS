@@ -13,7 +13,9 @@ public struct PricesSceneView: View {
     @ObservedObject var viewStore: ViewStoreOf<PricesScene>
     let store: StoreOf<PricesScene>
     @BlockchainApp var app
-    @State var isTradingEnabled = true
+    @State var isDeFiOnly = true
+
+    var isTradingEnabled: Bool { !isDeFiOnly }
 
     public init(store: StoreOf<PricesScene>) {
         self.store = store
@@ -25,25 +27,16 @@ public struct PricesSceneView: View {
             VStack(spacing: 0) {
                 searchBarSection
                 segmentedControl
-                    .padding(.top, Spacing.padding2)
-                List {
-                    if viewStore.filter == .tradable, !viewStore.isSearching {
-                        Section {
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        if viewStore.filter == .tradable, !viewStore.isSearching {
                             topMoversSection
+                                .padding(.bottom, Spacing.padding2)
                         }
-                        .listRowBackground(Color.clear)
-                        .listRowInsets(EdgeInsets(top: -20, leading: 0, bottom: 0, trailing: 0))
-                        .textCase(nil)
-                    }
-
-                    Section {
                         pricesSection
+                            .padding(.horizontal, Spacing.padding2)
                     }
-                    .listRowBackground(Color.semantic.background)
-                    .listRowInsets(.zero)
-                    .textCase(nil)
                 }
-                .environment(\.defaultMinListHeaderHeight, 0)
             }
             .background(Color.semantic.light.ignoresSafeArea())
             .superAppNavigationBar(
@@ -55,7 +48,7 @@ public struct PricesSceneView: View {
                 await viewStore.send(.onAppear).finish()
             }
             .bindings {
-                subscribe($isTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product[ProductIdentifier.useTradingAccount].is.eligible)
+                subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
             }
         })
     }
@@ -125,27 +118,31 @@ public struct PricesSceneView: View {
     }
 
     @ViewBuilder private var pricesSection: some View {
-        if let searchResults = viewStore.searchResults {
-            if searchResults.isEmpty {
-                noResultsView
-            } else {
-                ForEach(Array(searchResults.enumerated()), id: \.element) { i, info in
-                    Row(info: info)
-                        .onTapGesture {
-                            viewStore.send(.set(\.$isSearching, false))
-                            viewStore.send(.onAssetTapped(info))
+        Group {
+            if let searchResults = viewStore.searchResults {
+                if searchResults.isEmpty {
+                    noResultsView
+                } else {
+                    LazyVStack(spacing: 0) {
+                        ForEach(Array(searchResults.enumerated()), id: \.element) { _, info in
+                            Row(info: info)
+                                .onTapGesture {
+                                    viewStore.send(.set(\.$isSearching, false))
+                                    viewStore.send(.onAssetTapped(info))
+                                }
+                                .context([blockchain.ux.dashboard.is.hiding.balance: false])
                         }
-                        .context([blockchain.ux.dashboard.is.hiding.balance: false])
-                        .listRowInsets(i == searchResults.count ? .init(top: 0, leading: 0, bottom: 44, trailing: 0) : .zero)
+                    }
                 }
+            } else {
+                loadingSection.redacted(reason: .placeholder)
             }
-        } else {
-            loadingSection.redacted(reason: .placeholder)
         }
+        .cornerRadius(16, corners: .allCorners)
     }
 
     private var trailingIconTrendingIcon: (Icon, Color) {
-        (Icon.fireFilled, Color.WalletSemantic.warningMuted)
+        (.fireFilled, .semantic.warningMuted)
     }
 
     @ViewBuilder private var loadingSection: some View {

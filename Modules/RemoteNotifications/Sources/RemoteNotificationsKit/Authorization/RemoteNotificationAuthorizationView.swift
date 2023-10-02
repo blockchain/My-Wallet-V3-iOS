@@ -1,22 +1,19 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
+import BlockchainNamespace
 import Localization
 import SwiftUI
 
 public struct RemoteNotificationAuthorizationView: View {
 
+    @BlockchainApp var app
+
     private typealias L10n = LocalizationConstants.Notifications.Authorization
     private var onEnableTap: (() -> Void)?
     private var onDisableTap: (() -> Void)?
 
-    public init(
-        onEnableTap: (() -> Void)? = nil,
-        onDisableTap: (() -> Void)? = nil
-    ) {
-        self.onEnableTap = onEnableTap
-        self.onDisableTap = onDisableTap
-    }
+    public init() {}
 
     public var body: some View {
         ZStack(alignment: .top) {
@@ -39,7 +36,7 @@ public struct RemoteNotificationAuthorizationView: View {
                 }
                 HStack(spacing: .zero) {
                     Button {
-                        onDisableTap?()
+                        $app.post(event: blockchain.ux.onboarding.notification.authorization.reject.paragraph.button.primary.tap)
                     } label: {
                         Text(L10n.dontAllow)
                             .typography(.body2)
@@ -51,7 +48,7 @@ public struct RemoteNotificationAuthorizationView: View {
                         .frame(width: 1, height: 48)
                     ZStack {
                         Button {
-                            onEnableTap?()
+                            $app.post(event: blockchain.ux.onboarding.notification.authorization.accept.paragraph.button.primary.tap)
                         } label: {
                             Text(L10n.allow)
                                 .typography(.body2)
@@ -65,7 +62,6 @@ public struct RemoteNotificationAuthorizationView: View {
                             .allowsHitTesting(false)
                     }
                     .frame(height: 48)
-                    
                 }
             }
             .frame(width: 270)
@@ -81,11 +77,16 @@ public struct RemoteNotificationAuthorizationView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.light.ignoresSafeArea())
+        .batch {
+            set(blockchain.ux.onboarding.notification.authorization.accept.paragraph.button.primary.tap.then.close, to: true)
+            set(blockchain.ux.onboarding.notification.authorization.reject.paragraph.button.primary.tap.then.close, to: true)
+        }
     }
 }
 
 struct RemoteNotificationAuthorization_Previews: PreviewProvider {
     static var previews: some View {
         RemoteNotificationAuthorizationView()
+            .app(App.preview)
     }
 }

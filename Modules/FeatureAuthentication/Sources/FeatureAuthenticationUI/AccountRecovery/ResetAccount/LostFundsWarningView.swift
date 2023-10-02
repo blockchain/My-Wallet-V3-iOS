@@ -101,8 +101,7 @@ struct LostFundsWarningView_Previews: PreviewProvider {
         LostFundsWarningView(
             store: .init(
                 initialState: .init(),
-                reducer: lostFundsWarningReducer,
-                environment: .init(
+                reducer: LostFundsWarningReducer(
                     mainQueue: .main,
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     passwordValidator: NoOpPasswordValidator(),

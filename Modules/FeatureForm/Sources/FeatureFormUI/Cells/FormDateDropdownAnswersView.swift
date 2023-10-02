@@ -13,20 +13,19 @@ struct FormDateDropdownAnswersView: View {
     @Binding var showAnswerState: Bool
     var isEnabled: Bool { answer.isEnabled ?? true }
 
+    var dateString: String? {
+        guard let input = answer.input, let timeInterval = TimeInterval(input) else {
+            return nil
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        return dateFormatter.string(from: Date(timeIntervalSince1970: timeInterval))
+    }
+
     var body: some View {
         VStack {
             HStack(spacing: Spacing.padding1) {
-
-                let dateString: String? = {
-                    guard let input = answer.input, let timeInterval = TimeInterval(input) else {
-                        return nil
-                    }
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateStyle = .medium
-                    return dateFormatter.string(from: Date(timeIntervalSince1970: timeInterval))
-                }()
-
-                Text(dateString ?? "")
+                Text(dateString ?? LocalizationConstants.selectDate)
                     .typography(.body1)
                     .foregroundColor(textColor)
 
@@ -48,7 +47,7 @@ struct FormDateDropdownAnswersView: View {
             )
             .contentShape(Rectangle())
             .onTapGesture {
-                guard isEnabled else { return }
+                guard isEnabled, !selectionPanelOpened else { return }
                 // hide current keybaord if presented,
                 // delay needed to wait until keyboard is dismissed
                 stopEditing()
@@ -58,11 +57,20 @@ struct FormDateDropdownAnswersView: View {
             }
         }
         .sheet(isPresented: $selectionPanelOpened) {
-            FormDatePickerView(
-                title: title,
-                answer: $answer,
-                selectionPanelOpened: $selectionPanelOpened
-            )
+            if #available(iOS 16.4, *) {
+                FormDatePickerView(
+                    title: title,
+                    answer: $answer,
+                    selectionPanelOpened: $selectionPanelOpened
+                )
+                .presentationDetents([.fraction(0.35)])
+            } else {
+                FormDatePickerView(
+                    title: title,
+                    answer: $answer,
+                    selectionPanelOpened: $selectionPanelOpened
+                )
+            }
         }
     }
 }
@@ -79,7 +87,7 @@ extension FormDateDropdownAnswersView {
     }
 
     private var textColor: Color {
-        if !isEnabled {
+        if dateString.isNil || !isEnabled {
             return .semantic.muted
         } else {
             return .semantic.title
@@ -109,64 +117,41 @@ struct FormDatePickerView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                datePicker
-            }
-            .padding(.vertical, Spacing.padding1)
-            .padding(.horizontal, Spacing.padding2)
-            .background(Color.semantic.background)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    VStack {
-                        Spacer()
-                        Text(title).typography(.body2)
+            datePicker
+                .padding(.vertical, Spacing.padding1)
+                .padding(.horizontal, Spacing.padding2)
+                .background(Color.semantic.light)
+                .navigationBarItems(
+                    trailing: Button(LocalizationConstants.done) {
+                        if answer.input.isNilOrEmpty, maxDate != .distantFuture {
+                            answer.input = String(maxDate.timeIntervalSince1970)
+                        }
+                        selectionPanelOpened.toggle()
                     }
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
+                )
+                .navigationBarTitleDisplayMode(.inline)
         }
-        primaryButton
     }
 
     private var datePicker: some View {
-        VStack {
-            DatePicker(
-                selection: Binding(
-                    get: {
-                        guard let input = answer.input, let timeInterval = TimeInterval(input) else {
-                            return Date()
-                        }
-                        return Date(timeIntervalSince1970: timeInterval)
-                    },
-                    set: {
-                        answer.input = String($0.timeIntervalSince1970)
+        DatePicker(
+            selection: Binding(
+                get: {
+                    guard let input = answer.input, let timeInterval = TimeInterval(input) else {
+                        return Date()
                     }
-                ),
-                in: minDate...maxDate,
-                displayedComponents: .date,
-                label: EmptyView.init
-            )
-            .datePickerStyle(.graphical)
-        }
-        .padding(.horizontal, Spacing.padding1)
-        .padding(.vertical, Spacing.padding1)
-    }
-
-    private var primaryButton: some View {
-        PrimaryButton(
-            title: LocalizationConstants.MultiSelection.Buttons.done
-        ) {
-            if answer.input.isNilOrEmpty, maxDate != .distantFuture {
-                answer.input = String(maxDate.timeIntervalSince1970)
-            }
-            selectionPanelOpened.toggle()
-        }
-        .frame(alignment: .bottom)
-        .padding([.horizontal, .bottom])
-        .background(
-            Rectangle()
-                .fill(Color.semantic.background)
-                .backgroundWithWhiteShadow
+                    return Date(timeIntervalSince1970: timeInterval)
+                },
+                set: {
+                    answer.input = String($0.timeIntervalSince1970)
+                }
+            ),
+            in: minDate...maxDate,
+            displayedComponents: .date,
+            label: EmptyView.init
         )
+        .datePickerStyle(.wheel)
+        .padding(Spacing.padding1)
+        .background(Color.semantic.light)
     }
 }

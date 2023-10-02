@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainNamespace
 import ComposableArchitecture
 @testable import FeatureKYCDomain
 @testable import FeatureKYCUI
@@ -61,7 +62,8 @@ final class LimitedFeaturesListViewTests: XCTestCase {
         )
     }
 
-    func x_test_entire_list_contents() throws {
+    func test_entire_list_contents() throws {
+        _ = App.preview
         let view = LimitedFeaturesListView(
             store: .init(
                 initialState: LimitedFeaturesListState(

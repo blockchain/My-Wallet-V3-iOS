@@ -38,7 +38,7 @@ struct ConfirmationPageDetailsTermsView: View {
             .primaryNavigation(
                 title: title,
                 trailing: {
-                    IconButton(icon: .closeCirclev2) {
+                    IconButton(icon: .navigationCloseButton()) {
                         onCompletion()
                     }
                     .frame(width: 24.pt, height: 24.pt)

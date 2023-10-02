@@ -31,7 +31,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.54.1"
+            exact: "0.56.0"
         ),
         .package(
             url: "https://github.com/stripe/stripe-ios",
@@ -39,7 +39,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/checkout/frames-ios.git",
-            from: "3.5.2"
+            from: "4.2.1"
         ),
         .package(path: "../Analytics"),
         .package(path: "../ComposableArchitectureExtensions"),

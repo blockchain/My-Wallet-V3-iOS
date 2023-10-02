@@ -42,7 +42,8 @@ public protocol PlaidClientAPI {
 
     func getSettlementInfo(
         accountId: String,
-        amount: String
+        amount: String,
+        product: String
     ) -> AnyPublisher<SettlementInfoResponse, NabuError>
 
     func getPaymentsDepositTerms(

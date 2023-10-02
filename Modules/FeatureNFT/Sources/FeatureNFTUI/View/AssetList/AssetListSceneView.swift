@@ -271,10 +271,17 @@ public struct AssetListSceneView: View {
                 subscribe($isVerified, to: blockchain.user.is.verified)
             }
             .batch {
-                set(
-                    blockchain.ux.nft.empty.receive.paragraph.button.primary.tap.then.enter.into,
-                    to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more
-                )
+                if app.currentMode == .pkw {
+                    set(
+                        blockchain.ux.nft.empty.receive.paragraph.button.primary.tap.then.enter.into,
+                        to: blockchain.ux.currency.receive.address
+                    )
+                } else {
+                    set(
+                        blockchain.ux.nft.empty.receive.paragraph.button.primary.tap.then.enter.into,
+                        to: isVerified ? blockchain.ux.currency.receive.address : blockchain.ux.kyc.trading.unlock.more
+                    )
+                }
             }
             .onAppear {
                 $app.post(event: blockchain.ux.nft.empty)

@@ -20,7 +20,7 @@ extension WalletCreationService {
             importWallet: { _, _, _, _ -> AnyPublisher<Either<WalletCreatedContext, EmptyValue>, WalletCreationServiceError> in
                 .failure(.creationFailure(.genericFailure))
             },
-            setResidentialInfo: { _, _ -> AnyPublisher<Void, Never> in
+            setResidentialInfo: { _, _ -> AnyPublisher<Void, Error> in
                 .just(())
             },
             updateCurrencyForNewWallets: { _, _, _ -> AnyPublisher<Void, Never> in
@@ -37,8 +37,8 @@ extension WalletCreationService {
             importWallet: { _, _, _, _ -> AnyPublisher<Either<WalletCreatedContext, EmptyValue>, WalletCreationServiceError> in
                 .failure(.creationFailure(.genericFailure))
             },
-            setResidentialInfo: { _, _ -> AnyPublisher<Void, Never> in
-                .just(())
+            setResidentialInfo: { _, _ -> AnyPublisher<Void, Error> in
+                .failure(WalletCreationServiceError.creationFailure(.genericFailure))
             },
             updateCurrencyForNewWallets: { _, _, _ -> AnyPublisher<Void, Never> in
                 .just(())

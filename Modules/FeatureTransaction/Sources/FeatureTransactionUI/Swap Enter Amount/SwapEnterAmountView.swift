@@ -83,7 +83,7 @@ public struct SwapEnterAmountView: View {
         .bindings {
             subscribe(
                 viewStore.binding(\.$sourceValuePrice),
-                to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat[{blockchain.user.currency.preferred.fiat.trading.currency}].quote.value
+                to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat[{ blockchain.user.currency.preferred.fiat.trading.currency }].quote.value
             )
         }
         .bindings {
@@ -91,16 +91,6 @@ public struct SwapEnterAmountView: View {
                 viewStore.binding(\.$defaultFiatCurrency),
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
-        }
-    }
-
-    func close() -> some View {
-        IconButton(
-            icon: .closeCirclev2,
-            action: { $app.post(event: blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap) }
-        )
-        .batch {
-            set(blockchain.ux.transaction.select.source.article.plain.navigation.bar.button.close.tap.then.close, to: true)
         }
     }
 
@@ -268,7 +258,7 @@ struct DigitPadViewSwiftUI: UIViewRepresentable {
     func updateUIView(_ uiView: DigitPadView, context: Context) {}
 
     private func provideDigitPadViewModel() -> DigitPadViewModel {
-        let highlightColor = Color.black.withAlphaComponent(0.08)
+        let highlightColor = UIColor.black.withAlphaComponent(0.08)
         let model = DigitPadButtonViewModel(
             content: .label(text: MoneyValueInputScanner.Constant.decimalSeparator, tint: .titleText),
             background: .init(highlightColor: highlightColor)

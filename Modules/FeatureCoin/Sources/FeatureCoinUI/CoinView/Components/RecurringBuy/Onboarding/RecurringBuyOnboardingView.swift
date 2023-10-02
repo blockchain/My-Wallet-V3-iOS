@@ -131,7 +131,7 @@ public struct RecurringBuyOnboardingView: View {
             Button {
                 $app.post(event: blockchain.ux.recurring.buy.onboarding.article.plain.navigation.bar.button.close.tap)
             } label: {
-                Icon.closeCirclev3
+                Icon.close
                     .frame(width: 24, height: 24)
             }
         }

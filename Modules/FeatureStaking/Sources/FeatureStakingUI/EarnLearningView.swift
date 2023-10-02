@@ -20,7 +20,8 @@ struct EarnLearningCardView: View {
                 .fill(backgroundColor)
             VStack(alignment: .leading, spacing: 8.pt) {
                 HStack {
-                    icon.color(.semantic.primary)
+                    icon
+                        .circle(backgroundColor: .semantic.primary)
                         .frame(width: 20.pt, height: 20.pt)
                     Text(title)
                         .foregroundColor(.semantic.body)
@@ -67,7 +68,7 @@ extension EarnProduct {
             )
         case .savings:
             EarnLearningCardView(
-                icon: .interestCircle,
+                icon: .interest,
                 title: L10n.rewards.interpolating(title),
                 message: L10n.learningSavings,
                 backgroundColor: backgroundColor

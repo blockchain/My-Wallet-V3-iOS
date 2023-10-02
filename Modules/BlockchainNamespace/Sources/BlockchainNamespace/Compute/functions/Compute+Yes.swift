@@ -20,6 +20,6 @@ extension Compute.Yes {
 extension Compute.Yes {
 
     public var description: String {
-        "Yes(if: \(`if` ?? []), unless: \(`unless` ?? []))"
+        "Yes(if: \(`if` ?? []), unless: \(unless ?? []))"
     }
 }

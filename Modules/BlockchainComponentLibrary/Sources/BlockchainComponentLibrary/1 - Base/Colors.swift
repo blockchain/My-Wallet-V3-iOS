@@ -28,7 +28,7 @@ extension Color {
         )
 
         public static let body = Color(
-            light: .palette.grey800,
+            light: .palette.grey600,
             dark: .palette.dark200
         )
 
@@ -121,9 +121,9 @@ extension Color {
             dark: .palette.purple
         )
 
-        public static let destructive = Color(
-            light: .palette.pink700,
-            dark: .palette.pink600
+        public static let negative = Color(
+            light: .palette.pink600,
+            dark: .palette.pink500
         )
 
         public static let primaryUltraLight = Color(

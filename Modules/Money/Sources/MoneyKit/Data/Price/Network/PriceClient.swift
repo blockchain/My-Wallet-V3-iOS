@@ -51,6 +51,21 @@ public protocol PriceClientAPI {
     func prices(
         of pairs: [CurrencyPair]
     ) -> AnyPublisher<[String: Price], NetworkError>
+
+    /// Fetches the currencies that had the most price variation, by percentage fiat value, in the last 24h.
+    ///
+    /// - Parameters:
+    ///   - baseCurrency:  Which fiat currency to be used as the base currency (this might change the top movers depending on this currency's own volatility)
+    ///   - topN: Of all top movers, how many to return of the ones that moved the most.
+    ///   - custodialOnly: Only return custodial currencies
+    ///
+    /// - Returns: A publisher that emits an array of  `PriceResponse.TopMovers.Response`s on success, or a `NetworkError` on failure.
+
+    func topMovers(
+        with baseCurrency: FiatCurrency,
+        topFirst topN: Int,
+        custodialOnly: Bool
+    ) -> AnyPublisher<PriceResponse.TopMovers.Response, NetworkError>
 }
 
 final class PriceClient: PriceClientAPI {
@@ -94,7 +109,7 @@ final class PriceClient: PriceClientAPI {
     func prices(
         of pairs: [CurrencyPair]
     ) -> AnyPublisher<[String: Price], NetworkError> {
-        if pairs.isEmpty { return .just([:])}
+        if pairs.isEmpty { return .just([:]) }
         let request: NetworkRequest! = PriceRequest.IndexMulti.request(
             requestBuilder: requestBuilder,
             pairs: pairs
@@ -105,7 +120,7 @@ final class PriceClient: PriceClientAPI {
     func prices(
         of pairs: [CurrencyPairAndTime]
     ) -> AnyPublisher<[String: [Price]], NetworkError> {
-        if pairs.isEmpty { return .just([:])}
+        if pairs.isEmpty { return .just([:]) }
         let request: NetworkRequest! = PriceRequest.IndexMultiSeries.request(
             requestBuilder: requestBuilder,
             pairs: pairs
@@ -125,6 +140,20 @@ final class PriceClient: PriceClientAPI {
             quote: quote,
             start: start,
             scale: scale
+        )
+        return networkAdapter.perform(request: request)
+    }
+
+    func topMovers(
+        with baseCurrency: FiatCurrency,
+        topFirst topN: Int,
+        custodialOnly: Bool
+    ) -> AnyPublisher<PriceResponse.TopMovers.Response, NetworkError> {
+        let request: NetworkRequest! = PriceRequest.TopMovers.request(
+            requestBuilder: requestBuilder,
+            fiatBase: baseCurrency.code,
+            topN: String(topN),
+            custodialOnly: String(custodialOnly)
         )
         return networkAdapter.perform(request: request)
     }
@@ -149,7 +178,9 @@ struct IndexMultiSeriesRequest {
             logger?.storeRequest(request, response: response, error: nil, data: data, metrics: nil, session: session)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            return try data.decode(to: [String: [Price]].self, using: decoder).mapKeys(CurrencyPair.init)
+            return try data.decode(to: [String: [Price?]].self, using: decoder)
+                .compactMapKeys { key in try? CurrencyPair(key) }
+                .mapValues { prices in prices.compacted().array }
         } catch {
             logger?.storeRequest(request, response: nil, error: error, data: nil, metrics: nil, session: session)
             throw error
@@ -176,7 +207,9 @@ struct IndexMultiRequest {
             logger?.storeRequest(request, response: response, error: nil, data: data, metrics: nil, session: session)
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970
-            return try data.decode(to: [String: Price].self, using: decoder).mapKeys(CurrencyPair.init)
+            return try data.decode(to: [String: Price?].self, using: decoder)
+                .compactMapKeys { key in try? CurrencyPair(key) }
+                .compactMapValues { price in price }
         } catch {
             logger?.storeRequest(request, response: nil, error: error, data: nil, metrics: nil, session: session)
             throw error

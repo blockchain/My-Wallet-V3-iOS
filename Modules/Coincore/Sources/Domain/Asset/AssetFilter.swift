@@ -18,6 +18,9 @@ public struct AssetFilter: OptionSet, Hashable, Codable {
     public static let staking = AssetFilter(rawValue: 1 << 4)
     public static let activeRewards = AssetFilter(rawValue: 1 << 5)
 
+    /// This is only used on a specific case, refrain from adding this to a group of `AssetFilter`(s)
+    public static let nonCustodialImported = AssetFilter(rawValue: 1 << 6)
+
     public static let all: AssetFilter = [.custodial, .nonCustodial, .interest, .exchange, .staking, .activeRewards]
     public static let allExcludingExchange: AssetFilter = [.custodial, .nonCustodial, .interest, .staking, .activeRewards]
     public static let allCustodial: AssetFilter = [.custodial, .interest, .staking, .activeRewards]

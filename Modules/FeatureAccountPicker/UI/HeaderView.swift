@@ -34,14 +34,14 @@ struct HeaderView: View {
         case .normal(
             title: let title,
             subtitle: let subtitle,
-            image: let image,
+            image: let imageResource,
             tableTitle: let tableTitle,
             searchable: let searchable
         ):
             NormalHeaderView(
                 title: title,
                 subtitle: subtitle,
-                image: image,
+                image: imageResource,
                 tableTitle: tableTitle,
                 searchable: searchable,
                 searchText: $searchText,
@@ -54,7 +54,7 @@ struct HeaderView: View {
 private struct NormalHeaderView: View {
     let title: String
     let subtitle: String?
-    let image: Image?
+    let image: ImageLocation?
     let tableTitle: String?
     let searchable: Bool
 
@@ -71,8 +71,6 @@ private struct NormalHeaderView: View {
 
         static let imageSize = CGSize(width: 32, height: 32)
         static let dividerLineHeight: CGFloat = 1
-        static let titleFontSize: CGFloat = 20
-        static let subtitleFontSize: CGFloat = 14
         static let tableTitleFontSize: CGFloat = 12
     }
 
@@ -81,18 +79,18 @@ private struct NormalHeaderView: View {
             if !isSearching {
                 HStack {
                     VStack(alignment: .leading, spacing: 0) {
-                        image?
-                            .aspectRatio(contentMode: .fit)
+                        image?.image
+                            .scaledToFit()
                             .frame(width: Layout.imageSize.width, height: Layout.imageSize.height)
                             .padding(.top, Layout.margins.top)
 
                         Text(title)
-                            .font(Font(weight: .semibold, size: Layout.titleFontSize))
+                            .typography(.title3)
                             .foregroundColor(.semantic.title)
                             .padding(.top, Layout.titleTopPadding)
                         if let subtitle {
                             Text(subtitle)
-                                .font(Font(weight: .medium, size: Layout.subtitleFontSize))
+                                .typography(.paragraph1)
                                 .foregroundColor(.semantic.text)
                                 .padding(.top, Layout.subtitleTopPadding)
                         }
@@ -132,14 +130,13 @@ private struct SimpleHeaderView: View {
 
     private enum Layout {
         static let dividerLineHeight: CGFloat = 1
-        static let subtitleFontSize: CGFloat = 14
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if let subtitle, !isSearching {
                 Text(subtitle)
-                    .font(Font(weight: .medium, size: Layout.subtitleFontSize))
+                    .typography(.paragraph1)
                     .foregroundColor(.semantic.text)
                     .padding(.horizontal, Spacing.padding3)
                     .padding(.vertical, Spacing.padding1)
@@ -197,7 +194,7 @@ struct HeaderView_Previews: PreviewProvider {
                 viewModel: .normal(
                     title: "Receive Crypto Now",
                     subtitle: "Choose a Wallet to receive crypto to.",
-                    image: ImageAsset.iconReceive.image,
+                    image: ImageAsset.iconReceive.imageResource,
                     tableTitle: nil,
                     searchable: true
                 ),

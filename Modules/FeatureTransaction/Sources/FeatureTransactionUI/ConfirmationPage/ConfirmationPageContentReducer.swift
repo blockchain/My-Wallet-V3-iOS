@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
+import BlockchainComponentLibrary
 import Combine
 import DIKit
 import FeatureTransactionDomain
@@ -71,8 +72,6 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
     let showACHDepositTermsTapped = PublishRelay<String>()
     let availableToWithdrawDateInfoTapped = PublishRelay<Void>()
     let hyperlinkTapped = PublishRelay<TitledLink>()
-    let memoUpdated = PublishRelay<(String, TransactionConfirmations.Memo)>()
-    let memoModel: TextFieldViewModel
     private var disposeBag = DisposeBag()
     private var cancellables = Set<AnyCancellable>()
     private let withdrawalLocksCheckRepository: WithdrawalLocksCheckRepositoryAPI
@@ -89,12 +88,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         self.withdrawalLocksCheckRepository = withdrawalLocksCheckRepository
         self.analyticsRecorder = analyticsRecorder
         self.cancelButtonViewModel = .cancel(with: LocalizedString.Confirmation.cancel)
-        self.continueButtonViewModel = .primary(with: "")
-        self.memoModel = TextFieldViewModel(
-            with: .memo,
-            validator: TextValidationFactory.Send.memo,
-            messageRecorder: messageRecorder
-        )
+        self.continueButtonViewModel = .transactionPrimary(with: "")
     }
 
     func setup(for state: TransactionState) {
@@ -288,7 +282,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
             }
             .map { model -> NoticeViewModel in
                 let imageResource = URL(string: model.imageURL)
-                    .flatMap(ImageResource.remote)
+                    .flatMap(ImageLocation.remote)
                 let imageViewContent = ImageViewContent(
                     imageResource: imageResource,
                     accessibility: .none,
@@ -364,20 +358,12 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
 
         var memoModels: [DetailsScreen.CellType] = []
         if let memo {
-            let subtitle = memo.formatted?.subtitle ?? ""
-            memoModel.originalTextRelay.accept(subtitle)
-            memoModel
-                .focusRelay
-                .filter { $0 == .off(.endEditing) }
-                .mapToVoid()
-                .withLatestFrom(memoModel.textRelay)
-                .distinctUntilChanged()
-                .map { text in
-                    (text: text, oldModel: memo)
-                }
-                .bind(to: memoUpdated)
-                .disposed(by: disposeBag)
-            memoModels.append(.textField(memoModel))
+            let interactor = DefaultLineItemCellInteractor(
+                title: DefaultLabelContentInteractor(knownValue: memo.formatted?.0 ?? ""),
+                description: DefaultLabelContentInteractor(knownValue: memo.formatted?.1 ?? "")
+            )
+            let presenter = DefaultLineItemCellPresenter(interactor: interactor, accessibilityIdPrefix: "memo")
+            memoModels.append(.lineItem(presenter))
         }
 
         var checkboxModels: [DetailsScreen.CellType] = []
@@ -463,7 +449,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         return ConfrimationQuoteRefreshHeaderBuilder(quoteExpirationTimer.expirationDate)
     }
 
-    static func screenTitle(state: TransactionState) -> String {
+    private static func screenTitle(state: TransactionState) -> String {
         switch state.action {
         case .sign:
             return LocalizedString.Confirmation.signatureRequest
@@ -474,7 +460,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         }
     }
 
-    static func confirmCtaText(state: TransactionState) -> String {
+    private static func confirmCtaText(state: TransactionState) -> String {
         switch state.action {
         case .swap:
             return LocalizedString.Swap.swapNow
@@ -505,14 +491,13 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         }
     }
 
-    static func confirmCtaBackgroundColor(state: TransactionState) -> UIColor {
-        guard case .buy = state.action,
-              let paymentMethod = state.source as? PaymentMethodAccount,
-              paymentMethod.paymentMethodType.method.isApplePay
-        else {
-            return .semantic.primary
+    private static func confirmCtaBackgroundColor(state: TransactionState) -> UIColor {
+        switch state.action {
+        case .buy:
+            return sourceIsApplePay(state: state) ? .semantic.title : .primary
+        default:
+            return .primary
         }
-        return .semantic.title
     }
 
     // MARK: - Private methods
@@ -522,6 +507,13 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
 
         presenter.imageWidthRelay.accept(bitPayLogo?.size.width ?? 0)
         presenter.imageRelay.accept(bitPayLogo)
+    }
+
+    private static func sourceIsApplePay(state: TransactionState) -> Bool {
+        guard let account = state.source as? PaymentMethodAccount else {
+            return false
+        }
+        return account.paymentMethodType.method.isApplePay
     }
 }
 

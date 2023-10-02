@@ -54,6 +54,18 @@ public struct BrokerageQuote: Hashable {
         }
     }
 
+    public var exchangeRate: MoneyValue? {
+        do {
+            let exchangeRate = try MoneyValuePair(
+                base: .one(currency: request.amount.currency),
+                quote: .create(minor: response.price, currency: request.quote).or(throw: "Bad quote price")
+            )
+            return exchangeRate.inverseExchangeRate.quote
+        } catch {
+            return nil
+        }
+    }
+
     public var source: CurrencyType {
         request.base
     }
@@ -97,7 +109,7 @@ extension BrokerageQuote {
             id: String,
             marginPercent: Double,
             createdAt: String,
-            expiresAt: String,
+            expiresAt: String?,
             price: String,
             resultAmount: String,
             networkFee: String? = nil,
@@ -123,7 +135,7 @@ extension BrokerageQuote {
 
         public var id: String
         public var marginPercent: Double
-        public var createdAt, expiresAt: String
+        public var createdAt, expiresAt: String?
         public var price: String
         public var resultAmount: String
         public var networkFee, staticFee: String?
@@ -141,9 +153,19 @@ extension BrokerageQuote.Response {
     }
 
     public var date: (createdAt: Date?, expiresAt: Date?) {
-        (
-            My.formatter.date(from: createdAt),
-            My.formatter.date(from: expiresAt)
+        var formattedCreatedAt, formattedExpiresAt: Date?
+
+        if let createdAt {
+            formattedCreatedAt = My.formatter.date(from: createdAt)
+        }
+
+        if let expiresAt {
+            formattedExpiresAt = My.formatter.date(from: expiresAt)
+        }
+
+        return (
+            formattedCreatedAt,
+            formattedExpiresAt
         )
     }
 }
@@ -167,6 +189,8 @@ extension BrokerageQuote {
         public init(_ value: String) { self.value = value }
 
         public static let buy: Self = "SIMPLEBUY"
+        public static let externalBuy: Self = "EXTERNAL_BROKERAGE_BUY"
+        public static let externalTradingToTrading: Self = "EXTERNAL_BROKERAGE_SWAP_INTERNAL"
         public static let swapTradingToTrading: Self = "SWAP_INTERNAL"
         public static let swapPKWToPKW: Self = "SWAP_ON_CHAIN"
         public static let swapPKWToTrading: Self = "SWAP_FROM_USERKEY"

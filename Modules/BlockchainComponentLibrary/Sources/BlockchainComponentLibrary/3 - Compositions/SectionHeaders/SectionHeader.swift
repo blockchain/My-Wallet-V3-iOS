@@ -35,8 +35,8 @@ public struct SectionHeader<Trailing: View, Decoration: View>: View {
     public init(
         title: String,
         variant: SectionHeaderVariant = .regular,
-        @ViewBuilder decoration: @escaping() -> Decoration,
-        @ViewBuilder trailing: @escaping () -> Trailing
+        @ViewBuilder decoration: @escaping() -> Decoration = { EmptyView() },
+        @ViewBuilder trailing: @escaping () -> Trailing = { EmptyView() }
     ) {
         self.title = title
         self.variant = variant
@@ -50,6 +50,7 @@ public struct SectionHeader<Trailing: View, Decoration: View>: View {
                 .typography(variant.typography)
                 .foregroundColor(variant.fontColor)
             decoration
+                .frame(maxHeight: 24)
             Spacer()
             trailing
                 .frame(maxHeight: 24)
@@ -66,74 +67,6 @@ public struct SectionHeader<Trailing: View, Decoration: View>: View {
         )
     }
 }
-
-extension SectionHeader where Trailing == EmptyView {
-
-    /// Initialize a section header without a trailing view (for wallet)
-    /// - Parameters:
-    ///   - title: Leading title text
-    ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
-    ///   - decoration: Decoration after title
-    public init(
-        title: String,
-        variant: SectionHeaderVariant = .regular,
-        @ViewBuilder decoration: @escaping() -> Decoration) {
-        self.init(
-            title: title,
-            variant: variant,
-            decoration: decoration
-        ) {
-            EmptyView()
-        }
-    }
-}
-
-extension SectionHeader where Decoration == EmptyView {
-
-    /// Initialize a section header without a trailing view (for wallet)
-    /// - Parameters:
-    ///   - title: Leading title text
-    ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
-    ///   - trailing: Trailing view
-    public init(
-        title: String,
-        variant: SectionHeaderVariant = .regular,
-        @ViewBuilder trailing: @escaping() -> Trailing) {
-        self.init(
-            title: title,
-            variant: variant,
-            decoration: {
-                EmptyView()
-            },
-            trailing: trailing
-        )
-    }
-}
-
-extension SectionHeader where Decoration == EmptyView, Trailing == EmptyView {
-
-    /// Initialize a section header without a trailing view (for wallet)
-    /// - Parameters:
-    ///   - title: Leading title text
-    ///   - variant: `.regular` (default) for wallet, `.large` for exchange.
-    public init(
-        title: String,
-        variant: SectionHeaderVariant = .regular) {
-        self.init(
-            title: title,
-            variant: variant,
-            decoration: {
-                EmptyView()
-            },
-            trailing: {
-                EmptyView()
-            }
-        )
-    }
-}
-
-
-
 
 /// Variant types for `SectionHeader`
 public struct SectionHeaderVariant {
@@ -199,26 +132,39 @@ public struct SectionHeaderVariant {
 struct SectionHeader_Previews: PreviewProvider {
 
     static var previews: some View {
-        SectionHeader(title: "Regular")
-            .previewLayout(.sizeThatFits)
+        Group {
+            SectionHeader(
+                title: "Regular",
+                decoration: { IconButton(icon: .questionFilled) {} },
+                trailing: { IconButton(icon: .qrCode) {} }
+            )
             .previewDisplayName("Regular")
 
-        SectionHeader(title: "Large", variant: .large)
-            .previewLayout(.sizeThatFits)
+            SectionHeader(
+                title: "Large",
+                variant: .large,
+                decoration: { IconButton(icon: .questionFilled) {} },
+                trailing: { IconButton(icon: .qrCode) {} }
+            )
             .previewDisplayName("Large")
 
-        SectionHeader(title: "Superapp", variant: .superapp)
-            .previewLayout(.sizeThatFits)
+            SectionHeader(
+                title: "Superapp",
+                variant: .superapp,
+                decoration: { IconButton(icon: .questionFilled) {} },
+                trailing: { IconButton(icon: .qrCode) {} }
+            )
             .previewDisplayName("Superapp")
 
-        SectionHeader(title: "Large with Trailing",
-                      variant: .large,
-                      decoration: {
-            IconButton(icon: .qrCode) {}
-        }, trailing: {
-            IconButton(icon: .qrCode) {}
-        })
+            SectionHeader(
+                title: "Large with Trailing",
+                variant: .large,
+                decoration: { IconButton(icon: .questionFilled) {} },
+                trailing: { IconButton(icon: .qrCode) {} }
+            )
+            .previewDisplayName("Large with Trailing")
+        }
         .previewLayout(.sizeThatFits)
-        .previewDisplayName("Large with Trailing")
+        .frame(width: 375)
     }
 }

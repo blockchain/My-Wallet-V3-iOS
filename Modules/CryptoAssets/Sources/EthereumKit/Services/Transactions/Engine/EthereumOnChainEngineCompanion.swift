@@ -213,6 +213,7 @@ final class EthereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI {
                 return receiveAddressFactory.makeExternalAssetAddress(
                     asset: cryptoCurrency,
                     address: hotWalletAddress,
+                    memo: nil,
                     label: hotWalletAddress,
                     onTxCompleted: { _ in AnyPublisher.just(()) }
                 )

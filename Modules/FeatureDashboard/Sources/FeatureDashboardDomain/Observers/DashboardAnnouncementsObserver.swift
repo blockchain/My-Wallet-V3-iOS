@@ -35,7 +35,7 @@ public final class DashboardAnnouncementsObserver: Client.Observer {
         ]
     }
 
-    lazy private var userDidTapBackupSeedPhraseAnnouncement = app
+    private lazy var userDidTapBackupSeedPhraseAnnouncement = app
         .on(blockchain.ux.home.dashboard.announcement.backup.seed.phrase)
         .receive(on: DispatchQueue.main)
         .sink(to: DashboardAnnouncementsObserver.handleBackupSeedPhraseTap(_:), on: self)

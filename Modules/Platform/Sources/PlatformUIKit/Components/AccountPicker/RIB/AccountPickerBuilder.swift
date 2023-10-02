@@ -35,11 +35,9 @@ public final class AccountPickerBuilder: RIBs.Buildable {
     // MARK: - Init
 
     public convenience init(
-        singleAccountsOnly: Bool,
         action: AssetAction
     ) {
         let provider = AccountPickerAccountProvider(
-            singleAccountsOnly: singleAccountsOnly,
             action: action,
             failSequence: false
         )

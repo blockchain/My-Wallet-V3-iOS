@@ -50,12 +50,14 @@ struct EarnListView<Header: View, Content: View>: View {
     @State var isSearching: Bool = false
     @State var subscription: AnyCancellable?
 
-    let fuzzyAlgorithm = FuzzyAlgorithm()
+    let fuzzyAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
     var filtered: [Model] {
         state.value.filter { item in
             switch filter {
-            case .all: return true
-            case .only(let o): return item.product == o
+            case .all:
+                return true
+            case .only(let product):
+                return item.product == product
             }
         }
         .filter { item in
@@ -191,7 +193,9 @@ struct EarnListView<Header: View, Content: View>: View {
                             noResults
                             Spacer()
                         }
-                        .backport.hideListRowSeparator()
+                        .listRowBackground(filtered.isEmpty ? Color.semantic.light : Color.semantic.background)
+                        .backport
+                        .hideListRowSeparator()
                     }
                     ForEach(filtered, id: \.self) { item in
                         content(hub.product.asset, item.product, item.asset, item.isEligible)
@@ -246,6 +250,7 @@ struct EarnListView<Header: View, Content: View>: View {
             }
             Spacer()
         }
+        .background(Color.semantic.light)
     }
 
     func clear() {
@@ -257,10 +262,12 @@ struct EarnListView<Header: View, Content: View>: View {
 }
 
 struct Model: Hashable {
-    let product: EarnProduct, asset: CryptoCurrency
+    let product: EarnProduct
+    let asset: CryptoCurrency
     let marketCap: Double
     let isEligible: Bool
-    let crypto: MoneyValue?, fiat: MoneyValue?
+    let crypto: MoneyValue?
+    let fiat: MoneyValue?
     let rate: Double
 }
 

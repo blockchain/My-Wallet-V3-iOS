@@ -30,7 +30,7 @@ public struct SwapFromAccountSelectView: View {
                         .foregroundColor(.semantic.title)
                 },
                 trailing: {
-                    IconButton(icon: .closev2.circle().small()) {
+                    IconButton(icon: .navigationCloseButton()) {
                         viewStore.send(.onCloseTapped)
                     }
                 },

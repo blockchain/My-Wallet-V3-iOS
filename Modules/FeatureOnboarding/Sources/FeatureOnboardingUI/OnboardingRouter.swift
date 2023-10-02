@@ -23,22 +23,16 @@ public final class OnboardingRouter: OnboardingRouterAPI {
 
     // MARK: - Properties
 
-    let app: AppProtocol
     let kycRouter: KYCRouterAPI
-    let transactionsRouter: TransactionsRouterAPI
     let mainQueue: AnySchedulerOf<DispatchQueue>
 
     // MARK: - Init
 
     public init(
-        app: AppProtocol = resolve(),
         kycRouter: KYCRouterAPI = resolve(),
-        transactionsRouter: TransactionsRouterAPI = resolve(),
         mainQueue: AnySchedulerOf<DispatchQueue> = .main
     ) {
-        self.app = app
         self.kycRouter = kycRouter
-        self.transactionsRouter = transactionsRouter
         self.mainQueue = mainQueue
     }
 
@@ -47,42 +41,10 @@ public final class OnboardingRouter: OnboardingRouterAPI {
     public func presentPostSignUpOnboarding(from presenter: UIViewController) -> AnyPublisher<OnboardingResult, Never> {
         // Step 1: present email verification
         presentEmailVerification(from: presenter)
-            .flatMap { result -> AnyPublisher<OnboardingResult, Never> in
+            .flatMap { _ -> AnyPublisher<OnboardingResult, Never> in
                 .just(.abandoned)
             }
             .eraseToAnyPublisher()
-    }
-
-    public func presentRequiredCryptoBalanceView(
-        from presenter: UIViewController
-    ) -> AnyPublisher<OnboardingResult, Never> {
-        let subject = PassthroughSubject<OnboardingResult, Never>()
-        let view = CryptoBalanceRequiredView(
-            store: .init(
-                initialState: (),
-                reducer: CryptoBalanceRequired.reducer,
-                environment: CryptoBalanceRequired.Environment(
-                    close: {
-                        presenter.dismiss(animated: true) {
-                            subject.send(.abandoned)
-                            subject.send(completion: .finished)
-                        }
-                    },
-                    presentBuyFlow: { [transactionsRouter] in
-                        presenter.dismiss(animated: true) {
-                            transactionsRouter.navigateToBuyCryptoFlow(from: presenter)
-                        }
-                    },
-                    presentRequestCryptoFlow: { [transactionsRouter] in
-                        presenter.dismiss(animated: true) {
-                            transactionsRouter.navigateToReceiveCryptoFlow(from: presenter)
-                        }
-                    }
-                )
-            )
-        )
-        presenter.present(view)
-        return subject.eraseToAnyPublisher()
     }
 
     // MARK: - Helper Methods

@@ -9,11 +9,13 @@ protocol BankTransferClientAPI {
 
     func startBankTransfer(
         id: String,
-        amount: MoneyValue
+        amount: MoneyValue,
+        product: String
     ) -> AnyPublisher<BankTranferPaymentResponse, NabuNetworkError>
 
     func createWithdrawOrder(
         id: String,
-        amount: MoneyValue
+        amount: MoneyValue,
+        product: String
     ) -> AnyPublisher<Void, NabuNetworkError>
 }

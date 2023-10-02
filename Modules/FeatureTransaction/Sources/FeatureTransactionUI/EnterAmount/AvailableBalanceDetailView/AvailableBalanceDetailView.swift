@@ -183,7 +183,7 @@ struct AvailableBalanceDetailView: View {
                             .typography(.title3)
                         Spacer()
                     }
-                    IconButton(icon: .closev2.circle()) {
+                    IconButton(icon: .navigationCloseButton()) {
                         viewStore.send(.closeButtonTapped)
                     }
                     .frame(width: 24, height: 24)

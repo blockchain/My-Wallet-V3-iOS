@@ -17,7 +17,6 @@ public struct RootView: View {
             NavigationLinkProvider(view: IconsExamplesView(), title: "🖼 Icons")
         ],
         "2 - Primitives": [
-            NavigationLinkProvider(view: TabBarExamplesView(), title: "🎼 TabBar"),
             NavigationLinkProvider(view: ButtonExamplesView(), title: "🕹 Buttons"),
             NavigationLinkProvider(view: PrimaryDividerExamples(), title: "🗂 Dividers"),
             NavigationLinkProvider(view: SVGExamples(), title: "✍️ SVG"),

@@ -11,6 +11,7 @@ enum PriceRequest {
     enum IndexMultiSeries {}
     enum IndexSeries {}
     enum Symbols {}
+    enum TopMovers {}
 }
 
 // MARK: - IndexSeries
@@ -132,6 +133,32 @@ extension PriceRequest.Symbols {
     ) -> NetworkRequest? {
         requestBuilder.get(
             path: "/price/symbols"
+        )
+    }
+}
+
+// MARK: - Top Movers
+
+extension PriceRequest.TopMovers {
+    struct Key: Hashable, CustomStringConvertible {
+        let currency: FiatCurrency
+        let custodialOnly: Bool
+        var description: String { "id - \(custodialOnly)" }
+    }
+
+    static func request(
+        requestBuilder: RequestBuilder,
+        fiatBase: String,
+        topN: String,
+        custodialOnly: String
+    ) -> NetworkRequest? {
+        requestBuilder.get(
+            path: "/price/top-movers-24h",
+            parameters: [
+                URLQueryItem(name: "fiatBase", value: fiatBase),
+                URLQueryItem(name: "topN", value: topN),
+                URLQueryItem(name: "custodialOnly", value: custodialOnly)
+            ]
         )
     }
 }

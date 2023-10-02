@@ -21,6 +21,8 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
     let asset: CryptoCurrency = .bitcoinCash
     let isDefault: Bool
     let hdAccountIndex: Int
+    let isImported: Bool
+    let importedPrivateKey: String?
 
     func createTransactionEngine() -> Any {
         BitcoinOnChainTransactionEngineFactory<BitcoinCashToken>()
@@ -31,15 +33,19 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
     }
 
     var balance: AnyPublisher<MoneyValue, Error> {
-        balanceRepository
-            .balances
-            .map { [asset, hdAccountIndex] balances in
-                balances.balance(
-                    index: hdAccountIndex,
-                    currency: asset
-                ) ?? MoneyValue.zero(currency: asset)
-            }
-            .eraseToAnyPublisher()
+        if isImported {
+            return importedAddressBalance()
+        } else {
+            return balanceRepository
+                .balances
+                .map { [asset, hdAccountIndex] balances in
+                    balances.balance(
+                        index: hdAccountIndex,
+                        currency: asset
+                    ) ?? MoneyValue.zero(currency: asset)
+                }
+                .eraseToAnyPublisher()
+        }
     }
 
     var actionableBalance: AnyPublisher<MoneyValue, Error> {
@@ -47,33 +53,47 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
     }
 
     var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
-        receiveAddressProvider
-            .receiveAddressProvider(UInt32(hdAccountIndex))
-            .map { $0.replacingOccurrences(of: "bitcoincash:", with: "") }
-            .eraseError()
-            .map { [label, onTxCompleted] address -> ReceiveAddress in
+        if isImported {
+            return .just(
                 BitcoinChainReceiveAddress<BitcoinCashToken>(
-                    address: address,
+                    address: xPub.address,
                     label: label,
                     onTxCompleted: onTxCompleted
                 )
-            }
-            .eraseToAnyPublisher()
+            )
+        } else {
+            return receiveAddressProvider
+                .receiveAddressProvider(UInt32(hdAccountIndex))
+                .map { $0.replacingOccurrences(of: "bitcoincash:", with: "") }
+                .eraseError()
+                .map { [label, onTxCompleted] address -> ReceiveAddress in
+                    BitcoinChainReceiveAddress<BitcoinCashToken>(
+                        address: address,
+                        label: label,
+                        onTxCompleted: onTxCompleted
+                    )
+                }
+                .eraseToAnyPublisher()
+        }
     }
 
     var firstReceiveAddress: AnyPublisher<ReceiveAddress, Error> {
-        receiveAddressProvider
-            .firstReceiveAddressProvider(UInt32(hdAccountIndex))
-            .map { $0.replacingOccurrences(of: "bitcoincash:", with: "") }
-            .eraseError()
-            .map { [label, onTxCompleted] address -> ReceiveAddress in
-                BitcoinChainReceiveAddress<BitcoinCashToken>(
-                    address: address,
-                    label: label,
-                    onTxCompleted: onTxCompleted
-                )
-            }
-            .eraseToAnyPublisher()
+        if isImported {
+            return receiveAddress
+        } else {
+            return receiveAddressProvider
+                .firstReceiveAddressProvider(UInt32(hdAccountIndex))
+                .map { $0.replacingOccurrences(of: "bitcoincash:", with: "") }
+                .eraseError()
+                .map { [label, onTxCompleted] address -> ReceiveAddress in
+                    BitcoinChainReceiveAddress<BitcoinCashToken>(
+                        address: address,
+                        label: label,
+                        onTxCompleted: onTxCompleted
+                    )
+                }
+                .eraseToAnyPublisher()
+        }
     }
 
     private var isInterestTransferAvailable: AnyPublisher<Bool, Never> {
@@ -90,15 +110,19 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
     private let app: AppProtocol
     private let balanceRepository: DelegatedCustodyBalanceRepositoryAPI
     private let repository: BitcoinCashWalletAccountRepository
+    private let multiAddrFetcher: FetchMultiAddressFor
 
     init(
         xPub: XPub,
         label: String?,
         isDefault: Bool,
         hdAccountIndex: Int,
+        imported: Bool,
+        importedPrivateKey: String?,
         app: AppProtocol = resolve(),
         priceService: PriceServiceAPI = resolve(),
         balanceRepository: DelegatedCustodyBalanceRepositoryAPI = resolve(),
+        multiAddrFetcher: @escaping FetchMultiAddressFor = resolve(tag: BitcoinChainCoin.bitcoinCash),
         repository: BitcoinCashWalletAccountRepository = resolve(),
         receiveAddressProvider: BitcoinChainReceiveAddressProviderAPI = resolve(
             tag: BitcoinChainKit.BitcoinChainCoin.bitcoinCash
@@ -108,15 +132,26 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
         self.label = label ?? CryptoCurrency.bitcoinCash.defaultWalletName
         self.assetName = CryptoCurrency.bitcoinCash.name
         self.isDefault = isDefault
+        self.isImported = imported
+        self.importedPrivateKey = importedPrivateKey
         self.hdAccountIndex = hdAccountIndex
         self.priceService = priceService
         self.receiveAddressProvider = receiveAddressProvider
         self.app = app
         self.balanceRepository = balanceRepository
         self.repository = repository
+        self.multiAddrFetcher = multiAddrFetcher
     }
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
+        if isImported {
+            return .just(false)
+        } else {
+            return accountCan(perform: action)
+        }
+    }
+
+    private func accountCan(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .receive,
              .send,
@@ -142,8 +177,10 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
                     isEnabled ? isFunded : .just(false)
                 }
                 .eraseToAnyPublisher()
-        case .sell, .swap:
+        case .sell:
             return hasPositiveDisplayableBalance
+        case .swap:
+            return .just(true)
         }
     }
 
@@ -169,8 +206,31 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
         )
     }
 
+    private func importedAddressBalance() -> AnyPublisher<MoneyValue, Error> {
+        multiAddrFetcher([xPub])
+            .eraseError()
+            .map { [asset] response in
+                response.addresses
+                    .map { address in
+                        MoneyValue(cryptoValue:
+                            CryptoValue.create(
+                                minor: address.finalBalance,
+                                currency: asset
+                            )
+                        )
+                    }
+            }
+            .map { [asset] values in
+                values.first ?? .zero(currency: asset)
+            }
+            .eraseToAnyPublisher()
+    }
+
     func updateLabel(_ newLabel: String) -> AnyPublisher<Void, Never> {
-        repository.update(accountIndex: hdAccountIndex, label: newLabel)
+        guard !isImported else {
+            return .just(())
+        }
+        return repository.update(accountIndex: hdAccountIndex, label: newLabel)
     }
 
     func invalidateAccountBalance() {}

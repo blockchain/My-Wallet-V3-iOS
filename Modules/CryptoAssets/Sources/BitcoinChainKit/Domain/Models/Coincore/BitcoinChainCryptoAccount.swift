@@ -11,4 +11,10 @@ public protocol BitcoinChainCryptoAccount: CryptoNonCustodialAccount {
     var hdAccountIndex: Int { get }
 
     var xPub: XPub { get }
+
+    /// Returns `true` if this acocunt is an imported address, otherwise `false`
+    var isImported: Bool { get }
+
+    /// Available only on imported addresses
+    var importedPrivateKey: String? { get }
 }

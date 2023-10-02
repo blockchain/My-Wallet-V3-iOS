@@ -18,7 +18,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Blockchain"),
-        .package(path: "../FeatureQuickActions"),
+        .package(path: "../FeatureQuickActions")
     ],
     targets: [
         .target(

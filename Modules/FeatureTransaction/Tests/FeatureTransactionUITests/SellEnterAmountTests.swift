@@ -1,16 +1,16 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
-import XCTest
-import ComposableArchitecture
-import MoneyKit
-import Combine
-@testable import FeatureTransactionUI
 import BlockchainUI
-import FeatureTransactionDomain
-import SwiftUI
+import Combine
+import ComposableArchitecture
 import DIKit
+import FeatureTransactionDomain
+@testable import FeatureTransactionUI
+import Foundation
+import MoneyKit
 import PlatformKit
+import SwiftUI
+import XCTest
 
 @MainActor
 class SellEnterAmountTests: XCTestCase {
@@ -20,7 +20,7 @@ class SellEnterAmountTests: XCTestCase {
         SellEnterAmount.Action,
         SellEnterAmount.State,
         SellEnterAmount.Action,
-        ()
+        Void
     >!
 
     let defaultSourcePair = FeatureTransactionDomain.SelectionInformation(accountId: "BTC.Account", currency: .bitcoin)
@@ -30,31 +30,34 @@ class SellEnterAmountTests: XCTestCase {
     let minSpendableFiatValue = MoneyValue.zero(currency: .USD)
     let minSpendableCryptoValue = MoneyValue.zero(currency: .bitcoin)
 
-    lazy var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues,Never> = .just(TransactionMinMaxValues(maxSpendableFiatValue: self.maxSpendableFiatValue,
-                                                                                                                 maxSpendableCryptoValue: self.maxSpendableFiatValue,
-                                                                                                                 minSpendableFiatValue: self.minSpendableFiatValue,
-                                                                                                                 minSpendableCryptoValue: self.minSpendableCryptoValue))
+    lazy var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never> = .just(TransactionMinMaxValues(
+        maxSpendableFiatValue: self.maxSpendableFiatValue,
+        maxSpendableCryptoValue: self.maxSpendableFiatValue,
+        minSpendableFiatValue: self.minSpendableFiatValue,
+        minSpendableCryptoValue: self.minSpendableCryptoValue
+    ))
+
+    lazy var validationStatePublisher: AnyPublisher<TransactionValidationState, Never> = .just(.canExecute)
+
 
     override func setUpWithError() throws {
         try super.setUpWithError()
         completionHandlerSpy = SellEnterAmountCompletionHandlerSpy()
 
-        testStore = TestStore(initialState: SellEnterAmount.State(),
-                              reducer: SellEnterAmount(app: App.test,
-                                                       onAmountChanged: completionHandlerSpy.onAmountChanged,
-                                                       onPreviewTapped: completionHandlerSpy.onPreviewTapped,
-                                                       minMaxAmountsPublisher: minMaxAmountsPublisher)
+        testStore = TestStore(
+            initialState: SellEnterAmount.State(),
+            reducer: SellEnterAmount(
+                app: App.test,
+                onAmountChanged: completionHandlerSpy.onAmountChanged,
+                onPreviewTapped: completionHandlerSpy.onPreviewTapped,
+                minMaxAmountsPublisher: minMaxAmountsPublisher,
+                validationStatePublisher: validationStatePublisher
+            )
         )
     }
-
-
-//    func test_initial_state() async {
-//        await testStore.send(.onAppear)
-//
-//    }
 }
 
-fileprivate class SellEnterAmountCompletionHandlerSpy {
+private class SellEnterAmountCompletionHandlerSpy {
     var onPreviewTappedCalled = false
     var onPreviewTappedMoneyValue: MoneyValue?
 

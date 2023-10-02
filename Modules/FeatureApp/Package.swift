@@ -26,7 +26,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.54.1"
+            exact: "0.56.0"
         ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),
@@ -45,7 +45,6 @@ let package = Package(
         .package(path: "../FeatureDebug"),
         .package(path: "../FeatureDex"),
         .package(path: "../FeatureInterest"),
-        .package(path: "../FeatureKYCIntegration"),
         .package(path: "../FeatureNFT"),
         .package(path: "../FeatureOnboarding"),
         .package(path: "../FeatureOpenBanking"),
@@ -107,7 +106,6 @@ let package = Package(
                 .product(name: "FeatureOpenBankingDomain", package: "FeatureOpenBanking"),
                 .product(name: "FeatureOpenBankingUI", package: "FeatureOpenBanking"),
                 .product(name: "FeaturePin", package: "FeaturePin"),
-                .product(name: "FeatureProveUI", package: "FeatureKYCIntegration"),
                 .product(name: "FeatureProductsDomain", package: "FeatureProducts"),
                 .product(name: "FeatureQRCodeScannerDomain", package: "FeatureQRCodeScanner"),
                 .product(name: "FeatureQRCodeScannerUI", package: "FeatureQRCodeScanner"),

@@ -32,7 +32,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.54.1"
+            exact: "0.56.0"
         ),
         .package(
             url: "https://github.com/attaswift/BigInt.git",
@@ -48,11 +48,13 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Veriff/veriff-ios-spm.git",
-            exact: "4.17.0"
+            exact: "6.17.0"
         ),
         .package(path: "../Analytics"),
         .package(path: "../FeatureAuthentication"),
+        .package(path: "../FeatureCustodialOnboarding"),
         .package(path: "../FeatureForm"),
+        .package(path: "../Blockchain"),
         .package(path: "../Localization"),
         .package(path: "../Network"),
         .package(path: "../Permissions"),
@@ -94,9 +96,11 @@ let package = Package(
                 .product(name: "PlatformUIKit", package: "Platform"),
                 .product(name: "RxSwift", package: "RxSwift"),
                 .product(name: "ToolKit", package: "Tool"),
+                .product(name: "Blockchain", package: "Blockchain"),
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "UIComponents", package: "UIComponents"),
-                .product(name: "Veriff", package: "veriff-ios-spm")
+                .product(name: "Veriff", package: "veriff-ios-spm"),
+                .product(name: "FeatureCustodialOnboarding", package: "FeatureCustodialOnboarding")
             ],
             resources: [
                 .copy("Media.xcassets")

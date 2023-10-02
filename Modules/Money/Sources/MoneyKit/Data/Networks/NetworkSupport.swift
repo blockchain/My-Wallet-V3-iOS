@@ -5,6 +5,22 @@ import ToolKit
 struct NetworkConfigResponse: Codable {
     let networks: [Network]
     let types: [TypeEntry]
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let networks = try container
+            .decode(
+                [FailableDecodable<NetworkConfigResponse.Network>].self,
+                forKey: .networks
+            )
+        self.networks = networks.compactMap(\.value)
+        let types = try container
+            .decode(
+                [FailableDecodable<NetworkConfigResponse.TypeEntry>].self,
+                forKey: .types
+            )
+        self.types = types.compactMap(\.value)
+    }
 }
 
 extension NetworkConfigResponse {
@@ -30,6 +46,7 @@ extension NetworkConfigResponse {
     struct Network: Codable {
         let explorerUrl: String
         let identifiers: JSONValue
+        let memos: Bool
         let name: String
         let nativeAsset: String
         let networkTicker: String
@@ -51,7 +68,6 @@ extension NetworkConfigResponse {
         struct Derivation: Codable {
             let purpose: Int
             let coinType: Int
-            let descriptor: Int
         }
 
         let type: NetworkType

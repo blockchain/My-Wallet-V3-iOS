@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import Blockchain
+import BlockchainUI
 import ComposableArchitecture
 import SwiftUI
 import UIComponentsKit
@@ -35,7 +36,7 @@ public struct EmailVerificationView: View {
 
                 // Root View when loading Email Verification Status
                 if viewStore.flowStep == .loadingVerificationState || viewStore.flowStep == .verificationCheckFailed {
-                    ActivityIndicatorView()
+                    ProgressView()
                         .accessibility(identifier: "KYC.EmailVerification.loading.spinner")
                         .alert(
                             store.scope(state: \.emailVerificationFailedAlert),
@@ -133,7 +134,8 @@ struct EmailVerificationView_Previews: PreviewProvider {
                     analyticsRecorder: NoOpAnalyticsRecorder(),
                     emailVerificationService: NoOpEmailVerificationService(),
                     flowCompletionCallback: nil,
-                    openMailApp: { EffectTask(value: true) }
+                    openMailApp: { EffectTask(value: true) },
+                    app: App.preview
                 )
             )
         )

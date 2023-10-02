@@ -100,7 +100,7 @@ class AccountPickerViewTests: XCTestCase {
     let header = HeaderStyle.normal(
         title: "Send Crypto Now",
         subtitle: "Choose a Wallet to send cypto from.",
-        image: ImageAsset.iconSend.image,
+        image: ImageAsset.iconSend.imageResource,
         tableTitle: "Select a Wallet",
         searchable: false
     )

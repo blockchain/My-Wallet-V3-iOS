@@ -18,6 +18,7 @@ final class KYCCountrySelectionController: KYCBaseViewController, ProgressableVi
     var startingValue: Float = 0.4
 
     // MARK: - IBOutlets
+
     @IBOutlet private var headerTitle: UILabel!
     @IBOutlet private var headerSubtitle: UILabel!
 

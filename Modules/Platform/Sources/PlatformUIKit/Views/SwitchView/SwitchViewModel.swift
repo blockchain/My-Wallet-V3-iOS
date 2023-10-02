@@ -59,7 +59,7 @@ public struct SwitchViewModel {
     public let accessibility: Accessibility
 
     /// The background color relay
-    public let fillColorRelay = BehaviorRelay<UIColor>(value: .primaryButton)
+    public let fillColorRelay = BehaviorRelay<UIColor>(value: .primary)
 
     /// Streams events when the component is being tapped
     public let isSwitchedOnRelay = PublishRelay<Bool>()

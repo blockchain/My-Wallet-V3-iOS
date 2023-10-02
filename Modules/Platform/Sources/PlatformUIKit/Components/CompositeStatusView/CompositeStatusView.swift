@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import RxCocoa
 import RxRelay
 import RxSwift
@@ -65,7 +66,7 @@ public final class CompositeStatusView: UIView {
             layer.cornerRadius = min(bounds.width, bounds.height) * 0.5
         }
 
-        private func setupImageView(with imageResource: ImageResource) {
+        private func setupImageView(with imageResource: ImageLocation) {
             let content = ImageViewContent(imageResource: imageResource)
             let imageView = UIImageView(image: nil)
             add(view: imageView)
@@ -76,8 +77,8 @@ public final class CompositeStatusView: UIView {
             let edge = bounds.width * contentSizeRatio
             let loadingView = LoadingAnimatingView(
                 diameter: edge,
-                strokeColor: .secondary,
-                strokeBackgroundColor: UIColor.secondary.withAlphaComponent(0.3),
+                strokeColor: .primary,
+                strokeBackgroundColor: UIColor.primary.withAlphaComponent(0.3),
                 fillColor: .clear,
                 strokeWidth: 4
             )
@@ -224,8 +225,8 @@ public final class CompositeStatusView: UIView {
     private func setupLoadingView() {
         let loadingView = LoadingAnimatingView(
             diameter: mainContainerView.bounds.width,
-            strokeColor: .secondary,
-            strokeBackgroundColor: UIColor.secondary.withAlphaComponent(0.3),
+            strokeColor: .primary,
+            strokeBackgroundColor: UIColor.primary.withAlphaComponent(0.3),
             fillColor: .clear
         )
 
@@ -239,7 +240,7 @@ public final class CompositeStatusView: UIView {
         add(view: badgeImageView)
     }
 
-    private func setupImageView(with imageResource: ImageResource) {
+    private func setupImageView(with imageResource: ImageLocation) {
         let content = ImageViewContent(imageResource: imageResource)
         let imageView = UIImageView(image: nil)
         add(view: imageView)

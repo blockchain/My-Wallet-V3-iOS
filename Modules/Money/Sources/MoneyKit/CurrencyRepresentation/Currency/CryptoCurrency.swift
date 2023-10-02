@@ -135,9 +135,9 @@ public struct CryptoCurrency: Currency, Hashable, Codable, Comparable, CustomDeb
 extension CryptoCurrency {
 
     public func network(
-        enabledCurrenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
+        currenciesService: EnabledCurrenciesServiceAPI = EnabledCurrenciesService.default
     ) -> EVMNetwork? {
-        enabledCurrenciesService.network(for: self)
+        currenciesService.network(for: self)
     }
 }
 

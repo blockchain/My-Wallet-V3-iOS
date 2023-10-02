@@ -52,7 +52,6 @@ struct AddressSearchView: View {
             WithViewStore(store) { viewStore in
                 VStack(alignment: .leading) {
                     header
-                    title
                     searchBar
                     content
                 }
@@ -72,28 +71,20 @@ struct AddressSearchView: View {
 
     private var header: some View {
         WithViewStore(store) { viewStore in
-            VStack(alignment: .center, spacing: Spacing.padding3) {
-                ZStack {
-                    Circle()
-                        .fill(Color.semantic.background)
-                        .frame(width: 88)
-                    Icon.superAppHomeFilled
-                        .color(Color.semantic.title).frame(width: 49)
+            VStack(alignment: .leading, spacing: Spacing.padding1) {
+                HStack {
+                    Text(viewStore.screenTitle)
+                        .typography(.title3)
+                    Spacer()
                 }
                 Text(viewStore.screenTitle)
-                    .typography(.title3)
-                    .padding(.bottom, Spacing.padding2)
+                    .typography(.body1)
+                    .foregroundColor(.semantic.body)
             }
             .frame(maxWidth: .infinity)
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.bottom, Spacing.padding2)
         }
-    }
-
-    private var title: some View {
-        Text(L10n.title)
-            .typography(.paragraph2)
-            .foregroundColor(.WalletSemantic.title)
-            .multilineTextAlignment(.leading)
-            .padding(.horizontal, 18)
     }
 
     private var searchBar: some View {
@@ -105,13 +96,13 @@ struct AddressSearchView: View {
                 cancelButtonText: "",
                 placeholder: L10n.SearchAddress.SearchBar.Placeholder.text
             )
-            .padding(.horizontal, 18)
+            .padding(.horizontal, Spacing.padding2)
         }
     }
 
     private var content: some View {
         WithViewStore(store) { viewStore in
-                List{
+                List {
                     Section(
                         content: {
                             addressManualInputRow
@@ -137,6 +128,7 @@ struct AddressSearchView: View {
                 .listStyle(.insetGrouped)
                 .listRowInsets(.zero)
                 .background(Color.semantic.light)
+                .hideScrollContentBackground()
                 .simultaneousGesture(
                     DragGesture().onChanged { _ in
                         viewStore.send(.set(\.$isSearchFieldSelected, false))
@@ -181,7 +173,7 @@ struct AddressSearchView: View {
                         .typography(.paragraph1)
                         .foregroundColor(.semantic.primary)
                 }
-                .padding(.vertical, 16)
+                .padding(.vertical, Spacing.padding2)
             }
             .padding(.horizontal, Spacing.padding3)
         }
@@ -230,11 +222,10 @@ struct AddressSearch_Previews: PreviewProvider {
                         )
                     ]
                 ),
-                reducer: addressSearchReducer,
-                environment: .init(
+                reducer: AddressSearchReducer(
                     mainQueue: .main,
                     config: .init(
-                        addressSearchScreen: .init(title: "Title"),
+                        addressSearchScreen: .init(title: "Title", subtitle: "Subtitle"),
                         addressEditScreen: .init(title: "Title", subtitle: "Subtitle")
                     ),
                     addressService: MockServices(),

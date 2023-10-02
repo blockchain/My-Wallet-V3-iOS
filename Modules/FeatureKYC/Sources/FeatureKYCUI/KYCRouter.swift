@@ -40,24 +40,11 @@ public enum UserAddressSearchResult {
     case saved
 }
 
-public enum KYCProveResult {
-    case success
-    case failure(Nabu.ErrorCode)
-    case abandoned
-}
-
 public protocol AddressSearchFlowPresenterAPI {
     func openSearchAddressFlow(
         country: String,
         state: String?
     ) -> AnyPublisher<UserAddressSearchResult, Never>
-}
-
-public protocol KYCProveFlowPresenterAPI {
-    func presentFlow(
-        country: String,
-        state: String?
-    ) -> AnyPublisher<KYCProveResult, Never>
 }
 
 /// Coordinates the KYC flow. This component can be used to start a new KYC flow, or if
@@ -100,7 +87,6 @@ final class KYCRouter: KYCRouterAPI {
     private let analyticsRecorder: AnalyticsEventRecorderAPI
     private let nabuUserService: NabuUserServiceAPI
     private let requestBuilder: RequestBuilder
-    private let flowKYCInfoService: FlowKYCInfoServiceAPI
     private let emailVerificationService: FeatureKYCDomain.EmailVerificationServiceAPI
     private let externalAppOpener: ExternalAppOpener
 
@@ -115,8 +101,6 @@ final class KYCRouter: KYCRouterAPI {
     private var alertPresenter: AlertViewPresenterAPI
 
     private var addressSearchFlowPresenter: AddressSearchFlowPresenterAPI
-    private var proveFlowPresenter: KYCProveFlowPresenterAPI
-    private var proveFlowFailed = false
 
     /// KYC finsihed with `verified` in-progress / approved
     var verifiedFinished: Observable<Void> {
@@ -144,9 +128,7 @@ final class KYCRouter: KYCRouterAPI {
         errorRecorder: ErrorRecording = resolve(),
         alertPresenter: AlertViewPresenterAPI = resolve(),
         addressSearchFlowPresenter: AddressSearchFlowPresenterAPI = resolve(),
-        proveFlowPresenter: KYCProveFlowPresenterAPI = resolve(),
         nabuUserService: NabuUserServiceAPI = resolve(),
-        flowKYCInfoService: FlowKYCInfoServiceAPI = resolve(),
         emailVerificationService: FeatureKYCDomain.EmailVerificationServiceAPI = resolve(),
         externalAppOpener: ExternalAppOpener = resolve(),
         kycSettings: KYCSettingsAPI = resolve(),
@@ -158,10 +140,8 @@ final class KYCRouter: KYCRouterAPI {
         self.errorRecorder = errorRecorder
         self.alertPresenter = alertPresenter
         self.addressSearchFlowPresenter = addressSearchFlowPresenter
-        self.proveFlowPresenter = proveFlowPresenter
         self.analyticsRecorder = analyticsRecorder
         self.nabuUserService = nabuUserService
-        self.flowKYCInfoService = flowKYCInfoService
         self.emailVerificationService = emailVerificationService
         self.externalAppOpener = externalAppOpener
         self.webViewServiceAPI = webViewServiceAPI
@@ -229,12 +209,16 @@ final class KYCRouter: KYCRouterAPI {
         let disposable = Observable
             .zip(
                 nabuUserService.fetchUser().asObservable(),
-                postTierObservable
+                postTierObservable,
+                app.publisher(for: blockchain.ux.kyc.SSN.should.be.collected, as: Bool.self)
+                    .replaceError(with: false)
+                    .prefix(1)
+                    .asObservable()
             )
             .subscribe(on: MainScheduler.asyncInstance)
             .observe(on: MainScheduler.instance)
             .hideLoaderOnDisposal(loader: loadingViewPresenter)
-            .subscribe(onNext: { [weak self] user, tiersResponse in
+            .subscribe(onNext: { [weak self] user, tiersResponse, isSSNRequired in
                 self?.isNewProfileEnabled { isNewProfileEnabled in
                     self?.pager = KYCPager(isNewProfile: isNewProfileEnabled, tier: tier, tiersResponse: tiersResponse)
                     Logger.shared.debug("Got user with ID: \(user.personalDetails.identifier ?? "")")
@@ -249,7 +233,8 @@ final class KYCRouter: KYCRouterAPI {
                         requiredTier: tier,
                         tiersResponse: tiersResponse,
                         hasQuestions: strongSelf.hasQuestions,
-                        isNewProfile: isNewProfileEnabled
+                        isNewProfile: isNewProfileEnabled,
+                        isSSNRequired: isSSNRequired
                     )
 
                     if startingPage == .finish {
@@ -266,11 +251,13 @@ final class KYCRouter: KYCRouterAPI {
                         viewController,
                         user: user,
                         tier: tier,
-                        isNewProfile: isNewProfileEnabled
+                        isNewProfile: isNewProfileEnabled,
+                        isSSNRequired: isSSNRequired
                     )
                     strongSelf.restoreToMostRecentPageIfNeeded(
                         tier: tier,
-                        isNewProfile: isNewProfileEnabled
+                        isNewProfile: isNewProfileEnabled,
+                        isSSNRequired: isSSNRequired
                     )
                 }
             }, onError: { [alertPresenter, errorRecorder] error in
@@ -361,14 +348,6 @@ final class KYCRouter: KYCRouterAPI {
                         return
                     }
 
-                    switch (parentFlow, nextPage) {
-                    case (.simpleBuy, .accountStatus):
-                        finish()
-                        return
-                    default:
-                        break
-                    }
-
                     let controller = pageFactory.createFrom(
                         pageType: nextPage,
                         in: self,
@@ -377,9 +356,8 @@ final class KYCRouter: KYCRouterAPI {
 
                     checkConfigurations(
                         page: nextPage,
-                        user: user,
-                        proveFlowFailed: proveFlowFailed
-                    ) { shouldShowEmailVerification, shouldShowAddressFlow, shouldShowProveFlow in
+                        user: user
+                    ) { shouldShowEmailVerification, shouldShowAddressFlow in
                         if let informationController = controller as? KYCInformationController, nextPage == .accountStatus {
                             self.presentInformationController(informationController)
                         } else if shouldShowEmailVerification {
@@ -399,15 +377,6 @@ final class KYCRouter: KYCRouterAPI {
                                 }
                             } else {
                                 self.presentAddressSearchFlow()
-                            }
-                        } else if shouldShowProveFlow, let address = self.user?.address {
-                            if let navController = self.navController {
-                                navController.dismiss(animated: true) {
-                                    self.navController = nil
-                                    self.presentKYCProveFlow(address: address, page: nextPage)
-                                }
-                            } else {
-                                self.presentKYCProveFlow(address: address, page: nextPage)
                             }
                         } else {
                             self.safePushInNavController(controller)
@@ -545,36 +514,9 @@ final class KYCRouter: KYCRouterAPI {
                             callback(.success(result))
                         }
                     }
-            }
+            },
+            app: app
         )
-    }
-
-    private func presentKYCProveFlow(
-        address: UserAddress,
-        page: KYCPageType
-    ) {
-        proveFlowPresenter
-            .presentFlow(country: address.countryCode, state: address.state)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] addressResult in
-                switch addressResult {
-                case .success:
-                    self?.handle(event: .nextPageFromPageType(.accountStatus, nil))
-                case .abandoned:
-                    self?.stop()
-                case .failure(let errorCode):
-                    self?.proveFlowFailed = true
-                    switch errorCode {
-                    case .provePossessionFailed:
-                        self?.handle(event: .nextPageFromPageType(.states, nil))
-                    case .proveVerificationFailed:
-                        self?.presentVerification()
-                    default:
-                        self?.handle(event: .nextPageFromPageType(.states, nil))
-                    }
-                }
-            })
-            .store(in: &bag)
     }
 
     private func presentVerification() {
@@ -614,17 +556,14 @@ final class KYCRouter: KYCRouterAPI {
                     )
                     controller.primaryButtonAction = { _ in
                         switch status {
-                        case .approved:
-                            self.finish()
-                        case .pending:
-                            break
                         case .failed, .expired:
                             if let blockchainSupportURL = URL(string: Constants.Url.blockchainSupport) {
                                 UIApplication.shared.open(blockchainSupportURL)
                             }
-                        case .none, .underReview:
-                            return
+                        default:
+                            break
                         }
+                        self.finish()
                     }
 
                     safePushInNavController(controller)
@@ -642,7 +581,8 @@ final class KYCRouter: KYCRouterAPI {
     /// Restores the user to the most recent page if they dropped off mid-flow while KYC'ing
     private func restoreToMostRecentPageIfNeeded(
         tier: KYC.Tier,
-        isNewProfile: Bool
+        isNewProfile: Bool,
+        isSSNRequired: Bool
     ) {
         guard let currentUser = user else {
             return
@@ -656,7 +596,8 @@ final class KYCRouter: KYCRouterAPI {
             requiredTier: tier,
             tiersResponse: response,
             hasQuestions: hasQuestions,
-            isNewProfile: isNewProfile
+            isNewProfile: isNewProfile,
+            isSSNRequired: isSSNRequired
         )
 
         if startingPage == .finish {
@@ -686,7 +627,8 @@ final class KYCRouter: KYCRouterAPI {
                 user: user,
                 country: country,
                 tiersResponse: response,
-                isNewProfile: isNewProfile
+                isNewProfile: isNewProfile,
+                isSSNRequired: isSSNRequired
             ) else { return }
 
             currentPage = nextPage
@@ -725,6 +667,7 @@ final class KYCRouter: KYCRouterAPI {
              .verifyIdentity,
              .resubmitIdentity,
              .applicationComplete,
+             .ssn,
              .finish:
             return nil
         }
@@ -734,7 +677,8 @@ final class KYCRouter: KYCRouterAPI {
         _ viewController: UIViewController,
         user: NabuUser,
         tier: KYC.Tier,
-        isNewProfile: Bool
+        isNewProfile: Bool,
+        isSSNRequired: Bool
     ) {
         guard let response = userTiersResponse else { return }
         let startingPage = KYCPageType.startingPage(
@@ -742,7 +686,8 @@ final class KYCRouter: KYCRouterAPI {
             requiredTier: tier,
             tiersResponse: response,
             hasQuestions: hasQuestions,
-            isNewProfile: isNewProfile
+            isNewProfile: isNewProfile,
+            isSSNRequired: isSSNRequired
         )
         if startingPage == .finish {
             return
@@ -750,9 +695,8 @@ final class KYCRouter: KYCRouterAPI {
 
         checkConfigurations(
             page: startingPage,
-            user: user,
-            proveFlowFailed: proveFlowFailed
-        ) { [weak self] shouldShowEmailVerification, shouldShowAddressFlow, shouldShowProveFlow in
+            user: user
+        ) { [weak self] shouldShowEmailVerification, shouldShowAddressFlow in
 
             guard let self else { return }
             var controller: KYCBaseViewController
@@ -774,10 +718,6 @@ final class KYCRouter: KYCRouterAPI {
             }
             if shouldShowAddressFlow {
                 presentAddressSearchFlow()
-                return
-            }
-            if shouldShowProveFlow, let address = user.address {
-                presentKYCProveFlow(address: address, page: startingPage)
                 return
             }
             controller = pageFactory.createFrom(
@@ -859,6 +799,7 @@ final class KYCRouter: KYCRouterAPI {
              .accountUsageForm,
              .applicationComplete,
              .resubmitIdentity,
+             .ssn,
              .finish:
             break
         case .enterEmail:
@@ -926,10 +867,10 @@ final class KYCRouter: KYCRouterAPI {
         navController.modalPresentationStyle = .pageSheet
         if let presentedViewController = presentingViewController.presentedViewController {
             presentedViewController.dismiss(animated: true) {
-                presentingViewController.present(navController, animated: true)
+                presentingViewController.enter(into: navController, animated: true)
             }
         } else {
-            presentingViewController.present(navController, animated: true)
+            presentingViewController.enter(into: navController, animated: true)
         }
 
         return navController
@@ -979,14 +920,12 @@ extension KYCRouter {
 
     private typealias OnCompleteCheckConfigurationsParameters = (
         shouldShowEmailVerification: Bool,
-        shouldShowAddressFlow: Bool,
-        shouldShowProveFlow: Bool
+        shouldShowAddressFlow: Bool
     )
 
     private func checkConfigurations(
         page: KYCPageType,
         user: NabuUser?,
-        proveFlowFailed: Bool,
         onComplete: @escaping (OnCompleteCheckConfigurationsParameters) -> Void
     ) {
         Task(priority: .userInitiated) { @MainActor in
@@ -1013,23 +952,9 @@ extension KYCRouter {
                 .value
             }
 
-            var shouldShowProveFlow: Bool?
-            if !proveFlowFailed, page == .profileNew || page == .profile {
-                shouldShowProveFlow = try? await app.publisher(
-                    for: blockchain.app.configuration.kyc.integration.prove.is.enabled,
-                    as: Bool.self
-                )
-                .await()
-                .value
-                if shouldShowProveFlow ?? false {
-                    shouldShowProveFlow = try? await flowKYCInfoService.isProveFlow()
-                }
-            }
-
             onComplete(OnCompleteCheckConfigurationsParameters(
                 shouldShowEmailVerification: shouldShowEmailVerification ?? false,
-                shouldShowAddressFlow: shouldShowAddressFlow ?? false,
-                shouldShowProveFlow: shouldShowProveFlow ?? false
+                shouldShowAddressFlow: shouldShowAddressFlow ?? false
             ))
         }
     }

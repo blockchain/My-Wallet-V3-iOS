@@ -63,7 +63,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
         var seeAllButtonHidden = true
 
         var balancesFailingForNetworksTitles: String? {
-            balancesFailingForNetworks?.map(\.networkConfig.name).joined(separator: ", ")
+            balancesFailingForNetworks?.map(\.networkConfig.shortName).joined(separator: ", ")
         }
 
         public init(presentedAssetsType: PresentedAssetType) {
@@ -87,7 +87,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
                 state.isLoading = state.assetRows.isEmpty
 
                 let refreshEvents = app.on(blockchain.ux.home.event.did.pull.to.refresh).mapToVoid().prepend(())
-                    .combineLatest(app.on(blockchain.ux.transaction.event.execution.status.completed).mapToVoid().prepend(()))
+                    .combineLatest(app.on(blockchain.ux.transaction.event.did.finish).mapToVoid().prepend(()))
                     .mapToVoid()
 
                 let cryptoEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)

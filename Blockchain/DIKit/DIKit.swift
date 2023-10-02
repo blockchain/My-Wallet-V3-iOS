@@ -323,10 +323,19 @@ extension DependencyContainer {
                 guidProvider: DIKit.resolve(),
                 traitRepository: DIKit.resolve()
             )
+#if DEBUG || ALPHA_BUILD || INTERNAL_BUILD
+            let pulse = PulseAnalyticsServiceProvider()
+            return AnalyticsEventRecorder(analyticsServiceProviders: [
+                firebaseAnalyticsServiceProvider,
+                nabuAnalyticsServiceProvider,
+                pulse
+            ])
+#else
             return AnalyticsEventRecorder(analyticsServiceProviders: [
                 firebaseAnalyticsServiceProvider,
                 nabuAnalyticsServiceProvider
             ])
+#endif
         }
 
         single {
@@ -360,7 +369,7 @@ extension DependencyContainer {
                 networkAdapter: adapter,
                 requestBuilder: builder
             )
-            return PlaidRepository(client: client)
+            return PlaidRepository(app: DIKit.resolve(), client: client)
         }
 
         factory { () -> VGSClientAPI in
@@ -413,6 +422,7 @@ extension DependencyContainer {
 
         single { () -> ProductsRepositoryAPI in
             ProductsRepository(
+                app: DIKit.resolve(),
                 client: ProductsAPIClient(
                     networkAdapter: DIKit.resolve(tag: DIKitContext.retail),
                     requestBuilder: DIKit.resolve(tag: DIKitContext.retail)
@@ -634,7 +644,7 @@ extension DependencyContainer {
 
         factory { () -> TopMoversServiceAPI in
             TopMoversService(
-                app: DIKit.resolve()
+                priceRepository: DIKit.resolve()
             ) as TopMoversServiceAPI
         }
     }
