@@ -74,11 +74,13 @@ extension Bindings {
         lock.lock()
         let isSynchronized = isSynchronized
         let bindings = bindings
+        let isBindingSynchronized = binding.result.isSynchronized
+        let areAllBindingsSynchronised = bindings.allSatisfy(\.result.isSynchronized)
         lock.unlock()
         if depth < 0, binding.hasTransactionChanges { return }
         if case .failure(let error, _) = binding.result { handle?(.updateError(binding, error)) }
-        if isSynchronized, binding.result.isSynchronized { apply(binding) }
-        if !isSynchronized, bindings.allSatisfy(\.result.isSynchronized) { apply(bindings) }
+        if isSynchronized, isBindingSynchronized { apply(binding) }
+        if !isSynchronized, areAllBindingsSynchronised { apply(bindings) }
     }
 
     func insert(_ binding: Bindings.Binding?) {
