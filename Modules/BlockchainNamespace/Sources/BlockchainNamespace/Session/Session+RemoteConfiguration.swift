@@ -86,39 +86,65 @@ extension Session {
                 }
 
                 func activate(keys: [String]) {
-                    remote.activate { [self] _, error in
-                        guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
-                        if keys.isEmpty {
-                            #if DEBUG
-                            if !isInTest { return errored() }
-                            #else
-                            app.post(error: "Firebase returned no remote configuration values")
-                            return errored()
-                            #endif
+                    if keys.isEmpty {
+                        #if DEBUG
+                        app.post(error: "remote configuration keys is empty! ‼️‼️‼️‼️")
+                        if !isInTest { return errored() }
+                        #else
+                        return errored()
+                        #endif
+                    }
+                    for key in keys {
+                        do {
+                            configuration[key] = try JSONSerialization.jsonObject(
+                                with: remote[key].dataValue,
+                                options: .fragmentsAllowed
+                            )
+                        } catch {
+                            configuration[key] = String(decoding: remote[key].dataValue, as: UTF8.self)
                         }
-                        for key in keys {
-                            do {
-                                configuration[key] = try JSONSerialization.jsonObject(
-                                    with: remote[key].dataValue,
-                                    options: .fragmentsAllowed
-                                )
-                            } catch {
-                                configuration[key] = String(decoding: remote[key].dataValue, as: UTF8.self)
-                            }
-                        }
-                        self._fetched = configuration
-                        app.state.set(blockchain.app.configuration.remote.is.stale, to: false)
+                    }
+                    self._fetched = configuration
+                    app.state.set(blockchain.app.configuration.remote.is.stale, to: false)
+                }
+
+                func onMain(_ block: @escaping () -> Void) {
+                    if isInTest {
+                        block()
+                    } else {
+                        DispatchQueue.main.async(execute: block)
                     }
                 }
 
                 remote.fetch(withExpirationDuration: expiration) { _, error in
                     guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
-                    activate(keys: remote.allKeys(from: .remote))
+                    remote.activate { _, error in
+                        guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                        onMain {
+                            activate(keys: remote.allKeys(from: .remote))
+                            self.setupRealtimeListener(
+                                remote: remote,
+                                errored: errored,
+                                activate: { keys in
+                                    onMain { activate(keys: keys) }
+                                }
+                            )
+                        }
+                    }
                 }
+            }
+        }
 
-                realtimeListener = remote.addOnConfigUpdateListener { update, error in
-                    guard let update, error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
-                    activate(keys: update.updatedKeys.array)
+        func setupRealtimeListener(
+            remote: some RemoteConfiguration_p,
+            errored: @escaping () -> Void,
+            activate: @escaping ([String]) -> Void
+        ) {
+            realtimeListener = remote.addOnConfigUpdateListener { update, error in
+                guard let update, error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                remote.activate { _, error in
+                    guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
+                    activate(update.updatedKeys.array)
                 }
             }
         }

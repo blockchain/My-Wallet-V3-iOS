@@ -42,7 +42,7 @@ extension Mock {
         public func addOnConfigUpdateListener(
             remoteConfigUpdateCompletion listener: @escaping (RemoteConfigUpdate?, Error?) -> Void
         ) -> ConfigUpdateListenerRegistration {
-            ConfigUpdateListenerRegistration()
+            return ConfigUpdateListenerRegistration()
         }
     }
 
