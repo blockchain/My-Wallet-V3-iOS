@@ -13,6 +13,7 @@ import FeatureCoinUI
 import FeatureCustodialOnboarding
 import FeatureDashboardUI
 import FeatureExternalTradingMigrationDomain
+import FeatureExternalTradingMigrationUI
 import FeatureQuickActions
 import FeatureTopMoversCryptoUI
 import FeatureTransactionUI
@@ -33,25 +34,9 @@ struct ExternalTradingDashboardView: View {
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
     @StateObject private var onboarding = CustodialOnboardingService()
 
-    @State private var externalTradingMigrationState: Tag?
-    @State private var externalTradingMigrationAnnouncementCardDismissed: Bool = false
+    @State var externalTradingMigrationState: Tag?
     var externalTradingMigrationIsPending: Bool {
-        guard let externalTradingMigrationState else {
-            return false
-        }
         return externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
-    }
-
-    var externalTradingMigrationIsComplete: Bool {
-        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.complete[]
-    }
-
-    var shouldDisplayMigrationCompleteSuccessCard: Bool {
-        guard externalTradingMigrationIsComplete == true else {
-            return false
-        }
-
-        return !externalTradingMigrationAnnouncementCardDismissed
     }
 
     struct ViewState: Equatable {
@@ -107,10 +92,6 @@ struct ExternalTradingDashboardView: View {
                 to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state
             )
             subscribe(
-                $externalTradingMigrationAnnouncementCardDismissed,
-                to: blockchain.ux.dashboard.external.trading.migration.success.message.dismissed
-            )
-            subscribe(
                 $kycState,
                 to: blockchain.user.account.kyc.state
             )
@@ -158,11 +139,7 @@ struct ExternalTradingDashboardView: View {
                 blockedView
             }
 
-            if externalTradingMigrationIsPending {
-                externalTradingMigrationInProgressView
-            } else if shouldDisplayMigrationCompleteSuccessCard {
-                migrationSuccessAnnouncementCard
-            }
+            DashboardExternalMigrateView()
 
             if !viewStore.isZeroBalance {
                 if isRejected {
@@ -214,36 +191,6 @@ struct ExternalTradingDashboardView: View {
         .batch {
             set(blockchain.ux.dashboard.trading.is.blocked.contact.support.paragraph.button.primary.tap.then.emit, to: blockchain.ux.customer.support.show.messenger)
         }
-    }
-
-    var externalTradingMigrationInProgressView: some View {
-        AlertCard(
-            title: L10n.bakktMigrationInProgressTitle,
-            message: L10n.bakktMigrationMessage,
-            variant: .default,
-            isBordered: true
-        )
-        .padding(.horizontal)
-    }
-
-    var migrationSuccessAnnouncementCard: some View {
-        AnnouncementCard(
-            title: L10n.bakktMigrationSuccessAnnouncementCardTitle,
-            message: L10n.bakktMigrationSuccessAnnouncementCardMessage,
-            background: {
-                Color.semantic.background
-            },
-            onCloseTapped: {
-                Task {
-                    try? await app.set(blockchain.ux.dashboard.external.trading.migration.success.message.dismissed,
-                                       to: true)
-                }
-            },
-            leading: {
-                Icon.user
-            }
-        )
-        .padding(.horizontal, Spacing.padding2)
     }
 
     @State private var supportURL: URL?

@@ -12,17 +12,20 @@ struct BakktAssetMigrationView: View {
     var afterMigrationBalance: Balance
     var onDone: () -> Void
     var onGoBack: () -> Void
+    var isLoading: Bool = false
 
     init(
         beforeMigrationBalances: [Balance],
         afterMigrationBalance: Balance,
         onDone: @escaping () -> Void,
-        onGoBack: @escaping () -> Void
+        onGoBack: @escaping () -> Void,
+        isLoading: Bool
     ) {
         self.beforeMigrationBalances = beforeMigrationBalances
         self.afterMigrationBalance = afterMigrationBalance
         self.onDone = onDone
         self.onGoBack = onGoBack
+        self.isLoading = isLoading
     }
 
     var body: some View {
@@ -101,9 +104,11 @@ struct BakktAssetMigrationView: View {
 
             termsAndConditions
 
-            PrimaryButton(title: "Upgrade") {
+            PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.upgradeButton, 
+                          isLoading: isLoading) {
                 onDone()
             }
+            .disabled(isLoading)
         }
         .padding(.horizontal, Spacing.padding2)
         .foregroundStyle(.primary)
@@ -146,7 +151,8 @@ struct BakktAssetMigrationView_Preview: PreviewProvider {
                     amount: .one(currency: .bitcoin)
                 ),
                 onDone: {},
-                onGoBack: {}
+                onGoBack: {},
+                isLoading: true
             )
         }
     }

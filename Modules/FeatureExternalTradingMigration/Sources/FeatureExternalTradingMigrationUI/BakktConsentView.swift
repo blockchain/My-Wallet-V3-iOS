@@ -10,8 +10,9 @@ struct BakktConsentView: View {
     var hasAssetsToConsolidate: Bool = false
     var onDone: (() -> Void)?
     var onContinue: (() -> Void)?
+    var isLoading: Bool = false
     var continueButtonEnabled: Bool {
-        consentItems.allSatisfy(\.isApproved)
+        consentItems.allSatisfy(\.isApproved) && !isLoading
     }
 
     @State var consentItems: [MigrationConsentElement]
@@ -19,7 +20,8 @@ struct BakktConsentView: View {
     init(
         hasAssetsToConsolidate: Bool,
         onDone: (() -> Void)? = nil,
-        onContinue: (() -> Void)? = nil
+        onContinue: (() -> Void)? = nil,
+        isLoading: Bool
     ) {
         self.hasAssetsToConsolidate = hasAssetsToConsolidate
         self.consentItems = hasAssetsToConsolidate ?
@@ -39,6 +41,7 @@ struct BakktConsentView: View {
 
         self.onDone = onDone
         self.onContinue = onContinue
+        self.isLoading = isLoading
     }
 
     var body: some View {
@@ -80,15 +83,17 @@ struct BakktConsentView: View {
     var bottomView: some View {
         VStack(spacing: Spacing.padding2) {
             if hasAssetsToConsolidate {
-                PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton, action: {
+                PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton,
+                              action: {
                     onContinue?()
                 })
                 .disabled(!continueButtonEnabled)
             } else {
                 PrimaryButton(
                     title: LocalizationConstants.ExternalTradingMigration.upgradeButton,
+                    isLoading: isLoading,
                     action: {
-                    onDone?()
+                        onDone?()
                     }
                 )
                 .disabled(!continueButtonEnabled)
@@ -139,8 +144,8 @@ struct BakktConsentView: View {
 
 struct BakktConsentView_Preview: PreviewProvider {
     static var previews: some View {
-        BakktConsentView(hasAssetsToConsolidate: false)
-        BakktConsentView(hasAssetsToConsolidate: true)
+        BakktConsentView(hasAssetsToConsolidate: false, isLoading: false)
+        BakktConsentView(hasAssetsToConsolidate: true, isLoading: false)
     }
 }
 

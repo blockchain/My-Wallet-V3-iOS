@@ -22,12 +22,11 @@ public struct CustodialOnboardingDashboardView: View {
             if onboarding.isRejected {
                 RejectedVerificationView()
             } else {
-                if externalTradingMigrationIsAvailable {
-                    DashboardExternalMigrateView()
-                } else {
+                if externalTradingMigrationIsAvailable == false {
                     QuickActionsView(tag: blockchain.ux.user.custodial.onboarding.dashboard.quick.action)
                         .padding(.vertical)
                 }
+                DashboardExternalMigrateView()
                 CustodialOnboardingProgressView(progress: onboarding.progress)
                 CustodialOnboardingTaskListView(service: onboarding)
                 FinancialPromotionDisclaimerView()

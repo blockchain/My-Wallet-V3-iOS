@@ -17,6 +17,8 @@ public struct ExternalTradingMigration: ReducerProtocol {
 
     public struct State: Equatable {
         @BindingState var migrationInProgressPresented: Bool = false
+        @BindingState var upgradeError: UX.Error?
+
         public init(flow: Flow? = nil) {
             self.flow = flow
         }
@@ -24,6 +26,7 @@ public struct ExternalTradingMigration: ReducerProtocol {
         var flow: Flow?
         var migrationInfo: ExternalTradingMigrationInfo?
         var showConsolidatedAssets: Bool = false
+        var isSubmittingMigration: Bool = false
     }
 
     public enum Action: Equatable, BindableAction {
@@ -32,6 +35,8 @@ public struct ExternalTradingMigration: ReducerProtocol {
         case setNavigation(isActive: Bool)
         case onContinue
         case onUpgrade
+        case onUpgradeSuccess
+        case onUpgradeFailure(UX.Error)
         case binding(BindingAction<State>)
         case migrationInProgressModalDismissed(Bool)
         case onFlowComplete
@@ -94,14 +99,25 @@ public struct ExternalTradingMigration: ReducerProtocol {
                 return .none
 
             case .onUpgrade:
-                state.migrationInProgressPresented = true
-                return .run { [externalTradingMigrationService] _ in
+                state.isSubmittingMigration = true
+                return .run { [externalTradingMigrationService] send in
                     do {
                         try await externalTradingMigrationService.startMigration()
-                    } catch {
-                        print(error.localizedDescription)
+                        await send(.onUpgradeSuccess)
+                    } catch let error {
+                        let error = UX.Error(error: error)
+                        await send(.onUpgradeFailure(error))
                     }
                 }
+
+            case .onUpgradeSuccess:
+                state.migrationInProgressPresented = true
+                return .none
+
+            case .onUpgradeFailure(let error):
+                state.upgradeError = error
+                return .none
+
             case .migrationInProgressModalDismissed(let dismissed):
                 state.migrationInProgressPresented = dismissed
                 return .none
@@ -112,3 +128,4 @@ public struct ExternalTradingMigration: ReducerProtocol {
         }
     }
 }
+

@@ -6,6 +6,7 @@ import SwiftUI
 struct BakktTermsAndConditionsView: View {
     @State var termsApproved: Bool = false
     var onDone: () -> Void
+    var isLoading: Bool
     var termsAndConditionsUrl: URL? {
         URL(string: "https://bakkt.com/user-agreement-blockchain")
     }
@@ -21,7 +22,7 @@ struct BakktTermsAndConditionsView: View {
                 PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton) {
                     onDone()
                 }
-                .disabled(!termsApproved)
+                .disabled(!termsApproved && isLoading)
             }
         }
         .padding(.horizontal, Spacing.padding2)
@@ -39,6 +40,6 @@ struct BakktTermsAndConditionsView: View {
 
 struct BakktTermsAndConditionsView_Preview: PreviewProvider {
     static var previews: some View {
-        BakktTermsAndConditionsView(onDone: {})
+        BakktTermsAndConditionsView(onDone: {}, isLoading: false)
     }
 }

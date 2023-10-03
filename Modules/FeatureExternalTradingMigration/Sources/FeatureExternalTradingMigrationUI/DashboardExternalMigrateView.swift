@@ -18,19 +18,32 @@ public struct DashboardExternalMigrateView: View {
 
     @State var type: MigrationType?
     @State var userIsKycVerified: Bool?
+    @State var migrationSuccessDismissed: Bool = false
 
     public var body: some View {
         Group {
             switch type {
+            case .none:
+                progressView
             case .inProgress:
                 externalTradingMigrationInProgressView
             case .reviewTerms:
                 externalTradingReviewTermsView
             case .upgrade:
                 externalTradingUpgradeView
-            case .none:
-                progressView
+            case .complete:
+                if migrationSuccessDismissed == false {
+                    migrationSuccessAnnouncementCard
+                }
+            case .notAvailable:
+                EmptyView()
             }
+        }
+        .bindings {
+            subscribe(
+                $migrationSuccessDismissed,
+                to: blockchain.ux.dashboard.external.trading.migration.success.message.dismissed
+            )
         }
         .batch {
             if userIsKycVerified == true {
@@ -50,13 +63,19 @@ public struct DashboardExternalMigrateView: View {
     var progressView: some View {
         ProgressView()
             .task {
-                let migrationInfo = try? await service.fetchMigrationInfo()
-                if migrationInfo?.state == .pending {
+                let state = try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.state, as: Tag.self)
+                switch state {
+                case blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]:
                     type = .inProgress
-                } else if let availableBalances = migrationInfo?.availableBalances {
-                    type = availableBalances.isEmpty ? MigrationType.reviewTerms : MigrationType.upgrade
-                }
+                case blockchain.api.nabu.gateway.user.external.brokerage.migration.state.complete[]:
+                    type = .complete
+                case blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]:
+                    let availableBalances = try? await service.fetchMigrationInfo()?.availableBalances
+                    type = availableBalances?.isEmpty == true ? MigrationType.reviewTerms : MigrationType.upgrade
 
+                default:
+                    type = .notAvailable
+                }
                 userIsKycVerified = try? await app.get(blockchain.user.is.verified, as: Bool.self)
             }
     }
@@ -109,12 +128,33 @@ public struct DashboardExternalMigrateView: View {
             }
         )
     }
+
+    var migrationSuccessAnnouncementCard: some View {
+        AnnouncementCard(
+            title: L10n.bakktMigrationSuccessAnnouncementCardTitle,
+            message: L10n.bakktMigrationSuccessAnnouncementCardMessage,
+            background: {
+                Color.semantic.background
+            },
+            onCloseTapped: {
+                Task {
+                    try? await app.set(blockchain.ux.dashboard.external.trading.migration.success.message.dismissed, to: true)
+                }
+            },
+            leading: {
+                Icon.user
+            }
+        )
+        .padding(.horizontal, Spacing.padding2)
+    }
 }
 
 extension DashboardExternalMigrateView {
     public enum MigrationType {
+        case notAvailable
         case upgrade
         case reviewTerms
         case inProgress
+        case complete
     }
 }

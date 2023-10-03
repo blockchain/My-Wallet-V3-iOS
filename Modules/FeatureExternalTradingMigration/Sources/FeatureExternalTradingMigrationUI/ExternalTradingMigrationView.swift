@@ -15,18 +15,19 @@ public struct ExternalTradingMigrationView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
-            Group {
-                content
-                    .sheet(
-                        isPresented: viewStore.$migrationInProgressPresented,
-                        content: {
+        Group {
+            content
+                .sheet(
+                    isPresented: viewStore.$migrationInProgressPresented,
+                    content: {
                         BakktMigrationInProgressView(onDone: {
                             viewStore.send(.onFlowComplete)
-                            })
-                        }
-                    )
-            }
+                        })
+                    }
+                )
+                .sheet(item: viewStore.$upgradeError) { error in
+                    ErrorView(ux: error)
+                }
         }
     }
 
@@ -49,7 +50,8 @@ public struct ExternalTradingMigrationView: View {
 
     @ViewBuilder var existingUserNoAssetsFlowView: some View {
         BakktTermsAndConditionsView(
-            onDone: {}
+            onDone: {},
+            isLoading: viewStore.isSubmittingMigration
         )
     }
 
@@ -59,7 +61,8 @@ public struct ExternalTradingMigrationView: View {
             onDone: {
                 viewStore.send(.onUpgrade)
             },
-            onContinue: nil
+            onContinue: nil,
+            isLoading: viewStore.isSubmittingMigration
         )
     }
 
@@ -70,7 +73,8 @@ public struct ExternalTradingMigrationView: View {
                 onDone: nil,
                 onContinue: {
                     viewStore.send(.onContinue)
-                }
+                },
+                isLoading: viewStore.isSubmittingMigration
             )
 
             assetMigrationInfoNavigationLink
@@ -88,7 +92,8 @@ public struct ExternalTradingMigrationView: View {
                     },
                     onGoBack: {
                         viewStore.send(.setNavigation(isActive: false))
-                    }
+                    },
+                    isLoading: viewStore.isSubmittingMigration
                 ),
                 isActive: viewStore.binding(
                     get: \.showConsolidatedAssets,

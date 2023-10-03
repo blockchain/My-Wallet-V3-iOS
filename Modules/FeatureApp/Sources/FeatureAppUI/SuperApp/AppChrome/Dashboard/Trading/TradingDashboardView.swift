@@ -32,11 +32,6 @@ struct TradingDashboardView: View {
     @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
 
-    @State private var externalTradingMigrationState: Tag?
-    var externalTradingMigrationIsAvailable: Bool {
-        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]
-    }
-
     @StateObject private var onboarding = CustodialOnboardingService()
 
     struct ViewState: Equatable {
@@ -84,7 +79,6 @@ struct TradingDashboardView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
-            subscribe($externalTradingMigrationState, to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state)
             subscribe($kycState, to: blockchain.user.account.kyc.state)
         }
         .onAppear {
@@ -135,10 +129,8 @@ struct TradingDashboardView: View {
                 blockedView
             }
 
-            if externalTradingMigrationIsAvailable {
-                DashboardExternalMigrateView()
-                    .padding(.horizontal, Spacing.padding2)
-            }
+            DashboardExternalMigrateView()
+                .padding(.horizontal, Spacing.padding2)
 
             if !viewStore.isZeroBalance {
                 if isRejected {
