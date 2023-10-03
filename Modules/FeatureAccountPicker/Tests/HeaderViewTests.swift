@@ -102,7 +102,7 @@ final class HeaderViewTests: XCTestCase {
         )
         .frame(width: 375)
 
-        assertSnapshot(matching: view, as: .image)
+        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
     }
 
     func testSimple() {

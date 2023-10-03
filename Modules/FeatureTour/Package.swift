@@ -34,12 +34,13 @@ let package = Package(
             from: "1.11.1"
         ),
         .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
-        .package(path: "../Localization"),
-        .package(path: "../Platform"),
-        .package(path: "../UIComponents"),
+        .package(path: "../Blockchain"),
+        .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
         .package(path: "../ComposableArchitectureExtensions"),
-        .package(path: "../BlockchainComponentLibrary")
+        .package(path: "../Localization"),
+        .package(path: "../Money"),
+        .package(path: "../UIComponents")
     ],
     targets: [
         .target(
@@ -61,12 +62,12 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureTourDomain"),
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
-                .product(name: "Localization", package: "Localization"),
-                .product(name: "PlatformKit", package: "Platform"),
-                .product(name: "PlatformUIKit", package: "Platform"),
-                .product(name: "UIComponents", package: "UIComponents"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions")
+                .product(name: "ComposableArchitectureExtensions", package: "ComposableArchitectureExtensions"),
+                .product(name: "Localization", package: "Localization"),
+                .product(name: "MoneyKit", package: "Money"),
+                .product(name: "UIComponents", package: "UIComponents")
             ],
             path: "UI"
         ),
@@ -77,9 +78,9 @@ let package = Package(
                 .target(name: "FeatureTourDomain"),
                 .target(name: "FeatureTourUI"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
-                .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-                .product(name: "DIKit", package: "DIKit")
+                .product(name: "DIKit", package: "DIKit"),
+                .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
             ],
             path: "Tests",
             exclude: ["__Snapshots__"]

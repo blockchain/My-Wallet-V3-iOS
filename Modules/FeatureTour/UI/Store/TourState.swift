@@ -14,11 +14,19 @@ public struct TourState: Equatable {
 
     private let scrollEffectTransitionDistance: CGFloat = 300
 
-    public init() {}
+    var items: IdentifiedArrayOf<Price>
+    var scrollOffset: CGFloat
+    var visibleStep: Step
 
-    var items = IdentifiedArrayOf<Price>()
-    var scrollOffset: CGFloat = 0
-    var visibleStep: Step = .brokerage
+    public init(
+        items: IdentifiedArrayOf<Price> = [],
+        scrollOffset: CGFloat = 0,
+        visibleStep: TourState.Step = .brokerage
+    ) {
+        self.items = items
+        self.scrollOffset = scrollOffset
+        self.visibleStep = visibleStep
+    }
 
     var gradientBackgroundOpacity: Double {
         switch scrollOffset {

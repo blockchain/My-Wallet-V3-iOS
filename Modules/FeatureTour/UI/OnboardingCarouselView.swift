@@ -3,7 +3,6 @@
 import BlockchainUI
 import ComposableArchitecture
 import Localization
-import PlatformUIKit
 import SwiftUI
 
 public struct OnboardingCarouselView: View {
@@ -76,13 +75,12 @@ extension OnboardingCarouselView {
         }
 
         @ViewBuilder private func makeCarouselView(image: Image?, text: String) -> some View {
-            let isSmallDevice = DevicePresenter.type <= .compact
             VStack(spacing: Spacing.padding2) {
                 if let image {
                     image
                         .resizable()
                         .scaledToFit()
-                        .frame(height: isSmallDevice ? 230 : 300)
+                        .frame(height: compactDesign() ? 230 : 300)
                 }
 
                 Text(text)
@@ -144,6 +142,10 @@ extension OnboardingCarouselView {
         .padding(.horizontal, Spacing.padding3)
         .opacity(viewStore.gradientBackgroundOpacity)
     }
+}
+
+func compactDesign() -> Bool {
+    CGRect.screen.size.max <= 667
 }
 
 struct TourView_Previews: PreviewProvider {

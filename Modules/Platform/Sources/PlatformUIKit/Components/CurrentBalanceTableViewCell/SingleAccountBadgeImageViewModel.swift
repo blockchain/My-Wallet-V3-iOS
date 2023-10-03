@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainComponentLibrary
 import Localization
 import MoneyKit
 import PlatformKit
@@ -80,7 +81,7 @@ public enum SingleAccountBadgeImageViewModel {
         case let account as CryptoNonCustodialAccount:
             if let network = service.network(for: account.asset) {
                 model = .default(
-                    image: network.nativeAsset.logoResource,
+                    image: network.logoResource,
                     backgroundColor: .semantic.background,
                     cornerRadius: .round,
                     accessibilityIdSuffix: ""

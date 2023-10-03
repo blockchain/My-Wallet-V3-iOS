@@ -282,7 +282,7 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
             }
             .map { model -> NoticeViewModel in
                 let imageResource = URL(string: model.imageURL)
-                    .flatMap(ImageLocation.remote)
+                    .flatMap { ImageLocation.remote(url: $0, fallback: nil) }
                 let imageViewContent = ImageViewContent(
                     imageResource: imageResource,
                     accessibility: .none,

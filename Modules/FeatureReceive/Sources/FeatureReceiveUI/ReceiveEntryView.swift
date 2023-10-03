@@ -297,27 +297,4 @@ struct ReceiveEntryRow: View {
             set(id.paragraph.row.tap.then.enter.into, to: blockchain.ux.currency.receive.address)
         }
     }
-
-    @ViewBuilder
-    func iconView(for info: AccountInfo) -> some View {
-        ZStack(alignment: .bottomTrailing) {
-            AsyncMedia(url: info.currency.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                .frame(width: 24.pt, height: 24.pt)
-                .background(Color.semantic.light, in: Circle())
-
-            if let network = info.network,
-                info.currency.code != network.nativeAsset.code
-            {
-                ZStack(alignment: .center) {
-                    AsyncMedia(url: network.nativeAsset.assetModel.logoPngUrl, placeholder: { EmptyView() })
-                        .frame(width: 12.pt, height: 12.pt)
-                        .background(Color.semantic.background, in: Circle())
-                    Circle()
-                        .strokeBorder(Color.semantic.background, lineWidth: 1)
-                        .frame(width: 13, height: 13)
-                }
-                .offset(x: 4, y: 4)
-            }
-        }
-    }
 }

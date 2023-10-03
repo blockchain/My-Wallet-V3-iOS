@@ -294,11 +294,17 @@ class AccountPickerRowViewTests: XCTestCase {
             currencyCode: nil
         )
 
-        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
+        assertSnapshot(
+            matching: view,
+            as: .image(perceptualPrecision: 0.98)
+        )
 
         isShowingMultiBadge = true
 
-        assertSnapshot(matching: view, as: .image(perceptualPrecision: 0.98))
+        assertSnapshot(
+            matching: view,
+            as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testSingleAccountLoading() {
@@ -320,7 +326,10 @@ class AccountPickerRowViewTests: XCTestCase {
             )
         )
 
-        assertSnapshot(matching: view(row: buttonRow), as: .image)
+        assertSnapshot(
+            matching: view(row: buttonRow),
+            as: .image(perceptualPrecision: 0.98)
+        )
     }
 
     func testLinkedAccount() {

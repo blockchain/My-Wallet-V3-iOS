@@ -131,7 +131,7 @@ extension ImageResourceView {
         @ViewBuilder loading: @escaping () -> Loading,
         placeholder: @autoclosure @escaping () -> Placeholder
     ) {
-        self.init(resource: .remote(url: url), loading: loading, placeholder: placeholder)
+        self.init(resource: .remote(url: url, fallback: nil), loading: loading, placeholder: placeholder)
     }
 
     public init(
@@ -164,14 +164,14 @@ extension ImageResourceView where Loading == ProgressView<EmptyView, EmptyView> 
         url: URL,
         placeholder: @autoclosure @escaping () -> Placeholder
     ) {
-        self.init(.remote(url: url), placeholder: placeholder)
+        self.init(.remote(url: url, fallback: nil), placeholder: placeholder)
     }
 
     public init(
         url: URL,
         @ViewBuilder placeholder: @escaping () -> Placeholder
     ) {
-        self.init(.remote(url: url), placeholder: placeholder)
+        self.init(.remote(url: url, fallback: nil), placeholder: placeholder)
     }
 
     public init(
@@ -193,7 +193,7 @@ extension ImageResourceView where Loading == ProgressView<EmptyView, EmptyView>,
     }
 
     public init(url: URL) {
-        self.init(.remote(url: url))
+        self.init(.remote(url: url, fallback: nil))
     }
 
     public init(_ resource: ImageLocation) {
@@ -226,7 +226,7 @@ private class ImageLoader: ObservableObject {
         case .systemName(let name):
             image = Image(systemName: name)
             onFinish()
-        case .remote(url: let url):
+        case .remote(url: let url, fallback: let fallback):
             cancellable = URLSession.shared.dataTaskPublisher(for: url)
                 .map { UniversalImage(data: $0.data) }
                 .replaceError(with: nil)

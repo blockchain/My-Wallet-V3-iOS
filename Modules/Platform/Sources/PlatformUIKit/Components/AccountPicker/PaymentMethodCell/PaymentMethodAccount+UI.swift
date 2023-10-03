@@ -35,7 +35,8 @@ extension PaymentMethodAccount {
             return .local(name: "icon-applepay", bundle: .platformUIKit)
 
         case .linkedBank(let data):
-            return data.icon.map(ImageLocation.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
+            let placeholder = ImageLocation.local(name: "icon-bank", bundle: .platformUIKit)
+            return data.icon.flatMap { .remote(url: $0, fallback: placeholder) } ?? placeholder
 
         case .account(let fundData):
             return fundData.balance.currency.logoResource

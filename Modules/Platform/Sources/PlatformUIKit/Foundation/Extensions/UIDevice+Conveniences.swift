@@ -18,7 +18,7 @@ public enum DevicePresenter {
 }
 
 extension UIDevice {
-    public enum PhoneHeight: CGFloat {
+    private enum PhoneHeight: CGFloat {
         case se = 568
         case eight = 667
         case plus = 736

@@ -35,26 +35,26 @@ extension FiatCurrency {
 
 extension CryptoCurrency {
     public var logoResource: ImageLocation {
-        switch self {
-        case .bitcoin:
-            return .local(name: "crypto-btc", bundle: .module)
-        case .bitcoinCash:
-            return .local(name: "crypto-bch", bundle: .module)
-        case .ethereum:
-            return .local(name: "crypto-eth", bundle: .module)
-        case .stellar:
-            return .local(name: "crypto-xlm", bundle: .module)
-        default:
-            return assetModelImageResource ?? placeholderImageResource
+        if isInTest {
+            return placeholder
         }
+        return assetModelImageResource ?? placeholder
     }
 
     private var assetModelImageResource: ImageLocation? {
-        assetModel.logoPngUrl.map(ImageLocation.remote(url:))
+        assetModel.logoPngUrl.flatMap { .remote(url: $0, fallback: placeholder) }
     }
 
-    private var placeholderImageResource: ImageLocation {
-        .systemName("squareshape.squareshape.dashed")
+    private var placeholder: ImageLocation {
+        placeholderImageLocation(displayCode)
+    }
+}
+
+func placeholderImageLocation(_ value: String) -> ImageLocation {
+    if let first = value.first?.lowercased(), first.isAlphanumeric {
+        return .systemName("\(first).circle.fill")
+    } else {
+        return .systemName("circle.dashed")
     }
 }
 

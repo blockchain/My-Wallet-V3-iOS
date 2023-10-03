@@ -16,6 +16,7 @@ public struct DSCNetworkConfig: Hashable, Codable {
     public let name: String
     public let nativeAsset: String
     public let explorerUrl: String
+    public let logoURL: URL?
     public let networkTicker: String
     public let shortName: String
     public let memos: Bool
@@ -25,6 +26,7 @@ public struct DSCNetworkConfig: Hashable, Codable {
         name: String,
         nativeAsset: String,
         explorerUrl: String,
+        logoURL: URL?,
         networkTicker: String,
         shortName: String,
         memos: Bool,
@@ -33,6 +35,7 @@ public struct DSCNetworkConfig: Hashable, Codable {
         self.name = name
         self.nativeAsset = nativeAsset
         self.explorerUrl = explorerUrl
+        self.logoURL = logoURL
         self.networkTicker = networkTicker
         self.shortName = shortName
         self.memos = memos
@@ -77,6 +80,7 @@ extension DSCNetworkConfig {
             name: response.name,
             nativeAsset: response.nativeAsset,
             explorerUrl: response.explorerUrl,
+            logoURL: response.logoPngUrl.flatMap(URL.init),
             networkTicker: response.networkTicker,
             shortName: response.shortName,
             memos: response.memos,

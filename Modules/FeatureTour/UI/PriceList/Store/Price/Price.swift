@@ -1,11 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import ComposableArchitecture
 import ComposableArchitectureExtensions
 import MoneyKit
 import NukeUI
-import PlatformKit
-import PlatformUIKit
 import SwiftUI
 
 public struct Price: Equatable, Identifiable {

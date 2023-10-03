@@ -339,7 +339,7 @@ extension DexMainView {
                         .circle(backgroundColor: .semantic.light)
 
                     if let network = viewStore.currentNetwork {
-                        network.nativeAsset.logo(size: 12.pt)
+                        network.logo(size: 12.pt)
                     }
                 }
                 .padding(.horizontal, Spacing.padding1)
