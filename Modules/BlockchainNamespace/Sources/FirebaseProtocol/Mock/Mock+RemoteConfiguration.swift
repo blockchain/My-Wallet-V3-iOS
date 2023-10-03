@@ -28,7 +28,9 @@ extension Mock {
         }
 
         public func activate(completion: ((Bool, Error?) -> Void)?) {
-            completion?(true, nil)
+            DispatchQueue.global().async {
+                completion?(true, nil)
+            }
         }
 
         public func allKeys(from source: RemoteConfigurationSource) -> [String] {
@@ -42,7 +44,7 @@ extension Mock {
         public func addOnConfigUpdateListener(
             remoteConfigUpdateCompletion listener: @escaping (RemoteConfigUpdate?, Error?) -> Void
         ) -> ConfigUpdateListenerRegistration {
-            ConfigUpdateListenerRegistration()
+            return ConfigUpdateListenerRegistration()
         }
     }
 
