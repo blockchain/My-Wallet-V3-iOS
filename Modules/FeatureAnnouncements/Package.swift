@@ -39,8 +39,7 @@ let package = Package(
         .package(path: "../Tool"),
         .package(path: "../Network"),
         .package(path: "../Errors"),
-        .package(path: "../Localization"),
-        .package(path: "../Platform")
+        .package(path: "../Localization")
     ],
     targets: [
         .target(
@@ -68,8 +67,7 @@ let package = Package(
                 .target(name: "FeatureAnnouncementsDomain"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "Errors", package: "Errors"),
-                .product(name: "NetworkKit", package: "Network"),
-                .product(name: "PlatformKit", package: "Platform")
+                .product(name: "NetworkKit", package: "Network")
             ]
         )
     ]

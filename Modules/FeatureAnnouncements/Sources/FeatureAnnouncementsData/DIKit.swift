@@ -17,7 +17,7 @@ extension DependencyContainer {
                     config: .iterableConfig,
                     headers: ["api-key": InfoDictionaryHelper.value(for: .iterableApiKey)]
                 ),
-                userService: DIKit.resolve()
+                emailProvider: DIKit.resolve()
             ) as AnnouncementsClientAPI
         }
 

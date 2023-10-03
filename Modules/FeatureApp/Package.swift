@@ -28,6 +28,10 @@ let package = Package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
             exact: "0.59.0"
         ),
+        .package(
+            url: "https://github.com/pointfreeco/swift-snapshot-testing",
+            from: "1.11.1"
+        ),
         .package(path: "../Analytics"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../BlockchainNamespace"),
@@ -147,6 +151,15 @@ let package = Package(
                 .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload")
             ]
+        ),
+        .testTarget(
+            name: "FeatureAppUITests",
+            dependencies: [
+                .target(name: "FeatureAppUI"),
+                .product(name: "PlatformKitMock", package: "Platform"),
+                .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
+            ],
+            exclude: ["__Snapshots__"]
         )
     ]
 )

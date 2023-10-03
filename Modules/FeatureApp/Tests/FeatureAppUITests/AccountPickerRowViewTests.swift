@@ -12,7 +12,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
-class AccountPickerRowViewTests: XCTestCase {
+final class AccountPickerRowViewTests: XCTestCase {
 
     var isShowingMultiBadge = false
 

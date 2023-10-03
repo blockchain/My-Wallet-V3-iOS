@@ -1,10 +1,12 @@
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
+
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import Coincore
 import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import Localization
-import PlatformKit
 import SwiftUI
 import UIComponentsKit
 

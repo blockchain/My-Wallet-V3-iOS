@@ -2,12 +2,12 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import Coincore
 import ComposableArchitecture
 import Errors
 import ErrorsUI
 import Localization
 import MoneyKit
-import PlatformKit
 import SwiftUI
 import ToolKit
 import UIComponentsKit
@@ -174,8 +174,8 @@ private struct LinkedBankAccountRow<BadgeView: View, MultiBadgeView: View>: View
     @State private var action: AssetAction?
 
     var isDisabled: Bool {
-        (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
-        || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+        (action == .withdraw && model.capabilities?.canWithdrawal == false)
+        || ((action == .buy || action == .deposit) && model.capabilities?.canDeposit == false)
     }
 
     var body: some View {
@@ -224,8 +224,8 @@ private struct PaymentMethodRow: View {
     let badgeTapped: (UX.Dialog) -> Void
 
     var isDisabled: Bool {
-        (action == .withdraw && model.capabilities?.withdrawal?.enabled == false)
-        || ((action == .buy || action == .deposit) && model.capabilities?.deposit?.enabled == false)
+        (action == .withdraw && model.capabilities?.canWithdrawal == false)
+        || ((action == .buy || action == .deposit) && model.capabilities?.canDeposit == false)
     }
 
     var body: some View {

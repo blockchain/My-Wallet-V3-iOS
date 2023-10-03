@@ -26,11 +26,11 @@ let package = Package(
             from: "1.11.1"
         ),
         .package(path: "../Blockchain"),
+        .package(path: "../Coincore"),
         .package(path: "../ComposableArchitectureExtensions"),
         .package(path: "../Errors"),
         .package(path: "../Extensions"),
         .package(path: "../Localization"),
-        .package(path: "../Platform"),
         .package(path: "../UIComponents")
     ],
     targets: [
@@ -40,12 +40,12 @@ let package = Package(
                 .product(name: "BlockchainUI", package: "Blockchain"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "UIComponents", package: "UIComponents"),
+                .product(name: "Coincore", package: "Coincore"),
                 .product(name: "CombineExtensions", package: "Extensions"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ComposableArchitectureExtensions", package: "ComposableArchitectureExtensions"),
-                .product(name: "ErrorsUI", package: "Errors"),
-                .product(name: "PlatformKit", package: "Platform")
+                .product(name: "ErrorsUI", package: "Errors")
             ],
             path: "UI"
         ),
@@ -53,10 +53,7 @@ let package = Package(
             name: "FeatureAccountPickerTests",
             dependencies: [
                 .target(name: "FeatureAccountPickerUI"),
-                .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-                .product(name: "PlatformKit", package: "Platform"),
-                .product(name: "PlatformKitMock", package: "Platform"),
-                .product(name: "PlatformUIKit", package: "Platform")
+                .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
             ],
             path: "Tests",
             exclude: ["__Snapshots__"]

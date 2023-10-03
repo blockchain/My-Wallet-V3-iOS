@@ -14,3 +14,7 @@ public protocol AnnouncementsClientAPI {
         with action: Announcement.Action
     ) -> AnyPublisher<Void, NabuNetworkError>
 }
+
+public protocol AnnouncementsEmailProviderAPI {
+    var email: AnyPublisher<String, NabuNetworkError> { get }
+}

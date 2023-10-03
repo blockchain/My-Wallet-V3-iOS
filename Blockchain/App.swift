@@ -160,6 +160,7 @@ func defineDependencies() {
         DependencyContainer.featureAnnouncementsData
         DependencyContainer.featureAnnouncementsDomain
         DependencyContainer.featureExternalTradingMigrationData
+        DependencyContainer.blockchainFeatureAnnouncements
         #if INTERNAL_BUILD
         DependencyContainer.featureDebugUI
         #endif
