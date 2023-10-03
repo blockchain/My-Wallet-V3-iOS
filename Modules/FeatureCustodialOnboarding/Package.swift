@@ -19,7 +19,8 @@ let package = Package(
     dependencies: [
         .package(path: "../Blockchain"),
         .package(path: "../FeatureQuickActions"),
-        .package(path: "../FeatureExternalTradingMigration")
+        .package(path: "../FeatureExternalTradingMigration"),
+        .package(path: "../Network")
     ],
     targets: [
         .target(
@@ -40,7 +41,11 @@ let package = Package(
                 .product(
                     name: "FeatureExternalTradingMigrationUI",
                     package: "FeatureExternalTradingMigration"
-                )
+                ),
+                .product(
+                    name: "NetworkKit",
+                    package: "Network"
+                ),
             ]
         ),
         .testTarget(

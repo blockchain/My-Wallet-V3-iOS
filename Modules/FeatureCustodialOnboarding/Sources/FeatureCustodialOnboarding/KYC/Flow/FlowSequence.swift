@@ -1,61 +1,36 @@
 import Blockchain
+import BlockchainUI
 import ErrorsUI
 import SwiftUI
 import UIKit
 
-class Service {
-    func next() async throws -> OnboardingFlow {
-        // fetch client state
-        // post to onboarding/flow
-        // wait for response, return it
-        fatalError()
-    }
-}
-
-var a: Void {
-
-    let service = Service()
-    let s = AsyncStream(
-        unfolding: {
-            do {
-                return try await service.next()
-            } catch {
-                return OnboardingFlow(
-                    slug: .error,
-                    metadata: AnyJSON(error)
-                )
-            }
-        }
-    )
-}
-
-protocol WhichFlowSequenceViewController {
-    var metadata: AnyJSON { get }
+public protocol WhichFlowSequenceViewController {
     func viewController() -> FlowSequenceViewController
 }
 
-protocol FlowSequenceViewController: UIViewController {
+public protocol FlowSequenceViewController: UIViewController {
     func waitForCompletion() async
 }
 
-class FlowSequenceHostingViewController<RootView: View>: UIHostingController<RootView>, FlowSequenceViewController {
+public class FlowSequenceHostingViewController<RootView: View>: UIHostingController<RootView>, FlowSequenceViewController {
 
     private var subject: CurrentValueSubject<Bool, Never>
 
-    init(_ rootViewBuilder: (@escaping () -> Void) throws -> RootView) rethrows {
-        let completion = CurrentValueSubject<Bool, Never>(false); do {
-            subject = completion
-        }
-        try super.init(
-            rootView: rootViewBuilder { completion.send(true) }
-        )
+    public init(@ViewBuilder _ rootViewBuilder: (@escaping () -> Void) throws -> RootView) rethrows {
+        subject = CurrentValueSubject<Bool, Never>(false)
+        try super.init(rootView: rootViewBuilder { [subject] in subject.send(true) })
     }
     
     @MainActor required dynamic init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func waitForCompletion() async {
+
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        _disableSafeArea = true
+    }
+
+    public func waitForCompletion() async {
         for await isCompleted in subject.values {
             if isCompleted { break }
             await Task.yield()
@@ -63,29 +38,27 @@ class FlowSequenceHostingViewController<RootView: View>: UIHostingController<Roo
     }
 }
 
-@MainActor class FlowSequenceNavigationController<Of: WhichFlowSequenceViewController>: UINavigationController {
+@MainActor public class FlowSequenceNavigationController<Of: WhichFlowSequenceViewController>: UINavigationController {
 
     var sequence: AsyncStream<Of>
     var task: Task<Void, Never>? {
         didSet { oldValue?.cancel() }
     }
 
-    init(_ sequence: AsyncStream<Of>) {
+    public init(_ sequence: AsyncStream<Of>) {
         self.sequence = sequence
-        super.init(rootViewController: UIHostingController(rootView: InProgressView()))
+        super.init(
+            rootViewController: UIHostingController(rootView: InProgressView())
+        )
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.hidesBackButton = true
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        setNavigationBarHidden(true, animated: animated)
         task = Task {
             for await which in sequence {
                 let viewController = which.viewController()
@@ -96,58 +69,86 @@ class FlowSequenceHostingViewController<RootView: View>: UIHostingController<Roo
     }
 }
 
-// .. Example ..
+// .. Preview ..
 
-struct OnboardingFlow: Decodable {
-    let slug: OnboardingFlowSlug
-    let metadata: AnyJSON
+private struct PreviewFlow: Decodable {
+    let n: Int
 }
 
-struct OnboardingFlowSlug: NewTypeString {
-    var value: String
-    init(_ value: String) { self.value = value }
-}
+private struct PreviewNView: View {
 
-extension OnboardingFlowSlug {
-    static let dateOfBirthChallenge: Self = "PROVE_DOB_CHALLENGE"
-    static let error: Self = "ERROR"
+    @State private var isLoading = false
+    let n: Int
+    let completion: () -> Void
 
-    // ...
-}
-
-extension OnboardingFlow: WhichFlowSequenceViewController {
-
-    func viewController() -> FlowSequenceViewController {
-        do {
-            switch slug {
-            case .dateOfBirthChallenge:
-                return FlowSequenceHostingViewController { completion in
-                    DateOfBirthChallengeView(completion: completion)
-                }
-            case .error:
-                return try FlowSequenceHostingViewController { completion in
-                    do {
-                        return try ErrorView(ux: UX.Error(nabu: metadata.decode(Nabu.Error.self)))
-                    } catch {
-                        return try ErrorView(ux: UX.Error(error: metadata.as(Error.self)))
+    var body: some View {
+        VStack {
+            [ 
+                Color.red,
+                Color.blue,
+                Color.yellow,
+                Color.green
+            ][n % 4]
+        }
+        .safeAreaInset(edge: .bottom) {
+            PrimaryButton(
+                title: "Next (\(n))",
+                isLoading: isLoading,
+                action: {
+                    Task {
+                        isLoading = true
+                        try await Task.sleep(nanoseconds: (1...3).randomElement()! * NSEC_PER_SEC)
+                        completion()
                     }
                 }
-            default:
-                return FlowSequenceHostingViewController { _ in ErrorView(ux: .unsupportedFlow) }
-            }
-        } catch {
-            return FlowSequenceHostingViewController { _ in
-                ErrorView(ux: UX.Error(error: error))
+            )
+            .padding()
+            .padding(.bottom)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.semantic.light.ignoresSafeArea())
+    }
+}
+
+extension PreviewFlow: WhichFlowSequenceViewController {
+
+    func viewController() -> FlowSequenceViewController {
+        FlowSequenceHostingViewController { completion in
+            if n == 10 {
+                ConfettiCannonView(.init(confetti: [
+                    .icon(.blockchain),
+                    .icon(.blockchain),
+                    .icon(.blockchain.color(.red)),
+                    .icon(.blockchain.color(.yellow)),
+                    .icon(.blockchain.color(.pink)),
+                    .icon(.blockchain.color(.green))
+                ])) { fire in
+                    PrimaryButton(
+                        title: "Party!",
+                        action: { fire() }
+                    )
+                    .padding()
+                }
+            } else {
+                PreviewNView(n: n, completion: completion)
             }
         }
     }
 }
 
+private struct PreviewHosting: UIViewControllerRepresentable {
 
-extension UX.Error {
-    static let unsupportedFlow = UX.Error(
-        id: "unsupported.flow",
-        title: "Unsupported flow",
-        message: "We encountered a problem, please retry"
-    )
+    func makeUIViewController(context: Context) -> some UIViewController {
+        FlowSequenceNavigationController(AsyncStream((1...10).map(PreviewFlow.init(n:)).async))
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
 }
+
+#if compiler(>=5.9)
+
+#Preview {
+    PreviewHosting().ignoresSafeArea()
+}
+
+#endif
