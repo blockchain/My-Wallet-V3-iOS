@@ -17,12 +17,10 @@ struct TopMoverView: View {
                 .fill(Color.semantic.background)
             VStack(alignment: .leading, spacing: 8.pt) {
                 HStack {
-                    AsyncMedia(
-                        url: topMover.currency.logoURL
-                    )
+                    topMover.currency.logo()
                     .resizingMode(.aspectFit)
                     .frame(width: 24.pt, height: 24.pt)
-                    Text(topMover.currency.code)
+                    Text(topMover.currency.displayCode)
                         .typography(.paragraph1)
                         .foregroundColor(.semantic.title)
                 }
