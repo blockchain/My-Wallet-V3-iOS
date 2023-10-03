@@ -42,6 +42,7 @@ public enum LoggedIn {
         case didShowPostSignUpOnboardingFlow
         case showPostSignInOnboardingFlow
         case didShowPostSignInOnboardingFlow
+        case exitToPinScreen
     }
 
     public struct State: Equatable {
@@ -160,6 +161,9 @@ struct LoggedInReducer: ReducerProtocol {
                 return .none
             case .none:
                 return .none
+            case .exitToPinScreen:
+                state = LoggedIn.State()
+                return .cancel(id: LoggedInIdentifier())
             }
         }
         NamespaceReducer(app: app)

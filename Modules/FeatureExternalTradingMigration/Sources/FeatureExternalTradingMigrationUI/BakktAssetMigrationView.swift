@@ -126,7 +126,7 @@ struct BakktAssetMigrationView: View {
     }
 
     @ViewBuilder var termsAndConditions: some View {
-        Text("Consolidating your assets into Bitcoin (BTC) does not have any costs involved. Supported assets in your balances will remain the same.")
+        Text(L10n.disclaimer)
             .typography(.micro)
             .foregroundColor(.semantic.body)
     }

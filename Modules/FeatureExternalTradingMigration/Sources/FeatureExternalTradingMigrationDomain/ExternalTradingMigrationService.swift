@@ -31,6 +31,7 @@ public final class ExternalTradingMigrationService: ExternalTradingMigrationServ
 
         try await app.set(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state[][response.state.rawValue.lowercased()])
 
+        let savedState = try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, as: Tag.self)
         return response
     }
 

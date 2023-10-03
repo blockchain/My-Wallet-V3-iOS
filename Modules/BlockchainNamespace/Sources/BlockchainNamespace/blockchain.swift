@@ -1037,6 +1037,7 @@ public extension I_blockchain_app {
 	var `dynamic`: L_blockchain_app_dynamic { .init("\(__).dynamic") }
 	var `enter`: L_blockchain_app_enter { .init("\(__).enter") }
 	var `environment`: L_blockchain_app_environment { .init("\(__).environment") }
+	var `exit`: L_blockchain_app_exit { .init("\(__).exit") }
 	var `fraud`: L_blockchain_app_fraud { .init("\(__).fraud") }
 	var `is`: L_blockchain_app_is { .init("\(__).is") }
 	var `launched`: L_blockchain_app_launched { .init("\(__).launched") }
@@ -3073,6 +3074,24 @@ public final class L_blockchain_app_environment_production: L, I_blockchain_app_
 	public override class var localized: String { NSLocalizedString("blockchain.app.environment.production", comment: "") }
 }
 public protocol I_blockchain_app_environment_production: I {}
+public final class L_blockchain_app_exit: L, I_blockchain_app_exit {
+	public override class var localized: String { NSLocalizedString("blockchain.app.exit", comment: "") }
+}
+public protocol I_blockchain_app_exit: I {}
+public extension I_blockchain_app_exit {
+	var `to`: L_blockchain_app_exit_to { .init("\(__).to") }
+}
+public final class L_blockchain_app_exit_to: L, I_blockchain_app_exit_to {
+	public override class var localized: String { NSLocalizedString("blockchain.app.exit.to", comment: "") }
+}
+public protocol I_blockchain_app_exit_to: I {}
+public extension I_blockchain_app_exit_to {
+	var `pin`: L_blockchain_app_exit_to_pin { .init("\(__).pin") }
+}
+public final class L_blockchain_app_exit_to_pin: L, I_blockchain_app_exit_to_pin {
+	public override class var localized: String { NSLocalizedString("blockchain.app.exit.to.pin", comment: "") }
+}
+public protocol I_blockchain_app_exit_to_pin: I_blockchain_ux_type_action {}
 public final class L_blockchain_app_fraud: L, I_blockchain_app_fraud {
 	public override class var localized: String { NSLocalizedString("blockchain.app.fraud", comment: "") }
 }

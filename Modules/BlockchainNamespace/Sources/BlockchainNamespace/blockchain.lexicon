@@ -755,6 +755,10 @@ blockchain:
 		+ blockchain.session.state.shared.value
 			debug:
 			production:
+		exit:
+			to:
+				pin:
+				+ blockchain.ux.type.action
 		fraud:
 			sardine:
 				client:

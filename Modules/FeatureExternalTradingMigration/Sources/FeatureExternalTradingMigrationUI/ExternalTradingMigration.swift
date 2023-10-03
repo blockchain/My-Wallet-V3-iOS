@@ -90,7 +90,7 @@ public struct ExternalTradingMigration: ReducerProtocol {
             case .onFlowComplete:
                 state.migrationInProgressPresented = false
                 app.post(event: blockchain.user.event.did.update)
-                app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
+                app.post(event: blockchain.app.exit.to.pin)
                 return .none
 
             case .onUpgrade:

@@ -536,6 +536,13 @@ struct MainAppReducerCore: ReducerProtocol {
                 // show password screen
                 return EffectTask(value: .onboarding(.passwordScreen(.start)))
 
+            case .loggedIn(.exitToPinScreen):
+                state.loggedIn = nil
+                state.onboarding = .init(
+                    pinState: .init(creating: false, authenticate: true)
+                )
+                return EffectTask(value: .loggedIn(.start(.none)))
+
             case .loggedIn(.wallet(.authenticateForBiometrics(let password))):
                 return EffectTask(value: .fetchWallet(password: password))
 

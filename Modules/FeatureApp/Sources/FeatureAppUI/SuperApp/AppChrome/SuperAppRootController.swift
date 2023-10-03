@@ -67,7 +67,7 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
         super.init(rootView: SuperAppContainerChrome(app: app, isSmallDevice: isSmallDevice()))
 
         subscribeFrequentActions(to: app)
-
+        subscribeExitToPin()
         setupNavigationObservers()
         observeDismissals()
     }
@@ -150,6 +150,15 @@ extension SuperAppRootController {
         for observer in observers {
             observer.store(in: &bag)
         }
+    }
+
+    func subscribeExitToPin() {
+        app.on(blockchain.app.exit.to.pin)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [unowned self] _ in
+                exitToPinScreen()
+            })
+            .store(in: &bag)
     }
 
     func subscribe(to viewStore: ViewStore<LoggedIn.State, LoggedIn.Action>) {

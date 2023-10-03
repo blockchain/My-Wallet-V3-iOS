@@ -123,7 +123,6 @@ extension AppProtocol {
                 try await WireTransferNAPI(self).register()
                 try await TradingPairsNAPI().register()
                 try await UserProductsRepository(app: self).register()
-                try await ExternalTradingMigrationRepository().register()
                 let kycRepository: KYCSSNRepository = DIKit.resolve()
                 try await kycRepository.register()
                 try await ExternalTradingMigrationNAPI(app: self).register()
