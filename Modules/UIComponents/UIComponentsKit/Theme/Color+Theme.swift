@@ -9,7 +9,6 @@ extension Color {
 
     // MARK: Text
 
-    public static let textBody = Color(paletteColor: .grey800)
     public static let textMuted = Color(paletteColor: .grey400)
 
     // MARK: TextField

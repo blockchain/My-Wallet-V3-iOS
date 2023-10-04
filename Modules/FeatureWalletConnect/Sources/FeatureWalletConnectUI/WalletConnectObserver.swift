@@ -3,12 +3,10 @@
 import AnalyticsKit
 import BlockchainNamespace
 import Combine
-import DIKit
 import EthereumKit
 import FeatureWalletConnectDomain
 import Foundation
 import MoneyKit
-import PlatformUIKit
 import SwiftUI
 import UIKit
 import WalletConnectRouter
@@ -27,17 +25,18 @@ public final class WalletConnectObserver {
     private let app: AppProtocol
     private let analyticsEventRecorder: AnalyticsEventRecorderAPI
     private let service: WalletConnectServiceV2API
-
-    @LazyInject private var tabSwapping: TabSwapping
+    private let tabSwapping: () -> WalletConnectTabSwapping
 
     init(
         app: AppProtocol,
         analyticsEventRecorder: AnalyticsEventRecorderAPI,
-        service: WalletConnectServiceV2API
+        service: WalletConnectServiceV2API,
+        tabSwapping: @escaping () -> WalletConnectTabSwapping
     ) {
         self.app = app
         self.analyticsEventRecorder = analyticsEventRecorder
         self.service = service
+        self.tabSwapping = tabSwapping
 
         app.publisher(for: blockchain.user.id)
             .map(\.value.isNotNil)
@@ -69,11 +68,11 @@ public final class WalletConnectObserver {
             .sink { [weak self, app] event in
                 switch event {
                 case .signMessage(let account, let target):
-                    self?.tabSwapping.sign(from: account, target: target)
+                    self?.tabSwapping().sign(from: account, target: target)
                 case .signTransaction(let account, let target):
-                    self?.tabSwapping.sign(from: account, target: target)
+                    self?.tabSwapping().sign(from: account, target: target)
                 case .sendTransaction(let account, let target):
-                    self?.tabSwapping.send(from: account, target: target)
+                    self?.tabSwapping().send(from: account, target: target)
                 case .authRequest(let request):
                     app.post(
                         action: blockchain.ux.wallet.connect.auth.request.then.enter.into,

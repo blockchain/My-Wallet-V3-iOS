@@ -36,17 +36,15 @@ let package = Package(
         .package(path: "../Errors"),
         .package(path: "../Localization"),
         .package(path: "../Network"),
-        .package(path: "../UIComponents"),
-        .package(path: "../Platform"),
         .package(path: "../Test")
     ],
     targets: [
         .target(
             name: "FeatureUserDeletionData",
             dependencies: [
+                .target(name: "FeatureUserDeletionDomain"),
                 .product(name: "Errors", package: "Errors"),
-                .product(name: "NetworkKit", package: "Network"),
-                "FeatureUserDeletionDomain"
+                .product(name: "NetworkKit", package: "Network")
             ]
         ),
         .target(
@@ -59,38 +57,17 @@ let package = Package(
             name: "FeatureUserDeletionUI",
             dependencies: [
                 .target(name: "FeatureUserDeletionDomain"),
-                .product(
-                    name: "AnalyticsKit",
-                    package: "Analytics"
-                ),
-                .product(
-                    name: "BlockchainComponentLibrary",
-                    package: "BlockchainComponentLibrary"
-                ),
-                .product(
-                    name: "ComposableArchitecture",
-                    package: "swift-composable-architecture"
-                ),
-                .product(
-                    name: "ComposableArchitectureExtensions",
-                    package: "ComposableArchitectureExtensions"
-                ),
-                .product(
-                    name: "Localization",
-                    package: "Localization"
-                ),
-                .product(
-                    name: "UIComponents",
-                    package: "UIComponents"
-                )
+                .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .product(name: "ComposableArchitectureExtensions", package: "ComposableArchitectureExtensions"),
+                .product(name: "Localization", package: "Localization")
             ]
         ),
         .target(
             name: "FeatureUserDeletionDomainMock",
             dependencies: [
-                .target(name: "FeatureUserDeletionDomain"),
-                .product(name: "PlatformKit", package: "Platform"),
-                .product(name: "PlatformUIKit", package: "Platform")
+                .target(name: "FeatureUserDeletionDomain")
             ]
         ),
         .testTarget(
@@ -102,9 +79,7 @@ let package = Package(
                 .product(name: "AnalyticsKitMock", package: "Analytics"),
                 .product(name: "TestKit", package: "Test")
             ],
-            exclude: [
-                "__Snapshots__"
-            ]
+            exclude: ["__Snapshots__"]
         )
     ]
 )

@@ -41,10 +41,11 @@ let package = Package(
             exact: "1.6.13"
         ),
         .package(path: "../Analytics"),
+        .package(path: "../Blockchain"),
+        .package(path: "../Coincore"),
         .package(path: "../Localization"),
         .package(path: "../UIComponents"),
         .package(path: "../CryptoAssets"),
-        .package(path: "../Platform"),
         .package(path: "../WalletPayload"),
         .package(path: "../Network"),
         .package(path: "../Metadata"),
@@ -55,12 +56,12 @@ let package = Package(
             name: "FeatureWalletConnectDomain",
             dependencies: [
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "Coincore", package: "Coincore"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "EthereumKit", package: "CryptoAssets"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "MetadataKit", package: "Metadata"),
                 .product(name: "NetworkKit", package: "Network"),
-                .product(name: "PlatformKit", package: "Platform"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "WalletPayloadKit", package: "WalletPayload"),
                 .product(name: "WalletConnectRouter", package: "WalletConnectSwiftV2"),
@@ -72,10 +73,10 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureWalletConnectDomain"),
                 .product(name: "AnalyticsKit", package: "Analytics"),
+                .product(name: "BlockchainUI", package: "Blockchain"),
+                .product(name: "Coincore", package: "Coincore"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "Localization", package: "Localization"),
-                .product(name: "PlatformKit", package: "Platform"),
-                .product(name: "PlatformUIKit", package: "Platform"),
                 .product(name: "UIComponents", package: "UIComponents")
             ]
         ),

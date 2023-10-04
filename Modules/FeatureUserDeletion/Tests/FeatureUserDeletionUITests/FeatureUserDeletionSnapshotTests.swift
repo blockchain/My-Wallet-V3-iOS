@@ -31,7 +31,15 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
 
     func x_test_iPhoneSE_onAppear() throws {
         let view = UserDeletionView(store: buildStore())
-        assert(view, on: .iPhoneSe)
+
+        assertSnapshot(
+            matching: view,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhoneSe),
+                traits: UITraitCollection(userInterfaceStyle: .light)
+            )
+        )
     }
 
     func x_test_iPhoneXsMax_onAppear() throws {
@@ -39,7 +47,11 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
 
         assertSnapshot(
             matching: view,
-            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhoneXsMax))
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhoneXsMax),
+                traits: UITraitCollection(userInterfaceStyle: .light)
+            )
         )
     }
 

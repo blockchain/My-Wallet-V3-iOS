@@ -3,7 +3,6 @@ import ComposableArchitecture
 import ComposableNavigation
 import Localization
 import SwiftUI
-import UIComponentsKit
 
 // TODO: Analytics (next release)
 // TODO: acessibility identifiers (next release)

@@ -3,7 +3,6 @@ import ComposableArchitecture
 import ComposableNavigation
 import Localization
 import SwiftUI
-import UIComponentsKit
 
 private typealias LocalizedString = LocalizationConstants.UserDeletion.ConfirmationScreen
 
@@ -29,7 +28,7 @@ public struct DeletionConfirmView: View {
 
                     Text(LocalizedString.processing)
                         .typography(.title3)
-                        .foregroundColor(.textBody)
+                        .foregroundColor(.semantic.title)
                         .padding(.top, 16)
                 }
             } else {
@@ -94,17 +93,34 @@ public struct DeletionConfirmView: View {
     }
 }
 
-#if DEBUG
+//#if DEBUG
 
 struct DeletionConfirm_Previews: PreviewProvider {
+
+    static var loadingState: DeletionConfirmState {
+        var value = DeletionConfirmState()
+        value.isLoading = true
+        return value
+    }
+
     static var previews: some View {
-        DeletionConfirmView(
-            store: Store(
-                initialState: DeletionConfirmState(),
-                reducer: DeletionConfirmReducer.preview
+        Group {
+            DeletionConfirmView(
+                store: Store(
+                    initialState: DeletionConfirmState(),
+                    reducer: DeletionConfirmReducer.preview
+                )
             )
-        )
+            DeletionConfirmView(
+                store: Store(
+                    initialState: loadingState,
+                    reducer: DeletionConfirmReducer.preview
+                )
+            )
+        }
     }
 }
 
-#endif
+//#endif
+
+
