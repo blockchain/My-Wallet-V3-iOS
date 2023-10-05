@@ -9,13 +9,13 @@ import SwiftUI
 public struct OnboardingCarouselView: View {
 
     private let store: Store<TourState, TourAction>
-    private let list: LivePricesList
+//    private let list: LivePricesList
     private var manualLoginEnabled: Bool
 
     public init(store: Store<TourState, TourAction>, manualLoginEnabled: Bool) {
         self.store = store
         self.manualLoginEnabled = manualLoginEnabled
-        self.list = LivePricesList(store: store)
+//        self.list = LivePricesList(store: store)
     }
 
     public var body: some View {
@@ -33,7 +33,7 @@ public struct OnboardingCarouselView: View {
             }
             .background(
                 ZStack {
-                    list
+//                    list
                     Color.semantic.background.ignoresSafeArea()
                     Image("gradient", bundle: Bundle.featureTour)
                         .resizable()
@@ -113,8 +113,8 @@ extension OnboardingCarouselView {
                 .tag(TourState.Step.earn)
             Carousel.keys.makeView()
                 .tag(TourState.Step.keys)
-            LivePricesView(store: store, list: list)
-                .tag(TourState.Step.prices)
+//            LivePricesView(store: store, list: list)
+//                .tag(TourState.Step.prices)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
     }
