@@ -186,6 +186,35 @@ blockchain:
 						+ blockchain.db.type.array.of.strings
 				user:
 				+ blockchain.namespace.napi
+					external:
+						brokerage:
+							migration:
+								complete:
+									success:
+										message:
+											shown:
+											+ blockchain.db.type.boolean
+											+ blockchain.session.state.preference.value
+								last:
+									known:
+										state:
+										+ blockchain.db.type.enum
+										+ blockchain.session.state.stored.value
+											available:
+											complete:
+											not_available:
+											pending:
+								state:
+								+ blockchain.db.type.enum
+									available:
+									complete:
+									not_available:
+									pending:
+					intercom:
+						identity:
+							user:
+								digest:
+								+ blockchain.db.type.string
 					products:
 						product:
 						+ blockchain.db.collection

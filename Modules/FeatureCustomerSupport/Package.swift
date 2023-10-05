@@ -17,13 +17,15 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(path: "../BlockchainNamespace")
+        .package(path: "../Blockchain"),
+        .package(path: "../Network"),
     ],
     targets: [
         .target(
             name: "FeatureCustomerSupportUI",
             dependencies: [
-                .product(name: "BlockchainNamespace", package: "BlockchainNamespace")
+                .product(name: "Blockchain", package: "Blockchain"),
+                .product(name: "NetworkKit", package: "Network"),
             ]
         ),
         .testTarget(
