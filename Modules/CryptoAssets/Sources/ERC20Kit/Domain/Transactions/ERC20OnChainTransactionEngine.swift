@@ -27,7 +27,7 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
     private let ethereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI
     private let receiveAddressFactory: ExternalAssetAddressServiceAPI
     private let erc20Token: AssetModel
-    private let feeCache: CachedValue<EthereumTransactionFee>
+    private let feeCache: CachedValue<EVMTransactionFee>
     private let feeService: EthereumKit.EthereumFeeServiceAPI
     private let transactionBuildingService: EthereumTransactionBuildingServiceAPI
     private let ethereumTransactionDispatcher: EthereumTransactionDispatcherAPI
@@ -71,7 +71,7 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
                 schedulerIdentifier: "ERC20OnChainTransactionEngine"
             )
         )
-        feeCache.setFetch(weak: self) { (self) -> Single<EthereumTransactionFee> in
+        feeCache.setFetch(weak: self) { (self) -> Single<EVMTransactionFee> in
             self.feeService
                 .fees(network: self.erc20CryptoAccount.network, cryptoCurrency: self.sourceCryptoCurrency)
                 .asSingle()

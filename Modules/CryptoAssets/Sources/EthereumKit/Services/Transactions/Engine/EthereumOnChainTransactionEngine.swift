@@ -27,7 +27,7 @@ final class EthereumOnChainTransactionEngine: OnChainTransactionEngine {
     private let ethereumAccountService: EthereumAccountServiceAPI
     private let ethereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI
     private let ethereumTransactionDispatcher: EthereumTransactionDispatcherAPI
-    private let feeCache: CachedValue<EthereumTransactionFee>
+    private let feeCache: CachedValue<EVMTransactionFee>
     private let feeService: EthereumFeeServiceAPI
     private let network: EVMNetwork
     private let pendingTransactionRepository: PendingTransactionRepositoryAPI
@@ -72,7 +72,7 @@ final class EthereumOnChainTransactionEngine: OnChainTransactionEngine {
                 schedulerIdentifier: "EthereumOnChainTransactionEngine"
             )
         )
-        feeCache.setFetch { [feeService, network] () -> Single<EthereumTransactionFee> in
+        feeCache.setFetch { [feeService, network] () -> Single<EVMTransactionFee> in
             feeService
                 .fees(network: network)
                 .asSingle()

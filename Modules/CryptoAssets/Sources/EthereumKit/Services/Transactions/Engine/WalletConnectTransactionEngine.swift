@@ -24,7 +24,7 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
     // MARK: - Private Properties
 
     private let ethereumTransactionDispatcher: EthereumTransactionDispatcherAPI
-    private let feeCache: CachedValue<EthereumTransactionFee>
+    private let feeCache: CachedValue<EVMTransactionFee>
     private let feeService: EthereumFeeServiceAPI
     private let gasEstimateService: GasEstimateServiceAPI
     private let keyPairProvider: EthereumKeyPairProvider
@@ -76,7 +76,7 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
                 schedulerIdentifier: "WalletConnectTransactionEngine"
             )
         )
-        feeCache.setFetch(weak: self) { (self) -> Single<EthereumTransactionFee> in
+        feeCache.setFetch(weak: self) { (self) -> Single<EVMTransactionFee> in
             self.feeService
                 .fees(network: self.network, cryptoCurrency: self.sourceCryptoCurrency)
                 .asSingle()

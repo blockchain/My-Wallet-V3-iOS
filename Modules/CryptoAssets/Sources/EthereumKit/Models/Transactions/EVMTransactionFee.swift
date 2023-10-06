@@ -4,7 +4,7 @@ import BigInt
 import MoneyKit
 import PlatformKit
 
-public struct EthereumTransactionFee {
+public struct EVMTransactionFee {
 
     // MARK: Types
 
@@ -20,8 +20,8 @@ public struct EthereumTransactionFee {
     private static let defaultGasLimit: BigUInt = 21000
     private static let defaultGasLimitContract: BigUInt = 75000
 
-    static func `default`(network: EVMNetwork) -> EthereumTransactionFee {
-        EthereumTransactionFee(
+    static func `default`(network: EVMNetwork) -> EVMTransactionFee {
+        EVMTransactionFee(
             regular: .ether(gwei: defaultRegularFee, network: network),
             priority: .ether(gwei: defaultPriorityFee, network: network),
             gasLimit: defaultGasLimit,
@@ -77,9 +77,13 @@ public struct EthereumTransactionFee {
         gasLimitContract: String,
         network: EVMNetwork
     ) {
+        let regular = CryptoValue.create(minor: regularMinor, currency: network.nativeAsset)
+            ?? .ether(gwei: Self.defaultRegularFee, network: network)
+        let priority = CryptoValue.create(minor: priorityMinor, currency: network.nativeAsset)
+            ?? .ether(gwei: Self.defaultPriorityFee, network: network)
         self.init(
-            regular: .create(minor: regularMinor, currency: network.nativeAsset) ?? .ether(gwei: Self.defaultRegularFee, network: network),
-            priority: .create(minor: priorityMinor, currency: network.nativeAsset) ?? .ether(gwei: Self.defaultPriorityFee, network: network),
+            regular: regular,
+            priority: priority,
             gasLimit: BigUInt(gasLimit) ?? Self.defaultGasLimit,
             gasLimitContract: BigUInt(gasLimitContract) ?? Self.defaultGasLimitContract,
             network: network

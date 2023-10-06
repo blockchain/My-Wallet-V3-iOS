@@ -7,7 +7,7 @@ import XCTest
 final class EthereumTransactionFeeTests: XCTestCase {
 
     func testAbsoluteFeeInitGwei() {
-        let subject = EthereumTransactionFee(
+        let subject = EVMTransactionFee(
             regularGwei: 5,
             priorityGwei: 7,
             gasLimit: 11,

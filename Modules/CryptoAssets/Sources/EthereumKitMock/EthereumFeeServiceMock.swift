@@ -6,16 +6,16 @@ import MoneyKit
 import PlatformKit
 
 class EthereumFeeServiceMock: EthereumFeeServiceAPI {
-    var underlyingFees: EthereumTransactionFee
+    var underlyingFees: EVMTransactionFee
 
-    init(underlyingFees: EthereumTransactionFee) {
+    init(underlyingFees: EVMTransactionFee) {
         self.underlyingFees = underlyingFees
     }
 
     func fees(
         network: EVMNetwork,
         contractAddress: String?
-    ) -> AnyPublisher<EthereumTransactionFee, Never> {
+    ) -> AnyPublisher<EVMTransactionFee, Never> {
         .just(underlyingFees)
     }
 }
