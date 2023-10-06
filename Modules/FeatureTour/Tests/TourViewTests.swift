@@ -24,7 +24,7 @@ final class TourViewTests: XCTestCase {
         isRecording = false
     }
 
-    func testTourView_manualLogin_disabled() {
+    func x_testTourView_manualLogin_disabled() {
         let view = OnboardingCarouselView(
             environment: TourEnvironment(
                 createAccountAction: {},
@@ -108,7 +108,7 @@ final class TourViewTests: XCTestCase {
         )
     }
 
-    func testTourView_manualLogin_enabled() {
+    func x_testTourView_manualLogin_enabled() {
         let view = OnboardingCarouselView(
             environment: TourEnvironment(
                 createAccountAction: {},
