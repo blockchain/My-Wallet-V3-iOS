@@ -1084,6 +1084,9 @@ blockchain:
 					system:
 						failure:
 	namespace:
+		compute:
+			id:
+			+ blockchain.db.type.string
 		language:
 			error:
 			+ blockchain.ux.type.analytics.error

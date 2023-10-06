@@ -503,6 +503,56 @@ final class AppTests: XCTestCase {
 
         XCTAssertEqual(value, 1)
     }
+
+    func test_external_brokerage() async throws {
+
+        let products = CurrentValueSubject<_, Never>(false)
+
+        try await app.register(
+            napi: blockchain.api.nabu.gateway.user,
+            domain: blockchain.api.nabu.gateway.user.products.product.is.eligible,
+            repository: { _ in products.map(AnyJSON.init).eraseToAnyPublisher() }
+        )
+
+        app.remoteConfiguration.override(blockchain.app.is.external.brokerage, with: [
+            "{returns}": [
+                "from": [
+                    "reference": blockchain.api.nabu.gateway.user.products.product["external"].is.eligible
+                ]
+            ]
+        ])
+
+        var isExternalBrokerage: Bool?
+        app.publisher(for: blockchain.app.is.external.brokerage)
+            .sink { value in isExternalBrokerage = value.isYes }
+            .tearDown(after: self)
+
+        class A { var isExternalBrokerage = false }
+        let binding = A()
+
+        var bindings = app.binding(binding)
+            .subscribe(\.isExternalBrokerage, to: blockchain.app.is.external.brokerage)
+            .request()
+
+        await Task.megaYield()
+
+        do {
+            let get = try await app.get(blockchain.app.is.external.brokerage, as: Bool.self)
+            XCTAssert(get == false)
+            XCTAssert(isExternalBrokerage == false)
+            XCTAssert(binding.isExternalBrokerage == false)
+        }
+
+        products.send(true)
+        await Task.megaYield()
+
+        do {
+            let get = try await app.get(blockchain.app.is.external.brokerage, as: Bool.self)
+            XCTAssert(get == true)
+            XCTAssert(isExternalBrokerage == true)
+            XCTAssert(binding.isExternalBrokerage == true)
+        }
+    }
 }
 
 final class AppActionTests: XCTestCase {

@@ -4323,10 +4323,22 @@ public final class L_blockchain_namespace: L, I_blockchain_namespace {
 }
 public protocol I_blockchain_namespace: I {}
 public extension I_blockchain_namespace {
+	var `compute`: L_blockchain_namespace_compute { .init("\(__).compute") }
 	var `language`: L_blockchain_namespace_language { .init("\(__).language") }
 	var `napi`: L_blockchain_namespace_napi { .init("\(__).napi") }
 	var `test`: L_blockchain_namespace_test { .init("\(__).test") }
 }
+public final class L_blockchain_namespace_compute: L, I_blockchain_namespace_compute {
+	public override class var localized: String { NSLocalizedString("blockchain.namespace.compute", comment: "") }
+}
+public protocol I_blockchain_namespace_compute: I {}
+public extension I_blockchain_namespace_compute {
+	var `id`: L_blockchain_namespace_compute_id { .init("\(__).id") }
+}
+public final class L_blockchain_namespace_compute_id: L, I_blockchain_namespace_compute_id {
+	public override class var localized: String { NSLocalizedString("blockchain.namespace.compute.id", comment: "") }
+}
+public protocol I_blockchain_namespace_compute_id: I_blockchain_db_type_string {}
 public final class L_blockchain_namespace_language: L, I_blockchain_namespace_language {
 	public override class var localized: String { NSLocalizedString("blockchain.namespace.language", comment: "") }
 }
