@@ -71,9 +71,9 @@ public struct TourReducer: ReducerProtocol {
                 return .none
             }
         }
-        .forEach(\.items, action: /Action.price(id:action:)) {
-            PriceReducer(priceService: priceService)
-        }
+//        .forEach(\.items, action: /Action.price(id:action:)) {
+//            PriceReducer(priceService: priceService)
+//        }
     }
 }
 
