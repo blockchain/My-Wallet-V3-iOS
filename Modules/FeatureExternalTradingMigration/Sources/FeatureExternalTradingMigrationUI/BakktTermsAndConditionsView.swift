@@ -11,6 +11,10 @@ struct BakktTermsAndConditionsView: View {
         URL(string: "https://bakkt.com/user-agreement-blockchain")
     }
 
+    var continueDisabled: Bool {
+        isLoading || !termsApproved
+    }
+
     var body: some View {
         VStack {
             if let url = termsAndConditionsUrl {
@@ -22,7 +26,7 @@ struct BakktTermsAndConditionsView: View {
                 PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton) {
                     onDone()
                 }
-                .disabled(!termsApproved && isLoading)
+                .disabled(continueDisabled)
             }
         }
         .padding(.horizontal, Spacing.padding2)

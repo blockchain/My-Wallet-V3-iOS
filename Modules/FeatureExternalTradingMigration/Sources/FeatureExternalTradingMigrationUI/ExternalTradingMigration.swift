@@ -71,7 +71,7 @@ public struct ExternalTradingMigration: ReducerProtocol {
             case .fetchMigrationState(let migrationInfo):
                 state.migrationInfo = migrationInfo
 
-                if migrationInfo.consolidatedBalances.beforeMigration.isNotEmpty {
+                if migrationInfo.consolidatedBalances?.beforeMigration.isNotEmpty == true {
                     state.flow = .existingUserAssetsConsolidationNeeded
                     return .none
                 }

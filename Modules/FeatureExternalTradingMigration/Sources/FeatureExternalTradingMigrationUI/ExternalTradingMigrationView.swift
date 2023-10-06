@@ -50,7 +50,9 @@ public struct ExternalTradingMigrationView: View {
 
     @ViewBuilder var existingUserNoAssetsFlowView: some View {
         BakktTermsAndConditionsView(
-            onDone: {},
+            onDone: {
+                viewStore.send(.onUpgrade)
+            },
             isLoading: viewStore.isSubmittingMigration
         )
     }
@@ -82,11 +84,12 @@ public struct ExternalTradingMigrationView: View {
     }
 
     @ViewBuilder var assetMigrationInfoNavigationLink: some View {
-        if let migrationInfo = viewStore.migrationInfo {
+        if let migrationInfo = viewStore.migrationInfo,
+           let consolidationBalances = migrationInfo.consolidatedBalances {
             NavigationLink(
                 destination: BakktAssetMigrationView(
-                    beforeMigrationBalances: migrationInfo.consolidatedBalances.beforeMigration,
-                    afterMigrationBalance: migrationInfo.consolidatedBalances.afterMigration,
+                    beforeMigrationBalances: consolidationBalances.beforeMigration ,
+                    afterMigrationBalance: consolidationBalances.afterMigration,
                     onDone: {
                         viewStore.send(.onUpgrade)
                     },
