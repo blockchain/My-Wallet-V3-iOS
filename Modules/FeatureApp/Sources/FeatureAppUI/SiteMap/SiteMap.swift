@@ -1,6 +1,6 @@
 import BlockchainUI
-import Dependencies
 import DIKit
+import Dependencies
 import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
@@ -9,6 +9,7 @@ import FeatureDashboardUI
 import FeatureDexUI
 import FeatureExternalTradingMigrationUI
 import FeatureKYCUI
+import FeatureNFTUI
 import FeatureQRCodeScannerUI
 import FeatureQuickActions
 import FeatureReceiveUI
@@ -28,7 +29,6 @@ import RemoteNotificationsKit
 import SafariServices
 import UnifiedActivityDomain
 import UnifiedActivityUI
-import FeatureExternalTradingMigrationUI
 
 @MainActor
 public struct SiteMap {
@@ -52,6 +52,8 @@ public struct SiteMap {
             UpsellPassiveRewardsView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
+        case blockchain.ux.nft, isDescendant(of: blockchain.ux.nft):
+            try NFTSiteMap().view(for: ref, in: context)
         case blockchain.ux.web:
             try SafariView(url: ref.context[blockchain.ux.web].decode())
                 .ignoresSafeArea(.container, edges: .bottom)

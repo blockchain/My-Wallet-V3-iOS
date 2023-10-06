@@ -2,12 +2,17 @@
 
 import Combine
 import Errors
-import FeatureNFTDomain
 import Foundation
 import NetworkKit
 import ToolKit
 
 public protocol FeatureNFTClientAPI {
+    /// Fetches any assets using the v2 API, no pagination yet
+    func fetchAssets(
+        address: String,
+        network: String?
+    ) -> AnyPublisher<NftCollection, NabuNetworkError>
+
     func fetchAssetsFromEthereumAddress(
         _ address: String
     ) -> AnyPublisher<Nft, NabuNetworkError>
@@ -34,6 +39,12 @@ public final class APIClient: FeatureNFTClientAPI {
             "explorer-gateway",
             "features",
             "subscribe"
+        ]
+        static let assetsV2 = [
+            "nft-market-api",
+            "nft",
+            "v2",
+            "account_assets"
         ]
     }
 
@@ -63,6 +74,22 @@ public final class APIClient: FeatureNFTClientAPI {
     }
 
     // MARK: - FeatureNFTClientAPI
+
+    public func fetchAssets(
+        address: String,
+        network: String?
+    ) -> AnyPublisher<NftCollection, NabuNetworkError> {
+        var query: [URLQueryItem] = []
+        if let network {
+            query = [URLQueryItem(name: "network", value: network)]
+        }
+        let request = defaultRequestBuilder.get(
+            path: Path.assetsV2 + [address],
+            parameters: query,
+            contentType: .json
+        )!
+        return defaultNetworkAdapter.perform(request: request)
+    }
 
     public func fetchAssetsFromEthereumAddress(
         _ address: String

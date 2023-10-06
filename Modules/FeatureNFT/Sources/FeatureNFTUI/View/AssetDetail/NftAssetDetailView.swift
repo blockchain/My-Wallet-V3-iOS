@@ -5,76 +5,69 @@ import ComposableArchitecture
 import FeatureNFTDomain
 import Localization
 import SwiftUI
-import UIComponentsKit
 
-public struct AssetDetailView: View {
-
+struct NftAssetDetailView: View {
     private typealias LocalizationId = LocalizationConstants.NFT.Screen.Detail
 
     @State private var webViewPresented = false
     @Environment(\.presentationMode) private var presentationMode
     private let url: URL
-    private let store: Store<AssetDetailViewState, AssetDetailViewAction>
+    private let asset: NFTAssets.Asset
 
-    public init(store: Store<AssetDetailViewState, AssetDetailViewAction>) {
-        self.store = store
-        self.url = ViewStore(store).asset.url
+    init(asset: NFTAssets.Asset) {
+        self.asset = asset
+        self.url = asset.assetUrl
     }
 
-    public var body: some View {
-        content
-    }
-
-    private var content: some View {
-        WithViewStore(store) { viewStore in
-            let asset = viewStore.asset
-            GeometryReader { proxy in
-                ScrollView {
-                    Capsule()
-                        .fill(Color.semantic.dark)
-                        .frame(width: 32.pt, height: 4.pt)
-                        .foregroundColor(.semantic.muted)
-                        .padding([.top], Spacing.padding2)
-                    VStack(alignment: .center, spacing: 8.0) {
-                        VStack(alignment: .center, spacing: 32) {
+    var body: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                Capsule()
+                    .fill(Color.semantic.dark)
+                    .frame(width: 32.pt, height: 4.pt)
+                    .foregroundColor(.semantic.muted)
+                    .padding([.top], Spacing.padding2)
+                VStack(alignment: .center, spacing: 8.0) {
+                    VStack(alignment: .center, spacing: 32) {
+                        if let url = asset.value.media?.collection?.medium.url {
                             AssetMotionView(
-                                url: asset.media.imageURL ?? asset.media.imagePreviewURL,
+                                url: url,
                                 proxy: proxy,
                                 button: {
                                     webViewPresented.toggle()
                                 }
                             )
-                            AssetDescriptionView(asset: asset)
-                                .padding([.leading, .trailing], Spacing.padding2)
                         }
-                        TraitGridView(asset: asset)
+                        AssetDescriptionView(asset: asset)
+                            .padding([.leading, .trailing], Spacing.padding2)
+                    }
+                    if let metadata = asset.value.metadata?.atributes {
+                        TraitGridView(metadata: metadata)
                             .padding(Spacing.padding2)
                     }
                 }
-                .frame(minHeight: proxy.size.height)
             }
-            .background(Color.semantic.light.ignoresSafeArea())
-            .navigationBarHidden(true)
+            .frame(minHeight: proxy.size.height)
         }
+        .background(Color.semantic.light.ignoresSafeArea())
+        .navigationBarHidden(true)
         .sheet(isPresented: $webViewPresented, content: {
             webView
         })
     }
 
     @ViewBuilder var webView: some View {
-        WithViewStore(store) { viewStore in
-            PrimaryNavigationView {
-                WebView(url: url)
-                    .primaryNavigation(
-                        title: viewStore.asset.name,
-                        trailing: {
-                            IconButton(icon: .navigationCloseButton()) {
-                                webViewPresented = false
-                            }
-                            .frame(width: 24.pt, height: 24.pt)
+        PrimaryNavigationView {
+            WebView(url: url)
+                .primaryNavigation(
+                    title: "",
+                    trailing: {
+                        IconButton(icon: .navigationCloseButton()) {
+                            webViewPresented = false
                         }
-                    )
-            }
+                        .frame(width: 24.pt, height: 24.pt)
+                    }
+                )
         }
     }
 
@@ -92,22 +85,22 @@ public struct AssetDetailView: View {
 
         var body: some View {
             VStack(alignment: .center, spacing: 24.pt) {
-                    ZStack {
-                        AsyncMedia(
-                            url: URL(string: url)
-                        )
-                        .cornerRadius(64)
-                        .blur(radius: 30)
-                        .opacity(0.9)
-                        AssetViewRepresentable(
-                            imageURL: URL(
-                                string: url
-                            ),
-                            size: proxy.size.width - Spacing.padding4
-                        )
-                    }
-                    .frame(minHeight: proxy.size.width - Spacing.padding4)
-                    .padding([.top, .leading], Spacing.padding2)
+                ZStack {
+                    AsyncMedia(
+                        url: URL(string: url)
+                    )
+                    .cornerRadius(64)
+                    .blur(radius: 30)
+                    .opacity(0.9)
+                    AssetViewRepresentable(
+                        imageURL: URL(
+                            string: url
+                        ),
+                        size: proxy.size.width - Spacing.padding4
+                    )
+                }
+                .frame(minHeight: proxy.size.width - Spacing.padding4)
+                .padding([.top, .leading], Spacing.padding2)
                 MinimalButton(
                     title: LocalizationId.viewOnOpenSea,
                     leadingView: {
@@ -131,23 +124,23 @@ public struct AssetDetailView: View {
             GridItem(.flexible(minimum: 100.0, maximum: 300))
         ]
 
-        private let asset: Asset
+        private let metadata: [AssetAttribute]
 
-        init(asset: Asset) {
-            self.asset = asset
+        init(metadata: [AssetAttribute]) {
+            self.metadata = metadata
         }
 
         var body: some View {
             VStack(alignment: .leading, spacing: Spacing.padding1) {
                 Text(LocalizationId.properties)
                     .typography(.body2)
-                    .foregroundColor(asset.traits.isEmpty ? .clear : .semantic.muted)
+                    .foregroundColor(metadata.isEmpty ? .clear : .semantic.muted)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 VStack(spacing: 0) {
-                    ForEach(asset.traits) {
+                    ForEach(metadata) {
                         TableRow(
-                            title: TableRowTitle($0.type),
-                            byline: TableRowByline($0.description)
+                            title: TableRowTitle($0.name),
+                            byline: TableRowByline($0.value)
                         )
                         .backport
                         .listDivider()
@@ -165,17 +158,17 @@ public struct AssetDetailView: View {
 
         @State private var isExpanded: Bool = false
 
-        let asset: Asset
+        let asset: NFTAssets.Asset
 
         var body: some View {
             VStack(alignment: .leading, spacing: Spacing.padding2) {
-                Text(asset.name)
+                Text(asset.value.name ?? "")
                     .typography(.title2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 TableRow(
                     leading: {
                         ZStack(alignment: .bottomTrailing) {
-                            if let value = asset.collection.collectionImageUrl, value.isNotEmpty {
+                            if let value = asset.value.media?.collection?.medium.url, value.isNotEmpty {
                                 AsyncMedia(url: URL(string: value))
                                     .frame(width: 24, height: 24)
                                     .clipShape(RoundedRectangle(cornerRadius: 8.0))
@@ -188,20 +181,9 @@ public struct AssetDetailView: View {
                             } else {
                                 Icon.user.color(.semantic.title).circle(backgroundColor: .semantic.light).small()
                             }
-                            if asset.collection.isVerified {
-                                Circle()
-                                    .fill(.white)
-                                    .frame(width: 12.0, height: 12.0)
-                                    .overlay(
-                                        Icon.verified
-                                            .color(.semantic.gold)
-                                            .frame(width: 9.0, height: 9.0)
-                                    )
-                                    .offset(x: 4.0, y: 4.0)
-                            }
                         }
                     },
-                    title: TableRowTitle(asset.creatorDisplayValue),
+                    title: TableRowTitle(asset.creatorDisplayValue ?? ""),
                     byline: TableRowByline(LocalizationId.creator)
                 )
                 .background(
@@ -209,18 +191,10 @@ public struct AssetDetailView: View {
                         .foregroundColor(Color.semantic.background)
                 )
 
-                if let collectionDescription = asset.collection.collectionDescription {
-                    if collectionDescription != asset.nftDescription {
-                        ExpandableRichTextBlock(
-                            title: "\(LocalizationId.about) \(asset.collection.name)",
-                            text: collectionDescription
-                        )
-                    }
-                }
-                if !asset.nftDescription.isEmpty {
+                if let description = asset.value.metadata?.description, !description.isEmpty {
                     ExpandableRichTextBlock(
                         title: LocalizationId.descripton,
-                        text: asset.nftDescription
+                        text: description
                     )
                 }
             }

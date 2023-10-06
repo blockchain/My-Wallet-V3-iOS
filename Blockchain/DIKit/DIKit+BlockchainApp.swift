@@ -27,7 +27,6 @@ import FeatureDashboardDomain
 import FeatureDebugUI
 import FeatureKYCDomain
 import FeatureKYCUI
-import FeatureNFTData
 import FeatureNFTDomain
 import FeatureNotificationPreferencesData
 import FeatureNotificationPreferencesDomain
@@ -446,13 +445,14 @@ extension DependencyContainer {
                 .eraseError()
             return AssetProviderService(
                 repository: AssetProviderRepository(
-                    client: FeatureNFTData.APIClient(
+                    client: FeatureNFTDomain.APIClient(
                         retailNetworkAdapter: DIKit.resolve(tag: DIKitContext.retail),
                         defaultNetworkAdapter: DIKit.resolve(),
                         retailRequestBuilder: DIKit.resolve(tag: DIKitContext.retail),
                         defaultRequestBuilder: DIKit.resolve()
                     )
                 ),
+                enabledCurrencies: EnabledCurrenciesService.default,
                 ethereumWalletAddressPublisher: publisher
             )
         }
@@ -463,7 +463,7 @@ extension DependencyContainer {
                 .emailPublisher
                 .eraseError()
             return ViewWaitlistRegistrationRepository(
-                client: FeatureNFTData.APIClient(
+                client: FeatureNFTDomain.APIClient(
                     retailNetworkAdapter: DIKit.resolve(tag: DIKitContext.retail),
                     defaultNetworkAdapter: DIKit.resolve(),
                     retailRequestBuilder: DIKit.resolve(tag: DIKitContext.retail),

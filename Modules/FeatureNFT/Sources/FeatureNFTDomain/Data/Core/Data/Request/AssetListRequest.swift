@@ -6,7 +6,7 @@ struct AssetListRequest: Encodable {
 }
 
 extension AssetListRequest {
-    static func ethereum(address: String) -> AssetListRequest {
-        .init(network: "ETH", address: address)
+    static func ethereum(address: String, network: String) -> AssetListRequest {
+        .init(network: network, address: address)
     }
 }

@@ -225,3 +225,23 @@ public func unifiedBalanceMockPublisher(app: AppProtocol) -> AnyPublisher<Unifie
     }
     return isEnabled.flatMapIf(then: config, else: .just(nil))
 }
+
+// MARK: Preview
+
+public class PreviewEnabledCurrenciesService: EnabledCurrenciesServiceAPI {
+    public var allEnabledCurrencies: [CurrencyType] = [.crypto(.bitcoin), .crypto(.ethereum)]
+    public var allEnabledCryptoCurrencies: [CryptoCurrency] = [.bitcoin, .ethereum]
+    public var allEnabledFiatCurrencies: [FiatCurrency] = [.USD]
+    public var allEnabledEVMNetworks: [EVMNetwork] = [EVMNetwork(networkConfig: .ethereum, nativeAsset: .ethereum)]
+    public var bankTransferEligibleFiatCurrencies: [FiatCurrency] = []
+
+    public init() {}
+
+    public func network(for cryptoCurrency: CryptoCurrency) -> EVMNetwork? {
+        nil
+    }
+
+    public func network(for chainId: String) -> EVMNetwork? {
+        nil
+    }
+}

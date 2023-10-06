@@ -2805,6 +2805,13 @@ blockchain:
 			+ blockchain.ux.type.story
 				receive:
 				+ blockchain.ux.type.task
+			network:
+				picker:
+				+ blockchain.ux.type.story
+					selected:
+						network:
+						+ blockchain.db.type.any
+						+ blockchain.session.state.value
 			wallet:
 			+ blockchain.db.collection
 				select:

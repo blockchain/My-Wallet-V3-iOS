@@ -2,7 +2,6 @@
 
 import Combine
 import Errors
-import FeatureNFTDomain
 import Foundation
 import NetworkKit
 import ToolKit
@@ -16,6 +15,18 @@ public final class AssetProviderRepository: AssetProviderRepositoryAPI {
     }
 
     // MARK: - AssetProviderRepositoryAPI
+
+    public func fetchAssets(
+        address: String,
+        network: String?
+    ) -> AnyPublisher<Assets, NabuNetworkError> {
+        client.fetchAssets(
+            address: address,
+            network: network
+        )
+        .map(Assets.init)
+        .eraseToAnyPublisher()
+    }
 
     public func fetchAssetsFromEthereumAddress(
         _ address: String

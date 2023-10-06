@@ -15,8 +15,7 @@ let package = Package(
             name: "FeatureNFT",
             targets: [
                 "FeatureNFTDomain",
-                "FeatureNFTUI",
-                "FeatureNFTData"
+                "FeatureNFTUI"
             ]
         ),
         .library(
@@ -39,12 +38,18 @@ let package = Package(
         .package(path: "../Errors"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../ComposableArchitectureExtensions"),
+        .package(path: "../Money"),
         .package(path: "../Tool")
     ],
     targets: [
         .target(
             name: "FeatureNFTDomain",
             dependencies: [
+                .product(name: "MoneyKit", package: "Money"),
+                .product(
+                    name: "NetworkKit",
+                    package: "Network"
+                ),
                 .product(
                     name: "Errors",
                     package: "Errors"
@@ -56,36 +61,17 @@ let package = Package(
             ]
         ),
         .target(
-            name: "FeatureNFTData",
-            dependencies: [
-                .target(name: "FeatureNFTDomain"),
-                .product(
-                    name: "NetworkKit",
-                    package: "Network"
-                ),
-                .product(
-                    name: "Errors",
-                    package: "Errors"
-                )
-            ]
-        ),
-        .target(
             name: "FeatureNFTUI",
             dependencies: [
                 .target(name: "FeatureNFTDomain"),
-                .target(name: "FeatureNFTData"),
+                .product(name: "MoneyKit", package: "Money"),
                 .product(name: "ComposableNavigation", package: "ComposableArchitectureExtensions"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "Localization", package: "Localization"),
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "UIComponents", package: "UIComponents"),
+                .product(name: "Errors", package: "Errors"),
                 .product(name: "ToolKit", package: "Tool")
-            ]
-        ),
-        .testTarget(
-            name: "FeatureNFTDataTests",
-            dependencies: [
-                .target(name: "FeatureNFTData")
             ]
         ),
         .testTarget(

@@ -10481,6 +10481,7 @@ public extension I_blockchain_ux_nft {
 	var `asset`: L_blockchain_ux_nft_asset { .init("\(__).asset") }
 	var `collection`: L_blockchain_ux_nft_collection { .init("\(__).collection") }
 	var `empty`: L_blockchain_ux_nft_empty { .init("\(__).empty") }
+	var `network`: L_blockchain_ux_nft_network { .init("\(__).network") }
 	var `wallet`: L_blockchain_ux_nft_wallet { .init("\(__).wallet") }
 }
 public final class L_blockchain_ux_nft_asset: L, I_blockchain_ux_nft_asset {
@@ -10516,6 +10517,31 @@ public final class L_blockchain_ux_nft_empty_receive: L, I_blockchain_ux_nft_emp
 	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.empty.receive", comment: "") }
 }
 public protocol I_blockchain_ux_nft_empty_receive: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_nft_network: L, I_blockchain_ux_nft_network {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.network", comment: "") }
+}
+public protocol I_blockchain_ux_nft_network: I {}
+public extension I_blockchain_ux_nft_network {
+	var `picker`: L_blockchain_ux_nft_network_picker { .init("\(__).picker") }
+}
+public final class L_blockchain_ux_nft_network_picker: L, I_blockchain_ux_nft_network_picker {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.network.picker", comment: "") }
+}
+public protocol I_blockchain_ux_nft_network_picker: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_nft_network_picker {
+	var `selected`: L_blockchain_ux_nft_network_picker_selected { .init("\(__).selected") }
+}
+public final class L_blockchain_ux_nft_network_picker_selected: L, I_blockchain_ux_nft_network_picker_selected {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.network.picker.selected", comment: "") }
+}
+public protocol I_blockchain_ux_nft_network_picker_selected: I {}
+public extension I_blockchain_ux_nft_network_picker_selected {
+	var `network`: L_blockchain_ux_nft_network_picker_selected_network { .init("\(__).network") }
+}
+public final class L_blockchain_ux_nft_network_picker_selected_network: L, I_blockchain_ux_nft_network_picker_selected_network {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.network.picker.selected.network", comment: "") }
+}
+public protocol I_blockchain_ux_nft_network_picker_selected_network: I_blockchain_session_state_value, I_blockchain_db_type_any {}
 public final class L_blockchain_ux_nft_wallet: L, I_blockchain_ux_nft_wallet {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.nft.wallet", comment: "") }
 }
