@@ -17,6 +17,9 @@ public struct CustodialOnboardingDashboardView: View {
 
     public var body: some View {
         VStack(spacing: 16.pt) {
+
+            FinancialPromotionDisclaimerView()
+
             MoneyValue.zero(currency: onboarding.currency).headerView()
                 .padding(.top)
             if onboarding.isRejected {
@@ -30,10 +33,19 @@ public struct CustodialOnboardingDashboardView: View {
                 }
                 CustodialOnboardingProgressView(progress: onboarding.progress)
                 CustodialOnboardingTaskListView(service: onboarding)
-                FinancialPromotionDisclaimerView()
                 if onboarding.isVerified {
                     CustodialOnboardingHelpSectionView()
                 }
+                FinancialPromotionApprovalView()
+                    .padding()
+                    .background(
+                        RoundedRectangle(
+                            cornerRadius: 16
+                        )
+                        .fill(Color.semantic.background)
+                        .frame(maxWidth: .infinity)
+                    )
+                    .padding(.bottom)
             }
         }
         .padding(.horizontal)

@@ -53,9 +53,14 @@ public struct IntroView: View {
                     .padding(16)
                     .padding(.vertical, byline.isNil ? Spacing.padding4 : 0)
                     VStack {
-                        rows
                         FinancialPromotionDisclaimerView()
-                            .padding(.top)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color.semantic.background)
+                            )
+                            .padding([.top, .bottom])
+                        rows
                         Spacer()
                         Text(footer)
                             .typography(.caption1)
@@ -63,6 +68,13 @@ public struct IntroView: View {
                             .multilineTextAlignment(.center)
                             .padding(.bottom, Spacing.padding1)
                         buttons
+                        FinancialPromotionApprovalView()
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 16).fill(Color.semantic.background)
+                            )
+                            .padding(.top)
+                            .frame(maxWidth: .infinity)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding(16)
