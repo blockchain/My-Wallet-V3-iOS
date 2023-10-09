@@ -28,7 +28,7 @@ final class PersonalInfoReducerTests: XCTestCase {
         PersonalInfo.Action,
         PersonalInfo.State,
         PersonalInfo.Action,
-        PersonalInfo.Environment
+        Void
     >!
 
     private var testScheduler: TestSchedulerOf<DispatchQueue>!
@@ -41,8 +41,7 @@ final class PersonalInfoReducerTests: XCTestCase {
         testScheduler = DispatchQueue.test
         testStore = TestStore(
             initialState: PersonalInfo.State(),
-            reducer: PersonalInfo.reducer,
-            environment: PersonalInfo.Environment(
+            reducer: PersonalInfo.Reducer(
                 onClose: { [weak self] in
                     self?.recordedInvocations.onClose += 1
                 },

@@ -16,69 +16,74 @@ enum UnlockTradingAction: Equatable, BindableAction {
     case unlockButtonTapped(KYC.Tier)
 }
 
-struct UnlockTradingEnvironment {
+struct UnlockTradingReducer: ReducerProtocol {
+
+    typealias State = UnlockTradingState
+    typealias Action = UnlockTradingAction
+
     let dismiss: () -> Void
     let unlock: (KYC.Tier) -> Void
     let analyticsRecorder: AnalyticsEventRecorderAPI
-}
 
-let unlockTradingReducer = Reducer<
-    UnlockTradingState,
-    UnlockTradingAction,
-    UnlockTradingEnvironment
-> { _, action, environment in
-    switch action {
-    case .closeButtonTapped:
-        return .fireAndForget {
-            environment.dismiss()
+    var body: some ReducerProtocol<State, Action> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .closeButtonTapped:
+                return .fireAndForget {
+                    dismiss()
+                }
+
+            case .unlockButtonTapped(let requiredTier):
+                return .fireAndForget {
+                    unlock(requiredTier)
+                }
+
+            case .binding:
+                return .none
+            }
         }
-
-    case .unlockButtonTapped(let requiredTier):
-        return .fireAndForget {
-            environment.unlock(requiredTier)
-        }
-
-    case .binding:
-        return .none
+        UnlockTradingAnalyticsReducer(analyticsRecorder: analyticsRecorder)
     }
 }
-.analytics()
-.binding()
 
 // MARK: - Analytics
 
-extension Reducer where State == UnlockTradingState, Action == UnlockTradingAction, Environment == UnlockTradingEnvironment {
+struct UnlockTradingAnalyticsReducer: ReducerProtocol {
 
-    func analytics() -> Self {
-        combined(
-            with: Reducer { state, action, environment in
-                switch action {
-                case .binding:
-                    return .none
+    typealias State = UnlockTradingState
+    typealias Action = UnlockTradingAction
 
-                case .closeButtonTapped:
-                    return .none
+    let analyticsRecorder: AnalyticsEventRecorderAPI
 
-                case .unlockButtonTapped:
-                    let userTier = state.currentUserTier
-                    return .fireAndForget {
-                        environment.analyticsRecorder.record(
-                            event: Events.tradingLimitsGetVerifiedCTAClicked(
-                                tier: userTier.rawValue
-                            )
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .binding:
+                return .none
+
+            case .closeButtonTapped:
+                return .none
+
+            case .unlockButtonTapped:
+                let userTier = state.currentUserTier
+                return .fireAndForget {
+                    analyticsRecorder.record(
+                        event: Events.tradingLimitsGetVerifiedCTAClicked(
+                            tier: userTier.rawValue
                         )
-                    }
+                    )
                 }
             }
-        )
+        }
     }
 }
 
 // MARK: - SwiftUI Preview Helpers
 
-extension UnlockTradingEnvironment {
+extension UnlockTradingReducer {
 
-    static let preview = UnlockTradingEnvironment(
+    static let preview = UnlockTradingReducer(
         dismiss: {},
         unlock: { _ in },
         analyticsRecorder: NoOpAnalyticsRecorder()

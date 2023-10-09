@@ -97,7 +97,7 @@ extension VGSContentView {
     class Model: LoadableObject {
         typealias Output = CardTokenIdResponse
         typealias Failure = NabuError
-        typealias State = Extensions.LoadingState<CardTokenIdResponse, NabuError>
+        typealias State = AsyncState<CardTokenIdResponse, NabuError>
 
         @Published var state: State = .idle
 
@@ -110,9 +110,9 @@ extension VGSContentView {
         func load() {
             retrieveToken()
                 .receive(on: DispatchQueue.main)
-                .map { State.loaded($0) }
+                .map { State.success($0) }
                 .catch { error -> AnyPublisher<State, Never> in
-                    .just(State.failed(error))
+                    .just(State.failure(error))
                 }
                 .eraseToAnyPublisher()
                 .assign(to: &$state)

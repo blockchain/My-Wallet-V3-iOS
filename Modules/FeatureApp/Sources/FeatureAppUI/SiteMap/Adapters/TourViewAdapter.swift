@@ -2,6 +2,7 @@
 
 import BlockchainNamespace
 import ComposableArchitecture
+import DIKit
 import FeatureAuthenticationUI
 import FeatureTourUI
 import Localization
@@ -24,11 +25,16 @@ public struct TourViewAdapter: View {
     public var body: some View {
         WithViewStore(store) { viewStore in
             OnboardingCarouselView(
-                environment: TourEnvironment(
-                    createAccountAction: { viewStore.send(.navigate(to: .createWallet)) },
-                    restoreAction: { viewStore.send(.navigate(to: .restoreWallet)) },
-                    logInAction: { viewStore.send(.navigate(to: .emailLogin)) },
-                    manualLoginAction: { viewStore.send(.navigate(to: .manualLogin)) }
+                store: Store(
+                    initialState: TourState(),
+                    reducer: TourReducer(
+                        enabledCurrenciesService: resolve(),
+                        priceService: resolve(),
+                        createAccountAction: { viewStore.send(.navigate(to: .createWallet)) },
+                        restoreAction: { viewStore.send(.navigate(to: .restoreWallet)) },
+                        logInAction: { viewStore.send(.navigate(to: .emailLogin)) },
+                        manualLoginAction: { viewStore.send(.navigate(to: .manualLogin)) }
+                    )
                 ),
                 manualLoginEnabled: manualLoginEnabled
             )

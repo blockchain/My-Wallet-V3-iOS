@@ -17,6 +17,7 @@ extension Compute.HandlerProtocol {
 public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerProtocol {
 
     weak var app: AppProtocol?
+    let id: String
 
     let context: Tag.Context
     public let result: FetchResult
@@ -40,13 +41,17 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
         handle: @escaping (FetchResult.Value<Property>) -> Void
     ) {
         self.app = app
-        self.context = context
+        self.id = (context[blockchain.namespace.compute.id] as? String) ?? UUID().uuidString
+        self.context = [blockchain.namespace.compute.id: id] + context
         self.result = result
         self.isSubscribed = subscribed
         self.handle = handle
         do {
             try decode(result.get())
         } catch {
+            if Compute.isLogging {
+                id.peek("👾 ‼️ → throws \(error) ← \(result.metadata.ref)")
+            }
             handle(.error(error, result.metadata))
         }
     }
@@ -54,11 +59,23 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     func decode(_ any: Any) throws {
         state.lock.lock(); defer { state.lock.unlock() }
         let decoder = ReturnsDecoder()
+        decoder.id = id
         decoder.isComputing = result.metadata.source == .compute
+        if Compute.isLogging {
+            id.peek("👾 ℹ️ → decode(\((any as Optional<Any>).flattened ?? "nil") ← \(result.metadata.ref)")
+        }
         switch try decoder.decodeWithComputes(Property.self, from: any) {
         case .ready(let value):
+            if Compute.isLogging {
+                id.peek("👾 ✅ → finished computing value '\(value)' ← \(result.metadata.ref)")
+            }
             guard decoder.isComputing else { return handle(.value(value, result.metadata)) }
-            if value == oldValue { return }
+            if value == oldValue {
+                if Compute.isLogging {
+                    id.peek("👾 ⚠️ → value is equal to oldValue - no update ← \(result.metadata.ref)")
+                }
+                return
+            }
             oldValue = value
             handle(.value(value, result.metadata))
         case .computes(let computes):
@@ -67,6 +84,9 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     }
 
     func decode(with computes: Set<Compute.JSON>) throws {
+        if Compute.isLogging {
+            id.peek("👾 ℹ️ → decode(with: \(computes.count)) at depth \(state.depth) ← \(result.metadata.ref)")
+        }
         state.lock.lock(); defer { state.lock.unlock() }
         guard state.depth < 20 else {
             let error = AnyJSON.Error(
@@ -93,6 +113,9 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
     }
 
     func update(at depth: Int) {
+        if Compute.isLogging {
+            id.peek("👾 ℹ️ → update(at: \(depth)) ← \(result.metadata.ref)")
+        }
         state.lock.lock(); defer { state.lock.unlock() }
         var depth = depth
         do {
@@ -111,6 +134,9 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
             try decode(result)
         } catch {
             state.raise(to: depth)
+            if Compute.isLogging {
+                id.peek("👾 ‼️ → throws \(error) ← \(result.metadata.ref)")
+            }
             handle(.error(error, result.metadata))
         }
     }
@@ -124,6 +150,10 @@ public class ComputeHandler<Property: Decodable & Equatable>: Compute.HandlerPro
         var result = result
         for (compute, value) in computes {
             result[compute.codingPath] = value
+            if Compute.isLogging {
+                let path = compute.codingPath.isEmpty ? "self" : compute.codingPath.string
+                id.peek("👾 ℹ️ → \(path) = \((value as Optional<Any>).flattened ?? "nil") ← \(self.result.metadata.ref)")
+            }
         }
         return result as Any
     }

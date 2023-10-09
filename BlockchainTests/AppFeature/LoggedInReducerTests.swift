@@ -37,7 +37,7 @@ final class LoggedInReducerTests: XCTestCase {
         LoggedIn.Action,
         LoggedIn.State,
         LoggedIn.Action,
-        LoggedIn.Environment
+        Void
     >!
 
     override func setUpWithError() throws {
@@ -64,8 +64,7 @@ final class LoggedInReducerTests: XCTestCase {
 
         testStore = TestStore(
             initialState: LoggedIn.State(),
-            reducer: loggedInReducer,
-            environment: LoggedIn.Environment(
+            reducer: LoggedInReducer(
                 analyticsRecorder: mockAnalyticsRecorder,
                 app: App.test,
                 appSettings: mockSettingsApp,

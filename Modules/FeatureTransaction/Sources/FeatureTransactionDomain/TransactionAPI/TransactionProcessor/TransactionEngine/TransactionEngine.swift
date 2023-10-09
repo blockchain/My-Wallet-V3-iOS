@@ -140,7 +140,9 @@ public protocol TransactionEngine: AnyObject {
         pendingTransaction: PendingTransaction
     ) -> Single<PendingTransaction>
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction>
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error>
 
     /// Implementation interface:
     /// Call this first to initialise the processor. Construct and initialise a pendingTx object.
@@ -206,7 +208,7 @@ public protocol TransactionEngine: AnyObject {
         customFeeAmount: MoneyValue
     ) -> Single<PendingTransaction>
 
-    func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction>
+    func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> AnyPublisher<PendingTransaction, Error>
 }
 
 // MARK: - Conversion rates
@@ -220,10 +222,6 @@ extension TransactionEngine {
         default:
             return nil
         }
-    }
-
-    public var transactionExchangeRatePair: Observable<MoneyValuePair> {
-        .empty()
     }
 
     public func amountToSourceRate(
@@ -411,7 +409,7 @@ extension TransactionEngine {
         return .just(pendingTransaction)
     }
 
-    public func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    public func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> AnyPublisher<PendingTransaction, Error> {
         .just(pendingTransaction)
     }
 

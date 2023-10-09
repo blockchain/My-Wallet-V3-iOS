@@ -57,7 +57,7 @@ final class RouterTests: XCTestCase {
 
     func test_routesTo_emailVerification() throws {
         let viewController = MockViewController()
-        router.routeToEmailVerification(
+        _ = router.routeToEmailVerification(
             from: viewController,
             emailAddress: "test@example.com",
             flowCompletion: { _ in }
@@ -68,18 +68,18 @@ final class RouterTests: XCTestCase {
 
     func test_calls_back_to_passedIn_completionBlock() throws {
         var didCallCompletionBlock = false
-        let environment = router.buildEmailVerificationEnvironment(emailAddress: "test@example.com") { _ in
+        let reducer = router.buildEmailVerificationReducer(emailAddress: "test@example.com") { _ in
             didCallCompletionBlock = true
         }
-        environment.flowCompletionCallback?(.completed)
+        reducer.flowCompletionCallback?(.completed)
         XCTAssertTrue(didCallCompletionBlock)
     }
 
     func test_uses_extenalAppOpener_to_openMailApp() throws {
-        let environment = router.buildEmailVerificationEnvironment(emailAddress: "test@example.com") { _ in }
+        let reducer = router.buildEmailVerificationReducer(emailAddress: "test@example.com") { _ in }
         var valueReceived = false
         let e = expectation(description: "Wait for publisher to send value")
-        let cancellable = environment.openMailApp()
+        let cancellable = reducer.openMailApp()
             .sink(receiveValue: { value in
                 valueReceived = value
                 e.fulfill()

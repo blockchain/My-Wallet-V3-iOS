@@ -8,8 +8,12 @@ import FeatureStakingUI
 extension SuperAppRootController {
 
     struct NavigationError: Error, CustomStringConvertible, LocalizedError {
-        static var noTopMostViewController: NavigationError = .init(message: "Unable to determine the top most view controller.")
-        static var noNavigationController: NavigationError = .init(message: "No UINavigationController is associated with the top most view controller")
+        static let noTopMostViewController: NavigationError = NavigationError(
+            message: "Unable to determine the top most view controller."
+        )
+        static let noNavigationController: NavigationError = NavigationError(
+            message: "No UINavigationController is associated with the top most view controller"
+        )
         let message: String
         var description: String { message }
         var errorDescription: String? { message }
@@ -29,7 +33,7 @@ extension SuperAppRootController {
     }
 
     func push(_ vc: UIViewController, animated: Bool = true) throws {
-        try (currentNavigationController ?? getTopMostViewController().navigationController)
+        try topNavigationController
             .or(throw: NavigationError.noNavigationController)
             .pushViewController(vc, animated: animated)
     }
@@ -43,21 +47,22 @@ extension SuperAppRootController {
     }
 
     func pop(animated: Bool = true) {
-        (currentNavigationController ?? topMostViewController?.navigationController)?
+        topNavigationController?
             .popViewController(animated: animated)
     }
 
-    func dismissAll(animated: Bool = true, completion: (() -> Void)? = nil) {
-        guard let hostingController = presentedViewController else {
+    func dismissAll(animated: Bool, completion: (() -> Void)?) {
+        guard let presentedViewController else {
             return
         }
-        guard let appChrome = hostingController.presentedViewController else {
-            return
+        if presentedViewController.isBeingDismissed {
+            app.post(error: NavigationError.isBeingDismissedError(presentedViewController))
         }
-        if appChrome.isBeingDismissed {
-            app.post(error: NavigationError.isBeingDismissedError(appChrome))
-        }
-        appChrome.dismiss(animated: animated, completion: completion)
+        presentedViewController.dismiss(animated: animated, completion: completion)
+    }
+
+    private var topNavigationController: UINavigationController? {
+        currentNavigationController ?? topMostViewController?.navigationController
     }
 }
 
@@ -256,7 +261,7 @@ extension SuperAppRootController {
     }
 
     func dismissAll(_ event: Session.Event) {
-        dismissAll()
+        dismissAll(animated: true, completion: nil)
     }
 }
 

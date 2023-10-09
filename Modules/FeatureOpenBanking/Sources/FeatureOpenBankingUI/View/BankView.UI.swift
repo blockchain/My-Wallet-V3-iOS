@@ -82,7 +82,7 @@ extension BankState.UI {
         let resource = environment.fiatCurrencyFormatter.displayImage(currency: payment.amount.symbol)
         let media: UIComponentsKit.Media
         switch resource {
-        case .remote(url: let url):
+        case .remote(url: let url, fallback: _):
             media = .image(at: url)
         default:
             media = .bankIcon
@@ -115,7 +115,7 @@ extension BankState.UI {
         let resource = environment.cryptoCurrencyFormatter.displayImage(currency: order.outputCurrency)
         let media: UIComponentsKit.Media
         switch resource {
-        case .remote(url: let url):
+        case .remote(url: let url, fallback: _):
             media = .image(at: url)
         default:
             media = .blockchainLogo
@@ -147,7 +147,7 @@ extension BankState.UI {
         let resource = environment.cryptoCurrencyFormatter.displayImage(currency: order.outputCurrency)
         let media: UIComponentsKit.Media
         switch resource {
-        case .remote(url: let url):
+        case .remote(url: let url, fallback: _):
             media = .image(at: url)
         default:
             media = .blockchainLogo

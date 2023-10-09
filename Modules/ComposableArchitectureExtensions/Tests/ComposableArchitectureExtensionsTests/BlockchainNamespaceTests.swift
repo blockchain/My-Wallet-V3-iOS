@@ -13,11 +13,14 @@ final class BlockchainNamespaceTests: XCTestCase {
     }
 
     func test() {
-
+        let fileName = "Folder/TestFileName"
+        let lineTag = 1
+        let lineString = 2
+        let lineBoolean = 3
+        let lineInteger = 4
         let store = TestStore(
             initialState: TestState(),
-            reducer: testReducer,
-            environment: TestEnvironment(app: app)
+            reducer: TestReducer(app: app)
         )
 
         app.post(event: blockchain.db.type.string)
@@ -25,55 +28,55 @@ final class BlockchainNamespaceTests: XCTestCase {
 
         store.send(.observation(.start))
 
-        app.post(event: blockchain.db.type.tag)
+        app.post(event: blockchain.db.type.tag, file: fileName, line: lineTag)
 
-        app.post(event: blockchain.db.type.string)
+        app.post(event: blockchain.db.type.string, file: fileName, line: lineString)
         store.receive(
             .observation(
                 .event(blockchain.db.type.string[].reference, context: [
-                    blockchain.ux.type.analytics.event.source.file[]: "ComposableArchitectureExtensionsTests/BlockchainNamespaceTests.swift",
-                    blockchain.ux.type.analytics.event.source.line[]: 30
+                    blockchain.ux.type.analytics.event.source.file[]: fileName,
+                    blockchain.ux.type.analytics.event.source.line[]: lineString
                 ])
             )
         ) { state in
             state.event = blockchain.db.type.string[].reference
             state.context = [
-                blockchain.ux.type.analytics.event.source.file[]: "ComposableArchitectureExtensionsTests/BlockchainNamespaceTests.swift",
-                blockchain.ux.type.analytics.event.source.line[]: 30
+                blockchain.ux.type.analytics.event.source.file[]: fileName,
+                blockchain.ux.type.analytics.event.source.line[]: lineString
             ]
         }
 
-        app.post(event: blockchain.db.type.boolean)
+        app.post(event: blockchain.db.type.boolean, file: fileName, line: lineBoolean)
         store.receive(
             .observation(
                 .event(blockchain.db.type.boolean[].reference, context: [
-                    blockchain.ux.type.analytics.event.source.file[]: "ComposableArchitectureExtensionsTests/BlockchainNamespaceTests.swift",
-                    blockchain.ux.type.analytics.event.source.line[]: 46
+                    blockchain.ux.type.analytics.event.source.file[]: fileName,
+                    blockchain.ux.type.analytics.event.source.line[]: lineBoolean
                 ])
             )
         ) { state in
             state.event = blockchain.db.type.boolean[].reference
             state.context = [
-                blockchain.ux.type.analytics.event.source.file[]: "ComposableArchitectureExtensionsTests/BlockchainNamespaceTests.swift",
-                blockchain.ux.type.analytics.event.source.line[]: 46
+                blockchain.ux.type.analytics.event.source.file[]: fileName,
+                blockchain.ux.type.analytics.event.source.line[]: lineBoolean
             ]
         }
 
-        app.post(event: blockchain.db.type.integer, context: [blockchain.db.type.string: "context"])
+        app.post(event: blockchain.db.type.integer, context: [blockchain.db.type.string: "context"], file: fileName, line: lineInteger)
         store.receive(
             .observation(
                 .event(blockchain.db.type.integer[].reference, context: [
                     blockchain.db.type.string[]: "context",
-                    blockchain.ux.type.analytics.event.source.file[]: "ComposableArchitectureExtensionsTests/BlockchainNamespaceTests.swift",
-                    blockchain.ux.type.analytics.event.source.line[]: 62
+                    blockchain.ux.type.analytics.event.source.file[]: fileName,
+                    blockchain.ux.type.analytics.event.source.line[]: lineInteger
                 ])
             )
         ) { state in
             state.event = blockchain.db.type.integer[].reference
             state.context = [
                 blockchain.db.type.string[]: "context",
-                blockchain.ux.type.analytics.event.source.file[]: "ComposableArchitectureExtensionsTests/BlockchainNamespaceTests.swift",
-                blockchain.ux.type.analytics.event.source.line[]: 62
+                blockchain.ux.type.analytics.event.source.file[]: fileName,
+                blockchain.ux.type.analytics.event.source.line[]: lineInteger
             ]
         }
 
@@ -81,10 +84,6 @@ final class BlockchainNamespaceTests: XCTestCase {
 
         app.post(event: blockchain.db.type.boolean)
     }
-}
-
-struct TestEnvironment: BlockchainNamespaceAppEnvironment {
-    var app: AppProtocol
 }
 
 struct TestState: Equatable {
@@ -96,16 +95,27 @@ enum TestAction: BlockchainNamespaceObservationAction, Equatable {
     case observation(BlockchainNamespaceObservation)
 }
 
-let testReducer = Reducer<TestState, TestAction, TestEnvironment> { state, action, _ in
-    switch action {
-    case .observation(.event(let event, context: let context)):
-        state.event = event
-        state.context = context
-        return .none
-    case .observation:
-        return .none
+struct TestReducer: ReducerProtocol {
+    typealias State = TestState
+    typealias Action = TestAction
+
+    let app: AppProtocol
+
+    var body: some ReducerProtocol<State, Action>  {
+        BlockchainNamespaceReducer(app: app, events: [
+            blockchain.db.type.string,
+            blockchain.db.type.integer,
+            blockchain.db.type.boolean
+        ])
+        Reduce { state, action in
+            switch action {
+            case .observation(.event(let event, context: let context)):
+                state.event = event
+                state.context = context
+                return .none
+            case .observation:
+                return .none
+            }
+        }
     }
 }
-.on(blockchain.db.type.string)
-.on(blockchain.db.type.integer)
-.on(blockchain.db.type.boolean)

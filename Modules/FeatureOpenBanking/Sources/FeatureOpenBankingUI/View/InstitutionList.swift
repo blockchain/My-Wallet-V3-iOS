@@ -47,16 +47,19 @@ public enum InstitutionListRoute: CaseIterable, NavigationRoute {
     }
 }
 
-public let institutionListReducer = Reducer<InstitutionListState, InstitutionListAction, OpenBankingEnvironment>
-    .combine(
-        bankReducer
-            .optional()
-            .pullback(
-                state: \.selection,
-                action: /InstitutionListAction.bank,
-                environment: \.environment
-            ),
-        .init { state, action, environment in
+public struct InstitutionListReducer: ReducerProtocol {
+    
+    public typealias State = InstitutionListState
+    public typealias Action = InstitutionListAction
+
+    let environment: OpenBankingEnvironment
+
+    public init(environment: OpenBankingEnvironment) {
+        self.environment = environment
+    }
+    
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
             switch action {
             case .route(let route):
                 state.route = route
@@ -101,7 +104,11 @@ public let institutionListReducer = Reducer<InstitutionListState, InstitutionLis
                 return .none
             }
         }
-    )
+        .ifLet(\.selection, action: /Action.bank) {
+            BankReducer(environment: environment)
+        }
+    }
+}
 
 public struct InstitutionList: View {
 
@@ -235,8 +242,9 @@ struct InstitutionList_Previews: PreviewProvider {
             InstitutionList(
                 store: Store<InstitutionListState, InstitutionListAction>(
                     initialState: InstitutionListState(),
-                    reducer: institutionListReducer,
-                    environment: .mock
+                    reducer: InstitutionListReducer(
+                        environment: .mock
+                    )
                 )
             )
         }

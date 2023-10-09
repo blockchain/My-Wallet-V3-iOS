@@ -31,7 +31,10 @@ enum TradingLimitsAction: Equatable {
     case unlockTrading(UnlockTradingAction)
 }
 
-struct TradingLimitsEnvironment {
+struct TradingLimitsReducer: ReducerProtocol {
+
+    typealias State = TradingLimitsState
+    typealias Action = TradingLimitsAction
 
     let close: () -> Void
     let openURL: (URL) -> Void
@@ -56,85 +59,76 @@ struct TradingLimitsEnvironment {
         self.analyticsRecorder = analyticsRecorder
         self.mainQueue = mainQueue
     }
-}
 
-let tradingLimitsReducer = Reducer.combine(
-    limitedFeaturesListReducer.pullback(
-        state: \TradingLimitsState.featuresList,
-        action: /TradingLimitsAction.listAction,
-        environment: {
-            LimitedFeaturesListEnvironment(
-                openURL: $0.openURL,
-                presentKYCFlow: $0.presentKYCFlow
-            )
-        }
-    ),
-    unlockTradingReducer.optional().pullback(
-        state: \TradingLimitsState.unlockTradingState,
-        action: /TradingLimitsAction.unlockTrading,
-        environment: {
-            UnlockTradingEnvironment(
-                dismiss: $0.close,
-                unlock: $0.presentKYCFlow,
-                analyticsRecorder: $0.analyticsRecorder
-            )
-        }
-    ),
-    Reducer<TradingLimitsState, TradingLimitsAction, TradingLimitsEnvironment> { state, action, environment in
-        switch action {
-        case .close:
-            let currentTier = state.unlockTradingState?.currentUserTier
-            return .fireAndForget {
-                if let currentTier {
-                    environment.analyticsRecorder.record(
-                        event: Events.tradingLimitsDismissed(
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .close:
+                let currentTier = state.unlockTradingState?.currentUserTier
+                return .fireAndForget {
+                    if let currentTier {
+                        analyticsRecorder.record(
+                            event: Events.tradingLimitsDismissed(
+                                tier: currentTier.rawValue
+                            )
+                        )
+                    }
+                    close()
+                }
+
+            case .fetchLimits:
+                state.loading = true
+                return fetchLimitsOverview()
+                    .eraseToAnyPublisher()
+                    .catchToEffect()
+                    .map(TradingLimitsAction.didFetchLimits)
+                    .receive(on: mainQueue)
+                    .eraseToEffect()
+
+            case .didFetchLimits(let result):
+                state.loading = false
+                if case .success(let overview) = result {
+                    state.userTiers = overview.tiers
+                    state.featuresList = .init(
+                        features: overview.features,
+                        kycTiers: overview.tiers
+                    )
+                    let currentTier = overview.tiers.latestApprovedTier
+                    state.unlockTradingState = UnlockTradingState(
+                        currentUserTier: currentTier
+                    )
+                    analyticsRecorder.record(
+                        event: Events.tradingLimitsViewed(
                             tier: currentTier.rawValue
                         )
                     )
-                }
-                environment.close()
-            }
-
-        case .fetchLimits:
-            state.loading = true
-            return environment
-                .fetchLimitsOverview()
-                .eraseToAnyPublisher()
-                .catchToEffect()
-                .map(TradingLimitsAction.didFetchLimits)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-
-        case .didFetchLimits(let result):
-            state.loading = false
-            if case .success(let overview) = result {
-                state.userTiers = overview.tiers
-                state.featuresList = .init(
-                    features: overview.features,
-                    kycTiers: overview.tiers
-                )
-                let currentTier = overview.tiers.latestApprovedTier
-                state.unlockTradingState = UnlockTradingState(
-                    currentUserTier: currentTier
-                )
-                environment.analyticsRecorder.record(
-                    event: Events.tradingLimitsViewed(
-                        tier: currentTier.rawValue
+                } else {
+                    state.featuresList = .init(
+                        features: [],
+                        kycTiers: .init(tiers: [])
                     )
-                )
-            } else {
-                state.featuresList = .init(
-                    features: [],
-                    kycTiers: .init(tiers: [])
-                )
-            }
-            return .none
+                }
+                return .none
 
-        default:
-            return .none
+            default:
+                return .none
+            }
+        }
+        .ifLet(\TradingLimitsState.unlockTradingState, action: /TradingLimitsAction.unlockTrading) {
+            UnlockTradingReducer(
+                dismiss: close,
+                unlock: presentKYCFlow,
+                analyticsRecorder: analyticsRecorder
+            )
+        }
+        Scope(state: \TradingLimitsState.featuresList, action: /TradingLimitsAction.listAction) {
+            LimitedFeaturesListReducer(
+                openURL: openURL,
+                presentKYCFlow: presentKYCFlow
+            )
         }
     }
-)
+}
 
 struct TradingLimitsView: View {
 
@@ -213,8 +207,7 @@ struct TradingLimitsView_Previews: PreviewProvider {
         TradingLimitsView(
             store: .init(
                 initialState: TradingLimitsState(),
-                reducer: tradingLimitsReducer,
-                environment: TradingLimitsEnvironment(
+                reducer: TradingLimitsReducer(
                     close: {},
                     openURL: { _ in },
                     presentKYCFlow: { _ in },

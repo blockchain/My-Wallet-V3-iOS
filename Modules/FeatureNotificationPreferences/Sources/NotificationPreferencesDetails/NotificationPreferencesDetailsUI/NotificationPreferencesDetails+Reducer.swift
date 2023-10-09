@@ -4,18 +4,24 @@ import ComposableArchitecture
 import FeatureNotificationPreferencesDomain
 import Foundation
 
-public let notificationPreferencesDetailsReducer = Reducer<
-    NotificationPreferencesDetailsState,
-    NotificationPreferencesDetailsAction,
-    NotificationPreferencesDetailsEnvironment
-> { _, action, _ in
-    switch action {
-    case .onAppear:
-        return .none
-    case .save:
-        return .none
-    case .binding:
-        return .none
+public struct NotificationPreferencesDetailsReducer: ReducerProtocol {
+
+    public typealias State = NotificationPreferencesDetailsState
+    public typealias Action = NotificationPreferencesDetailsAction
+
+    public init() {}
+
+    public var body: some ReducerProtocol<State,Action> {
+        BindingReducer()
+        Reduce { _, action in
+            switch action {
+            case .onAppear:
+                return .none
+            case .save:
+                return .none
+            case .binding:
+                return .none
+            }
+        }
     }
 }
-.binding()

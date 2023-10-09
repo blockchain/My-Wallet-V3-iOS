@@ -20,7 +20,6 @@ public struct DeletionResultView: View {
             contentView
                 .padding()
         }
-        .whiteNavigationBarStyle()
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -85,3 +84,33 @@ public struct DeletionResultView: View {
         }
     }
 }
+
+#if DEBUG
+
+struct DeletionResult_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            PrimaryNavigationView {
+                DeletionResultView(
+                    store: .init(
+                        initialState: DeletionResultState(success: true),
+                        reducer: DeletionResultReducer.preview
+                    )
+                )
+            }
+            .previewDisplayName("Success")
+
+            PrimaryNavigationView {
+                DeletionResultView(
+                    store: Store(
+                        initialState: DeletionResultState(success: false),
+                        reducer: DeletionResultReducer.preview
+                    )
+                )
+            }
+            .previewDisplayName("Failure")
+        }
+    }
+}
+
+#endif

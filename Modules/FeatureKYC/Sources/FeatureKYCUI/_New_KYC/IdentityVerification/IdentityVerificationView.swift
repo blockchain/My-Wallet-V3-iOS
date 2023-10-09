@@ -10,7 +10,7 @@ private typealias LocalizedStrings = LocalizationConstants.NewKYC.Steps.Identity
 
 struct IdentityVerificationView: View {
 
-    let store: Store<IdentityVerification.State, IdentityVerification.Action>
+    let store: Store<IdentityVerificationState, IdentityVerificationAction>
 
     var body: some View {
         WithViewStore(store) { viewStore in

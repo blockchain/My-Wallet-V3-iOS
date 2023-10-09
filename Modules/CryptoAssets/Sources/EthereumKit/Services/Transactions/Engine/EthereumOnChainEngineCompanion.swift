@@ -51,7 +51,7 @@ public protocol EthereumOnChainEngineCompanionAPI: AnyObject {
     /// Returns Ethereum CryptoValue of the maximum fee that the user may pay.
     func absoluteFee(
         feeLevel: FeeLevel,
-        fees: EthereumTransactionFee,
+        fees: EVMTransactionFee,
         transactionTarget: TransactionTarget,
         cryptoCurrency: CryptoCurrency,
         receiveAddressFactory: ExternalAssetAddressServiceAPI,
@@ -82,7 +82,7 @@ final class EthereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI {
     /// Returns Ethereum CryptoValue of the maximum fee that the user may pay.
     func absoluteFee(
         feeLevel: FeeLevel,
-        fees: EthereumTransactionFee,
+        fees: EVMTransactionFee,
         transactionTarget: TransactionTarget,
         cryptoCurrency: CryptoCurrency,
         receiveAddressFactory: ExternalAssetAddressServiceAPI,

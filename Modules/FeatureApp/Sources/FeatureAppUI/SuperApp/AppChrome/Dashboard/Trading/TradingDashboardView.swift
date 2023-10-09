@@ -12,6 +12,8 @@ import FeatureAppDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
 import FeatureDashboardUI
+import FeatureExternalTradingMigrationDomain
+import FeatureExternalTradingMigrationUI
 import FeatureQuickActions
 import FeatureTopMoversCryptoUI
 import FeatureTransactionUI
@@ -28,7 +30,6 @@ struct TradingDashboardView: View {
     @State private var scrollOffset: CGPoint = .zero
     @State private var isBlocked = false
     @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
-
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
 
     @StateObject private var onboarding = CustodialOnboardingService()
@@ -38,6 +39,7 @@ struct TradingDashboardView: View {
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
+
         init(state: TradingDashboard.State) {
             self.balance = state.tradingBalance
             self.getStartedBuyCryptoAmmounts = state.getStartedBuyCryptoAmmounts
@@ -102,7 +104,6 @@ struct TradingDashboardView: View {
 
     var dashboardView: some View {
         VStack(spacing: Spacing.padding3) {
-
             Group {
                 DashboardMainBalanceView(
                     info: .constant(viewStore.balance),
@@ -127,6 +128,9 @@ struct TradingDashboardView: View {
             if isBlocked {
                 blockedView
             }
+
+            DashboardExternalMigrateView()
+                .padding(.horizontal, Spacing.padding2)
 
             if !viewStore.isZeroBalance {
                 if isRejected {

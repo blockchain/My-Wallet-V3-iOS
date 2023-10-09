@@ -21,24 +21,6 @@ final class WalletConnectSignMessageEngine: TransactionEngine {
     var sourceAccount: BlockchainAccount!
     var transactionTarget: TransactionTarget!
 
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        walletCurrencyService
-            .displayCurrencyPublisher
-            .map { [network] fiatCurrency -> MoneyValuePair in
-                MoneyValuePair(
-                    base: .one(currency: .crypto(network.nativeAsset)),
-                    quote: .one(currency: fiatCurrency)
-                )
-            }
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
-    }
-
     private var didExecute = false
     private var cancellables: Set<AnyCancellable> = []
     private var walletConnectTarget: EthereumSignMessageTarget {
@@ -88,7 +70,9 @@ final class WalletConnectSignMessageEngine: TransactionEngine {
         self.askForRefreshConfirmation = askForRefreshConfirmation
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let notice = TransactionConfirmations.Notice(
             value: String(
                 format: LocalizationConstants.Transaction.Sign.dappRequestWarning,

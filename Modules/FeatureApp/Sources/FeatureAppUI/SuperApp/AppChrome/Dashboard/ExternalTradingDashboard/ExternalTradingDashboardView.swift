@@ -12,6 +12,8 @@ import FeatureAppDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
 import FeatureDashboardUI
+import FeatureExternalTradingMigrationDomain
+import FeatureExternalTradingMigrationUI
 import FeatureQuickActions
 import FeatureTopMoversCryptoUI
 import FeatureTransactionUI
@@ -20,25 +22,30 @@ import MoneyKit
 import SwiftUI
 
 struct ExternalTradingDashboardView: View {
-    @BlockchainApp var app
+    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
 
+    @BlockchainApp var app
     let store: StoreOf<ExternalTradingDashboard>
     @ObservedObject var viewStore: ViewStore<ExternalTradingDashboardView.ViewState, ExternalTradingDashboard.Action>
 
     @State private var scrollOffset: CGPoint = .zero
     @State private var isBlocked = false
     @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
-
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
-
     @StateObject private var onboarding = CustodialOnboardingService()
+
+    @State var externalTradingMigrationState: Tag?
+    var externalTradingMigrationIsPending: Bool {
+        return externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
+    }
 
     struct ViewState: Equatable {
         let balance: BalanceInfo?
         let getStartedBuyCryptoAmmounts: [TradingGetStartedAmmountValue]
         var isZeroBalance: Bool { balance?.balance.isZero ?? false }
         var isBalanceLoaded: Bool { balance != nil }
-        init(state: ExternalTradingDashboard.State) {
+
+        init(state: BindingViewStore<ExternalTradingDashboard.State>) {
             self.balance = state.tradingBalance
             self.getStartedBuyCryptoAmmounts = state.getStartedBuyCryptoAmmounts
         }
@@ -76,8 +83,18 @@ struct ExternalTradingDashboardView: View {
         )
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .bindings {
-            subscribe($isBlocked, to: blockchain.user.is.blocked)
-            subscribe($kycState, to: blockchain.user.account.kyc.state)
+            subscribe(
+                $isBlocked,
+                to: blockchain.user.is.blocked
+            )
+            subscribe(
+                $externalTradingMigrationState,
+                to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state
+            )
+            subscribe(
+                $kycState,
+                to: blockchain.user.account.kyc.state
+            )
         }
         .onAppear {
             onboarding.request()
@@ -103,11 +120,13 @@ struct ExternalTradingDashboardView: View {
     var dashboardView: some View {
         VStack(spacing: Spacing.padding3) {
             Group {
-                DashboardMainBalanceView(
-                    info: .constant(viewStore.balance),
-                    isPercentageHidden: viewStore.isZeroBalance
-                )
-                .padding([.top], Spacing.padding3)
+                if !(externalTradingMigrationIsPending && viewStore.isZeroBalance) {
+                    DashboardMainBalanceView(
+                        info: .constant(viewStore.balance),
+                        isPercentageHidden: viewStore.isZeroBalance
+                    )
+                    .padding([.top], Spacing.padding3)
+                }
 
                 if !isRejected {
                     QuickActionsView(
@@ -119,6 +138,8 @@ struct ExternalTradingDashboardView: View {
             if isBlocked {
                 blockedView
             }
+
+            DashboardExternalMigrateView()
 
             if !viewStore.isZeroBalance {
                 if isRejected {
@@ -145,7 +166,6 @@ struct ExternalTradingDashboardView: View {
         .frame(maxWidth: .infinity)
     }
 
-    private typealias L10n = LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading
     var blockedView: some View {
         AlertCard(
             title: L10n.blockedTitle,

@@ -67,7 +67,7 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
         super.init(rootView: SuperAppContainerChrome(app: app, isSmallDevice: isSmallDevice()))
 
         subscribeFrequentActions(to: app)
-
+        subscribeExitToPin()
         setupNavigationObservers()
         observeDismissals()
     }
@@ -152,6 +152,15 @@ extension SuperAppRootController {
         }
     }
 
+    func subscribeExitToPin() {
+        app.on(blockchain.app.exit.to.pin)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: { [unowned self] _ in
+                exitToPinScreen()
+            })
+            .store(in: &bag)
+    }
+
     func subscribe(to viewStore: ViewStore<LoggedIn.State, LoggedIn.Action>) {
         displaySendCryptoScreen = viewStore.publisher
             .displaySendCryptoScreen
@@ -174,9 +183,8 @@ extension SuperAppRootController {
     }
 }
 
-// not really intuitive tbh
 func isSmallDevice() -> Bool {
-    CGRect.screen.height < 812.0
+    CGRect.screen.size.max <= 667
 }
 
 // MARK: - Frame invalidation

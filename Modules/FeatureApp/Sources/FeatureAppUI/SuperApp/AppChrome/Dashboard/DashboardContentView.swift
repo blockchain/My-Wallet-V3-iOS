@@ -224,18 +224,10 @@ func provideTradingPricesTab(
 func provideNftTab(
     tab: Tab
 ) -> some View {
-    AssetListSceneView(
-        store: .init(
-            initialState: .empty,
-            reducer: assetListReducer,
-            environment: .init(
-                assetProviderService: DIKit.resolve()
-            )
-        )
-    )
-    .tag(tab.ref)
-    .id(tab.ref.description)
-    .accessibilityIdentifier(tab.ref.description)
+    NftAssetListSceneView()
+        .tag(tab.ref)
+        .id(tab.ref.description)
+        .accessibilityIdentifier(tab.ref.description)
 }
 
 func provideTradingEarnTab(
@@ -243,9 +235,9 @@ func provideTradingEarnTab(
     store: StoreOf<DashboardContent>
 ) -> some View {
     EarnDashboardView()
-    .tag(tab.ref)
-    .id(tab.ref.description)
-    .accessibilityIdentifier(tab.ref.description)
+        .tag(tab.ref)
+        .id(tab.ref.description)
+        .accessibilityIdentifier(tab.ref.description)
 }
 
 func provideDefiPricesTab(

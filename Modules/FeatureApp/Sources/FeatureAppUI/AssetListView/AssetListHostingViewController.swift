@@ -32,8 +32,7 @@ public final class AssetListHostingViewController: UIViewController {
             AssetListView(
                 store: .init(
                     initialState: .empty,
-                    reducer: assetListReducer,
-                    environment: .init(
+                    reducer: AssetListReducer(
                         assetProviderService: assetProviderService as! AssetProviderService
                     )
                 )

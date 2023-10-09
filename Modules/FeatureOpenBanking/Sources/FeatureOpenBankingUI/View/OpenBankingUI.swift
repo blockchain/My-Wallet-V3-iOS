@@ -59,21 +59,25 @@ public enum OpenBankingAction: Equatable {
     case bank(BankAction)
 }
 
-public let openBankingReducer = Reducer<OpenBankingState, OpenBankingAction, OpenBankingEnvironment>
-    .combine(
-        institutionListReducer
-            .pullback(
-                state: /OpenBankingState.institutionList,
-                action: /OpenBankingAction.institutionList,
-                environment: \.environment
-            ),
-        bankReducer
-            .pullback(
-                state: /OpenBankingState.bank,
-                action: /OpenBankingAction.bank,
-                environment: \.environment
-            ),
-        .init { _, action, environment in
+public struct OpenBankingReducer: ReducerProtocol {
+
+    public typealias State = OpenBankingState
+    public typealias Action = OpenBankingAction
+
+    let environment: OpenBankingEnvironment
+
+    public init(environment: OpenBankingEnvironment) {
+        self.environment = environment
+    }
+
+    public var body: some ReducerProtocol<State, Action> {
+        Scope(state: /State.institutionList, action: /Action.institutionList) {
+            InstitutionListReducer(environment: environment)
+        }
+        Scope(state: /State.bank, action: /Action.bank) {
+            BankReducer(environment: environment)
+        }
+        Reduce { state, action in
             switch action {
             case .bank(.failure(let error)),
                  .institutionList(.bank(.failure(let error))):
@@ -88,7 +92,8 @@ public let openBankingReducer = Reducer<OpenBankingState, OpenBankingAction, Ope
                 return .none
             }
         }
-    )
+    }
+}
 
 public struct OpenBankingView: View {
 
@@ -99,17 +104,21 @@ public struct OpenBankingView: View {
     }
 
     public var body: some View {
-        SwitchStore(store) {
-            CaseLet(
-                state: /OpenBankingState.institutionList,
-                action: OpenBankingAction.institutionList,
-                then: InstitutionList.init(store:)
-            )
-            CaseLet(
-                state: /OpenBankingState.bank,
-                action: OpenBankingAction.bank,
-                then: BankView.init(store:)
-            )
+        SwitchStore(store) { state in
+            switch state {
+            case .institutionList:
+                CaseLet(
+                    /OpenBankingState.institutionList,
+                     action: OpenBankingAction.institutionList,
+                     then: InstitutionList.init(store:)
+                )
+            case .bank:
+                CaseLet(
+                    /OpenBankingState.bank,
+                     action: OpenBankingAction.bank,
+                     then: BankView.init(store:)
+                )
+            }
         }
     }
 }

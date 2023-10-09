@@ -25,33 +25,35 @@ enum VerifyEmailAction: Equatable {
     case dismissCannotOpenMailAppAlert
 }
 
-struct VerifyEmailEnvironment {
+struct VerifyEmailReducer: ReducerProtocol {
+    
+    typealias State = VerifyEmailState
+    typealias Action = VerifyEmailAction
+
     var openMailApp: () -> EffectTask<Bool>
-}
 
-let verifyEmailReducer = Reducer<
-    VerifyEmailState,
-    VerifyEmailAction,
-    VerifyEmailEnvironment
-> { state, action, environment in
-    switch action {
-    case .tapCheckInbox:
-        return environment.openMailApp()
-            .map { didSucceed in
-                didSucceed ? .dismissCannotOpenMailAppAlert : .presentCannotOpenMailAppAlert
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .tapCheckInbox:
+                return openMailApp()
+                    .map { didSucceed in
+                        didSucceed ? .dismissCannotOpenMailAppAlert : .presentCannotOpenMailAppAlert
+                    }
+
+            case .tapGetEmailNotReceivedHelp:
+                return .none
+
+            case .presentCannotOpenMailAppAlert:
+                // NOTE: this should happen only on Simulators
+                state.cannotOpenMailAppAlert = AlertState(title: .init("Cannot Open Mail App"))
+                return .none
+
+            case .dismissCannotOpenMailAppAlert:
+                state.cannotOpenMailAppAlert = nil
+                return .none
             }
-
-    case .tapGetEmailNotReceivedHelp:
-        return .none
-
-    case .presentCannotOpenMailAppAlert:
-        // NOTE: this should happen only on Simulators
-        state.cannotOpenMailAppAlert = AlertState(title: .init("Cannot Open Mail App"))
-        return .none
-
-    case .dismissCannotOpenMailAppAlert:
-        state.cannotOpenMailAppAlert = nil
-        return .none
+        }
     }
 }
 
@@ -114,8 +116,7 @@ struct VerifyEmailView_Previews: PreviewProvider {
                     initialState: .init(
                         emailAddress: "test@example.com"
                     ),
-                    reducer: verifyEmailReducer,
-                    environment: VerifyEmailEnvironment(
+                    reducer: VerifyEmailReducer(
                         openMailApp: { EffectTask(value: true) }
                     )
                 )
@@ -127,8 +128,7 @@ struct VerifyEmailView_Previews: PreviewProvider {
                     initialState: .init(
                         emailAddress: "test@example.com"
                     ),
-                    reducer: verifyEmailReducer,
-                    environment: VerifyEmailEnvironment(
+                    reducer: VerifyEmailReducer(
                         openMailApp: { EffectTask(value: true) }
                     )
                 )

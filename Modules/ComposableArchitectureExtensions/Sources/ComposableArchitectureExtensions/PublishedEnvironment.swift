@@ -16,22 +16,6 @@ extension PublishedEnvironment {
     }
 }
 
-extension Reducer where Environment: PublishedEnvironment, Environment.State == State, Environment.Action == Action {
-
-    /// Returns a reducer that publishes ``State`` and `Action` to a passthrough subject
-    /// after the reducer runs.
-    public func published() -> Self {
-        Self { state, action, environment in
-            .merge(
-                run(&state, action, environment),
-                .fireAndForget { [state] in
-                    environment.subject.send((state, action))
-                }
-            )
-        }
-    }
-}
-
 extension Publisher where Failure == Never {
 
     public func sink<Root, State, Action>(

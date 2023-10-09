@@ -79,7 +79,7 @@ public struct SwapFromAccountRow: ReducerProtocol {
 
 extension SwapFromAccountRow.State {
     var networkTag: TagView? {
-        guard let networkName, networkName != currency?.name, appMode == .pkw else {
+        guard let networkName, appMode == .pkw else {
             return nil
         }
         return TagView(text: networkName, variant: .outline)

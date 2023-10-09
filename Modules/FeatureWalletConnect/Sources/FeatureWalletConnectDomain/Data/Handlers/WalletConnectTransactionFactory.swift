@@ -1,10 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Coincore
 import Combine
 import CryptoSwift
 import EthereumKit
+import Foundation
 import MoneyKit
-import PlatformKit
 import WalletConnectSign
 
 func txTarget(

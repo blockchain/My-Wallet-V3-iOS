@@ -20,6 +20,7 @@ import FeatureCardPaymentData
 import FeatureCardPaymentUI
 import FeatureDashboardData
 import FeatureDebugUI
+import FeatureExternalTradingMigrationData
 import FeatureInterestData
 import FeatureNotificationPreferencesDomain
 import FeatureSettingsDomain
@@ -56,8 +57,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         bootstrap()
         store = Store(
             initialState: AppState(),
-            reducer: appReducer,
-            environment: .live
+            reducer: AppReducer(environment: .live)
         )
         super.init()
     }
@@ -159,6 +159,8 @@ func defineDependencies() {
         DependencyContainer.unifiedActivityData
         DependencyContainer.featureAnnouncementsData
         DependencyContainer.featureAnnouncementsDomain
+        DependencyContainer.featureExternalTradingMigrationData
+        DependencyContainer.blockchainFeatureAnnouncements
         #if INTERNAL_BUILD
         DependencyContainer.featureDebugUI
         #endif

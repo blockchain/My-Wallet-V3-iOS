@@ -117,46 +117,32 @@ extension InterestTransactionEngine {
 
     public func fiatAmountAndFees(
         from pendingTransaction: PendingTransaction
-    ) -> Single<(amount: FiatValue, fees: FiatValue)> {
-        Single.zip(
-            sourceExchangeRatePair,
-            .just(pendingTransaction.amount.cryptoValue ?? .zero(currency: sourceCryptoCurrency)),
-            .just(pendingTransaction.feeAmount.cryptoValue ?? .zero(currency: sourceCryptoCurrency))
-        )
-        .map { (quote: $0.0.quote.fiatValue ?? .zero(currency: .USD), amount: $0.1, fees: $0.2) }
-        .map { (quote: FiatValue, amount: CryptoValue, fees: CryptoValue) -> (FiatValue, FiatValue) in
-            let fiatAmount = amount.convert(using: quote)
-            let fiatFees = fees.convert(using: quote)
-            return (fiatAmount, fiatFees)
-        }
-        .map { (amount: $0.0, fees: $0.1) }
+    ) -> AnyPublisher<(amount: FiatValue, fees: FiatValue), Error> {
+        let amount = pendingTransaction.amount.cryptoValue ?? .zero(currency: sourceCryptoCurrency)
+        let fees = pendingTransaction.feeAmount.cryptoValue ?? .zero(currency: sourceCryptoCurrency)
+        return sourceExchangeRatePair
+            .tryMap { value in
+                try value.quote.fiatValue.or(throw: "Expected fiat value.")
+            }
+            .map { quote -> (FiatValue, FiatValue) in
+                let fiatAmount = amount.convert(using: quote)
+                let fiatFees = fees.convert(using: quote)
+                return (fiatAmount, fiatFees)
+            }
+            .eraseToAnyPublisher()
     }
 
     // MARK: - Internal
 
-    var sourceExchangeRatePair: Single<MoneyValuePair> {
+    private var sourceExchangeRatePair: AnyPublisher<MoneyValuePair, Error> {
         walletCurrencyService
             .displayCurrency
-            .asSingle()
-            .flatMap { [currencyConversionService, sourceAsset] fiatCurrency -> Single<MoneyValuePair> in
+            .flatMap { [currencyConversionService, sourceAsset] fiatCurrency in
                 currencyConversionService
                     .conversionRate(from: sourceAsset, to: fiatCurrency.currencyType)
-                    .asSingle()
                     .map { MoneyValuePair(base: .one(currency: sourceAsset), quote: $0) }
+                    .eraseError()
             }
-    }
-}
-
-extension InterestTransactionEngine {
-
-    public var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
+            .eraseToAnyPublisher()
     }
 }

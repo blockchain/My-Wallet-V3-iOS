@@ -200,10 +200,6 @@ blockchain:
 										state:
 										+ blockchain.db.type.enum
 										+ blockchain.session.state.stored.value
-											available:
-											complete:
-											not_available:
-											pending:
 								state:
 								+ blockchain.db.type.enum
 									available:
@@ -759,6 +755,10 @@ blockchain:
 		+ blockchain.session.state.shared.value
 			debug:
 			production:
+		exit:
+			to:
+				pin:
+				+ blockchain.ux.type.action
 		fraud:
 			sardine:
 				client:
@@ -1084,6 +1084,9 @@ blockchain:
 					system:
 						failure:
 	namespace:
+		compute:
+			id:
+			+ blockchain.db.type.string
 		language:
 			error:
 			+ blockchain.ux.type.analytics.error
@@ -1235,6 +1238,9 @@ blockchain:
 			locale:
 				language:
 					code:
+					+ blockchain.db.type.string
+					+ blockchain.session.state.shared.value
+					identifier:
 					+ blockchain.db.type.string
 					+ blockchain.session.state.shared.value
 			os:
@@ -2038,6 +2044,10 @@ blockchain:
 			+ blockchain.db.collection
 			+ blockchain.ux.type.story
 			bio:
+				copy:
+					contract:
+					+ blockchain.ui.device.haptic.feedback.impact.medium
+					+ blockchain.ui.type.action
 				visit:
 					website:
 					+ blockchain.ux.type.action
@@ -2327,6 +2337,17 @@ blockchain:
 					+ blockchain.ux.type.task
 				receive:
 				+ blockchain.ux.type.task
+			external:
+				trading:
+					migration:
+					+ blockchain.ux.type.story
+						start:
+						+ blockchain.ux.type.task
+						success:
+							message:
+								dismissed:
+								+ blockchain.db.type.boolean
+								+ blockchain.session.state.stored.value
 			fiat:
 				account:
 					action:
@@ -2790,6 +2811,13 @@ blockchain:
 			+ blockchain.ux.type.story
 				receive:
 				+ blockchain.ux.type.task
+			network:
+				picker:
+				+ blockchain.ux.type.story
+					selected:
+						network:
+						+ blockchain.db.type.any
+						+ blockchain.session.state.value
 			wallet:
 			+ blockchain.db.collection
 				select:

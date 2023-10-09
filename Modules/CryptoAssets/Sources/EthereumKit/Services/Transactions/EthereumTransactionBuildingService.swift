@@ -99,7 +99,7 @@ final class EthereumTransactionBuildingService: EthereumTransactionBuildingServi
 }
 
 extension FeeLevel {
-    public var ethereumFeeLevel: EthereumTransactionFee.FeeLevel {
+    public var ethereumFeeLevel: EVMTransactionFee.FeeLevel {
         switch self {
         case .custom, .none, .regular:
             return .regular

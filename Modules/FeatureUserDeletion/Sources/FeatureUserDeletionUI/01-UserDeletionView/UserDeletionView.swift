@@ -3,7 +3,6 @@ import ComposableArchitecture
 import ComposableNavigation
 import Localization
 import SwiftUI
-import UIComponentsKit
 
 // TODO: Analytics (next release)
 // TODO: acessibility identifiers (next release)
@@ -169,3 +168,18 @@ public struct UserDeletionView: View {
         .padding()
     }
 }
+
+#if DEBUG
+
+struct UserDeletion_Previews: PreviewProvider {
+    static var previews: some View {
+        UserDeletionView(
+            store: Store(
+                initialState: UserDeletionState(),
+                reducer: UserDeletionReducer.preview
+            )
+        )
+    }
+}
+
+#endif

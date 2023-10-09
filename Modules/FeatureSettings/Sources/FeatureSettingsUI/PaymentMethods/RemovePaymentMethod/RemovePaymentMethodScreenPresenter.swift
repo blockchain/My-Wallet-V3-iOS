@@ -60,7 +60,8 @@ final class RemovePaymentMethodScreenPresenter {
         let imageResource: ImageLocation
         switch interactor.data.type {
         case .beneficiary:
-            imageResource = interactor.data.icon.map(ImageLocation.remote(url:)) ?? .local(name: "icon-bank", bundle: .platformUIKit)
+            let placeholder = ImageLocation.local(name: "icon-bank", bundle: .platformUIKit)
+            imageResource = interactor.data.icon.flatMap { .remote(url: $0, fallback: placeholder) } ?? placeholder
         case .card(let type):
             imageResource = type.thumbnail ?? .local(name: "icon-card", bundle: .platformUIKit)
         }

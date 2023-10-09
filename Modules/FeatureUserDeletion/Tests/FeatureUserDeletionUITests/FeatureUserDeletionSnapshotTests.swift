@@ -10,7 +10,6 @@ import XCTest
 
 final class FeatureUserDeletionSnapshotTests: XCTestCase {
 
-    private var environment: UserDeletionEnvironment!
     private var mockEmailVerificationService: MockUserDeletionRepositoryAPI!
     private var analyticsRecorder: MockAnalyticsRecorder!
     private var userDeletionState: UserDeletionState!
@@ -22,25 +21,25 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
 
         mockEmailVerificationService = MockUserDeletionRepositoryAPI()
         analyticsRecorder = MockAnalyticsRecorder()
-        environment = UserDeletionEnvironment(
-            mainQueue: .immediate,
-            userDeletionRepository: mockEmailVerificationService,
-            analyticsRecorder: analyticsRecorder,
-            dismissFlow: {},
-            logoutAndForgetWallet: {}
-        )
     }
 
     override func tearDownWithError() throws {
         mockEmailVerificationService = nil
-        environment = nil
         analyticsRecorder = nil
         try super.tearDownWithError()
     }
 
     func x_test_iPhoneSE_onAppear() throws {
         let view = UserDeletionView(store: buildStore())
-        assert(view, on: .iPhoneSe)
+
+        assertSnapshot(
+            matching: view,
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhoneSe),
+                traits: UITraitCollection(userInterfaceStyle: .light)
+            )
+        )
     }
 
     func x_test_iPhoneXsMax_onAppear() throws {
@@ -48,7 +47,11 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
 
         assertSnapshot(
             matching: view,
-            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhoneXsMax))
+            as: .image(
+                perceptualPrecision: 0.98,
+                layout: .device(config: .iPhoneXsMax),
+                traits: UITraitCollection(userInterfaceStyle: .light)
+            )
         )
     }
 
@@ -63,8 +66,13 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
                 confirmViewState: confirmViewState,
                 route: route
             ),
-            reducer: UserDeletionModule.reducer,
-            environment: environment
+            reducer: UserDeletionReducer(
+                mainQueue: .immediate,
+                userDeletionRepository: mockEmailVerificationService,
+                analyticsRecorder: analyticsRecorder,
+                dismissFlow: {},
+                logoutAndForgetWallet: {}
+            )
         )
     }
 }

@@ -79,6 +79,7 @@ let package = Package(
         .target(
             name: "BitcoinChainKit",
             dependencies: [
+                .target(name: "_BitcoinSDK"),
                 .product(name: "BlockchainNamespace", package: "BlockchainNamespace"),
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "DIKit", package: "DIKit"),
@@ -94,6 +95,7 @@ let package = Package(
             name: "BitcoinKit",
             dependencies: [
                 .target(name: "BitcoinChainKit"),
+                .target(name: "_BitcoinSDK"),
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "FeatureCryptoDomainDomain", package: "FeatureCryptoDomain"),

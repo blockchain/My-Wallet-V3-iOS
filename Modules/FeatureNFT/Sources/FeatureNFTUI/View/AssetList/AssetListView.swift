@@ -3,7 +3,6 @@
 import BlockchainComponentLibrary
 import ComposableArchitecture
 import ComposableNavigation
-import FeatureNFTData
 import FeatureNFTDomain
 import Localization
 import SwiftUI
@@ -175,8 +174,7 @@ struct AssetListView_Previews: PreviewProvider {
         AssetListView(
             store: .init(
                 initialState: .init(),
-                reducer: assetListReducer,
-                environment: .init(
+                reducer: AssetListReducer(
                     assetProviderService: AssetProviderService.previewEmpty
                 )
             )

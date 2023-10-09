@@ -87,103 +87,111 @@ public struct AppDelegateState: Equatable {
 }
 
 /// The reducer of the app delegate that describes the effects for each action.
-let appDelegateReducer = Reducer<
-    AppDelegateState, AppDelegateAction, AppDelegateEnvironment
-> { state, action, environment in
-    switch action {
-    case .didFinishLaunching(let window):
-        state.window = window
-        return .merge(
-            environment.assetsRemoteService
-                .refreshCache
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .fireAndForget(),
+struct AppDelegateReducer: ReducerProtocol {
 
-            .fireAndForget {
-                environment.app.post(event: blockchain.app.did.finish.launching)
-            },
+    typealias State = AppDelegateState
+    typealias Action = AppDelegateAction
 
-            environment.app.publisher(for: blockchain.app.configuration.SSL.pinning.is.enabled, as: Bool.self)
-                .prefix(1)
-                .replaceError(with: true)
-                .filter { $0 }
-                .map(.applyCertificatePinning)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect(),
+    let environment: AppDelegateEnvironment
 
-            setupWalletConnectV2(
-                projectId: InfoDictionaryHelper.value(for: .walletConnectId),
-                configurator: configureWalletConnectV2(projectId:)
-            ),
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .didFinishLaunching(let window):
+                state.window = window
+                return .merge(
+                    environment.assetsRemoteService
+                        .refreshCache
+                        .receive(on: environment.mainQueue)
+                        .eraseToEffect()
+                        .fireAndForget(),
 
-            enableSift(using: environment.siftService)
-        )
-    case .willResignActive:
-        return applyBlurFilter(
-            handler: environment.blurEffectHandler,
-            on: state.window
-        )
-    case .willEnterForeground(let application):
-        return .merge(
-            .cancel(id: BackgroundTaskId()),
-            environment.backgroundAppHandler
-                .appEnteredForeground(application)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .fireAndForget()
-        )
-    case .didEnterBackground(let application):
-        return environment.backgroundAppHandler
-                .appEnteredBackground(application)
-                .receive(on: environment.mainQueue)
-                .eraseToEffect()
-                .cancellable(id: BackgroundTaskId(), cancelInFlight: true)
-                .map { _ in .handleDelayedEnterBackground }
-    case .handleDelayedEnterBackground:
-        return .merge(
-            .fireAndForget {
-                environment.app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
-            },
-            .cancel(id: BackgroundTaskId())
-        )
-    case .didBecomeActive:
-        return .merge(
-            removeBlurFilter(
-                handler: environment.blurEffectHandler,
-                from: state.window
-            ),
-            .fireAndForget {
-                UIApplication.shared.applicationIconBadgeNumber = 0
-            }
-        )
-    case .open(let url):
-        return .none
-    case .didRegisterForRemoteNotifications(let result):
-        return .fireAndForget {
-            switch result {
-            case .success(let data):
-                environment.remoteNotificationTokenReceiver
-                    .appDidRegisterForRemoteNotifications(with: data)
-            case .failure(let error):
-                environment.remoteNotificationTokenReceiver
-                    .appDidFailToRegisterForRemoteNotifications(with: error)
-            }
-        }
-    case .didReceiveRemoteNotification(let application, let userInfo, let completionHandler):
-        return .fireAndForget {
-            environment.remoteNotificationBackgroundReceiver
-                .didReceiveRemoteNotification(
-                    userInfo,
-                    onApplicationState: application.applicationState,
-                    fetchCompletionHandler: completionHandler
+                    .fireAndForget {
+                        environment.app.post(event: blockchain.app.did.finish.launching)
+                    },
+
+                    environment.app.publisher(for: blockchain.app.configuration.SSL.pinning.is.enabled, as: Bool.self)
+                        .prefix(1)
+                        .replaceError(with: true)
+                        .filter { $0 }
+                        .map(.applyCertificatePinning)
+                        .receive(on: environment.mainQueue)
+                        .eraseToEffect(),
+
+                    setupWalletConnectV2(
+                        projectId: InfoDictionaryHelper.value(for: .walletConnectId),
+                        configurator: configureWalletConnectV2(projectId:)
+                    ),
+
+                    enableSift(using: environment.siftService)
                 )
-        }
-    case .userActivity(let userActivity):
-        return .none
-    case .applyCertificatePinning:
-        return .fireAndForget {
-            environment.certificatePinner.pinCertificateIfNeeded()
+            case .willResignActive:
+                return applyBlurFilter(
+                    handler: environment.blurEffectHandler,
+                    on: state.window
+                )
+            case .willEnterForeground(let application):
+                return .merge(
+                    .cancel(id: BackgroundTaskId()),
+                    environment.backgroundAppHandler
+                        .appEnteredForeground(application)
+                        .receive(on: environment.mainQueue)
+                        .eraseToEffect()
+                        .fireAndForget()
+                )
+            case .didEnterBackground(let application):
+                return environment.backgroundAppHandler
+                        .appEnteredBackground(application)
+                        .receive(on: environment.mainQueue)
+                        .eraseToEffect()
+                        .cancellable(id: BackgroundTaskId(), cancelInFlight: true)
+                        .map { _ in .handleDelayedEnterBackground }
+            case .handleDelayedEnterBackground:
+                return .merge(
+                    .fireAndForget {
+                        environment.app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
+                    },
+                    .cancel(id: BackgroundTaskId())
+                )
+            case .didBecomeActive:
+                return .merge(
+                    removeBlurFilter(
+                        handler: environment.blurEffectHandler,
+                        from: state.window
+                    ),
+                    .fireAndForget {
+                        UIApplication.shared.applicationIconBadgeNumber = 0
+                    }
+                )
+            case .open:
+                return .none
+            case .didRegisterForRemoteNotifications(let result):
+                return .fireAndForget {
+                    switch result {
+                    case .success(let data):
+                        environment.remoteNotificationTokenReceiver
+                            .appDidRegisterForRemoteNotifications(with: data)
+                    case .failure(let error):
+                        environment.remoteNotificationTokenReceiver
+                            .appDidFailToRegisterForRemoteNotifications(with: error)
+                    }
+                }
+            case .didReceiveRemoteNotification(let application, let userInfo, let completionHandler):
+                return .fireAndForget {
+                    environment.remoteNotificationBackgroundReceiver
+                        .didReceiveRemoteNotification(
+                            userInfo,
+                            onApplicationState: application.applicationState,
+                            fetchCompletionHandler: completionHandler
+                        )
+                }
+            case .userActivity:
+                return .none
+            case .applyCertificatePinning:
+                return .fireAndForget {
+                    environment.certificatePinner.pinCertificateIfNeeded()
+                }
+            }
         }
     }
 }

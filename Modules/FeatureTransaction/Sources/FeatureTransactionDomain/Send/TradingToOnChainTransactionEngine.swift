@@ -10,22 +10,6 @@ import ToolKit
 
 final class TradingToOnChainTransactionEngine: TransactionEngine {
 
-    /// This might need to be `1:1` as there isn't a transaction pair.
-    var transactionExchangeRatePair: Observable<MoneyValuePair> {
-        .empty()
-    }
-
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
-    }
-
     let walletCurrencyService: FiatCurrencyServiceAPI
     let currencyConversionService: CurrencyConversionServiceAPI
     var askForRefreshConfirmation: AskForRefreshConfirmation!
@@ -178,35 +162,36 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
         }
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        Single.zip(
-            fiatAmountAndFees(from: pendingTransaction),
-            convertAmountIntoTradingCurrency(pendingTransaction.amount)
-        )
-        .map { [sourceTradingAccount, target] fiatAmountAndFees, amountFiatValue -> [TransactionConfirmation] in
-            let totalPlusFee = try pendingTransaction.amount + pendingTransaction.feeAmount
-            let totalPlusFeeFiat = try amountFiatValue.moneyValue + fiatAmountAndFees.fees.moneyValue
-            var confirmations: [TransactionConfirmation] = [
-                TransactionConfirmations.Amount(amount: pendingTransaction.amount, exchange: amountFiatValue),
-                TransactionConfirmations.Source(value: sourceTradingAccount!.label),
-                TransactionConfirmations.Destination(value: target.label),
-                TransactionConfirmations.ProccessingFee(
-                    fee: pendingTransaction.feeAmount,
-                    exchange: fiatAmountAndFees.fees.moneyValue
-                ),
-                TransactionConfirmations.SendTotal(
-                    total: totalPlusFee,
-                    exchange: totalPlusFeeFiat
-                )
-            ]
-            if TransactionMemoSupport.supportsMemo(sourceTradingAccount!.currencyType) {
-                confirmations.append(TransactionConfirmations.Memo(textMemo: target.memo))
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
+        convertAmountIntoTradingCurrency(pendingTransaction.amount)
+            .zip(convertAmountIntoTradingCurrency(pendingTransaction.feeAmount))
+            .tryMap { [sourceTradingAccount, target] fiatAmount, fiatFees -> [TransactionConfirmation] in
+                let totalPlusFee = try pendingTransaction.amount + pendingTransaction.feeAmount
+                let totalPlusFeeFiat = try fiatAmount.moneyValue + fiatFees.moneyValue
+                var confirmations: [TransactionConfirmation] = [
+                    TransactionConfirmations.Amount(amount: pendingTransaction.amount, exchange: fiatAmount),
+                    TransactionConfirmations.Source(value: sourceTradingAccount!.label),
+                    TransactionConfirmations.Destination(value: target.label),
+                    TransactionConfirmations.ProccessingFee(
+                        fee: pendingTransaction.feeAmount,
+                        exchange: fiatFees.moneyValue
+                    ),
+                    TransactionConfirmations.SendTotal(
+                        total: totalPlusFee,
+                        exchange: totalPlusFeeFiat
+                    )
+                ]
+                if TransactionMemoSupport.supportsMemo(sourceTradingAccount!.currencyType) {
+                    confirmations.append(TransactionConfirmations.Memo(textMemo: target.memo))
+                }
+                return confirmations
             }
-            return confirmations
-        }
-        .map { confirmations in
-            pendingTransaction.update(confirmations: confirmations)
-        }
+            .map { confirmations in
+                pendingTransaction.update(confirmations: confirmations)
+            }
+            .eraseToAnyPublisher()
     }
 
     func validateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
@@ -241,36 +226,28 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
 
     // MARK: - Private Functions
 
-    private func fiatAmountAndFees(
-        from pendingTransaction: PendingTransaction
-    ) -> Single<(amount: FiatValue, fees: FiatValue)> {
-        Single.zip(
-            convertAmountIntoTradingCurrency(pendingTransaction.amount),
-            convertAmountIntoTradingCurrency(pendingTransaction.feeAmount)
-        )
-        .map { (amount: $0.0, fees: $0.1) }
-    }
-
-    private var fiatExchangeRatePairsSingle: Single<TransactionMoneyValuePairs> {
-        fiatExchangeRatePairs
-            .take(1)
-            .asSingle()
-    }
-
-    private func convertAmountIntoTradingCurrency(_ amount: MoneyValue) -> Single<FiatValue> {
-        fiatExchangeRatePairsSingle
-            .map { moneyPair in
-                guard !amount.isFiat else {
-                    return amount.fiatValue!
-                }
-                return try amount
+    private func convertAmountIntoTradingCurrency(_ amount: MoneyValue) -> AnyPublisher<FiatValue, Error> {
+        guard amount.isFiat.isNo else {
+            return .just(amount.fiatValue!)
+        }
+        return sourceExchangeRatePair
+            .map { pair -> TransactionMoneyValuePairs in
+                TransactionMoneyValuePairs(
+                    source: pair,
+                    destination: pair
+                )
+            }
+            .tryMap { moneyPair in
+                try amount
                     .convert(using: moneyPair.source)
                     .displayableRounding(roundingMode: .bankers)
                     .fiatValue!
             }
+            .prefix(1)
+            .eraseToAnyPublisher()
     }
 
-    private var sourceExchangeRatePair: Observable<MoneyValuePair> {
+    private var sourceExchangeRatePair: AnyPublisher<MoneyValuePair, Error> {
         let cryptoCurrency = transactionTarget.currencyType
         return walletCurrencyService
             .tradingCurrencyPublisher
@@ -285,7 +262,8 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
                         )
                     }
             }
-            .asObservable()
+            .eraseError()
+            .eraseToAnyPublisher()
     }
 }
 

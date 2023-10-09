@@ -85,9 +85,8 @@ final class KYCVerifyIdentityController: KYCBaseViewController, ProgressableView
     private func embedContentView() {
         let view = IdentityVerificationView(
             store: Store(
-                initialState: IdentityVerification.State(),
-                reducer: IdentityVerification.reducer,
-                environment: IdentityVerification.Environment(
+                initialState: IdentityVerificationState(),
+                reducer: IdentityVerificationReducer(
                     onCompletion: startVerification,
                     supportedDocumentTypes: supportedDocumentTypes,
                     analyticsRecorder: analyticsRecorder,

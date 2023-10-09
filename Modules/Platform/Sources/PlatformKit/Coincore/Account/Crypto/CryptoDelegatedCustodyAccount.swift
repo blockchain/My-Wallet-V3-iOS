@@ -7,7 +7,8 @@ import Foundation
 import MoneyKit
 import ToolKit
 
-public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAccount {
+public final class CryptoDelegatedCustodyAccount: CryptoNonCustodialAccount {
+
     public let asset: CryptoCurrency
 
     public let isDefault: Bool = true
@@ -103,6 +104,10 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
         self.asset = delegatedCustodyAccount.coin
     }
 
+    public func createTransactionEngine() -> Any {
+        fatalError("DSC TransactionEngine constructor doesn't rely on this interface.")
+    }
+
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .buy,
@@ -111,14 +116,12 @@ public final class CryptoDelegatedCustodyAccount: CryptoAccount, NonCustodialAcc
              .interestWithdraw,
              .stakingDeposit,
              .stakingWithdraw,
-             .sell,
              .sign,
-             .swap,
              .withdraw,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
             return .just(false)
-        case .send:
+        case .send, .swap, .sell:
             return balance
                 .map(\.isPositive)
                 .eraseToAnyPublisher()

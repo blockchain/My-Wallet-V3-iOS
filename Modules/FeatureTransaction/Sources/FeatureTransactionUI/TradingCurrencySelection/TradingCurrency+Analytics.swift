@@ -16,23 +16,26 @@ extension AnalyticsEvents.New {
     }
 }
 
-extension Reducer where Action == TradingCurrency.Action, Environment == TradingCurrency.Environment {
+struct TradingCurrencyAnalyticsReducer: ReducerProtocol {
+    
+    typealias State = TradingCurrency.State
+    typealias Action = TradingCurrency.Action
 
-    func analytics() -> Reducer<State, Action, Environment> {
-        combined(
-            with: Reducer { _, action, environment in
-                switch action {
-                case .didSelect(let currency):
-                    return .fireAndForget {
-                        environment.analyticsRecorder.record(
-                            event: AnalyticsEvents.New.TradingCurrency.fiatCurrencySelected(currency: currency.code)
-                        )
-                    }
+    let analyticsRecorder: AnalyticsEventRecorderAPI
 
-                default:
-                    return .none
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { _, action in
+            switch action {
+            case .didSelect(let currency):
+                return .fireAndForget {
+                    analyticsRecorder.record(
+                        event: AnalyticsEvents.New.TradingCurrency.fiatCurrencySelected(currency: currency.code)
+                    )
                 }
+
+            default:
+                return .none
             }
-        )
+        }
     }
 }

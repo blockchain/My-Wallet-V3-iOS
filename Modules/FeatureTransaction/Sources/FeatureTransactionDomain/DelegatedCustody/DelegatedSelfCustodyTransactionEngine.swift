@@ -9,7 +9,7 @@ import RxSwift
 import RxToolKit
 import ToolKit
 
-final class DelegatedSelfCustodyTransactionEngine: TransactionEngine {
+final class DelegatedSelfCustodyTransactionEngine: OnChainTransactionEngine {
 
     let currencyConversionService: CurrencyConversionServiceAPI
     let walletCurrencyService: FiatCurrencyServiceAPI
@@ -56,7 +56,9 @@ final class DelegatedSelfCustodyTransactionEngine: TransactionEngine {
         defaultValidateAmount(pendingTransaction: pendingTransaction)
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
         Publishers.Zip3(
             delegatedCustodyTransactionOutput(pendingTransaction: pendingTransaction),
             sourceExchangeRatePair,
@@ -98,7 +100,8 @@ final class DelegatedSelfCustodyTransactionEngine: TransactionEngine {
             pendingTransaction.setDelegatedCustodyTransactionOutput(output)
             return pendingTransaction
         }
-        .asSingle()
+        .prefix(1)
+        .eraseToAnyPublisher()
     }
 
     // MARK: - Private Functions

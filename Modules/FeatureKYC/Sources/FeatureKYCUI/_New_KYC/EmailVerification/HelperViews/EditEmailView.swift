@@ -30,64 +30,70 @@ enum EditEmailAction: Equatable {
     case save
 }
 
-struct EditEmailEnvironment {
+struct EditEmailReducer: ReducerProtocol {
+    
+    typealias State = EditEmailState
+    typealias Action = EditEmailAction
+
     let emailVerificationService: EmailVerificationServiceAPI
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let validateEmail: (String) -> Bool = { $0.isEmail }
-}
+    
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .didAppear:
+                state.isEmailValid = validateEmail(state.emailAddress)
+                return .none
 
-let editEmailReducer = Reducer<EditEmailState, EditEmailAction, EditEmailEnvironment> { state, action, environment in
-    switch action {
-    case .didAppear:
-        state.isEmailValid = environment.validateEmail(state.emailAddress)
-        return .none
+            case .didChangeEmailAddress(let emailAddress):
+                state.emailAddress = emailAddress
+                state.isEmailValid = validateEmail(emailAddress)
+                return .none
 
-    case .didChangeEmailAddress(let emailAddress):
-        state.emailAddress = emailAddress
-        state.isEmailValid = environment.validateEmail(emailAddress)
-        return .none
-
-    case .save:
-        guard state.isEmailValid else {
-            return .none
-        }
-        state.savingEmailAddress = true
-        return environment.emailVerificationService.updateEmailAddress(to: state.emailAddress)
-            .receive(on: environment.mainQueue)
-            .catchToEffect()
-            .map { result in
-                switch result {
-                case .success:
-                    return .didReceiveSaveResponse(.success(0))
-                case .failure(let error):
-                    return .didReceiveSaveResponse(.failure(error))
+            case .save:
+                guard state.isEmailValid else {
+                    return .none
                 }
+                state.savingEmailAddress = true
+                return emailVerificationService.updateEmailAddress(to: state.emailAddress)
+                    .receive(on: mainQueue)
+                    .catchToEffect()
+                    .map { result in
+                        switch result {
+                        case .success:
+                            return .didReceiveSaveResponse(.success(0))
+                        case .failure(let error):
+                            return .didReceiveSaveResponse(.failure(error))
+                        }
+                    }
+
+            case .didReceiveSaveResponse(let response):
+                state.savingEmailAddress = false
+                switch response {
+                case .success:
+                    return .none
+
+                case .failure:
+                    state.saveEmailFailureAlert = AlertState(
+                        title: TextState(L10n.GenericError.title),
+                        message: TextState(L10n.EditEmail.couldNotUpdateEmailAlertMessage),
+                        primaryButton: .default(
+                            TextState(L10n.GenericError.retryButtonTitle),
+                            action: .send(.save)
+                        ),
+                        secondaryButton: .cancel(
+                            TextState(L10n.GenericError.cancelButtonTitle)
+                        )
+                    )
+                    return .none
+                }
+
+            case .dismissSaveEmailFailureAlert:
+                state.saveEmailFailureAlert = nil
+                return .none
             }
-
-    case .didReceiveSaveResponse(let response):
-        state.savingEmailAddress = false
-        switch response {
-        case .success:
-            return .none
-
-        case .failure:
-            state.saveEmailFailureAlert = AlertState(
-                title: TextState(L10n.GenericError.title),
-                message: TextState(L10n.EditEmail.couldNotUpdateEmailAlertMessage),
-                primaryButton: .default(
-                    TextState(L10n.GenericError.retryButtonTitle),
-                    action: .send(.save)
-                ),
-                secondaryButton: .cancel(
-                    TextState(L10n.GenericError.cancelButtonTitle)
-                )
-            )
-            return .none
         }
-
-    case .dismissSaveEmailFailureAlert:
-        state.saveEmailFailureAlert = nil
-        return .none
     }
 }
 
@@ -177,8 +183,7 @@ struct EditEmailView_Previews: PreviewProvider {
         EditEmailView(
             store: .init(
                 initialState: .init(emailAddress: ""),
-                reducer: editEmailReducer,
-                environment: EditEmailEnvironment(
+                reducer: EditEmailReducer(
                     emailVerificationService: NoOpEmailVerificationService(),
                     mainQueue: .main
                 )
@@ -189,8 +194,7 @@ struct EditEmailView_Previews: PreviewProvider {
         EditEmailView(
             store: .init(
                 initialState: .init(emailAddress: "invalid.com"),
-                reducer: editEmailReducer,
-                environment: EditEmailEnvironment(
+                reducer: EditEmailReducer(
                     emailVerificationService: NoOpEmailVerificationService(),
                     mainQueue: .main
                 )
@@ -201,8 +205,7 @@ struct EditEmailView_Previews: PreviewProvider {
         EditEmailView(
             store: .init(
                 initialState: .init(emailAddress: "test@example.com"),
-                reducer: editEmailReducer,
-                environment: EditEmailEnvironment(
+                reducer: EditEmailReducer(
                     emailVerificationService: NoOpEmailVerificationService(),
                     mainQueue: .main
                 )
@@ -217,8 +220,7 @@ struct EditEmailView_Previews: PreviewProvider {
                     state.savingEmailAddress = true
                     return state
                 }(),
-                reducer: editEmailReducer,
-                environment: EditEmailEnvironment(
+                reducer: EditEmailReducer(
                     emailVerificationService: NoOpEmailVerificationService(),
                     mainQueue: .main
                 )

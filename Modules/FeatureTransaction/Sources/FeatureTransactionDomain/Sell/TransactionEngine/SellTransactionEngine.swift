@@ -33,34 +33,20 @@ extension SellTransactionEngine {
 
     // MARK: - TransactionEngine
 
-    func validateUpdateAmount(_ amount: MoneyValue) -> Single<MoneyValue> {
-        sourceExchangeRatePair.map { exchangeRate -> MoneyValue in
-            if amount.isFiat {
-                return amount.convert(using: exchangeRate.inverseQuote.quote)
-            } else {
-                return amount
-            }
-        }
-    }
-
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .map { source -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: source,
-                    destination: source.inverseExchangeRate
-                )
-            }
-            .asObservable()
-    }
-
-    var sourceExchangeRatePair: Single<MoneyValuePair> {
+    func validateUpdateAmount(_ amount: MoneyValue) -> AnyPublisher<MoneyValue, Never> {
         transactionExchangeRatePair
-            .take(1)
-            .asSingle()
+            .prefix(1)
+            .map { exchangeRate -> MoneyValue in
+                if amount.isFiat {
+                    return amount.convert(using: exchangeRate.inverseQuote.quote)
+                } else {
+                    return amount
+                }
+            }
+            .eraseToAnyPublisher()
     }
 
-    var transactionExchangeRatePair: Observable<MoneyValuePair> {
+    private var transactionExchangeRatePair: AnyPublisher<MoneyValuePair, Never> {
         app.publisher(for: blockchain.ux.transaction.source.target.quote.price)
             .decode(BrokerageQuote.Price.self)
             .compactMap { [target] quote -> MoneyValue? in
@@ -69,11 +55,10 @@ extension SellTransactionEngine {
             .map { [sourceAsset] rate -> MoneyValuePair in
                 MoneyValuePair(base: .one(currency: sourceAsset), exchangeRate: rate)
             }
-            .asObservable()
-            .share(replay: 1, scope: .whileConnected)
+            .eraseToAnyPublisher()
     }
 
-    func update(price: BrokerageQuote.Price, on pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func update(price: BrokerageQuote.Price, on pendingTransaction: PendingTransaction) -> AnyPublisher<PendingTransaction, Error> {
         updateLimits(
             pendingTransaction: pendingTransaction,
             quote: price
@@ -84,7 +69,7 @@ extension SellTransactionEngine {
     func updateLimits(
         pendingTransaction: PendingTransaction,
         quote: BrokerageQuote
-    ) -> Single<PendingTransaction> {
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let limitsPublisher = transactionLimitsService.fetchLimits(
             source: LimitsAccount(
                 currency: sourceAsset.currencyType,
@@ -97,18 +82,19 @@ extension SellTransactionEngine {
             product: .sell(orderDirection)
         )
         return limitsPublisher
-            .asSingle()
-            .map { transactionLimits -> PendingTransaction in
+            .prefix(1)
+            .tryMap { transactionLimits -> PendingTransaction in
                 var pendingTransaction = pendingTransaction
                 pendingTransaction.limits = try transactionLimits.update(with: quote)
                 return pendingTransaction
             }
+            .eraseToAnyPublisher()
     }
 
     func updateLimits(
         pendingTransaction: PendingTransaction,
         quote: BrokerageQuote.Price
-    ) -> Single<PendingTransaction> {
+    ) -> AnyPublisher<PendingTransaction, Error> {
         let limitsPublisher = transactionLimitsService.fetchLimits(
             source: LimitsAccount(
                 currency: sourceAsset.currencyType,
@@ -121,12 +107,13 @@ extension SellTransactionEngine {
             product: .sell(orderDirection)
         )
         return limitsPublisher
-            .asSingle()
-            .map { transactionLimits -> PendingTransaction in
+            .prefix(1)
+            .tryMap { transactionLimits -> PendingTransaction in
                 var pendingTransaction = pendingTransaction
                 pendingTransaction.limits = try transactionLimits.update(with: quote)
                 return pendingTransaction
             }
+            .eraseToAnyPublisher()
     }
 
     func clearConfirmations(pendingTransaction: PendingTransaction) -> PendingTransaction {
@@ -159,7 +146,7 @@ extension SellTransactionEngine {
         .just(pendingTransaction)
     }
 
-    func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    func doRefreshConfirmations(pendingTransaction: PendingTransaction) -> AnyPublisher<PendingTransaction, Error> {
         doBuildConfirmations(pendingTransaction: pendingTransaction)
     }
 

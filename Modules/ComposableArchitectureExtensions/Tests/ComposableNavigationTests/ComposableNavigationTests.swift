@@ -8,26 +8,27 @@ final class ComposableNavigationTests: XCTestCase {
     func test_route() throws {
 
         var state = TestState()
+        let testReducer = TestReducer()
 
-        _ = testReducer.run(&state, .navigate(to: .test), ())
+        _ = testReducer.reduce(into: &state, action: .navigate(to: .test))
         XCTAssertEqual(state.route?.action, .navigateTo)
         XCTAssertEqual(state.route?.route, .test)
 
-        _ = testReducer.run(&state, .enter(into: .story), ())
+        _ = testReducer.reduce(into: &state, action: .enter(into: .story))
         XCTAssertEqual(state.route?.action, .enterInto(.default))
         XCTAssertEqual(state.route?.route, .story)
 
-        _ = testReducer.run(&state, .dismiss(), ())
+        _ = testReducer.reduce(into: &state, action: .dismiss())
         XCTAssertNil(state.route)
 
-        _ = testReducer.run(&state, .enter(into: .story, context: .fullScreen), ())
+        _ = testReducer.reduce(into: &state, action: .enter(into: .story, context: .fullScreen))
         XCTAssertEqual(state.route?.action, .enterInto(.fullScreen))
         XCTAssertEqual(state.route?.route, .story)
 
-        _ = testReducer.run(&state, .dismiss(), ())
+        _ = testReducer.reduce(into: &state, action: .dismiss())
         XCTAssertNil(state.route)
 
-        _ = testReducer.run(&state, .enter(into: .context("Context")), ())
+        _ = testReducer.reduce(into: &state, action: .enter(into: .context("Context")))
         XCTAssertEqual(state.route?.action, .enterInto(.default))
         XCTAssertEqual(state.route?.route, .context("Context"))
     }
@@ -52,10 +53,18 @@ enum TestRoute: NavigationRoute {
     }
 }
 
-let testReducer = Reducer<TestState, TestAction, Void> { state, action, _ in
-    switch action {
-    case .route(let route):
-        state.route = route
-        return .none
+struct TestReducer: ReducerProtocol {
+
+    typealias State = TestState
+    typealias Action = TestAction
+
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .route(let route):
+                state.route = route
+                return .none
+            }
+        }
     }
 }

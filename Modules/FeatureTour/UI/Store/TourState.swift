@@ -3,9 +3,9 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct TourState: Equatable {
+public struct TourState: Equatable {
 
-    enum Step: Hashable {
+    public enum Step: Hashable {
         case brokerage
         case earn
         case keys
@@ -14,9 +14,19 @@ struct TourState: Equatable {
 
     private let scrollEffectTransitionDistance: CGFloat = 300
 
-    var items = IdentifiedArrayOf<Price>()
-    var scrollOffset: CGFloat = 0
-    var visibleStep: Step = .brokerage
+    var items: IdentifiedArrayOf<Price>
+    var scrollOffset: CGFloat
+    var visibleStep: Step
+
+    public init(
+        items: IdentifiedArrayOf<Price> = [],
+        scrollOffset: CGFloat = 0,
+        visibleStep: TourState.Step = .brokerage
+    ) {
+        self.items = items
+        self.scrollOffset = scrollOffset
+        self.visibleStep = visibleStep
+    }
 
     var gradientBackgroundOpacity: Double {
         switch scrollOffset {

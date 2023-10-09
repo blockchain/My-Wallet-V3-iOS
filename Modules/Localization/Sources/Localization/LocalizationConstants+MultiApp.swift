@@ -248,6 +248,56 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
         comment: "Blocked: Message"
     )
 
+    public static let bakktStartMigrationWithAssetsTitle = NSLocalizedString(
+        "Before you continue trading",
+        comment: "Bakkt Migration Title: Before you continue trading"
+    )
+
+    public static let bakktStartMigrationWithAssetsMessage = NSLocalizedString(
+        "We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto.",
+        comment: "Bakkt Migration Message: We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto."
+    )
+
+    public static let bakktStartMigrationNoAssetsTitle = NSLocalizedString(
+        "Important information",
+        comment: "Bakkt Migration Title: Before you continue trading"
+    )
+
+    public static let bakktStartMigrationNoAssetsMessage = NSLocalizedString(
+        "We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, review our new Terms of Services to start trading crypto.",
+        comment: "Bakkt Migration Message: We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, review our new Terms of Services to start trading crypto."
+    )
+
+    public static let bakktUpgradeAccountButton = NSLocalizedString(
+        "Upgrade account",
+        comment: "Bakkt Migration CTA: Upgrade account"
+    )
+
+    public static let bakktReviewTermsButton = NSLocalizedString(
+        "Review Terms of Service",
+        comment: "Bakkt Migration CTA: Review Terms of Service"
+    )
+
+    public static let bakktMigrationInProgressTitle = NSLocalizedString(
+        "Migration in progress",
+        comment: "Blocked: Title"
+    )
+
+    public static let bakktMigrationMessage = NSLocalizedString(
+        "We are upgrading your account. This process might take up to 24 hours.",
+        comment: "Blocked: We are upgrading your account. This process might take up to 24 hours."
+    )
+
+    public static let bakktMigrationSuccessAnnouncementCardTitle = NSLocalizedString(
+        "Account sucessfully upgraded",
+        comment: "Bakkt Migration: Account sucessfully upgraded"
+    )
+
+    public static let bakktMigrationSuccessAnnouncementCardMessage = NSLocalizedString(
+        "You're all set up! 🥳\nContinue trading today",
+        comment: "Bakkt Migration: You're all set up! 🥳\nContinue trading today"
+    )
+
     public static let blockedContactSupport = NSLocalizedString(
         "Contact Support",
         comment: "Blocked: Contact Support"

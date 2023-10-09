@@ -19,19 +19,6 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
     let walletCurrencyService: FiatCurrencyServiceAPI
 
     var askForRefreshConfirmation: AskForRefreshConfirmation!
-
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .asSingle()
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
-    }
-
     var sourceAccount: BlockchainAccount!
     var transactionTarget: TransactionTarget!
 
@@ -40,7 +27,7 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
     private let ethereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI
     private let receiveAddressFactory: ExternalAssetAddressServiceAPI
     private let erc20Token: AssetModel
-    private let feeCache: CachedValue<EthereumTransactionFee>
+    private let feeCache: CachedValue<EVMTransactionFee>
     private let feeService: EthereumKit.EthereumFeeServiceAPI
     private let transactionBuildingService: EthereumTransactionBuildingServiceAPI
     private let ethereumTransactionDispatcher: EthereumTransactionDispatcherAPI
@@ -84,7 +71,7 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
                 schedulerIdentifier: "ERC20OnChainTransactionEngine"
             )
         )
-        feeCache.setFetch(weak: self) { (self) -> Single<EthereumTransactionFee> in
+        feeCache.setFetch(weak: self) { (self) -> Single<EVMTransactionFee> in
             self.feeService
                 .fees(network: self.erc20CryptoAccount.network, cryptoCurrency: self.sourceCryptoCurrency)
                 .asSingle()
@@ -128,8 +115,10 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
             .asSingle()
     }
 
-    func doBuildConfirmations(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
-        doBuildConfirmationsPublisher(pendingTransaction: pendingTransaction).asSingle()
+    func doBuildConfirmations(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
+        doBuildConfirmationsPublisher(pendingTransaction: pendingTransaction)
     }
 
     private func doBuildConfirmationsPublisher(

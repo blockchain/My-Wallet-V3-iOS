@@ -69,10 +69,7 @@ struct WalletConnectAuthView: View {
                     )
                 }
                 HStack(spacing: Spacing.padding2) {
-                    request.accountInfo
-                        .network
-                        .nativeAsset
-                        .logo()
+                    request.accountInfo.network.logo()
                     VStack(alignment: .leading, spacing: Spacing.textSpacing) {
                         Text(request.accountInfo.label)
                             .typography(.paragraph2)

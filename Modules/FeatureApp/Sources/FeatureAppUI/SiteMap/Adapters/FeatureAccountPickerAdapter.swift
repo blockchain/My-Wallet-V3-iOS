@@ -306,8 +306,7 @@ class FeatureAccountPickerControllableAdapter: BaseScreenViewController {
     @ViewBuilder func withdrawalLocksView() -> some View {
         let store = Store<WithdrawalLocksState, WithdrawalLocksAction>(
             initialState: .init(),
-            reducer: withdrawalLocksReducer,
-            environment: WithdrawalLocksEnvironment { _ in }
+            reducer: WithdrawalLocksReducer { _ in }
         )
         WithdrawalLocksView(store: store)
     }
@@ -460,7 +459,10 @@ extension AccountPickerCellItem {
                 id: identity,
                 title: account.label,
                 description: LocalizationConstants.accountEndingIn + " \(account.accountNumber)",
-                capabilities: account.data.capabilities
+                capabilities: .init(
+                    canWithdrawal: account.data.capabilities?.withdrawal?.enabled,
+                    canDeposit: account.data.capabilities?.deposit?.enabled
+                )
             )
             return .linkedBankAccount(model)
 
@@ -477,7 +479,10 @@ extension AccountPickerCellItem {
                 ),
                 badge: account.logoResource,
                 badgeBackground: Color(account.logoBackgroundColor),
-                capabilities: account.capabilities
+                capabilities: .init(
+                    canWithdrawal: account.capabilities?.withdrawal?.enabled,
+                    canDeposit: account.capabilities?.deposit?.enabled
+                )
             )
             return .paymentMethodAccount(model)
 

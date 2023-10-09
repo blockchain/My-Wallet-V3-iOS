@@ -11,6 +11,7 @@ import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureDashboardDomain
 import FeatureDashboardUI
+import FeatureExternalTradingMigrationDomain
 import FeatureTopMoversCryptoUI
 import FeatureWithdrawalLocksDomain
 import Foundation
@@ -147,6 +148,7 @@ public struct ExternalTradingDashboard: ReducerProtocol {
                 default:
                     return .none
                 }
+
             case .binding:
                 return .none
             case .activityAction(let action):

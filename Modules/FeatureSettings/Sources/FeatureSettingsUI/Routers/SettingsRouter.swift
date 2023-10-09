@@ -346,8 +346,7 @@ final class SettingsRouter: SettingsRouterAPI {
         let presenter = topViewController
         let notificationCenterView = FeatureNotificationPreferencesView(store: .init(
             initialState: .init(viewState: .loading),
-            reducer: featureNotificationPreferencesMainReducer,
-            environment: NotificationPreferencesEnvironment(
+            reducer: FeatureNotificationPreferencesMainReducer(
                 mainQueue: .main,
                 notificationPreferencesRepository: DIKit.resolve(),
                 analyticsRecorder: DIKit.resolve()
@@ -365,8 +364,7 @@ final class SettingsRouter: SettingsRouterAPI {
         let presenter = topViewController
         let referralView = ReferFriendView(store: .init(
             initialState: .init(referralInfo: referral),
-            reducer: ReferFriendModule.reducer,
-            environment: .init(
+            reducer: ReferFriendReducer(
                 mainQueue: .main,
                 analyticsRecorder: DIKit.resolve()
             )
@@ -409,8 +407,7 @@ final class SettingsRouter: SettingsRouterAPI {
         }
         let view = UserDeletionView(store: .init(
             initialState: UserDeletionState(),
-            reducer: UserDeletionModule.reducer,
-            environment: .init(
+            reducer: UserDeletionReducer(
                 mainQueue: .main,
                 userDeletionRepository: resolve(),
                 analyticsRecorder: resolve(),

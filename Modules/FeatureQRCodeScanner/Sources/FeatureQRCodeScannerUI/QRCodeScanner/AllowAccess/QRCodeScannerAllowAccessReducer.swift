@@ -21,51 +21,53 @@ struct AllowAccessState: Equatable {
     var showWalletConnectRow: Bool
 }
 
-struct AllowAccessEnvironment {
+struct AllowAccessReducer: ReducerProtocol {
+
+    typealias State = AllowAccessState
+    typealias Action = AllowAccessAction
+
     let allowCameraAccess: () -> Void
     let cameraAccessDenied: () -> Bool
     let dismiss: () -> Void
     let showCameraDeniedAlert: () -> Void
     let showsWalletConnectRow: () -> AnyPublisher<Bool, Never>
     let openWalletConnectUrl: (String) -> Void
-}
 
-let qrScannerAllowAccessReducer = Reducer<
-    AllowAccessState,
-    AllowAccessAction,
-    AllowAccessEnvironment
-> { state, action, environment in
-    switch action {
-    case .onAppear:
-        return environment.showsWalletConnectRow()
-            .eraseToEffect()
-            .map(AllowAccessAction.showsWalletConnectRow)
-    case .showsWalletConnectRow(let display):
-        state.showWalletConnectRow = display
-        return .none
-    case .allowCameraAccess:
-        guard !environment.cameraAccessDenied() else {
-            return .concatenate(
-                EffectTask(value: .dismiss),
-                EffectTask(value: .showCameraDeniedAlert)
-            )
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
+                return showsWalletConnectRow()
+                    .eraseToEffect()
+                    .map(AllowAccessAction.showsWalletConnectRow)
+            case .showsWalletConnectRow(let display):
+                state.showWalletConnectRow = display
+                return .none
+            case .allowCameraAccess:
+                guard !cameraAccessDenied() else {
+                    return .concatenate(
+                        EffectTask(value: .dismiss),
+                        EffectTask(value: .showCameraDeniedAlert)
+                    )
+                }
+                return .merge(
+                    .fireAndForget {
+                        allowCameraAccess()
+                    },
+                    EffectTask(value: .dismiss)
+                )
+            case .showCameraDeniedAlert:
+                showCameraDeniedAlert()
+                return .none
+            case .dismiss:
+                dismiss()
+                return .none
+            case .openWalletConnectUrl:
+                openWalletConnectUrl(
+                    AllowAccessState.walletConnectArticleUrl
+                )
+                return .none
+            }
         }
-        return .merge(
-            .fireAndForget {
-                environment.allowCameraAccess()
-            },
-            EffectTask(value: .dismiss)
-        )
-    case .showCameraDeniedAlert:
-        environment.showCameraDeniedAlert()
-        return .none
-    case .dismiss:
-        environment.dismiss()
-        return .none
-    case .openWalletConnectUrl:
-        environment.openWalletConnectUrl(
-            AllowAccessState.walletConnectArticleUrl
-        )
-        return .none
     }
 }

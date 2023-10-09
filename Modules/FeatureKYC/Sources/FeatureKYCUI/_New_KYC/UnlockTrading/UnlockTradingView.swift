@@ -23,11 +23,11 @@ public struct SiteMap {
     ) throws -> some View {
         switch ref {
         case blockchain.ux.kyc.trading.unlock.more:
-            try UnlockTradingView(
-                store: .init(
-                    initialState: UnlockTradingState(currentUserTier: app.state.get(blockchain.user.is.verified) ? .verified : .unverified),
-                    reducer: unlockTradingReducer,
-                    environment: UnlockTradingEnvironment(
+            let isVerified = (try app.state.get(blockchain.user.is.verified) as? Bool) ?? false
+            UnlockTradingView(
+                store: Store(
+                    initialState: UnlockTradingState(currentUserTier: isVerified ? .verified : .unverified),
+                    reducer: UnlockTradingReducer(
                         dismiss: {
                             app.post(event: blockchain.ux.kyc.trading.unlock.more.article.plain.navigation.bar.button.close.tap, context: context)
                         },
@@ -311,8 +311,7 @@ struct UnlockTradingView_Previews: PreviewProvider {
         UnlockTradingView(
             store: .init(
                 initialState: UnlockTradingState(currentUserTier: .unverified),
-                reducer: unlockTradingReducer,
-                environment: .preview
+                reducer: UnlockTradingReducer.preview
             )
         )
     }

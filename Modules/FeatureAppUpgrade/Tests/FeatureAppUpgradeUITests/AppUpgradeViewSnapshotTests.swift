@@ -101,8 +101,7 @@ final class AppUpgradeViewSnapshotTests: XCTestCase {
         AppUpgradeView(
             store: .init(
                 initialState: AppUpgradeState(style: state, url: ""),
-                reducer: appUpgradeReducer,
-                environment: ()
+                reducer: AppUpgradeReducer()
             )
         )
         .frame(width: 100.vw, height: 600.pt)

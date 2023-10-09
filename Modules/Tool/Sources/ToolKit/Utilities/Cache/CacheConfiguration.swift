@@ -93,7 +93,8 @@ extension CacheConfiguration {
             blockchain.ux.transaction.event.did.finish,
             blockchain.ux.kyc.event.status.did.change,
             blockchain.ux.home.event.did.pull.to.refresh,
-            blockchain.session.event.did.sign.out
+            blockchain.session.event.did.sign.out,
+            blockchain.user.event.did.update
         )
     }
 

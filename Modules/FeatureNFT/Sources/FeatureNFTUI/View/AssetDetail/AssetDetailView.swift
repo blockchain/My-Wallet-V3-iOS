@@ -2,7 +2,6 @@
 
 import BlockchainComponentLibrary
 import ComposableArchitecture
-import FeatureNFTData
 import FeatureNFTDomain
 import Localization
 import SwiftUI

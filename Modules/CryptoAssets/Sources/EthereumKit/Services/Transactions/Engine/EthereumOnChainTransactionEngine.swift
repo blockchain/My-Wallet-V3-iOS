@@ -21,23 +21,13 @@ final class EthereumOnChainTransactionEngine: OnChainTransactionEngine {
 
     var sourceAccount: BlockchainAccount!
     var transactionTarget: TransactionTarget!
-    var fiatExchangeRatePairs: Observable<TransactionMoneyValuePairs> {
-        sourceExchangeRatePair
-            .map { pair -> TransactionMoneyValuePairs in
-                TransactionMoneyValuePairs(
-                    source: pair,
-                    destination: pair
-                )
-            }
-            .asObservable()
-    }
 
     // MARK: - Private Properties
 
     private let ethereumAccountService: EthereumAccountServiceAPI
     private let ethereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI
     private let ethereumTransactionDispatcher: EthereumTransactionDispatcherAPI
-    private let feeCache: CachedValue<EthereumTransactionFee>
+    private let feeCache: CachedValue<EVMTransactionFee>
     private let feeService: EthereumFeeServiceAPI
     private let network: EVMNetwork
     private let pendingTransactionRepository: PendingTransactionRepositoryAPI
@@ -82,7 +72,7 @@ final class EthereumOnChainTransactionEngine: OnChainTransactionEngine {
                 schedulerIdentifier: "EthereumOnChainTransactionEngine"
             )
         )
-        feeCache.setFetch { [feeService, network] () -> Single<EthereumTransactionFee> in
+        feeCache.setFetch { [feeService, network] () -> Single<EVMTransactionFee> in
             feeService
                 .fees(network: network)
                 .asSingle()
@@ -136,25 +126,28 @@ final class EthereumOnChainTransactionEngine: OnChainTransactionEngine {
 
     func doBuildConfirmations(
         pendingTransaction: PendingTransaction
-    ) -> Single<PendingTransaction> {
-        Single
-            .zip(
-                fiatAmountAndFees(from: pendingTransaction),
-                getFeeState(pendingTransaction: pendingTransaction).asSingle()
-            )
-            .map(weak: self) { (self, payload) -> PendingTransaction in
+    ) -> AnyPublisher<PendingTransaction, Error> {
+        fiatAmountAndFees(from: pendingTransaction)
+            .zip(getFeeState(pendingTransaction: pendingTransaction))
+            .map { [sourceAccount, transactionTarget] payload -> PendingTransaction in
                 let ((amount, fees), feeState) = payload
-                return self.doBuildConfirmations(
+                return Self.doBuildConfirmations(
                     pendingTransaction: pendingTransaction,
+                    sourceAccount: sourceAccount!,
+                    transactionTarget: transactionTarget!,
                     amountInFiat: amount.moneyValue,
                     feesInFiat: fees.moneyValue,
                     feeState: feeState
                 )
             }
+            .prefix(1)
+            .eraseToAnyPublisher()
     }
 
-    private func doBuildConfirmations(
+    private static func doBuildConfirmations(
         pendingTransaction: PendingTransaction,
+        sourceAccount: BlockchainAccount,
+        transactionTarget: TransactionTarget,
         amountInFiat: MoneyValue,
         feesInFiat: MoneyValue,
         feeState: FeeState
@@ -408,22 +401,22 @@ extension EthereumOnChainTransactionEngine {
 
     private func fiatAmountAndFees(
         from pendingTransaction: PendingTransaction
-    ) -> Single<(amount: FiatValue, fees: FiatValue)> {
-        Single.zip(
-            sourceExchangeRatePair,
-            .just(pendingTransaction.amount.cryptoValue ?? .zero(currency: network.nativeAsset)),
-            .just(pendingTransaction.feeAmount.cryptoValue ?? .zero(currency: network.nativeAsset))
-        )
-        .map { (quote: $0.0.quote.fiatValue ?? .zero(currency: .USD), amount: $0.1, fees: $0.2) }
-        .map { (quote: FiatValue, amount: CryptoValue, fees: CryptoValue) -> (FiatValue, FiatValue) in
-            let fiatAmount = amount.convert(using: quote)
-            let fiatFees = fees.convert(using: quote)
-            return (fiatAmount, fiatFees)
-        }
-        .map { (amount: $0.0, fees: $0.1) }
+    ) -> AnyPublisher<(amount: FiatValue, fees: FiatValue), Error> {
+        let amount = pendingTransaction.amount.cryptoValue ?? .zero(currency: network.nativeAsset)
+        let fees = pendingTransaction.feeAmount.cryptoValue ?? .zero(currency: network.nativeAsset)
+        return sourceExchangeRatePair
+            .tryMap { value in
+                try value.quote.fiatValue.or(throw: "Expected fiat value.")
+            }
+            .map { quote -> (FiatValue, FiatValue) in
+                let fiatAmount = amount.convert(using: quote)
+                let fiatFees = fees.convert(using: quote)
+                return (fiatAmount, fiatFees)
+            }
+            .eraseToAnyPublisher()
     }
 
-    private var sourceExchangeRatePair: Single<MoneyValuePair> {
+    private var sourceExchangeRatePair: AnyPublisher<MoneyValuePair, Error> {
         walletCurrencyService
             .displayCurrency
             .flatMap { [sourceAsset, currencyConversionService] fiatCurrency in
@@ -431,6 +424,7 @@ extension EthereumOnChainTransactionEngine {
                     .conversionRate(from: sourceAsset, to: fiatCurrency.currencyType)
                     .map { MoneyValuePair(base: .one(currency: sourceAsset), quote: $0) }
             }
-            .asSingle()
+            .eraseError()
+            .eraseToAnyPublisher()
     }
 }

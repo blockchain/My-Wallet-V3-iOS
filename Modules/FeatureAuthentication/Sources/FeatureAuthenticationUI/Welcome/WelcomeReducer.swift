@@ -55,7 +55,11 @@ public struct WelcomeState: Equatable, NavigationState {
     public var buildVersion: String
     public var route: RouteIntent<WelcomeRoute>?
     public var createWalletState: CreateAccountStepOneState?
-    public var emailLoginState: EmailLoginState?
+    public var emailLoginState: EmailLoginState? {
+      get { _emailLoginState?.first }
+      set { _emailLoginState = newValue.map { [$0] } }
+    }
+    private var _emailLoginState: [EmailLoginState]?
     public var restoreWalletState: SeedPhraseState?
     public var manualPairingEnabled: Bool
     public var manualCredentialsState: CredentialsState?
@@ -65,7 +69,7 @@ public struct WelcomeState: Equatable, NavigationState {
         self.route = nil
         self.createWalletState = nil
         self.restoreWalletState = nil
-        self.emailLoginState = nil
+        self._emailLoginState = nil
         self.manualPairingEnabled = false
         self.manualCredentialsState = nil
     }

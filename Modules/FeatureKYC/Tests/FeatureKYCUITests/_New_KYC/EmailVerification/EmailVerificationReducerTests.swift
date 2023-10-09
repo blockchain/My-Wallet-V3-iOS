@@ -25,6 +25,7 @@ final class EmailVerificationReducerTests: XCTestCase {
 
     private var recordedInvocations: RecordedInvocations!
     private var stubbedResults: StubbedResults!
+    private var emailVerificationService: MockEmailVerificationService!
 
     private var testPollingQueue: TestSchedulerOf<DispatchQueue>!
     private var testStore: TestStore<
@@ -32,11 +33,12 @@ final class EmailVerificationReducerTests: XCTestCase {
         EmailVerificationAction,
         EmailVerificationState,
         EmailVerificationAction,
-        EmailVerificationEnvironment
+        Void
     >!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
+        emailVerificationService = MockEmailVerificationService()
         recordedInvocations = RecordedInvocations()
         stubbedResults = StubbedResults()
         testPollingQueue = DispatchQueue.test
@@ -44,6 +46,7 @@ final class EmailVerificationReducerTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        emailVerificationService = nil
         recordedInvocations = nil
         stubbedResults = nil
         testStore = nil
@@ -157,8 +160,7 @@ final class EmailVerificationReducerTests: XCTestCase {
     }
 
     func test_loads_verificationStatus_when_app_opened_verified() throws {
-        let mockService = testStore.environment.emailVerificationService as? MockEmailVerificationService
-        mockService?.stubbedResults.checkEmailVerificationStatus = .just(
+        emailVerificationService?.stubbedResults.checkEmailVerificationStatus = .just(
             .init(emailAddress: "test@example.com", status: .verified)
         )
         testStore.assert(
@@ -179,8 +181,7 @@ final class EmailVerificationReducerTests: XCTestCase {
     }
 
     func test_loads_verificationStatus_when_app_opened_error() throws {
-        let mockService = testStore.environment.emailVerificationService as? MockEmailVerificationService
-        mockService?.stubbedResults.checkEmailVerificationStatus = .failure(.unknown(MockError.unknown))
+        emailVerificationService?.stubbedResults.checkEmailVerificationStatus = .failure(.unknown(MockError.unknown))
         testStore.assert(
             .send(.didEnterForeground),
             .receive(.presentStep(.loadingVerificationState)) {
@@ -360,8 +361,7 @@ final class EmailVerificationReducerTests: XCTestCase {
     }
 
     func test_edit_email_save_failure() throws {
-        let mockService = testStore.environment.emailVerificationService as? MockEmailVerificationService
-        mockService?.stubbedResults.updateEmailAddress = .failure(.missingCredentials)
+        emailVerificationService?.stubbedResults.updateEmailAddress = .failure(.missingCredentials)
         testStore.assert(
             .send(.editEmailAddress(.didAppear)),
             .send(.editEmailAddress(.save)) {
@@ -409,8 +409,7 @@ final class EmailVerificationReducerTests: XCTestCase {
     }
 
     func test_help_resend_verificationEmail_failure() throws {
-        let mockService = testStore.environment.emailVerificationService as? MockEmailVerificationService
-        mockService?.stubbedResults.sendVerificationEmail = .failure(.missingCredentials)
+        emailVerificationService?.stubbedResults.sendVerificationEmail = .failure(.missingCredentials)
         testStore.assert(
             .send(.emailVerificationHelp(.sendVerificationEmail)) {
                 $0.emailVerificationHelp.sendingVerificationEmail = true
@@ -436,12 +435,12 @@ final class EmailVerificationReducerTests: XCTestCase {
     // MARK: - Helpers
 
     private func resetTestStore(emailAddress: String = "test@example.com") {
+        emailVerificationService = MockEmailVerificationService()
         testStore = TestStore(
             initialState: EmailVerificationState(emailAddress: emailAddress),
-            reducer: emailVerificationReducer,
-            environment: EmailVerificationEnvironment(
+            reducer: EmailVerificationReducer(
                 analyticsRecorder: MockAnalyticsRecorder(),
-                emailVerificationService: MockEmailVerificationService(),
+                emailVerificationService: emailVerificationService,
                 flowCompletionCallback: { [weak self] result in
                     self?.recordedInvocations.flowCompletionCallback.append(result)
                 },

@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainNamespace
+import Coincore
 import Combine
 import CryptoSwift
 import DIKit
@@ -8,7 +9,6 @@ import EthereumKit
 import Foundation
 import MoneyKit
 import NetworkKit
-import PlatformKit
 import ToolKit
 import WalletConnectNetworking
 import WalletConnectPairing

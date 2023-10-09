@@ -22,7 +22,7 @@ struct NetworkPickerView: View {
                     ForEach(viewStore.availableNetworks, id: \.networkConfig.networkTicker) { network in
                         TableRow(
                             leading: {
-                                network.nativeAsset.logo(size: 24.pt)
+                                network.logo(size: 24.pt)
                             },
                             title: network.networkConfig.shortName,
                             trailing: {

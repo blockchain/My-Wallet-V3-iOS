@@ -313,15 +313,19 @@ extension BinaryFloatingPoint {
     }
 }
 
+#if DEBUG
+
 struct GraphViewPreviewProvider: PreviewProvider {
     static var previews: some View {
         GraphView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: graphViewReducer,
-                environment: .preview
+                reducer: GraphViewReducer(historicalPriceService: .preview)
+                    .dependency(\.app, App.preview)
             )
         )
         .app(App.preview)
     }
 }
+
+#endif

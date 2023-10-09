@@ -153,8 +153,7 @@ public final class Router: Routing {
             EmailVerificationView(
                 store: .init(
                     initialState: .init(emailAddress: emailAddress),
-                    reducer: emailVerificationReducer,
-                    environment: buildEmailVerificationEnvironment(
+                    reducer: buildEmailVerificationReducer(
                         emailAddress: emailAddress,
                         flowCompletion: flowCompletion
                     )
@@ -375,8 +374,7 @@ public final class Router: Routing {
                 let view = TradingLimitsView(
                     store: .init(
                         initialState: TradingLimitsState(),
-                        reducer: tradingLimitsReducer,
-                        environment: TradingLimitsEnvironment(
+                        reducer: TradingLimitsReducer(
                             close: close,
                             openURL: openURL,
                             presentKYCFlow: presentKYCFlow,
@@ -416,11 +414,11 @@ private typealias Events = AnalyticsEvents.New.KYC
 
 extension Router {
 
-    func buildEmailVerificationEnvironment(
+    func buildEmailVerificationReducer(
         emailAddress: String,
         flowCompletion: @escaping (FlowResult) -> Void
-    ) -> EmailVerificationEnvironment {
-        EmailVerificationEnvironment(
+    ) -> EmailVerificationReducer {
+        EmailVerificationReducer(
             analyticsRecorder: analyticsRecorder,
             emailVerificationService: emailVerificationService,
             flowCompletionCallback: flowCompletion,
@@ -443,8 +441,7 @@ extension Router {
         let view = UnlockTradingView(
             store: .init(
                 initialState: UnlockTradingState(currentUserTier: currentUserTier),
-                reducer: unlockTradingReducer,
-                environment: UnlockTradingEnvironment(
+                reducer: UnlockTradingReducer(
                     dismiss: {
                         presenter.dismiss(animated: true) {
                             publisher.send(.abandoned)

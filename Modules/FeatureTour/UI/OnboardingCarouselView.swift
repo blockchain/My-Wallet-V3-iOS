@@ -3,30 +3,18 @@
 import BlockchainUI
 import ComposableArchitecture
 import Localization
-import PlatformUIKit
 import SwiftUI
 
 public struct OnboardingCarouselView: View {
 
     private let store: Store<TourState, TourAction>
-    private let list: LivePricesList
+//    private let list: LivePricesList
     private var manualLoginEnabled: Bool
 
-    private init(store: Store<TourState, TourAction>, manualLoginEnabled: Bool) {
+    public init(store: Store<TourState, TourAction>, manualLoginEnabled: Bool) {
         self.store = store
         self.manualLoginEnabled = manualLoginEnabled
-        self.list = LivePricesList(store: store)
-    }
-
-    public init(environment: TourEnvironment, manualLoginEnabled: Bool) {
-        self.init(
-            store: Store(
-                initialState: TourState(),
-                reducer: tourReducer,
-                environment: environment
-            ),
-            manualLoginEnabled: manualLoginEnabled
-        )
+//        self.list = LivePricesList(store: store)
     }
 
     public var body: some View {
@@ -44,7 +32,7 @@ public struct OnboardingCarouselView: View {
             }
             .background(
                 ZStack {
-                    list
+//                    list
                     Color.semantic.background.ignoresSafeArea()
                     Image("gradient", bundle: Bundle.featureTour)
                         .resizable()
@@ -87,7 +75,6 @@ extension OnboardingCarouselView {
         }
 
         @ViewBuilder private func makeCarouselView(image: Image?, text: String) -> some View {
-            let isSmallDevice = DevicePresenter.type <= .compact
             VStack(spacing: Spacing.padding2) {
 
                 FinancialPromotionDisclaimerView()
@@ -97,7 +84,7 @@ extension OnboardingCarouselView {
                     image
                         .resizable()
                         .scaledToFit()
-                        .frame(height: isSmallDevice ? 230 : 300)
+                        .frame(height: compactDesign() ? 230 : 300)
                 }
 
                 Text(text)
@@ -134,8 +121,8 @@ extension OnboardingCarouselView {
                 .tag(TourState.Step.earn)
             Carousel.keys.makeView()
                 .tag(TourState.Step.keys)
-            LivePricesView(store: store, list: list)
-                .tag(TourState.Step.prices)
+//            LivePricesView(store: store, list: list)
+//                .tag(TourState.Step.prices)
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
     }
@@ -167,15 +154,17 @@ extension OnboardingCarouselView {
     }
 }
 
+func compactDesign() -> Bool {
+    CGRect.screen.size.max <= 667
+}
+
 struct TourView_Previews: PreviewProvider {
 
     static var previews: some View {
         OnboardingCarouselView(
-            environment: TourEnvironment(
-                createAccountAction: {},
-                restoreAction: {},
-                logInAction: {},
-                manualLoginAction: {}
+            store: Store(
+                initialState: TourState(),
+                reducer: NoOpReducer()
             ),
             manualLoginEnabled: false
         )

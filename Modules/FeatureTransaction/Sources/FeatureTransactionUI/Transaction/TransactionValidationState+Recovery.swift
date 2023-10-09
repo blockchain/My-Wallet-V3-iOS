@@ -1,9 +1,9 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Foundation
 import Errors
 import FeatureOpenBankingUI
 import FeatureTransactionDomain
+import Foundation
 import Localization
 import MoneyKit
 import PlatformKit

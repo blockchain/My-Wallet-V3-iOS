@@ -47,6 +47,8 @@ extension Fiat {
             maxFractionDigits = currencyPrecision
         case (.shortened, _, false):
             maxFractionDigits = 0
+        case (.forceShortened, _, _):
+            maxFractionDigits = 0
         }
 
         let result = Self._toDisplayString(

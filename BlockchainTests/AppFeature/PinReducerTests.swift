@@ -34,8 +34,7 @@ class PinReducerTests: XCTestCase {
     func test_verify_state_is_changed_correctly_per_action() {
         let testStore = TestStore(
             initialState: PinCore.State(),
-            reducer: pinReducer,
-            environment: PinCore.Environment(
+            reducer: PinReducer(
                 alertPresenter: MockAlertViewPresenter()
             )
         )

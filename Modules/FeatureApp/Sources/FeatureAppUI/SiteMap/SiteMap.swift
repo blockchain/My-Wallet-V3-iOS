@@ -1,13 +1,15 @@
 import BlockchainUI
-import Dependencies
 import DIKit
+import Dependencies
 import FeatureCoinDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
 import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureDexUI
+import FeatureExternalTradingMigrationUI
 import FeatureKYCUI
+import FeatureNFTUI
 import FeatureQRCodeScannerUI
 import FeatureQuickActions
 import FeatureReceiveUI
@@ -50,6 +52,8 @@ public struct SiteMap {
             UpsellPassiveRewardsView()
         case blockchain.ux.nft.collection:
             AssetListViewController()
+        case blockchain.ux.nft, isDescendant(of: blockchain.ux.nft):
+            try NFTSiteMap().view(for: ref, in: context)
         case blockchain.ux.web:
             try SafariView(url: ref.context[blockchain.ux.web].decode())
                 .ignoresSafeArea(.container, edges: .bottom)
@@ -142,9 +146,9 @@ public struct SiteMap {
             let model = try context[blockchain.ux.referral.details.screen.info].decode(Referral.self)
             ReferFriendView(store: .init(
                 initialState: .init(referralInfo: model),
-                reducer: ReferFriendModule.reducer,
-                environment: .init(
-                    mainQueue: .main
+                reducer: ReferFriendReducer(
+                    mainQueue: .main,
+                    analyticsRecorder: resolve()
                 )
             ))
             .identity(blockchain.ux.referral)
@@ -196,6 +200,18 @@ public struct SiteMap {
         case blockchain.ux.sweep.imported.addresses.no.action:
             SweepImportedAddressesNoActionView()
                 .app(app)
+
+        case blockchain.ux.dashboard.external.trading.migration:
+            ExternalTradingMigrationView(
+                store: .init(
+                    initialState: .init(),
+                    reducer: ExternalTradingMigration(
+                        app: app,
+                        externalTradingMigrationService: resolve()
+                    )
+                )
+            )
+
         default:
             throw Error(message: "No view", tag: ref, context: context)
         }

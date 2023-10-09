@@ -13,62 +13,67 @@ import ToolKit
 
 private typealias LocalizedStrings = LocalizationConstants.NewKYC.Steps.IdentityVerification
 
-enum IdentityVerification {
+struct IdentityVerificationReducer: ReducerProtocol {
+
     typealias State = IdentityVerificationState
     typealias Action = IdentityVerificationAction
-    typealias Environment = IdentityVerificationEnvironment
 
-    static let reducer: Reducer<State, Action, Environment> = Reducer { state, action, environment in
-        switch action {
-        case .startVerification:
-            return .fireAndForget(environment.onCompletion)
+    let onCompletion: () -> Void
+    let supportedDocumentTypes: () -> AnyPublisher<[KYCDocumentType], NabuNetworkError>
+    let analyticsRecorder: AnalyticsEventRecorderAPI
+    let mainQueue: AnySchedulerOf<DispatchQueue>
 
-        case .fetchSupportedDocumentTypes:
-            state.isLoading = true
-            return environment
-                .supportedDocumentTypes()
-                .receive(on: environment.mainQueue)
-                .catchToEffect()
-                .map { result in
-                    .didReceiveSupportedDocumentTypesResult(result)
-                }
+    var body: some ReducerProtocol<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .startVerification:
+                return .fireAndForget(onCompletion)
 
-        case .didReceiveSupportedDocumentTypesResult(let result):
-            state.isLoading = false
-            switch result {
-            case .success(let documents):
-                state.documentTypes = documents
-                    .sorted { $0.order < $1.order }
-            case .failure(let error):
-                Logger.shared.error("\(error)")
-                environment.analyticsRecorder.record(
-                    event: ClientEvent.clientError(
-                        id: error.ux?.id,
-                        error: "KYC_SHOW_DOCUMENTS_TYPES_ERROR",
-                        networkEndpoint: error.request?.url?.absoluteString ?? "",
-                        networkErrorCode: "\(error.code)",
-                        networkErrorDescription: error.description,
-                        networkErrorId: nil,
-                        networkErrorType: error.type.rawValue,
-                        source: "NABU",
-                        title: "KYC_SHOW_DOCUMENTS_TYPES"
+            case .fetchSupportedDocumentTypes:
+                state.isLoading = true
+                return supportedDocumentTypes()
+                    .receive(on: mainQueue)
+                    .catchToEffect()
+                    .map { result in
+                        .didReceiveSupportedDocumentTypesResult(result)
+                    }
+
+            case .didReceiveSupportedDocumentTypesResult(let result):
+                state.isLoading = false
+                switch result {
+                case .success(let documents):
+                    state.documentTypes = documents
+                        .sorted { $0.order < $1.order }
+                case .failure(let error):
+                    Logger.shared.error("\(error)")
+                    analyticsRecorder.record(
+                        event: ClientEvent.clientError(
+                            id: error.ux?.id,
+                            error: "KYC_SHOW_DOCUMENTS_TYPES_ERROR",
+                            networkEndpoint: error.request?.url?.absoluteString ?? "",
+                            networkErrorCode: "\(error.code)",
+                            networkErrorDescription: error.description,
+                            networkErrorId: nil,
+                            networkErrorType: error.type.rawValue,
+                            source: "NABU",
+                            title: "KYC_SHOW_DOCUMENTS_TYPES"
+                        )
                     )
-                )
-            }
-            return .none
+                }
+                return .none
 
-        case .onViewAppear:
-            return EffectTask(value: .fetchSupportedDocumentTypes)
+            case .onViewAppear:
+                return EffectTask(value: .fetchSupportedDocumentTypes)
+            }
         }
     }
 }
 
-extension Store where State == IdentityVerification.State, Action == IdentityVerification.Action {
+extension Store where State == IdentityVerificationState, Action == IdentityVerificationAction {
 
     static let emptyPreview = Store(
-        initialState: IdentityVerification.State(),
-        reducer: IdentityVerification.reducer,
-        environment: IdentityVerification.Environment(
+        initialState: IdentityVerificationState(),
+        reducer: IdentityVerificationReducer(
             onCompletion: {},
             supportedDocumentTypes: { .empty() },
             analyticsRecorder: NoOpAnalyticsRecorder(),
@@ -77,9 +82,8 @@ extension Store where State == IdentityVerification.State, Action == IdentityVer
     )
 
     static let filledPreview = Store(
-        initialState: IdentityVerification.State(),
-        reducer: IdentityVerification.reducer,
-        environment: IdentityVerification.Environment(
+        initialState: IdentityVerificationState(),
+        reducer: IdentityVerificationReducer(
             onCompletion: {},
             supportedDocumentTypes: { .empty() },
             analyticsRecorder: NoOpAnalyticsRecorder(),

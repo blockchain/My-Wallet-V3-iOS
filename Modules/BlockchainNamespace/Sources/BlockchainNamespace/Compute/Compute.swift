@@ -2,6 +2,8 @@ import Extensions
 
 public enum Compute {
 
+    public static let isLogging = false
+
     public static func metadata(_ file: String = #fileID, _ line: Int = #line) -> Metadata {
         blockchain.db.returns.key().metadata(.compute, file: file, line: line)
     }

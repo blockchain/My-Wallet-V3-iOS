@@ -1,19 +1,16 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import ComposableArchitecture
 import ComposableArchitectureExtensions
 import MoneyKit
 import NukeUI
-import PlatformKit
-import PlatformUIKit
 import SwiftUI
 
-struct Price: Equatable, Identifiable {
+public struct Price: Equatable, Identifiable {
 
     var currency: CryptoCurrency
     var value: LoadingState<String> = .loading
     var deltaPercentage: LoadingState<Double> = .loading
-    var id: AnyHashable = UUID()
+    public var id: AnyHashable = UUID()
 
     var title: String {
         currency.name
