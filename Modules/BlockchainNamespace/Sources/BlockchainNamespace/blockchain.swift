@@ -9595,8 +9595,25 @@ public final class L_blockchain_ux_finproms: L, I_blockchain_ux_finproms {
 }
 public protocol I_blockchain_ux_finproms: I {}
 public extension I_blockchain_ux_finproms {
+	var `approval`: L_blockchain_ux_finproms_approval { .init("\(__).approval") }
 	var `disclaimer`: L_blockchain_ux_finproms_disclaimer { .init("\(__).disclaimer") }
 }
+public final class L_blockchain_ux_finproms_approval: L, I_blockchain_ux_finproms_approval {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.approval", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_approval: I {}
+public extension I_blockchain_ux_finproms_approval {
+	var `tap`: L_blockchain_ux_finproms_approval_tap { .init("\(__).tap") }
+	var `text`: L_blockchain_ux_finproms_approval_text { .init("\(__).text") }
+}
+public final class L_blockchain_ux_finproms_approval_tap: L, I_blockchain_ux_finproms_approval_tap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.approval.tap", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_approval_tap: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_finproms_approval_text: L, I_blockchain_ux_finproms_approval_text {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.approval.text", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_approval_text: I_blockchain_db_type_string, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_finproms_disclaimer: L, I_blockchain_ux_finproms_disclaimer {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer", comment: "") }
 }

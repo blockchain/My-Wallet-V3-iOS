@@ -160,7 +160,10 @@ extension EarnIntroView {
                 )
             ) {
                 ForEach(viewStore.steps) { step in
-                    step.makeView()
+                    VStack {
+                        FinancialPromotionDisclaimerView()
+                        step.makeView()
+                    }
                 }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -203,7 +206,7 @@ extension EarnIntroView {
                     radius: 8,
                     y: 3
                 )
-                FinancialPromotionDisclaimerView()
+                FinancialPromotionApprovalView()
                     .padding(.top)
             }
             .padding(.horizontal, Spacing.padding3)

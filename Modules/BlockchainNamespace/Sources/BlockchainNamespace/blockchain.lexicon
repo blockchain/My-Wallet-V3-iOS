@@ -2552,6 +2552,12 @@ blockchain:
 			dismiss:
 			+ blockchain.ux.type.task
 		finproms:
+			approval:
+				tap:
+				+ blockchain.ux.type.action
+				text:
+				+ blockchain.db.type.string
+				+ blockchain.session.configuration.value
 			disclaimer:
 				tap:
 				+ blockchain.session.configuration.value

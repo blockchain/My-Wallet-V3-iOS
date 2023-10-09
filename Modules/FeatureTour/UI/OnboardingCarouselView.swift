@@ -76,6 +76,10 @@ extension OnboardingCarouselView {
 
         @ViewBuilder private func makeCarouselView(image: Image?, text: String) -> some View {
             VStack(spacing: Spacing.padding2) {
+
+                FinancialPromotionDisclaimerView()
+                    .padding(.bottom)
+
                 if let image {
                     image
                         .resizable()
@@ -89,7 +93,13 @@ extension OnboardingCarouselView {
                     .typography(.title3)
                     .foregroundColor(.semantic.title)
 
-                FinancialPromotionDisclaimerView()
+                FinancialPromotionApprovalView()
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 16).fill(Color.semantic.background)
+                    )
+                    .frame(maxWidth: .infinity)
+                    .padding([.horizontal], Spacing.padding2)
 
                 Spacer()
             }
