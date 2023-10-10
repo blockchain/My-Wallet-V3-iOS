@@ -488,6 +488,11 @@ extension LocalizationConstants.SuperApp.ActivityDetails {
         comment: "Copy Transaction ID"
     )
 
+    public static let viewOnExplorer = NSLocalizedString(
+        "View on Explorer",
+        comment: "View on Explorer"
+    )
+
     public static let blockchainAccount = NSLocalizedString(
         "Blockhain.com Account",
         comment: "Blockhain.com Account"

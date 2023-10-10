@@ -119,10 +119,12 @@ public struct ActivityDetailSceneView: View {
 
     @ViewBuilder
     func navigationTitleView(title: String?, icon: ImageType?) -> some View {
-        imageView(with: icon)
-        Text(title ?? "")
-            .typography(.body2)
-            .foregroundColor(.semantic.title)
+        HStack(spacing: Spacing.padding1) {
+            imageView(with: icon)
+            Text(title ?? "")
+                .typography(.body2)
+                .foregroundColor(.semantic.title)
+        }
     }
 
     public func navigationTrailingView() -> some View {
