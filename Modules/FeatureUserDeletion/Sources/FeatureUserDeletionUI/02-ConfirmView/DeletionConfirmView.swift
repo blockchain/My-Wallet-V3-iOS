@@ -93,7 +93,7 @@ public struct DeletionConfirmView: View {
     }
 }
 
-//#if DEBUG
+#if DEBUG
 
 struct DeletionConfirm_Previews: PreviewProvider {
 
@@ -121,6 +121,4 @@ struct DeletionConfirm_Previews: PreviewProvider {
     }
 }
 
-//#endif
-
-
+#endif
