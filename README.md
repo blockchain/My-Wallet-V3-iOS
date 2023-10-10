@@ -1,7 +1,5 @@
 # Blockchain Wallet for iOS
 
-![Banner](Documentation/Other/github_banner.png)
-
 # Tooling
 
 * Homebrew: 4.0.21+
