@@ -12,7 +12,7 @@ struct NetworkPickerView: View {
 
     init(store: StoreOf<NetworkPicker>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -75,7 +75,7 @@ struct NetworkPickerView_Previews: PreviewProvider {
                 initialState: NetworkPicker.State(
                     currentNetwork: "ETH"
                 ),
-                reducer: NetworkPicker()._printChanges()
+                reducer: { NetworkPicker()._printChanges() }
             )
         )
         .app(App.preview)

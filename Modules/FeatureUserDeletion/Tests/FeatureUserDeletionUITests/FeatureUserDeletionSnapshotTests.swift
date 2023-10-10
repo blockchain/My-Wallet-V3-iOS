@@ -66,13 +66,15 @@ final class FeatureUserDeletionSnapshotTests: XCTestCase {
                 confirmViewState: confirmViewState,
                 route: route
             ),
-            reducer: UserDeletionReducer(
-                mainQueue: .immediate,
-                userDeletionRepository: mockEmailVerificationService,
-                analyticsRecorder: analyticsRecorder,
-                dismissFlow: {},
-                logoutAndForgetWallet: {}
-            )
+            reducer: {
+                UserDeletionReducer(
+                    mainQueue: .immediate,
+                    userDeletionRepository: mockEmailVerificationService,
+                    analyticsRecorder: analyticsRecorder,
+                    dismissFlow: {},
+                    logoutAndForgetWallet: {}
+                )
+            }
         )
     }
 }

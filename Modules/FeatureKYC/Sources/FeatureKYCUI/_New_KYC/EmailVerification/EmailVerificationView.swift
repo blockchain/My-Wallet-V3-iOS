@@ -14,7 +14,7 @@ public struct EmailVerificationView: View {
 
     init(store: Store<EmailVerificationState, EmailVerificationAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -39,8 +39,10 @@ public struct EmailVerificationView: View {
                     ProgressView()
                         .accessibility(identifier: "KYC.EmailVerification.loading.spinner")
                         .alert(
-                            store.scope(state: \.emailVerificationFailedAlert),
-                            dismiss: .dismissEmailVerificationFailedAlert
+                            store: store.scope(
+                                state: \.$emailVerificationFailedAlert,
+                                action: { .alert($0) }
+                            )
                         )
                 } else if viewStore.flowStep == .emailVerifiedPrompt {
                     // Final step of the flow
@@ -90,7 +92,7 @@ struct EmailVerificationHelpRoutingView: View {
     let store: Store<EmailVerificationState, EmailVerificationAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             NavigationLink(
                 destination: (
                     EditEmailView(
@@ -127,15 +129,19 @@ import AnalyticsKit
 struct EmailVerificationView_Previews: PreviewProvider {
     static var previews: some View {
         EmailVerificationView(
-            store: .init(
+            store: Store(
                 initialState: .init(emailAddress: "test@example.com"),
-                reducer: EmailVerificationReducer(
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    emailVerificationService: NoOpEmailVerificationService(),
-                    flowCompletionCallback: nil,
-                    openMailApp: { EffectTask(value: true) },
-                    app: App.preview
-                )
+                reducer: {
+                    EmailVerificationReducer(
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        emailVerificationService: NoOpEmailVerificationService(),
+                        flowCompletionCallback: nil,
+                        openMailApp: { true },
+                        app: App.preview,
+                        mainQueue: .main,
+                        pollingQueue: .main
+                    )
+                }
             )
         )
     }

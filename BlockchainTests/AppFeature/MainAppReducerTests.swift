@@ -23,7 +23,7 @@ import XCTest
 @testable import FeatureAuthenticationUI
 
 // swiftlint:disable all
-final class MainAppReducerTests: XCTestCase {
+@MainActor final class MainAppReducerTests: XCTestCase {
 
     var mockAccountRecoveryService: MockAccountRecoveryService!
     var mockAlertPresenter: MockAlertViewPresenter!
@@ -60,10 +60,7 @@ final class MainAppReducerTests: XCTestCase {
 
     var testStore: TestStore<
         CoreAppState,
-        CoreAppAction,
-        CoreAppState,
-        CoreAppAction,
-        Void
+        CoreAppAction
     >!
     var cancellables = Set<AnyCancellable>()
 
@@ -140,47 +137,49 @@ final class MainAppReducerTests: XCTestCase {
 
         testStore = TestStore(
             initialState: CoreAppState(),
-            reducer: MainAppReducer(
-                environment: CoreAppEnvironment(
-                    accountRecoveryService: mockAccountRecoveryService,
-                    alertPresenter: mockAlertPresenter,
-                    analyticsRecorder: mockAnalyticsRecorder,
-                    app: App.test,
-                    appStoreOpener: mockAppStoreOpener,
-                    appUpgradeState: { .just(nil) },
-                    blockchainSettings: mockSettingsApp,
-                    buildVersionProvider: { "" },
-                    coincore: mockCoincore,
-                    credentialsStore: mockCredentialsStore,
-                    deeplinkHandler: mockDeepLinkHandler,
-                    deeplinkRouter: mockDeepLinkRouter,
-                    delegatedCustodySubscriptionsService: mockDelegatedCustodySubscriptionsService,
-                    deviceVerificationService: mockDeviceVerificationService,
-                    erc20CryptoAssetService: mockERC20CryptoAssetService,
-                    exchangeRepository: mockExchangeAccountRepository,
-                    externalAppOpener: mockExternalAppOpener,
-                    fiatCurrencySettingsService: mockFiatCurrencySettingsService,
-                    forgetWalletService: mockForgetWalletService,
-                    legacyGuidRepository: mockLegacyGuidRepo,
-                    legacySharedKeyRepository: mockLegacySharedKeyRepo,
-                    loadingViewPresenter: LoadingViewPresenter(),
-                    mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                    mobileAuthSyncService: mockMobileAuthSyncService,
-                    nabuUserService: mockNabuUserService,
-                    performanceTracing: mockPerformanceTracing,
-                    pushNotificationsRepository: MockPushNotificationsRepository(),
-                    reactiveWallet: mockReactiveWallet,
-                    recaptchaService: MockRecaptchaService(),
-                    remoteNotificationServiceContainer: mockRemoteNotificationServiceContainer,
-                    resetPasswordService: mockResetPasswordService,
-                    sharedContainer: SharedContainerUserDefaults(),
-                    siftService: mockSiftService,
-                    unifiedActivityService: UnifiedActivityPersistenceServiceMock(),
-                    walletPayloadService: mockWalletPayloadService,
-                    walletService: mockWalletService,
-                    walletStateProvider: mockWalletStateProvider
+            reducer: {
+                MainAppReducer(
+                    environment: CoreAppEnvironment(
+                        accountRecoveryService: mockAccountRecoveryService,
+                        alertPresenter: mockAlertPresenter,
+                        analyticsRecorder: mockAnalyticsRecorder,
+                        app: App.test,
+                        appStoreOpener: mockAppStoreOpener,
+                        appUpgradeState: { .just(nil) },
+                        blockchainSettings: mockSettingsApp,
+                        buildVersionProvider: { "" },
+                        coincore: mockCoincore,
+                        credentialsStore: mockCredentialsStore,
+                        deeplinkHandler: mockDeepLinkHandler,
+                        deeplinkRouter: mockDeepLinkRouter,
+                        delegatedCustodySubscriptionsService: mockDelegatedCustodySubscriptionsService,
+                        deviceVerificationService: mockDeviceVerificationService,
+                        erc20CryptoAssetService: mockERC20CryptoAssetService,
+                        exchangeRepository: mockExchangeAccountRepository,
+                        externalAppOpener: mockExternalAppOpener,
+                        fiatCurrencySettingsService: mockFiatCurrencySettingsService,
+                        forgetWalletService: mockForgetWalletService,
+                        legacyGuidRepository: mockLegacyGuidRepo,
+                        legacySharedKeyRepository: mockLegacySharedKeyRepo,
+                        loadingViewPresenter: LoadingViewPresenter(),
+                        mainQueue: mockMainQueue.eraseToAnyScheduler(),
+                        mobileAuthSyncService: mockMobileAuthSyncService,
+                        nabuUserService: mockNabuUserService,
+                        performanceTracing: mockPerformanceTracing,
+                        pushNotificationsRepository: MockPushNotificationsRepository(),
+                        reactiveWallet: mockReactiveWallet,
+                        recaptchaService: MockRecaptchaService(),
+                        remoteNotificationServiceContainer: mockRemoteNotificationServiceContainer,
+                        resetPasswordService: mockResetPasswordService,
+                        sharedContainer: SharedContainerUserDefaults(),
+                        siftService: mockSiftService,
+                        unifiedActivityService: UnifiedActivityPersistenceServiceMock(),
+                        walletPayloadService: mockWalletPayloadService,
+                        walletService: mockWalletService,
+                        walletStateProvider: mockWalletStateProvider
+                    )
                 )
-            )
+            }
         )
     }
 
@@ -281,7 +280,7 @@ final class MainAppReducerTests: XCTestCase {
         XCTAssertTrue(mockCredentialsStore.expectedPinDataCalled)
     }
 
-    func test_trying_to_login_withSecondPassword_account_displays_notice() {
+    func test_trying_to_login_withSecondPassword_account_displays_notice() async {
         let failingWalletService = FeatureAppDomain.WalletService(
             fetch: { _ in .failure(.initialization(.needsSecondPassword)) },
             recoverFromMetadata: { _ in .empty() }
@@ -289,64 +288,66 @@ final class MainAppReducerTests: XCTestCase {
         // recreated testStore here with failingWalletService
         testStore = TestStore(
             initialState: CoreAppState(),
-            reducer: MainAppReducer(
-                environment: CoreAppEnvironment(
-                    accountRecoveryService: mockAccountRecoveryService,
-                    alertPresenter: mockAlertPresenter,
-                    analyticsRecorder: mockAnalyticsRecorder,
-                    app: App.test,
-                    appStoreOpener: mockAppStoreOpener,
-                    appUpgradeState: { .just(nil) },
-                    blockchainSettings: mockSettingsApp,
-                    buildVersionProvider: { "" },
-                    coincore: mockCoincore,
-                    credentialsStore: mockCredentialsStore,
-                    deeplinkHandler: mockDeepLinkHandler,
-                    deeplinkRouter: mockDeepLinkRouter,
-                    delegatedCustodySubscriptionsService: mockDelegatedCustodySubscriptionsService,
-                    deviceVerificationService: mockDeviceVerificationService,
-                    erc20CryptoAssetService: mockERC20CryptoAssetService,
-                    exchangeRepository: mockExchangeAccountRepository,
-                    externalAppOpener: mockExternalAppOpener,
-                    fiatCurrencySettingsService: mockFiatCurrencySettingsService,
-                    forgetWalletService: mockForgetWalletService,
-                    legacyGuidRepository: mockLegacyGuidRepo,
-                    legacySharedKeyRepository: mockLegacySharedKeyRepo,
-                    loadingViewPresenter: LoadingViewPresenter(),
-                    mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                    mobileAuthSyncService: mockMobileAuthSyncService,
-                    nabuUserService: mockNabuUserService,
-                    performanceTracing: mockPerformanceTracing,
-                    pushNotificationsRepository: MockPushNotificationsRepository(),
-                    reactiveWallet: mockReactiveWallet,
-                    recaptchaService: MockRecaptchaService(),
-                    remoteNotificationServiceContainer: mockRemoteNotificationServiceContainer,
-                    resetPasswordService: mockResetPasswordService,
-                    sharedContainer: SharedContainerUserDefaults(),
-                    siftService: mockSiftService,
-                    unifiedActivityService: UnifiedActivityPersistenceServiceMock(),
-                    walletPayloadService: mockWalletPayloadService,
-                    walletService: failingWalletService,
-                    walletStateProvider: mockWalletStateProvider
+            reducer: {
+                MainAppReducer(
+                    environment: CoreAppEnvironment(
+                        accountRecoveryService: mockAccountRecoveryService,
+                        alertPresenter: mockAlertPresenter,
+                        analyticsRecorder: mockAnalyticsRecorder,
+                        app: App.test,
+                        appStoreOpener: mockAppStoreOpener,
+                        appUpgradeState: { .just(nil) },
+                        blockchainSettings: mockSettingsApp,
+                        buildVersionProvider: { "" },
+                        coincore: mockCoincore,
+                        credentialsStore: mockCredentialsStore,
+                        deeplinkHandler: mockDeepLinkHandler,
+                        deeplinkRouter: mockDeepLinkRouter,
+                        delegatedCustodySubscriptionsService: mockDelegatedCustodySubscriptionsService,
+                        deviceVerificationService: mockDeviceVerificationService,
+                        erc20CryptoAssetService: mockERC20CryptoAssetService,
+                        exchangeRepository: mockExchangeAccountRepository,
+                        externalAppOpener: mockExternalAppOpener,
+                        fiatCurrencySettingsService: mockFiatCurrencySettingsService,
+                        forgetWalletService: mockForgetWalletService,
+                        legacyGuidRepository: mockLegacyGuidRepo,
+                        legacySharedKeyRepository: mockLegacySharedKeyRepo,
+                        loadingViewPresenter: LoadingViewPresenter(),
+                        mainQueue: mockMainQueue.eraseToAnyScheduler(),
+                        mobileAuthSyncService: mockMobileAuthSyncService,
+                        nabuUserService: mockNabuUserService,
+                        performanceTracing: mockPerformanceTracing,
+                        pushNotificationsRepository: MockPushNotificationsRepository(),
+                        reactiveWallet: mockReactiveWallet,
+                        recaptchaService: MockRecaptchaService(),
+                        remoteNotificationServiceContainer: mockRemoteNotificationServiceContainer,
+                        resetPasswordService: mockResetPasswordService,
+                        sharedContainer: SharedContainerUserDefaults(),
+                        siftService: mockSiftService,
+                        unifiedActivityService: UnifiedActivityPersistenceServiceMock(),
+                        walletPayloadService: mockWalletPayloadService,
+                        walletService: failingWalletService,
+                        walletStateProvider: mockWalletStateProvider
+                    )
                 )
-            )
+            }
         )
 
         mockLegacyGuidRepo.directSet(guid: nil)
         mockLegacySharedKeyRepo.directSet(sharedKey: nil)
         mockSettingsApp.isPinSet = false
 
-        testStore.send(.onboarding(.start))
-        testStore.receive(.onboarding(.proceedToFlow)) { state in
+        await testStore.send(.onboarding(.start))
+        await testStore.receive(.onboarding(.proceedToFlow)) { state in
             state.onboarding?.welcomeState = .init()
         }
 
-        testStore.receive(.onboarding(.welcomeScreen(.start)))
-        testStore.send(.onboarding(.welcomeScreen(.enter(into: .manualLogin)))) { state in
+        await testStore.receive(.onboarding(.welcomeScreen(.start)))
+        await testStore.send(.onboarding(.welcomeScreen(.enter(into: .manualLogin)))) { state in
             state.onboarding?.welcomeState?.route = RouteIntent(route: .manualLogin, action: .enterInto())
             state.onboarding?.welcomeState?.manualCredentialsState = .init()
         }
-        testStore.send(
+        await testStore.send(
             .onboarding(
                 .welcomeScreen(
                     .manualPairing(
@@ -360,20 +361,20 @@ final class MainAppReducerTests: XCTestCase {
             state.onboarding?.welcomeState?.manualCredentialsState?.isLoading = true
         }
 
-        testStore.receive(.onboarding(.welcomeScreen(.requestedToDecryptWallet("password"))))
-        testStore.receive(.fetchWallet(password: "password"))
-        testStore.receive(.wallet(.fetch(password: "password")))
-        mockMainQueue.advance(by: .seconds(1))
+        await testStore.receive(.onboarding(.welcomeScreen(.requestedToDecryptWallet("password"))))
+        await testStore.receive(.fetchWallet(password: "password"))
+        await testStore.receive(.wallet(.fetch(password: "password")))
+        await mockMainQueue.advance(by: .seconds(1))
 
-        testStore.receive(.wallet(.walletFetched(.failure(.initialization(.needsSecondPassword)))))
+        await testStore.receive(.wallet(.walletFetched(.failure(.initialization(.needsSecondPassword)))))
 
         // Assert that both of these values are nil
         XCTAssertNil(mockLegacyGuidRepo.directGuid)
         XCTAssertNil(mockLegacySharedKeyRepo.directSharedKey)
 
-        testStore.receive(.onboarding(.informSecondPasswordDetected))
-        testStore.receive(.onboarding(.welcomeScreen(.informSecondPasswordDetected)))
-        testStore.receive(
+        await testStore.receive(.onboarding(.informSecondPasswordDetected))
+        await testStore.receive(.onboarding(.welcomeScreen(.informSecondPasswordDetected)))
+        await testStore.receive(
             .onboarding(
                 .welcomeScreen(
                     .manualPairing(
@@ -390,127 +391,127 @@ final class MainAppReducerTests: XCTestCase {
         }
     }
 
-    func test_sending_success_authentication_from_password_required_screen() {
+    func test_sending_success_authentication_from_password_required_screen() async {
         // given valid parameters
         mockLegacyGuidRepo.directSet(guid: "guid")
         mockLegacySharedKeyRepo.directSet(sharedKey: "sharedKey")
         mockSettingsApp.isPinSet = false
 
-        testStore.send(.onboarding(.start))
-        testStore.receive(.onboarding(.proceedToFlow)) { state in
+        await testStore.send(.onboarding(.start))
+        await testStore.receive(.onboarding(.proceedToFlow)) { state in
             state.onboarding?.passwordRequiredState = .init(
                 walletIdentifier: self.mockLegacyGuidRepo.directGuid ?? ""
             )
         }
 
         // password screen should start
-        testStore.receive(.onboarding(.passwordScreen(.start)))
+        await testStore.receive(.onboarding(.passwordScreen(.start)))
 
         // when authenticating
-        testStore.send(.onboarding(.passwordScreen(.authenticate("password"))))
+        await testStore.send(.onboarding(.passwordScreen(.authenticate("password"))))
 
-        testStore.receive(.fetchWallet(password: "password"))
-        testStore.receive(.wallet(.fetch(password: "password")))
-        mockMainQueue.advance(by: .seconds(1))
+        await testStore.receive(.fetchWallet(password: "password"))
+        await testStore.receive(.wallet(.fetch(password: "password")))
+        await mockMainQueue.advance(by: .seconds(1))
 
         let decryption = WalletFetchedContext(
             guid: mockLegacyGuidRepo.directGuid ?? "",
             sharedKey: mockLegacySharedKeyRepo.directSharedKey ?? "",
             passwordPartHash: ""
         )
-        testStore.receive(.wallet(.walletFetched(.success(decryption))))
-        testStore.receive(.wallet(.walletBootstrap(decryption)))
-        testStore.receive(.wallet(.walletSetup))
+        await testStore.receive(.wallet(.walletFetched(.success(decryption))))
+        await testStore.receive(.wallet(.walletBootstrap(decryption)))
+        await testStore.receive(.wallet(.walletSetup))
 
-        testStore.receive(.resetVerificationStatusIfNeeded(guid: decryption.guid, sharedKey: decryption.sharedKey))
+        await testStore.receive(.resetVerificationStatusIfNeeded(guid: decryption.guid, sharedKey: decryption.sharedKey))
 
-        testStore.receive(.setupPin) { state in
+        await testStore.receive(.setupPin) { state in
             state.onboarding?.pinState = .init()
             state.onboarding?.passwordRequiredState = nil
         }
-        testStore.receive(.onboarding(.pin(.create))) { state in
+        await testStore.receive(.onboarding(.pin(.create))) { state in
             state.onboarding?.pinState?.creating = true
         }
     }
 
-    func test_sending_success_authentication_from_pin() {
+    func test_sending_success_authentication_from_pin() async {
         // given valid parameters
         mockLegacyGuidRepo.directSet(guid: "guid")
         mockLegacySharedKeyRepo.directSet(sharedKey: "sharedKey")
         mockSettingsApp.isPinSet = true
 
-        testStore.send(.onboarding(.start))
-        testStore.receive(.onboarding(.proceedToFlow)) { state in
+        await testStore.send(.onboarding(.start))
+        await testStore.receive(.onboarding(.proceedToFlow)) { state in
             state.onboarding?.pinState = .init()
             state.onboarding?.passwordRequiredState = nil
         }
 
         // password screen should start
-        testStore.receive(.onboarding(.pin(.authenticate))) { state in
+        await testStore.receive(.onboarding(.pin(.authenticate))) { state in
             state.onboarding?.pinState?.authenticate = true
         }
 
         // when authenticating
-        testStore.send(.onboarding(.pin(.handleAuthentication("password"))))
+        await testStore.send(.onboarding(.pin(.handleAuthentication("password"))))
 
-        testStore.receive(.fetchWallet(password: "password"))
-        mockMainQueue.advance(by: .seconds(1))
-        testStore.receive(.wallet(.fetch(password: "password")))
-        mockMainQueue.advance(by: .seconds(1))
+        await testStore.receive(.fetchWallet(password: "password"))
+        await mockMainQueue.advance(by: .seconds(1))
+        await testStore.receive(.wallet(.fetch(password: "password")))
+        await mockMainQueue.advance(by: .seconds(1))
 
         let decryption = WalletFetchedContext(
             guid: mockLegacyGuidRepo.directGuid ?? "",
             sharedKey: mockLegacySharedKeyRepo.directSharedKey ?? "",
             passwordPartHash: ""
         )
-        testStore.receive(.wallet(.walletFetched(.success(decryption))))
-        testStore.receive(.wallet(.walletBootstrap(decryption)))
-        testStore.receive(.wallet(.walletSetup))
-        testStore.receive(.resetVerificationStatusIfNeeded(guid: decryption.guid, sharedKey: decryption.sharedKey))
+        await testStore.receive(.wallet(.walletFetched(.success(decryption))))
+        await testStore.receive(.wallet(.walletBootstrap(decryption)))
+        await testStore.receive(.wallet(.walletSetup))
+        await testStore.receive(.resetVerificationStatusIfNeeded(guid: decryption.guid, sharedKey: decryption.sharedKey))
 
-        testStore.receive(.prepareForLoggedIn)
-        testStore.receive(.proceedToLoggedIn(.success(true))) { state in
+        await testStore.receive(.prepareForLoggedIn)
+        await testStore.receive(.proceedToLoggedIn(.success(true))) { state in
             state.onboarding = nil
             state.loggedIn = .init()
         }
-        assertDidPerformSignIn()
-        logout()
-        testStore.receive(.onboarding(.passwordScreen(.start)))
+        await assertDidPerformSignIn()
+        await logout()
+        await testStore.receive(.onboarding(.passwordScreen(.start)))
     }
 
-    func test_sending_logout_should_perform_cleanup_and_display_password_screen() {
-        testStore.send(.proceedToLoggedIn(.success(true))) { state in
+    func test_sending_logout_should_perform_cleanup_and_display_password_screen() async {
+        await testStore.send(.proceedToLoggedIn(.success(true))) { state in
             state.loggedIn = .init()
             state.onboarding = nil
         }
-        mockMainQueue.advance()
+        await mockMainQueue.advance()
 
-        assertDidPerformSignIn()
-        logout()
+        await assertDidPerformSignIn()
+        await logout()
 
         XCTAssertTrue(mockSiftService.removeUserIdCalled)
         XCTAssertTrue(mockSettingsApp.resetCalled)
 
-        testStore.receive(.onboarding(.passwordScreen(.start)))
+        await testStore.receive(.onboarding(.passwordScreen(.start)))
     }
 
-    func test_sending_logout_should_perform_cleanup_and_pin_screen() {
+    func test_sending_logout_should_perform_cleanup_and_pin_screen() async {
         // given valid parameters
         mockLegacyGuidRepo.directSet(guid: "guid")
         mockLegacySharedKeyRepo.directSet(sharedKey: "sharedKey")
         mockSettingsApp.isPinSet = true
 
-        testStore.send(.onboarding(.start))
-        testStore.receive(.onboarding(.proceedToFlow)) { state in
+        await testStore.send(.onboarding(.start))
+        await testStore.receive(.onboarding(.proceedToFlow)) { state in
             state.onboarding?.pinState = .init()
         }
 
-        testStore.receive(.onboarding(.pin(.authenticate))) { state in
+        await testStore.receive(.onboarding(.pin(.authenticate))) { state in
             state.onboarding?.pinState?.authenticate = true
             state.onboarding?.passwordRequiredState = nil
         }
 
-        testStore.send(.onboarding(.pin(.logout))) { state in
+        await testStore.send(.onboarding(.pin(.logout))) { state in
             state.loggedIn = nil
             state.onboarding = .init(
                 pinState: nil,
@@ -523,39 +524,39 @@ final class MainAppReducerTests: XCTestCase {
         XCTAssertTrue(mockSiftService.removeUserIdCalled)
         XCTAssertTrue(mockSettingsApp.resetCalled)
 
-        testStore.receive(.onboarding(.passwordScreen(.start)))
+        await testStore.receive(.onboarding(.passwordScreen(.start)))
     }
 
-    func test_sending_appForegrounded_while_wallet_not_initialized_and_logged_in_state() {
+    func test_sending_appForegrounded_while_wallet_not_initialized_and_logged_in_state() async {
         // given
         mockLegacyGuidRepo.directSet(guid: "guid")
         mockLegacySharedKeyRepo.directSet(sharedKey: "sharedKey")
         mockSettingsApp.isPinSet = true
 
-        testStore.send(.walletInitialized)
-        mockMainQueue.advance()
-        testStore.receive(.prepareForLoggedIn)
-        testStore.receive(.proceedToLoggedIn(.success(true))) { state in
+        await testStore.send(.walletInitialized)
+        await mockMainQueue.advance()
+        await testStore.receive(.prepareForLoggedIn)
+        await testStore.receive(.proceedToLoggedIn(.success(true))) { state in
             state.loggedIn = LoggedIn.State()
             state.onboarding = nil
         }
-        assertDidPerformSignIn()
+        await assertDidPerformSignIn()
 
         // when
-        testStore.send(.appForegrounded)
-        mockMainQueue.advance()
+        await testStore.send(.appForegrounded)
+        await mockMainQueue.advance()
         // then
 
-        testStore.receive(.loggedIn(.stop))
-        testStore.receive(.requirePin) { state in
+        await testStore.receive(.loggedIn(.stop))
+        await testStore.receive(.requirePin) { state in
             state.loggedIn = nil
             state.onboarding = Onboarding.State(
                 pinState: PinCore.State()
             )
         }
-        testStore.receive(.onboarding(.start))
-        testStore.receive(.onboarding(.proceedToFlow))
-        testStore.receive(.onboarding(.pin(.authenticate))) { state in
+        await testStore.receive(.onboarding(.start))
+        await testStore.receive(.onboarding(.proceedToFlow))
+        await testStore.receive(.onboarding(.pin(.authenticate))) { state in
             state.onboarding?.pinState?.authenticate = true
         }
     }
@@ -577,7 +578,7 @@ final class MainAppReducerTests: XCTestCase {
         XCTAssertTrue(mockSettingsApp.clearPinCalled)
     }
 
-    func test_session_mismatch_deeplink_show_show_authorization() {
+    func test_session_mismatch_deeplink_show_show_authorization() async {
         mockDeviceVerificationService.expectedSessionMismatch = true
         let requestInfo = LoginRequestInfo(
             sessionId: "",
@@ -585,29 +586,29 @@ final class MainAppReducerTests: XCTestCase {
             details: DeviceVerificationDetails(originLocation: "", originIP: "", originBrowser: ""),
             timestamp: Date(timeIntervalSince1970: 1000)
         )
-        testStore.send(.loginRequestReceived(
+        await testStore.send(.loginRequestReceived(
             deeplink: MockDeviceVerificationService.validDeeplink
         ))
-        mockMainQueue.advance()
-        testStore.receive(
+        await mockMainQueue.advance()
+        await testStore.receive(
             .checkIfConfirmationRequired(
                 sessionId: "",
                 base64Str: ""
             )
         )
-        testStore.receive(.proceedToDeviceAuthorization(requestInfo)) { state in
+        await testStore.receive(.proceedToDeviceAuthorization(requestInfo)) { state in
             state.deviceAuthorization = .init(loginRequestInfo: requestInfo)
         }
     }
 
     // MARK: - Helpers
 
-    private func assertDidPerformSignIn(file: StaticString = #file, line: UInt = #line) {
-        testStore.receive(.loggedIn(.start(.none)), file: file, line: line)
-        testStore.receive(.mobileAuthSync(isLogin: true), file: file, line: line)
-        mockMainQueue.advance()
-        testStore.receive(.loggedIn(.handleExistingWalletSignIn), file: file, line: line)
-        testStore.receive(
+    private func assertDidPerformSignIn(file: StaticString = #file, line: UInt = #line) async {
+        await testStore.receive(.loggedIn(.start(.none)), file: file, line: line)
+        await testStore.receive(.mobileAuthSync(isLogin: true), file: file, line: line)
+        await mockMainQueue.advance()
+        await testStore.receive(.loggedIn(.handleExistingWalletSignIn), file: file, line: line)
+        await testStore.receive(
             .loggedIn(.showPostSignInOnboardingFlow),
             assert: { $0.loggedIn?.displayPostSignInOnboardingFlow = true },
             file: file,
@@ -616,8 +617,8 @@ final class MainAppReducerTests: XCTestCase {
     }
 
     /// send logout to clear pending effects after logged in.
-    private func logout(file: StaticString = #file, line: UInt = #line) {
-        testStore.send(.loggedIn(.logout)) { state in
+    private func logout(file: StaticString = #file, line: UInt = #line) async {
+        await testStore.send(.loggedIn(.logout)) { state in
             state.loggedIn = nil
             state.onboarding = .init(
                 pinState: nil,

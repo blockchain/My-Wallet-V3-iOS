@@ -8,7 +8,7 @@ import SwiftUI
 import ToolKit
 import UIComponentsKit
 
-public struct SecondPasswordNoticeReducer: ReducerProtocol {
+public struct SecondPasswordNoticeReducer: Reducer {
     public enum URLContent: Equatable {
         case loginOnWeb
         case twoFASupport
@@ -32,7 +32,7 @@ public struct SecondPasswordNoticeReducer: ReducerProtocol {
 
     let externalAppOpener: ExternalAppOpener
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .open(let urlContent):
@@ -71,7 +71,7 @@ public struct SecondPasswordNoticeView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 VStack {
                     Spacer()
@@ -133,9 +133,11 @@ struct SecondPasswordNoticeView_Previews: PreviewProvider {
         SecondPasswordNoticeView(
             store: Store(
                 initialState: .init(),
-                reducer: SecondPasswordNoticeReducer(
-                    externalAppOpener: ToLogAppOpener()
-                )
+                reducer: {
+                    SecondPasswordNoticeReducer(
+                        externalAppOpener: ToLogAppOpener()
+                    )
+                }
             )
         )
     }

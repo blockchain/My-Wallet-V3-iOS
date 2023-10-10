@@ -25,7 +25,7 @@ struct ImportWalletState: Equatable {
     }
 }
 
-struct ImportWalletReducer: ReducerProtocol {
+struct ImportWalletReducer: Reducer {
 
     typealias State = ImportWalletState
     typealias Action = ImportWalletAction
@@ -41,7 +41,7 @@ struct ImportWalletReducer: ReducerProtocol {
     let recaptchaService: GoogleRecaptchaServiceAPI
     let app: AppProtocol
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .setCreateAccountScreenVisible(let isVisible):
@@ -56,7 +56,7 @@ struct ImportWalletReducer: ReducerProtocol {
                 analyticsRecorder.record(
                     event: .importWalletClicked
                 )
-                return EffectTask(value: .setCreateAccountScreenVisible(true))
+                return Effect.send(.setCreateAccountScreenVisible(true))
             case .goBackButtonTapped:
                 analyticsRecorder.record(
                     event: .importWalletCancelled
@@ -66,7 +66,7 @@ struct ImportWalletReducer: ReducerProtocol {
                 guard state.createAccountState != nil else {
                     return .none
                 }
-                return EffectTask(value: .createAccount(.accountRecoveryFailed(error)))
+                return Effect.send(.createAccount(.accountRecoveryFailed(error)))
             case .createAccount:
                 return .none
             }

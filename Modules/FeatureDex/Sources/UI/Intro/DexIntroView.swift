@@ -14,7 +14,7 @@ public struct DexIntroView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             PrimaryNavigationView {
                 contentView
                     .primaryNavigation(trailing: {
@@ -45,7 +45,7 @@ public struct DexIntroView: View {
     }
 
     private func carouselContentSection() -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             TabView(
                 selection: viewStore.binding(
                     get: { $0.currentStep },
@@ -61,7 +61,7 @@ public struct DexIntroView: View {
     }
 
     private func buttonsSection() -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: .zero) {
                 Spacer()
                 PageControl(
@@ -164,7 +164,7 @@ struct DexIntroView_Previews: PreviewProvider {
         DexIntroView(
             store: Store(
                 initialState: DexIntro.State(),
-                reducer: DexIntro()
+                reducer: { DexIntro() }
             )
         )
     }

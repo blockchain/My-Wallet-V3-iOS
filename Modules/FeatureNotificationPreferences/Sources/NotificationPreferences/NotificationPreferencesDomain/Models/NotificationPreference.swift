@@ -15,7 +15,7 @@ public struct NotificationInfo {
     let notificationMethods: [NotificationMethodInfo]
 }
 
-public struct NotificationMethodInfo: Hashable, Identifiable {
+public struct NotificationMethodInfo: Equatable, Hashable, Identifiable {
     public init(
         id: UUID = UUID(),
         method: NotificationMethod,
@@ -36,7 +36,7 @@ public struct NotificationMethodInfo: Hashable, Identifiable {
     public let configured, verified: Bool
 }
 
-public struct NotificationPreference: Hashable, Identifiable {
+public struct NotificationPreference: Equatable, Hashable, Identifiable {
     public var id = UUID()
     public let type: PreferenceType
     public let title: String

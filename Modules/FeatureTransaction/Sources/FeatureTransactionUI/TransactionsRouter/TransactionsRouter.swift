@@ -497,30 +497,33 @@ extension TransactionsRouter {
         currencies: [FiatCurrency],
         handler: @escaping (TransactionFlowResult) -> Void
     ) -> UIViewController {
-        UIHostingController(
+        let selection: (FiatCurrency) -> Void = { [weak self] selectedCurrency in
+            guard let self else {
+                return
+            }
+            fiatCurrencyService
+                .update(tradingCurrency: selectedCurrency, context: .simpleBuy)
+                .map(TransactionFlowResult.completed)
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: handler)
+                .store(in: &cancellables)
+        }
+        return UIHostingController(
             rootView: TradingCurrencySelector(
                 store: .init(
                     initialState: .init(
                         displayCurrency: displayCurrency,
                         currencies: currencies
                     ),
-                    reducer: TradingCurrency.Reducer(
-                        closeHandler: {
-                            handler(.abandoned)
-                        },
-                        selectionHandler: { [weak self] selectedCurrency in
-                            guard let self else {
-                                return
-                            }
-                            fiatCurrencyService
-                                .update(tradingCurrency: selectedCurrency, context: .simpleBuy)
-                                .map(TransactionFlowResult.completed)
-                                .receive(on: DispatchQueue.main)
-                                .sink(receiveValue: handler)
-                                .store(in: &cancellables)
-                        },
-                        analyticsRecorder: analyticsRecorder
-                    )
+                    reducer: {
+                        TradingCurrency.TradingCurrencyReducer(
+                            closeHandler: {
+                                handler(.abandoned)
+                            },
+                            selectionHandler: selection,
+                            analyticsRecorder: analyticsRecorder
+                        )
+                    }
                 )
             )
         )

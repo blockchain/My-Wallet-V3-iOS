@@ -5,7 +5,7 @@ import ComposableArchitecture
 import Foundation
 import MoneyKit
 
-public struct SwapEnterAmountAnalytics: ReducerProtocol {
+public struct SwapEnterAmountAnalytics: Reducer {
     var app: AppProtocol
     public typealias State = SwapEnterAmount.State
     public typealias Action = SwapEnterAmount.Action
@@ -14,19 +14,19 @@ public struct SwapEnterAmountAnalytics: ReducerProtocol {
         self.app = app
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
                 return .none
 
             case .onPreviewTapped:
-                return .fireAndForget {
+                return .run { _ in
                     app.post(event: blockchain.ux.transaction.enter.amount.button.confirm.tap)
                 }
 
             case .onMaxButtonTapped:
-                return .fireAndForget {
+                return .run { _ in
                     app.post(event: blockchain.ux.transaction.enter.amount.button.max.tap)
                 }
 
@@ -37,12 +37,12 @@ public struct SwapEnterAmountAnalytics: ReducerProtocol {
                 return .none
 
             case .onSelectSourceTapped:
-                return .fireAndForget {
+                return .run { _ in
                     app.post(event: blockchain.ux.transaction.enter.amount.button.change.source)
                 }
 
             case .onSelectTargetTapped:
-                return .fireAndForget {
+                return .run { _ in
                     app.post(event: blockchain.ux.transaction.enter.amount.button.change.target)
                 }
 
@@ -53,7 +53,7 @@ public struct SwapEnterAmountAnalytics: ReducerProtocol {
                     if let selectedAccountRow = state.selectFromCryptoAccountState?.swapAccountRows.filter({ $0.id == id }).first,
                        let currency = selectedAccountRow.currency
                     {
-                        return .fireAndForget {
+                        return .run { _ in
                             app.state.set(blockchain.ux.transaction.source.id, to: currency.code)
                             app.post(event: blockchain.ux.transaction.enter.amount.swap.source.selected)
                         }
@@ -86,7 +86,7 @@ public struct SwapEnterAmountAnalytics: ReducerProtocol {
                 }
 
             case .didFetchPairs(let source, let target):
-                return .fireAndForget {
+                return .run { _ in
                     app.state.set(blockchain.ux.transaction.source.id, to: source.currency.code)
                     app.state.set(blockchain.ux.transaction.source.target.id, to: target.currency.code)
                 }

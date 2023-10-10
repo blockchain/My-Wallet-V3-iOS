@@ -13,7 +13,7 @@ import ToolKit
 
 private typealias LocalizedStrings = LocalizationConstants.NewKYC.Steps.IdentityVerification
 
-struct IdentityVerificationReducer: ReducerProtocol {
+struct IdentityVerificationReducer: Reducer {
 
     typealias State = IdentityVerificationState
     typealias Action = IdentityVerificationAction
@@ -23,20 +23,24 @@ struct IdentityVerificationReducer: ReducerProtocol {
     let analyticsRecorder: AnalyticsEventRecorderAPI
     let mainQueue: AnySchedulerOf<DispatchQueue>
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .startVerification:
-                return .fireAndForget(onCompletion)
+                return .run { _ in onCompletion() }
 
             case .fetchSupportedDocumentTypes:
                 state.isLoading = true
-                return supportedDocumentTypes()
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        .didReceiveSupportedDocumentTypesResult(result)
+                return .run { send in
+                    do {
+                        let result = try await supportedDocumentTypes()
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.didReceiveSupportedDocumentTypesResult(.success(result)))
+                    } catch {
+                        await send(.didReceiveSupportedDocumentTypesResult(.failure(error as! NabuNetworkError)))
                     }
+                }
 
             case .didReceiveSupportedDocumentTypesResult(let result):
                 state.isLoading = false
@@ -63,7 +67,7 @@ struct IdentityVerificationReducer: ReducerProtocol {
                 return .none
 
             case .onViewAppear:
-                return EffectTask(value: .fetchSupportedDocumentTypes)
+                return Effect.send(.fetchSupportedDocumentTypes)
             }
         }
     }
@@ -73,22 +77,26 @@ extension Store where State == IdentityVerificationState, Action == IdentityVeri
 
     static let emptyPreview = Store(
         initialState: IdentityVerificationState(),
-        reducer: IdentityVerificationReducer(
-            onCompletion: {},
-            supportedDocumentTypes: { .empty() },
-            analyticsRecorder: NoOpAnalyticsRecorder(),
-            mainQueue: .main
-        )
+        reducer: {
+            IdentityVerificationReducer(
+                onCompletion: {},
+                supportedDocumentTypes: { .empty() },
+                analyticsRecorder: NoOpAnalyticsRecorder(),
+                mainQueue: .main
+            )
+        }
     )
 
     static let filledPreview = Store(
         initialState: IdentityVerificationState(),
-        reducer: IdentityVerificationReducer(
-            onCompletion: {},
-            supportedDocumentTypes: { .empty() },
-            analyticsRecorder: NoOpAnalyticsRecorder(),
-            mainQueue: .main
-        )
+        reducer: {
+            IdentityVerificationReducer(
+                onCompletion: {},
+                supportedDocumentTypes: { .empty() },
+                analyticsRecorder: NoOpAnalyticsRecorder(),
+                mainQueue: .main
+            )
+        }
     )
 }
 

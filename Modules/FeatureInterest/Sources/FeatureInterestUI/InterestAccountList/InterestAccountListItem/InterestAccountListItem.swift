@@ -16,7 +16,7 @@ struct InterestAccountListItem: View {
     let store: Store<InterestAccountDetails, InterestAccountListItemAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ActionableView(
                 buttons: viewStore.actions.map { action in
                     .init(

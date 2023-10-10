@@ -16,7 +16,7 @@ public struct DashboardAnnouncementsSectionView: View {
 
     public init(store: StoreOf<DashboardAnnouncementsSection>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {

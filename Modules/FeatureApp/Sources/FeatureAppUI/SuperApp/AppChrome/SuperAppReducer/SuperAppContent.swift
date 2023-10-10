@@ -12,7 +12,7 @@ import Foundation
 import MoneyKit
 import SwiftUI
 
-struct SuperAppContent: ReducerProtocol {
+struct SuperAppContent: Reducer {
     @Dependency(\.totalBalanceService) var totalBalanceService
     let app: AppProtocol
 
@@ -35,9 +35,9 @@ struct SuperAppContent: ReducerProtocol {
         case defi(DashboardContent.Action)
     }
 
-    private enum TotalBalanceFetchId {}
+    private struct TotalBalanceFetchId: Hashable {}
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Scope(state: \State.headerState, action: /Action.header) { () -> SuperAppHeader in
             SuperAppHeader()
         }
@@ -58,7 +58,7 @@ struct SuperAppContent: ReducerProtocol {
             switch action {
             case .onAppear:
                 return .merge(
-                    .fireAndForget {
+                    .run { _ in
                         app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
                     },
                     .run { send in
@@ -76,7 +76,7 @@ struct SuperAppContent: ReducerProtocol {
                         await send(.onTotalBalanceFetched(TaskResult { try total.get() }))
                     }
                 }
-                .cancellable(id: TotalBalanceFetchId.self, cancelInFlight: true)
+                .cancellable(id: TotalBalanceFetchId(), cancelInFlight: true)
 
             case .onTotalBalanceFetched(.success(let info)):
                 state.headerState.totalBalance = info.total
@@ -89,7 +89,7 @@ struct SuperAppContent: ReducerProtocol {
                 state.headerState.hasError = true
                 return .none
             case .onDisappear:
-                return .fireAndForget {
+                return .run { _ in
                     app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
                 }
             case .header:

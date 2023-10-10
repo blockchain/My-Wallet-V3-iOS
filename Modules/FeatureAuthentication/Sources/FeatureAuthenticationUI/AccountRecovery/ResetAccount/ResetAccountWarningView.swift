@@ -28,7 +28,7 @@ struct ResetAccountWarningView: View {
 
     init(store: Store<ResetAccountWarningState, ResetAccountWarningAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -86,11 +86,13 @@ struct ResetAccountWarningView: View {
 struct ResetAccountWarningView_Previews: PreviewProvider {
     static var previews: some View {
         ResetAccountWarningView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: ResetAccountWarningReducer(
-                    analyticsRecorder: NoOpAnalyticsRecorder()
-                )
+                reducer: {
+                    ResetAccountWarningReducer(
+                        analyticsRecorder: NoOpAnalyticsRecorder()
+                    )
+                }
             )
         )
     }

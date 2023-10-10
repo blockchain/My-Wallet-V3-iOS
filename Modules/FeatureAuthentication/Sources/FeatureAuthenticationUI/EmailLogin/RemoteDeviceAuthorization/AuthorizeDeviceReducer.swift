@@ -22,7 +22,7 @@ public struct AuthorizeDeviceState: Equatable {
     }
 }
 
-public struct AuthorizeDeviceReducer: ReducerProtocol {
+public struct AuthorizeDeviceReducer: Reducer {
 
     public typealias State = AuthorizeDeviceState
     public typealias Action = AuthorizeDeviceAction
@@ -38,26 +38,25 @@ public struct AuthorizeDeviceReducer: ReducerProtocol {
         self.deviceVerificationService = deviceVerificationService
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .handleAuthorization(let authorized):
-                return deviceVerificationService
-                    .authorizeVerifyDevice(
-                        from: state.loginRequestInfo.sessionId,
-                        payload: state.loginRequestInfo.base64Str,
-                        confirmDevice: authorized
-                    )
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result -> AuthorizeDeviceAction in
-                        switch result {
-                        case .success:
-                            return .showAuthorizationResult(.success(.noValue))
-                        case .failure(let error):
-                            return .showAuthorizationResult(.failure(error))
-                        }
+                return .run { [loginRequestInfo = state.loginRequestInfo] send in
+                    do {
+                        try await deviceVerificationService
+                            .authorizeVerifyDevice(
+                                from: loginRequestInfo.sessionId,
+                                payload: loginRequestInfo.base64Str,
+                                confirmDevice: authorized
+                            )
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.showAuthorizationResult(.success(.noValue)))
+                    } catch {
+                        await send(.showAuthorizationResult(.failure(error as! AuthorizeVerifyDeviceError)))
                     }
+                }
             case .showAuthorizationResult(let result):
                 switch result {
                 case .success:

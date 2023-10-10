@@ -16,7 +16,7 @@ struct InterestAccountDetailsRowItemView: View {
     let store: Store<InterestAccountOverviewRowItem, InterestAccountDetailsRowAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 4.0) {
                 Text(viewStore.title)
                     .typography(.body2)

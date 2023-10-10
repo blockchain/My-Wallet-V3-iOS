@@ -61,7 +61,7 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
         app: AppProtocol,
         siteMap: SiteMap
     ) {
-        self.global = ViewStore(global)
+        self.global = ViewStore(global, observe: { $0 })
         self.app = app
         self.siteMap = siteMap
         super.init(rootView: SuperAppContainerChrome(app: app, isSmallDevice: isSmallDevice()))

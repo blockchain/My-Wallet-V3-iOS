@@ -4,7 +4,7 @@ import FeatureBackupRecoveryPhraseDomain
 import PlatformKit
 import UIKit
 
-public struct ViewRecoveryPhrase: ReducerProtocol {
+public struct ViewRecoveryPhrase: Reducer {
 
     public typealias State = ViewRecoveryPhraseState
     public typealias Action = ViewRecoveryPhraseAction
@@ -38,28 +38,27 @@ public struct ViewRecoveryPhrase: ReducerProtocol {
         self.onIcloudBackedUp = onIcloudBackedUp
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return recoveryPhraseVerifyingService
-                    .recoveryPhraseComponents()
-                    .catchToEffect()
-                    .map { result in
-                        switch result {
-                        case .success(let words):
-                            return .onRecoveryPhraseComponentsFetchSuccess(words)
-                        case .failure:
-                            return .onRecoveryPhraseComponentsFetchedFailed
-                        }
+                return .run { send in
+                    do {
+                        let words = try await recoveryPhraseVerifyingService
+                            .recoveryPhraseComponents()
+                            .await()
+                        await send(.onRecoveryPhraseComponentsFetchSuccess(words))
+                    } catch {
+                        await send(.onRecoveryPhraseComponentsFetchedFailed)
                     }
+                }
 
             case .onRecoveryPhraseComponentsFetchSuccess(let words):
                 state.availableWords = words
                 return .none
 
             case .onRecoveryPhraseComponentsFetchedFailed:
-                return .fireAndForget {
+                return .run { _ in
                     onFailed()
                 }
 
@@ -67,44 +66,41 @@ public struct ViewRecoveryPhrase: ReducerProtocol {
                 state.recoveryPhraseCopied = true
 
                 return .merge(
-                    .fireAndForget { [availableWords = state.availableWords] in
+                    .run { [availableWords = state.availableWords] _ in
                         UIPasteboard.general.string = availableWords.recoveryPhrase
                     },
-                    EffectTask(value: .onCopyReturn)
-                        .delay(
-                            for: 20,
-                            scheduler: mainQueue
-                        )
-                        .eraseToEffect()
+                    .run { send in
+                        try await Task.sleep(nanoseconds: NSEC_PER_SEC * 20)
+                        await send(.onCopyReturn)
+                    }
                 )
             case .onCopyReturn:
                 state.recoveryPhraseCopied = false
-                return .fireAndForget {
+                return .run { _ in
                     UIPasteboard.general.clear()
                 }
 
             case .onBackupToIcloudTap:
                 state.backupLoading = true
                 cloudBackupService.cloudBackupEnabled = true
-                return recoveryPhraseVerifyingService
-                    .markBackupVerified()
-                    .map { _ in
-                        recoveryPhraseRepository.updateMnemonicBackup()
+                return .run { send in
+                    do {
+                        try await recoveryPhraseVerifyingService
+                            .markBackupVerified()
+                            .map { _ in
+                                recoveryPhraseRepository.updateMnemonicBackup()
+                            }
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.onBackupToIcloudComplete)
+                    } catch {
+                        await send(.onBackupToIcloudComplete)
                     }
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        switch result {
-                        case .success:
-                            return .onBackupToIcloudComplete
-                        case .failure:
-                            return .onBackupToIcloudComplete
-                        }
-                    }
+                }
 
             case .onBackupToIcloudComplete:
                 state.backupLoading = false
-                return .fireAndForget {
+                return .run { _ in
                     onIcloudBackedUp()
                 }
 
@@ -117,9 +113,11 @@ public struct ViewRecoveryPhrase: ReducerProtocol {
                 state.blurEnabled = false
                 if state.exposureEmailSent == false {
                     state.exposureEmailSent = true
-                    return recoveryPhraseRepository
-                        .sendExposureAlertEmail()
-                        .fireAndForget()
+                    return .run { _ in
+                        try await recoveryPhraseRepository
+                            .sendExposureAlertEmail()
+                            .await()
+                    }
                 }
                 return .none
 

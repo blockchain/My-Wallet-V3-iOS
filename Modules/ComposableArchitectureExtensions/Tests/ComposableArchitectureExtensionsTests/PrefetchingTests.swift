@@ -5,13 +5,14 @@ import ComposableArchitecture
 import SwiftUI
 import XCTest
 
+@MainActor
 final class PrefetchingTests: XCTestCase {
 
     private let scheduler = DispatchQueue.test
 
     // MARK: - Mocks
 
-    struct TestReducer: ReducerProtocol {
+    struct TestReducer: Reducer {
         let mainQueue: AnySchedulerOf<DispatchQueue>
 
         struct State: Equatable {
@@ -24,7 +25,7 @@ final class PrefetchingTests: XCTestCase {
             case updateValidIndices(Range<Int>)
         }
 
-        var body: some ReducerProtocol<State, Action> {
+        var body: some Reducer<State, Action> {
             Scope<State, Action, PrefetchingReducer>(
                 state: \State.prefetching,
                 action: /Action.prefetching
@@ -46,88 +47,88 @@ final class PrefetchingTests: XCTestCase {
 
     // MARK: - Tests
 
-    func testPrefetchingDebounce() {
+    func testPrefetchingDebounce() async {
         let store = TestStore(
             initialState: TestReducer.State(),
-            reducer: TestReducer(mainQueue: scheduler.eraseToAnyScheduler())
+            reducer: { TestReducer(mainQueue: scheduler.eraseToAnyScheduler()) }
         )
 
-        store.send(.prefetching(.onAppear(index: 0))) {
+        await store.send(.prefetching(.onAppear(index: 0))) {
             $0.prefetching.seen = [0]
         }
 
-        store.send(.prefetching(.onAppear(index: 1))) {
+        await store.send(.prefetching(.onAppear(index: 1))) {
             $0.prefetching.seen = [0, 1]
         }
 
         // Shorter than the debounce
-        scheduler.advance(by: 0.25)
+        await scheduler.advance(by: 0.25)
         // To the debounce
-        scheduler.advance(by: 0.25)
+        await scheduler.advance(by: 0.25)
 
-        store.receive(.prefetching(.fetchIfNeeded))
+        await store.receive(.prefetching(.fetchIfNeeded))
 
-        store.receive(.prefetching(.fetch(indices: [0, 1]))) {
+        await store.receive(.prefetching(.fetch(indices: [0, 1]))) {
             $0.prefetching.seen = [0, 1]
             $0.prefetching.fetchedIndices = [0, 1]
         }
     }
 
-    func testMarginsOverValidIndices() {
+    func testMarginsOverValidIndices() async {
         let allIndices = 0..<10
         let visible = 2
         let expectedIndicies = Set(allIndices)
 
         let store = TestStore(
             initialState: .init(),
-            reducer: TestReducer(mainQueue: scheduler.eraseToAnyScheduler())
+            reducer: { TestReducer(mainQueue: scheduler.eraseToAnyScheduler()) }
         )
 
-        store.send(.updateValidIndices(allIndices)) {
+        await store.send(.updateValidIndices(allIndices)) {
             $0.prefetching.validIndices = allIndices
         }
 
-        store.send(.prefetching(.onAppear(index: visible))) {
+        await store.send(.prefetching(.onAppear(index: visible))) {
             $0.prefetching.seen = [visible]
         }
 
-        scheduler.advance(by: 0.5)
+        await scheduler.advance(by: 0.5)
 
-        store.receive(.prefetching(.fetchIfNeeded))
+        await store.receive(.prefetching(.fetchIfNeeded))
 
-        store.receive(.prefetching(.fetch(indices: expectedIndicies))) {
+        await store.receive(.prefetching(.fetch(indices: expectedIndicies))) {
             $0.prefetching.fetchedIndices = expectedIndicies
         }
     }
 
-    func testMarginsUnderValidIndices() {
+    func testMarginsUnderValidIndices() async {
         let allIndices = 0..<50
         let visible = 30
         let expectedIndices = Set(20..<41)
 
         let store = TestStore(
             initialState: .init(),
-            reducer: TestReducer(mainQueue: scheduler.eraseToAnyScheduler())
+            reducer: { TestReducer(mainQueue: scheduler.eraseToAnyScheduler()) }
         )
 
-        store.send(.updateValidIndices(allIndices)) {
+        await store.send(.updateValidIndices(allIndices)) {
             $0.prefetching.validIndices = allIndices
         }
 
-        store.send(.prefetching(.onAppear(index: visible))) {
+        await store.send(.prefetching(.onAppear(index: visible))) {
             $0.prefetching.seen = [visible]
         }
 
-        scheduler.advance(by: 0.5)
+        await scheduler.advance(by: 0.5)
 
-        store.receive(.prefetching(.fetchIfNeeded))
+        await store.receive(.prefetching(.fetchIfNeeded))
 
-        store.receive(.prefetching(.fetch(indices: Set(expectedIndices)))) {
+        await store.receive(.prefetching(.fetch(indices: Set(expectedIndices)))) {
             $0.prefetching.fetchedIndices = Set(expectedIndices)
         }
     }
 
-    func testRequeue() {
+    func testRequeue() async {
         let allIndices = 0..<10
         let visible = 2
         let expectedIndices = Set(allIndices)
@@ -141,35 +142,35 @@ final class PrefetchingTests: XCTestCase {
                     validIndices: allIndices
                 )
             ),
-            reducer: TestReducer(mainQueue: scheduler.eraseToAnyScheduler())
+            reducer: { TestReducer(mainQueue: scheduler.eraseToAnyScheduler()) }
         )
 
-        store.send(.prefetching(.onAppear(index: visible))) {
+        await store.send(.prefetching(.onAppear(index: visible))) {
             $0.prefetching.seen = [visible]
         }
 
-        scheduler.advance(by: debounce)
+        await scheduler.advance(by: debounce)
 
-        store.receive(.prefetching(.fetchIfNeeded))
+        await store.receive(.prefetching(.fetchIfNeeded))
 
-        store.receive(.prefetching(.fetch(indices: expectedIndices))) {
+        await store.receive(.prefetching(.fetch(indices: expectedIndices))) {
             $0.prefetching.fetchedIndices = expectedIndices
         }
 
         // Fail indices 4 and 6
 
         let requeue: Set<Int> = [4, 6]
-        store.send(.prefetching(.requeue(indices: requeue))) {
+        await store.send(.prefetching(.requeue(indices: requeue))) {
             $0.prefetching.fetchedIndices = expectedIndices.subtracting(requeue)
         }
 
         // Ensure they're re-fetched after debounce
 
-        scheduler.advance(by: debounce)
+        await scheduler.advance(by: debounce)
 
-        store.receive(.prefetching(.fetchIfNeeded))
+        await store.receive(.prefetching(.fetchIfNeeded))
 
-        store.receive(.prefetching(.fetch(indices: requeue))) {
+        await store.receive(.prefetching(.fetch(indices: requeue))) {
             $0.prefetching.fetchedIndices = expectedIndices
         }
     }

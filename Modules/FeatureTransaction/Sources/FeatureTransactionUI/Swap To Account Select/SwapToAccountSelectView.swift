@@ -100,8 +100,8 @@ public struct SwapToAccountSelectView: View {
 
     private var searchBarSection: some View {
         SearchBar(
-            text: viewStore.binding(\.$searchText),
-            isFirstResponder: viewStore.binding(\.$isSearching),
+            text: viewStore.$searchText,
+            isFirstResponder: viewStore.$isSearching,
             cancelButtonText: LocalizationConstants.SuperApp.AllAssets.cancelButton,
             placeholder: LocalizationConstants.SuperApp.AllAssets.searchPlaceholder
         )
@@ -122,7 +122,7 @@ public struct SwapToAccountSelectView: View {
                     icon: Icon.blockchain,
                     identifier: blockchain.ux.asset.account.swap.segment.filter.trading[]
                 )
-            ], selection: viewStore.binding(\.$controlSelection)
+            ], selection: viewStore.$controlSelection
         )
         .padding(.horizontal, Spacing.padding3)
     }

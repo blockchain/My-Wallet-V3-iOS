@@ -17,7 +17,7 @@ import MoneyKit
 import SwiftUI
 import UnifiedActivityDomain
 
-public struct DeFiDashboard: ReducerProtocol {
+public struct DeFiDashboard: Reducer {
     @Dependency(\.mainQueue) var mainQueue
 
     let app: AppProtocol
@@ -50,7 +50,7 @@ public struct DeFiDashboard: ReducerProtocol {
 
     struct FetchBalanceId: Hashable {}
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Scope(state: \State.assetsState, action: /Action.assetsAction) { () -> DashboardAssetsSection in
             DashboardAssetsSection(
                 assetBalanceInfoRepository: assetBalanceInfoRepository,

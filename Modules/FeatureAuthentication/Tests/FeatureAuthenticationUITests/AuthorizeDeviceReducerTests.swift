@@ -7,16 +7,13 @@ import XCTest
 
 @testable import FeatureAuthenticationMock
 
-final class AuthorizeDeviceReducerTests: XCTest {
+@MainActor final class AuthorizeDeviceReducerTests: XCTest {
 
     private var mockMainQueue: TestSchedulerOf<DispatchQueue>!
     private var mockDeviceVerificationService: DeviceVerificationServiceAPI!
     private var testStore: TestStore<
         AuthorizeDeviceState,
-        AuthorizeDeviceAction,
-        AuthorizeDeviceState,
-        AuthorizeDeviceAction,
-        Void
+        AuthorizeDeviceAction
     >!
 
     override func setUpWithError() throws {
@@ -32,10 +29,12 @@ final class AuthorizeDeviceReducerTests: XCTest {
                     timestamp: Date()
                 )
             ),
-            reducer: AuthorizeDeviceReducer(
-                mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                deviceVerificationService: mockDeviceVerificationService
-            )
+            reducer: {
+                AuthorizeDeviceReducer(
+                    mainQueue: mockMainQueue.eraseToAnyScheduler(),
+                    deviceVerificationService: mockDeviceVerificationService
+                )
+            }
         )
     }
 
@@ -46,17 +45,17 @@ final class AuthorizeDeviceReducerTests: XCTest {
         try super.tearDownWithError()
     }
 
-    func test_handle_authorization_should_set_result() {
-        testStore.send(.handleAuthorization(true))
-        testStore.receive(.showAuthorizationResult(.success(.noValue))) { state in
+    func test_handle_authorization_should_set_result() async {
+        await testStore.send(.handleAuthorization(true))
+        await testStore.receive(.showAuthorizationResult(.success(.noValue))) { state in
             state.authorizationResult = .success
         }
-        mockMainQueue.advance()
+        await mockMainQueue.advance()
 
-        testStore.send(.handleAuthorization(false))
-        testStore.receive(.showAuthorizationResult(.failure(.requestDenied))) { state in
+        await testStore.send(.handleAuthorization(false))
+        await testStore.receive(.showAuthorizationResult(.failure(.requestDenied))) { state in
             state.authorizationResult = .requestDenied
         }
-        mockMainQueue.advance()
+        await mockMainQueue.advance()
     }
 }

@@ -18,7 +18,7 @@ struct CreateAccountStepOneView: View {
 
     init(store: Store<CreateAccountStepOneState, CreateAccountStepOneAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -61,7 +61,12 @@ struct CreateAccountStepOneView: View {
             viewStore.send(.onWillDisappear)
         }
         .navigationRoute(in: store)
-        .alert(store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
+        .alert(
+            store: store.scope(
+                state: \.$failureAlert,
+                action: { .alert($0) }
+            )
+        )
         .background(Color.semantic.light.ignoresSafeArea())
     }
 }
@@ -114,7 +119,7 @@ private struct CreateAccountForm: View {
                 if viewStore.shouldDisplayCountryStateField {
                     let isCountryStateValid = viewStore.inputValidationState != .invalid(.noCountryStateSelected)
                     PrimaryPicker(
-                        selection: viewStore.binding(\.$selectedAddressSegmentPicker),
+                        selection: viewStore.$selectedAddressSegmentPicker,
                         rows: [
                             .row(
                                 title: viewStore.country?.title,
@@ -129,7 +134,7 @@ private struct CreateAccountForm: View {
                         .typography(.paragraph2)
                         .padding(.top, Spacing.padding2)
                     PrimaryPicker(
-                        selection: viewStore.binding(\.$selectedAddressSegmentPicker),
+                        selection: viewStore.$selectedAddressSegmentPicker,
                         rows: [
                             .row(
                                 title: viewStore.countryState?.title,
@@ -142,7 +147,7 @@ private struct CreateAccountForm: View {
                     )
                 } else {
                     PrimaryPicker(
-                        selection: viewStore.binding(\.$selectedAddressSegmentPicker),
+                        selection: viewStore.$selectedAddressSegmentPicker,
                         rows: [
                             .row(
                                 title: viewStore.country?.title,
@@ -169,9 +174,9 @@ private struct CreateAccountForm: View {
             subTextStlye = .success
         }
         return Input(
-            text: viewStore.binding(\.$referralCode),
+            text: viewStore.$referralCode,
             isFirstResponder: viewStore
-                .binding(\.$selectedInputField)
+                .$selectedInputField
                 .equals(.referralCode),
             label: LocalizedString.TextFieldTitle.referral,
             subText: subText,
@@ -200,22 +205,24 @@ struct CreateAccountStepOneView_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
             CreateAccountStepOneView(
-                store: .init(
+                store: Store(
                     initialState: .init(
                         context: .createWallet
                     ),
-                    reducer: CreateAccountStepOneReducer(
-                        mainQueue: .main,
-                        passwordValidator: NoOpPasswordValidator(),
-                        externalAppOpener: ToLogAppOpener(),
-                        analyticsRecorder: NoOpAnalyticsRecorder(),
-                        walletRecoveryService: .noop,
-                        walletCreationService: .noop,
-                        walletFetcherService: .noop,
-                        signUpCountriesService: NoSignUpCountriesService(),
-                        recaptchaService: NoOpGoogleRecatpchaService(),
-                        app: App.preview
-                    )
+                    reducer: {
+                        CreateAccountStepOneReducer(
+                            mainQueue: .main,
+                            passwordValidator: NoOpPasswordValidator(),
+                            externalAppOpener: ToLogAppOpener(),
+                            analyticsRecorder: NoOpAnalyticsRecorder(),
+                            walletRecoveryService: .noop,
+                            walletCreationService: .noop,
+                            walletFetcherService: .noop,
+                            signUpCountriesService: NoSignUpCountriesService(),
+                            recaptchaService: NoOpGoogleRecatpchaService(),
+                            app: App.preview
+                        )
+                    }
                 )
             )
         }

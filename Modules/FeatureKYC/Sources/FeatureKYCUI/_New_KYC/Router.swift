@@ -151,12 +151,16 @@ public final class Router: Routing {
     ) -> UIViewController {
         presenter.present(
             EmailVerificationView(
-                store: .init(
+                store: Store(
                     initialState: .init(emailAddress: emailAddress),
-                    reducer: buildEmailVerificationReducer(
-                        emailAddress: emailAddress,
-                        flowCompletion: flowCompletion
-                    )
+                    reducer: {
+                        buildEmailVerificationReducer(
+                            emailAddress: emailAddress,
+                            mainQueue: .main,
+                            pollingQueue: DispatchQueue.global(qos: .background).eraseToAnyScheduler(),
+                            flowCompletion: flowCompletion
+                        )
+                    }
                 )
             )
         )
@@ -372,15 +376,17 @@ public final class Router: Routing {
                 }
                 let app = app
                 let view = TradingLimitsView(
-                    store: .init(
+                    store: Store(
                         initialState: TradingLimitsState(),
-                        reducer: TradingLimitsReducer(
-                            close: close,
-                            openURL: openURL,
-                            presentKYCFlow: presentKYCFlow,
-                            fetchLimitsOverview: kycService.fetchOverview,
-                            analyticsRecorder: analyticsRecorder
-                        )
+                        reducer: {
+                            TradingLimitsReducer(
+                                close: close,
+                                openURL: openURL,
+                                presentKYCFlow: presentKYCFlow,
+                                fetchLimitsOverview: kycService.fetchOverview,
+                                analyticsRecorder: analyticsRecorder
+                            )
+                        }
                     )
                 )
                     .onAppear {
@@ -416,20 +422,25 @@ extension Router {
 
     func buildEmailVerificationReducer(
         emailAddress: String,
+        mainQueue: AnySchedulerOf<DispatchQueue>,
+        pollingQueue: AnySchedulerOf<DispatchQueue>,
         flowCompletion: @escaping (FlowResult) -> Void
     ) -> EmailVerificationReducer {
-        EmailVerificationReducer(
+        let openMailApp = openMailApp
+        return EmailVerificationReducer(
             analyticsRecorder: analyticsRecorder,
             emailVerificationService: emailVerificationService,
             flowCompletionCallback: flowCompletion,
-            openMailApp: { [openMailApp] in
-                    .future { callback in
-                        openMailApp { result in
-                            callback(.success(result))
-                        }
+            openMailApp: {
+                await withCheckedContinuation { continuation in
+                    openMailApp { result in
+                        continuation.resume(returning: result)
                     }
+                }
             },
-            app: app
+            app: app,
+            mainQueue: mainQueue,
+            pollingQueue: pollingQueue
         )
     }
 
@@ -439,32 +450,34 @@ extension Router {
     ) -> AnyPublisher<FlowResult, Never> {
         let publisher = PassthroughSubject<FlowResult, Never>()
         let view = UnlockTradingView(
-            store: .init(
+            store: Store(
                 initialState: UnlockTradingState(currentUserTier: currentUserTier),
-                reducer: UnlockTradingReducer(
-                    dismiss: {
-                        presenter.dismiss(animated: true) {
-                            publisher.send(.abandoned)
-                            publisher.send(completion: .finished)
-                        }
-                    },
-                    unlock: { [routeToKYC] requiredTier in
-                        routeToKYC(presenter, requiredTier) { result in
-                            // KYC is presented on top of prompt. Only dismiss KYC.
-                            // KYC id dismissed automatically.
-                            // When the kyc flow is abandoned, we don't complete
-                            // so users have another shot at going through it
-                            guard case .completed = result else {
-                                return
-                            }
+                reducer: {
+                    UnlockTradingReducer(
+                        dismiss: {
                             presenter.dismiss(animated: true) {
-                                publisher.send(.completed)
+                                publisher.send(.abandoned)
                                 publisher.send(completion: .finished)
                             }
-                        }
-                    },
-                    analyticsRecorder: analyticsRecorder
-                )
+                        },
+                        unlock: { [routeToKYC] requiredTier in
+                            routeToKYC(presenter, requiredTier) { result in
+                                // KYC is presented on top of prompt. Only dismiss KYC.
+                                // KYC id dismissed automatically.
+                                // When the kyc flow is abandoned, we don't complete
+                                // so users have another shot at going through it
+                                guard case .completed = result else {
+                                    return
+                                }
+                                presenter.dismiss(animated: true) {
+                                    publisher.send(.completed)
+                                    publisher.send(completion: .finished)
+                                }
+                            }
+                        },
+                        analyticsRecorder: analyticsRecorder
+                    )
+                }
             )
         )
             .embeddedInNavigationView()

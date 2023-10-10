@@ -33,7 +33,7 @@ public struct SiteMap {
             NetworkPickerView(
                 store: StoreOf<NetworkPicker>(
                     initialState: NetworkPicker.State(currentNetwork: selectedNetworkTicker),
-                    reducer: NetworkPicker()
+                    reducer: { NetworkPicker() }
                 )
             )
 

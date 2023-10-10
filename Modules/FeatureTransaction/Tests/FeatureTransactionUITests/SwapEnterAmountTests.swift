@@ -18,10 +18,7 @@ class SwapEnterAmountTests: XCTestCase {
     fileprivate var completionHandlerSpy: SwapCompletionHandlerSpy!
     var testStore: TestStore<
         SwapEnterAmount.State,
-        SwapEnterAmount.Action,
-        SwapEnterAmount.State,
-        SwapEnterAmount.Action,
-        Void
+        SwapEnterAmount.Action
     >!
 
     let defaultSourcePair = FeatureTransactionDomain.SelectionInformation(accountId: "BTC.Account", currency: .bitcoin)
@@ -46,16 +43,18 @@ class SwapEnterAmountTests: XCTestCase {
 
         testStore = TestStore(
             initialState: SwapEnterAmount.State(),
-            reducer: SwapEnterAmount(
-                app: App.test,
-                defaultSwaptPairsService: mockDefaultPairsService,
-                supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                minMaxAmountsPublisher: minMaxAmountsPublisher,
-                dismiss: completionHandlerSpy.onDismiss,
-                onPairsSelected: completionHandlerSpy.onPairsSelected,
-                onAmountChanged: completionHandlerSpy.onAmountChanged,
-                onPreviewTapped: completionHandlerSpy.onPreviewTapped
-            )
+            reducer: {
+                SwapEnterAmount(
+                    app: App.test,
+                    defaultSwaptPairsService: mockDefaultPairsService,
+                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                    minMaxAmountsPublisher: minMaxAmountsPublisher,
+                    dismiss: completionHandlerSpy.onDismiss,
+                    onPairsSelected: completionHandlerSpy.onPairsSelected,
+                    onAmountChanged: completionHandlerSpy.onAmountChanged,
+                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                )
+            }
         )
     }
 
@@ -74,16 +73,18 @@ class SwapEnterAmountTests: XCTestCase {
         state.sourceValuePrice = MoneyValue.one(currency: .USD)
         testStore = TestStore(
             initialState: state,
-            reducer: SwapEnterAmount(
-                app: App.test,
-                defaultSwaptPairsService: mockDefaultPairsService,
-                supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                minMaxAmountsPublisher: minMaxAmountsPublisher,
-                dismiss: completionHandlerSpy.onDismiss,
-                onPairsSelected: completionHandlerSpy.onPairsSelected,
-                onAmountChanged: completionHandlerSpy.onAmountChanged,
-                onPreviewTapped: completionHandlerSpy.onPreviewTapped
-            )
+            reducer: {
+                SwapEnterAmount(
+                    app: App.test,
+                    defaultSwaptPairsService: mockDefaultPairsService,
+                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                    minMaxAmountsPublisher: minMaxAmountsPublisher,
+                    dismiss: completionHandlerSpy.onDismiss,
+                    onPairsSelected: completionHandlerSpy.onPairsSelected,
+                    onAmountChanged: completionHandlerSpy.onAmountChanged,
+                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                )
+            }
         )
         await testStore.send(.onInputChanged("1"), assert: {
             var inputFormatter = CurrencyInputFormatter()
@@ -106,16 +107,18 @@ class SwapEnterAmountTests: XCTestCase {
         state.transactionMinMaxValues = TransactionMinMaxValues(maxSpendableFiatValue: maxSpendableFiatValue, maxSpendableCryptoValue: maxSpendableCryptoValue, minSpendableFiatValue: minSpendableFiatValue, minSpendableCryptoValue: minSpendableCryptoValue)
         testStore = TestStore(
             initialState: state,
-            reducer: SwapEnterAmount(
-                app: App.test,
-                defaultSwaptPairsService: mockDefaultPairsService,
-                supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                minMaxAmountsPublisher: minMaxAmountsPublisher,
-                dismiss: completionHandlerSpy.onDismiss,
-                onPairsSelected: completionHandlerSpy.onPairsSelected,
-                onAmountChanged: completionHandlerSpy.onAmountChanged,
-                onPreviewTapped: completionHandlerSpy.onPreviewTapped
-            )
+            reducer: {
+                SwapEnterAmount(
+                    app: App.test,
+                    defaultSwaptPairsService: mockDefaultPairsService,
+                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                    minMaxAmountsPublisher: minMaxAmountsPublisher,
+                    dismiss: completionHandlerSpy.onDismiss,
+                    onPairsSelected: completionHandlerSpy.onPairsSelected,
+                    onAmountChanged: completionHandlerSpy.onAmountChanged,
+                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                )
+            }
         )
 
         await testStore.send(.onMaxButtonTapped, assert: {
@@ -137,16 +140,18 @@ class SwapEnterAmountTests: XCTestCase {
         state.amountCryptoEntered = maxSpendableCryptoValue
          testStore = TestStore(
              initialState: state,
-             reducer: SwapEnterAmount(
-                 app: App.test,
-                 defaultSwaptPairsService: mockDefaultPairsService,
-                 supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                 minMaxAmountsPublisher: minMaxAmountsPublisher,
-                 dismiss: completionHandlerSpy.onDismiss,
-                 onPairsSelected: completionHandlerSpy.onPairsSelected,
-                 onAmountChanged: completionHandlerSpy.onAmountChanged,
-                 onPreviewTapped: completionHandlerSpy.onPreviewTapped
-             )
+             reducer: {
+                 SwapEnterAmount(
+                    app: App.test,
+                    defaultSwaptPairsService: mockDefaultPairsService,
+                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                    minMaxAmountsPublisher: minMaxAmountsPublisher,
+                    dismiss: completionHandlerSpy.onDismiss,
+                    onPairsSelected: completionHandlerSpy.onPairsSelected,
+                    onAmountChanged: completionHandlerSpy.onAmountChanged,
+                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                 )
+             }
          )
 
         await testStore.send(.onPreviewTapped)
@@ -166,16 +171,18 @@ class SwapEnterAmountTests: XCTestCase {
         state.isEnteringFiat = true
          testStore = TestStore(
              initialState: state,
-             reducer: SwapEnterAmount(
-                 app: App.test,
-                 defaultSwaptPairsService: mockDefaultPairsService,
-                 supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                 minMaxAmountsPublisher: minMaxAmountsPublisher,
-                 dismiss: completionHandlerSpy.onDismiss,
-                 onPairsSelected: completionHandlerSpy.onPairsSelected,
-                 onAmountChanged: completionHandlerSpy.onAmountChanged,
-                 onPreviewTapped: completionHandlerSpy.onPreviewTapped
-             )
+             reducer: {
+                 SwapEnterAmount(
+                    app: App.test,
+                    defaultSwaptPairsService: mockDefaultPairsService,
+                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                    minMaxAmountsPublisher: minMaxAmountsPublisher,
+                    dismiss: completionHandlerSpy.onDismiss,
+                    onPairsSelected: completionHandlerSpy.onPairsSelected,
+                    onAmountChanged: completionHandlerSpy.onAmountChanged,
+                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                 )
+             }
          )
 
         await testStore.send(.onChangeInputTapped, assert: {
@@ -200,16 +207,18 @@ class SwapEnterAmountTests: XCTestCase {
         state.isEnteringFiat = true
          testStore = TestStore(
              initialState: state,
-             reducer: SwapEnterAmount(
-                 app: App.test,
-                 defaultSwaptPairsService: mockDefaultPairsService,
-                 supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                 minMaxAmountsPublisher: minMaxAmountsPublisher,
-                 dismiss: completionHandlerSpy.onDismiss,
-                 onPairsSelected: completionHandlerSpy.onPairsSelected,
-                 onAmountChanged: completionHandlerSpy.onAmountChanged,
-                 onPreviewTapped: completionHandlerSpy.onPreviewTapped
-             )
+             reducer: {
+                 SwapEnterAmount(
+                    app: App.test,
+                    defaultSwaptPairsService: mockDefaultPairsService,
+                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                    minMaxAmountsPublisher: minMaxAmountsPublisher,
+                    dismiss: completionHandlerSpy.onDismiss,
+                    onPairsSelected: completionHandlerSpy.onPairsSelected,
+                    onAmountChanged: completionHandlerSpy.onAmountChanged,
+                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                 )
+             }
          )
 
         let projectedValue = testStore.state.secondaryFieldText

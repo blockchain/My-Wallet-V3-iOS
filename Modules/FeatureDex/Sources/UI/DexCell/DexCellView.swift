@@ -39,17 +39,17 @@ public struct DexCellView: View {
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$defaultFiatCurrency),
+                viewStore.$defaultFiatCurrency,
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$quoteByOutputEnabled),
+                viewStore.$quoteByOutputEnabled,
                 to: blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled
             )
         }
-        .sheet(isPresented: viewStore.binding(\.$showAssetPicker), content: { assetPickerView })
+        .sheet(isPresented: viewStore.$showAssetPicker, content: { assetPickerView })
     }
 }
 
@@ -74,13 +74,13 @@ extension DexCellView {
             .foregroundColor(.semantic.title)
             .focused($textFieldIsFocused)
             .textInputAutocapitalization(.never)
-            .synchronize(viewStore.binding(\.$textFieldIsFocused), $textFieldIsFocused)
+            .synchronize(viewStore.$textFieldIsFocused, $textFieldIsFocused)
             .disabled(viewStore.textFieldDisabled)
     }
 
     private var amountViewText: Binding<String> {
         if viewStore.isCurrentInput {
-            return viewStore.binding(\.$inputText).removeDuplicates()
+            return viewStore.$inputText.removeDuplicates()
         } else {
             return .constant(viewStore.amount?.toDisplayString(includeSymbol: false) ?? "")
         }
@@ -226,7 +226,7 @@ struct DexCellView_Previews: PreviewProvider {
                 DexCellView(
                     store: Store(
                         initialState: state,
-                        reducer: DexCell()
+                        reducer: { DexCell() }
                     )
                 )
                 .app(app)

@@ -9,6 +9,7 @@ import SwiftUI
 import ToolKit
 import UIComponentsKit
 
+@MainActor
 public struct PasswordRequiredView: View {
 
     private typealias LocalizedString = LocalizationConstants.FeatureAuthentication.PasswordRequired
@@ -29,7 +30,12 @@ public struct PasswordRequiredView: View {
                     forgetWalletSection
                 }
                 .padding(Spacing.padding3)
-                .alert(store.scope(state: \.alert), dismiss: .alert(.dismiss))
+                .alert(
+                    store: store.scope(
+                        state: \.$alert,
+                        action: { .alert($0) }
+                    )
+                )
             }
             .frame(height: geometry.size.height)
         }
@@ -48,19 +54,21 @@ public struct PasswordRequiredView: View {
     }
 
     private var passwordRequiredForm: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Spacing.padding3) {
                 walletIdField
                 passwordField
                 PrimaryButton(title: LocalizedString.continueButton) {
-                    viewStore.send(.continueButtonTapped)
+//                    viewStore.send(.alert(.presented(.show(title: "Title", message: "message"))))
+                    viewStore.send(.forgetWalletTapped)
+//                    viewStore.send(.continueButtonTapped)
                 }
             }
         }
     }
 
     private var walletIdField: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Spacing.padding1) {
                 Input(
                     text: .constant(viewStore.walletIdentifier),
@@ -81,17 +89,17 @@ public struct PasswordRequiredView: View {
     }
 
     private var passwordField: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: Spacing.padding1) {
                 Input(
-                    text: viewStore.binding(\.$password),
+                    text: viewStore.$password,
                     isFirstResponder: viewStore
-                        .binding(\.$isPasswordSelected),
+                        .$isPasswordSelected,
                     label: LocalizedString.passwordField,
                     placeholder: LocalizedString.passwordFieldPlaceholder,
                     isSecure: !viewStore.isPasswordVisible,
                     trailing: {
-                        PasswordEyeSymbolButton(isPasswordVisible: viewStore.binding(\.$isPasswordVisible))
+                        PasswordEyeSymbolButton(isPasswordVisible: viewStore.$isPasswordVisible)
                     },
                     onReturnTapped: {
                         viewStore.send(.set(\.$isPasswordSelected, false))
@@ -112,7 +120,7 @@ public struct PasswordRequiredView: View {
     }
 
     private var forgetWalletSection: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Spacing.padding2) {
                 Text(LocalizedString.forgetWalletDescription)
                     .typography(.caption1)
@@ -128,3 +136,53 @@ public struct PasswordRequiredView: View {
         }
     }
 }
+
+#if DEBUG
+
+import WalletPayloadKit
+
+struct PasswordRequired_Previews: PreviewProvider {    
+    static var previews: some View {
+        NavigationView {
+            PasswordRequiredView(
+                store: Store(
+                    initialState: .init(walletIdentifier: "42"),
+                    reducer: {
+                        PasswordRequiredReducer(
+                            mainQueue: .main,
+                            externalAppOpener: NoOpExternalAppOpener(),
+                            walletPayloadService: NoOpWalletPayloadService(),
+                            pushNotificationsRepository: NoOpPushNotificationsRepositoryAPI(),
+                            mobileAuthSyncService: NoOpMobileAuthSyncServiceAPI(),
+                            forgetWalletService: ForgetWalletService.live(forgetWallet: NoOpForgetWalletAPI())
+                        )
+                    }
+                )
+            )
+        }
+    }
+}
+
+struct NoOpPushNotificationsRepositoryAPI: PushNotificationsRepositoryAPI {
+    func revokeToken() -> AnyPublisher<Void, FeatureAuthenticationDomain.PushNotificationsRepositoryError> {
+        .just(())
+    }
+}
+
+struct NoOpMobileAuthSyncServiceAPI: MobileAuthSyncServiceAPI {
+    func updateMobileSetup(isMobileSetup: Bool) -> AnyPublisher<Void, FeatureAuthenticationDomain.MobileAuthSyncServiceError> {
+        .just(())
+    }
+    
+    func verifyCloudBackup(hasCloudBackup: Bool) -> AnyPublisher<Void, FeatureAuthenticationDomain.MobileAuthSyncServiceError> {
+        .just(())
+    }
+}
+
+struct NoOpForgetWalletAPI: ForgetWalletAPI {
+    func forget() -> AnyPublisher<Void, WalletPayloadKit.ForgetWalletError> {
+        .just(())
+    }
+}
+
+#endif

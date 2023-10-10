@@ -86,12 +86,14 @@ final class KYCVerifyIdentityController: KYCBaseViewController, ProgressableView
         let view = IdentityVerificationView(
             store: Store(
                 initialState: IdentityVerificationState(),
-                reducer: IdentityVerificationReducer(
-                    onCompletion: startVerification,
-                    supportedDocumentTypes: supportedDocumentTypes,
-                    analyticsRecorder: analyticsRecorder,
-                    mainQueue: .main
-                )
+                reducer: {
+                    IdentityVerificationReducer(
+                        onCompletion: startVerification,
+                        supportedDocumentTypes: supportedDocumentTypes,
+                        analyticsRecorder: analyticsRecorder,
+                        mainQueue: .main
+                    )
+                }
             )
         )
         embed(view)

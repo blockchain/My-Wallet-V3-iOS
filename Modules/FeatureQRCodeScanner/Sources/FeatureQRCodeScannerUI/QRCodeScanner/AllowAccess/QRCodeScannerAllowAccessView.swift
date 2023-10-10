@@ -17,7 +17,7 @@ struct QRCodeScannerAllowAccessView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .center) {
                 VStack(alignment: .center) {
                     indicator
@@ -131,19 +131,21 @@ struct QRCodeScannerAllowAccessView: View {
 struct QRCodeScannerAllowAccessView_Previews: PreviewProvider {
     static var previews: some View {
         QRCodeScannerAllowAccessView(
-            store: .init(
+            store: Store(
                 initialState: AllowAccessState(
                     informationalOnly: false,
                     showWalletConnectRow: true
                 ),
-                reducer: AllowAccessReducer(
-                    allowCameraAccess: {},
-                    cameraAccessDenied: { false },
-                    dismiss: {},
-                    showCameraDeniedAlert: {},
-                    showsWalletConnectRow: { .just(true) },
-                    openWalletConnectUrl: { _ in }
-                )
+                reducer: {
+                    AllowAccessReducer(
+                        allowCameraAccess: {},
+                        cameraAccessDenied: { false },
+                        dismiss: {},
+                        showCameraDeniedAlert: {},
+                        showsWalletConnectRow: { .just(true) },
+                        openWalletConnectUrl: { _ in }
+                    )
+                }
             )
         )
         .frame(height: 70.vh)

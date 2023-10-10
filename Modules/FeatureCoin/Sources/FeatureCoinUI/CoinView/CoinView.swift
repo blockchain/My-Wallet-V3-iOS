@@ -29,7 +29,7 @@ public struct CoinView: View {
 
     public init(store: Store<CoinViewState, CoinViewAction>) {
         self.store = store
-        _viewStore = .init(initialValue: ViewStore(store))
+        _viewStore = .init(initialValue: ViewStore(store, observe: { $0 }))
     }
 
     @ViewBuilder
@@ -88,7 +88,7 @@ public struct CoinView: View {
             }
         }
         .bottomSheet(
-            item: viewStore.binding(\.$account).animation(.spring()),
+            item: viewStore.$account.animation(.spring()),
             content: { account in
                 AccountSheet(
                     account: account,
@@ -107,7 +107,7 @@ public struct CoinView: View {
             }
         )
         .bottomSheet(
-            item: viewStore.binding(\.$explainer).animation(.spring()),
+            item: viewStore.$explainer.animation(.spring()),
             content: { account in
                 AccountExplainer(
                     account: account,
@@ -378,7 +378,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
             CoinView(
                 store: Store(
                     initialState: normalState,
-                    reducer: CoinViewReducer(environment: .preview)
+                    reducer: { CoinViewReducer(environment: .preview) }
                 )
             )
             .app(App.preview)
@@ -390,7 +390,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
             CoinView(
                 store: Store(
                     initialState: normalState,
-                    reducer: CoinViewReducer(environment: .preview)
+                    reducer: { CoinViewReducer(environment: .preview) }
                 )
             )
             .app(App.preview)
@@ -413,7 +413,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                             result: .success(.preview)
                         )
                     ),
-                    reducer: CoinViewReducer(environment: .preview)
+                    reducer: { CoinViewReducer(environment: .preview) }
                 )
             )
             .app(App.preview)
@@ -435,7 +435,7 @@ struct CoinView_PreviewProvider: PreviewProvider {
                             result: .success(.preview)
                         )
                     ),
-                    reducer: CoinViewReducer(environment: .preview)
+                    reducer: { CoinViewReducer(environment: .preview) }
                 )
             )
             .app(App.preview)
@@ -450,7 +450,9 @@ struct CoinView_PreviewProvider: PreviewProvider {
                         isFavorite: nil,
                         graph: .init(isFetching: true)
                     ),
-                    reducer: CoinViewReducer(environment: .previewEmpty)
+                    reducer: {
+                        CoinViewReducer(environment: .previewEmpty)
+                    }
                 )
             )
             .app(App.preview)
@@ -470,7 +472,9 @@ struct CoinView_PreviewProvider: PreviewProvider {
                             result: .failure(.init(request: nil, type: .serverError(.badResponse)))
                         )
                     ),
-                    reducer: CoinViewReducer(environment: .previewEmpty)
+                    reducer: {
+                        CoinViewReducer(environment: .previewEmpty)
+                    }
                 )
             )
             .app(App.preview)

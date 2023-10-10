@@ -68,9 +68,9 @@ public struct SiteMap {
                 app: app
             )
             AllActivitySceneView(
-                store: .init(
+                store: Store(
                     initialState: .init(with: modelOrDefault),
-                    reducer: reducer
+                    reducer: { reducer }
                 )
             )
         case blockchain.ux.user.assets.all:
@@ -81,18 +81,20 @@ public struct SiteMap {
             )
             AllAssetsSceneView(store: Store(
                 initialState: initialState,
-                reducer: reducer
+                reducer: { reducer }
             ))
         case blockchain.ux.activity.detail:
             let initialState = try ActivityDetailScene.State(activityEntry: context.decode(blockchain.ux.activity.detail.model))
             ActivityDetailSceneView(
-                store: .init(
+                store: Store(
                     initialState: initialState,
-                    reducer: ActivityDetailScene(
-                        app: resolve(),
-                        activityDetailsService: resolve(),
-                        custodialActivityDetailsService: resolve()
-                    )
+                    reducer: {
+                        ActivityDetailScene(
+                            app: resolve(),
+                            activityDetailsService: resolve(),
+                            custodialActivityDetailsService: resolve()
+                        )
+                    }
                 )
             )
         case blockchain.ux.dashboard.recurring.buy.manage,
@@ -144,12 +146,14 @@ public struct SiteMap {
                 .ignoresSafeArea(.container, edges: .bottom)
         case blockchain.ux.referral.details.screen:
             let model = try context[blockchain.ux.referral.details.screen.info].decode(Referral.self)
-            ReferFriendView(store: .init(
+            ReferFriendView(store: Store(
                 initialState: .init(referralInfo: model),
-                reducer: ReferFriendReducer(
-                    mainQueue: .main,
-                    analyticsRecorder: resolve()
-                )
+                reducer: {
+                    ReferFriendReducer(
+                        mainQueue: .main,
+                        analyticsRecorder: resolve()
+                    )
+                }
             ))
             .identity(blockchain.ux.referral)
             .ignoresSafeArea()
@@ -203,12 +207,14 @@ public struct SiteMap {
 
         case blockchain.ux.dashboard.external.trading.migration:
             ExternalTradingMigrationView(
-                store: .init(
+                store: Store(
                     initialState: .init(),
-                    reducer: ExternalTradingMigration(
-                        app: app,
-                        externalTradingMigrationService: resolve()
-                    )
+                    reducer: {
+                        ExternalTradingMigration(
+                            app: app,
+                            externalTradingMigrationService: resolve()
+                        )
+                    }
                 )
             )
 

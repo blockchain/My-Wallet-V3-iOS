@@ -12,7 +12,7 @@ import MoneyKit
 import SwiftExtensions
 import SwiftUI
 
-public struct PricesScene: ReducerProtocol {
+public struct PricesScene: Reducer {
 
     public let app: AppProtocol
     public let enabledCurrencies: EnabledCurrenciesServiceAPI
@@ -90,7 +90,7 @@ public struct PricesScene: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
 
         Reduce { state, action in
@@ -129,7 +129,7 @@ public struct PricesScene: ReducerProtocol {
                 return .none
 
             case .onAssetTapped(let asset):
-                return .fireAndForget {
+                return .run { _ in
                     app.post(
                         action: blockchain.ux.asset[asset.currency.code].select.then.enter.into,
                         value: blockchain.ux.asset[asset.currency.code],

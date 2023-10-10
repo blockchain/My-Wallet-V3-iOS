@@ -10,6 +10,7 @@ import Localization
 import SwiftUI
 import ToolKit
 
+@MainActor
 struct SearchCryptoDomainView: View {
 
     private typealias LocalizedString = LocalizationConstants.FeatureCryptoDomain.SearchDomain
@@ -22,7 +23,7 @@ struct SearchCryptoDomainView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Spacing.padding2) {
                 searchBar
                     .padding([.top, .leading, .trailing], Spacing.padding3)
@@ -34,7 +35,7 @@ struct SearchCryptoDomainView: View {
                 viewStore.send(.onAppear)
             }
             .primaryNavigation(title: LocalizedString.title)
-            .bottomSheet(isPresented: viewStore.binding(\.$isPremiumDomainBottomSheetShown)) {
+            .bottomSheet(isPresented: viewStore.$isPremiumDomainBottomSheetShown) {
                 createPremiumDomainBottomSheet()
             }
             .navigationRoute(in: store)
@@ -42,10 +43,10 @@ struct SearchCryptoDomainView: View {
     }
 
     private var searchBar: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             SearchBar(
-                text: viewStore.binding(\.$searchText),
-                isFirstResponder: viewStore.binding(\.$isSearchFieldSelected),
+                text: viewStore.$searchText,
+                isFirstResponder: viewStore.$isSearchFieldSelected,
                 cancelButtonText: LocalizationConstants.cancel,
                 subText: viewStore.isSearchTextValid ? nil : LocalizedString.SearchBar.error,
                 subTextStyle: viewStore.isSearchTextValid ? .default : .error,
@@ -59,7 +60,7 @@ struct SearchCryptoDomainView: View {
     }
 
     private var alertCardDescription: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if viewStore.isAlertCardShown {
                 AlertCard(
                     title: LocalizedString.Description.title,
@@ -74,7 +75,7 @@ struct SearchCryptoDomainView: View {
     }
 
     private var domainList: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ScrollView {
                 if viewStore.isSearchResultsLoading {
                     ProgressView()
@@ -98,7 +99,7 @@ struct SearchCryptoDomainView: View {
     }
 
     private func createDomainRow(result: SearchDomainResult) -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             PrimaryRow(
                 title: result.domainName,
                 subtitle: result.domainType.statusLabel,
@@ -125,11 +126,11 @@ struct SearchCryptoDomainView: View {
     }
 
     private func createPremiumDomainBottomSheet() -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             BuyDomainActionView(
                 domainName: viewStore.selectedPremiumDomain?.domainName ?? "",
                 redirectUrl: viewStore.selectedPremiumDomainRedirectUrl ?? "",
-                isShown: viewStore.binding(\.$isPremiumDomainBottomSheetShown)
+                isShown: viewStore.$isPremiumDomainBottomSheetShown
             )
         }
     }
@@ -142,19 +143,21 @@ struct SearchCryptoDomainView: View {
 struct SearchCryptoDomainView_Previews: PreviewProvider {
     static var previews: some View {
         SearchCryptoDomainView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: SearchCryptoDomain(
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    externalAppOpener: ToLogAppOpener(),
-                    searchDomainRepository: SearchDomainRepository(
-                        apiClient: SearchDomainClient.mock
-                    ),
-                    orderDomainRepository: OrderDomainRepository(
-                        apiClient: OrderDomainClient.mock
-                    ),
-                    userInfoProvider: { .empty() }
-                )
+                reducer: {
+                    SearchCryptoDomain(
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        externalAppOpener: ToLogAppOpener(),
+                        searchDomainRepository: SearchDomainRepository(
+                            apiClient: SearchDomainClient.mock
+                        ),
+                        orderDomainRepository: OrderDomainRepository(
+                            apiClient: OrderDomainClient.mock
+                        ),
+                        userInfoProvider: { .empty() }
+                    )
+                }
             )
         )
     }

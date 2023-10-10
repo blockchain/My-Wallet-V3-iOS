@@ -37,30 +37,36 @@ public enum WalletAction: Equatable {
     case walletSetup
 }
 
-struct WalletReducer: ReducerProtocol {
+struct WalletReducer: Reducer {
 
     typealias State = CoreAppState
     typealias Action = CoreAppAction
 
     let environment: CoreAppEnvironment
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .wallet(.fetch(let password)):
-                return environment.walletService.fetch(password)
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect()
+                return .run { send in
+                        do {
+                            let wallet = try await environment.walletService.fetch(password)
+                                .receive(on: environment.mainQueue)
+                                .await()
+                            await send(.wallet(.walletFetched(.success(wallet))))
+                        } catch {
+                            await send(.wallet(.walletFetched(.failure(error as! WalletError))))
+                        }
+                    }
                     .cancellable(id: WalletCancelations.FetchId, cancelInFlight: true)
-                    .map { CoreAppAction.wallet(.walletFetched($0)) }
 
             case .wallet(.walletFetched(.success(let context))):
                 // the cancellations are here because we still call the legacy actions
                 // and we need to cancel those operation - (remove after JS removal)
                 return .concatenate(
                     .cancel(id: WalletCancelations.FetchId),
-                    EffectTask(value: .wallet(.walletBootstrap(context))),
-                    EffectTask(value: .wallet(.walletSetup))
+                    Effect.send(.wallet(.walletBootstrap(context))),
+                    Effect.send(.wallet(.walletSetup))
                 )
 
             case .wallet(.walletBootstrap(let context)):
@@ -74,7 +80,7 @@ struct WalletReducer: ReducerProtocol {
                 )
                 return .merge(
                     // reset KYC verification if decrypted wallet under recovery context
-                    EffectTask(value: .resetVerificationStatusIfNeeded(
+                    Effect.send(.resetVerificationStatusIfNeeded(
                         guid: context.guid,
                         sharedKey: context.sharedKey
                     ))
@@ -87,25 +93,25 @@ struct WalletReducer: ReducerProtocol {
                    context == .metadataRecovery
                 {
                     environment.loadingViewPresenter.hide()
-                    return EffectTask(value: .onboarding(.handleMetadataRecoveryAfterAuthentication))
+                    return Effect.send(.onboarding(.handleMetadataRecoveryAfterAuthentication))
                 }
                 // decide if we need to set a pin or not
                 guard environment.blockchainSettings.isPinSet else {
                     guard state.onboarding?.welcomeState != nil else {
-                        return EffectTask(value: .setupPin)
+                        return Effect.send(.setupPin)
                     }
                     return .merge(
-                        EffectTask(value: .onboarding(.welcomeScreen(.dismiss()))),
-                        EffectTask(value: .setupPin)
+                        Effect.send(.onboarding(.welcomeScreen(.dismiss()))),
+                        Effect.send(.setupPin)
                     )
                 }
-                return EffectTask(value: .prepareForLoggedIn)
+                return Effect.send(.prepareForLoggedIn)
 
             case .wallet(.walletFetched(.failure(.initialization(.needsSecondPassword)))):
                 // we don't support double encrypted password wallets
                 environment.loadingViewPresenter.hide()
-                return EffectTask(
-                    value: .onboarding(.informSecondPasswordDetected)
+                return Effect.send(
+                    .onboarding(.informSecondPasswordDetected)
                 )
 
             case .wallet(.walletFetched(.failure(.decryption(.decryptionError)))) where state.onboarding?.pinState != nil:
@@ -127,7 +133,7 @@ struct WalletReducer: ReducerProtocol {
                         buttons: buttons
                     )
                     return .merge(
-                        EffectTask(value: .alert(alertAction)),
+                        Effect.send(.alert(alertAction)),
                         .cancel(id: WalletCancelations.FetchId)
                     )
                 }
@@ -150,9 +156,9 @@ struct WalletReducer: ReducerProtocol {
                     buttons: buttons
                 )
                 return .merge(
-                    EffectTask(value: .alert(alertAction)),
+                    Effect.send(.alert(alertAction)),
                     .cancel(id: WalletCancelations.FetchId),
-                    EffectTask(value: .onboarding(.handleWalletDecryptionError))
+                    Effect.send(.onboarding(.handleWalletDecryptionError))
                 )
 
             default:

@@ -13,15 +13,13 @@ import TestKit
 import ToolKit
 import XCTest
 
+@MainActor
 final class SearchCryptoDomainReducerTests: XCTestCase {
 
     private var mockMainQueue: ImmediateSchedulerOf<DispatchQueue>!
     private var testStore: TestStore<
         SearchCryptoDomainState,
-        SearchCryptoDomainAction,
-        SearchCryptoDomainState,
-        SearchCryptoDomainAction,
-        Void
+        SearchCryptoDomainAction
     >!
     private var searchClient: SearchDomainClientAPI!
     private var orderClient: OrderDomainClientAPI!
@@ -82,71 +80,71 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
         XCTAssertNil(state.checkoutState)
     }
 
-    func test_on_appear_should_search_domains_by_firstname() throws {
+    func test_on_appear_should_search_domains_by_firstname() async throws {
         let expectedResults = try searchDomainRepository
             .searchResults(searchKey: "Firstname", freeOnly: true)
             .wait()
-        testStore.send(.onAppear)
-        testStore.receive(.searchDomainsWithUsername)
-        testStore.receive(.searchDomains(key: "Firstname", freeOnly: true)) { state in
+        await testStore.send(.onAppear)
+        await testStore.receive(.searchDomainsWithUsername)
+        await testStore.receive(.searchDomains(key: "Firstname", freeOnly: true)) { state in
             state.isSearchResultsLoading = true
         }
-        testStore.receive(.didReceiveDomainsResult(.success(expectedResults), true)) { state in
+        await testStore.receive(.didReceiveDomainsResult(.success(expectedResults), true)) { state in
             state.isSearchResultsLoading = false
             state.searchResults = expectedResults
         }
     }
 
-    func test_empty_search_text_should_search_domains_by_username() throws {
+    func test_empty_search_text_should_search_domains_by_username() async throws {
         let expectedResults = try searchDomainRepository
             .searchResults(searchKey: "Firstname", freeOnly: true)
             .wait()
-        testStore.send(.set(\.$searchText, ""))
-        testStore.receive(.searchDomains(key: "", freeOnly: false))
-        testStore.receive(.searchDomainsWithUsername)
-        testStore.receive(.searchDomains(key: "Firstname", freeOnly: true)) { state in
+        await testStore.send(.set(\.$searchText, ""))
+        await testStore.receive(.searchDomains(key: "", freeOnly: false))
+        await testStore.receive(.searchDomainsWithUsername)
+        await testStore.receive(.searchDomains(key: "Firstname", freeOnly: true)) { state in
             state.isSearchResultsLoading = true
         }
-        testStore.receive(.didReceiveDomainsResult(.success(expectedResults), true)) { state in
+        await testStore.receive(.didReceiveDomainsResult(.success(expectedResults), true)) { state in
             state.isSearchResultsLoading = false
             state.searchResults = expectedResults
         }
     }
 
-    func test_valid_search_text_should_search_domains() throws {
+    func test_valid_search_text_should_search_domains() async throws {
         let expectedResults = try searchDomainRepository
             .searchResults(searchKey: "Searchkey", freeOnly: false)
             .wait()
-        testStore.send(.set(\.$searchText, "Searchkey")) { state in
+        await testStore.send(.set(\.$searchText, "Searchkey")) { state in
             state.isSearchTextValid = true
             state.searchText = "Searchkey"
         }
-        testStore.receive(.searchDomains(key: "Searchkey", freeOnly: false)) { state in
+        await testStore.receive(.searchDomains(key: "Searchkey", freeOnly: false)) { state in
             state.isSearchResultsLoading = true
         }
-        testStore.receive(.didReceiveDomainsResult(.success(expectedResults), false)) { state in
+        await testStore.receive(.didReceiveDomainsResult(.success(expectedResults), false)) { state in
             state.isSearchResultsLoading = false
             state.searchResults = expectedResults
         }
     }
 
-    func test_invalid_search_text_should_not_search_domains() {
-        testStore.send(.set(\.$searchText, "in.valid")) { state in
+    func test_invalid_search_text_should_not_search_domains() async {
+        await testStore.send(.set(\.$searchText, "in.valid")) { state in
             state.isSearchTextValid = false
             state.searchText = "in.valid"
         }
     }
 
-    func test_select_free_domain_should_go_to_checkout() {
+    func test_select_free_domain_should_go_to_checkout() async {
         let testDomain = SearchDomainResult(
             domainName: "free.blockchain",
             domainType: .free,
             domainAvailability: .availableForFree
         )
-        testStore.send(.selectFreeDomain(testDomain)) { state in
+        await testStore.send(.selectFreeDomain(testDomain)) { state in
             state.selectedDomains = OrderedSet([testDomain])
         }
-        testStore.receive(.navigate(to: .checkout)) { state in
+        await testStore.receive(.navigate(to: .checkout)) { state in
             state.route = RouteIntent(route: .checkout, action: .navigateTo)
             state.checkoutState = .init(
                 selectedDomains: OrderedSet([testDomain])
@@ -154,7 +152,7 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
         }
     }
 
-    func test_select_premium_domain_should_open_bottom_sheet() throws {
+    func test_select_premium_domain_should_open_bottom_sheet() async throws {
         let expectedResult = try orderDomainRepository
             .createDomainOrder(
                 isFree: false,
@@ -167,38 +165,38 @@ final class SearchCryptoDomainReducerTests: XCTestCase {
             domainType: .premium,
             domainAvailability: .availableForPremiumSale(price: "50")
         )
-        testStore.send(.selectPremiumDomain(testDomain)) { state in
+        await testStore.send(.selectPremiumDomain(testDomain)) { state in
             state.selectedPremiumDomain = testDomain
         }
-        testStore.receive(.set(\.$isPremiumDomainBottomSheetShown, true)) { state in
+        await testStore.receive(.set(\.$isPremiumDomainBottomSheetShown, true)) { state in
             state.isPremiumDomainBottomSheetShown = true
         }
-        testStore.receive(.didSelectPremiumDomain(.success(expectedResult))) { state in
+        await testStore.receive(.didSelectPremiumDomain(.success(expectedResult))) { state in
             state.selectedPremiumDomainRedirectUrl = expectedResult.redirectUrl ?? ""
         }
     }
 
-    func test_remove_at_checkout_should_update_state() {
+    func test_remove_at_checkout_should_update_state() async {
         let testDomain = SearchDomainResult(
             domainName: "free.blockchain",
             domainType: .free,
             domainAvailability: .availableForFree
         )
-        testStore.send(.selectFreeDomain(testDomain)) { state in
+        await testStore.send(.selectFreeDomain(testDomain)) { state in
             state.selectedDomains = OrderedSet([testDomain])
         }
-        testStore.receive(.navigate(to: .checkout)) { state in
+        await testStore.receive(.navigate(to: .checkout)) { state in
             state.route = RouteIntent(route: .checkout, action: .navigateTo)
             state.checkoutState = .init(
                 selectedDomains: OrderedSet([testDomain])
             )
         }
-        testStore.send(.checkoutAction(.removeDomain(testDomain))) { state in
+        await testStore.send(.checkoutAction(.removeDomain(testDomain))) { state in
             state.checkoutState?.selectedDomains = OrderedSet([])
             state.selectedDomains = OrderedSet([])
         }
-        testStore.receive(.checkoutAction(.set(\.$isRemoveBottomSheetShown, false)))
-        testStore.receive(.dismiss()) { state in
+        await testStore.receive(.checkoutAction(.set(\.$isRemoveBottomSheetShown, false)))
+        await testStore.receive(.dismiss()) { state in
             state.route = nil
         }
     }

@@ -12,7 +12,7 @@ public struct DeletionResultView: View {
 
     public init(store: Store<DeletionResultState, DeletionResultAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -94,7 +94,7 @@ struct DeletionResult_Previews: PreviewProvider {
                 DeletionResultView(
                     store: .init(
                         initialState: DeletionResultState(success: true),
-                        reducer: DeletionResultReducer.preview
+                        reducer: { DeletionResultReducer.preview }
                     )
                 )
             }
@@ -104,7 +104,7 @@ struct DeletionResult_Previews: PreviewProvider {
                 DeletionResultView(
                     store: Store(
                         initialState: DeletionResultState(success: false),
-                        reducer: DeletionResultReducer.preview
+                        reducer: { DeletionResultReducer.preview }
                     )
                 )
             }

@@ -12,7 +12,7 @@ import MoneyKit
 import SwiftUI
 import ToolKit
 
-public struct DashboardAssetsSection: ReducerProtocol {
+public struct DashboardAssetsSection: Reducer {
     public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     public let withdrawalLocksRepository: WithdrawalLocksRepositoryAPI
     public let app: AppProtocol
@@ -79,7 +79,7 @@ public struct DashboardAssetsSection: ReducerProtocol {
         case smallBalances
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -90,58 +90,61 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .combineLatest(app.on(blockchain.ux.transaction.event.did.finish).mapToVoid().prepend(()))
                     .mapToVoid()
 
-                let cryptoEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
-                    .compactMap(\.value)
-                    .combineLatest(refreshEvents)
-                    .flatMap { [state, assetBalanceInfoRepository] fiatCurrency, _ -> StreamOf<[AssetBalanceInfo], Never> in
-                        let cryptoPublisher = state.presentedAssetsType.isCustodial
-                        ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
-                        : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
-                        return cryptoPublisher
-                    }
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect()
-                    .cancellable(
-                        id: state.presentedAssetsType.isCustodial ? CancellationID.blockchainAssets : CancellationID.deFiAssets,
-                        cancelInFlight: true
-                    )
-                    .map(Action.onBalancesFetched)
-
-                let fiatEffect = app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
-                    .compactMap(\.value)
-                    .combineLatest(
-                        app.publisher(for: blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self).compactMap(\.value),
-                        refreshEvents
-                    )
-                    .flatMap { [assetBalanceInfoRepository] fiatCurrency, tradingCurrency, _ -> StreamOf<FiatBalancesInfo, Never> in
-                        assetBalanceInfoRepository
-                            .fiat(fiatCurrency: fiatCurrency, time: .now)
-                            .map { $0.map { FiatBalancesInfo(balances: $0, tradingCurrency: tradingCurrency) } }
-                            .eraseToAnyPublisher()
-                    }
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect()
-                    .cancellable(id: CancellationID.fiatAssets, cancelInFlight: true)
-                    .map(Action.onFiatBalanceFetched)
-
-                let onHoldEffect = app.publisher(
-                    for: blockchain.user.currency.preferred.fiat.display.currency,
-                    as: FiatCurrency.self
-                )
-                    .compactMap(\.value)
-                    .combineLatest(refreshEvents)
-                    .flatMap { [state, withdrawalLocksRepository] fiatCurrency, _ -> StreamOf<WithdrawalLocks, Never> in
-                        guard state.presentedAssetsType == .custodial else {
-                            return .empty()
+                let cryptoEffect = Effect.publisher { [state] in
+                    app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+                        .compactMap(\.value)
+                        .combineLatest(refreshEvents)
+                        .flatMap { [state, assetBalanceInfoRepository] fiatCurrency, _ -> StreamOf<[AssetBalanceInfo], Never> in
+                            let cryptoPublisher = state.presentedAssetsType.isCustodial
+                            ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                            : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                            return cryptoPublisher
                         }
-                        return withdrawalLocksRepository
-                            .withdrawalLocks(currencyCode: fiatCurrency.code)
-                            .result()
-                    }
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect()
-                    .cancellable(id: CancellationID.onHoldAssets, cancelInFlight: true)
-                    .map(Action.onWithdrawalLocksFetched)
+                        .receive(on: DispatchQueue.main)
+                        .map(Action.onBalancesFetched)
+                }
+                .cancellable(
+                    id: state.presentedAssetsType.isCustodial ? CancellationID.blockchainAssets : CancellationID.deFiAssets,
+                    cancelInFlight: true
+                )
+
+                let fiatEffect = Effect.publisher {
+                    app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
+                        .compactMap(\.value)
+                        .combineLatest(
+                            app.publisher(for: blockchain.user.currency.preferred.fiat.trading.currency, as: FiatCurrency.self).compactMap(\.value),
+                            refreshEvents
+                        )
+                        .flatMap { [assetBalanceInfoRepository] fiatCurrency, tradingCurrency, _ -> StreamOf<FiatBalancesInfo, Never> in
+                            assetBalanceInfoRepository
+                                .fiat(fiatCurrency: fiatCurrency, time: .now)
+                                .map { $0.map { FiatBalancesInfo(balances: $0, tradingCurrency: tradingCurrency) } }
+                                .eraseToAnyPublisher()
+                        }
+                        .receive(on: DispatchQueue.main)
+                        .map(Action.onFiatBalanceFetched)
+                }
+                .cancellable(id: CancellationID.fiatAssets, cancelInFlight: true)
+
+                let onHoldEffect = Effect.publisher { [state] in
+                    app.publisher(
+                        for: blockchain.user.currency.preferred.fiat.display.currency,
+                        as: FiatCurrency.self
+                    )
+                        .compactMap(\.value)
+                        .combineLatest(refreshEvents)
+                        .flatMap { [state, withdrawalLocksRepository] fiatCurrency, _ -> StreamOf<WithdrawalLocks, Never> in
+                            guard state.presentedAssetsType == .custodial else {
+                                return .empty()
+                            }
+                            return withdrawalLocksRepository
+                                .withdrawalLocks(currencyCode: fiatCurrency.code)
+                                .result()
+                        }
+                        .receive(on: DispatchQueue.main)
+                        .map(Action.onWithdrawalLocksFetched)
+                }
+                .cancellable(id: CancellationID.onHoldAssets, cancelInFlight: true)
 
                 guard state.presentedAssetsType == .custodial else {
                     return cryptoEffect
@@ -161,22 +164,23 @@ public struct DashboardAssetsSection: ReducerProtocol {
                     .compactMap(\.network)
                     .unique
 
-                return app
-                    .publisher(for: state.presentedAssetsType.smallBalanceFilterTag)
-                    .map { value in
-                        let filterIsOn = value.value ?? false
-                        let allBalances = balanceInfo
-                            .filter { $0.balance?.hasPositiveDisplayableBalance ?? false }
-                        if filterIsOn {
-                            return allBalances
-                        } else {
-                            let bigBalances = allBalances.filter(\.hasBalance)
-                            return bigBalances.isEmpty ? allBalances : bigBalances
+                return .publisher { [state] in
+                    app
+                        .publisher(for: state.presentedAssetsType.smallBalanceFilterTag)
+                        .map { value in
+                            let filterIsOn = value.value ?? false
+                            let allBalances = balanceInfo
+                                .filter { $0.balance?.hasPositiveDisplayableBalance ?? false }
+                            if filterIsOn {
+                                return allBalances
+                            } else {
+                                let bigBalances = allBalances.filter(\.hasBalance)
+                                return bigBalances.isEmpty ? allBalances : bigBalances
+                            }
                         }
-                    }
-                    .eraseToEffect()
-                    .cancellable(id: CancellationID.smallBalances, cancelInFlight: true)
-                    .map(Action.displayAssetBalances)
+                        .map(Action.displayAssetBalances)
+                }
+                .cancellable(id: CancellationID.smallBalances, cancelInFlight: true)
 
             case .onBalancesFetched(.failure):
                 state.isLoading = false

@@ -10,7 +10,7 @@ import Localization
 import SwiftUI
 import ToolKit
 
-public struct CoinViewReducer: ReducerProtocol {
+public struct CoinViewReducer: Reducer {
 
     public typealias State = CoinViewState
     public typealias Action = CoinViewAction
@@ -21,7 +21,7 @@ public struct CoinViewReducer: ReducerProtocol {
         self.environment = environment
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Scope(state: \.graph, action: /Action.graph) {
             GraphViewReducer(historicalPriceService: environment.historicalPriceService)
@@ -41,104 +41,150 @@ public struct CoinViewReducer: ReducerProtocol {
                 state.appMode = environment.app.currentMode
 
                 return .merge(
-                    EffectTask(value: .observation(.start)),
+                    Effect.send(.observation(.start)),
 
-                    EffectTask(value: .setRefresh),
+                    Effect.send(.setRefresh),
 
-                    environment.assetInformationService
-                        .fetch()
-                        .receive(on: environment.mainQueue)
-                        .catchToEffect(CoinViewAction.fetchedAssetInformation),
-
-                    environment.app.publisher(
-                        for: blockchain.app.configuration.recurring.buy.is.enabled,
-                        as: Bool.self
-                    )
-                    .compactMap(\.value)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-                    .map(CoinViewAction.isRecurringBuyEnabled),
-
-                    environment.app.publisher(
-                        for: blockchain.api.nabu.gateway.products["DEX"].is.eligible,
-                        as: Bool.self
-                    )
-                    .compactMap(\.value)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-                    .map {
-                        .binding(.set(\.$isDexEnabled, $0))
+                    .run { send in
+                        do {
+                            let assetInfo = try await environment.assetInformationService
+                                .fetch()
+                                .receive(on: environment.mainQueue)
+                                .await()
+                            await send(.fetchedAssetInformation(.success(assetInfo)))
+                        } catch {
+                            await send(.fetchedAssetInformation(.failure(error as! Never)))
+                        }
                     },
 
-                    environment.app.publisher(
-                        for: blockchain.app.is.external.brokerage,
-                        as: Bool.self
-                    )
-                    .compactMap(\.value)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-                    .map {
-                        .binding(.set(\.$isExternalBrokerageEnabled, $0))
+                    .run { send in
+                        do {
+                            let isEnabled = try await environment.app.publisher(
+                                for: blockchain.app.configuration.recurring.buy.is.enabled,
+                                as: Bool.self
+                            )
+                            .compactMap(\.value)
+                            .receive(on: environment.mainQueue)
+                            .await()
+                            await send(.isRecurringBuyEnabled(isEnabled))
+                        } catch {
+                            await send(.isRecurringBuyEnabled(false))
+                        }
                     },
 
-                    environment.app.publisher(
-                        for: blockchain.ux.asset[state.currency.code].watchlist.is.on,
-                        as: Bool.self
-                    )
-                    .compactMap(\.value)
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-                    .map(CoinViewAction.isOnWatchlist)
+                    .run { send in
+                        do {
+                            let isDexEnabled = try await environment.app.publisher(
+                                for: blockchain.api.nabu.gateway.products["DEX"].is.eligible,
+                                as: Bool.self
+                            )
+                            .compactMap(\.value)
+                            .receive(on: environment.mainQueue)
+                            .await()
+
+                            await send(.binding(.set(\.$isDexEnabled, isDexEnabled)))
+                        } catch {
+                            await send(.binding(.set(\.$isDexEnabled, false)))
+                        }
+                    },
+
+                    .run { send in
+                        do {
+                            let isExternalBrokerageEnabled = try await environment.app.publisher(
+                                for: blockchain.app.is.external.brokerage,
+                                as: Bool.self
+                            )
+                            .compactMap(\.value)
+                            .receive(on: environment.mainQueue)
+                            .await()
+
+                            await send(.binding(.set(\.$isExternalBrokerageEnabled, isExternalBrokerageEnabled)))
+                        } catch {
+                            await send(.binding(.set(\.$isExternalBrokerageEnabled, false)))
+                        }
+                    },
+
+                    .run { [currency = state.currency] send in
+                        do {
+                            let isOnWatchlist = try await environment.app.publisher(
+                                for: blockchain.ux.asset[currency.code].watchlist.is.on,
+                                as: Bool.self
+                            )
+                            .compactMap(\.value)
+                            .receive(on: environment.mainQueue)
+                            .await()
+                            
+                            await send(.isOnWatchlist(isOnWatchlist))
+                        } catch {
+                            await send(.isOnWatchlist(false))
+                        }
+                    }
                 )
 
             case .setRefresh:
                 return .merge(
-                    EffectTask(value: .refresh),
+                    Effect.send(.refresh),
 
-                    NotificationCenter.default
-                        .publisher(for: .transaction)
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect()
-                        .map { _ in .refresh },
+                    .publisher {
+                        NotificationCenter.default
+                            .publisher(for: .transaction)
+                            .receive(on: environment.mainQueue)
+                            .map { _ in .refresh }
+                    },
 
-                    environment.app.on(blockchain.ux.asset[state.currency.code].refresh)
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect()
-                        .map { _ in .refresh }
+                    .publisher { [currency = state.currency] in
+                        environment.app.on(blockchain.ux.asset[currency.code].refresh)
+                            .receive(on: environment.mainQueue)
+                            .map { _ in .refresh }
+                    }
                 )
 
             case .onDisappear:
-                return EffectTask(value: .observation(.stop))
+                return Effect.send(.observation(.stop))
 
             case .refresh:
-                return environment.kycStatusProvider()
-                    .setFailureType(to: Error.self)
-                    .combineLatest(
-                        environment.accountsProvider().flatMap(\.snapshot)
-                    )
-                    .receive(on: environment.mainQueue.animation(.spring()))
-                    .catchToEffect()
-                    .map(CoinViewAction.update)
+                return .run { send in
+                    do {
+                        let result = try await environment.kycStatusProvider()
+                            .setFailureType(to: Error.self)
+                            .combineLatest(
+                                environment.accountsProvider().flatMap(\.snapshot)
+                            )
+                            .receive(on: environment.mainQueue.animation(.spring()))
+                            .await()
+                        await send(.update(.success(result)))
+                    } catch {
+                        await send(.update(.failure(error)))
+                    }
+                }
 
             case .isRecurringBuyEnabled(let isRecurringBuyEnabled):
                 state.isRecurringBuyEnabled = isRecurringBuyEnabled
                 guard isRecurringBuyEnabled else { return .none }
-                return environment.recurringBuyProvider()
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect()
-                    .map(CoinViewAction.fetchedRecurringBuys)
+                return .run { send in
+                    do {
+                        let recurringBuys = try await environment
+                            .recurringBuyProvider()
+                            .receive(on: environment.mainQueue)
+                            .await()
+                        await send(.fetchedRecurringBuys(.success(recurringBuys)))
+                    } catch {
+                        await send(.fetchedRecurringBuys(.failure(error)))
+                    }
+                }
 
             case .fetchedRecurringBuys(let result):
                 state.recurringBuys = try? result.get()
                 return .none
 
             case .fetchInterestRate:
-                return environment.earnRatesRepository
-                    .fetchEarnRates(code: state.currency.code)
-                    .result()
-                    .receive(on: environment.mainQueue)
-                    .eraseToEffect()
-                    .map(CoinViewAction.fetchedInterestRate)
+                return .publisher { [currency = state.currency] in
+                    environment.earnRatesRepository
+                        .fetchEarnRates(code: currency.code)
+                        .result()
+                        .receive(on: environment.mainQueue)
+                        .map(CoinViewAction.fetchedInterestRate)
+                }
 
             case .fetchedInterestRate(let result):
                 state.earnRates = try? result.get()
@@ -154,7 +200,7 @@ public struct CoinViewReducer: ReducerProtocol {
 
             case .addToWatchlist:
                 state.isFavorite = nil
-                return .fireAndForget { [state] in
+                return .run { [state] _ in
                     environment.app.post(
                         event: blockchain.ux.asset[state.currency.code].watchlist.add
                     )
@@ -162,7 +208,7 @@ public struct CoinViewReducer: ReducerProtocol {
 
             case .removeFromWatchlist:
                 state.isFavorite = nil
-                return .fireAndForget { [state] in
+                return .run { [state] _ in
                     environment.app.post(
                         event: blockchain.ux.asset[state.currency.code].watchlist.remove
                     )
@@ -177,7 +223,7 @@ public struct CoinViewReducer: ReducerProtocol {
                     if let account = state.account {
                         state.account = state.accounts.first(where: { snapshot in snapshot.id == account.id })
                     }
-                    let update = EffectTask<CoinViewAction>.fireAndForget {
+                    let update = Effect<CoinViewAction>.run { _ in
                         environment.app.state.transaction { state in
                             for account in accounts {
                                 state.set(blockchain.ux.asset.account[account.id].is.trading, to: account.accountType == .trading)
@@ -187,7 +233,7 @@ public struct CoinViewReducer: ReducerProtocol {
                         }
                     }
                     if accounts.contains(where: \.accountType.supportRates) {
-                        return .merge(update, EffectTask(value: .fetchInterestRate))
+                        return .merge(update, Effect.send(.fetchInterestRate))
                     } else {
                         return update
                     }
@@ -197,7 +243,7 @@ public struct CoinViewReducer: ReducerProtocol {
                 }
 
             case .reset:
-                return .fireAndForget {
+                return .run { _ in
                     environment.explainerService.resetAll()
                 }
 
@@ -205,7 +251,7 @@ public struct CoinViewReducer: ReducerProtocol {
                 switch ref.tag {
                 case blockchain.ux.asset.recurring.buy.summary.cancel.was.successful:
                     let isRecurringBuyEnabled = state.isRecurringBuyEnabled
-                    return EffectTask(value: .isRecurringBuyEnabled(isRecurringBuyEnabled))
+                    return Effect.send(.isRecurringBuyEnabled(isRecurringBuyEnabled))
                 case blockchain.ux.asset.account.sheet:
                     guard let account = cxt[blockchain.ux.asset.account] as? Account.Snapshot else {
                         return .none
@@ -213,7 +259,7 @@ public struct CoinViewReducer: ReducerProtocol {
                     if environment.explainerService.isAccepted(account) {
                         switch account.accountType {
                         case .interest, .activeRewards, .staking:
-                            return .fireAndForget {
+                            return .run { _ in
                                 environment.app.post(
                                     event: account.action(with: ref.context),
                                     context: cxt
@@ -224,7 +270,7 @@ public struct CoinViewReducer: ReducerProtocol {
                             return .none
                         }
                     } else {
-                        return .fireAndForget {
+                        return .run { _ in
                             environment.app.post(
                                 event: blockchain.ux.asset.account.explainer[].ref(to: ref.context),
                                 context: cxt
@@ -242,7 +288,7 @@ public struct CoinViewReducer: ReducerProtocol {
                         return .none
                     }
                     state.explainer = nil
-                    return .fireAndForget {
+                    return .run { _ in
                         environment.explainerService.accept(account)
                         environment.app.post(
                             event: account.action(with: ref.context),
@@ -254,8 +300,8 @@ public struct CoinViewReducer: ReducerProtocol {
                 }
             case .dismiss:
                 return .merge(
-                    .fireAndForget(environment.dismiss),
-                    .fireAndForget { [state] in
+                    .run { _ in environment.dismiss() },
+                    .run { [state] _ in
                         environment.app.post(
                             event: blockchain.ux.asset[state.currency.code].article.plain.navigation.bar.button.close
                         )

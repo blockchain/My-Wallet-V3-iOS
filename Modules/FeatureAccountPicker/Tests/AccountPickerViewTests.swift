@@ -112,7 +112,7 @@ class AccountPickerViewTests: XCTestCase {
 
     func testView() {
         let view = AccountPickerView(
-            store: .init(
+            store: Store(
                 initialState: .init(
                     sections: .loaded(next: .success(Sections(content: accountPickerRowList))),
                     header: .init(headerStyle: header),
@@ -120,19 +120,21 @@ class AccountPickerViewTests: XCTestCase {
                     cryptoBalances: cryptoBalances,
                     currencyCodes: currencyCodes
                 ),
-                reducer: AccountPicker(
-                    app: App.test,
-                    rowSelected: { _ in },
-                    uxSelected: { _ in },
-                    backButtonTapped: {},
-                    closeButtonTapped: {},
-                    search: { _ in },
-                    sections: { .just([]).eraseToAnyPublisher() },
-                    updateSingleAccounts: { _ in .just([:]) },
-                    updateAccountGroups: { _ in .just([:]) },
-                    header: { [unowned self] in .just(header).eraseToAnyPublisher() },
-                    onSegmentSelectionChanged: { _ in }
-                )
+                reducer: {
+                    AccountPicker(
+                        app: App.test,
+                        rowSelected: { _ in },
+                        uxSelected: { _ in },
+                        backButtonTapped: {},
+                        closeButtonTapped: {},
+                        search: { _ in },
+                        sections: { .just([]).eraseToAnyPublisher() },
+                        updateSingleAccounts: { _ in .just([:]) },
+                        updateAccountGroups: { _ in .just([:]) },
+                        header: { [unowned self] in .just(header).eraseToAnyPublisher() },
+                        onSegmentSelectionChanged: { _ in }
+                    )
+                }
             ),
             badgeView: { _ in EmptyView() },
             descriptionView: { _ in EmptyView() },

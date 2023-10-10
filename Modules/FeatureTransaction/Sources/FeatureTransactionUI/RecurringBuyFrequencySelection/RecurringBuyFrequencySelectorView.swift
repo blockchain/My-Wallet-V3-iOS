@@ -18,7 +18,7 @@ struct RecurringBuyFrequencySelectorView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 HStack {
                     Text(LocalizationId.title)
@@ -81,9 +81,9 @@ struct RecurringBuyFrequencySelectorView: View {
 struct RecurringBuyFrequencySelectorView_Previews: PreviewProvider {
     static var previews: some View {
         RecurringBuyFrequencySelectorView(
-            store: .init(
-                initialState: .init(eligibleRecurringBuyFrequenciesAndNextDates: []),
-                reducer: RecurringBuyFrequencySelectorReducer(app: App.preview, dismiss: {})
+            store: Store(
+                initialState: .init(eligibleRecurringBuyFrequenciesAndNextDates: [EligibleAndNextPaymentRecurringBuy]()),
+                reducer: { RecurringBuyFrequencySelectorReducer(app: App.preview, dismiss: {}) }
             )
         )
     }
@@ -117,7 +117,7 @@ enum RecurringBuyFrequencySelectorAction: Equatable, BindableAction {
 
 // MARK: - Reducer
 
-struct RecurringBuyFrequencySelectorReducer: ReducerProtocol {
+struct RecurringBuyFrequencySelectorReducer: Reducer {
     
     typealias State = RecurringBuyFrequencySelectorState
     typealias Action = RecurringBuyFrequencySelectorAction
@@ -125,24 +125,26 @@ struct RecurringBuyFrequencySelectorReducer: ReducerProtocol {
     let app: AppProtocol
     let dismiss: (() -> Void)?
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .refresh:
                 return .merge(
-                    app.publisher(for: blockchain.ux.transaction.checkout.recurring.buy.frequency, as: String.self)
-                        .receive(on: DispatchQueue.main)
-                        .compactMap(\.value)
-                        .compactMap(RecurringBuy.Frequency.init(rawValue:))
-                        .eraseToEffect()
-                        .map { .binding(.set(\.$recurringBuyFrequency, $0)) },
+                    .publisher {
+                        app.publisher(for: blockchain.ux.transaction.checkout.recurring.buy.frequency, as: String.self)
+                            .receive(on: DispatchQueue.main)
+                            .compactMap(\.value)
+                            .compactMap(RecurringBuy.Frequency.init(rawValue:))
+                            .map { .binding(.set(\.$recurringBuyFrequency, $0)) }
+                    },
 
-                    app.publisher(for: blockchain.ux.transaction.event.did.fetch.recurring.buy.frequencies, as: [EligibleAndNextPaymentRecurringBuy].self)
-                        .receive(on: DispatchQueue.main)
-                        .compactMap(\.value)
-                        .eraseToEffect()
-                        .map { .binding(.set(\.$eligibleRecurringBuyFrequenciesAndNextDates, $0)) }
+                    .publisher {
+                        app.publisher(for: blockchain.ux.transaction.event.did.fetch.recurring.buy.frequencies, as: [EligibleAndNextPaymentRecurringBuy].self)
+                            .receive(on: DispatchQueue.main)
+                            .compactMap(\.value)
+                            .map { .binding(.set(\.$eligibleRecurringBuyFrequenciesAndNextDates, $0)) }
+                    }
                 )
 
             case .update(let frequency):
@@ -159,11 +161,11 @@ struct RecurringBuyFrequencySelectorReducer: ReducerProtocol {
                     appState.set(blockchain.ux.transaction.action.select.recurring.buy.frequency, to: frequency.rawValue)
                 }
                 app.post(event: blockchain.ux.transaction.checkout.recurring.buy.frequency)
-                return .fireAndForget {
+                return .run { _ in
                     dismiss?()
                 }
             case .closeButtonTapped:
-                return .fireAndForget {
+                return .run { _ in
                     dismiss?()
                 }
             }

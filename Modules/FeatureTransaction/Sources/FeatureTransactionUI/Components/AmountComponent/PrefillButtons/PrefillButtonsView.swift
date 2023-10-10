@@ -13,7 +13,7 @@ import ToolKit
 
 // MARK: State
 
-public struct PrefillButtons: ReducerProtocol {
+public struct PrefillButtons: Reducer {
     let app: AppProtocol
     let lastPurchasePublisher: AnyPublisher<FiatValue, Never>
     let maxLimitPublisher: AnyPublisher<FiatValue, Never>
@@ -43,7 +43,7 @@ public struct PrefillButtons: ReducerProtocol {
     public typealias State = PrefillButtonsState
     public typealias Action = PrefillButtonsAction
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -53,40 +53,43 @@ public struct PrefillButtons: ReducerProtocol {
                     .compactMap { AssetAction(rawValue: $0) }
 
                 return .merge(
-                    lastPurchasePublisher
-                        .map(\.rounded)
-                        .removeDuplicates()
-                        .eraseToEffect()
-                        .map(PrefillButtonsAction.updatePreviousTxAmount),
+                    .publisher {
+                        lastPurchasePublisher
+                            .map(\.rounded)
+                            .removeDuplicates()
+                            .map(PrefillButtonsAction.updatePreviousTxAmount)
+                    },
 
-                    maxLimitPublisher
-                        .removeDuplicates()
-                        .eraseToEffect()
-                        .map(PrefillButtonsAction.updateMaxLimit),
+                    .publisher {
+                        maxLimitPublisher
+                            .removeDuplicates()
+                            .map(PrefillButtonsAction.updateMaxLimit)
+                    },
 
-                    assetActionPublisher
-                        .flatMap { action -> AnyPublisher<[QuickfillConfiguration], Never> in
-                            if action == .buy {
-                                return app
-                                    .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BaseValueQuickfillConfiguration].self)
-                                    .compactMap(\.value)
-                                    .map { $0.map(QuickfillConfiguration.baseValue) }
-                                    .eraseToAnyPublisher()
-                            } else {
-                                return app
-                                    .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BalanceQuickfillConfiguration].self)
-                                    .compactMap(\.value)
-                                    .map { $0.map(QuickfillConfiguration.balance) }
-                                    .eraseToAnyPublisher()
+                    .publisher {
+                        assetActionPublisher
+                            .flatMap { action -> AnyPublisher<[QuickfillConfiguration], Never> in
+                                if action == .buy {
+                                    return app
+                                        .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BaseValueQuickfillConfiguration].self)
+                                        .compactMap(\.value)
+                                        .map { $0.map(QuickfillConfiguration.baseValue) }
+                                        .eraseToAnyPublisher()
+                                } else {
+                                    return app
+                                        .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BalanceQuickfillConfiguration].self)
+                                        .compactMap(\.value)
+                                        .map { $0.map(QuickfillConfiguration.balance) }
+                                        .eraseToAnyPublisher()
+                                }
                             }
-                        }
-                        .replaceError(with: [])
-                        .eraseToEffect()
-                        .map(PrefillButtonsAction.updateQuickfillConfiguration),
+                            .replaceError(with: [])
+                            .map(PrefillButtonsAction.updateQuickfillConfiguration)
+                    },
 
-                    assetActionPublisher
-                        .eraseToEffect()
-                        .map(PrefillButtonsAction.updateAssetAction)
+                    .publisher {
+                        assetActionPublisher.map(PrefillButtonsAction.updateAssetAction)
+                    }
                 )
 
             case .updateQuickfillConfiguration(let configuration):
@@ -106,7 +109,7 @@ public struct PrefillButtons: ReducerProtocol {
                 return .none
 
             case .select(let moneyValue, let size):
-                return .fireAndForget {
+                return .run { _ in
                     onValueSelected(moneyValue, size)
                 }
             }
@@ -396,7 +399,7 @@ public struct PrefillButtonsView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             HStack {
                 ZStack(alignment: .trailing) {
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -450,12 +453,12 @@ public struct PrefillButtonsView: View {
 
 struct PrefillButtonsView_Previews: PreviewProvider {
     static var previews: some View {
-        PrefillButtonsView(store: .init(
+        PrefillButtonsView(store: Store(
             initialState: PrefillButtonsState(
                 previousTxAmount: FiatValue.create(majorBigInt: 9, currency: .USD),
                 maxLimit: FiatValue.create(majorBigInt: 1200, currency: .USD)
             ),
-            reducer: PrefillButtons.preview
+            reducer: { PrefillButtons.preview }
         )
         )
     }

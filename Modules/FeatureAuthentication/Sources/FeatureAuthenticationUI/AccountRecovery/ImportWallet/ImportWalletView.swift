@@ -28,7 +28,7 @@ struct ImportWalletView: View {
 
     init(store: Store<ImportWalletState, ImportWalletAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -98,20 +98,22 @@ import ToolKit
 struct ImportWalletView_Previews: PreviewProvider {
     static var previews: some View {
         ImportWalletView(
-            store: .init(
+            store: Store(
                 initialState: .init(mnemonic: ""),
-                reducer: ImportWalletReducer(
-                    mainQueue: .main,
-                    passwordValidator: PasswordValidator(),
-                    externalAppOpener: ToLogAppOpener(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    walletRecoveryService: .noop,
-                    walletCreationService: .noop,
-                    walletFetcherService: .noop,
-                    signUpCountriesService: NoSignUpCountriesService(),
-                    recaptchaService: NoOpGoogleRecatpchaService(),
-                    app: App.preview
-                )
+                reducer: {
+                    ImportWalletReducer(
+                        mainQueue: .main,
+                        passwordValidator: PasswordValidator(),
+                        externalAppOpener: ToLogAppOpener(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        walletRecoveryService: .noop,
+                        walletCreationService: .noop,
+                        walletFetcherService: .noop,
+                        signUpCountriesService: NoSignUpCountriesService(),
+                        recaptchaService: NoOpGoogleRecatpchaService(),
+                        app: App.preview
+                    )
+                }
             )
         )
     }

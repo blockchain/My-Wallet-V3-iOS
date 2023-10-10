@@ -16,7 +16,7 @@ import XCTest
 @testable import BlockchainApp
 @testable import FeatureAppUI
 
-final class LoggedInReducerTests: XCTestCase {
+@MainActor final class LoggedInReducerTests: XCTestCase {
 
     var mockSettingsApp: MockBlockchainSettingsApp!
     var mockAlertPresenter: MockAlertViewPresenter!
@@ -34,10 +34,7 @@ final class LoggedInReducerTests: XCTestCase {
 
     var testStore: TestStore<
         LoggedIn.State,
-        LoggedIn.Action,
-        LoggedIn.State,
-        LoggedIn.Action,
-        Void
+        LoggedIn.Action
     >!
 
     override func setUpWithError() throws {
@@ -64,22 +61,24 @@ final class LoggedInReducerTests: XCTestCase {
 
         testStore = TestStore(
             initialState: LoggedIn.State(),
-            reducer: LoggedInReducer(
-                analyticsRecorder: mockAnalyticsRecorder,
-                app: App.test,
-                appSettings: mockSettingsApp,
-                deeplinkRouter: mockDeepLinkRouter,
-                exchangeRepository: mockExchangeAccountRepository,
-                fiatCurrencySettingsService: fiatCurrencySettingsServiceMock,
-                loadingViewPresenter: LoadingViewPresenter(),
-                mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                nabuUserService: mockNabuUserService,
-                performanceTracing: performanceTracingMock,
-                reactiveWallet: mockReactiveWallet,
-                remoteNotificationAuthorizer: mockRemoteNotificationServiceContainer.authorizer,
-                remoteNotificationTokenSender: mockRemoteNotificationServiceContainer.tokenSender,
-                unifiedActivityService: UnifiedActivityPersistenceServiceMock()
-            )
+            reducer: {
+                LoggedInReducer(
+                    analyticsRecorder: mockAnalyticsRecorder,
+                    app: App.test,
+                    appSettings: mockSettingsApp,
+                    deeplinkRouter: mockDeepLinkRouter,
+                    exchangeRepository: mockExchangeAccountRepository,
+                    fiatCurrencySettingsService: fiatCurrencySettingsServiceMock,
+                    loadingViewPresenter: LoadingViewPresenter(),
+                    mainQueue: mockMainQueue.eraseToAnyScheduler(),
+                    nabuUserService: mockNabuUserService,
+                    performanceTracing: performanceTracingMock,
+                    reactiveWallet: mockReactiveWallet,
+                    remoteNotificationAuthorizer: mockRemoteNotificationServiceContainer.authorizer,
+                    remoteNotificationTokenSender: mockRemoteNotificationServiceContainer.tokenSender,
+                    unifiedActivityService: UnifiedActivityPersistenceServiceMock()
+                )
+            }
         )
     }
 
@@ -101,16 +100,16 @@ final class LoggedInReducerTests: XCTestCase {
         try super.tearDownWithError()
     }
 
-    func test_calling_start_on_reducer_should_post_login_notification() {
+    func test_calling_start_on_reducer_should_post_login_notification() async {
         let expectation = expectation(forNotification: .login, object: nil)
 
-        performSignIn()
+        await performSignIn()
         wait(for: [expectation], timeout: 2)
-        performSignOut()
+        await performSignOut()
     }
 
-    func test_calling_start_calls_required_services() {
-        performSignIn()
+    func test_calling_start_calls_required_services() async {
+        await performSignIn()
 
         XCTAssertTrue(mockExchangeAccountRepository.syncDepositAddressesIfLinkedCalled)
 
@@ -118,88 +117,85 @@ final class LoggedInReducerTests: XCTestCase {
 
         XCTAssertTrue(mockRemoteNotificationAuthorizer.requestAuthorizationIfNeededCalled)
 
-        performSignOut()
+        await performSignOut()
     }
 
-    func test_reducer_handles_new_wallet_correctly_should_show_postSignUp_onboarding() {
+    func test_reducer_handles_new_wallet_correctly_should_show_postSignUp_onboarding() async {
         // given
         let context = LoggedIn.Context.wallet(.new)
-        testStore.send(.start(context))
+        await testStore.send(.start(context))
 
         // then
-        testStore.receive(.handleNewWalletCreation)
+        await testStore.receive(.handleNewWalletCreation)
 
-        testStore.receive(.showPostSignUpOnboardingFlow) { state in
+        await testStore.receive(.showPostSignUpOnboardingFlow) { state in
             state.displayPostSignUpOnboardingFlow = true
         }
 
-        performSignOut()
+        await performSignOut()
     }
 
-    func test_reducer_handles_plain_signins_correctly_should_show_postSignIn_onboarding() {
+    func test_reducer_handles_plain_signins_correctly_should_show_postSignIn_onboarding() async {
         // given
         let context = LoggedIn.Context.none
-        testStore.send(.start(context))
+        await testStore.send(.start(context))
 
         // then
-        testStore.receive(.handleExistingWalletSignIn)
+        await testStore.receive(.handleExistingWalletSignIn)
 
-        testStore.receive(.showPostSignInOnboardingFlow) { state in
+        await testStore.receive(.showPostSignInOnboardingFlow) { state in
             state.displayPostSignInOnboardingFlow = true
         }
 
-        performSignOut()
+        await performSignOut()
     }
 
-    func test_reducer_handles_deeplink_sendCrypto_correctly() {
+    func test_reducer_handles_deeplink_sendCrypto_correctly() async {
         let uriContent = URIContent(url: URL(string: "https://")!, context: .sendCrypto)
         let context = LoggedIn.Context.deeplink(uriContent)
-        testStore.send(.start(context))
+        await testStore.send(.start(context))
 
         // then
-        testStore.receive(.deeplink(uriContent)) { state in
+        await testStore.receive(.deeplink(uriContent)) { state in
             state.displaySendCryptoScreen = true
         }
 
-        testStore.receive(.deeplinkHandled) { state in
+        await testStore.receive(.deeplinkHandled) { state in
             state.displaySendCryptoScreen = false
         }
 
-        performSignOut(stageWillChangeToLoggedInState: false)
+        await performSignOut(stageWillChangeToLoggedInState: false)
     }
 
-    func test_reducer_handles_deeplink_executeDeeplinkRouting_correctly() {
+    func test_reducer_handles_deeplink_executeDeeplinkRouting_correctly() async {
         let uriContent = URIContent(url: URL(string: "https://")!, context: .executeDeeplinkRouting)
         let context = LoggedIn.Context.deeplink(uriContent)
-        testStore.send(.start(context))
+        await testStore.send(.start(context))
 
         // then
-        testStore.receive(.deeplink(uriContent))
+        await testStore.receive(.deeplink(uriContent))
 
         XCTAssertTrue(mockDeepLinkRouter.routeIfNeededCalled)
 
-        performSignOut(stageWillChangeToLoggedInState: false)
+        await performSignOut(stageWillChangeToLoggedInState: false)
     }
 
     // MARK: - Helpers
 
-    private func performSignIn(file: StaticString = #file, line: UInt = #line) {
-        testStore.send(.start(.none), file: file, line: line)
-        testStore.receive(.handleExistingWalletSignIn, file: file, line: line)
-        testStore.receive(
-            .showPostSignInOnboardingFlow,
-            assert: { $0.displayPostSignInOnboardingFlow = true },
-            file: file,
-            line: line
-        )
+    private func performSignIn(file: StaticString = #file, line: UInt = #line) async {
+        await testStore.send(.start(.none))
+        await testStore.receive(.handleExistingWalletSignIn)
+        await testStore.receive(.showPostSignInOnboardingFlow) {
+            $0.displayPostSignInOnboardingFlow = true
+        }
     }
 
     private func performSignOut(
         stageWillChangeToLoggedInState: Bool = true,
         file: StaticString = #file,
         line: UInt = #line
-    ) {
-        testStore.send(
+    ) async {
+        await testStore.send(
             .logout,
             assert: stageWillChangeToLoggedInState ? { $0 = LoggedIn.State() } : nil,
             file: file,

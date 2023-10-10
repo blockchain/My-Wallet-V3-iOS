@@ -111,23 +111,29 @@ public struct ExternalTradingMigrationView: View {
 struct ExternalTradingMigrationView_Preview: PreviewProvider {
     static var previews: some View {
         ExternalTradingMigrationView(
-            store: .init(
+            store: Store(
                 initialState: .init(flow: .existingUserAssetsNoConsolidationNeeded),
-                reducer: ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                reducer: {
+                    ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                }
             )
         )
 
         ExternalTradingMigrationView(
-            store: .init(
+            store: Store(
                 initialState: .init(flow: .existingUsersNoAssets),
-                reducer: ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                reducer: {
+                    ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                }
             )
         )
 
         ExternalTradingMigrationView(
-            store: .init(
+            store: Store(
                 initialState: .init(flow: .existingUserAssetsConsolidationNeeded),
-                reducer: ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                reducer: {
+                    ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                }
             )
         )
     }

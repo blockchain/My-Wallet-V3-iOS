@@ -9,7 +9,7 @@ import PlatformKit
 import TestKit
 import XCTest
 
-final class TradingLimitsViewTests: XCTestCase {
+@MainActor final class TradingLimitsViewTests: XCTestCase {
 
     struct RecordedInvocations {
         var close: [Void] = []
@@ -19,10 +19,7 @@ final class TradingLimitsViewTests: XCTestCase {
 
     private var testStore: TestStore<
         TradingLimitsState,
-        TradingLimitsAction,
-        TradingLimitsState,
-        TradingLimitsAction,
-        Void
+        TradingLimitsAction
     >!
     private let testScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
 
@@ -48,12 +45,12 @@ final class TradingLimitsViewTests: XCTestCase {
         try super.tearDownWithError()
     }
 
-    func test_initial_load_success() throws {
-        testStore.send(.fetchLimits) {
+    func test_initial_load_success() async throws {
+        await testStore.send(.fetchLimits) {
             $0.loading = true
         }
-        testScheduler.advance()
-        testStore.receive(.didFetchLimits(.success(stubOverview))) { [stubOverview] in
+        await testScheduler.advance()
+        await testStore.receive(.didFetchLimits(.success(stubOverview))) { [stubOverview] in
             $0.loading = false
             $0.userTiers = stubOverview.tiers
             $0.unlockTradingState = UnlockTradingState(currentUserTier: stubOverview.tiers.latestApprovedTier)
@@ -64,13 +61,13 @@ final class TradingLimitsViewTests: XCTestCase {
         }
     }
 
-    func test_initial_load_failure() throws {
+    func test_initial_load_failure() async throws {
         resetStore(failCalls: true)
-        testStore.send(.fetchLimits) {
+        await testStore.send(.fetchLimits) {
             $0.loading = true
         }
-        testScheduler.advance(by: .seconds(2))
-        testStore.receive(.didFetchLimits(.failure(Nabu.Error.unknown))) {
+        await testScheduler.advance(by: .seconds(2))
+        await testStore.receive(.didFetchLimits(.failure(Nabu.Error.unknown))) {
             $0.loading = false
             $0.featuresList = LimitedFeaturesListState(
                 features: [],
@@ -79,13 +76,13 @@ final class TradingLimitsViewTests: XCTestCase {
         }
     }
 
-    func test_initial_load_emptyResult() throws {
+    func test_initial_load_emptyResult() async throws {
         resetOverviewForEmptyState()
-        testStore.send(.fetchLimits) {
+        await testStore.send(.fetchLimits) {
             $0.loading = true
         }
-        testScheduler.advance(by: .seconds(2))
-        testStore.receive(.didFetchLimits(.success(stubOverview))) { [stubOverview] in
+        await testScheduler.advance(by: .seconds(2))
+        await testStore.receive(.didFetchLimits(.success(stubOverview))) { [stubOverview] in
             $0.loading = false
             $0.userTiers = stubOverview.tiers
             $0.unlockTradingState = UnlockTradingState(currentUserTier: stubOverview.tiers.latestApprovedTier)
@@ -96,36 +93,36 @@ final class TradingLimitsViewTests: XCTestCase {
         }
     }
 
-    func test_close() throws {
-        testStore.send(.close)
+    func test_close() async throws {
+        await testStore.send(.close)
         XCTAssertEqual(recordedInvocations.close.count, 1)
     }
 
-    func test_present_support_center() throws {
-        testStore.send(.listAction(.supportCenterLinkTapped))
+    func test_present_support_center() async throws {
+        await testStore.send(.listAction(.supportCenterLinkTapped))
         XCTAssertEqual(recordedInvocations.openURL, [.customerSupport])
     }
 
-    func test_apply_for_gold() throws {
-        testStore.send(.listAction(.verify))
+    func test_apply_for_gold() async throws {
+        await testStore.send(.listAction(.verify))
         XCTAssertEqual(recordedInvocations.presentKYC, [.verified])
     }
 
-    func test_view_tiers() throws {
-        testStore.send(.listAction(.viewTiersTapped))
-        testStore.receive(.listAction(.enter(into: .viewTiers, context: .none))) {
+    func test_view_tiers() async throws {
+        await testStore.send(.listAction(.viewTiersTapped))
+        await testStore.receive(.listAction(.enter(into: .viewTiers, context: .none))) {
             $0.featuresList.route = .init(route: .viewTiers, action: .enterInto(.none))
         }
     }
 
-    func test_view_tiers_close_modal() throws {
-        testStore.send(.listAction(.tiersStatusViewAction(.close)))
-        testStore.receive(.listAction(.dismiss()))
+    func test_view_tiers_close_modal() async throws {
+        await testStore.send(.listAction(.tiersStatusViewAction(.close)))
+        await testStore.receive(.listAction(.dismiss()))
     }
 
-    func test_presentKYC_verified() throws {
+    func test_presentKYC_verified() async throws {
         XCTAssertEqual(stubOverview.tiers.latestApprovedTier, .unverified)
-        testStore.send(.didFetchLimits(.success(stubOverview))) { [stubOverview] in
+        await testStore.send(.didFetchLimits(.success(stubOverview))) { [stubOverview] in
             $0.loading = false
             $0.userTiers = stubOverview.tiers
             $0.unlockTradingState = UnlockTradingState(currentUserTier: stubOverview.tiers.latestApprovedTier)
@@ -134,7 +131,7 @@ final class TradingLimitsViewTests: XCTestCase {
                 kycTiers: stubOverview.tiers
             )
         }
-        testStore.send(.listAction(.tiersStatusViewAction(.tierTapped(.verified))))
+        await testStore.send(.listAction(.tiersStatusViewAction(.tierTapped(.verified))))
         XCTAssertEqual(recordedInvocations.presentKYC, [.verified])
     }
 
@@ -150,25 +147,27 @@ final class TradingLimitsViewTests: XCTestCase {
                     kycTiers: .init(tiers: [])
                 )
             ),
-            reducer: TradingLimitsReducer(
-                close: { [weak self] in
-                    self?.recordedInvocations.close.append(())
-                },
-                openURL: { [weak self] url in
-                    self?.recordedInvocations.openURL.append(url)
-                },
-                presentKYCFlow: { tier in
-                    self.recordedInvocations.presentKYC.append(tier)
-                },
-                fetchLimitsOverview: { [unowned self] in
-                    guard failCalls else {
-                        return .just(stubOverview)
-                    }
-                    return .failure(Nabu.Error.unknown)
-                },
-                analyticsRecorder: MockAnalyticsRecorder(),
-                mainQueue: testScheduler.eraseToAnyScheduler()
-            )
+            reducer: {
+                TradingLimitsReducer(
+                    close: { [weak self] in
+                        self?.recordedInvocations.close.append(())
+                    },
+                    openURL: { [weak self] url in
+                        self?.recordedInvocations.openURL.append(url)
+                    },
+                    presentKYCFlow: { tier in
+                        self.recordedInvocations.presentKYC.append(tier)
+                    },
+                    fetchLimitsOverview: { [unowned self] in
+                        guard failCalls else {
+                            return .just(stubOverview)
+                        }
+                        return .failure(Nabu.Error.unknown)
+                    },
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    mainQueue: testScheduler.eraseToAnyScheduler()
+                )
+            }
         )
     }
 

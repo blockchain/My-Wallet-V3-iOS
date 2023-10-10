@@ -37,7 +37,7 @@ public enum WithdrawalLocksRoute: NavigationRoute {
     }
 }
 
-public struct WithdrawalLocksReducer: ReducerProtocol {
+public struct WithdrawalLocksReducer: Reducer {
 
     public typealias State = WithdrawalLocksState
     public typealias Action = WithdrawalLocksAction
@@ -56,23 +56,22 @@ public struct WithdrawalLocksReducer: ReducerProtocol {
         self.updateViewAction = updateViewAction
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .loadWithdrawalLocks:
-                return .merge(
+                return .publisher {
                     withdrawalLockService
                         .withdrawalLocks
                         .receive(on: mainQueue)
-                        .eraseToEffect()
                         .map { withdrawalLocks in
                             .present(withdrawalLocks: withdrawalLocks)
                         }
-                )
+                }
             case .present(withdrawalLocks: let withdrawalLocks):
                 let updated = state.withdrawalLocks != withdrawalLocks
                 state.withdrawalLocks = withdrawalLocks
-                return .fireAndForget {
+                return .run { _ in
                     if updated {
                         mainQueue.schedule {
                             updateViewAction?(
@@ -100,7 +99,7 @@ public struct WithdrawalLocksView: View {
     private typealias LocalizationIds = LocalizationConstants.WithdrawalLocks
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: 0) {
                 if let withdrawalLocks = viewStore.state.withdrawalLocks, !withdrawalLocks.items.isEmpty {
                     Button {
@@ -140,13 +139,12 @@ struct WithdrawalLocksView_PreviewProvider: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
             WithdrawalLocksView(store:
-                .init(
-                    initialState: .init(withdrawalLocks: nil),
-                    reducer: WithdrawalLocksReducer(
+                Store(initialState: .init(withdrawalLocks: nil)) {
+                    WithdrawalLocksReducer(
                         withdrawalLockService: NoOpWithdrawalLocksService(),
                         updateViewAction: nil
                     )
-                )
+                }
             )
         }
     }

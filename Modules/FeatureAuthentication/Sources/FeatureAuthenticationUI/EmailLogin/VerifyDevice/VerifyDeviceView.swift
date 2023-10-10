@@ -18,7 +18,7 @@ public enum VerifyDeviceRoute: NavigationRoute {
     public func destination(
         in store: Store<VerifyDeviceState, VerifyDeviceAction>
     ) -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             switch self {
             case .credentials:
                 IfLetStore(
@@ -74,7 +74,7 @@ struct VerifyDeviceView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 VStack {
                     Spacer()
@@ -116,13 +116,13 @@ struct VerifyDeviceView: View {
             )
             .primaryNavigation(title: LocalizedString.navigationTitle)
             .navigationRoute(in: store)
-            .alert(store.scope(state: \.alert), dismiss: .alert(.dismiss))
+            .alert(store: store.scope(state: \.$alert, action: { .alert($0) }))
             .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 
     private var buttonSection: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Layout.buttonSpacing) {
                 MinimalButton(
                     title: LocalizedString.Button.sendAgain,
@@ -151,27 +151,29 @@ struct VerifyDeviceView_Previews: PreviewProvider {
             store:
             Store(
                 initialState: .init(emailAddress: ""),
-                reducer: VerifyDeviceReducer(
-                    app: App.preview,
-                    mainQueue: .main,
-                    deviceVerificationService: NoOpDeviceVerificationService(),
-                    errorRecorder: NoOpErrorRecorder(),
-                    externalAppOpener: ToLogAppOpener(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    walletRecoveryService: .noop,
-                    walletCreationService: .noop,
-                    walletFetcherService: .noop,
-                    accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService(),
-                    sessionTokenService: NoOpSessionTokenService(),
-                    emailAuthorizationService: NoOpEmailAuthorizationService(),
-                    smsService: NoOpSMSService(),
-                    loginService: NoOpLoginService(),
-                    seedPhraseValidator: NoOpValidator(),
-                    passwordValidator: PasswordValidator(),
-                    signUpCountriesService: NoOpSignupCountryService(),
-                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
-                )
+                reducer: {
+                    VerifyDeviceReducer(
+                        app: App.preview,
+                        mainQueue: .main,
+                        deviceVerificationService: NoOpDeviceVerificationService(),
+                        errorRecorder: NoOpErrorRecorder(),
+                        externalAppOpener: ToLogAppOpener(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        walletRecoveryService: .noop,
+                        walletCreationService: .noop,
+                        walletFetcherService: .noop,
+                        accountRecoveryService: NoOpAccountRecoveryService(),
+                        recaptchaService: NoOpGoogleRecatpchaService(),
+                        sessionTokenService: NoOpSessionTokenService(),
+                        emailAuthorizationService: NoOpEmailAuthorizationService(),
+                        smsService: NoOpSMSService(),
+                        loginService: NoOpLoginService(),
+                        seedPhraseValidator: NoOpValidator(),
+                        passwordValidator: PasswordValidator(),
+                        signUpCountriesService: NoOpSignupCountryService(),
+                        appStoreInformationRepository: NoOpAppStoreInformationRepository()
+                    )
+                }
             )
         )
     }

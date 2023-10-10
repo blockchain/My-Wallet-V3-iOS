@@ -36,7 +36,7 @@ struct SupportViewState: Equatable {
     }
 }
 
-struct SupportViewReducer: ReducerProtocol {
+struct SupportViewReducer: Reducer {
 
     typealias State = SupportViewState
     typealias Action = SupportViewAction
@@ -58,24 +58,25 @@ struct SupportViewReducer: ReducerProtocol {
         self.externalAppOpener = externalAppOpener
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .loadAppStoreVersionInformation:
                 analyticsRecorder.record(event: .customerSupportClicked)
-                return appStoreInformationRepository
-                    .verifyTheCurrentAppVersionIsTheLatestVersion(
-                        state.applicationVersion,
-                        bundleId: "com.rainydayapps.Blockchain"
-                    )
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result -> SupportViewAction in
-                        guard let applicationInfo = result.success else {
-                            return .failedToRetrieveAppStoreInfo
-                        }
-                        return .appStoreVersionInformationReceived(applicationInfo)
+                return .run { [applicationVersion = state.applicationVersion] send in
+                    do {
+                        let applicationInfo = try await appStoreInformationRepository
+                            .verifyTheCurrentAppVersionIsTheLatestVersion(
+                                applicationVersion,
+                                bundleId: "com.rainydayapps.Blockchain"
+                            )
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.appStoreVersionInformationReceived(applicationInfo))
+                    } catch {
+                        await send(.failedToRetrieveAppStoreInfo)
                     }
+                }
             case .appStoreVersionInformationReceived(let applicationInfo):
                 state.isApplicationUpdated = applicationInfo.isApplicationUpToDate
                 state.appStoreVersion = applicationInfo.version

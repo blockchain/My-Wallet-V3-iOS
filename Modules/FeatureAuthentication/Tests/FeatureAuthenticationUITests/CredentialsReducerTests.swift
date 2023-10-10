@@ -14,7 +14,7 @@ import XCTest
 @testable import FeatureAuthenticationMock
 @testable import ToolKitMock
 
-final class CredentialsReducerTests: XCTestCase {
+@MainActor final class CredentialsReducerTests: XCTestCase {
 
     private var mockMainQueue: TestSchedulerOf<DispatchQueue>!
     private var mockPollingQueue: TestSchedulerOf<DispatchQueue>!
@@ -22,10 +22,7 @@ final class CredentialsReducerTests: XCTestCase {
 
     private var testStore: TestStore<
         CredentialsState,
-        CredentialsAction,
-        CredentialsState,
-        CredentialsAction,
-        Void
+        CredentialsAction
     >!
 
     override func setUpWithError() throws {
@@ -56,7 +53,7 @@ final class CredentialsReducerTests: XCTestCase {
         )
         testStore = TestStore(
             initialState: .init(),
-            reducer: reducer
+            reducer: { reducer }
         )
     }
 
@@ -83,54 +80,56 @@ final class CredentialsReducerTests: XCTestCase {
         XCTAssertFalse(state.isTwoFAPrepared)
     }
 
-    func test_did_appear_should_setup_wallet_info() {
+    func test_did_appear_should_setup_wallet_info() async {
         let mockWalletInfo = MockDeviceVerificationService.mockWalletInfo
-        testStore.send(.didAppear(context: .walletInfo(mockWalletInfo))) { state in
+        await testStore.send(.didAppear(context: .walletInfo(mockWalletInfo))) { state in
             state.walletPairingState.emailAddress = mockWalletInfo.wallet!.email!
             state.walletPairingState.walletGuid = mockWalletInfo.wallet!.guid
             state.walletPairingState.emailCode = mockWalletInfo.wallet!.emailCode
         }
     }
 
-    func test_did_appear_should_prepare_twoFA_if_needed() {
+    func test_did_appear_should_prepare_twoFA_if_needed() async {
         // login service is going to return sms required error
         (reducer.loginService as! MockLoginService).twoFAType = .sms
 
         let mockWalletInfo = MockDeviceVerificationService.mockWalletInfoWithTwoFA
-        testStore.send(.didAppear(context: .walletInfo(mockWalletInfo))) { state in
+        await testStore.send(.didAppear(context: .walletInfo(mockWalletInfo))) { state in
             state.walletPairingState.emailAddress = mockWalletInfo.wallet!.email!
             state.walletPairingState.walletGuid = mockWalletInfo.wallet!.guid
             state.walletPairingState.emailCode = mockWalletInfo.wallet!.emailCode
             state.isTwoFAPrepared = true
         }
 
-        testStore.receive(.walletPairing(.authenticate("", autoTrigger: true))) { state in
+        await testStore.receive(.walletPairing(.authenticate("", autoTrigger: true))) { state in
             state.isLoading = true
         }
-        testStore.receive(.showAccountLockedError(false))
-        testStore.receive(.password(.showIncorrectPasswordError(false)))
-        testStore.receive(.alert(.dismiss))
-        mockMainQueue.advance()
+        await testStore.receive(.showAccountLockedError(false))
+        await testStore.receive(.password(.showIncorrectPasswordError(false)))
+        await testStore.receive(.alert(.dismiss))
+        await mockMainQueue.advance()
 
         // authentication with sms requied
-        testStore.receive(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.sms)))) { state in
+        await testStore.receive(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.sms)))) { state in
             state.twoFAState = .init(
                 twoFAType: .sms
             )
         }
-        testStore.receive(.walletPairing(.handleSMS))
-        testStore.receive(.twoFA(.showResendSMSButton(true))) { state in
+        await testStore.receive(.walletPairing(.handleSMS))
+        await testStore.receive(.twoFA(.showResendSMSButton(true))) { state in
             state.twoFAState?.isResendSMSButtonVisible = true
         }
-        testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
+        await testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
             state.twoFAState?.isTwoFACodeFieldVisible = true
             state.isLoading = false
         }
-        testStore.receive(
+        await testStore.receive(
             .alert(
-                .show(
-                    title: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SMSCode.Success.title,
-                    message: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SMSCode.Success.message
+                .presented(
+                    .show(
+                        title: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SMSCode.Success.title,
+                        message: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SMSCode.Success.message
+                    )
                 )
             )
         ) { state in
@@ -143,33 +142,33 @@ final class CredentialsReducerTests: XCTestCase {
                 ),
                 dismissButton: .default(
                     TextState(LocalizationConstants.okString),
-                    action: .send(.alert(.dismiss))
+                    action: .send(.dismiss)
                 )
             )
         }
-        mockMainQueue.advance()
+        await mockMainQueue.advance()
     }
 
-    func test_wallet_identifier_fallback_did_appear_should_setup_guid_if_present() {
+    func test_wallet_identifier_fallback_did_appear_should_setup_guid_if_present() async {
         let mockWalletGuid = MockDeviceVerificationService.mockWalletInfo.wallet!.guid
-        testStore.send(.didAppear(context: .walletIdentifier(guid: mockWalletGuid))) { state in
+        await testStore.send(.didAppear(context: .walletIdentifier(guid: mockWalletGuid))) { state in
             state.walletPairingState.walletGuid = mockWalletGuid
         }
     }
 
-    func test_manual_screen_did_appear_should_setup_session_token() {
-        testStore.send(.didAppear(context: .manualPairing)) { state in
+    func test_manual_screen_did_appear_should_setup_session_token() async {
+        await testStore.send(.didAppear(context: .manualPairing)) { state in
             state.walletPairingState.emailAddress = ""
             state.isManualPairing = true
         }
-        testStore.receive(.walletPairing(.setupSessionToken))
-        mockMainQueue.advance()
-        testStore.receive(.walletPairing(.didSetupSessionToken(.success(.noValue))))
+        await testStore.receive(.walletPairing(.setupSessionToken))
+        await mockMainQueue.advance()
+        await testStore.receive(.walletPairing(.didSetupSessionToken(.success(.noValue))))
     }
 
     // MARK: - Wallet Pairing Actions
 
-    func test_authenticate_success_should_update_view_state_and_decrypt_password() {
+    func test_authenticate_success_should_update_view_state_and_decrypt_password() async {
         /*
          Use Case: Authentication flow without any 2FA
          1. Setup walletInfo
@@ -178,20 +177,20 @@ final class CredentialsReducerTests: XCTestCase {
          */
 
         // some preliminery actions
-        setupWalletInfo()
+        await setupWalletInfo()
 
         // authentication without 2FA
-        testStore.send(.walletPairing(.authenticate(""))) { state in
+        await testStore.send(.walletPairing(.authenticate(""))) { state in
             state.isLoading = true
         }
-        testStore.receive(.showAccountLockedError(false))
-        testStore.receive(.password(.showIncorrectPasswordError(false)))
-        testStore.receive(.alert(.dismiss))
-        mockMainQueue.advance()
-        testStore.receive(.walletPairing(.decryptWalletWithPassword("")))
+        await testStore.receive(.showAccountLockedError(false))
+        await testStore.receive(.password(.showIncorrectPasswordError(false)))
+        await testStore.receive(.alert(.dismiss))
+        await mockMainQueue.advance()
+        await testStore.receive(.walletPairing(.decryptWalletWithPassword("")))
     }
 
-    func test_authenticate_email_required_should_return_relevant_actions() {
+    func test_authenticate_email_required_should_return_relevant_actions() async {
         /*
          Use Case: Authentication flow with auto-authorized email approval
          1. Setup walletInfo
@@ -206,43 +205,43 @@ final class CredentialsReducerTests: XCTestCase {
         (reducer.loginService as! MockLoginService).twoFAType = .email
 
         // some preliminery actions
-        setupWalletInfo()
+        await setupWalletInfo()
 
         // authentication
-        testStore.send(.walletPairing(.authenticate(""))) { state in
+        await testStore.send(.walletPairing(.authenticate(""))) { state in
             state.isLoading = true
         }
-        testStore.receive(.showAccountLockedError(false))
-        testStore.receive(.password(.showIncorrectPasswordError(false)))
-        testStore.receive(.alert(.dismiss))
-        mockMainQueue.advance()
+        await testStore.receive(.showAccountLockedError(false))
+        await testStore.receive(.password(.showIncorrectPasswordError(false)))
+        await testStore.receive(.alert(.dismiss))
+        await mockMainQueue.advance()
 
         // authentication with email required
-        testStore.receive(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.email))))
-        testStore.receive(.walletPairing(.approveEmailAuthorization))
-        testStore.receive(.walletPairing(.startPolling))
-        mockMainQueue.advance()
+        await testStore.receive(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.email))))
+        await testStore.receive(.walletPairing(.approveEmailAuthorization))
+        await testStore.receive(.walletPairing(.startPolling))
+        await mockMainQueue.advance()
 
         // after approval twoFA type should be set to standard
         (reducer.loginService as! MockLoginService).twoFAType = .standard
 
         // nothing should happen after 1 second
-        mockPollingQueue.advance(by: 1)
+        await mockPollingQueue.advance(by: 1)
 
         // polling should happen after 1 more second (2 seconds in total)
-        mockPollingQueue.advance(by: 1)
+        await mockPollingQueue.advance(by: 1)
 
-        mockMainQueue.advance()
-        testStore.receive(.walletPairing(.pollWalletIdentifier))
-        testStore.receive(.walletPairing(.authenticate("")))
-        testStore.receive(.showAccountLockedError(false))
-        testStore.receive(.password(.showIncorrectPasswordError(false)))
-        testStore.receive(.alert(.dismiss))
-        testStore.receive(.walletPairing(.decryptWalletWithPassword("")))
-        mockMainQueue.advance()
+        await mockMainQueue.advance()
+        await testStore.receive(.walletPairing(.pollWalletIdentifier))
+        await testStore.receive(.walletPairing(.authenticate("")))
+        await testStore.receive(.showAccountLockedError(false))
+        await testStore.receive(.password(.showIncorrectPasswordError(false)))
+        await testStore.receive(.alert(.dismiss))
+        await testStore.receive(.walletPairing(.decryptWalletWithPassword("")))
+        await mockMainQueue.advance()
     }
 
-    func test_authenticate_sms_required_should_return_relevant_actions() {
+    func test_authenticate_sms_required_should_return_relevant_actions() async {
         /*
          Use Case: Authentication flow with SMS as 2FA
          1. Setup walletInfo
@@ -256,36 +255,38 @@ final class CredentialsReducerTests: XCTestCase {
         (reducer.loginService as! MockLoginService).twoFAType = .sms
 
         // some preliminery actions
-        setupWalletInfo()
+        await setupWalletInfo()
 
         // authentication
-        testStore.send(.walletPairing(.authenticate(""))) { state in
+        await testStore.send(.walletPairing(.authenticate(""))) { state in
             state.isLoading = true
         }
-        testStore.receive(.showAccountLockedError(false))
-        testStore.receive(.password(.showIncorrectPasswordError(false)))
-        testStore.receive(.alert(.dismiss))
-        mockMainQueue.advance()
+        await testStore.receive(.showAccountLockedError(false))
+        await testStore.receive(.password(.showIncorrectPasswordError(false)))
+        await testStore.receive(.alert(.dismiss))
+        await mockMainQueue.advance()
 
         // authentication with sms requied
-        testStore.receive(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.sms)))) { state in
+        await testStore.receive(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.sms)))) { state in
             state.twoFAState = .init(
                 twoFAType: .sms
             )
         }
-        testStore.receive(.walletPairing(.handleSMS))
-        testStore.receive(.twoFA(.showResendSMSButton(true))) { state in
+        await testStore.receive(.walletPairing(.handleSMS))
+        await testStore.receive(.twoFA(.showResendSMSButton(true))) { state in
             state.twoFAState?.isResendSMSButtonVisible = true
         }
-        testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
+        await testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
             state.twoFAState?.isTwoFACodeFieldVisible = true
             state.isLoading = false
         }
-        testStore.receive(
+        await testStore.receive(
             .alert(
-                .show(
-                    title: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SMSCode.Success.title,
-                    message: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SMSCode.Success.message
+                .presented(
+                    .show(
+                        title: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SMSCode.Success.title,
+                        message: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SMSCode.Success.message
+                    )
                 )
             )
         ) { state in
@@ -298,14 +299,14 @@ final class CredentialsReducerTests: XCTestCase {
                 ),
                 dismissButton: .default(
                     TextState(LocalizationConstants.okString),
-                    action: .send(.alert(.dismiss))
+                    action: .send(.dismiss)
                 )
             )
         }
-        mockMainQueue.advance()
+        await mockMainQueue.advance()
     }
 
-    func test_authenticate_google_auth_required_should_return_relevant_actions() {
+    func test_authenticate_google_auth_required_should_return_relevant_actions() async {
         /*
          Use Case: Authentication flow with google authenticator as 2FA
          1. Setup walletInfo
@@ -318,30 +319,30 @@ final class CredentialsReducerTests: XCTestCase {
         (reducer.loginService as! MockLoginService).twoFAType = .google
 
         // some preliminery actions
-        setupWalletInfo()
+        await setupWalletInfo()
 
         // authentication
-        testStore.send(.walletPairing(.authenticate(""))) { state in
+        await testStore.send(.walletPairing(.authenticate(""))) { state in
             state.isLoading = true
         }
-        testStore.receive(.showAccountLockedError(false))
-        testStore.receive(.password(.showIncorrectPasswordError(false)))
-        testStore.receive(.alert(.dismiss))
-        mockMainQueue.advance()
+        await testStore.receive(.showAccountLockedError(false))
+        await testStore.receive(.password(.showIncorrectPasswordError(false)))
+        await testStore.receive(.alert(.dismiss))
+        await mockMainQueue.advance()
 
         // authentication with google auth required
-        testStore.receive(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.google)))) { state in
+        await testStore.receive(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.google)))) { state in
             state.twoFAState = .init(
                 twoFAType: .google
             )
         }
-        testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
+        await testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
             state.twoFAState?.isTwoFACodeFieldVisible = true
             state.isLoading = false
         }
     }
 
-    func test_authenticate_with_twoFA_should_return_relevant_actions() {
+    func test_authenticate_with_twoFA_should_return_relevant_actions() async {
         /*
          Use Case: Authentication flow with google auth as 2FA
          1. Authenticate with 2FA, clear 2FA error states
@@ -352,35 +353,35 @@ final class CredentialsReducerTests: XCTestCase {
         // set 2FA required (e.g. sms) and initialise twoFA state
         (reducer.loginService as! MockLoginService).twoFAType = .google
         // some preliminery actions
-        setupWalletInfo()
+        await setupWalletInfo()
 
         // authentication using 2FA
-        testStore.send(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.google)))) { state in
+        await testStore.send(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.google)))) { state in
             state.twoFAState = .init(
                 twoFAType: .google
             )
         }
-        testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
+        await testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
             state.twoFAState?.isTwoFACodeFieldVisible = true
         }
-        testStore.send(.walletPairing(.authenticateWithTwoFactorOTP(""))) { state in
+        await testStore.send(.walletPairing(.authenticateWithTwoFactorOTP(""))) { state in
             state.isLoading = true
         }
-        testStore.receive(.showAccountLockedError(false))
-        testStore.receive(.password(.showIncorrectPasswordError(false)))
-        testStore.receive(.twoFA(.showIncorrectTwoFACodeError(.none)))
-        testStore.receive(.alert(.dismiss))
-        mockMainQueue.advance()
-        testStore.receive(.walletPairing(.twoFactorOTPDidVerified)) { state in
+        await testStore.receive(.showAccountLockedError(false))
+        await testStore.receive(.password(.showIncorrectPasswordError(false)))
+        await testStore.receive(.twoFA(.showIncorrectTwoFACodeError(.none)))
+        await testStore.receive(.alert(.dismiss))
+        await mockMainQueue.advance()
+        await testStore.receive(.walletPairing(.twoFactorOTPDidVerified)) { state in
             state.isTwoFactorOTPVerified = true
             state.isLoading = false
         }
-        testStore.receive(.walletPairing(.decryptWalletWithPassword(""))) { state in
+        await testStore.receive(.walletPairing(.decryptWalletWithPassword(""))) { state in
             state.isLoading = true
         }
     }
 
-    func test_authenticate_with_twoFA_wrong_code_error() {
+    func test_authenticate_with_twoFA_wrong_code_error() async {
         // set 2FA required (e.g. google)
         (reducer.loginService as! MockLoginService).twoFAType = .google
 
@@ -390,10 +391,10 @@ final class CredentialsReducerTests: XCTestCase {
             .twoFAServiceError = .twoFAWalletServiceError(.wrongCode(attemptsLeft: mockAttemptsLeft))
 
         // some preliminery actions
-        setupWalletInfo()
+        await setupWalletInfo()
 
         // authentication using 2FA
-        testStore.send(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.google)))) { state in
+        await testStore.send(.walletPairing(.authenticateDidFail(.twoFactorOTPRequired(.google)))) { state in
             state.twoFAState = TwoFAState(
                 twoFACode: "",
                 twoFAType: .google,
@@ -404,18 +405,18 @@ final class CredentialsReducerTests: XCTestCase {
                 twoFACodeAttemptsLeft: 5
             )
         }
-        testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
+        await testStore.receive(.twoFA(.showTwoFACodeField(true))) { state in
             state.twoFAState?.isTwoFACodeFieldVisible = true
         }
-        testStore.send(.walletPairing(.authenticateWithTwoFactorOTP(""))) { state in
+        await testStore.send(.walletPairing(.authenticateWithTwoFactorOTP(""))) { state in
             state.isLoading = true
         }
-        testStore.receive(.showAccountLockedError(false))
-        testStore.receive(.password(.showIncorrectPasswordError(false)))
-        testStore.receive(.twoFA(.showIncorrectTwoFACodeError(.none)))
-        testStore.receive(.alert(.dismiss))
-        mockMainQueue.advance()
-        testStore.receive(
+        await testStore.receive(.showAccountLockedError(false))
+        await testStore.receive(.password(.showIncorrectPasswordError(false)))
+        await testStore.receive(.twoFA(.showIncorrectTwoFACodeError(.none)))
+        await testStore.receive(.alert(.dismiss))
+        await mockMainQueue.advance()
+        await testStore.receive(
             .walletPairing(
                 .authenticateWithTwoFactorOTPDidFail(
                     .twoFAWalletServiceError(
@@ -424,10 +425,10 @@ final class CredentialsReducerTests: XCTestCase {
                 )
             )
         )
-        testStore.receive(.twoFA(.didChangeTwoFACodeAttemptsLeft(mockAttemptsLeft))) { state in
+        await testStore.receive(.twoFA(.didChangeTwoFACodeAttemptsLeft(mockAttemptsLeft))) { state in
             state.twoFAState?.twoFACodeAttemptsLeft = mockAttemptsLeft
         }
-        testStore.receive(.twoFA(.showIncorrectTwoFACodeError(.incorrect))) { state in
+        await testStore.receive(.twoFA(.showIncorrectTwoFACodeError(.incorrect))) { state in
             state.twoFAState?.twoFACodeIncorrectContext = .incorrect
             state.twoFAState?.isTwoFACodeIncorrect = true
             state.isLoading = false
@@ -436,9 +437,9 @@ final class CredentialsReducerTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func setupWalletInfo() {
+    private func setupWalletInfo() async {
         let mockWalletInfo = MockDeviceVerificationService.mockWalletInfo
-        testStore.send(.didAppear(context: .walletInfo(mockWalletInfo))) { state in
+        await testStore.send(.didAppear(context: .walletInfo(mockWalletInfo))) { state in
             state.walletPairingState.emailAddress = mockWalletInfo.wallet!.email!
             state.walletPairingState.walletGuid = mockWalletInfo.wallet!.guid
             state.walletPairingState.emailCode = mockWalletInfo.wallet!.emailCode

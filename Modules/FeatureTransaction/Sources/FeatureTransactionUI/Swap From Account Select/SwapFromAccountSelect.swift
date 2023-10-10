@@ -8,7 +8,7 @@ import PlatformKit
 import SwiftExtensions
 import ToolKit
 
-public struct SwapFromAccountSelect: ReducerProtocol {
+public struct SwapFromAccountSelect: Reducer {
     private var app: AppProtocol
     private var supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
 
@@ -36,7 +36,7 @@ public struct SwapFromAccountSelect: ReducerProtocol {
         self.supportedPairsInteractorService = supportedPairsInteractorService
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .accountRow:

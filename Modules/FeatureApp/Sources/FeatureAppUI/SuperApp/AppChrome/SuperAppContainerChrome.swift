@@ -22,9 +22,11 @@ public struct SuperAppContainerChrome: View {
         self.isSmallDevice = isSmallDevice
         self.store = Store(
             initialState: .init(),
-            reducer: SuperAppContent(
-                app: app
-            )
+            reducer: {
+                SuperAppContent(
+                    app: app
+                )
+            }
         )
         self.currentModeSelection = app.currentMode
     }

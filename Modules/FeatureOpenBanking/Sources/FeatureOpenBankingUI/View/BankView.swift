@@ -62,7 +62,7 @@ public enum BankAction: Hashable, FailureAction {
     case failure(OpenBanking.Error)
 }
 
-public struct BankReducer: ReducerProtocol {
+public struct BankReducer: Reducer {
     
     public typealias State = BankState
     public typealias Action = BankAction
@@ -79,45 +79,48 @@ public struct BankReducer: ReducerProtocol {
         self.environment = environment
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .retry:
                 return .merge(
                     .cancel(id: ID.Request()),
                     .cancel(id: ID.LaunchBank()),
-                    EffectTask(value: .request)
+                    Effect.send(.request)
                 )
             case .request:
                 state.ui = .communicating(to: state.name)
                 state.showActions = false
                 return .merge(
-                    Just(())
-                        .delay(for: .seconds(90), scheduler: environment.scheduler)
-                        .eraseToEffect()
-                        .map { BankAction.showActions },
-                    .fireAndForget {
+                    .publisher {
+                        Just(())
+                            .delay(for: .seconds(90), scheduler: environment.scheduler)
+                            .map { BankAction.showActions }
+                    },
+                    .run { _ in
                         environment.openBanking.reset()
                     },
-                    environment.openBanking.start(state.data)
-                        .compactMap { state -> BankAction in
-                            switch state {
-                            case .waitingForConsent:
-                                return .waitingForConsent
-                            case .success(let output):
-                                return .finalise(output)
-                            case .fail(let error):
-                                return BankAction.failure(error)
+                    .publisher { [data = state.data] in
+                        environment.openBanking.start(data)
+                            .compactMap { state -> BankAction in
+                                switch state {
+                                case .waitingForConsent:
+                                    return .waitingForConsent
+                                case .success(let output):
+                                    return .finalise(output)
+                                case .fail(let error):
+                                    return BankAction.failure(error)
+                                }
                             }
-                        }
-                        .receive(on: environment.scheduler)
-                        .eraseToEffect()
-                        .cancellable(id: ID.Request()),
-                    environment.openBanking.authorisationURLPublisher
-                        .map(BankAction.launchAuthorisation)
-                        .receive(on: environment.scheduler)
-                        .eraseToEffect()
-                        .cancellable(id: ID.LaunchBank())
+                            .receive(on: environment.scheduler)
+                    }
+                    .cancellable(id: ID.Request()),
+                    .publisher {
+                        environment.openBanking.authorisationURLPublisher
+                            .map(BankAction.launchAuthorisation)
+                            .receive(on: environment.scheduler)
+                    }
+                    .cancellable(id: ID.LaunchBank())
                 )
             case .showActions:
                 state.showActions = true
@@ -130,7 +133,7 @@ public struct BankReducer: ReducerProtocol {
             case .launchAuthorisation(let url):
                 state.ui = .waiting(for: state.name)
                 return .merge(
-                    .fireAndForget { environment.openURL.open(url) },
+                    .run { _ in environment.openURL.open(url) },
                     .cancel(id: ID.LaunchBank())
                 )
 
@@ -158,7 +161,7 @@ public struct BankReducer: ReducerProtocol {
                 )
 
             case .dismiss:
-                return .fireAndForget(environment.dismiss)
+                return .run { _ in environment.dismiss() }
 
             case .finished, .cancel:
                 return .merge(
@@ -184,18 +187,18 @@ public struct BankReducer: ReducerProtocol {
     }
 }
 
-struct BankAnalyticsReducer: ReducerProtocol {
+struct BankAnalyticsReducer: Reducer {
     
     typealias State = BankState
     typealias Action = BankAction
 
     let analytics: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .failure(let error):
-                return .fireAndForget {
+                return .run { _ in
                     analytics.record(
                         event: ClientEvent.clientError(
                             id: error.code,
@@ -231,7 +234,7 @@ public struct BankView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if let ux = viewStore.error {
                 ErrorView(
                     ux: UX.Error(nabu: ux),
@@ -317,7 +320,7 @@ struct BankView_Previews: PreviewProvider {
 
     static var previews: some View {
         BankView(
-            store: .init(
+            store: Store(
                 initialState: BankState(
                     ui: .linked(institution: "Monzo"),
                     data: .init(
@@ -325,9 +328,11 @@ struct BankView_Previews: PreviewProvider {
                         action: .link(institution: .mock)
                     )
                 ),
-                reducer: BankReducer(
-                    environment: .mock
-                )
+                reducer: {
+                    BankReducer(
+                        environment: .mock
+                    )
+                }
             )
         )
     }

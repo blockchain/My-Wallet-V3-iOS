@@ -12,7 +12,7 @@ public struct ReferralPopup: View {
 
     public init(store: Store<ReferFriendState, ReferFriendAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -34,8 +34,7 @@ public struct ReferralPopup: View {
             viewStore.send(.onAppear)
         })
         .sheet(
-            isPresented: viewStore
-                .binding(\.$isShowReferralViewPresented),
+            isPresented: viewStore.$isShowReferralViewPresented,
             content: {
                 ReferFriendView(store: store)
             }

@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import UIKit
 
-public struct ViewIntroBackup: ReducerProtocol {
+public struct ViewIntroBackup: Reducer {
 
     public let mainQueue: AnySchedulerOf<DispatchQueue>
     public let onNext: () -> Void
@@ -20,7 +20,7 @@ public struct ViewIntroBackup: ReducerProtocol {
     public typealias State = ViewIntroBackupState
     public typealias Action = ViewIntroBackupAction
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {

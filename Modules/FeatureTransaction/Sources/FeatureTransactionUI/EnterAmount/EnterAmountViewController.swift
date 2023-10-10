@@ -39,8 +39,10 @@ final class EnterAmountViewController: BaseScreenViewController,
     private lazy var withdrawalLocksHostingController: UIHostingController<WithdrawalLocksView> = {
         let store = Store<WithdrawalLocksState, WithdrawalLocksAction>(
             initialState: .init(),
-            reducer: WithdrawalLocksReducer { [weak self] isVisible in
-                self?.withdrawalLocksVisible.onNext(isVisible)
+            reducer: {
+                WithdrawalLocksReducer { [weak self] isVisible in
+                    self?.withdrawalLocksVisible.onNext(isVisible)
+                }
             }
         )
         return UIHostingController(rootView: WithdrawalLocksView(store: store))
@@ -392,8 +394,10 @@ final class EnterAmountViewController: BaseScreenViewController,
     func presentWithdrawalLocks(amountAvailable: String) {
         let store = Store<WithdrawalLocksInfoState, WithdrawalLocksInfoAction>(
             initialState: WithdrawalLocksInfoState(amountAvailable: amountAvailable),
-            reducer: WithdrawalLockInfoReducer { [weak self] in
-                self?.dismiss(animated: true, completion: nil)
+            reducer: {
+                WithdrawalLockInfoReducer { [weak self] in
+                    self?.dismiss(animated: true, completion: nil)
+                }
             }
         )
         let rootView = WithdrawalLocksInfoView(store: store)
@@ -408,16 +412,18 @@ final class EnterAmountViewController: BaseScreenViewController,
     func presentAvailableBalanceDetailView(_ availableBalanceDetails: AvailableBalanceDetails) {
         let store = Store<AvailableBalanceDetailViewState, AvailableBalanceDetailViewAction>(
             initialState: .init(),
-            reducer: AvailableBalanceDetailViewReducer(
-                app: app,
-                balancePublisher: availableBalanceDetails.balance,
-                availableBalancePublisher: availableBalanceDetails.availableBalance,
-                feesPublisher: availableBalanceDetails.fee,
-                transactionIsFeeLessPublisher: availableBalanceDetails.transactionIsFeeLess,
-                closeAction: { [weak self] in
-                    self?.dismiss(animated: true, completion: nil)
-                }
-            )
+            reducer: {
+                AvailableBalanceDetailViewReducer(
+                    app: app,
+                    balancePublisher: availableBalanceDetails.balance,
+                    availableBalancePublisher: availableBalanceDetails.availableBalance,
+                    feesPublisher: availableBalanceDetails.fee,
+                    transactionIsFeeLessPublisher: availableBalanceDetails.transactionIsFeeLess,
+                    closeAction: { [weak self] in
+                        self?.dismiss(animated: true, completion: nil)
+                    }
+                )
+            }
         )
         let rootView = AvailableBalanceDetailView(store: store)
         let viewController = SelfSizingHostingController(rootView: rootView)

@@ -12,18 +12,23 @@ extension AccountUsage {
 
         struct State: Equatable {
             @BindingState var form: FeatureFormDomain.Form
-            var submissionState: LoadingState<Empty, AlertState<Action>> = .idle
+            @PresentationState var alert: AlertState<Action.AlertAction>?
+            var submissionState: LoadingState<Empty, Empty> = .idle
         }
 
         enum Action: Equatable, BindableAction {
+            enum AlertAction {
+                case dismiss
+                case submit
+            }
             case binding(BindingAction<State>)
             case onComplete
             case submit
             case submissionDidComplete(Result<Empty, NabuNetworkError>)
-            case dismissSubmissionError
+            case alert(PresentationAction<AlertAction>)
         }
 
-        struct Reducer: ReducerProtocol {
+        struct FormReducer: Reducer {
 
             typealias State = AccountUsage.Form.State
             typealias Action = AccountUsage.Form.Action
@@ -31,7 +36,7 @@ extension AccountUsage {
             let submitForm: (FeatureFormDomain.Form) -> AnyPublisher<Void, NabuNetworkError>
             let mainQueue: AnySchedulerOf<DispatchQueue>
 
-            var body: some ReducerProtocol<State, Action> {
+            var body: some ReducerOf<Self> {
                 BindingReducer()
                 Reduce { state, action in
                     switch action {
@@ -42,42 +47,45 @@ extension AccountUsage {
                         // handled in parent reducer
                         return .none
 
-                    case .submit:
+                    case .submit, .alert(.presented(.submit)):
                         state.submissionState = .loading
-                        return submitForm(state.form)
-                            .catchToEffect()
-                            .map { result in
-                                result.map(Empty.init)
+                        return .run { [form = state.form] send in
+                            do {
+                                try await submitForm(form)
+                                    .receive(on: mainQueue)
+                                    .await()
+                                await send(.submissionDidComplete(.success(Empty())))
+                            } catch {
+                                await send(.submissionDidComplete(.failure(error as! NabuNetworkError)))
                             }
-                            .map(Action.submissionDidComplete)
-                            .receive(on: mainQueue)
-                            .eraseToEffect()
+                        }
 
                     case .submissionDidComplete(let result):
                         switch result {
                         case .success:
                             state.submissionState = .success(Empty())
-                            return EffectTask(value: .onComplete)
+                            return Effect.send(.onComplete)
 
                         case .failure(let error):
-                            state.submissionState = .failure(
-                                AlertState(
-                                    title: TextState(LocalizationConstants.NewKYC.GenericError.title),
-                                    message: TextState(String(describing: error)),
-                                    primaryButton: .default(
-                                        TextState(LocalizationConstants.NewKYC.GenericError.retryButtonTitle),
-                                        action: .send(.submit)
-                                    ),
-                                    secondaryButton: .cancel(
-                                        TextState(LocalizationConstants.NewKYC.GenericError.cancelButtonTitle)
-                                    )
+                            state.submissionState = .failure(Empty())
+                            state.alert = AlertState(
+                                title: TextState(LocalizationConstants.NewKYC.GenericError.title),
+                                message: TextState(String(describing: error)),
+                                primaryButton: .default(
+                                    TextState(LocalizationConstants.NewKYC.GenericError.retryButtonTitle),
+                                    action: .send(.submit)
+                                ),
+                                secondaryButton: .cancel(
+                                    TextState(LocalizationConstants.NewKYC.GenericError.cancelButtonTitle),
+                                    action: .send(.dismiss)
                                 )
                             )
                         }
                         return .none
 
-                    case .dismissSubmissionError:
+                    case .alert(.dismiss), .alert(.presented(.dismiss)):
                         state.submissionState = .idle
+                        state.alert = nil
                         return .none
                     }
                 }

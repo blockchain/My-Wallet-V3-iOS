@@ -53,12 +53,12 @@ enum TestRoute: NavigationRoute {
     }
 }
 
-struct TestReducer: ReducerProtocol {
+struct TestReducer: Reducer {
 
     typealias State = TestState
     typealias Action = TestAction
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .route(let route):

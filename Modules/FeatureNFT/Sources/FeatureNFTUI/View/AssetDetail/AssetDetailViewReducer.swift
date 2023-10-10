@@ -2,12 +2,12 @@ import Combine
 import ComposableArchitecture
 import FeatureNFTDomain
 
-struct AssetDetailReducer: ReducerProtocol {
+struct AssetDetailReducer: Reducer {
     
     typealias State = AssetDetailViewState
     typealias Action = AssetDetailViewAction
     
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .viewOnWebTapped:

@@ -18,7 +18,7 @@ public enum CredentialsAction: Equatable, NavigationAction, BindableAction {
 
     case binding(BindingAction<CredentialsState>)
     case route(RouteIntent<CredentialsRoute>?)
-    case alert(AlertAction)
+    case alert(PresentationAction<AlertAction>)
     case continueButtonTapped
     case didAppear(context: CredentialsContext)
     case onWillDisappear
@@ -61,7 +61,7 @@ public struct CredentialsState: Equatable, NavigationState {
     var isTwoFactorOTPVerified: Bool
     var isWalletIdentifierIncorrect: Bool
     var isAccountLocked: Bool
-    var credentialsFailureAlert: AlertState<CredentialsAction>?
+    @PresentationState var credentialsFailureAlert: AlertState<CredentialsAction.AlertAction>?
     var isLoading: Bool
 
     /// when the screen appears for the first time we would like to prepare for 2FA (if needed)
@@ -91,7 +91,7 @@ public struct CredentialsState: Equatable, NavigationState {
         isTwoFactorOTPVerified: Bool = false,
         isWalletIdentifierIncorrect: Bool = false,
         isAccountLocked: Bool = false,
-        credentialsFailureAlert: AlertState<CredentialsAction>? = nil,
+        credentialsFailureAlert: AlertState<CredentialsAction.AlertAction>? = nil,
         isLoading: Bool = false,
         isTwoFAPrepared: Bool = false
     ) {
@@ -113,7 +113,7 @@ public struct CredentialsState: Equatable, NavigationState {
     }
 }
 
-struct CredentialsReducer: ReducerProtocol {
+struct CredentialsReducer: Reducer {
 
     typealias State = CredentialsState
     typealias Action = CredentialsAction
@@ -189,7 +189,7 @@ struct CredentialsReducer: ReducerProtocol {
         self.appStoreInformationRepository = appStoreInformationRepository
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Scope(state: \.passwordState, action: /Action.password) {
             PasswordReducer()
@@ -208,19 +208,19 @@ struct CredentialsReducer: ReducerProtocol {
             case .binding:
                 return .none
 
-            case .alert(.show(let title, let message)):
+            case .alert(.presented(.show(let title, let message))):
                 state.isLoading = false
                 state.credentialsFailureAlert = AlertState(
                     title: TextState(verbatim: title),
                     message: TextState(verbatim: message),
                     dismissButton: .default(
                         TextState(LocalizationConstants.okString),
-                        action: .send(.alert(.dismiss))
+                        action: .send(.dismiss)
                     )
                 )
                 return .none
 
-            case .alert(.dismiss):
+            case .alert(.dismiss), .alert(.presented(.dismiss)):
                 state.credentialsFailureAlert = nil
                 return .none
 
@@ -238,8 +238,8 @@ struct CredentialsReducer: ReducerProtocol {
                     // if we want to send SMS when the view appears we would need to trigger approve authorization and sms error in order to send SMS when appeared
                     // also, if we want to show 2FA field when view appears, we need to do the above
                     state.isTwoFAPrepared = true
-                    return EffectTask(
-                        value: .walletPairing(
+                    return Effect.send(
+                        .walletPairing(
                             .authenticate(
                                 state.passwordState.password,
                                 autoTrigger: true
@@ -255,7 +255,7 @@ struct CredentialsReducer: ReducerProtocol {
 
             case .didAppear(.manualPairing):
                 state.isManualPairing = true
-                return EffectTask(value: .walletPairing(.setupSessionToken))
+                return Effect.send(.walletPairing(.setupSessionToken))
 
             case .didAppear:
                 return .none
@@ -271,19 +271,19 @@ struct CredentialsReducer: ReducerProtocol {
 
             case .continueButtonTapped:
                 if state.isTwoFactorOTPVerified {
-                    return EffectTask(value: .walletPairing(.decryptWalletWithPassword(state.passwordState.password)))
+                    return Effect.send(.walletPairing(.decryptWalletWithPassword(state.passwordState.password)))
                 }
                 if let twoFAState = state.twoFAState, twoFAState.isTwoFACodeFieldVisible {
-                    return EffectTask(value: .walletPairing(.authenticateWithTwoFactorOTP(twoFAState.twoFACode)))
+                    return Effect.send(.walletPairing(.authenticateWithTwoFactorOTP(twoFAState.twoFACode)))
                 }
-                return EffectTask(value: .walletPairing(.authenticate(state.passwordState.password)))
+                return Effect.send(.walletPairing(.authenticate(state.passwordState.password)))
 
             case .walletPairing(.authenticate):
                 // Set loading state
                 state.isLoading = true
                 return .merge(
                     clearErrorStates(state),
-                    EffectTask(value: .alert(.dismiss))
+                    Effect.send(.alert(.dismiss))
                 )
 
             case .walletPairing(.authenticateDidFail(let error)):
@@ -294,7 +294,7 @@ struct CredentialsReducer: ReducerProtocol {
                 state.isLoading = true
                 return .merge(
                     clearErrorStates(state),
-                    EffectTask(value: .alert(.dismiss))
+                    Effect.send(.alert(.dismiss))
                 )
 
             case .walletPairing(.authenticateWithTwoFactorOTPDidFail(let error)):
@@ -322,7 +322,7 @@ struct CredentialsReducer: ReducerProtocol {
                 state.isTwoFactorOTPVerified = true
                 state.isLoading = false
                 let password = state.passwordState.password
-                return EffectTask(value: .walletPairing(.decryptWalletWithPassword(password)))
+                return Effect.send(.walletPairing(.decryptWalletWithPassword(password)))
 
             case .walletPairing(.approveEmailAuthorization),
                  .walletPairing(.pollWalletIdentifier),
@@ -364,7 +364,7 @@ struct CredentialsReducer: ReducerProtocol {
                 guard let url = URL(string: Constants.HostURL.recoverPassword) else {
                     return .none
                 }
-                return EffectTask(value: .openExternalLink(url))
+                return Effect.send(.openExternalLink(url))
 
             case .route(let route):
                 if let routeValue = route?.route {
@@ -444,13 +444,13 @@ struct CredentialsReducer: ReducerProtocol {
 extension CredentialsReducer {
     private func clearErrorStates(
         _ state: CredentialsState
-    ) -> EffectTask<CredentialsAction> {
-        var effects: [EffectTask<CredentialsAction>] = [
-            EffectTask(value: .showAccountLockedError(false)),
-            EffectTask(value: .password(.showIncorrectPasswordError(false)))
+    ) -> Effect<CredentialsAction> {
+        var effects: [Effect<CredentialsAction>] = [
+            Effect.send(.showAccountLockedError(false)),
+            Effect.send(.password(.showIncorrectPasswordError(false)))
         ]
         if state.twoFAState != nil {
-            effects.append(EffectTask(value: .twoFA(.showIncorrectTwoFACodeError(.none))))
+            effects.append(Effect.send(.twoFA(.showIncorrectTwoFACodeError(.none))))
         }
         return .merge(effects)
     }
@@ -458,7 +458,7 @@ extension CredentialsReducer {
     private func authenticateDidFail(
         _ error: LoginServiceError,
         _ state: inout CredentialsState
-    ) -> EffectTask<CredentialsAction> {
+    ) -> Effect<CredentialsAction> {
         let isManualPairing = state.isManualPairing
         switch error {
         case .twoFactorOTPRequired(let type):
@@ -466,32 +466,34 @@ extension CredentialsReducer {
             case .email:
                 switch isManualPairing {
                 case true:
-                    return EffectTask(value: .walletPairing(.needsEmailAuthorization))
+                    return Effect.send(.walletPairing(.needsEmailAuthorization))
                 case false:
-                    return EffectTask(value: .walletPairing(.approveEmailAuthorization))
+                    return Effect.send(.walletPairing(.approveEmailAuthorization))
                 }
             case .sms:
                 state.twoFAState = .init(
                     twoFAType: .sms
                 )
-                return EffectTask(value: .walletPairing(.handleSMS))
+                return Effect.send(.walletPairing(.handleSMS))
             case .google, .yubiKey, .yubikeyMtGox:
                 state.twoFAState = .init(
                     twoFAType: type
                 )
-                return EffectTask(value: .twoFA(.showTwoFACodeField(true)))
+                return Effect.send(.twoFA(.showTwoFACodeField(true)))
             default:
                 fatalError("Unsupported TwoFA Types")
             }
         case .walletPayloadServiceError(.accountLocked):
-            return EffectTask(value: .showAccountLockedError(true))
+            return Effect.send(.showAccountLockedError(true))
         case .walletPayloadServiceError(let error):
             errorRecorder.error(error)
-            return EffectTask(
-                value: .alert(
-                    .show(
-                        title: CredentialsLocalization.Alerts.GenericNetworkError.title,
-                        message: CredentialsLocalization.Alerts.GenericNetworkError.message
+            return Effect.send(
+                .alert(
+                    .presented(
+                        .show(
+                            title: CredentialsLocalization.Alerts.GenericNetworkError.title,
+                            message: CredentialsLocalization.Alerts.GenericNetworkError.message
+                        )
                     )
                 )
             )
@@ -502,23 +504,24 @@ extension CredentialsReducer {
 
     private func authenticateWithTwoFactorOTPDidFail(
         _ error: LoginServiceError
-    ) -> EffectTask<CredentialsAction> {
+    ) -> Effect<CredentialsAction> {
         switch error {
         case .twoFAWalletServiceError(let error):
             switch error {
             case .wrongCode(let attemptsLeft):
-                return EffectTask(value: .twoFA(.didChangeTwoFACodeAttemptsLeft(attemptsLeft)))
+                return Effect.send(.twoFA(.didChangeTwoFACodeAttemptsLeft(attemptsLeft)))
             case .accountLocked:
-                return EffectTask(value: .showAccountLockedError(true))
+                return Effect.send(.showAccountLockedError(true))
             case .missingCode:
-                return EffectTask(value: .twoFA(.showIncorrectTwoFACodeError(.missingCode)))
+                return Effect.send(.twoFA(.showIncorrectTwoFACodeError(.missingCode)))
             case .missingPayload, .missingCredentials, .networkError:
-                return EffectTask(
-                    value:
+                return Effect.send(
                     .alert(
-                        .show(
-                            title: CredentialsLocalization.Alerts.GenericNetworkError.title,
-                            message: CredentialsLocalization.Alerts.GenericNetworkError.message
+                        .presented(
+                            .show(
+                                title: CredentialsLocalization.Alerts.GenericNetworkError.title,
+                                message: CredentialsLocalization.Alerts.GenericNetworkError.message
+                            )
                         )
                     )
                 )
@@ -532,24 +535,28 @@ extension CredentialsReducer {
 
     private func didResendSMSCode(
         _ result: Result<EmptyValue, SMSServiceError>
-    ) -> EffectTask<CredentialsAction> {
+    ) -> Effect<CredentialsAction> {
         switch result {
         case .success:
-            return EffectTask(
-                value: .alert(
-                    .show(
-                        title: CredentialsLocalization.Alerts.SMSCode.Success.title,
-                        message: CredentialsLocalization.Alerts.SMSCode.Success.message
+            return Effect.send(
+                .alert(
+                    .presented(
+                        .show(
+                            title: CredentialsLocalization.Alerts.SMSCode.Success.title,
+                            message: CredentialsLocalization.Alerts.SMSCode.Success.message
+                        )
                     )
                 )
             )
         case .failure(let error):
             errorRecorder.error(error)
-            return EffectTask(
-                value: .alert(
-                    .show(
-                        title: CredentialsLocalization.Alerts.SMSCode.Failure.title,
-                        message: CredentialsLocalization.Alerts.SMSCode.Failure.message
+            return Effect.send(
+                .alert(
+                    .presented(
+                        .show(
+                            title: CredentialsLocalization.Alerts.SMSCode.Failure.title,
+                            message: CredentialsLocalization.Alerts.SMSCode.Failure.message
+                        )
                     )
                 )
             )
@@ -558,44 +565,50 @@ extension CredentialsReducer {
 
     private func didSetupSessionToken(
         _ result: Result<EmptyValue, SessionTokenServiceError>
-    ) -> EffectTask<CredentialsAction> {
+    ) -> Effect<CredentialsAction> {
         switch result {
         case .success:
             return .none
         case .failure(let error):
             errorRecorder.error(error)
-            return EffectTask(
-                value: .alert(
-                    .show(
-                        title: CredentialsLocalization.Alerts.GenericNetworkError.title,
-                        message: CredentialsLocalization.Alerts.GenericNetworkError.message
+            return Effect.send(
+                .alert(
+                    .presented(
+                        .show(
+                            title: CredentialsLocalization.Alerts.GenericNetworkError.title,
+                            message: CredentialsLocalization.Alerts.GenericNetworkError.message
+                        )
                     )
                 )
             )
         }
     }
 
-    private func handleSMS() -> EffectTask<CredentialsAction> {
+    private func handleSMS() -> Effect<CredentialsAction> {
         .merge(
-            EffectTask(value: .twoFA(.showResendSMSButton(true))),
-            EffectTask(value: .twoFA(.showTwoFACodeField(true))),
-            EffectTask(
-                value: .alert(
-                    .show(
-                        title: CredentialsLocalization.Alerts.SMSCode.Success.title,
-                        message: CredentialsLocalization.Alerts.SMSCode.Success.message
+            Effect.send(.twoFA(.showResendSMSButton(true))),
+            Effect.send(.twoFA(.showTwoFACodeField(true))),
+            Effect.send(
+                .alert(
+                    .presented(
+                        .show(
+                            title: CredentialsLocalization.Alerts.SMSCode.Success.title,
+                            message: CredentialsLocalization.Alerts.SMSCode.Success.message
+                        )
                     )
                 )
             )
         )
     }
 
-    private func needsEmailAuthorization() -> EffectTask<CredentialsAction> {
-        EffectTask(
-            value: .alert(
-                .show(
-                    title: CredentialsLocalization.Alerts.EmailAuthorizationAlert.title,
-                    message: CredentialsLocalization.Alerts.EmailAuthorizationAlert.message
+    private func needsEmailAuthorization() -> Effect<CredentialsAction> {
+        Effect.send(
+            .alert(
+                .presented(
+                    .show(
+                        title: CredentialsLocalization.Alerts.EmailAuthorizationAlert.title,
+                        message: CredentialsLocalization.Alerts.EmailAuthorizationAlert.message
+                    )
                 )
             )
         )
@@ -604,14 +617,14 @@ extension CredentialsReducer {
 
 // MARK: - Extension
 
-struct CredentialsAnalytics: ReducerProtocol {
+struct CredentialsAnalytics: Reducer {
 
     typealias Action = CredentialsAction
     typealias State = CredentialsState
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .continueButtonTapped:

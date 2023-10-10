@@ -16,15 +16,12 @@ import XCTest
 @testable import FeatureAuthenticationMock
 @testable import ToolKitMock
 
-final class VerifyDeviceReducerTests: XCTestCase {
+@MainActor final class VerifyDeviceReducerTests: XCTestCase {
 
     private var mockMainQueue: ImmediateSchedulerOf<DispatchQueue>!
     private var testStore: TestStore<
         VerifyDeviceState,
-        VerifyDeviceAction,
-        VerifyDeviceState,
-        VerifyDeviceAction,
-        Void
+        VerifyDeviceAction
     >!
     private var cancellables = Set<AnyCancellable>()
 
@@ -33,27 +30,29 @@ final class VerifyDeviceReducerTests: XCTestCase {
         mockMainQueue = DispatchQueue.immediate
         testStore = TestStore(
             initialState: .init(emailAddress: ""),
-            reducer: VerifyDeviceReducer(
-                app: App.test,
-                mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                deviceVerificationService: MockDeviceVerificationService(),
-                errorRecorder: NoOpErrorRecorder(),
-                externalAppOpener: MockExternalAppOpener(),
-                analyticsRecorder: MockAnalyticsRecorder(),
-                walletRecoveryService: .mock(),
-                walletCreationService: .mock(),
-                walletFetcherService: WalletFetcherServiceMock().mock(),
-                accountRecoveryService: MockAccountRecoveryService(),
-                recaptchaService: MockRecaptchaService(),
-                sessionTokenService: NoOpSessionTokenService(),
-                emailAuthorizationService: NoOpEmailAuthorizationService(),
-                smsService: NoOpSMSService(),
-                loginService: NoOpLoginService(),
-                seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
-                passwordValidator: PasswordValidator(),
-                signUpCountriesService: MockSignUpCountriesService(),
-                appStoreInformationRepository: NoOpAppStoreInformationRepository()
-            )
+            reducer: {
+                VerifyDeviceReducer(
+                    app: App.test,
+                    mainQueue: mockMainQueue.eraseToAnyScheduler(),
+                    deviceVerificationService: MockDeviceVerificationService(),
+                    errorRecorder: NoOpErrorRecorder(),
+                    externalAppOpener: MockExternalAppOpener(),
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    walletRecoveryService: .mock(),
+                    walletCreationService: .mock(),
+                    walletFetcherService: WalletFetcherServiceMock().mock(),
+                    accountRecoveryService: MockAccountRecoveryService(),
+                    recaptchaService: MockRecaptchaService(),
+                    sessionTokenService: NoOpSessionTokenService(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
+                    seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: MockSignUpCountriesService(),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
+                )
+            }
         )
     }
 
@@ -70,15 +69,16 @@ final class VerifyDeviceReducerTests: XCTestCase {
         XCTAssertEqual(state.credentialsContext, .none)
     }
 
-    func test_on_appear_should_poll_wallet_info() {
-        testStore.send(.onAppear)
+    func test_on_appear_should_poll_wallet_info() async {
+        await testStore.send(.onAppear)
 
-        testStore.receive(.pollWalletInfo)
-        testStore.receive(.didPolledWalletInfo(.success(MockDeviceVerificationService.mockWalletInfo)))
-        testStore.receive(.didExtractWalletInfo(MockDeviceVerificationService.mockWalletInfo)) { state in
+        await testStore.receive(.pollWalletInfo)
+        await testStore.receive(.didPolledWalletInfo(.success(MockDeviceVerificationService.mockWalletInfo)))
+        await testStore.receive(.didExtractWalletInfo(MockDeviceVerificationService.mockWalletInfo)) { state in
             state.credentialsContext = .walletInfo(MockDeviceVerificationService.mockWalletInfo)
         }
-        testStore.receive(.navigate(to: .credentials)) { state in
+        await testStore.receive(.navigate(.credentials))
+        await testStore.receive(.navigate(to: .credentials)) { state in
             state.credentialsState = CredentialsState(
                 walletPairingState: WalletPairingState(
                     emailAddress: MockDeviceVerificationService.mockWalletInfo.wallet!.email!,
@@ -90,12 +90,13 @@ final class VerifyDeviceReducerTests: XCTestCase {
         }
     }
 
-    func test_receive_valid_wallet_deeplink_should_update_wallet_info() {
-        testStore.send(.didReceiveWalletInfoDeeplink(MockDeviceVerificationService.validDeeplink))
-        testStore.receive(.didExtractWalletInfo(MockDeviceVerificationService.mockWalletInfo)) { state in
+    func test_receive_valid_wallet_deeplink_should_update_wallet_info() async {
+        await testStore.send(.didReceiveWalletInfoDeeplink(MockDeviceVerificationService.validDeeplink))
+        await testStore.receive(.didExtractWalletInfo(MockDeviceVerificationService.mockWalletInfo)) { state in
             state.credentialsContext = .walletInfo(MockDeviceVerificationService.mockWalletInfo)
         }
-        testStore.receive(.navigate(to: .credentials)) { state in
+        await testStore.receive(.navigate(.credentials))
+        await testStore.receive(.navigate(to: .credentials)) { state in
             state.credentialsState = CredentialsState(
                 walletPairingState: WalletPairingState(
                     emailAddress: MockDeviceVerificationService.mockWalletInfo.wallet!.email!,
@@ -106,13 +107,13 @@ final class VerifyDeviceReducerTests: XCTestCase {
             state.route = RouteIntent(route: .credentials, action: .navigateTo)
         }
 
-        testStore.send(.didReceiveWalletInfoDeeplink(MockDeviceVerificationService.deeplinkWithValidGuid))
-        testStore.receive(.didExtractWalletInfo(MockDeviceVerificationService.mockWalletInfoWithGuidOnly)) { state in
+        await testStore.send(.didReceiveWalletInfoDeeplink(MockDeviceVerificationService.deeplinkWithValidGuid))
+        await testStore.receive(.didExtractWalletInfo(MockDeviceVerificationService.mockWalletInfoWithGuidOnly)) { state in
             state.credentialsContext = .walletIdentifier(
                 guid: MockDeviceVerificationService.mockWalletInfoWithGuidOnly.wallet!.guid
             )
         }
-        testStore.receive(.navigate(to: .credentials)) { state in
+        await testStore.receive(.navigate(to: .credentials)) { state in
             state.credentialsState = CredentialsState(
                 walletPairingState: WalletPairingState(
                     emailAddress: "",
@@ -122,12 +123,12 @@ final class VerifyDeviceReducerTests: XCTestCase {
         }
     }
 
-    func test_deeplink_parsing_failure_should_fallback_to_wallet_identifier() {
-        testStore.send(.didReceiveWalletInfoDeeplink(MockDeviceVerificationService.invalidDeeplink))
-        testStore.receive(.fallbackToWalletIdentifier) { state in
+    func test_deeplink_parsing_failure_should_fallback_to_wallet_identifier() async {
+        await testStore.send(.didReceiveWalletInfoDeeplink(MockDeviceVerificationService.invalidDeeplink))
+        await testStore.receive(.fallbackToWalletIdentifier) { state in
             state.credentialsContext = .walletIdentifier(guid: "")
         }
-        testStore.receive(.navigate(to: .credentials)) { state in
+        await testStore.receive(.navigate(to: .credentials)) { state in
             state.credentialsState = .init()
             state.route = RouteIntent(route: .credentials, action: .navigateTo)
         }

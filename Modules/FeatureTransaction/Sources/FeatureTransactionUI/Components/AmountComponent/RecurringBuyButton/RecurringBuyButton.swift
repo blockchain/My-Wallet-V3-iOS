@@ -22,7 +22,7 @@ struct RecurringBuyButton<TrailingView: View>: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             Button {
                 viewStore.send(.buttonTapped)
             } label: {
@@ -79,7 +79,7 @@ enum RecurringBuyButtonAction: Equatable, BindableAction {
     case binding(BindingAction<RecurringBuyButtonState>)
 }
 
-struct RecurringBuyButtonReducer: ReducerProtocol {
+struct RecurringBuyButtonReducer: Reducer {
     
     typealias State = RecurringBuyButtonState
     typealias Action = RecurringBuyButtonAction
@@ -87,25 +87,27 @@ struct RecurringBuyButtonReducer: ReducerProtocol {
     let app: AppProtocol
     let recurringBuyButtonTapped: () -> Void
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .refresh:
                 return .merge(
-                    app.publisher(for: blockchain.ux.transaction.checkout.recurring.buy.frequency.localized, as: String.self)
-                        .receive(on: DispatchQueue.main)
-                        .compactMap(\.value)
-                        .eraseToEffect()
-                        .map { .binding(.set(\.$title, $0)) },
-                    app.publisher(for: blockchain.ux.transaction.recurring.buy.button.tapped.once, as: Bool.self)
-                        .replaceError(with: false)
-                        .receive(on: DispatchQueue.main)
-                        .eraseToEffect()
-                        .map { .binding(.set(\.$highlighted, !$0)) }
+                    .publisher {
+                        app.publisher(for: blockchain.ux.transaction.checkout.recurring.buy.frequency.localized, as: String.self)
+                            .receive(on: DispatchQueue.main)
+                            .compactMap(\.value)
+                            .map { .binding(.set(\.$title, $0)) }
+                    },
+                    .publisher {
+                        app.publisher(for: blockchain.ux.transaction.recurring.buy.button.tapped.once, as: Bool.self)
+                            .replaceError(with: false)
+                            .receive(on: DispatchQueue.main)
+                            .map { .binding(.set(\.$highlighted, !$0)) }
+                    }
                 )
             case .buttonTapped:
-                return .fireAndForget {
+                return .run { _ in
                     app.post(value: true, of: blockchain.ux.transaction.recurring.buy.button.tapped.once)
                     recurringBuyButtonTapped()
                 }
@@ -119,9 +121,9 @@ struct RecurringBuyButtonReducer: ReducerProtocol {
 struct RecurringBuyButton_Previews: PreviewProvider {
     static var previews: some View {
         RecurringBuyButton(
-            store: .init(
+            store: Store(
                 initialState: .init(title: ""),
-                reducer: RecurringBuyButtonReducer(app: App.preview, recurringBuyButtonTapped: {})
+                reducer: { RecurringBuyButtonReducer(app: App.preview, recurringBuyButtonTapped: {}) }
             ),
             trailingView: { Icon.placeholder }
         )

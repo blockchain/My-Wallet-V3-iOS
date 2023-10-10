@@ -23,7 +23,7 @@ enum InterestAccountListRoute: NavigationRoute, CaseIterable {
                 then: InterestAccountDetailsView.init(store:)
             )
         case .transaction:
-            WithViewStore(store) { viewStore in
+            WithViewStore(store, observe: { $0 }) { viewStore in
                 InterestTransactionHostingView(state: viewStore.interestTransactionState!)
             }
         case .noWalletsError:

@@ -10,13 +10,10 @@ import FeatureNotificationPreferencesMocks
 import UIComponentsKit
 import XCTest
 
-class NotificationPreferencesReducerTest: XCTestCase {
+@MainActor class NotificationPreferencesReducerTest: XCTestCase {
     private var testStore: TestStore<
         NotificationPreferencesState,
-        NotificationPreferencesAction,
-        NotificationPreferencesState,
-        NotificationPreferencesAction,
-        Void
+        NotificationPreferencesAction
     >!
 
     private let mainScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
@@ -27,11 +24,13 @@ class NotificationPreferencesReducerTest: XCTestCase {
         notificationRepoMock = NotificationPreferencesRepositoryMock()
         testStore = TestStore(
             initialState: .init(viewState: .loading),
-            reducer: NotificationPreferencesReducer(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                notificationPreferencesRepository: notificationRepoMock,
-                analyticsRecorder: MockAnalyticsRecorder()
-            )
+            reducer: {
+                NotificationPreferencesReducer(
+                    mainQueue: mainScheduler.eraseToAnyScheduler(),
+                    notificationPreferencesRepository: notificationRepoMock,
+                    analyticsRecorder: MockAnalyticsRecorder()
+                )
+            }
         )
     }
 
@@ -42,40 +41,40 @@ class NotificationPreferencesReducerTest: XCTestCase {
         XCTAssertEqual(state.viewState, .loading)
     }
 
-    func test_fetchSettings_on_startup() {
-        testStore.send(.onAppear)
+    func test_fetchSettings_on_startup() async {
+        await testStore.send(.onAppear)
     }
 
-    func test_reload_tap() {
+    func test_reload_tap() async {
         let preferencesToReturn = [MockGenerator.marketingNotificationPreference]
         notificationRepoMock.fetchPreferencesSubject.send(preferencesToReturn)
 
-        testStore.send(.onReloadTap)
+        await testStore.send(.onReloadTap)
 
         XCTAssertTrue(notificationRepoMock.fetchSettingsCalled)
 
-        mainScheduler.advance()
+        await mainScheduler.advance()
 
-        testStore.receive(.onFetchedSettings(Result.success(preferencesToReturn))) { state in
+        await testStore.receive(.onFetchedSettings(Result.success(preferencesToReturn))) { state in
             state.viewState = .data(notificationDetailsState: preferencesToReturn)
         }
     }
 
-    func test_onFetchedSettings_success() {
+    func test_onFetchedSettings_success() async {
         let preferencesToReturn = [MockGenerator.marketingNotificationPreference]
 
-        testStore.send(.onFetchedSettings(Result.success(preferencesToReturn))) { state in
+        await testStore.send(.onFetchedSettings(Result.success(preferencesToReturn))) { state in
             state.viewState = .data(notificationDetailsState: preferencesToReturn)
         }
     }
 
-    func test_onFetchedSettings_failure() {
-        testStore.send(.onFetchedSettings(Result.failure(NetworkError.unknown))) { state in
+    func test_onFetchedSettings_failure() async {
+        await testStore.send(.onFetchedSettings(Result.failure(NetworkError.unknown))) { state in
             state.viewState = .error
         }
     }
 
-    func test_onSaveSettings_reload_triggered() {
+    func test_onSaveSettings_reload_triggered() async {
         testStore = TestStore(
             initialState:
             .init(
@@ -84,28 +83,30 @@ class NotificationPreferencesReducerTest: XCTestCase {
                     notificationPreference: MockGenerator.marketingNotificationPreference),
                 viewState: .loading
             ),
-            reducer: FeatureNotificationPreferencesMainReducer(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                notificationPreferencesRepository: notificationRepoMock,
-                analyticsRecorder: MockAnalyticsRecorder()
-            )
+            reducer: {
+                FeatureNotificationPreferencesMainReducer(
+                    mainQueue: mainScheduler.eraseToAnyScheduler(),
+                    notificationPreferencesRepository: notificationRepoMock,
+                    analyticsRecorder: MockAnalyticsRecorder()
+                )
+            }
         )
 
-        testStore.send(.notificationDetailsChanged(.save))
-        mainScheduler.advance()
+        await testStore.send(.notificationDetailsChanged(.save))
+        await mainScheduler.advance()
         XCTAssertTrue(notificationRepoMock.updateCalled)
-        testStore.receive(.onReloadTap)
+        await testStore.receive(.onReloadTap)
     }
 
-    func test_OnPreferenceSelected() {
+    func test_OnPreferenceSelected() async {
         let selectedPreference = MockGenerator.marketingNotificationPreference
-        testStore.send(.onPreferenceSelected(selectedPreference)) { state in
+        await testStore.send(.onPreferenceSelected(selectedPreference)) { state in
             state.notificationDetailsState = NotificationPreferencesDetailsState(notificationPreference: selectedPreference)
         }
     }
 
-    func test_navigate_to_details_route() {
-        testStore.send(.route(.navigate(to: .showDetails))) { state in
+    func test_navigate_to_details_route() async {
+        await testStore.send(.route(.navigate(to: .showDetails))) { state in
             state.route = RouteIntent.navigate(to: .showDetails)
         }
     }

@@ -16,7 +16,7 @@ import TestKit
 @testable import ToolKitMock
 import XCTest
 
-final class RouterTests: XCTestCase {
+@MainActor final class RouterTests: XCTestCase {
 
     private var router: FeatureKYCUI.Router!
     private var mockExternalAppOpener: MockExternalAppOpener!
@@ -68,30 +68,15 @@ final class RouterTests: XCTestCase {
 
     func test_calls_back_to_passedIn_completionBlock() throws {
         var didCallCompletionBlock = false
-        let reducer = router.buildEmailVerificationReducer(emailAddress: "test@example.com") { _ in
+        let reducer = router.buildEmailVerificationReducer(
+            emailAddress: "test@example.com",
+            mainQueue: .immediate,
+            pollingQueue: .immediate
+        ) { _ in
             didCallCompletionBlock = true
         }
         reducer.flowCompletionCallback?(.completed)
         XCTAssertTrue(didCallCompletionBlock)
-    }
-
-    func test_uses_extenalAppOpener_to_openMailApp() throws {
-        let reducer = router.buildEmailVerificationReducer(emailAddress: "test@example.com") { _ in }
-        var valueReceived = false
-        let e = expectation(description: "Wait for publisher to send value")
-        let cancellable = reducer.openMailApp()
-            .sink(receiveValue: { value in
-                valueReceived = value
-                e.fulfill()
-            })
-        let openMailRequest = mockExternalAppOpener.recordedInvocations.open.first
-        XCTAssertEqual(openMailRequest?.url, URL(string: "message://"))
-        if let completionHandler = openMailRequest?.completionHandler {
-            completionHandler(true)
-        }
-        waitForExpectations(timeout: 3)
-        XCTAssertTrue(valueReceived)
-        cancellable.cancel()
     }
 
     func test_fails_when_emailVerification_fails() throws {
@@ -157,7 +142,7 @@ final class RouterTests: XCTestCase {
 
         // WHEN: The flow completes
         if let store = emailVerificationHosting?.rootView.store {
-            let viewStore = ViewStore(store)
+            let viewStore = ViewStore(store, observe: { $0 })
             viewStore.send(.emailVerified(.acknowledgeEmailVerification))
         }
 

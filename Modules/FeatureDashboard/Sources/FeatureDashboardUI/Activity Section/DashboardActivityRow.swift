@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 import UnifiedActivityDomain
 
-public struct DashboardActivityRow: ReducerProtocol {
+public struct DashboardActivityRow: Reducer {
     public let app: AppProtocol
     public init(
         app: AppProtocol
@@ -34,7 +34,7 @@ public struct DashboardActivityRow: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         EmptyReducer()
     }
 }

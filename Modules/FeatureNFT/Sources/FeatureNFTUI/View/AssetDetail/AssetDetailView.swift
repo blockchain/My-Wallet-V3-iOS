@@ -18,7 +18,7 @@ public struct AssetDetailView: View {
 
     public init(store: Store<AssetDetailViewState, AssetDetailViewAction>) {
         self.store = store
-        self.url = ViewStore(store).asset.url
+        self.url = ViewStore(store, observe: { $0 }).asset.url
     }
 
     public var body: some View {
@@ -26,7 +26,7 @@ public struct AssetDetailView: View {
     }
 
     private var content: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             let asset = viewStore.asset
             GeometryReader { proxy in
                 ScrollView {
@@ -62,7 +62,7 @@ public struct AssetDetailView: View {
     }
 
     @ViewBuilder var webView: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             PrimaryNavigationView {
                 WebView(url: url)
                     .primaryNavigation(

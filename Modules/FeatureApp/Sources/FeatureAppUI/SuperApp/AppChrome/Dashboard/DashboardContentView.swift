@@ -21,7 +21,7 @@ struct DashboardContentView: View {
 
     init(store: StoreOf<DashboardContent>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     struct ViewState: Equatable {

@@ -32,7 +32,7 @@ struct ResetAccountFailureView: View {
 
     init(store: Store<ResetAccountFailureState, ResetAccountFailureAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -115,9 +115,9 @@ struct ResetAccountFailureView: View {
 struct ResetAccountFailureView_Previews: PreviewProvider {
     static var previews: some View {
         ResetAccountFailureView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: ResetAccountFailureReducer(externalAppOpener: NoOpExternalAppOpener())
+                reducer: { ResetAccountFailureReducer(externalAppOpener: NoOpExternalAppOpener()) }
             )
         )
     }

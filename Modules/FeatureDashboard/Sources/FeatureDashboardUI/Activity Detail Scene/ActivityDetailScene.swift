@@ -6,7 +6,7 @@ import FeatureDashboardDomain
 import Foundation
 import UnifiedActivityDomain
 
-public struct ActivityDetailScene: ReducerProtocol {
+public struct ActivityDetailScene: Reducer {
     private var app: AppProtocol
     var nonCustodialActivityDetailsService: UnifiedActivityDetailsServiceAPI
     var custodialActivityDetailsService: CustodialActivityDetailsServiceAPI
@@ -40,7 +40,7 @@ public struct ActivityDetailScene: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:

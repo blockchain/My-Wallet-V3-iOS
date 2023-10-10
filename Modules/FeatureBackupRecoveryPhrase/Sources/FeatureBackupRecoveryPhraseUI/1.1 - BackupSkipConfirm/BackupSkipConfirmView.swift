@@ -12,7 +12,7 @@ public struct BackupSkipConfirmView: View {
 
     public init(store: Store<BackupSkipConfirmState, BackupSkipConfirmAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -50,11 +50,13 @@ public struct BackupSkipConfirmView: View {
 
 struct BackupSkipConfirmView_Previews: PreviewProvider {
     static var previews: some View {
-        BackupSkipConfirmView(store: .init(
+        BackupSkipConfirmView(store: Store(
             initialState: .init(),
-            reducer: BackupSkipConfirm(
-                onConfirm: {}
-            )
+            reducer: {
+                BackupSkipConfirm(
+                    onConfirm: {}
+                )
+            }
         ))
     }
 }

@@ -18,7 +18,7 @@ public struct OnboardingCarouselView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 Image("logo-blockchain-black", bundle: Bundle.featureTour)
                     .padding([.top, .horizontal], Spacing.padding3)
@@ -164,7 +164,7 @@ struct TourView_Previews: PreviewProvider {
         OnboardingCarouselView(
             store: Store(
                 initialState: TourState(),
-                reducer: NoOpReducer()
+                reducer: { NoOpReducer() }
             ),
             manualLoginEnabled: false
         )

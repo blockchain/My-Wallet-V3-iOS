@@ -8,7 +8,7 @@ import PlatformKit
 import SwiftExtensions
 import ToolKit
 
-public struct SwapToAccountSelect: ReducerProtocol {
+public struct SwapToAccountSelect: Reducer {
     private var app: AppProtocol
 
     public struct State: Equatable {
@@ -55,7 +55,7 @@ public struct SwapToAccountSelect: ReducerProtocol {
         self.app = app
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {

@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 
-public struct ReferFriendReducer: ReducerProtocol {
+public struct ReferFriendReducer: Reducer {
 
     public typealias State = ReferFriendState
     public typealias Action = ReferFriendAction
@@ -22,7 +22,7 @@ public struct ReferFriendReducer: ReducerProtocol {
         self.analyticsRecorder = analyticsRecorder
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -48,15 +48,13 @@ public struct ReferFriendReducer: ReducerProtocol {
                 state.codeIsCopied = true
 
                 return .merge(
-                    .fireAndForget { [referralCode = state.referralInfo.code] in
+                    .run { [referralCode = state.referralInfo.code] _ in
                         UIPasteboard.general.string = referralCode
                     },
-                    EffectTask(value: .onCopyReturn)
-                        .delay(
-                            for: 2,
-                            scheduler: mainQueue
-                        )
-                        .eraseToEffect()
+                    .run { send in
+                        try await Task.sleep(nanoseconds: NSEC_PER_SEC * 2)
+                        await send(.onCopyReturn)
+                    }
                 )
             }
         }
@@ -84,19 +82,19 @@ extension ReferFriendState {
     }
 }
 
-struct ReferFriendAnalytics: ReducerProtocol {
+struct ReferFriendAnalytics: Reducer {
 
     typealias Action = ReferFriendAction
     typealias State = ReferFriendState
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             guard let event = state.analyticsEvent(for: action) else {
                 return .none
             }
-            return .fireAndForget {
+            return .run { _ in
                 analyticsRecorder.record(event: event)
             }
         }

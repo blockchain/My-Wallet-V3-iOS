@@ -96,7 +96,8 @@ final class SessionRemoteConfigurationTests: XCTestCase {
 
         XCTAssertEqual(announcements, ["1", "2", "3"])
 
-        try XCTAssertEqual(app.remoteConfiguration.get(blockchain.app.configuration.deep_link.rules), ["1", "2", "3"])
+        let rules = try await app.get(blockchain.app.configuration.deep_link.rules, as: [String].self)
+        XCTAssertEqual(rules, ["1", "2", "3"])
     }
 
     func test_fetch_fallback() async throws {
@@ -296,18 +297,24 @@ final class SessionRemoteConfigurationTests: XCTestCase {
     func test_concurrency() async throws {
         let limit = 10
 
-        DispatchQueue.concurrentPerform(iterations: limit) { i in
-            app.remoteConfiguration.override(blockchain.db.collection[String(i)], with: i)
+        try await withThrowingTaskGroup(of: Void.self) { [app] group in
+            for i in 0..<limit {
+                group.addTask {
+                    try await app?.set(blockchain.app.dynamic[String(i)].session.configuration.value, to: i)
+                }
+            }
+            try await group.waitForAll()
         }
 
         let results = try await (0..<limit).map { i in
-            app.remoteConfiguration.publisher(for: blockchain.db.collection[String(i)]).decode(Int.self).map(\.value)
+            app.remoteConfiguration.publisher(for: blockchain.app.dynamic[String(i)].session.configuration.value).decode(Int.self).map(\.value)
         }
         .combineLatest()
         .await()
 
         for i in 0..<limit {
-            try XCTAssertEqual(app.remoteConfiguration.get(blockchain.db.collection[String(i)]), i)
+            let item = try await app.get(blockchain.app.dynamic[String(i)].session.configuration.value, as: Int.self)
+            XCTAssertEqual(item, i)
         }
         XCTAssertNotNil(results)
     }

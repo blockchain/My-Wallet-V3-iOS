@@ -44,7 +44,7 @@ enum LimitedFeaturesListAction: Equatable, NavigationAction {
     case tiersStatusViewAction(TiersStatusViewAction)
 }
 
-struct LimitedFeaturesListReducer: ReducerProtocol {
+struct LimitedFeaturesListReducer: Reducer {
 
     typealias State = LimitedFeaturesListState
     typealias Action = LimitedFeaturesListAction
@@ -52,7 +52,7 @@ struct LimitedFeaturesListReducer: ReducerProtocol {
     let openURL: (URL) -> Void
     let presentKYCFlow: (KYC.Tier) -> Void
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Scope(state: \LimitedFeaturesListState.kycTiers, action: /LimitedFeaturesListAction.tiersStatusViewAction) {
             TiersStatusViewReducer(
                 presentKYCFlow: presentKYCFlow
@@ -68,19 +68,19 @@ struct LimitedFeaturesListReducer: ReducerProtocol {
                 return .enter(into: .viewTiers, context: .none)
 
             case .verify:
-                return .fireAndForget {
+                return .run { _ in
                     presentKYCFlow(.verified)
                 }
 
             case .supportCenterLinkTapped:
-                return .fireAndForget {
+                return .run { _ in
                     openURL(.customerSupport)
                 }
 
             case .tiersStatusViewAction(let action):
                 switch action {
                 case .close:
-                    return .init(value: .dismiss())
+                    return Effect.send(.dismiss())
 
                 default:
                     return .none
@@ -118,7 +118,7 @@ struct LimitedFeaturesListView: View {
     let store: Store<LimitedFeaturesListState, LimitedFeaturesListAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             let latestApprovedTier = viewStore.kycTiers.latestApprovedTier
             let hasPendingState = viewStore.kycTiers.tiers.contains(
                 where: { $0.state == .pending }
@@ -199,15 +199,17 @@ struct LimitedFeaturesListView_Previews: PreviewProvider {
 
     static var previews: some View {
         LimitedFeaturesListView(
-            store: .init(
+            store: Store(
                 initialState: LimitedFeaturesListState(
                     features: [],
                     kycTiers: .init(tiers: [])
                 ),
-                reducer: LimitedFeaturesListReducer(
-                    openURL: { _ in },
-                    presentKYCFlow: { _ in }
-                )
+                reducer: {
+                    LimitedFeaturesListReducer(
+                        openURL: { _ in },
+                        presentKYCFlow: { _ in }
+                    )
+                }
             )
         )
     }

@@ -7,14 +7,12 @@ import ComposableNavigation
 @testable import FeatureAddressSearchUI
 import XCTest
 
+@MainActor
 final class AddressSearchReducerTests: XCTestCase {
 
     typealias TestStoreType = TestStore<
         AddressSearchState,
-        AddressSearchAction,
-        AddressSearchState,
-        AddressSearchAction,
-        Void
+        AddressSearchAction
     >
 
     private var testStore: TestStoreType!
@@ -30,33 +28,33 @@ final class AddressSearchReducerTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_on_view_appear_with_no_address_does_not_start_search() throws {
+    func test_on_view_appear_with_no_address_does_not_start_search() async throws {
         testStore = .build(
             mainScheduler: mainScheduler,
             address: nil
         )
 
-        testStore.send(.onAppear) {
+        await testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressEditScreenConfig.sample()
             $0.screenTitle = sample.title
             $0.screenSubtitle = sample.subtitle ?? ""
         }
     }
 
-    func test_on_view_appear_with_address_starts_search() throws {
+    func test_on_view_appear_with_address_starts_search() async throws {
         let address: Address = .sample()
         testStore = .build(
             mainScheduler: mainScheduler,
             address: address
         )
 
-        testStore.send(.onAppear) {
+        await testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressSearchScreenConfig.sample()
             $0.screenTitle = sample.title
             $0.screenSubtitle = sample.subtitle
         }
 
-        testStore.receive(
+        await testStore.receive(
             .searchAddresses(
                 searchText: address.searchText,
                 country: address.country
@@ -65,9 +63,9 @@ final class AddressSearchReducerTests: XCTestCase {
             $0.isSearchResultsLoading = true
         }
 
-        mainScheduler.advance(by: .init(searchDebounceInMilliseconds))
+        await mainScheduler.advance(by: .init(searchDebounceInMilliseconds))
 
-        testStore.receive(
+        await testStore.receive(
             .didReceiveAddressesResult(
                 .success([.sample()])
             )
@@ -77,13 +75,13 @@ final class AddressSearchReducerTests: XCTestCase {
         }
     }
 
-    func test_on_select_address_with_address_type_navigates_to_modify_view() throws {
+    func test_on_select_address_with_address_type_navigates_to_modify_view() async throws {
         testStore = .build(
             mainScheduler: mainScheduler,
             address: nil
         )
 
-        testStore.send(.onAppear) {
+        await testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressSearchScreenConfig.sample()
             $0.screenTitle = sample.title
             $0.screenSubtitle = sample.subtitle
@@ -92,13 +90,13 @@ final class AddressSearchReducerTests: XCTestCase {
         let searchResult: AddressSearchResult = .sample(
             type: AddressSearchResult.AddressType.address.rawValue
         )
-        testStore.send(.selectAddress(searchResult))
+        await testStore.send(.selectAddress(searchResult))
 
-        testStore.receive(
+        await testStore.receive(
             .modifySelectedAddress(addressId: searchResult.addressId)
         )
 
-        testStore.receive(
+        await testStore.receive(
             .navigate(to: .modifyAddress(selectedAddressId: searchResult.addressId, address: nil))
         ) {
             $0.route = RouteIntent(
@@ -115,20 +113,20 @@ final class AddressSearchReducerTests: XCTestCase {
         }
     }
 
-    func test_on_select_address_with_not_address_type_searches_with_container_id() throws {
+    func test_on_select_address_with_not_address_type_searches_with_container_id() async throws {
         let address: Address = .sample()
         testStore = .build(
             mainScheduler: mainScheduler,
             address: address
         )
 
-        testStore.send(.onAppear) {
+        await testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressSearchScreenConfig.sample()
             $0.screenTitle = sample.title
             $0.screenSubtitle = sample.subtitle
         }
 
-        testStore.receive(
+        await testStore.receive(
             .searchAddresses(
                 searchText: address.searchText,
                 country: address.country
@@ -137,9 +135,9 @@ final class AddressSearchReducerTests: XCTestCase {
             $0.isSearchResultsLoading = true
         }
 
-        mainScheduler.advance(by: .init(searchDebounceInMilliseconds))
+        await mainScheduler.advance(by: .init(searchDebounceInMilliseconds))
 
-        testStore.receive(
+        await testStore.receive(
             .didReceiveAddressesResult(
                 .success([.sample()])
             )
@@ -151,7 +149,7 @@ final class AddressSearchReducerTests: XCTestCase {
         let searchResult: AddressSearchResult = .sample(
             type: "OTHER_TYPE"
         )
-        testStore.send(.selectAddress(searchResult)) {
+        await testStore.send(.selectAddress(searchResult)) {
             let searchText = (searchResult.text ?? "") + " "
             $0.searchText = searchText
             $0.containerSearch = .init(
@@ -160,9 +158,9 @@ final class AddressSearchReducerTests: XCTestCase {
             )
         }
 
-        mainScheduler.advance(by: .init(searchDebounceInMilliseconds))
+        await mainScheduler.advance(by: .init(searchDebounceInMilliseconds))
 
-        testStore.receive(
+        await testStore.receive(
             .searchAddresses(
                 searchText: testStore.state.searchText,
                 country: address.country
@@ -171,9 +169,9 @@ final class AddressSearchReducerTests: XCTestCase {
             $0.isSearchResultsLoading = true
         }
 
-        mainScheduler.advance(by: .init(searchDebounceInMilliseconds))
+        await mainScheduler.advance(by: .init(searchDebounceInMilliseconds))
 
-        testStore.receive(
+        await testStore.receive(
             .didReceiveAddressesResult(
                 .success([.sample()])
             )
@@ -195,13 +193,15 @@ extension TestStore {
                 address: address,
                 error: nil
             ),
-            reducer: AddressSearchReducer(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                config: .sample(),
-                addressService: MockAddressService(),
-                addressSearchService: MockAddressSearchService(),
-                onComplete: { _ in }
-            )
+            reducer: {
+                AddressSearchReducer(
+                    mainQueue: mainScheduler.eraseToAnyScheduler(),
+                    config: .sample(),
+                    addressService: MockAddressService(),
+                    addressSearchService: MockAddressSearchService(),
+                    onComplete: { _ in }
+                )
+            }
         )
     }
 }

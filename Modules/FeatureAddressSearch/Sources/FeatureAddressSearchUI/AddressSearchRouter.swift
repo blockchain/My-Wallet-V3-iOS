@@ -21,6 +21,7 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
         self.addressService = addressService
     }
 
+    @MainActor
     public func presentSearchAddressFlow(
         prefill: Address?,
         config: AddressSearchFeatureConfig
@@ -32,21 +33,23 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
 
                 let presenter = topMostViewControllerProvider.topMostViewController
                 let view = AddressSearchView(
-                    store: .init(
+                    store: Store(
                         initialState: .init(address: prefill, error: nil),
-                        reducer: AddressSearchReducer(
-                            mainQueue: .main,
-                            config: config,
-                            addressService: addressService,
-                            addressSearchService: resolve(),
-                            onComplete: { address in
-                                self.topMostViewControllerProvider
-                                    .topMostViewController?
-                                    .dismiss(animated: true) {
-                                    promise(.success(address))
-                                    }
-                            }
-                        )
+                        reducer: { [addressService] in
+                            AddressSearchReducer(
+                                mainQueue: .main,
+                                config: config,
+                                addressService: addressService,
+                                addressSearchService: resolve(),
+                                onComplete: { address in
+                                    self.topMostViewControllerProvider
+                                        .topMostViewController?
+                                        .dismiss(animated: true) {
+                                            promise(.success(address))
+                                        }
+                                }
+                            )
+                        }
                     )
                 )
                 presenter?.present(view)
@@ -54,6 +57,7 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
         }.eraseToAnyPublisher()
     }
 
+    @MainActor
     public func presentEditAddressFlow(
         isPresentedFromSearchView: Bool,
         config: AddressSearchFeatureConfig.AddressEditScreenConfig
@@ -65,19 +69,21 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
 
                 let presenter = topMostViewControllerProvider.topMostViewController
                 let view = AddressModificationView(
-                    store: .init(
+                    store: Store(
                         initialState: .init(isPresentedFromSearchView: isPresentedFromSearchView),
-                        reducer: AddressModificationReducer(
-                            mainQueue: .main,
-                            config: config,
-                            addressService: addressService,
-                            addressSearchService: resolve(),
-                            onComplete: { addressResult in
-                                presenter?.dismiss(animated: true) {
-                                    promise(.success(addressResult))
+                        reducer: { [addressService] in
+                            AddressModificationReducer(
+                                mainQueue: .main,
+                                config: config,
+                                addressService: addressService,
+                                addressSearchService: resolve(),
+                                onComplete: { addressResult in
+                                    presenter?.dismiss(animated: true) {
+                                        promise(.success(addressResult))
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     )
                 )
                 presenter?.present(view)
@@ -85,6 +91,7 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
         }.eraseToAnyPublisher()
     }
 
+    @MainActor
     public func presentEditAddressFlow(
         address: Address,
         config: AddressSearchFeatureConfig.AddressEditScreenConfig
@@ -96,19 +103,21 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
 
                 let presenter = topMostViewControllerProvider.topMostViewController
                 let view = AddressModificationView(
-                    store: .init(
+                    store: Store(
                         initialState: .init(address: address),
-                        reducer: AddressModificationReducer(
-                            mainQueue: .main,
-                            config: config,
-                            addressService: addressService,
-                            addressSearchService: resolve(),
-                            onComplete: { addressResult in
-                                presenter?.dismiss(animated: true) {
-                                    promise(.success(addressResult))
+                        reducer: { [addressService] in
+                            AddressModificationReducer(
+                                mainQueue: .main,
+                                config: config,
+                                addressService: addressService,
+                                addressSearchService: resolve(),
+                                onComplete: { addressResult in
+                                    presenter?.dismiss(animated: true) {
+                                        promise(.success(addressResult))
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     )
                 )
                 presenter?.present(view)

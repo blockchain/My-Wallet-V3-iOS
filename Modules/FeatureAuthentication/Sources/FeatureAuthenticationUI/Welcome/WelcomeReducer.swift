@@ -75,7 +75,7 @@ public struct WelcomeState: Equatable, NavigationState {
     }
 }
 
-public struct WelcomeReducer: ReducerProtocol {
+public struct WelcomeReducer: Reducer {
 
     public typealias State = WelcomeState
     public typealias Action = WelcomeAction
@@ -148,7 +148,7 @@ public struct WelcomeReducer: ReducerProtocol {
         self.appStoreInformationRepository = appStoreInformationRepository
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .route(let route):
@@ -176,17 +176,13 @@ public struct WelcomeReducer: ReducerProtocol {
             case .start:
                 state.buildVersion = buildVersionProvider()
                 if BuildFlag.isInternal {
-                    return app
-                        .publisher(for: blockchain.app.configuration.manual.login.is.enabled, as: Bool.self)
-                        .prefix(1)
-                        .replaceError(with: false)
-                        .flatMap { isEnabled -> EffectTask<WelcomeAction> in
-                            guard isEnabled else {
-                                return .none
-                            }
-                            return EffectTask(value: .setManualPairingEnabled)
+                    return .run { send in
+                        let isEnabled = (try? await app.get(blockchain.app.configuration.manual.login.is.enabled, as: Bool.self)) ?? false
+                        guard isEnabled else {
+                            return
                         }
-                        .eraseToEffect()
+                        await send(.setManualPairingEnabled)
+                    }
                 }
                 return .none
 
@@ -201,7 +197,7 @@ public struct WelcomeReducer: ReducerProtocol {
                 else {
                     return .none
                 }
-                return EffectTask(value: .emailLogin(.verifyDevice(.didReceiveWalletInfoDeeplink(url))))
+                return Effect.send(.emailLogin(.verifyDevice(.didReceiveWalletInfoDeeplink(url))))
 
             case .requestedToCreateWallet,
                  .requestedToDecryptWallet,
@@ -213,10 +209,10 @@ public struct WelcomeReducer: ReducerProtocol {
                 return .none
 
             case .createWallet(.informWalletFetched(let context)):
-                return EffectTask(value: .informWalletFetched(context))
+                return Effect.send(.informWalletFetched(context))
 
             case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.informWalletFetched(let context))))):
-                return EffectTask(value: .informWalletFetched(context))
+                return Effect.send(.informWalletFetched(context))
 
             case .emailLogin(.verifyDevice(.credentials(.onForgotPasswordTapped))):
                 state.route = nil
@@ -225,29 +221,29 @@ public struct WelcomeReducer: ReducerProtocol {
             // TODO: refactor this by not relying on access lower level reducers
             case .emailLogin(.verifyDevice(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))),
                  .emailLogin(.verifyDevice(.upgradeAccount(.skipUpgrade(.credentials(.walletPairing(.decryptWalletWithPassword(let password))))))):
-                return EffectTask(value: .requestedToDecryptWallet(password))
+                return Effect.send(.requestedToDecryptWallet(password))
 
             case .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restoreWallet(let walletRecovery))))):
-                return EffectTask(value: .requestedToRestoreWallet(walletRecovery))
+                return Effect.send(.requestedToRestoreWallet(walletRecovery))
 
             case .restoreWallet(.restoreWallet(let walletRecovery)):
-                return EffectTask(value: .requestedToRestoreWallet(walletRecovery))
+                return Effect.send(.requestedToRestoreWallet(walletRecovery))
 
             case .restoreWallet(.importWallet(.createAccount(.importAccount))):
-                return EffectTask(value: .requestedToRestoreWallet(.importRecovery))
+                return Effect.send(.requestedToRestoreWallet(.importRecovery))
 
             case .manualPairing(.walletPairing(.decryptWalletWithPassword(let password))):
-                return EffectTask(value: .requestedToDecryptWallet(password))
+                return Effect.send(.requestedToDecryptWallet(password))
 
             case .emailLogin(.verifyDevice(.credentials(.secondPasswordNotice(.returnTapped)))),
                  .manualPairing(.secondPasswordNotice(.returnTapped)):
                 return .dismiss()
 
             case .manualPairing(.seedPhrase(.informWalletFetched(let context))):
-                return EffectTask(value: .informWalletFetched(context))
+                return Effect.send(.informWalletFetched(context))
 
             case .manualPairing(.seedPhrase(.importWallet(.createAccount(.walletFetched(.success(.right(let context))))))):
-                return EffectTask(value: .informWalletFetched(context))
+                return Effect.send(.informWalletFetched(context))
 
             case .manualPairing:
                 return .none
@@ -260,14 +256,14 @@ public struct WelcomeReducer: ReducerProtocol {
 
             case .restoreWallet(.restored(.success(.right(let context)))),
                  .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.success(.right(let context))))))):
-                return EffectTask(value: .informWalletFetched(context))
+                return Effect.send(.informWalletFetched(context))
 
             case .restoreWallet(.importWallet(.createAccount(.walletFetched(.success(.right(let context)))))):
-                return EffectTask(value: .informWalletFetched(context))
+                return Effect.send(.informWalletFetched(context))
 
             case .restoreWallet(.restored(.success(.left(.noValue)))),
                  .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.success(.left(.noValue))))))):
-                return EffectTask(value: .informForWalletInitialization)
+                return Effect.send(.informForWalletInitialization)
             case .restoreWallet(.restored(.failure)),
                  .emailLogin(.verifyDevice(.credentials(.seedPhrase(.restored(.failure))))):
                 return .none
@@ -277,11 +273,11 @@ public struct WelcomeReducer: ReducerProtocol {
             case .informSecondPasswordDetected:
                 switch state.route?.route {
                 case .emailLogin:
-                    return EffectTask(value: .emailLogin(.verifyDevice(.credentials(.navigate(to: .secondPasswordDetected)))))
+                    return Effect.send(.emailLogin(.verifyDevice(.credentials(.navigate(to: .secondPasswordDetected)))))
                 case .manualLogin:
-                    return EffectTask(value: .manualPairing(.navigate(to: .secondPasswordDetected)))
+                    return Effect.send(.manualPairing(.navigate(to: .secondPasswordDetected)))
                 case .restoreWallet:
-                    return EffectTask(value: .restoreWallet(.setSecondPasswordNoticeVisible(true)))
+                    return Effect.send(.restoreWallet(.setSecondPasswordNoticeVisible(true)))
                 default:
                     return .none
                 }
@@ -382,14 +378,14 @@ public struct WelcomeReducer: ReducerProtocol {
     }
 }
 
-struct WelcomeAnalytics: ReducerProtocol {
+struct WelcomeAnalytics: Reducer {
 
     typealias Action = WelcomeAction
     typealias State = WelcomeState
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .route(let route):

@@ -12,7 +12,7 @@ public struct VerifyRecoveryPhraseView: View {
 
     public init(store: Store<VerifyRecoveryPhraseState, VerifyRecoveryPhraseAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -116,7 +116,7 @@ public struct VerifyRecoveryPhraseView: View {
             width: 1
         )
         .background(Color.semantic.light)
-        .alert(isPresented: viewStore.binding(\.$backupRemoteFailed)) {
+        .alert(isPresented: viewStore.$backupRemoteFailed) {
             Alert(
                 title: Text(Localization.backupFailedAlertTitle),
                 message: Text(Localization.backupFailedAlertDescription),
@@ -206,14 +206,16 @@ public struct VerifyRecoveryPhraseView: View {
 struct SeedPhraseVerifyView_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
-            VerifyRecoveryPhraseView(store: .init(
+            VerifyRecoveryPhraseView(store: Store(
                 initialState: .init(),
-                reducer: VerifyRecoveryPhrase(
-                    mainQueue: .main,
-                    recoveryPhraseRepository: resolve(),
-                    recoveryPhraseService: resolve(),
-                    onNext: {}
-                )
+                reducer: {
+                    VerifyRecoveryPhrase(
+                        mainQueue: .main,
+                        recoveryPhraseRepository: resolve(),
+                        recoveryPhraseService: resolve(),
+                        onNext: {}
+                    )
+                }
             ))
         }
     }

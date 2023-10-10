@@ -4,7 +4,7 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-struct EarnProductCompare: ReducerProtocol {
+struct EarnProductCompare: Reducer {
 
     private let onDismiss: () -> Void
 
@@ -12,13 +12,13 @@ struct EarnProductCompare: ReducerProtocol {
         self.onDismiss = onDismiss
     }
 
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .didChangeStep(let step):
             state.currentStep = step
             return .none
         case .onDismiss:
-            return .fireAndForget {
+            return .run { _ in
                 onDismiss()
             }
         }

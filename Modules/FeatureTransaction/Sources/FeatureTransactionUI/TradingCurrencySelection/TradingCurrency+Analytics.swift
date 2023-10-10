@@ -16,18 +16,18 @@ extension AnalyticsEvents.New {
     }
 }
 
-struct TradingCurrencyAnalyticsReducer: ReducerProtocol {
+struct TradingCurrencyAnalyticsReducer: Reducer {
     
     typealias State = TradingCurrency.State
     typealias Action = TradingCurrency.Action
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { _, action in
             switch action {
             case .didSelect(let currency):
-                return .fireAndForget {
+                return .run { _ in
                     analyticsRecorder.record(
                         event: AnalyticsEvents.New.TradingCurrency.fiatCurrencySelected(currency: currency.code)
                     )

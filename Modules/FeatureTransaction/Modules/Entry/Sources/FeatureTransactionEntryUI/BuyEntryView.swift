@@ -97,7 +97,9 @@ struct BuyEntryListView: View {
         _topMovers = .init(
             wrappedValue: .init(
                 initialState: .init(presenter: .accountPicker),
-                reducer: TopMoversSection(app: resolve(), topMoversService: resolve())
+                reducer: {
+                    TopMoversSection(app: resolve(), topMoversService: resolve())
+                }
             )
         )
     }

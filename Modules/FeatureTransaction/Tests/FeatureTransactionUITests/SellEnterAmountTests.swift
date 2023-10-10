@@ -17,10 +17,7 @@ class SellEnterAmountTests: XCTestCase {
     fileprivate var completionHandlerSpy: SellEnterAmountCompletionHandlerSpy!
     var testStore: TestStore<
         SellEnterAmount.State,
-        SellEnterAmount.Action,
-        SellEnterAmount.State,
-        SellEnterAmount.Action,
-        Void
+        SellEnterAmount.Action
     >!
 
     let defaultSourcePair = FeatureTransactionDomain.SelectionInformation(accountId: "BTC.Account", currency: .bitcoin)
@@ -46,13 +43,15 @@ class SellEnterAmountTests: XCTestCase {
 
         testStore = TestStore(
             initialState: SellEnterAmount.State(),
-            reducer: SellEnterAmount(
-                app: App.test,
-                onAmountChanged: completionHandlerSpy.onAmountChanged,
-                onPreviewTapped: completionHandlerSpy.onPreviewTapped,
-                minMaxAmountsPublisher: minMaxAmountsPublisher,
-                validationStatePublisher: validationStatePublisher
-            )
+            reducer: {
+                SellEnterAmount(
+                    app: App.test,
+                    onAmountChanged: completionHandlerSpy.onAmountChanged,
+                    onPreviewTapped: completionHandlerSpy.onPreviewTapped,
+                    minMaxAmountsPublisher: minMaxAmountsPublisher,
+                    validationStatePublisher: validationStatePublisher
+                )
+            }
         )
     }
 }

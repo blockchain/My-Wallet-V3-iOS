@@ -27,15 +27,17 @@ public struct SiteMap {
             UnlockTradingView(
                 store: Store(
                     initialState: UnlockTradingState(currentUserTier: isVerified ? .verified : .unverified),
-                    reducer: UnlockTradingReducer(
-                        dismiss: {
-                            app.post(event: blockchain.ux.kyc.trading.unlock.more.article.plain.navigation.bar.button.close.tap, context: context)
-                        },
-                        unlock: { _ in
-                            app.post(event: blockchain.ux.kyc.launch.verification, context: context)
-                        },
-                        analyticsRecorder: resolve()
-                    )
+                    reducer: {
+                        UnlockTradingReducer(
+                            dismiss: {
+                                app.post(event: blockchain.ux.kyc.trading.unlock.more.article.plain.navigation.bar.button.close.tap, context: context)
+                            },
+                            unlock: { _ in
+                                app.post(event: blockchain.ux.kyc.launch.verification, context: context)
+                            },
+                            analyticsRecorder: resolve()
+                        )
+                    }
                 )
             )
             .batch {
@@ -52,7 +54,7 @@ struct UnlockTradingView: View {
     let store: Store<UnlockTradingState, UnlockTradingAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: Spacing.padding2) {
                 HStack(alignment: .top, spacing: Spacing.padding2) {
                     Image("icon-verified", bundle: .module)
@@ -130,7 +132,7 @@ private struct BenefitsView: View {
     let benefits: [UnlockTradingBenefit]
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 VStack(alignment: .leading, spacing: .zero) {
                     let lastBenefit = benefits.last
@@ -309,9 +311,9 @@ struct UnlockTradingView_Previews: PreviewProvider {
 
     static var previews: some View {
         UnlockTradingView(
-            store: .init(
+            store: Store(
                 initialState: UnlockTradingState(currentUserTier: .unverified),
-                reducer: UnlockTradingReducer.preview
+                reducer: { UnlockTradingReducer.preview }
             )
         )
     }

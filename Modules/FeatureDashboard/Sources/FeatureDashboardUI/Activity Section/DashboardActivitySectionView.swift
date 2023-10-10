@@ -16,7 +16,7 @@ public struct DashboardActivitySectionView: View {
 
     public init(store: StoreOf<DashboardActivitySection>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -65,7 +65,7 @@ public struct DashboardActivitySectionView: View {
                   action: DashboardActivitySection.Action.onActivityRowTapped(id:action:)
               )
             ) { rowStore in
-                WithViewStore(rowStore) { viewStore in
+                WithViewStore(rowStore, observe: { $0 }) { viewStore in
                     DashboardActivityRowView(store: rowStore)
                         .context([blockchain.ux.activity.detail.id: viewStore.id])
                 }

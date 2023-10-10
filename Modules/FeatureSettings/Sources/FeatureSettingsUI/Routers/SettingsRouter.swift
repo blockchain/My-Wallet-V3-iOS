@@ -3,6 +3,7 @@
 import AnalyticsKit
 import BlockchainNamespace
 import Combine
+import ComposableArchitecture
 import DIKit
 import FeatureAuthenticationDomain
 import FeatureBackupRecoveryPhraseUI
@@ -344,13 +345,15 @@ final class SettingsRouter: SettingsRouterAPI {
     private func showNotificationsSettingsScreen() {
         analyticsRecording.record(event: AnalyticsEvents.New.Settings.notificationClicked)
         let presenter = topViewController
-        let notificationCenterView = FeatureNotificationPreferencesView(store: .init(
+        let notificationCenterView = FeatureNotificationPreferencesView(store: Store(
             initialState: .init(viewState: .loading),
-            reducer: FeatureNotificationPreferencesMainReducer(
-                mainQueue: .main,
-                notificationPreferencesRepository: DIKit.resolve(),
-                analyticsRecorder: DIKit.resolve()
-            )
+            reducer: {
+                FeatureNotificationPreferencesMainReducer(
+                    mainQueue: .main,
+                    notificationPreferencesRepository: DIKit.resolve(),
+                    analyticsRecorder: DIKit.resolve()
+                )
+            }
         ))
         presenter.present(notificationCenterView)
     }
@@ -362,28 +365,32 @@ final class SettingsRouter: SettingsRouterAPI {
             .Settings
             .walletReferralProgramClicked(origin: origin))
         let presenter = topViewController
-        let referralView = ReferFriendView(store: .init(
+        let referralView = ReferFriendView(store: Store(
             initialState: .init(referralInfo: referral),
-            reducer: ReferFriendReducer(
-                mainQueue: .main,
-                analyticsRecorder: DIKit.resolve()
-            )
+            reducer: {
+                ReferFriendReducer(
+                    mainQueue: .main,
+                    analyticsRecorder: DIKit.resolve()
+                )
+            }
         ))
         presenter.present(referralView)
     }
 
     private func showPasswordChangeScreen() {
         let changePasswordView = ChangePasswordView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: ChangePasswordReducer(
-                    mainQueue: .main,
-                    coordinator: resolve(),
-                    passwordRepository: passwordRepository,
-                    passwordValidator: PasswordValidator(),
-                    previousAPI: self,
-                    analyticsRecorder: resolve()
-                )
+                reducer: {
+                    ChangePasswordReducer(
+                        mainQueue: .main,
+                        coordinator: resolve(),
+                        passwordRepository: passwordRepository,
+                        passwordValidator: PasswordValidator(),
+                        previousAPI: self,
+                        analyticsRecorder: resolve()
+                    )
+                }
             )
         )
         navigationRouter.present(viewController: UIHostingController(rootView: changePasswordView))
@@ -405,15 +412,17 @@ final class SettingsRouter: SettingsRouterAPI {
         let dismissFlow = {
             presenter.dismiss(animated: true)
         }
-        let view = UserDeletionView(store: .init(
+        let view = UserDeletionView(store: Store(
             initialState: UserDeletionState(),
-            reducer: UserDeletionReducer(
-                mainQueue: .main,
-                userDeletionRepository: resolve(),
-                analyticsRecorder: resolve(),
-                dismissFlow: dismissFlow,
-                logoutAndForgetWallet: logoutAndForgetWallet
-            )
+            reducer: {
+                UserDeletionReducer(
+                    mainQueue: .main,
+                    userDeletionRepository: resolve(),
+                    analyticsRecorder: resolve(),
+                    dismissFlow: dismissFlow,
+                    logoutAndForgetWallet: logoutAndForgetWallet
+                )
+            }
         ))
         presenter.present(view)
     }

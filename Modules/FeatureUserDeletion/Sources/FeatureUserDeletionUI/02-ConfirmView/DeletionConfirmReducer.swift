@@ -2,10 +2,11 @@ import AnalyticsKit
 import Combine
 import ComposableArchitecture
 import ComposableNavigation
+import Errors
 import FeatureUserDeletionDomain
 import Foundation
 
-public struct DeletionConfirmReducer: ReducerProtocol {
+public struct DeletionConfirmReducer: Reducer {
 
     public typealias State = DeletionConfirmState
     public typealias Action = DeletionConfirmAction
@@ -30,7 +31,7 @@ public struct DeletionConfirmReducer: ReducerProtocol {
         self.logoutAndForgetWallet = logoutAndForgetWallet
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -40,14 +41,20 @@ public struct DeletionConfirmReducer: ReducerProtocol {
                 return .none
             case .deleteUserAccount:
                 guard state.isConfirmationInputValid else {
-                    return EffectTask(value: .validateConfirmationInput)
+                    return Effect.send(.validateConfirmationInput)
                 }
                 state.isLoading = true
-                return userDeletionRepository
-                    .deleteUser(with: nil)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(DeletionConfirmAction.showResultScreen)
+                return .run { send in
+                    do {
+                        try await userDeletionRepository
+                            .deleteUser(with: nil)
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.showResultScreen(result: .success(())))
+                    } catch {
+                        await send(.showResultScreen(result: .failure(error as! NetworkError)))
+                    }
+                }
             case .validateConfirmationInput:
                 state.validateConfirmationInputField()
                 return .none
@@ -58,7 +65,7 @@ public struct DeletionConfirmReducer: ReducerProtocol {
                 state.route = routeItent
                 return .none
             case .binding(\.$textFieldText):
-                return EffectTask(value: .validateConfirmationInput)
+                return Effect.send(.validateConfirmationInput)
             case .onConfirmViewChanged:
                 return .none
             default:
@@ -79,14 +86,14 @@ public struct DeletionConfirmReducer: ReducerProtocol {
 
 // MARK: - Private
 
-struct DeletionConfirmAnalytics: ReducerProtocol {
+struct DeletionConfirmAnalytics: Reducer {
 
     typealias State = DeletionConfirmState
     typealias Action = DeletionConfirmAction
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .showResultScreen(.success):

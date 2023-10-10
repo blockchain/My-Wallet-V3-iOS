@@ -13,7 +13,7 @@ import SwiftExtensions
 import SwiftUI
 import UnifiedActivityDomain
 
-public struct AllActivityScene: ReducerProtocol {
+public struct AllActivityScene: Reducer {
     public let app: AppProtocol
     let activityRepository: UnifiedActivityRepositoryAPI
     let custodialActivityRepository: CustodialActivityRepositoryAPI
@@ -83,7 +83,7 @@ public struct AllActivityScene: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -93,15 +93,19 @@ public struct AllActivityScene: ReducerProtocol {
                     state.activityResults = state.placeholderItems
                 }
                 if state.presentedAssetType.isCustodial {
-                    return custodialActivityRepository
-                        .activity()
-                        .receive(on: DispatchQueue.main)
-                        .eraseToEffect { .onActivityFetched($0) }
+                    return .publisher {
+                        custodialActivityRepository
+                            .activity()
+                            .receive(on: DispatchQueue.main)
+                            .map { .onActivityFetched($0) }
+                    }
                 } else {
-                    return activityRepository
-                        .activity
-                        .receive(on: DispatchQueue.main)
-                        .eraseToEffect { .onActivityFetched(.success($0)) }
+                    return .publisher {
+                        activityRepository
+                            .activity
+                            .receive(on: DispatchQueue.main)
+                            .map { .onActivityFetched(.success($0)) }
+                    }
                 }
             case .onPendingInfoTapped:
                 state.pendingInfoPresented.toggle()

@@ -18,7 +18,7 @@ public enum SkipUpgradeRoute: NavigationRoute {
     public func destination(
         in store: Store<SkipUpgradeState, SkipUpgradeAction>
     ) -> some View {
-        let viewStore = ViewStore(store)
+        let viewStore = ViewStore(store, observe: { $0 })
         switch self {
         case .credentials:
             IfLetStore(
@@ -59,7 +59,7 @@ struct SkipUpgradeView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 VStack {
                     Spacer()
@@ -117,31 +117,33 @@ struct SkipUpgradeView: View {
 struct SkipUpgradeView_Previews: PreviewProvider {
     static var previews: some View {
         SkipUpgradeView(
-            store: .init(
+            store: Store(
                 initialState: .init(
                     walletInfo: .empty
                 ),
-                reducer: SkipUpgradeReducer(
-                    app: App.preview,
-                    mainQueue: .main,
-                    deviceVerificationService: NoOpDeviceVerificationService(),
-                    errorRecorder: NoOpErrorRecoder(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    walletRecoveryService: .noop,
-                    walletCreationService: .noop,
-                    walletFetcherService: .noop,
-                    accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService(),
-                    sessionTokenService: NoOpSessionTokenService(),
-                    emailAuthorizationService: NoOpEmailAuthorizationService(),
-                    smsService: NoOpSMSService(),
-                    loginService: NoOpLoginService(),
-                    externalAppOpener: NoOpExternalAppOpener(),
-                    seedPhraseValidator: NoOpValidator(),
-                    passwordValidator: PasswordValidator(),
-                    signUpCountriesService: NoOpSignupCountryService(),
-                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
-                )
+                reducer: {
+                    SkipUpgradeReducer(
+                        app: App.preview,
+                        mainQueue: .main,
+                        deviceVerificationService: NoOpDeviceVerificationService(),
+                        errorRecorder: NoOpErrorRecoder(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        walletRecoveryService: .noop,
+                        walletCreationService: .noop,
+                        walletFetcherService: .noop,
+                        accountRecoveryService: NoOpAccountRecoveryService(),
+                        recaptchaService: NoOpGoogleRecatpchaService(),
+                        sessionTokenService: NoOpSessionTokenService(),
+                        emailAuthorizationService: NoOpEmailAuthorizationService(),
+                        smsService: NoOpSMSService(),
+                        loginService: NoOpLoginService(),
+                        externalAppOpener: NoOpExternalAppOpener(),
+                        seedPhraseValidator: NoOpValidator(),
+                        passwordValidator: PasswordValidator(),
+                        signUpCountriesService: NoOpSignupCountryService(),
+                        appStoreInformationRepository: NoOpAppStoreInformationRepository()
+                    )
+                }
             )
         )
     }

@@ -31,7 +31,7 @@ public struct AssetListSceneView: View {
     }
 
     private var contentView: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 if viewStore.isLoading || viewStore.shouldShowErrorState {
                     LoadingStateView(title: L10n.fetchingYourNFTs)
@@ -119,7 +119,7 @@ public struct AssetListSceneView: View {
         }
 
         var body: some View {
-            WithViewStore(store) { viewStore in
+            WithViewStore(store, observe: { $0 }) { viewStore in
                 ZStack(alignment: .bottom) {
                     ScrollView {
                         HStack(alignment: .center) {
@@ -224,7 +224,7 @@ public struct AssetListSceneView: View {
         }
 
         var body: some View {
-            WithViewStore(store) { _ in
+            WithViewStore(store, observe: { $0 }) { _ in
                 VStack(alignment: .center, spacing: 24) {
                     Spacer()
                     VStack(spacing: 8) {
@@ -292,11 +292,13 @@ public struct AssetListSceneView: View {
 struct AssetListSceneView_Previews: PreviewProvider {
     static var previews: some View {
         AssetListSceneView.NoNFTsView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: AssetListReducer(
-                    assetProviderService: AssetProviderService.previewEmpty
-                )
+                reducer: {
+                    AssetListReducer(
+                        assetProviderService: AssetProviderService.previewEmpty
+                    )
+                }
             )
         )
         .app(App.preview)

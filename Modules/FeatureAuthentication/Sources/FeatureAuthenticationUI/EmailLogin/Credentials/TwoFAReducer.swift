@@ -58,11 +58,11 @@ struct TwoFAState: Equatable {
     }
 }
 
-struct TwoFAReducer: ReducerProtocol {
+struct TwoFAReducer: Reducer {
     typealias State = TwoFAState
     typealias Action = TwoFAAction
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .didChangeTwoFACode(let code):
@@ -70,7 +70,7 @@ struct TwoFAReducer: ReducerProtocol {
                 return .none
             case .didChangeTwoFACodeAttemptsLeft(let attemptsLeft):
                 state.twoFACodeAttemptsLeft = attemptsLeft
-                return EffectTask(value: .showIncorrectTwoFACodeError(.incorrect))
+                return Effect.send(.showIncorrectTwoFACodeError(.incorrect))
             case .showIncorrectTwoFACodeError(let context):
                 state.twoFACodeIncorrectContext = context
                 state.isTwoFACodeIncorrect = context.hasError

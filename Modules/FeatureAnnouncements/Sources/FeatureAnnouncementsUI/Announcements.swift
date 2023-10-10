@@ -5,7 +5,7 @@ import Errors
 import FeatureAnnouncementsDomain
 import Foundation
 
-public struct Announcements: ReducerProtocol {
+public struct Announcements: Reducer {
 
     public enum LoadingStatus: Equatable {
         case idle
@@ -56,7 +56,7 @@ public struct Announcements: ReducerProtocol {
         self.mode = mode
     }
 
-    public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    public func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .initialize:
             guard state.status == .idle, !state.initialized else {
@@ -64,13 +64,15 @@ public struct Announcements: ReducerProtocol {
             }
             state.initialized = true
             return .merge(
-                EffectTask(value: .fetchAnnouncements(false)),
-                app
-                    .on(blockchain.ux.home.event.did.pull.to.refresh)
-                    .map { _ in Action.fetchAnnouncements(true) }
-                    .debounce(for: .seconds(1), scheduler: mainQueue)
-                    .receive(on: mainQueue)
-                    .eraseToEffect()
+                Effect.send(.fetchAnnouncements(false)),
+                Effect.run { send in
+                    try await app
+                        .on(blockchain.ux.home.event.did.pull.to.refresh)
+                        .debounce(for: .seconds(1), scheduler: mainQueue)
+                        .receive(on: mainQueue)
+                        .await()
+                    await send(Action.fetchAnnouncements(true))
+                }
             )
         case .fetchAnnouncements(let force):
             guard state.status != .loading else {
@@ -94,29 +96,33 @@ public struct Announcements: ReducerProtocol {
                 await send(.onAnnouncementsFetched(announcements))
             }
         case .open(let announcement):
-            return Publishers.MergeMany(services.map { service in service.handle(announcement) })
-                .collect()
-                .map { _ in Action.dismiss(announcement, .open) }
-                .receive(on: mainQueue)
-                .eraseToEffect()
+            return .run { [services, announcement] send in
+                try await Publishers.MergeMany(services.map { service in service.handle(announcement) })
+                    .collect()
+                    .receive(on: mainQueue)
+                    .await()
+                await send(Action.dismiss(announcement, .open))
+            }
         case .read(let announcement):
             guard let announcement, !announcement.read else {
                 return .none
             }
-            return Publishers.MergeMany(services.map { service in service.setRead(announcement: announcement) })
-                .collect()
-                .receive(on: mainQueue)
-                .eraseToEffect()
-                .fireAndForget()
-        case .dismiss(let announcement, let action):
-            return .merge(
-                Publishers.MergeMany(services.map { service in service.setDismissed(announcement, with: action) })
+            return .run { _ in
+                try await Publishers.MergeMany(services.map { service in service.setRead(announcement: announcement) })
                     .collect()
                     .receive(on: mainQueue)
-                    .eraseToEffect()
-                    .fireAndForget(),
-                EffectTask(value: .read(state.announcements.last)),
-                EffectTask(value: .delete(announcement))
+                    .await()
+            }
+        case .dismiss(let announcement, let action):
+            return .merge(
+                Effect.run { _ in
+                    try await Publishers.MergeMany(services.map { service in service.setDismissed(announcement, with: action) })
+                        .collect()
+                        .receive(on: mainQueue)
+                        .await()
+                },
+                Effect.send(.read(state.announcements.last)),
+                Effect.send(.delete(announcement))
             )
         case .delete(let announcement):
             state.announcements = state.announcements.filter { $0 != announcement }
@@ -125,7 +131,7 @@ public struct Announcements: ReducerProtocol {
         case .onAnnouncementsFetched(let announcements):
             state.status = .loaded
             state.announcements = announcements.sorted().reversed()
-            return EffectTask(value: .read(announcements.last))
+            return Effect.send(.read(announcements.last))
         case .hideCompletion:
             state.showCompletion = false
             return .none

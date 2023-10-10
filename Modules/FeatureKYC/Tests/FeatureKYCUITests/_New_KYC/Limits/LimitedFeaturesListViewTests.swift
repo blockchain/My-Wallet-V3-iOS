@@ -7,7 +7,7 @@ import ComposableArchitecture
 import SnapshotTesting
 import XCTest
 
-final class LimitedFeaturesListViewTests: XCTestCase {
+@MainActor final class LimitedFeaturesListViewTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
@@ -65,15 +65,17 @@ final class LimitedFeaturesListViewTests: XCTestCase {
     func test_entire_list_contents() throws {
         _ = App.preview
         let view = LimitedFeaturesListView(
-            store: .init(
+            store: Store(
                 initialState: LimitedFeaturesListState(
                     features: [.init(id: .send, enabled: false, limit: nil)],
                     kycTiers: .init(tiers: [])
                 ),
-                reducer: LimitedFeaturesListReducer(
-                    openURL: { _ in },
-                    presentKYCFlow: { _ in }
-                )
+                reducer: {
+                    LimitedFeaturesListReducer(
+                        openURL: { _ in },
+                        presentKYCFlow: { _ in }
+                    )
+                }
             )
         )
         .frame(width: 320, height: 480)

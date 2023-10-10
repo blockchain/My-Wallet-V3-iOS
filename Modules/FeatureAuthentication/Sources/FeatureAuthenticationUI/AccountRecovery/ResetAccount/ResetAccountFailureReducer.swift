@@ -25,7 +25,7 @@ public enum ResetAccountFailureAction: Equatable {
 
 struct ResetAccountFailureState: Equatable {}
 
-struct ResetAccountFailureReducer: ReducerProtocol {
+struct ResetAccountFailureReducer: Reducer {
 
     typealias State = ResetAccountFailureState
     typealias Action = ResetAccountFailureAction
@@ -38,7 +38,7 @@ struct ResetAccountFailureReducer: ReducerProtocol {
         self.externalAppOpener = externalAppOpener
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .open(let urlContent):

@@ -102,7 +102,7 @@ public struct CredentialsView: View {
     public init(context: CredentialsContext, store: Store<CredentialsState, CredentialsAction>) {
         self.context = context
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -214,7 +214,7 @@ public struct CredentialsView: View {
             .accessibility(identifier: AccessibilityIdentifiers.CredentialsScreen.nextButton)
         }
         .bottomSheet(
-            isPresented: viewStore.binding(\.$supportSheetShown),
+            isPresented: viewStore.$supportSheetShown,
             content: {
                 IfLetStore(
                     store.scope(
@@ -231,7 +231,12 @@ public struct CredentialsView: View {
         .onWillDisappear {
             viewStore.send(.onWillDisappear)
         }
-        .alert(store.scope(state: \.credentialsFailureAlert), dismiss: .alert(.dismiss))
+        .alert(
+            store: store.scope(
+                state: \.$credentialsFailureAlert,
+                action: { .alert($0) }
+            )
+        )
         .background(Color.semantic.light.ignoresSafeArea())
     }
 
@@ -364,27 +369,29 @@ struct PasswordLoginView_Previews: PreviewProvider {
             context: .none,
             store: Store(
                 initialState: .init(),
-                reducer: CredentialsReducer(
-                    app: App.preview,
-                    mainQueue: .main,
-                    sessionTokenService: NoOpSessionTokenService(),
-                    deviceVerificationService: NoOpDeviceVerificationService(),
-                    emailAuthorizationService: NoOpEmailAuthorizationService(),
-                    smsService: NoOpSMSService(),
-                    loginService: NoOpLoginService(),
-                    errorRecorder: NoOpErrorRecorder(),
-                    externalAppOpener: NoOpExternalAppOpener(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    walletRecoveryService: .noop,
-                    walletCreationService: .noop,
-                    walletFetcherService: .noop,
-                    accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService(),
-                    seedPhraseValidator: NoOpValidator(),
-                    passwordValidator: PasswordValidator(),
-                    signUpCountriesService: NoOpSignupCountryService(),
-                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
-                )
+                reducer: {
+                    CredentialsReducer(
+                        app: App.preview,
+                        mainQueue: .main,
+                        sessionTokenService: NoOpSessionTokenService(),
+                        deviceVerificationService: NoOpDeviceVerificationService(),
+                        emailAuthorizationService: NoOpEmailAuthorizationService(),
+                        smsService: NoOpSMSService(),
+                        loginService: NoOpLoginService(),
+                        errorRecorder: NoOpErrorRecorder(),
+                        externalAppOpener: NoOpExternalAppOpener(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        walletRecoveryService: .noop,
+                        walletCreationService: .noop,
+                        walletFetcherService: .noop,
+                        accountRecoveryService: NoOpAccountRecoveryService(),
+                        recaptchaService: NoOpGoogleRecatpchaService(),
+                        seedPhraseValidator: NoOpValidator(),
+                        passwordValidator: PasswordValidator(),
+                        signUpCountriesService: NoOpSignupCountryService(),
+                        appStoreInformationRepository: NoOpAppStoreInformationRepository()
+                    )
+                }
             )
         )
     }

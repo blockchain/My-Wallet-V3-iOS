@@ -5,7 +5,7 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-public struct SwapToAccountRow: ReducerProtocol {
+public struct SwapToAccountRow: Reducer {
     public let app: AppProtocol
     public init(
         app: AppProtocol
@@ -62,7 +62,7 @@ public struct SwapToAccountRow: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -105,10 +105,10 @@ public struct SwapToAccountRow: ReducerProtocol {
                     return .none
 
                 case .onAccountSelected(let accountId):
-                    return EffectTask(value: .onAccountSelected(accountId))
+                    return Effect.send(.onAccountSelected(accountId))
 
                 case .accountRow(let id, let action) where action == .onAccountTapped:
-                    return EffectTask(value: .onAccountSelected(id))
+                    return Effect.send(.onAccountSelected(id))
 
                 case .accountRow:
                     return .none

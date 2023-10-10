@@ -38,7 +38,7 @@ final class OnboardingHostingController: UIViewController {
     ) {
         self.app = app
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
         self.alertViewPresenter = alertViewPresenter
         self.webViewService = webViewService
         super.init(nibName: nil, bundle: nil)

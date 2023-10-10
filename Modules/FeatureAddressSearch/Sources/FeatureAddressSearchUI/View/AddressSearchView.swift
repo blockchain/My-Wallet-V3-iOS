@@ -12,6 +12,7 @@ import ToolKit
 enum AddressSearchRoute: NavigationRoute {
     case modifyAddress(selectedAddressId: String?, address: Address?)
 
+    @MainActor
     @ViewBuilder
     func destination(
         in store: Store<AddressSearchState, AddressSearchAction>
@@ -23,12 +24,13 @@ enum AddressSearchRoute: NavigationRoute {
                     state: \.addressModificationState,
                     action: AddressSearchAction.addressModificationAction
                 ),
-                then: AddressModificationView.init(store:)
+                then: { AddressModificationView(store:$0) }
             )
         }
     }
 }
 
+@MainActor
 struct AddressSearchView: View {
 
     private typealias L10n = LocalizationConstants.AddressSearch
@@ -49,7 +51,7 @@ struct AddressSearchView: View {
 
     var body: some View {
         PrimaryNavigationView {
-            WithViewStore(store) { viewStore in
+            WithViewStore(store, observe: { $0 }) { viewStore in
                 VStack(alignment: .leading) {
                     header
                     searchBar
@@ -70,7 +72,7 @@ struct AddressSearchView: View {
     }
 
     private var header: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: Spacing.padding1) {
                 HStack {
                     Text(viewStore.screenTitle)
@@ -88,10 +90,10 @@ struct AddressSearchView: View {
     }
 
     private var searchBar: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             SearchBar(
-                text: viewStore.binding(\.$searchText),
-                isFirstResponder: viewStore.binding(\.$isSearchFieldSelected),
+                text: viewStore.$searchText,
+                isFirstResponder: viewStore.$isSearchFieldSelected,
                 hasAutocorrection: false,
                 cancelButtonText: "",
                 placeholder: L10n.SearchAddress.SearchBar.Placeholder.text
@@ -101,7 +103,7 @@ struct AddressSearchView: View {
     }
 
     private var content: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
                 List {
                     Section(
                         content: {
@@ -138,7 +140,7 @@ struct AddressSearchView: View {
     }
 
     private func createItemRow(result: AddressSearchResult) -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             let title = result.text ?? ""
             let subtitle: PrimaryRowTextValue? = {
                 guard let description = result.description, description.isNotEmpty else { return nil }
@@ -164,7 +166,7 @@ struct AddressSearchView: View {
     }
 
     private var addressManualInputRow: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading) {
                 Button {
                     viewStore.send(.modifyAddress)
@@ -206,14 +208,14 @@ struct AddressSearch_Previews: PreviewProvider {
                     address: MockServices.address,
                     error: .unknown,
                     searchResults: [
-                        .init(
+                        AddressSearchResult(
                             addressId: "123",
                             text: "32 rue de la messe",
                             type: "Type",
                             highlight: "Highlight",
                             description: "Bois-le-Roi, France"
                         ),
-                        .init(
+                        AddressSearchResult(
                             addressId: "456",
                             text: "7 place de la cité",
                             type: "Type",
@@ -222,16 +224,18 @@ struct AddressSearch_Previews: PreviewProvider {
                         )
                     ]
                 ),
-                reducer: AddressSearchReducer(
-                    mainQueue: .main,
-                    config: .init(
-                        addressSearchScreen: .init(title: "Title", subtitle: "Subtitle"),
-                        addressEditScreen: .init(title: "Title", subtitle: "Subtitle")
-                    ),
-                    addressService: MockServices(),
-                    addressSearchService: MockServices(),
-                    onComplete: { _ in }
-                )
+                reducer: {
+                    AddressSearchReducer(
+                        mainQueue: .main,
+                        config: .init(
+                            addressSearchScreen: .init(title: "Title", subtitle: "Subtitle"),
+                            addressEditScreen: .init(title: "Title", subtitle: "Subtitle")
+                        ),
+                        addressService: MockServices(),
+                        addressSearchService: MockServices(),
+                        onComplete: { _ in }
+                    )
+                }
             )
         )
     }

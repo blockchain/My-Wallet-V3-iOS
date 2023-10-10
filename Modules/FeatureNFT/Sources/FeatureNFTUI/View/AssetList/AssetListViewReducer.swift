@@ -9,7 +9,7 @@ private enum AssetListCancellation {
     struct RequestPageAssetsKeyId: Hashable {}
 }
 
-public struct AssetListReducer: ReducerProtocol {
+public struct AssetListReducer: Reducer {
 
     public typealias State = AssetListViewState
     public typealias Action = AssetListViewAction
@@ -28,20 +28,26 @@ public struct AssetListReducer: ReducerProtocol {
         self.assetProviderService = assetProviderService
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
                 state.isLoading = true
-                return assetProviderService
-                    .fetchAssetsFromEthereumAddress()
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(AssetListViewAction.fetchedAssets)
-                    .cancellable(
-                        id: AssetListCancellation.RequestAssetsKeyId(),
-                        cancelInFlight: true
-                    )
+                return .run { send in
+                    do {
+                        let assets = try await assetProviderService
+                            .fetchAssetsFromEthereumAddress()
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.fetchedAssets(.success(assets)))
+                    } catch {
+                        await send(.fetchedAssets(.failure(error as! AssetProviderServiceError)))
+                    }
+                }
+                .cancellable(
+                    id: AssetListCancellation.RequestAssetsKeyId(),
+                    cancelInFlight: true
+                )
             case .fetchedAssets(let result):
                 switch result {
                 case .success(let value):
@@ -63,27 +69,39 @@ public struct AssetListReducer: ReducerProtocol {
             case .increaseOffset:
                 guard !state.isPaginating else { return .none }
                 guard state.next != nil else { return .none }
-                return EffectTask(value: .fetchNextPageIfNeeded)
+                return Effect.send(.fetchNextPageIfNeeded)
             case .fetchNextPageIfNeeded:
                 state.isPaginating = true
                 guard let cursor = state.next else {
                     impossible("Cannot page without cursor")
                 }
-                return assetProviderService
-                    .fetchAssetsFromEthereumAddressWithCursor(cursor)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(AssetListViewAction.fetchedAssets)
-                    .cancellable(
-                        id: AssetListCancellation.RequestPageAssetsKeyId(),
-                        cancelInFlight: true
-                    )
+                return .run { send in
+                    do {
+                        let assets = try await assetProviderService
+                            .fetchAssetsFromEthereumAddressWithCursor(cursor)
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.fetchedAssets(.success(assets)))
+                    } catch {
+                        await send(.fetchedAssets(.failure(error as! AssetProviderServiceError)))
+                    }
+                }
+                .cancellable(
+                    id: AssetListCancellation.RequestPageAssetsKeyId(),
+                    cancelInFlight: true
+                )
             case .copyEthereumAddressTapped:
-                return assetProviderService
-                    .address
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(AssetListViewAction.copyEthereumAddress)
+                return .run { send in
+                    do {
+                        let address = try await assetProviderService
+                            .address
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.copyEthereumAddress(.success(address)))
+                    } catch {
+                        await send(.copyEthereumAddress(.failure(error as! AssetProviderServiceError)))
+                    }
+                }
             case .copyEthereumAddress(let result):
                 guard let address = try? result.get() else { return .none }
                 pasteboard.string = address

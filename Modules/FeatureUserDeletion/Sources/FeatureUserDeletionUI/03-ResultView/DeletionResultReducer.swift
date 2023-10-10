@@ -2,7 +2,7 @@ import AnalyticsKit
 import ComposableArchitecture
 import Foundation
 
-public struct DeletionResultReducer: ReducerProtocol {
+public struct DeletionResultReducer: Reducer {
 
     public typealias State = DeletionResultState
     public typealias Action = DeletionResultAction
@@ -24,7 +24,7 @@ public struct DeletionResultReducer: ReducerProtocol {
         self.logoutAndForgetWallet = logoutAndForgetWallet
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {

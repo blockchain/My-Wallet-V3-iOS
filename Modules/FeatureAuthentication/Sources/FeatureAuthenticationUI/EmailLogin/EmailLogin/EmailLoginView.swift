@@ -44,7 +44,7 @@ public struct EmailLoginView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 emailField
                 Spacer()
@@ -72,7 +72,12 @@ public struct EmailLoginView: View {
                 .accessibility(identifier: AccessibilityIdentifiers.EmailLoginScreen.nextButton)
             }
             .navigationRoute(in: store)
-            .alert(store.scope(state: \.alert), dismiss: .alert(.dismiss))
+            .alert(
+                store: store.scope(
+                    state: \.$alert,
+                    action: { .alert($0) }
+                )
+            )
             .onAppear {
                 viewStore.send(.onAppear)
             }
@@ -81,7 +86,7 @@ public struct EmailLoginView: View {
     }
 
     private var emailField: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             Input(
                 text: viewStore.binding(
                     get: { $0.emailAddress },
@@ -117,27 +122,29 @@ struct EmailLoginView_Previews: PreviewProvider {
             store:
             Store(
                 initialState: .init(),
-                reducer: EmailLoginReducer(
-                    app: App.preview,
-                    mainQueue: .main,
-                    sessionTokenService: NoOpSessionTokenService(),
-                    deviceVerificationService: NoOpDeviceVerificationService(),
-                    errorRecorder: NoOpErrorRecoder(),
-                    externalAppOpener: ToLogAppOpener(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    walletRecoveryService: .noop,
-                    walletCreationService: .noop,
-                    walletFetcherService: .noop,
-                    accountRecoveryService: NoOpAccountRecoveryService(),
-                    recaptchaService: NoOpGoogleRecatpchaService(),
-                    emailAuthorizationService: NoOpEmailAuthorizationService(),
-                    smsService: NoOpSMSService(),
-                    loginService: NoOpLoginService(),
-                    seedPhraseValidator: NoOpValidator(),
-                    passwordValidator: PasswordValidator(),
-                    signUpCountriesService: NoOpSignupCountryService(),
-                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
-                )
+                reducer: {
+                    EmailLoginReducer(
+                        app: App.preview,
+                        mainQueue: .main,
+                        sessionTokenService: NoOpSessionTokenService(),
+                        deviceVerificationService: NoOpDeviceVerificationService(),
+                        errorRecorder: NoOpErrorRecoder(),
+                        externalAppOpener: ToLogAppOpener(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        walletRecoveryService: .noop,
+                        walletCreationService: .noop,
+                        walletFetcherService: .noop,
+                        accountRecoveryService: NoOpAccountRecoveryService(),
+                        recaptchaService: NoOpGoogleRecatpchaService(),
+                        emailAuthorizationService: NoOpEmailAuthorizationService(),
+                        smsService: NoOpSMSService(),
+                        loginService: NoOpLoginService(),
+                        seedPhraseValidator: NoOpValidator(),
+                        passwordValidator: PasswordValidator(),
+                        signUpCountriesService: NoOpSignupCountryService(),
+                        appStoreInformationRepository: NoOpAppStoreInformationRepository()
+                    )
+                }
             )
         )
     }

@@ -28,7 +28,7 @@ struct InterestAccountListView: View {
     let embeddedInNavigationView: Bool
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 if viewStore.isLoading {
                     LoadingStateView(title: "")
@@ -95,24 +95,26 @@ struct InterestAccountListView_Previews: PreviewProvider {
 
     static var previews: some View {
         InterestAccountListView(
-            store: .init(
+            store: Store(
                 initialState: InterestAccountListState(
                     interestAccountDetails: .init(uniqueElements: testCurrencyPairs),
                     loadingStatus: .loaded
                 ),
-                reducer: InterestAccountListReducer(
-                    environment: .init(
-                        fiatCurrencyService: NoOpFiatCurrencyPublisher(),
-                        accountOverviewRepository: NoOpInterestAccountOverviewRepository(),
-                        accountBalanceRepository: NoOpInterestAccountBalanceRepository(),
-                        priceService: NoOpPriceService(),
-                        blockchainAccountRepository: NoOpBlockchainAccountRepository(),
-                        kycVerificationService: NoOpKYCVerificationService(),
-                        transactionRouterAPI: NoOpTransactionsRouter(),
-                        analyticsRecorder: NoOpAnalyticsRecorder(),
-                        mainQueue: .main
+                reducer: {
+                    InterestAccountListReducer(
+                        environment: .init(
+                            fiatCurrencyService: NoOpFiatCurrencyPublisher(),
+                            accountOverviewRepository: NoOpInterestAccountOverviewRepository(),
+                            accountBalanceRepository: NoOpInterestAccountBalanceRepository(),
+                            priceService: NoOpPriceService(),
+                            blockchainAccountRepository: NoOpBlockchainAccountRepository(),
+                            kycVerificationService: NoOpKYCVerificationService(),
+                            transactionRouterAPI: NoOpTransactionsRouter(),
+                            analyticsRecorder: NoOpAnalyticsRecorder(),
+                            mainQueue: .main
+                        )
                     )
-                )
+                }
             ),
             embeddedInNavigationView: true
         )

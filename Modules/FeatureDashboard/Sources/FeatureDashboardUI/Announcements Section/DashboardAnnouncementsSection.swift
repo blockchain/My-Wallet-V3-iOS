@@ -8,7 +8,7 @@ import Foundation
 import Localization
 import PlatformKit
 
-public struct DashboardAnnouncementsSection: ReducerProtocol {
+public struct DashboardAnnouncementsSection: Reducer {
     enum ViewState {
         case idle
         case empty
@@ -49,40 +49,41 @@ public struct DashboardAnnouncementsSection: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return recoverPhraseProviding
-                    .isRecoveryPhraseVerified
-                    .combineLatest(
-                        app
-                            .publisher(
-                                for: blockchain.app.is.DeFi.only,
-                                as: Bool.self
-                            )
-                            .compactMap(\.value)
-                    )
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect()
-                    .map { backedUp, isDeFiOnly in
-                        if backedUp == false {
-                            let tag = blockchain.ux.home.dashboard.announcement.backup.seed.phrase
-                            let result = Result<[DashboardAnnouncement], Never>.success(
-                                [
-                                    DashboardAnnouncement(
-                                        id: UUID().uuidString,
-                                        title: isDeFiOnly ? L10n.DeFiOnly.title : L10n.recoveryPhraseBackupTitle,
-                                        message: isDeFiOnly ? L10n.DeFiOnly.message : L10n.recoveryPhraseBackupMessage,
-                                        action: tag
-                                    )
-                                ]
-                            )
-                            return .onDashboardAnnouncementFetched(result)
-                        } else {
-                            return .onDashboardAnnouncementFetched(.success([]))
+                return .publisher {
+                    recoverPhraseProviding
+                        .isRecoveryPhraseVerified
+                        .combineLatest(
+                            app
+                                .publisher(
+                                    for: blockchain.app.is.DeFi.only,
+                                    as: Bool.self
+                                )
+                                .compactMap(\.value)
+                        )
+                        .receive(on: DispatchQueue.main)
+                        .map { backedUp, isDeFiOnly in
+                            if backedUp == false {
+                                let tag = blockchain.ux.home.dashboard.announcement.backup.seed.phrase
+                                let result = Result<[DashboardAnnouncement], Never>.success(
+                                    [
+                                        DashboardAnnouncement(
+                                            id: UUID().uuidString,
+                                            title: isDeFiOnly ? L10n.DeFiOnly.title : L10n.recoveryPhraseBackupTitle,
+                                            message: isDeFiOnly ? L10n.DeFiOnly.message : L10n.recoveryPhraseBackupMessage,
+                                            action: tag
+                                        )
+                                    ]
+                                )
+                                return .onDashboardAnnouncementFetched(result)
+                            } else {
+                                return .onDashboardAnnouncementFetched(.success([]))
+                            }
                         }
-                    }
+                }
 
             case .onAnnouncementTapped:
                 return .none

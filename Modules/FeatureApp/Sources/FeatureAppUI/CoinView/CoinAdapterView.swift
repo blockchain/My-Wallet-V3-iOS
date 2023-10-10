@@ -50,76 +50,78 @@ public struct CoinAdapterView: View {
         self.app = app
         self.store = Store<CoinViewState, CoinViewAction>(
             initialState: CoinViewState(currency: cryptoCurrency),
-            reducer: CoinViewReducer(
-                environment: CoinViewEnvironment(
-                    app: app,
-                    kycStatusProvider: { [userAdapter] in
-                        userAdapter.userState
-                            .compactMap { result -> UserState.KYCStatus? in
-                                guard case .success(let userState) = result else {
-                                    return nil
-                                }
-                                return userState.kycStatus
-                            }
-                            .map(FeatureCoinDomain.KYCStatus.init)
-                            .eraseToAnyPublisher()
-                    },
-                    accountsProvider: { [fiatCurrencyService, coincore] in
-                        fiatCurrencyService.displayCurrencyPublisher
-                            .setFailureType(to: Error.self)
-                            .flatMap { [coincore] fiatCurrency in
-                                app.modePublisher()
-                                    .flatMap { _ in
-                                        coincore.cryptoAccounts(
-                                            for: cryptoCurrency,
-                                            filter: app.currentMode.filter
-                                        )
-                                    }
-                                    .map { accounts in
-                                        accounts
-                                            .filter { !($0 is ExchangeAccount) }
-                                            .map { Account($0, fiatCurrency) }
-                                    }
-                                    .eraseToAnyPublisher()
-                            }
-                            .eraseToAnyPublisher()
-                    },
-                    recurringBuyProvider: {
-                        app
-                            .publisher(for: blockchain.app.configuration.recurring.buy.is.enabled)
-                            .replaceError(with: false)
-                            .flatMap { [recurringBuyProviderRepository] isRecurringBuyEnabled -> AnyPublisher<[FeatureCoinDomain.RecurringBuy], Error> in
-                                guard isRecurringBuyEnabled else { return .just([]) }
-
-                                return recurringBuyProviderRepository
-                                    .fetchRecurringBuysForCryptoCurrency(cryptoCurrency)
-                                    .map { $0.map(RecurringBuy.init) }
-                                    .eraseError()
-                                    .eraseToAnyPublisher()
-                            }
-                            .eraseToAnyPublisher()
-                    },
-                    assetInformationService: AssetInformationService(
+            reducer: {
+                CoinViewReducer(
+                    environment: CoinViewEnvironment(
                         app: app,
-                        cryptoCurrency: cryptoCurrency,
-                        repository: assetInformationRepository,
-                        currenciesService: currenciesService
-                    ),
-                    historicalPriceService: HistoricalPriceService(
-                        base: cryptoCurrency,
-                        displayFiatCurrency: fiatCurrencyService.displayCurrencyPublisher,
-                        historicalPriceRepository: historicalPriceRepository
-                    ),
-                    earnRatesRepository: ratesRepository,
-                    explainerService: .init(app: app),
-                    watchlistService: WatchlistService(
-                        base: cryptoCurrency,
-                        watchlistRepository: watchlistRepository,
-                        app: app
-                    ),
-                    dismiss: dismiss
+                        kycStatusProvider: { [userAdapter] in
+                            userAdapter.userState
+                                .compactMap { result -> UserState.KYCStatus? in
+                                    guard case .success(let userState) = result else {
+                                        return nil
+                                    }
+                                    return userState.kycStatus
+                                }
+                                .map(FeatureCoinDomain.KYCStatus.init)
+                                .eraseToAnyPublisher()
+                        },
+                        accountsProvider: { [fiatCurrencyService, coincore] in
+                            fiatCurrencyService.displayCurrencyPublisher
+                                .setFailureType(to: Error.self)
+                                .flatMap { [coincore] fiatCurrency in
+                                    app.modePublisher()
+                                        .flatMap { _ in
+                                            coincore.cryptoAccounts(
+                                                for: cryptoCurrency,
+                                                filter: app.currentMode.filter
+                                            )
+                                        }
+                                        .map { accounts in
+                                            accounts
+                                                .filter { !($0 is ExchangeAccount) }
+                                                .map { Account($0, fiatCurrency) }
+                                        }
+                                        .eraseToAnyPublisher()
+                                }
+                                .eraseToAnyPublisher()
+                        },
+                        recurringBuyProvider: {
+                            app
+                                .publisher(for: blockchain.app.configuration.recurring.buy.is.enabled)
+                                .replaceError(with: false)
+                                .flatMap { [recurringBuyProviderRepository] isRecurringBuyEnabled -> AnyPublisher<[FeatureCoinDomain.RecurringBuy], Error> in
+                                    guard isRecurringBuyEnabled else { return .just([]) }
+                                    
+                                    return recurringBuyProviderRepository
+                                        .fetchRecurringBuysForCryptoCurrency(cryptoCurrency)
+                                        .map { $0.map(RecurringBuy.init) }
+                                        .eraseError()
+                                        .eraseToAnyPublisher()
+                                }
+                                .eraseToAnyPublisher()
+                        },
+                        assetInformationService: AssetInformationService(
+                            app: app,
+                            cryptoCurrency: cryptoCurrency,
+                            repository: assetInformationRepository,
+                            currenciesService: currenciesService
+                        ),
+                        historicalPriceService: HistoricalPriceService(
+                            base: cryptoCurrency,
+                            displayFiatCurrency: fiatCurrencyService.displayCurrencyPublisher,
+                            historicalPriceRepository: historicalPriceRepository
+                        ),
+                        earnRatesRepository: ratesRepository,
+                        explainerService: .init(app: app),
+                        watchlistService: WatchlistService(
+                            base: cryptoCurrency,
+                            watchlistRepository: watchlistRepository,
+                            app: app
+                        ),
+                        dismiss: dismiss
+                    )
                 )
-            )
+            }
         )
     }
 

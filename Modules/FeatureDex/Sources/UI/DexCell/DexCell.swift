@@ -4,11 +4,11 @@ import BlockchainUI
 import DelegatedSelfCustodyDomain
 import FeatureDexDomain
 
-public struct DexCell: ReducerProtocol {
+public struct DexCell: Reducer {
 
     @Dependency(\.app) var app
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -18,9 +18,9 @@ public struct DexCell: ReducerProtocol {
                 {
                     state.balance = updatedBalance
                 }
-                return EffectTask(value: .preselectCurrency)
+                return Effect.send(.preselectCurrency)
             case .onAppear:
-                return EffectTask(value: .preselectCurrency)
+                return Effect.send(.preselectCurrency)
             case .onTapBalance:
                 if let balance = state.balance {
                     state.inputText = balance.value.toDisplayString(includeSymbol: false)
@@ -46,7 +46,7 @@ public struct DexCell: ReducerProtocol {
                 dexCellClear(state: &state)
                 return .merge(
                     .cancel(id: CancellationID.price),
-                    EffectTask(value: .preselectCurrency)
+                    Effect.send(.preselectCurrency)
                 )
 
             case .preselectCurrency:
@@ -56,14 +56,14 @@ public struct DexCell: ReducerProtocol {
                         return .none
                     }
                     guard let balance = favoriteSourceToken(app: app, state: state) else { return .none }
-                    return EffectTask(value: .didSelectCurrency(balance))
+                    return Effect.send(.didSelectCurrency(balance))
 
                 case .destination:
                     guard getThatDestinationCurrency(app: app).isNotNil || state.balance.isNil else {
                         return .none
                     }
                     guard let balance = favoriteDestinationToken(app: app, state: state) else { return .none }
-                    return EffectTask(value: .didSelectCurrency(balance))
+                    return Effect.send(.didSelectCurrency(balance))
                 }
 
             case .didSelectCurrency(let balance):
@@ -73,15 +73,17 @@ public struct DexCell: ReducerProtocol {
                 state.balance = balance
                 let currencyCode = balance.currency.code
 
-                return app
-                    .publisher(
-                        for: blockchain.api.nabu.gateway.price.crypto[currencyCode].fiat.quote.value,
-                        as: FiatValue?.self
-                    )
-                    .replaceError(with: nil)
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect(Action.onPrice)
-                    .cancellable(id: CancellationID.price, cancelInFlight: true)
+                return .publisher {
+                    app
+                        .publisher(
+                            for: blockchain.api.nabu.gateway.price.crypto[currencyCode].fiat.quote.value,
+                            as: FiatValue?.self
+                        )
+                        .replaceError(with: nil)
+                        .receive(on: DispatchQueue.main)
+                        .map(Action.onPrice)
+                }
+                .cancellable(id: CancellationID.price, cancelInFlight: true)
 
             case .onPrice(let price):
                 state.price = price
@@ -104,7 +106,7 @@ public struct DexCell: ReducerProtocol {
                 }()
                 return .merge(
                     .cancel(id: CancellationID.price),
-                    EffectTask(value: .didSelectCurrency(dexBalance))
+                    Effect.send(.didSelectCurrency(dexBalance))
                 )
             case .assetPicker:
                 return .none

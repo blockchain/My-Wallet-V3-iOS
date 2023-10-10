@@ -17,7 +17,7 @@ struct InterestNoEligibleWalletsView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ActionableView(
                 buttons: [
                     .init(
@@ -53,14 +53,14 @@ struct InterestNoEligibleWalletsView: View {
 struct InterestNoEligibleWalletsView_Previews: PreviewProvider {
     static var previews: some View {
         InterestNoEligibleWalletsView(
-            store: .init(
+            store: Store(
                 initialState: .init(
                     interestAccountRate: .init(
                         currencyCode: "BTC",
                         rate: 4.0
                     )
                 ),
-                reducer: InterestNoEligibleWalletsReducer()
+                reducer: { InterestNoEligibleWalletsReducer() }
             )
         )
     }

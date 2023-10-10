@@ -4,7 +4,7 @@ import BlockchainUI
 import ComposableArchitecture
 import Foundation
 
-public struct SwapSelectAccountRow: ReducerProtocol {
+public struct SwapSelectAccountRow: Reducer {
     public let app: AppProtocol
     public init(
         app: AppProtocol
@@ -45,7 +45,7 @@ public struct SwapSelectAccountRow: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { _, action in
             switch action {

@@ -37,7 +37,7 @@ final class AppHostingController: UIViewController {
         loggedInDependencyBridge: LoggedInDependencyBridgeAPI = resolve()
     ) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
         self.loggedInDependencyBridge = loggedInDependencyBridge
         self.siteMap = SiteMap(app: app)
         super.init(nibName: nil, bundle: nil)

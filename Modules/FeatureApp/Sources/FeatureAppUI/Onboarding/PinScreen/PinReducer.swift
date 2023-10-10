@@ -43,14 +43,14 @@ public enum PinCore {
     }
 }
 
-struct PinReducer: ReducerProtocol {
+struct PinReducer: Reducer {
 
     typealias State = PinCore.State
     typealias Action = PinCore.Action
 
     let alertPresenter: AlertViewPresenterAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .authenticate:

@@ -31,7 +31,7 @@ public struct SwapSelectAccountRowView: View {
             }
         }
         .bindings {
-            subscribe(viewStore.binding(\.$label), to: blockchain.coin.core.account[viewStore.accountId].label)
+            subscribe(viewStore.$label, to: blockchain.coin.core.account[viewStore.accountId].label)
         }
     }
 

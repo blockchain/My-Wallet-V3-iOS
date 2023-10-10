@@ -31,7 +31,7 @@ struct LostFundsWarningView: View {
 
     init(store: Store<LostFundsWarningState, LostFundsWarningAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -99,15 +99,17 @@ struct LostFundsWarningView: View {
 struct LostFundsWarningView_Previews: PreviewProvider {
     static var previews: some View {
         LostFundsWarningView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: LostFundsWarningReducer(
-                    mainQueue: .main,
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    passwordValidator: NoOpPasswordValidator(),
-                    externalAppOpener: NoOpExternalAppOpener(),
-                    errorRecorder: NoOpErrorRecoder()
-                )
+                reducer: {
+                    LostFundsWarningReducer(
+                        mainQueue: .main,
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        passwordValidator: NoOpPasswordValidator(),
+                        externalAppOpener: NoOpExternalAppOpener(),
+                        errorRecorder: NoOpErrorRecoder()
+                    )
+                }
             )
         )
     }

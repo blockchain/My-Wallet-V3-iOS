@@ -34,7 +34,7 @@ struct DefiTabsState: Equatable {
     var dex: DexDashboard.State = .init()
 }
 
-struct DashboardContent: ReducerProtocol {
+struct DashboardContent: Reducer {
     @Dependency(\.app) var app
 
     struct State: Equatable {
@@ -70,7 +70,7 @@ struct DashboardContent: ReducerProtocol {
         case defiDex(DexDashboard.Action)
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Scope(state: \State.externalTradingState.home, action: /Action.externalTradingHome) { () -> ExternalTradingDashboard in
             ExternalTradingDashboard(
                 app: app,

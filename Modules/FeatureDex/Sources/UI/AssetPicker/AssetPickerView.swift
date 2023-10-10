@@ -50,8 +50,8 @@ public struct AssetPickerView: View {
     @ViewBuilder
     private var searchBarSection: some View {
         SearchBar(
-            text: viewStore.binding(\.$searchText),
-            isFirstResponder: viewStore.binding(\.$isSearching),
+            text: viewStore.$searchText,
+            isFirstResponder: viewStore.$isSearching,
             cancelButtonText: L10n.AssetPicker.cancel,
             placeholder: L10n.AssetPicker.search
         )
@@ -214,7 +214,7 @@ struct AssetPickerView_Previews: PreviewProvider {
                     searchText: "",
                     isSearching: false
                 ),
-                reducer: AssetPicker()
+                reducer: { AssetPicker() }
             )
         )
         .app(app)

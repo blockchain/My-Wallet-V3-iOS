@@ -7,7 +7,7 @@ import FeatureTransactionDomain
 import PlatformKit
 import PlatformUIKit
 
-public struct SellEnterAmount: ReducerProtocol {
+public struct SellEnterAmount: Reducer {
     var app: AppProtocol
     public var onAmountChanged: (MoneyValue) -> Void
     public var onPreviewTapped: (MoneyValue) -> Void
@@ -152,7 +152,7 @@ public struct SellEnterAmount: ReducerProtocol {
 
     // MARK: - Reducer
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
 
         Scope(state: \.prefillButtonsState, action: /Action.prefillButtonAction) {
@@ -203,13 +203,15 @@ public struct SellEnterAmount: ReducerProtocol {
                         }
                     },
 
-                    minMaxAmountsPublisher
-                        .eraseToEffect()
-                        .map(Action.onMinMaxAmountsFetched),
+                    .publisher {
+                        minMaxAmountsPublisher
+                            .map(Action.onMinMaxAmountsFetched)
+                    },
 
-                    validationStatePublisher
-                        .eraseToEffect()
-                        .map(Action.onValidationStateFetched)
+                    .publisher {
+                        validationStatePublisher
+                            .map(Action.onValidationStateFetched)
+                    }
 
                 )
 
@@ -229,7 +231,7 @@ public struct SellEnterAmount: ReducerProtocol {
                         onAmountChanged(.zero(currency: moneyValue.currency))
                     }
 
-                    return EffectTask(value: .resetInput(newInput: nil))
+                    return Effect.send(.resetInput(newInput: nil))
                 }
 
                 return .none
@@ -264,9 +266,9 @@ public struct SellEnterAmount: ReducerProtocol {
                 )
 
                 if state.amountCryptoEntered?.isNotZero == true {
-                    return EffectTask(value: .resetInput(newInput: inputToFill))
+                    return Effect.send(.resetInput(newInput: inputToFill))
                 } else {
-                    return EffectTask(value: .resetInput(newInput: nil))
+                    return Effect.send(.resetInput(newInput: nil))
                 }
 
             case .resetInput(let input):
@@ -295,7 +297,7 @@ public struct SellEnterAmount: ReducerProtocol {
 
             case .onBackspace:
                 state.rawInput.backspace()
-                return .fireAndForget { [state] in
+                return .run { [state] _ in
                     if let amount = state.amountCryptoEntered {
                         onAmountChanged(amount)
                     }
@@ -326,7 +328,7 @@ public struct SellEnterAmount: ReducerProtocol {
                         to: moneyValue.displayMajorValue.doubleValue
                     )
 
-                    return EffectTask(value: .resetInput(newInput: state.amountCryptoEntered?.toDisplayString(includeSymbol: false)))
+                    return Effect.send(.resetInput(newInput: state.amountCryptoEntered?.toDisplayString(includeSymbol: false)))
 
                 default:
                     return .none

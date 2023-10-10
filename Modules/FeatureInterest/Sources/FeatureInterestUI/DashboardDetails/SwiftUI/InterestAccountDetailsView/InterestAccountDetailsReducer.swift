@@ -7,7 +7,7 @@ import FeatureInterestDomain
 import MoneyKit
 import PlatformKit
 
-struct InterestAccountDetailsReducer: ReducerProtocol {
+struct InterestAccountDetailsReducer: Reducer {
     
     typealias State = InterestAccountDetailsState
     typealias Action = InterestAccountDetailsAction
@@ -29,7 +29,7 @@ struct InterestAccountDetailsReducer: ReducerProtocol {
         self.mainQueue = mainQueue
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .loadInterestAccountBalanceInfo:
@@ -38,30 +38,28 @@ struct InterestAccountDetailsReducer: ReducerProtocol {
                 let overview = state.interestAccountOverview
                 let balance = overview.balance
                 let currency = overview.currency
-                return fiatCurrencyService
-                    .displayCurrencyPublisher
-                    .flatMap { [priceService] fiatCurrency -> AnyPublisher<PriceQuoteAtTime, Error> in
-                        priceService
-                            .price(
-                                of: currency,
-                                in: fiatCurrency
-                            )
-                            .eraseError()
+                return .run { send in
+                    do {
+                        let amount = try await fiatCurrencyService
+                            .displayCurrencyPublisher
+                            .flatMap { [priceService] fiatCurrency -> AnyPublisher<PriceQuoteAtTime, Error> in
+                                priceService
+                                    .price(
+                                        of: currency,
+                                        in: fiatCurrency
+                                    )
+                                    .eraseError()
+                            }
+                            .map(\.moneyValue)
+                            .map { moneyValue -> MoneyValue in
+                                balance.convert(using: moneyValue)
+                            }
+                            .receive(on: mainQueue).await()
+                        await send(.interestAccountFiatBalanceFetched(amount))
+                    } catch {
+                        await send(.interestAccountFiatBalanceFetchFailed)
                     }
-                    .map(\.moneyValue)
-                    .map { moneyValue -> MoneyValue in
-                        balance.convert(using: moneyValue)
-                    }
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        switch result {
-                        case .success(let amount):
-                            return .interestAccountFiatBalanceFetched(amount)
-                        case .failure:
-                            return .interestAccountFiatBalanceFetchFailed
-                        }
-                    }
+                }
             case .loadSupportedActions:
                 let account = blockchainAccountRepository
                     .accountWithCurrencyType(
@@ -89,27 +87,26 @@ struct InterestAccountDetailsReducer: ReducerProtocol {
                             .replaceError(with: false)
                     }
 
-                return Publishers
-                    .Zip(
-                        canTransfer,
-                        canWithdraw
-                    )
-                    .receive(on: mainQueue)
-                    .map { isTransferAvailable, isWithdrawAvailable -> [AssetAction] in
-                        var actions: [AssetAction] = []
-                        if isWithdrawAvailable {
-                            actions.append(.interestWithdraw)
+                return .run { send in
+                    let actions = try await Publishers
+                        .Zip(
+                            canTransfer,
+                            canWithdraw
+                        )
+                        .receive(on: mainQueue)
+                        .map { isTransferAvailable, isWithdrawAvailable -> [AssetAction] in
+                            var actions: [AssetAction] = []
+                            if isWithdrawAvailable {
+                                actions.append(.interestWithdraw)
+                            }
+                            if isTransferAvailable {
+                                actions.append(.interestTransfer)
+                            }
+                            return actions
                         }
-                        if isTransferAvailable {
-                            actions.append(.interestTransfer)
-                        }
-                        return actions
-                    }
-                    .replaceError(with: [])
-                    .eraseToEffect()
-                    .map { actions -> InterestAccountDetailsAction in
-                        .interestAccountActionsFetched(actions)
-                    }
+                        .replaceError(with: []).await()
+                    await send(.interestAccountActionsFetched(actions))
+                }
             case .interestAccountActionsFetched(let actions):
                 state.supportedActions = actions
                 state.isLoading = false
@@ -122,26 +119,26 @@ struct InterestAccountDetailsReducer: ReducerProtocol {
                     cryptoBalance: state.interestAccountOverview.balance.displayString,
                     fiatBalance: "Unknown"
                 )
-                return EffectTask(value: .loadSupportedActions)
+                return Effect.send(.loadSupportedActions)
             case .interestAccountFiatBalanceFetched(let moneyValue):
                 state.interestAccountBalanceSummary = .init(
                     currency: state.interestAccountOverview.currency,
                     cryptoBalance: state.interestAccountOverview.balance.displayString,
                     fiatBalance: moneyValue.displayString
                 )
-                return EffectTask(value: .loadSupportedActions)
+                return Effect.send(.loadSupportedActions)
             case .interestTransferTapped:
                 state.interestAccountActionSelection = .init(
                     currency: state.interestAccountOverview.currency,
                     action: .interestTransfer
                 )
-                return EffectTask(value: .dismissInterestDetailsScreen)
+                return Effect.send(.dismissInterestDetailsScreen)
             case .interestWithdrawTapped:
                 state.interestAccountActionSelection = .init(
                     currency: state.interestAccountOverview.currency,
                     action: .interestWithdraw
                 )
-                return EffectTask(value: .dismissInterestDetailsScreen)
+                return Effect.send(.dismissInterestDetailsScreen)
             case .loadCryptoInterestAccount,
                  .closeButtonTapped,
                  .interestAccountDescriptorTapped,

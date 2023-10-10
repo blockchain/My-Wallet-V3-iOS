@@ -15,7 +15,7 @@ import XCTest
 @testable import FeatureAuthenticationMock
 @testable import FeatureAuthenticationUI
 
-final class OnboardingReducerTests: XCTestCase {
+@MainActor final class OnboardingReducerTests: XCTestCase {
 
     var app: AppProtocol!
     var settingsApp: MockBlockchainSettingsApp!
@@ -107,10 +107,10 @@ final class OnboardingReducerTests: XCTestCase {
         XCTAssertNil(state.walletRecoveryContext)
     }
 
-    func test_should_authenticate_when_pinIsSet_and_guidSharedKey_are_set() {
+    func test_should_authenticate_when_pinIsSet_and_guidSharedKey_are_set() async {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onboardingReducer
+            reducer: { onboardingReducer }
         )
 
         // given
@@ -119,36 +119,38 @@ final class OnboardingReducerTests: XCTestCase {
         settingsApp.isPinSet = true
 
         // then
-        testStore.send(.start)
-        testStore.receive(.proceedToFlow) { state in
+        await testStore.send(.start)
+        await testStore.receive(.proceedToFlow) { state in
             state.pinState = .init()
         }
-        testStore.receive(.pin(.authenticate)) { state in
+        await testStore.receive(.pin(.authenticate)) { state in
             state.pinState?.authenticate = true
         }
     }
 
-    func test_should_passwordScreen_when_pin_is_not_set() {
+    func test_should_passwordScreen_when_pin_is_not_set() async {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: OnboardingReducer(
-                app: app,
-                appSettings: settingsApp,
-                credentialsStore: mockCredentialsStore,
-                alertPresenter: mockAlertPresenter,
-                mainQueue: mockQueue.eraseToAnyScheduler(),
-                deviceVerificationService: mockDeviceVerificationService,
-                legacyGuidRepository: mockLegacyGuidRepository,
-                legacySharedKeyRepository: mockLegacySharedKeyRepository,
-                mobileAuthSyncService: mockMobileAuthSyncService,
-                pushNotificationsRepository: mockPushNotificationsRepository,
-                walletPayloadService: mockWalletPayloadService,
-                externalAppOpener: mockExternalAppOpener,
-                forgetWalletService: mockForgetWalletService,
-                recaptchaService: mockRecaptchaService,
-                buildVersionProvider: { "v1.0.0" },
-                appUpgradeState: { .just(nil) }
-            )
+            reducer: {
+                OnboardingReducer(
+                    app: app,
+                    appSettings: settingsApp,
+                    credentialsStore: mockCredentialsStore,
+                    alertPresenter: mockAlertPresenter,
+                    mainQueue: mockQueue.eraseToAnyScheduler(),
+                    deviceVerificationService: mockDeviceVerificationService,
+                    legacyGuidRepository: mockLegacyGuidRepository,
+                    legacySharedKeyRepository: mockLegacySharedKeyRepository,
+                    mobileAuthSyncService: mockMobileAuthSyncService,
+                    pushNotificationsRepository: mockPushNotificationsRepository,
+                    walletPayloadService: mockWalletPayloadService,
+                    externalAppOpener: mockExternalAppOpener,
+                    forgetWalletService: mockForgetWalletService,
+                    recaptchaService: mockRecaptchaService,
+                    buildVersionProvider: { "v1.0.0" },
+                    appUpgradeState: { .just(nil) }
+                )
+            }
         )
 
         // given
@@ -157,19 +159,19 @@ final class OnboardingReducerTests: XCTestCase {
         settingsApp.isPinSet = false
 
         // then
-        testStore.send(.start)
-        testStore.receive(.proceedToFlow) { state in
+        await testStore.send(.start)
+        await testStore.receive(.proceedToFlow) { state in
             state.passwordRequiredState = .init(
                 walletIdentifier: self.mockLegacyGuidRepository.directGuid ?? ""
             )
         }
-        testStore.receive(.passwordScreen(.start))
+        await testStore.receive(.passwordScreen(.start))
     }
 
-    func test_should_authenticate_pinIsSet_and_icloud_restoration_exists() {
+    func test_should_authenticate_pinIsSet_and_icloud_restoration_exists() async {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onboardingReducer
+            reducer: { onboardingReducer }
         )
 
         // given
@@ -178,19 +180,19 @@ final class OnboardingReducerTests: XCTestCase {
         settingsApp.isPinSet = true
 
         // then
-        testStore.send(.start)
-        testStore.receive(.proceedToFlow) { state in
+        await testStore.send(.start)
+        await testStore.receive(.proceedToFlow) { state in
             state.pinState = .init()
         }
-        testStore.receive(.pin(.authenticate)) { state in
+        await testStore.receive(.pin(.authenticate)) { state in
             state.pinState?.authenticate = true
         }
     }
 
-    func test_should_passwordScreen_whenPin_not_set_and_icloud_restoration_exists() {
+    func test_should_passwordScreen_whenPin_not_set_and_icloud_restoration_exists() async {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onboardingReducer
+            reducer: { onboardingReducer }
         )
 
         // given
@@ -199,19 +201,19 @@ final class OnboardingReducerTests: XCTestCase {
         settingsApp.isPinSet = false
 
         // then
-        testStore.send(.start)
-        testStore.receive(.proceedToFlow) { state in
+        await testStore.send(.start)
+        await testStore.receive(.proceedToFlow) { state in
             state.passwordRequiredState = .init(
                 walletIdentifier: self.mockLegacyGuidRepository.directGuid ?? ""
             )
         }
-        testStore.receive(.passwordScreen(.start))
+        await testStore.receive(.passwordScreen(.start))
     }
 
-    func test_should_show_welcome_screen() {
+    func test_should_show_welcome_screen() async {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onboardingReducer
+            reducer: { onboardingReducer }
         )
 
         // given
@@ -221,19 +223,19 @@ final class OnboardingReducerTests: XCTestCase {
         settingsApp.set(encryptedPinPassword: nil)
 
         // then
-        testStore.send(.start)
-        testStore.receive(.proceedToFlow) { state in
+        await testStore.send(.start)
+        await testStore.receive(.proceedToFlow) { state in
             state.welcomeState = .init()
         }
-        testStore.receive(.welcomeScreen(.start)) { state in
+        await testStore.receive(.welcomeScreen(.start)) { state in
             state.welcomeState?.buildVersion = "v1.0.0"
         }
     }
 
-    func test_forget_wallet_should_show_welcome_screen() {
+    func test_forget_wallet_should_show_welcome_screen() async {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onboardingReducer
+            reducer: { onboardingReducer }
         )
 
         // given
@@ -242,30 +244,30 @@ final class OnboardingReducerTests: XCTestCase {
         settingsApp.isPinSet = true
 
         // then
-        testStore.send(.start)
-        testStore.receive(.proceedToFlow) { state in
+        await testStore.send(.start)
+        await testStore.receive(.proceedToFlow) { state in
             state.pinState = .init()
         }
-        testStore.receive(.pin(.authenticate)) { state in
+        await testStore.receive(.pin(.authenticate)) { state in
             state.pinState?.authenticate = true
         }
 
         // when sending forgetWallet as a direct action
-        testStore.send(.forgetWallet) { state in
+        await testStore.send(.forgetWallet) { state in
             state.pinState = nil
             state.welcomeState = .init()
         }
 
         // then
-        testStore.receive(.welcomeScreen(.start)) { state in
+        await testStore.receive(.welcomeScreen(.start)) { state in
             state.welcomeState?.buildVersion = "v1.0.0"
         }
     }
 
-    func test_forget_wallet_from_password_screen() {
+    func test_forget_wallet_from_password_screen() async {
         let testStore = TestStore(
             initialState: Onboarding.State(),
-            reducer: onboardingReducer
+            reducer: { onboardingReducer }
         )
 
         // given
@@ -274,24 +276,24 @@ final class OnboardingReducerTests: XCTestCase {
         settingsApp.isPinSet = false
 
         // then
-        testStore.send(.start)
-        testStore.receive(.proceedToFlow) { state in
+        await testStore.send(.start)
+        await testStore.receive(.proceedToFlow) { state in
             state.passwordRequiredState = .init(
                 walletIdentifier: self.mockLegacyGuidRepository.directGuid ?? ""
             )
         }
 
-        testStore.receive(.passwordScreen(.start))
+        await testStore.receive(.passwordScreen(.start))
         // when sending forgetWallet from password screen
-        testStore.send(.passwordScreen(.forgetWallet)) { state in
+        await testStore.send(.passwordScreen(.alert(.presented(.forgetWallet)))) { state in
             state.passwordRequiredState = nil
             state.welcomeState = .init()
         }
-        mockQueue.advance()
+        await mockQueue.advance()
 
         XCTAssertTrue(settingsApp.clearCalled)
 
-        testStore.receive(.welcomeScreen(.start)) { state in
+        await testStore.receive(.welcomeScreen(.start)) { state in
             state.welcomeState?.buildVersion = "v1.0.0"
         }
     }

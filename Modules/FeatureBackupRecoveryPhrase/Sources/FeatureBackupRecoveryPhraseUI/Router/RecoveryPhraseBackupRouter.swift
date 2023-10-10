@@ -94,13 +94,15 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
     }
 
     @objc func onFailed() {
-        let failedView = BackupRecoveryPhraseFailedView(store: .init(
+        let failedView = BackupRecoveryPhraseFailedView(store: Store(
             initialState: .init(),
-            reducer: BackupRecoveryPhraseFailed(
-              onConfirm: { [weak self] in
-                  self?.skipFlow()
-              }
-            )
+            reducer: {
+                BackupRecoveryPhraseFailed(
+                    onConfirm: { [weak self] in
+                        self?.skipFlow()
+                    }
+                )
+            }
         )).app(app)
 
        topViewController
@@ -109,13 +111,15 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
     }
 
     @objc func onSkip() {
-          let confirmView = BackupSkipConfirmView(store: .init(
+          let confirmView = BackupSkipConfirmView(store: Store(
               initialState: .init(),
-              reducer: BackupSkipConfirm(
-                onConfirm: { [weak self] in
-                    self?.skipFlow()
-                }
-              )
+              reducer: {
+                  BackupSkipConfirm(
+                    onConfirm: { [weak self] in
+                        self?.skipFlow()
+                    }
+                  )
+              }
           )).app(app)
 
          topViewController
@@ -173,16 +177,18 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
     {
         switch step {
         case .backupIntro:
-           let view = ViewIntroBackupView(store: .init(
+           let view = ViewIntroBackupView(store: Store(
                initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
-               reducer: ViewIntroBackup(
-                   onSkip: { [weak self] in
-                       self?.onSkip()
-                   },
-                   onNext: { [weak self] in
-                       self?.onNext()
-                   }
-               )
+               reducer: {
+                   ViewIntroBackup(
+                    onSkip: { [weak self] in
+                        self?.onSkip()
+                    },
+                    onNext: { [weak self] in
+                        self?.onNext()
+                    }
+                   )
+               }
            )).app(app)
 
             let viewController = UIHostingController(rootView: view)
@@ -197,26 +203,28 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
             return viewController
 
         case .viewRecoveryPhrase:
-           let view = ViewRecoveryPhraseView(store: .init(
+           let view = ViewRecoveryPhraseView(store: Store(
                initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
-               reducer: ViewRecoveryPhrase(
-                   recoveryPhraseRepository: resolve(),
-                   recoveryPhraseService: resolve(),
-                   cloudBackupService: resolve(),
-                   onNext: { [weak self] in
-                       self?.onNext()
-                   },
-                   onDone: { [weak self] in
-                       self?.onDone()
-                   },
-                   onFailed: { [weak self] in
-                       self?.onFailed()
-                   },
-                   onIcloudBackedUp: { [weak self] in
-                       self?.step = .backupPhraseSuccess
-                       self?.onNext()
-                   }
-               )
+               reducer: {
+                   ViewRecoveryPhrase(
+                    recoveryPhraseRepository: resolve(),
+                    recoveryPhraseService: resolve(),
+                    cloudBackupService: resolve(),
+                    onNext: { [weak self] in
+                        self?.onNext()
+                    },
+                    onDone: { [weak self] in
+                        self?.onDone()
+                    },
+                    onFailed: { [weak self] in
+                        self?.onFailed()
+                    },
+                    onIcloudBackedUp: { [weak self] in
+                        self?.step = .backupPhraseSuccess
+                        self?.onNext()
+                    }
+                   )
+               }
            )).app(app)
 
             let viewController = UIHostingController(rootView: view)
@@ -235,14 +243,16 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
             return viewController
 
         case .manualBackupPhrase:
-            let view = ManualBackupSeedPhraseView(store: .init(
+            let view = ManualBackupSeedPhraseView(store: Store(
                 initialState: .init(),
-                reducer: ManualBackupSeedPhrase(
-                    onNext: { [weak self] in
-                        self?.onNext()
-                    },
-                    recoveryPhraseVerifyingService: resolve()
-                )
+                reducer: {
+                    ManualBackupSeedPhrase(
+                        onNext: { [weak self] in
+                            self?.onNext()
+                        },
+                        recoveryPhraseVerifyingService: resolve()
+                    )
+                }
             )).app(app)
 
             let viewController = UIHostingController(rootView: view)
@@ -250,15 +260,17 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
             return viewController
 
         case .verifyBackupPhrase:
-            let view = VerifyRecoveryPhraseView(store: .init(
+            let view = VerifyRecoveryPhraseView(store: Store(
                 initialState: .init(),
-                reducer: VerifyRecoveryPhrase(
-                    recoveryPhraseRepository: resolve(),
-                    recoveryPhraseService: resolve(),
-                    onNext: { [weak self] in
-                        self?.onNext()
-                    }
-                )
+                reducer: {
+                    VerifyRecoveryPhrase(
+                        recoveryPhraseRepository: resolve(),
+                        recoveryPhraseService: resolve(),
+                        onNext: { [weak self] in
+                            self?.onNext()
+                        }
+                    )
+                }
             )).app(app)
 
             let viewController = UIHostingController(rootView: view)
@@ -266,13 +278,15 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
             return viewController
 
         case .backupPhraseSuccess:
-            let view = BackupRecoveryPhraseSuccessView(store: .init(
+            let view = BackupRecoveryPhraseSuccessView(store: Store(
                 initialState: .init(),
-                reducer: BackupRecoveryPhraseSuccess(
-                    onNext: { [weak self] in
-                        self?.endFlow()
-                    }
-                )
+                reducer: {
+                    BackupRecoveryPhraseSuccess(
+                        onNext: { [weak self] in
+                            self?.endFlow()
+                        }
+                    )
+                }
             )).app(app)
 
             let viewController = UIHostingController(rootView: view)

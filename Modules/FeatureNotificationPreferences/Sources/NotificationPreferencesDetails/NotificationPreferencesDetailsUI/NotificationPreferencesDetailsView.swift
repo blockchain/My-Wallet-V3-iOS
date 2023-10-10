@@ -12,7 +12,7 @@ public struct NotificationPreferencesDetailsView: View {
 
     public init(store: Store<NotificationPreferencesDetailsState, NotificationPreferencesDetailsAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -28,58 +28,56 @@ public struct NotificationPreferencesDetailsView: View {
 
 extension NotificationPreferencesDetailsView {
     @ViewBuilder func controlsViewSection() -> some View {
-        WithViewStore(store) { viewStore in
-            let requiredMethods = viewStore.notificationPreference.requiredMethods.map(\.method)
+        let requiredMethods = viewStore.notificationPreference.requiredMethods.map(\.method)
 
-            let allMethods = (
-                viewStore.notificationPreference.requiredMethods
-                    +
-                    viewStore.notificationPreference.optionalMethods
-            )
-            .uniqued { $0.id }
+        let allMethods = (
+            viewStore.notificationPreference.requiredMethods
+                +
+                viewStore.notificationPreference.optionalMethods
+        )
+        .uniqued { $0.id }
 
-            VStack(spacing: 30) {
-                ForEach(allMethods, id: \.self) { methodInfo in
-                    switch methodInfo.method {
-                    case .push:
-                        controlView(
-                            label: methodInfo.title,
-                            mandatory: requiredMethods.contains(.push),
-                            isOn: viewStore.binding(\.$pushSwitch.isOn)
-                        )
+        VStack(spacing: 30) {
+            ForEach(allMethods) { methodInfo in
+                switch methodInfo.method {
+                case .push:
+                    controlView(
+                        label: methodInfo.title,
+                        mandatory: requiredMethods.contains(.push),
+                        isOn: viewStore.$pushSwitch.isOn
+                    )
 
-                    case .email:
-                        controlView(
-                            label: methodInfo.title,
-                            mandatory: requiredMethods.contains(.email),
-                            isOn: viewStore.binding(\.$emailSwitch.isOn)
-                        )
+                case .email:
+                    controlView(
+                        label: methodInfo.title,
+                        mandatory: requiredMethods.contains(.email),
+                        isOn: viewStore.$emailSwitch.isOn
+                    )
 
-                    case .sms:
-                        controlView(
-                            label: methodInfo.title,
-                            mandatory: requiredMethods.contains(.sms),
-                            isOn: viewStore.binding(\.$smsSwitch.isOn)
-                        )
+                case .sms:
+                    controlView(
+                        label: methodInfo.title,
+                        mandatory: requiredMethods.contains(.sms),
+                        isOn: viewStore.$smsSwitch.isOn
+                    )
 
-                    case .inApp:
-                        controlView(
-                            label: methodInfo.title,
-                            mandatory: requiredMethods.contains(.inApp),
-                            isOn: viewStore.binding(\.$inAppSwitch.isOn)
-                        )
+                case .inApp:
+                    controlView(
+                        label: methodInfo.title,
+                        mandatory: requiredMethods.contains(.inApp),
+                        isOn: viewStore.$inAppSwitch.isOn
+                    )
 
-                    case .browser:
-                        controlView(
-                            label: methodInfo.title,
-                            mandatory: requiredMethods.contains(.browser),
-                            isOn: viewStore.binding(\.$browserSwitch.isOn)
-                        )
-                    }
+                case .browser:
+                    controlView(
+                        label: methodInfo.title,
+                        mandatory: requiredMethods.contains(.browser),
+                        isOn: viewStore.$browserSwitch.isOn
+                    )
                 }
             }
-            .padding(.top, 50)
         }
+        .padding(.top, 50)
         .onAppear {
             viewStore.send(.onAppear)
         }
@@ -113,7 +111,7 @@ extension NotificationPreferencesDetailsView {
     }
 
     private var headerViewSection: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 2) {
                 Text(viewStore.notificationPreference.title)
                     .typography(.title3)
@@ -131,9 +129,9 @@ struct NotificationPreferencesDetailsViewView_Previews: PreviewProvider {
         let notificationPreference = MockGenerator.marketingNotificationPreference
         PrimaryNavigationView {
             NotificationPreferencesDetailsView(
-                store: .init(
+                store: Store(
                     initialState: .init(notificationPreference: notificationPreference),
-                    reducer: NotificationPreferencesDetailsReducer()
+                    reducer: { NotificationPreferencesDetailsReducer() }
                 )
             )
         }

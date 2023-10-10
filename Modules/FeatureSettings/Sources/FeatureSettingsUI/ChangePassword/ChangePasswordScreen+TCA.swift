@@ -39,7 +39,7 @@ struct ChangePasswordState: Equatable {
     var error: Nabu.Error?
 }
 
-struct ChangePasswordReducer: ReducerProtocol {
+struct ChangePasswordReducer: Reducer {
 
     private let mainQueue: AnySchedulerOf<DispatchQueue>
     private let passwordRepository: PasswordRepositoryAPI
@@ -70,7 +70,7 @@ struct ChangePasswordReducer: ReducerProtocol {
     typealias State = ChangePasswordState
     typealias Action = ChangePasswordAction
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -90,17 +90,23 @@ struct ChangePasswordReducer: ReducerProtocol {
                     }
                     .eraseToAnyPublisher()
 
-                return test
-                    .flatMap { [state, passwordRepository] passwordOk -> AnyPublisher<Void, PasswordRepositoryError> in
-                        if passwordOk {
-                            return passwordRepository.changePassword(password: state.new)
-                        } else {
-                            return .failure(.invalidPassword)
-                        }
+                return .run { [new = state.new] send in
+                    do {
+                        try await test
+                            .flatMap { [passwordRepository] passwordOk -> AnyPublisher<Void, PasswordRepositoryError> in
+                                if passwordOk {
+                                    return passwordRepository.changePassword(password: new)
+                                } else {
+                                    return .failure(.invalidPassword)
+                                }
+                            }
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.didUpdatePassword(.success(())))
+                    } catch {
+                        await send(.didUpdatePassword(.failure(error as! PasswordRepositoryError)))
                     }
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(ChangePasswordAction.didUpdatePassword)
+                }
             case .didUpdatePassword(.failure(let error)):
                 state.loading = false
                 state.fatalError = UX.Error(error: error)

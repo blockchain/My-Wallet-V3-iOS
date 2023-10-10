@@ -21,7 +21,7 @@ public enum TopMoversPresenter {
     }
 }
 
-public struct TopMoversSection: ReducerProtocol {
+public struct TopMoversSection: Reducer {
     public let app: AppProtocol
     public let topMoversService: TopMoversServiceAPI
 
@@ -58,14 +58,15 @@ public struct TopMoversSection: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return app
-                    .modePublisher()
-                    .eraseToEffect()
-                    .map(TopMoversSection.Action.onAppModeFetched)
+                return .publisher {
+                    app
+                        .modePublisher()
+                        .map(TopMoversSection.Action.onAppModeFetched)
+                }
 
             case .onPricesDataFetched(let topMoversData):
                 return .run { send in

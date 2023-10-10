@@ -22,7 +22,7 @@ struct ChangePasswordView: View {
 
     init(store: Store<ChangePasswordState, ChangePasswordAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -50,7 +50,7 @@ struct ChangePasswordView: View {
             .dismissKeyboardOnScroll()
         }
         .primaryNavigation(title: LocalizedString.title)
-        .sheet(item: viewStore.binding(\.$fatalError)) { error in
+        .sheet(item: viewStore.$fatalError) { error in
             ErrorView(
                 ux: error,
                 navigationBarClose: true,
@@ -101,14 +101,14 @@ extension ChangePasswordView {
     private var currentPasswordField: some View {
         VStack {
             Input(
-                text: viewStore.binding(\.$current),
+                text: viewStore.$current,
                 isFirstResponder: $currentPassword,
                 shouldResignFirstResponderOnReturn: true,
                 label: LocalizationConstants.TextField.Title.currentPassword,
                 isSecure: !viewStore.passwordFieldTextVisible,
                 trailing: {
                     PasswordEyeSymbolButton(
-                        isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
+                        isPasswordVisible: viewStore.$passwordFieldTextVisible
                     )
                 }
             )
@@ -122,7 +122,7 @@ extension ChangePasswordView {
         let shouldShowError = viewStore.passwordRulesBreached.isNotEmpty
         return VStack {
             Input(
-                text: viewStore.binding(\.$new),
+                text: viewStore.$new,
                 isFirstResponder: $newPassword,
                 shouldResignFirstResponderOnReturn: true,
                 label: LocalizationConstants.TextField.Title.newPassword,
@@ -132,7 +132,7 @@ extension ChangePasswordView {
                 isSecure: !viewStore.passwordFieldTextVisible,
                 trailing: {
                     PasswordEyeSymbolButton(
-                        isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
+                        isPasswordVisible: viewStore.$passwordFieldTextVisible
                     )
                 }
             )
@@ -156,7 +156,7 @@ extension ChangePasswordView {
     private var passwordConfirmationField: some View {
         let shouldShowError = viewStore.confirmation.isNotEmpty && viewStore.confirmation != viewStore.new
         return Input(
-            text: viewStore.binding(\.$confirmation),
+            text: viewStore.$confirmation,
             isFirstResponder: $confirmationPassword,
             shouldResignFirstResponderOnReturn: true,
             label: LocalizationConstants.TextField.Title.confirmNewPassword,
@@ -166,7 +166,7 @@ extension ChangePasswordView {
             isSecure: !viewStore.passwordFieldTextVisible,
             trailing: {
                 PasswordEyeSymbolButton(
-                    isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
+                    isPasswordVisible: viewStore.$passwordFieldTextVisible
                 )
             }
         )

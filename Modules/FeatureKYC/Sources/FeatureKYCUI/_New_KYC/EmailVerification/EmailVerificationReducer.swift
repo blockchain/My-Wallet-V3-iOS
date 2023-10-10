@@ -28,7 +28,7 @@ struct EmailVerificationState: Equatable {
     var editEmailAddress: EditEmailState
     var emailVerified: EmailVerifiedState
 
-    var emailVerificationFailedAlert: AlertState<EmailVerificationAction>?
+    @PresentationState var emailVerificationFailedAlert: AlertState<EmailVerificationAction.AlertAction>?
 
     init(emailAddress: String) {
         self.verifyEmail = VerifyEmailState(emailAddress: emailAddress)
@@ -41,21 +41,25 @@ struct EmailVerificationState: Equatable {
 
 /// The `master` `Action`type  for the Email Verification Flow
 enum EmailVerificationAction: Equatable {
+    enum AlertAction {
+        case dismiss
+        case loadVerificationState
+    }
     case closeButtonTapped
     case didAppear
     case didDisappear
     case didEnterForeground
     case didReceiveEmailVerficationResponse(Result<EmailVerificationResponse, EmailVerificationCheckError>)
-    case dismissEmailVerificationFailedAlert
     case loadVerificationState
     case presentStep(EmailVerificationState.FlowStep)
     case verifyEmail(VerifyEmailAction)
     case emailVerified(EmailVerifiedAction)
     case editEmailAddress(EditEmailAction)
     case emailVerificationHelp(EmailVerificationHelpAction)
+    case alert(PresentationAction<AlertAction>)
 }
 
-struct EmailVerificationReducer: ReducerProtocol {
+struct EmailVerificationReducer: Reducer {
 
     typealias State = EmailVerificationState
     typealias Action = EmailVerificationAction
@@ -65,17 +69,17 @@ struct EmailVerificationReducer: ReducerProtocol {
     let flowCompletionCallback: ((FlowResult) -> Void)?
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let pollingQueue: AnySchedulerOf<DispatchQueue>
-    let openMailApp: () -> EffectTask<Bool>
+    let openMailApp: () async -> Bool
     let app: AppProtocol
 
     init(
         analyticsRecorder: AnalyticsEventRecorderAPI,
         emailVerificationService: EmailVerificationServiceAPI,
         flowCompletionCallback: ((FlowResult) -> Void)?,
-        openMailApp: @escaping () -> EffectTask<Bool>,
+        openMailApp: @escaping () async -> Bool,
         app: AppProtocol,
-        mainQueue: AnySchedulerOf<DispatchQueue> = .main,
-        pollingQueue: AnySchedulerOf<DispatchQueue> = DispatchQueue.global(qos: .background).eraseToAnyScheduler()
+        mainQueue: AnySchedulerOf<DispatchQueue>,
+        pollingQueue: AnySchedulerOf<DispatchQueue>
     ) {
         self.analyticsRecorder = analyticsRecorder
         self.emailVerificationService = emailVerificationService
@@ -86,7 +90,7 @@ struct EmailVerificationReducer: ReducerProtocol {
         self.openMailApp = openMailApp
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Scope(state: \.verifyEmail, action: /Action.verifyEmail) {
             VerifyEmailReducer(openMailApp: openMailApp)
         }
@@ -116,22 +120,26 @@ struct EmailVerificationReducer: ReducerProtocol {
                 return .none
 
             case .didAppear:
-                return EffectTask.timer(
-                    id: TimerIdentifier(),
-                    every: 5,
-                    on: pollingQueue
-                )
-                .map { _ in .loadVerificationState }
-                .receive(on: mainQueue)
-                .eraseToEffect()
+                return Effect.run { send in
+                    for await _ in pollingQueue.timer(interval: .seconds(5)) {
+                        mainQueue.schedule {
+                            do {
+                                Task { @MainActor in
+                                    send(.loadVerificationState)
+                                }
+                            }
+                        }
+                    }
+                }
+                .cancellable(id: TimerIdentifier())
 
             case .didDisappear:
                 return .cancel(id: TimerIdentifier())
 
             case .didEnterForeground:
                 return .merge(
-                    EffectTask(value: .presentStep(.loadingVerificationState)),
-                    EffectTask(value: .loadVerificationState)
+                    Effect.send(.presentStep(.loadingVerificationState)),
+                    Effect.send(.loadVerificationState)
                 )
 
             case .didReceiveEmailVerficationResponse(let response):
@@ -140,8 +148,8 @@ struct EmailVerificationReducer: ReducerProtocol {
                     guard state.flowStep != .editEmailAddress else {
                         return .none
                     }
-                    return EffectTask(
-                        value: .presentStep(object.status == .verified ? .emailVerifiedPrompt : .verifyEmailPrompt)
+                    return Effect.send(
+                        .presentStep(object.status == .verified ? .emailVerifiedPrompt : .verifyEmailPrompt)
                     )
 
                 case .failure:
@@ -154,18 +162,24 @@ struct EmailVerificationReducer: ReducerProtocol {
                         ),
                         secondaryButton: .cancel(TextState(L10n.GenericError.cancelButtonTitle))
                     )
-                    return EffectTask(value: .presentStep(.verificationCheckFailed))
+                    return Effect.send(.presentStep(.verificationCheckFailed))
                 }
 
-            case .loadVerificationState:
-                return emailVerificationService.checkEmailVerificationStatus()
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(EmailVerificationAction.didReceiveEmailVerficationResponse)
+            case .loadVerificationState, .alert(.presented(.loadVerificationState)):
+                return .run { send in
+                    do {
+                        let status = try await emailVerificationService
+                            .checkEmailVerificationStatus()
+                            .receive(on: mainQueue).await()
+                        await send(.didReceiveEmailVerficationResponse(.success(status)))
+                    } catch {
+                        await send(.didReceiveEmailVerficationResponse(.failure(error as! EmailVerificationCheckError)))
+                    }
+                }
 
-            case .dismissEmailVerificationFailedAlert:
+            case .alert(.presented(.dismiss)), .alert(.dismiss):
                 state.emailVerificationFailedAlert = nil
-                return .init(value: .presentStep(.verifyEmailPrompt))
+                return Effect.send(.presentStep(.verifyEmailPrompt))
 
             case .presentStep(let flowStep):
                 state.flowStep = flowStep
@@ -174,7 +188,7 @@ struct EmailVerificationReducer: ReducerProtocol {
             case .verifyEmail(let subaction):
                 switch subaction {
                 case .tapGetEmailNotReceivedHelp:
-                    return .init(value: .presentStep(.emailVerificationHelp))
+                    return Effect.send(.presentStep(.emailVerificationHelp))
 
                 default:
                     return .none
@@ -184,7 +198,7 @@ struct EmailVerificationReducer: ReducerProtocol {
                 switch subaction {
                 case .acknowledgeEmailVerification:
                     flowCompletionCallback?(.completed)
-                    return .fireAndForget {
+                    return .run { _ in
                         app.post(event: blockchain.ux.kyc.event.status.did.change)
                     }
                 }
@@ -192,17 +206,17 @@ struct EmailVerificationReducer: ReducerProtocol {
             case .emailVerificationHelp(let subaction):
                 switch subaction {
                 case .editEmailAddress:
-                    return .init(value: .presentStep(.editEmailAddress))
+                    return Effect.send(.presentStep(.editEmailAddress))
 
                 case .didReceiveEmailSendingResponse(let response):
                     switch response {
                     case .success:
-                        return .init(value: .presentStep(.verifyEmailPrompt))
+                        return Effect.send(.presentStep(.verifyEmailPrompt))
 
                     default:
                         break
                     }
-                case .sendVerificationEmail:
+                case .alert(.presented(.sendVerificationEmail)):
                     analyticsRecorder.record(event:
                         AnalyticsEvents.New.Onboarding.emailVerificationRequested(origin: .verification)
                     )
@@ -219,7 +233,7 @@ struct EmailVerificationReducer: ReducerProtocol {
                         // updating email address for the flow so we are certain that (1.) the user wants to confirm and (2.) the change is reflected on the backend
                         state.verifyEmail.emailAddress = state.editEmailAddress.emailAddress
                         state.emailVerificationHelp.emailAddress = state.editEmailAddress.emailAddress
-                        return .init(value: .presentStep(.verifyEmailPrompt))
+                        return Effect.send(.presentStep(.verifyEmailPrompt))
 
                     default:
                         break

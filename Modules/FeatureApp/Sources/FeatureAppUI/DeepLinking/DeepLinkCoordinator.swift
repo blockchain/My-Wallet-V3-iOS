@@ -237,10 +237,12 @@ public final class DeepLinkCoordinator: Client.Observer {
 
         let referralView = ReferFriendView(store: .init(
             initialState: .init(referralInfo: referral),
-            reducer: ReferFriendReducer(
-                mainQueue: .main,
-                analyticsRecorder: DIKit.resolve()
-            )
+            reducer: {
+                ReferFriendReducer(
+                    mainQueue: .main,
+                    analyticsRecorder: DIKit.resolve()
+                )
+            }
         ))
 
         window

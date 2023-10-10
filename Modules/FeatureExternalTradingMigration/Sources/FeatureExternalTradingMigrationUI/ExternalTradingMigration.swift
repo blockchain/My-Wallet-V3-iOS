@@ -6,7 +6,7 @@ import Errors
 import FeatureExternalTradingMigrationDomain
 import Foundation
 
-public struct ExternalTradingMigration: ReducerProtocol {
+public struct ExternalTradingMigration: Reducer {
     public enum Flow {
         case existingUsersNoAssets
         case existingUserAssetsNoConsolidationNeeded
@@ -57,7 +57,7 @@ public struct ExternalTradingMigration: ReducerProtocol {
         self.externalTradingMigrationService = externalTradingMigrationService
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {

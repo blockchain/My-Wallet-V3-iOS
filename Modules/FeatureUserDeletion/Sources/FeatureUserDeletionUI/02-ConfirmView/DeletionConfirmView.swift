@@ -13,7 +13,7 @@ public struct DeletionConfirmView: View {
 
     public init(store: Store<DeletionConfirmState, DeletionConfirmAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -64,10 +64,8 @@ public struct DeletionConfirmView: View {
 
             let shouldShowError = viewStore.shouldShowInvalidInputUI
             Input(
-                text: viewStore.binding(\.$textFieldText),
-                isFirstResponder: viewStore
-                    .binding(\.$firstResponder)
-                    .equals(.confirmation),
+                text: viewStore.$textFieldText,
+                isFirstResponder: viewStore.$firstResponder.equals(.confirmation),
                 label: LocalizedString.textField.label,
                 subText: shouldShowError ? LocalizedString.textField.errorSubText : nil,
                 subTextStyle: shouldShowError ? .error : .default,
@@ -108,13 +106,13 @@ struct DeletionConfirm_Previews: PreviewProvider {
             DeletionConfirmView(
                 store: Store(
                     initialState: DeletionConfirmState(),
-                    reducer: DeletionConfirmReducer.preview
+                    reducer: { DeletionConfirmReducer.preview }
                 )
             )
             DeletionConfirmView(
                 store: Store(
                     initialState: loadingState,
-                    reducer: DeletionConfirmReducer.preview
+                    reducer: { DeletionConfirmReducer.preview }
                 )
             )
         }

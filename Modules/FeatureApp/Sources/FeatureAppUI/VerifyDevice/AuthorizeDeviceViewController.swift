@@ -27,7 +27,7 @@ public final class AuthorizeDeviceViewController: UINavigationController {
     ) {
         self.store = store
         self.viewDismissed = viewDismissed
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
         super.init(nibName: nil, bundle: nil)
     }
 

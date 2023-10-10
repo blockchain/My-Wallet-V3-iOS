@@ -17,6 +17,7 @@ enum ClaimIntroductionRoute: NavigationRoute {
     case benefits
     case searchDomain
 
+    @MainActor
     @ViewBuilder
     func destination(in store: Store<ClaimIntroductionState, ClaimIntroductionAction>) -> some View {
         switch self {
@@ -46,7 +47,7 @@ struct ClaimIntroductionState: NavigationState {
     var isModalOpen: Bool = true
 }
 
-struct ClaimIntroduction: ReducerProtocol {
+struct ClaimIntroduction: Reducer {
     typealias State = ClaimIntroductionState
     typealias Action = ClaimIntroductionAction
 
@@ -57,7 +58,7 @@ struct ClaimIntroduction: ReducerProtocol {
     let orderDomainRepository: OrderDomainRepositoryAPI
     let userInfoProvider: () -> AnyPublisher<OrderDomainUserInfo, Error>
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .route(.some(let route)):
@@ -123,17 +124,19 @@ public final class ClaimIntroductionHostingController: UIViewController {
         self.searchDomainRepository = searchDomainRepository
         self.orderDomainRepository = orderDomainRepository
         self.userInfoProvider = userInfoProvider
-        self.store = .init(
+        self.store = Store(
             initialState: ClaimIntroductionState(),
-            reducer: ClaimIntroduction(
-                analyticsRecorder: analyticsRecorder,
-                externalAppOpener: externalAppOpener,
-                searchDomainRepository: searchDomainRepository,
-                orderDomainRepository: orderDomainRepository,
-                userInfoProvider: userInfoProvider
-            )
+            reducer: {
+                ClaimIntroduction(
+                    analyticsRecorder: analyticsRecorder,
+                    externalAppOpener: externalAppOpener,
+                    searchDomainRepository: searchDomainRepository,
+                    orderDomainRepository: orderDomainRepository,
+                    userInfoProvider: userInfoProvider
+                )
+            }
         )
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
         self.contentView = UIHostingController(rootView: ClaimIntroductionView(store: store))
         super.init(nibName: nil, bundle: nil)
     }
@@ -186,7 +189,7 @@ public struct ClaimIntroductionView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             PrimaryNavigationView {
                 GeometryReader { geometry in
                     ScrollView {
@@ -277,19 +280,21 @@ public struct ClaimIntroductionView: View {
 struct ClaimIntroductionView_Previews: PreviewProvider {
     static var previews: some View {
         ClaimIntroductionView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: ClaimIntroduction(
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    externalAppOpener: ToLogAppOpener(),
-                    searchDomainRepository: SearchDomainRepository(
-                        apiClient: SearchDomainClient.mock
-                    ),
-                    orderDomainRepository: OrderDomainRepository(
-                        apiClient: OrderDomainClient.mock
-                    ),
-                    userInfoProvider: { .empty() }
-                )
+                reducer: {
+                    ClaimIntroduction(
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        externalAppOpener: ToLogAppOpener(),
+                        searchDomainRepository: SearchDomainRepository(
+                            apiClient: SearchDomainClient.mock
+                        ),
+                        orderDomainRepository: OrderDomainRepository(
+                            apiClient: OrderDomainClient.mock
+                        ),
+                        userInfoProvider: { .empty() }
+                    )
+                }
             )
         )
     }

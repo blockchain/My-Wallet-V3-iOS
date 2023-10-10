@@ -5,7 +5,7 @@ import Errors
 import FeatureUserDeletionDomain
 import Foundation
 
-public struct UserDeletionReducer: ReducerProtocol {
+public struct UserDeletionReducer: Reducer {
 
     public typealias State = UserDeletionState
     public typealias Action = UserDeletionAction
@@ -30,7 +30,7 @@ public struct UserDeletionReducer: ReducerProtocol {
         self.logoutAndForgetWallet = logoutAndForgetWallet
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {

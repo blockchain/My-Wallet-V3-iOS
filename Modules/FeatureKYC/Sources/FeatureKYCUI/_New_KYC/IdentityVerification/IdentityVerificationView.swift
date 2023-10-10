@@ -13,7 +13,7 @@ struct IdentityVerificationView: View {
     let store: Store<IdentityVerificationState, IdentityVerificationAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading) {
                 VStack(alignment: .leading) {
                     headerIcon
@@ -64,7 +64,7 @@ struct IdentityVerificationView: View {
     }
 
     private var documentsTypesItemsList: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if viewStore.isLoading {
                 HStack {
                     Spacer()

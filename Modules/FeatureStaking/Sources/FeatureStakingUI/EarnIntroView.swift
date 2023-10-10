@@ -14,7 +14,7 @@ public struct EarnIntroView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             PrimaryNavigationView {
                 contentView
                     .primaryNavigation(trailing: {
@@ -151,7 +151,7 @@ extension EarnIntro.State.Step {
 extension EarnIntroView {
 
     @ViewBuilder private func carouselContentSection() -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             #if os(iOS)
             TabView(
                 selection: viewStore.binding(
@@ -184,7 +184,7 @@ extension EarnIntroView {
     }
 
     @ViewBuilder private func buttonsSection() -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: .zero) {
                 Spacer()
                 PageControl(
@@ -215,7 +215,7 @@ extension EarnIntroView {
     }
 }
 
-public struct EarnIntro: ReducerProtocol {
+public struct EarnIntro: Reducer {
 
     var app: AppProtocol
     var onDismiss: () -> Void
@@ -228,17 +228,17 @@ public struct EarnIntro: ReducerProtocol {
         self.onDismiss = onDismiss
     }
 
-    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.EffectTask<Action> {
+    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.Effect<Action> {
         switch action {
         case .onAppear:
-            return .fireAndForget {
+            return .run { _ in
                 app.state.set(blockchain.ux.earn.intro.did.show, to: true)
             }
         case .didChangeStep(let step):
             state.currentStep = step
             return .none
         case .onDismiss:
-            return .fireAndForget {
+            return .run { _ in
                 onDismiss()
             }
         }

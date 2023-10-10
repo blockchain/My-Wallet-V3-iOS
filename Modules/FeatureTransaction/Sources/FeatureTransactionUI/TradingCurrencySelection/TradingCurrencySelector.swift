@@ -20,7 +20,7 @@ enum TradingCurrency {
         case didSelect(FiatCurrency)
     }
 
-    public struct Reducer: ReducerProtocol {
+    public struct TradingCurrencyReducer: Reducer {
 
         typealias State = TradingCurrency.State
         typealias Action = TradingCurrency.Action
@@ -29,17 +29,17 @@ enum TradingCurrency {
         let selectionHandler: (FiatCurrency) -> Void
         let analyticsRecorder: AnalyticsEventRecorderAPI
 
-        public var body: some ReducerProtocol<State, Action> {
+        public var body: some Reducer<State, Action> {
             TradingCurrencyAnalyticsReducer(analyticsRecorder: analyticsRecorder)
             Reduce { _, action in
                 switch action {
                 case .close:
-                    return .fireAndForget {
+                    return .run { _ in
                         closeHandler()
                     }
 
                 case .didSelect(let fiatCurrency):
-                    return .fireAndForget {
+                    return .run { _ in
                         selectionHandler(fiatCurrency)
                     }
                 }
@@ -55,7 +55,7 @@ struct TradingCurrencySelector: View {
     let store: Store<TradingCurrency.State, TradingCurrency.Action>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ModalContainer(
                 onClose: { viewStore.send(.close) },
                 content: {
@@ -109,16 +109,18 @@ struct TradingCurrencySelector_Previews: PreviewProvider {
 
     static var previews: some View {
         TradingCurrencySelector(
-            store: .init(
+            store: Store(
                 initialState: .init(
                     displayCurrency: .JPY,
                     currencies: FiatCurrency.allEnabledFiatCurrencies
                 ),
-                reducer: TradingCurrency.Reducer(
-                    closeHandler: {},
-                    selectionHandler: { _ in },
-                    analyticsRecorder: NoOpAnalyticsRecorder()
-                )
+                reducer: {
+                    TradingCurrency.TradingCurrencyReducer(
+                        closeHandler: {},
+                        selectionHandler: { _ in },
+                        analyticsRecorder: NoOpAnalyticsRecorder()
+                    )
+                }
             )
         )
     }

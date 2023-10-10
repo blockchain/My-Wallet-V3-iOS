@@ -30,11 +30,13 @@ public final class AssetListHostingViewController: UIViewController {
         super.viewDidLoad()
         embed(
             AssetListView(
-                store: .init(
+                store: Store(
                     initialState: .empty,
-                    reducer: AssetListReducer(
-                        assetProviderService: assetProviderService as! AssetProviderService
-                    )
+                    reducer: {
+                        AssetListReducer(
+                            assetProviderService: assetProviderService as! AssetProviderService
+                        )
+                    }
                 )
             )
         )

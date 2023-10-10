@@ -68,7 +68,7 @@ public enum Onboarding {
 }
 
 /// The reducer responsible for handing Pin screen and Login/Onboarding screen related action and state.
-struct OnboardingReducer: ReducerProtocol {
+struct OnboardingReducer: Reducer {
 
     typealias State = Onboarding.State
     typealias Action = Onboarding.Action
@@ -90,27 +90,28 @@ struct OnboardingReducer: ReducerProtocol {
     var buildVersionProvider: () -> String
     var appUpgradeState: () -> AnyPublisher<AppUpgradeState?, Never>
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .showAppUpgrade(let appUpgradeState):
                 state.appUpgradeState = appUpgradeState
                 return .none
             case .appUpgrade(AppUpgradeAction.skip):
-                return EffectTask(value: .proceedToFlow)
+                return Effect.send(.proceedToFlow)
             case .start:
                 return .merge(
-                    .fireAndForget {
+                    .run { _ in
                         recaptchaService.load()
                     },
-                    appUpgradeState()
-                        .eraseToEffect()
-                        .map { state in
-                            guard let state else {
-                                return .proceedToFlow
+                    .publisher {
+                        appUpgradeState()
+                            .map { state in
+                                guard let state else {
+                                    return .proceedToFlow
+                                }
+                                return .showAppUpgrade(state)
                             }
-                            return .showAppUpgrade(state)
-                        }
+                    }
                 )
             case .proceedToFlow:
                 return decideFlow(
@@ -143,32 +144,34 @@ struct OnboardingReducer: ReducerProtocol {
                 return .none
             case .welcomeScreen(.requestedToRestoreWallet(let walletRecovery)):
                 switch walletRecovery {
-                case .metadataRecovery(let seedPhrase):
+                case .metadataRecovery:
                     state.walletRecoveryContext = .metadataRecovery
                     return .none
                 case .importRecovery:
                     state.walletRecoveryContext = .importRecovery
                     return .none
-                case .resetAccountRecovery(let email, let newPassword, let nabuInfo):
+                case .resetAccountRecovery:
                     return .none
                 }
             case .welcomeScreen(.informForWalletInitialization):
-                return EffectTask(value: .informForWalletInitialization)
+                return Effect.send(.informForWalletInitialization)
             case .welcomeScreen:
                 return .none
-            case .passwordScreen(.forgetWallet),
+            case .passwordScreen(.alert(.presented(.forgetWallet))),
                  .forgetWallet:
                 state.passwordRequiredState = nil
                 state.pinState = nil
                 state.welcomeState = .init()
 
                 return .merge(
-                    .fireAndForget {
+                    .run { _ in
                         appSettings.clear()
                         credentialsStore.erase()
                     },
-                    forgetWalletService.forget().fireAndForget(),
-                    EffectTask(value: .welcomeScreen(.start))
+                    .run { _ in
+                        try await forgetWalletService.forget().await()
+                    },
+                    Effect.send(.welcomeScreen(.start))
                 )
             case .passwordScreen:
                 return .none
@@ -176,14 +179,14 @@ struct OnboardingReducer: ReducerProtocol {
                 guard state.welcomeState != nil else {
                     return .none
                 }
-                return EffectTask(value: .welcomeScreen(.informSecondPasswordDetected))
+                return Effect.send(.welcomeScreen(.informSecondPasswordDetected))
 
             case .informForWalletInitialization:
                 return .none
             case .handleWalletDecryptionError:
                 if state.welcomeState?.manualCredentialsState != nil {
-                    return EffectTask(
-                        value: .welcomeScreen(
+                    return Effect.send(
+                        .welcomeScreen(
                             .manualPairing(
                                 .password(
                                     .showIncorrectPasswordError(true)
@@ -192,8 +195,8 @@ struct OnboardingReducer: ReducerProtocol {
                         )
                     )
                 }
-                return EffectTask(
-                    value: .welcomeScreen(
+                return Effect.send(
+                    .welcomeScreen(
                         .emailLogin(
                             .verifyDevice(
                                 .credentials(
@@ -209,13 +212,13 @@ struct OnboardingReducer: ReducerProtocol {
                 // if it is from the restore wallet screen
                 if state.welcomeState?.restoreWalletState != nil {
                     return .merge(
-                        EffectTask(value: .welcomeScreen(.restoreWallet(.setResetPasswordScreenVisible(true))))
+                        Effect.send(.welcomeScreen(.restoreWallet(.setResetPasswordScreenVisible(true))))
                     )
                     // if it is from the trouble logging in screen
                 } else if state.welcomeState?.emailLoginState != nil {
                     return .merge(
-                        EffectTask(
-                            value: .welcomeScreen(
+                        Effect.send(
+                            .welcomeScreen(
                                 .emailLogin(
                                     .verifyDevice(
                                         .credentials(
@@ -266,38 +269,38 @@ func decideFlow(
     legacyGuidRepository: LegacyGuidRepositoryAPI,
     legacySharedKeyRepository: LegacySharedKeyRepositoryAPI,
     settingsAuthenticating: AppSettingsAuthenticating
-) -> EffectTask<Onboarding.Action> {
+) -> Effect<Onboarding.Action> {
     state.appUpgradeState = nil
     if legacyGuidRepository.directGuid != nil, legacySharedKeyRepository.directSharedKey != nil {
         // Original flow
         if settingsAuthenticating.isPinSet {
             state.pinState = .init()
             state.passwordRequiredState = nil
-            return EffectTask(value: .pin(.authenticate))
+            return Effect.send(.pin(.authenticate))
         } else {
             state.pinState = nil
             state.passwordRequiredState = .init(
                 walletIdentifier: legacyGuidRepository.directGuid ?? ""
             )
-            return EffectTask(value: .passwordScreen(.start))
+            return Effect.send(.passwordScreen(.start))
         }
     } else if settingsAuthenticating.pinKey != nil, settingsAuthenticating.encryptedPinPassword != nil {
         // iCloud restoration flow
         if settingsAuthenticating.isPinSet {
             state.pinState = .init()
             state.passwordRequiredState = nil
-            return EffectTask(value: .pin(.authenticate))
+            return Effect.send(.pin(.authenticate))
         } else {
             state.pinState = nil
             state.passwordRequiredState = .init(
                 walletIdentifier: legacyGuidRepository.directGuid ?? ""
             )
-            return EffectTask(value: .passwordScreen(.start))
+            return Effect.send(.passwordScreen(.start))
         }
     } else {
         state.pinState = nil
         state.passwordRequiredState = nil
         state.welcomeState = .init()
-        return EffectTask(value: .welcomeScreen(.start))
+        return Effect.send(.welcomeScreen(.start))
     }
 }

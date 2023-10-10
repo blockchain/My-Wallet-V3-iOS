@@ -14,7 +14,7 @@ public struct AnnouncementsView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if !viewStore.announcements.isEmpty || viewStore.showCompletion {
                 contentView
             } else if !viewStore.initialized {
@@ -29,7 +29,7 @@ public struct AnnouncementsView: View {
     }
 
     @ViewBuilder func completionView(_ completion: @escaping () -> Void) -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if viewStore.state.showCompletion {
                 Text(LocalizationConstants.Announcements.done)
                     .typography(.title3)
@@ -64,7 +64,7 @@ public struct AnnouncementsView: View {
     }
 
     @ViewBuilder var contentView: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack(alignment: .topTrailing) {
                 ZStack(alignment: .center) {
                     completionView {

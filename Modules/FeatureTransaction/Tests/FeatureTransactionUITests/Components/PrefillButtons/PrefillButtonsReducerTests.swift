@@ -10,7 +10,7 @@ import MoneyKit
 import OrderedCollections
 import XCTest
 
-final class PrefillButtonsReducerTests: XCTestCase {
+@MainActor final class PrefillButtonsReducerTests: XCTestCase {
 
     private var mockMainQueue: ImmediateSchedulerOf<DispatchQueue>!
     private let lastPurchase = FiatValue.create(minor: 900, currency: .USD)
@@ -87,12 +87,14 @@ final class PrefillButtonsReducerTests: XCTestCase {
     func test_roundingLastPurchase_after_onAppear() async {
         let testStore = TestStore(
             initialState: .init(),
-            reducer: PrefillButtons(
-                app: App.test,
-                lastPurchasePublisher: .just(lastPurchase),
-                maxLimitPublisher: .just(maxLimit),
-                onValueSelected: { _, _ in }
-            )
+            reducer: {
+                PrefillButtons(
+                    app: App.test,
+                    lastPurchasePublisher: .just(lastPurchase),
+                    maxLimitPublisher: .just(maxLimit),
+                    onValueSelected: { _, _ in }
+                )
+            }
         )
 
         let task = await testStore.send(.onAppear)
@@ -108,23 +110,25 @@ final class PrefillButtonsReducerTests: XCTestCase {
         await task.cancel()
     }
 
-    func test_select_triggersEnvironmentClosure() {
+    func test_select_triggersEnvironmentClosure() async {
         let e = expectation(description: "Closure should be triggered")
         let testStore = TestStore(
             initialState: .init(),
-            reducer: PrefillButtons(
-                app: App.test,
-                lastPurchasePublisher: .just(lastPurchase),
-                maxLimitPublisher: .just(maxLimit),
-                onValueSelected: { value, _ in
-                    XCTAssertEqual(value.currency, .USD)
-                    XCTAssertEqual(value.minorAmount, BigInt(123))
-                    e.fulfill()
-                }
-            )
+            reducer: {
+                PrefillButtons(
+                    app: App.test,
+                    lastPurchasePublisher: .just(lastPurchase),
+                    maxLimitPublisher: .just(maxLimit),
+                    onValueSelected: { value, _ in
+                        XCTAssertEqual(value.currency, .USD)
+                        XCTAssertEqual(value.minorAmount, BigInt(123))
+                        e.fulfill()
+                    }
+                )
+            }
         )
 
-        testStore.send(.select(FiatValue.create(minor: 123, currency: .USD), .small))
-        waitForExpectations(timeout: 1)
+        await testStore.send(.select(FiatValue.create(minor: 123, currency: .USD), .small))
+        await fulfillment(of: [e], timeout: 1)
     }
 }

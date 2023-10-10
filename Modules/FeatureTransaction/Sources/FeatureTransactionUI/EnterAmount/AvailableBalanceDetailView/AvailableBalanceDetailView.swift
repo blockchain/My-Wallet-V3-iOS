@@ -59,7 +59,7 @@ public struct AvailableBalanceDetailViewState: Equatable {
 
 // MARK: - Reducer
 
-public struct AvailableBalanceDetailViewReducer: ReducerProtocol {
+public struct AvailableBalanceDetailViewReducer: Reducer {
     
     public typealias State = AvailableBalanceDetailViewState
     public typealias Action = AvailableBalanceDetailViewAction
@@ -100,7 +100,7 @@ public struct AvailableBalanceDetailViewReducer: ReducerProtocol {
         )
     }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -115,23 +115,24 @@ public struct AvailableBalanceDetailViewReducer: ReducerProtocol {
                     transactionIsFeeLessPublisher
                 )
 
-                return Publishers.Zip3(
-                    balancePublishers,
-                    feesPublishers,
-                    app
-                        .publisher(for: blockchain.ux.transaction.id, as: String.self)
-                        .compactMap(\.value)
-                        .compactMap { AssetAction(rawValue: $0) }
-                )
-                    .map { payload -> (FiatValue, FiatValue, FiatValue, AssetAction, Bool) in
-                        let (balance, availableBalance) = payload.0
-                        let (fees, isTxFeeLess) = payload.1
-                        let assetAction = payload.2
-                        return (balance, availableBalance, fees, assetAction, isTxFeeLess)
-                    }
-                    .receive(on: mainQueue)
-                    .eraseToEffect()
-                    .map(AvailableBalanceDetailViewAction.updateAvailableBalanceDetails)
+                return .publisher {
+                    Publishers.Zip3(
+                        balancePublishers,
+                        feesPublishers,
+                        app
+                            .publisher(for: blockchain.ux.transaction.id, as: String.self)
+                            .compactMap(\.value)
+                            .compactMap { AssetAction(rawValue: $0) }
+                    )
+                        .map { payload -> (FiatValue, FiatValue, FiatValue, AssetAction, Bool) in
+                            let (balance, availableBalance) = payload.0
+                            let (fees, isTxFeeLess) = payload.1
+                            let assetAction = payload.2
+                            return (balance, availableBalance, fees, assetAction, isTxFeeLess)
+                        }
+                        .receive(on: mainQueue)
+                        .map(AvailableBalanceDetailViewAction.updateAvailableBalanceDetails)
+                }
 
             case .updateAvailableBalanceDetails(let balance, let available, let fees, let action, let isTxFeeLess):
                 state.title = "\(LocalizedIds.availableTo) \(action.name)"
@@ -143,7 +144,7 @@ public struct AvailableBalanceDetailViewReducer: ReducerProtocol {
                 return .none
             case .okayButtonTapped,
                     .closeButtonTapped:
-                return .fireAndForget {
+                return .run { _ in
                     closeAction?()
                 }
             }
@@ -171,7 +172,7 @@ struct AvailableBalanceDetailView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 closeHandle
                     .onTapGesture {
@@ -241,9 +242,9 @@ struct AvailableBalanceDetailView: View {
 struct AvailableBalanceDetailView_Previews: PreviewProvider {
     static var previews: some View {
         AvailableBalanceDetailView(
-            store: .init(
-                initialState: .init(data: []),
-                reducer: AvailableBalanceDetailViewReducer.preview
+            store: Store(
+                initialState: .init(data: [AvailableBalanceDetailViewState.Data]()),
+                reducer: { AvailableBalanceDetailViewReducer.preview }
             )
         )
     }

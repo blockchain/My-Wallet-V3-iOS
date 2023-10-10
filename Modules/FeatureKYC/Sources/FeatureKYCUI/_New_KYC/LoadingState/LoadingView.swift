@@ -28,19 +28,20 @@ struct LoadingView<
     }
 
     var body: some View {
-        SwitchStore(store) {
-            CaseLet<State, Action, Success, Action, SuccessContent>(
-                state: /State.success,
-                then: success
-            )
-
-            CaseLet<State, Action, FailureState<Action>, Action, LoadingFailureView>(
-                state: /State.failure,
-                then: LoadingFailureView.init(store:)
-            )
-
-            Default {
-                WithViewStore(store) { viewStore in
+        SwitchStore(store) { state in
+            switch state {
+            case .success:
+                CaseLet<State, Action, Success, Action, SuccessContent>(
+                    state: /State.success,
+                    then: success
+                )
+            case .failure:
+                CaseLet<State, Action, FailureState<Action>, Action, LoadingFailureView>(
+                    state: /State.failure,
+                    then: LoadingFailureView.init(store:)
+                )
+            default:
+                WithViewStore(store, observe: { $0 }) { viewStore in
                     contentView(viewStore)
                 }
             }
@@ -77,7 +78,7 @@ private struct LoadingFailureView<Action: Equatable>: View {
     let store: Store<FailureState<Action>, Action>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Spacing.padding3) {
                 VStack(spacing: Spacing.textSpacing) {
                     Text(viewStore.title)
