@@ -6,6 +6,7 @@ import SwiftUI
 
 struct BakktConsentView: View {
     @Dependency(\.app) var app
+    @Environment(\.openURL) var openURL
     typealias L10n = LocalizationConstants.ExternalTradingMigration.Consent
     var hasAssetsToConsolidate: Bool = false
     var onDone: (() -> Void)?
@@ -24,7 +25,7 @@ struct BakktConsentView: View {
         isLoading: Bool
     ) {
         self.hasAssetsToConsolidate = hasAssetsToConsolidate
-        self.consentItems = hasAssetsToConsolidate ?
+        let items = hasAssetsToConsolidate ?
         [
             MigrationConsentElement(type: .supportedAssets),
             MigrationConsentElement(type: .transactions),
@@ -39,6 +40,7 @@ struct BakktConsentView: View {
             MigrationConsentElement(type: .defiWallet)
         ]
 
+        _consentItems = .init(wrappedValue: items)
         self.onDone = onDone
         self.onContinue = onContinue
         self.isLoading = isLoading
@@ -57,7 +59,6 @@ struct BakktConsentView: View {
                     labelsView
                     consentItemsView
                     Spacer()
-                    termsAndConditions
                 }
             }
             bottomView
@@ -82,11 +83,14 @@ struct BakktConsentView: View {
     @ViewBuilder
     var bottomView: some View {
         VStack(spacing: Spacing.padding2) {
+            termsAndConditions
             if hasAssetsToConsolidate {
-                PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton,
-                              action: {
+                PrimaryButton(
+                    title: LocalizationConstants.ExternalTradingMigration.continueButton,
+                    action: {
                     onContinue?()
-                })
+                }
+                )
                 .disabled(!continueButtonEnabled)
             } else {
                 PrimaryButton(
@@ -126,7 +130,11 @@ struct BakktConsentView: View {
                 .multilineTextAlignment(.center)
 
             if hasAssetsToConsolidate {
-                SmallMinimalButton(title: LocalizationConstants.ExternalTradingMigration.learnMoreButton) {}
+                SmallMinimalButton(title: LocalizationConstants.ExternalTradingMigration.learnMoreButton) {
+                    if let url = URL(string: "https://support.blockchain.com/hc/en-us/articles/10613027459868-Texas-Update-Upgrading-Your-Account-for-Enhanced-Crypto-Trading") {
+                        openURL(url)
+                    }
+                }
             }
         }
     }
@@ -144,8 +152,14 @@ struct BakktConsentView: View {
 
 struct BakktConsentView_Preview: PreviewProvider {
     static var previews: some View {
-        BakktConsentView(hasAssetsToConsolidate: false, isLoading: false)
-        BakktConsentView(hasAssetsToConsolidate: true, isLoading: false)
+        BakktConsentView(
+            hasAssetsToConsolidate: false,
+            isLoading: false
+        )
+        BakktConsentView(
+            hasAssetsToConsolidate: true,
+            isLoading: false
+        )
     }
 }
 
@@ -165,7 +179,7 @@ struct MigrationConsentElement: Identifiable {
         case .transactions:
             return LocalizationConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
         case .migrationPeriod:
-            return LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
+            return  LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
         case .historicalData:
             return LocalizationConstants.ExternalTradingMigration.Consent.HistoricalData.title
         case .defiWallet:

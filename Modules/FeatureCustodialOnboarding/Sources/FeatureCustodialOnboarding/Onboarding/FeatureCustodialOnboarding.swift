@@ -10,18 +10,24 @@ public struct CustodialOnboardingDashboardView: View {
     var externalTradingMigrationIsAvailable: Bool {
         externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]
     }
-    
+    var externalTradingMigrationIsPending: Bool {
+        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
+    }
+
+
     public init(service: CustodialOnboardingService) {
         self.onboarding = service
     }
 
     public var body: some View {
         VStack(spacing: 16.pt) {
+            if externalTradingMigrationIsPending == false {
+                MoneyValue.zero(currency: onboarding.currency).headerView()
+                    .padding(.top)
+            }
 
             FinancialPromotionDisclaimerView()
 
-            MoneyValue.zero(currency: onboarding.currency).headerView()
-                .padding(.top)
             if onboarding.isRejected {
                 RejectedVerificationView()
             } else {

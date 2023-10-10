@@ -40,6 +40,7 @@ public struct ExternalTradingMigration: Reducer {
         case binding(BindingAction<State>)
         case migrationInProgressModalDismissed(Bool)
         case onFlowComplete
+        case onFlowDismiss
     }
 
     // MARK: - Properties
@@ -64,7 +65,8 @@ public struct ExternalTradingMigration: Reducer {
             case .initialize:
                 return .run { send in
                     if let migrationInfo = try? await externalTradingMigrationService
-                        .fetchMigrationInfo() {
+                        .fetchMigrationInfo()
+                    {
                         await send(.fetchMigrationState(migrationInfo))
                     }
                 }
@@ -104,7 +106,7 @@ public struct ExternalTradingMigration: Reducer {
                     do {
                         try await externalTradingMigrationService.startMigration()
                         await send(.onUpgradeSuccess)
-                    } catch let error {
+                    } catch {
                         let error = UX.Error(error: error)
                         await send(.onUpgradeFailure(error))
                     }
@@ -115,11 +117,16 @@ public struct ExternalTradingMigration: Reducer {
                 return .none
 
             case .onUpgradeFailure(let error):
+                state.migrationInProgressPresented = false
                 state.upgradeError = error
                 return .none
 
             case .migrationInProgressModalDismissed(let dismissed):
                 state.migrationInProgressPresented = dismissed
+                return .none
+
+            case .onFlowDismiss:
+                app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
                 return .none
 
             case .binding:
@@ -128,4 +135,3 @@ public struct ExternalTradingMigration: Reducer {
         }
     }
 }
-

@@ -104,8 +104,10 @@ struct BakktAssetMigrationView: View {
 
             termsAndConditions
 
-            PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.upgradeButton, 
-                          isLoading: isLoading) {
+            PrimaryButton(
+                title: LocalizationConstants.ExternalTradingMigration.upgradeButton,
+                isLoading: isLoading
+            ) {
                 onDone()
             }
             .disabled(isLoading)
@@ -172,7 +174,8 @@ struct AssetMigrationRow: View {
         SimpleBalanceRow(
             leadingTitle: balance.currency.name,
             leadingDescription: balance.currency.code,
-            trailingTitle: balance.amount.toDisplayString(includeSymbol: true),
+            trailingTitle:
+                "~" + balance.amount.toDisplayString(includeSymbol: true),
             trailingDescription:
                 balance.amount.cryptoValue?.toFiatAmount(with: price)?.toDisplayString(includeSymbol: true)
         ) {

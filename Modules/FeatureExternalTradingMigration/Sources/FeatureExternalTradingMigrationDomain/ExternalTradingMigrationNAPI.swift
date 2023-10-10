@@ -16,7 +16,6 @@ public final class ExternalTradingMigrationNAPI {
         self.service = service
         self.app = app
     }
-    
 
     public func register() async throws {
         var refresh = L_blockchain_namespace_napi_napi_policy.JSON()
@@ -35,7 +34,7 @@ public final class ExternalTradingMigrationNAPI {
                 } else {
                     json.state = try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, as: Tag.self)
 
-                    let state =  try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, as: Tag.self)
+                    let state = try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, as: Tag.self)
                 }
 
                 return json.toJSON()

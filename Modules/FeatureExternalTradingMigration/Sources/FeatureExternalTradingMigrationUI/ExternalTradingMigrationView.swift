@@ -26,7 +26,15 @@ public struct ExternalTradingMigrationView: View {
                     }
                 )
                 .sheet(item: viewStore.$upgradeError) { error in
-                    ErrorView(ux: error)
+                    PrimaryNavigationView {
+                        ErrorView(
+                            ux: error,
+                            dismiss: {
+                                viewStore.send(.onFlowDismiss)
+                            }
+                        )
+                        .interactiveDismissDisabled()
+                    }
                 }
         }
     }
@@ -85,10 +93,11 @@ public struct ExternalTradingMigrationView: View {
 
     @ViewBuilder var assetMigrationInfoNavigationLink: some View {
         if let migrationInfo = viewStore.migrationInfo,
-           let consolidationBalances = migrationInfo.consolidatedBalances {
+           let consolidationBalances = migrationInfo.consolidatedBalances
+        {
             NavigationLink(
                 destination: BakktAssetMigrationView(
-                    beforeMigrationBalances: consolidationBalances.beforeMigration ,
+                    beforeMigrationBalances: consolidationBalances.beforeMigration,
                     afterMigrationBalance: consolidationBalances.afterMigration,
                     onDone: {
                         viewStore.send(.onUpgrade)

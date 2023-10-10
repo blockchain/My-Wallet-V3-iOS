@@ -495,8 +495,10 @@ extension Router {
         let errorView = ErrorView(
             ux: UX.Error(title: L10n.GenericError.title, message: L10n.GenericError.featureIsNotAvailableMessage),
             dismiss: {
-                publisher.send(.abandoned)
-                publisher.send(completion: .finished)
+                presenter.dismiss(animated: true) {
+                    publisher.send(.abandoned)
+                    publisher.send(completion: .finished)
+                }
             }
         )
 
