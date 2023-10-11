@@ -14,7 +14,7 @@ extension LocalizationConstants.SweepImportedAddress {
     )
 
     static let notice = NSLocalizedString(
-        "The following legacy addresses have been identified as possibly to be vulnerable to a security issue.\n\nTo secure your funds, click the ‘Transfer Funds’ button below.\n\nThis will move the funds from the legacy addresses into new, secure addresses in your DeFi Wallet.",
+        "The following legacy addresses have been identified as possibly affected by a third party software security issue.\n\nTo secure your funds, click the ‘Transfer Funds’ button below.\n\nThis will move the funds from the legacy addresses into new, secure addresses in your DeFi Wallet.",
         comment: "Security Notice"
     )
 
@@ -56,7 +56,7 @@ extension LocalizationConstants.NoSweepNeeded {
     )
 
     static let subtitle = NSLocalizedString(
-        "Your wallet does not contain any funds affected by the identified security issue.",
+        "Your wallet does not contain any funds affected by the identified third party software security issue.",
         comment: "Subtitle Security notice"
     )
 
