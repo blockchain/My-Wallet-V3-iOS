@@ -191,9 +191,8 @@ struct AddressSearchReducer: Reducer {
                 return Effect.send(.complete(.abandoned))
 
             case .complete(let addressResult):
-                return .run { _ in
-                    onComplete(addressResult)
-                }
+                onComplete(addressResult)
+                return .none
 
             case .searchAddresses(let searchText, let country):
                 guard let searchText, searchText.isNotEmpty,
@@ -221,8 +220,11 @@ struct AddressSearchReducer: Reducer {
                             )
                             .await()
                         await send(.didReceiveAddressesResult(.success(addresses)))
-                    } catch {
-                        await send(.didReceiveAddressesResult(.failure(error as! AddressSearchServiceError)))
+                    } catch let error as AddressSearchServiceError {
+                        await send(.didReceiveAddressesResult(.failure(error)))
+                    }
+                    catch {
+                        print("\(error.localizedDescription)")
                     }
                 }
                 .debounce(

@@ -27,7 +27,8 @@ struct IdentityVerificationReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .startVerification:
-                return .run { _ in onCompletion() }
+                onCompletion()
+                return .none              
 
             case .fetchSupportedDocumentTypes:
                 state.isLoading = true
