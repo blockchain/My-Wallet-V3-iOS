@@ -54,86 +54,94 @@ public struct PasswordRequiredView: View {
     }
 
     private var passwordRequiredForm: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack(spacing: Spacing.padding3) {
-                walletIdField
-                passwordField
-                PrimaryButton(title: LocalizedString.continueButton) {
-//                    viewStore.send(.alert(.presented(.show(title: "Title", message: "message"))))
-                    viewStore.send(.forgetWalletTapped)
-//                    viewStore.send(.continueButtonTapped)
+        WithViewStore(
+            store,
+            observe: { $0 },
+            content: { viewStore in
+                VStack(spacing: Spacing.padding3) {
+                    walletIdField
+                    passwordField
+                    PrimaryButton(title: LocalizedString.continueButton) {
+                        viewStore.send(.continueButtonTapped)
+                    }
                 }
             }
-        }
+        )
     }
 
     private var walletIdField: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack(spacing: Spacing.padding1) {
-                Input(
-                    text: .constant(viewStore.walletIdentifier),
-                    isFirstResponder: .constant(false),
-                    label: LocalizedString.walletIdentifier,
-                    state: .default
-                )
-                .disabled(true)
-                .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.walletIdGroup)
-                Text(LocalizedString.description)
-                    .typography(.caption1)
-                    .foregroundColor(.semantic.text)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.description)
+        WithViewStore(
+            store,
+            observe: { $0 },
+            content: { viewStore in
+                VStack(spacing: Spacing.padding1) {
+                    Input(
+                        text: .constant(viewStore.walletIdentifier),
+                        isFirstResponder: .constant(false),
+                        label: LocalizedString.walletIdentifier,
+                        state: .default
+                    )
+                    .disabled(true)
+                    .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.walletIdGroup)
+                    Text(LocalizedString.description)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.text)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.description)
+                }
             }
-        }
+        )
     }
 
     private var passwordField: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack(alignment: .leading, spacing: Spacing.padding1) {
-                Input(
-                    text: viewStore.$password,
-                    isFirstResponder: viewStore
-                        .$isPasswordSelected,
-                    label: LocalizedString.passwordField,
-                    placeholder: LocalizedString.passwordFieldPlaceholder,
-                    isSecure: !viewStore.isPasswordVisible,
-                    trailing: {
-                        PasswordEyeSymbolButton(isPasswordVisible: viewStore.$isPasswordVisible)
-                    },
-                    onReturnTapped: {
-                        viewStore.send(.set(\.$isPasswordSelected, false))
-                        viewStore.send(.continueButtonTapped)
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
+                VStack(alignment: .leading, spacing: Spacing.padding1) {
+                    Input(
+                        text: viewStore.$password,
+                        isFirstResponder: viewStore
+                            .$isPasswordSelected,
+                        label: LocalizedString.passwordField,
+                        placeholder: LocalizedString.passwordFieldPlaceholder,
+                        isSecure: !viewStore.isPasswordVisible,
+                        trailing: {
+                            PasswordEyeSymbolButton(isPasswordVisible: viewStore.$isPasswordVisible)
+                        },
+                        onReturnTapped: {
+                            viewStore.send(.set(\.$isPasswordSelected, false))
+                            viewStore.send(.continueButtonTapped)
+                        }
+                    )
+                    .textContentType(.password)
+                    Button {
+                        viewStore.send(.forgotPasswordTapped)
+                    } label: {
+                        Text(LocalizedString.forgotButton)
+                            .typography(.paragraph1)
+                            .foregroundColor(.semantic.primary)
                     }
-                )
-                .textContentType(.password)
-                Button {
-                    viewStore.send(.forgotPasswordTapped)
-                } label: {
-                    Text(LocalizedString.forgotButton)
-                        .typography(.paragraph1)
-                        .foregroundColor(.semantic.primary)
                 }
             }
-        }
+        )
         .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.passwordGroup)
     }
 
     private var forgetWalletSection: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack(spacing: Spacing.padding2) {
-                Text(LocalizedString.forgetWalletDescription)
-                    .typography(.caption1)
-                    .foregroundColor(.semantic.text)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.forgotWalletDesription)
-                DestructiveMinimalButton(title: LocalizedString.forgetWalletButton) {
-                    viewStore.send(.forgetWalletTapped)
+        WithViewStore(store, observe: { $0 }, content: { viewStore in
+                VStack(spacing: Spacing.padding2) {
+                    Text(LocalizedString.forgetWalletDescription)
+                        .typography(.caption1)
+                        .foregroundColor(.semantic.text)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.forgotWalletDesription)
+                    DestructiveMinimalButton(title: LocalizedString.forgetWalletButton) {
+                        viewStore.send(.forgetWalletTapped)
+                    }
+                    .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.forgotWalletButton)
                 }
-                .accessibility(identifier: AccessibilityIdentifiers.PasswordRequiredScreen.forgotWalletButton)
             }
-        }
+        )
     }
 }
 
@@ -141,7 +149,7 @@ public struct PasswordRequiredView: View {
 
 import WalletPayloadKit
 
-struct PasswordRequired_Previews: PreviewProvider {    
+struct PasswordRequired_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             PasswordRequiredView(
@@ -173,7 +181,7 @@ struct NoOpMobileAuthSyncServiceAPI: MobileAuthSyncServiceAPI {
     func updateMobileSetup(isMobileSetup: Bool) -> AnyPublisher<Void, FeatureAuthenticationDomain.MobileAuthSyncServiceError> {
         .just(())
     }
-    
+
     func verifyCloudBackup(hasCloudBackup: Bool) -> AnyPublisher<Void, FeatureAuthenticationDomain.MobileAuthSyncServiceError> {
         .just(())
     }

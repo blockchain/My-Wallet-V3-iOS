@@ -209,7 +209,9 @@ private func applyBlurFilter(
         return .none
     }
     return .run { _ in
-        handler.applyEffect(on: view)
+        DispatchQueue.main.async {
+            handler.applyEffect(on: view)
+        }
     }
 }
 
@@ -221,7 +223,9 @@ private func removeBlurFilter(
         return .none
     }
     return .run { _ in
-        handler.removeEffect(from: view)
+        DispatchQueue.main.async {
+            handler.removeEffect(from: view)
+        }
     }
 }
 

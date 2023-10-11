@@ -51,7 +51,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     private let store: Store<AppState, AppAction>
 
     /// Responsible view store to send actions to the store
-    lazy var viewStore = ViewStore(store, observe: { $0}, removeDuplicates: ==)
+    lazy var viewStore = ViewStore(store, observe: { $0 }, removeDuplicates: ==)
 
     override init() {
         bootstrap()
