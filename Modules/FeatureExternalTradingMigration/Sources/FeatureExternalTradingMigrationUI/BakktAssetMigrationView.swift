@@ -5,7 +5,7 @@ import FeatureExternalTradingMigrationDomain
 import SwiftUI
 
 struct BakktAssetMigrationView: View {
-    typealias L10n = LocalizationConstants.ExternalTradingMigration.AssetMigration
+    typealias L10n = NonLocalizedConstants.ExternalTradingMigration.AssetMigration
 
     @Dependency(\.app) var app
     var beforeMigrationBalances: [Balance]
@@ -104,10 +104,8 @@ struct BakktAssetMigrationView: View {
 
             termsAndConditions
 
-            PrimaryButton(
-                title: LocalizationConstants.ExternalTradingMigration.upgradeButton,
-                isLoading: isLoading
-            ) {
+            PrimaryButton(title: NonLocalizedConstants.ExternalTradingMigration.upgradeButton,
+                          isLoading: isLoading) {
                 onDone()
             }
             .disabled(isLoading)

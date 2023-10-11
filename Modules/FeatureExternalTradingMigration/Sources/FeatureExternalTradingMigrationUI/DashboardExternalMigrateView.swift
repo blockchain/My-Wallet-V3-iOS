@@ -82,8 +82,8 @@ public struct DashboardExternalMigrateView: View {
 
     var externalTradingMigrationInProgressView: some View {
         AlertCard(
-            title: L10n.bakktMigrationInProgressTitle,
-            message: L10n.bakktMigrationMessage,
+            title: NonLocalizedConstants.Bakkt.bakktMigrationInProgressTitle,
+            message: NonLocalizedConstants.Bakkt.bakktMigrationMessage,
             variant: .default,
             isBordered: true
         )
@@ -92,14 +92,14 @@ public struct DashboardExternalMigrateView: View {
 
     var externalTradingReviewTermsView: some View {
         AlertCard(
-            title: L10n.bakktStartMigrationNoAssetsTitle,
-            message: L10n.bakktStartMigrationNoAssetsMessage,
+            title: NonLocalizedConstants.Bakkt.bakktStartMigrationNoAssetsTitle,
+            message: NonLocalizedConstants.Bakkt.bakktStartMigrationNoAssetsMessage,
             variant: .warning,
             isBordered: true,
             footer: {
                 HStack {
                     SmallSecondaryButton(
-                        title: L10n.bakktReviewTermsButton,
+                        title: NonLocalizedConstants.Bakkt.bakktReviewTermsButton,
                         action: {
                             app.post(event: blockchain.ux.dashboard.external.trading.migration.start.paragraph.button.primary.tap)
                         }
@@ -111,14 +111,14 @@ public struct DashboardExternalMigrateView: View {
 
     var externalTradingUpgradeView: some View {
         AlertCard(
-            title: L10n.bakktStartMigrationWithAssetsTitle,
-            message: L10n.bakktStartMigrationWithAssetsMessage,
+            title: NonLocalizedConstants.Bakkt.bakktStartMigrationWithAssetsTitle,
+            message: NonLocalizedConstants.Bakkt.bakktStartMigrationWithAssetsMessage,
             variant: .warning,
             isBordered: true,
             footer: {
                 HStack {
                     SmallSecondaryButton(
-                        title: L10n.bakktUpgradeAccountButton,
+                        title: NonLocalizedConstants.Bakkt.bakktUpgradeAccountButton,
                         action: {
                             app.post(event: blockchain.ux.dashboard.external.trading.migration.start.paragraph.button.primary.tap)
                         }
@@ -131,8 +131,8 @@ public struct DashboardExternalMigrateView: View {
 
     var migrationSuccessAnnouncementCard: some View {
         AnnouncementCard(
-            title: L10n.bakktMigrationSuccessAnnouncementCardTitle,
-            message: L10n.bakktMigrationSuccessAnnouncementCardMessage,
+            title: NonLocalizedConstants.Bakkt.bakktMigrationSuccessAnnouncementCardTitle,
+            message: NonLocalizedConstants.Bakkt.bakktMigrationSuccessAnnouncementCardMessage,
             background: {
                 Color.semantic.background
             },

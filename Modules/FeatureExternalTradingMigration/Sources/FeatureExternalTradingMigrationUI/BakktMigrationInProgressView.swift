@@ -5,7 +5,7 @@ import SwiftUI
 
 struct BakktMigrationInProgressView: View {
     @Dependency(\.app) var app
-    typealias L10n = LocalizationConstants.ExternalTradingMigration.MigrationInProgress
+    typealias L10n = NonLocalizedConstants.ExternalTradingMigration.MigrationInProgress
     var onDone: () -> Void
 
     var body: some View {

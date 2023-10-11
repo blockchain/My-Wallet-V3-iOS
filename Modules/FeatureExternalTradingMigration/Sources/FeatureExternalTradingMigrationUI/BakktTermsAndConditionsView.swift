@@ -23,7 +23,7 @@ struct BakktTermsAndConditionsView: View {
             VStack(spacing: Spacing.padding2) {
                 termsAndConditions
 
-                PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton) {
+                PrimaryButton(title: NonLocalizedConstants.ExternalTradingMigration.continueButton) {
                     onDone()
                 }
                 .disabled(continueDisabled)
@@ -35,7 +35,7 @@ struct BakktTermsAndConditionsView: View {
     @ViewBuilder var termsAndConditions: some View {
         HStack {
             Checkbox(isOn: $termsApproved)
-            Text(LocalizationConstants.ExternalTradingMigration.TermsAndConditions.disclaimer)
+            Text(NonLocalizedConstants.ExternalTradingMigration.TermsAndConditions.disclaimer)
                 .typography(.micro)
                 .foregroundColor(.semantic.body)
         }
