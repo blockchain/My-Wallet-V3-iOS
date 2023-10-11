@@ -7,7 +7,7 @@ import TestKit
 import ToolKit
 import XCTest
 
-final class ProductsRepositoryTests: XCTestCase {
+@MainActor final class ProductsRepositoryTests: XCTestCase {
 
     private var app: AppProtocol!
     private var repository: ProductsRepository!
@@ -81,13 +81,14 @@ final class ProductsRepositoryTests: XCTestCase {
         XCTAssertEqual(mockClient.recordedInvocations.fetchProductsData.count, 2)
     }
 
-    func test_stream_publishesNewValues_whenCacheIsInvalidated() throws {
+    func test_stream_publishesNewValues_whenCacheIsInvalidated() async throws {
         // GIVEN: A stream is requested
         let expectedProducts = try stubClientWithDefaultProducts()
         let publisher = repository.streamProducts()
         XCTAssertPublisherValues(publisher, .success(expectedProducts), expectCompletion: false)
         // WHEN: The cache is invalidated
         app.post(event: blockchain.ux.transaction.event.did.finish)
+        try await Task.sleep(nanoseconds: 1)
         // AND: The data is refreashed
         XCTAssertPublisherValues(publisher, .success(expectedProducts), expectCompletion: false)
         XCTAssertEqual(mockClient.recordedInvocations.fetchProductsData.count, 2)

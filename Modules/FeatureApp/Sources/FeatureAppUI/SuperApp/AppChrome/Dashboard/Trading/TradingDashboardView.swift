@@ -38,6 +38,7 @@ struct TradingDashboardView: View {
     }
 
     @StateObject private var onboarding = CustodialOnboardingService()
+    @State private var displayDisclaimer: Bool = false
 
     struct ViewState: Equatable {
         let balance: BalanceInfo?
@@ -57,15 +58,24 @@ struct TradingDashboardView: View {
     }
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            if onboarding.isSynchronized {
-                if onboarding.isFinished {
-                    dashboardView
+        ZStack(alignment: .top) {
+            ScrollView(showsIndicators: false) {
+                if onboarding.isSynchronized {
+                    if onboarding.isFinished {
+                        dashboardView
+                    } else {
+                        onboardingView
+                    }
                 } else {
-                    onboardingView
+                    loadingView
                 }
-            } else {
-                loadingView
+            }
+            .padding(.top, displayDisclaimer ? 68.pt : 0.pt)
+            if onboarding.isFinished {
+                FinancialPromotionDisclaimerView(display: $displayDisclaimer)
+                    .padding()
+                    .backgroundWithShadow(.bottom, fill: Color.semantic.light, radius: scrollOffset.y > 68 ? 8 : 0)
+                    .padding([.top, .bottom], 8.pt)
             }
         }
         .superAppNavigationBar(

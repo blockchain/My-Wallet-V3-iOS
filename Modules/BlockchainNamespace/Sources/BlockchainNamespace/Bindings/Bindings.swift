@@ -121,6 +121,15 @@ extension Bindings {
 
 extension Bindings.Update: CustomStringConvertible {
 
+    public var isSynchronized: Bool {
+        switch self {
+        case .request: return false
+        case .updateError: return false
+        case .update: return false
+        case .didSynchronize: return true
+        }
+    }
+
     public var description: String {
         switch self {
         case .request(let set):

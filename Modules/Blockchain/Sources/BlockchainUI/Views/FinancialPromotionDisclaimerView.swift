@@ -8,7 +8,9 @@ public struct FinancialPromotionDisclaimerView: View {
     @State private var text: String?
     @State private var isSynchronized: Bool = false
 
-    public init() { }
+    @Binding var display: Bool
+
+    public init(display: Binding<Bool> = .constant(false)) { _display = display }
 
     public var body: some View {
         Group {
@@ -27,8 +29,11 @@ public struct FinancialPromotionDisclaimerView: View {
                 Color.clear.frame(width: 1, height: 1)
             }
         }
-        .bindings {
+        .bindings(managing: { state in isSynchronized = state.isSynchronized }) {
             subscribe($text, to: blockchain.ux.finproms.disclaimer.text)
+        }
+        .onChange(of: isSynchronized) { _ in
+            display = text.isNotNilOrEmpty
         }
     }
 }
@@ -59,9 +64,8 @@ public struct FinancialPromotionApprovalView: View {
                 Color.clear.frame(width: 1, height: 1)
             }
         }
-        .bindings {
+        .bindings(managing: { state in isSynchronized = state.isSynchronized }) {
             subscribe($text, to: blockchain.ux.finproms.approval.text)
         }
     }
 }
-
