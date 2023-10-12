@@ -111,11 +111,9 @@ struct TradingDashboardView: View {
                 )
                 .padding([.top], Spacing.padding3)
 
-                if !isRejected {
-                    QuickActionsView(
-                        tag: blockchain.ux.user.custodial.dashboard.quick.action
-                    )
-                }
+                QuickActionsView(
+                    tag: blockchain.ux.user.custodial.dashboard.quick.action
+                )
             }
 
             AnnouncementsView(
