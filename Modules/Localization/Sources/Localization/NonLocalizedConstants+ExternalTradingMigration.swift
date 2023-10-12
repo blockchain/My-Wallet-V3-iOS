@@ -84,8 +84,8 @@ extension NonLocalizedConstants.Bakkt {
     )
 
     public static let bakktStartMigrationWithAssetsMessage = NSLocalizedString(
-        "We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto.",
-        comment: "Bakkt Migration Message: We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto."
+        "We’re partnering with a trusted virtual asset provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto.",
+        comment: "Bakkt Migration Message: We’re partnering with a trusted virtual asset provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto."
     )
 
     public static let bakktStartMigrationNoAssetsTitle = NSLocalizedString(
@@ -94,8 +94,8 @@ extension NonLocalizedConstants.Bakkt {
     )
 
     public static let bakktStartMigrationNoAssetsMessage = NSLocalizedString(
-        "We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, review our new Terms of Services to start trading crypto.",
-        comment: "Bakkt Migration Message: We’re partnering with a trusted third-party provider to ensure you enjoy our services seamlessly. Please, review our new Terms of Services to start trading crypto."
+        "We’re partnering with a trusted virtual asset provider to ensure you enjoy our services seamlessly. Please review your new Terms of Service to start trading crypto.",
+        comment: "Bakkt Migration Message: We’re partnering with a trusted virtual asset provider to ensure you enjoy our services seamlessly. Please review your new Terms of Service to start trading crypto."
     )
 
     public static let bakktUpgradeAccountButton = NSLocalizedString(
