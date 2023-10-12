@@ -34,13 +34,15 @@ public struct CalloutCard<Leading: View>: View {
             VStack(alignment: .leading, spacing: Spacing.baseline / 2) {
                 Text(title)
                     .typography(.caption1)
+                    .foregroundColor(.semantic.muted)
                 Text(message)
                     .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
             }
 
             Spacer()
 
-            SmallPrimaryButton(
+            SmallSecondaryButton(
                 title: control.title,
                 action: control.action
             )
@@ -54,10 +56,6 @@ public struct CalloutCard<Leading: View>: View {
                         dark: .palette.dark800
                     )
                 )
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Spacing.containerBorderRadius)
-                .stroke(Color.semantic.primary)
         )
     }
 }

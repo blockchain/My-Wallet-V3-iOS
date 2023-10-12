@@ -41,6 +41,7 @@ public struct CoinView: View {
                 if isRejected {
                     rejectedView
                 }
+                migration()
                 VStack(alignment: .leading, spacing: Spacing.padding4) {
                     accounts()
                     if viewStore.shouldShowRecurringBuy {
@@ -181,6 +182,15 @@ public struct CoinView: View {
                 blockchain.ux.asset.account.id: viewStore.accounts.first?.id,
                 blockchain.coin.core.account.id: viewStore.accounts.first?.id
             ])
+    }
+
+    @ViewBuilder
+    func migration() -> some View {
+        if let migrationInfo = viewStore.migrationInfo {
+            CoinMigrationCard(migrationInfo: migrationInfo)
+            .padding(.horizontal, Spacing.padding2)
+            .padding(.top, Spacing.padding1)
+        }
     }
 
     @ViewBuilder
@@ -373,6 +383,24 @@ struct CoinView_PreviewProvider: PreviewProvider {
         )
     }
 
+    static var normalStateWithMigration: CoinViewState {
+        CoinViewState(
+            currency: .bitcoin,
+            kycStatus: .gold,
+            accounts: [
+                .preview.privateKey,
+                .preview.trading,
+                .preview.rewards
+            ],
+            migrationInfo: .init(old: .bitcoin, new: .ethereum),
+            isFavorite: true,
+            graph: .init(
+                interval: .day,
+                result: .success(.preview)
+            )
+        )
+    }
+
     static var previews: some View {
         PrimaryNavigationView {
             CoinView(
@@ -397,6 +425,30 @@ struct CoinView_PreviewProvider: PreviewProvider {
         }
         .previewDevice("iPhone 13 Pro Max")
         .previewDisplayName("Gold - iPhone 13 Pro Max")
+
+        PrimaryNavigationView {
+            CoinView(
+                store: Store(
+                    initialState: normalState,
+                    reducer: { CoinViewReducer(environment: .preview) }
+                )
+            )
+            .app(App.preview)
+        }
+        .previewDevice("iPhone 13 Pro Max")
+        .previewDisplayName("Gold - iPhone 13 Pro Max")
+
+        PrimaryNavigationView {
+            CoinView(
+                store: Store(
+                    initialState: normalStateWithMigration,
+                    reducer: { CoinViewReducer(environment: .preview) }
+                )
+            )
+            .app(App.preview)
+        }
+        .previewDevice("iPhone 13 Pro Max")
+        .previewDisplayName("Migration Available")
 
         PrimaryNavigationView {
             CoinView(

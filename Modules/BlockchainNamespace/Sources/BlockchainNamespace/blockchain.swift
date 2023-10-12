@@ -1114,6 +1114,7 @@ public extension I_blockchain_app_configuration {
 	var `asset`: L_blockchain_app_configuration_asset { .init("\(__).asset") }
 	var `buy`: L_blockchain_app_configuration_buy { .init("\(__).buy") }
 	var `card`: L_blockchain_app_configuration_card { .init("\(__).card") }
+	var `coinview`: L_blockchain_app_configuration_coinview { .init("\(__).coinview") }
 	var `customer`: L_blockchain_app_configuration_customer { .init("\(__).customer") }
 	var `dashboard`: L_blockchain_app_configuration_dashboard { .init("\(__).dashboard") }
 	var `debug`: L_blockchain_app_configuration_debug { .init("\(__).debug") }
@@ -1572,6 +1573,24 @@ public final class L_blockchain_app_configuration_card_success_rate_is_enabled: 
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.card.success.rate.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_card_success_rate_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_coinview: L, I_blockchain_app_configuration_coinview {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.coinview", comment: "") }
+}
+public protocol I_blockchain_app_configuration_coinview: I {}
+public extension I_blockchain_app_configuration_coinview {
+	var `migration`: L_blockchain_app_configuration_coinview_migration { .init("\(__).migration") }
+}
+public final class L_blockchain_app_configuration_coinview_migration: L, I_blockchain_app_configuration_coinview_migration {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.coinview.migration", comment: "") }
+}
+public protocol I_blockchain_app_configuration_coinview_migration: I {}
+public extension I_blockchain_app_configuration_coinview_migration {
+	var `tickers`: L_blockchain_app_configuration_coinview_migration_tickers { .init("\(__).tickers") }
+}
+public final class L_blockchain_app_configuration_coinview_migration_tickers: L, I_blockchain_app_configuration_coinview_migration_tickers {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.coinview.migration.tickers", comment: "") }
+}
+public protocol I_blockchain_app_configuration_coinview_migration_tickers: I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_customer: L, I_blockchain_app_configuration_customer {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.customer", comment: "") }
 }
@@ -7293,6 +7312,7 @@ public extension I_blockchain_ux {
 	var `bakkt`: L_blockchain_ux_bakkt { .init("\(__).bakkt") }
 	var `buy`: L_blockchain_ux_buy { .init("\(__).buy") }
 	var `buy_and_sell`: L_blockchain_ux_buy__and__sell { .init("\(__).buy_and_sell") }
+	var `coinview`: L_blockchain_ux_coinview { .init("\(__).coinview") }
 	var `currency`: L_blockchain_ux_currency { .init("\(__).currency") }
 	var `customer`: L_blockchain_ux_customer { .init("\(__).customer") }
 	var `dashboard`: L_blockchain_ux_dashboard { .init("\(__).dashboard") }
@@ -8254,6 +8274,24 @@ public final class L_blockchain_ux_buy_last_bought_asset: L, I_blockchain_ux_buy
 	public override class var localized: String { NSLocalizedString("blockchain.ux.buy.last.bought.asset", comment: "") }
 }
 public protocol I_blockchain_ux_buy_last_bought_asset: I_blockchain_session_state_value {}
+public final class L_blockchain_ux_coinview: L, I_blockchain_ux_coinview {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.coinview", comment: "") }
+}
+public protocol I_blockchain_ux_coinview: I {}
+public extension I_blockchain_ux_coinview {
+	var `migration`: L_blockchain_ux_coinview_migration { .init("\(__).migration") }
+}
+public final class L_blockchain_ux_coinview_migration: L, I_blockchain_ux_coinview_migration {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.coinview.migration", comment: "") }
+}
+public protocol I_blockchain_ux_coinview_migration: I {}
+public extension I_blockchain_ux_coinview_migration {
+	var `view`: L_blockchain_ux_coinview_migration_view { .init("\(__).view") }
+}
+public final class L_blockchain_ux_coinview_migration_view: L, I_blockchain_ux_coinview_migration_view {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.coinview.migration.view", comment: "") }
+}
+public protocol I_blockchain_ux_coinview_migration_view: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_currency: L, I_blockchain_ux_currency {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.currency", comment: "") }
 }

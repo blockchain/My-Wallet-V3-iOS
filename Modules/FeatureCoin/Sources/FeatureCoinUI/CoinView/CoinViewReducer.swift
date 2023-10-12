@@ -45,78 +45,86 @@ public struct CoinViewReducer: Reducer {
 
                     Effect.send(.setRefresh),
 
-                    .run { send in
-                        do {
-                            let assetInfo = try await environment.assetInformationService
-                                .fetch()
-                                .receive(on: environment.mainQueue)
-                                .await()
-                            await send(.fetchedAssetInformation(.success(assetInfo)))
-                        } catch {
-                            await send(.fetchedAssetInformation(.failure(error as! Never)))
-                        }
-                    },
+                        .run { send in
+                            do {
+                                let assetInfo = try await environment.assetInformationService
+                                    .fetch()
+                                    .receive(on: environment.mainQueue)
+                                    .await()
+                                await send(.fetchedAssetInformation(.success(assetInfo)))
+                            } catch {
+                                await send(.fetchedAssetInformation(.failure(error as! Never)))
+                            }
+                        },
 
-                    .run { send in
-                        do {
-                            let isEnabled = try await environment.app.publisher(
-                                for: blockchain.app.configuration.recurring.buy.is.enabled,
-                                as: Bool.self
-                            )
-                            .compactMap(\.value)
-                            .receive(on: environment.mainQueue)
-                            .await()
-                            await send(.isRecurringBuyEnabled(isEnabled))
-                        } catch {
-                            await send(.isRecurringBuyEnabled(false))
-                        }
-                    },
+                        .run { send in
+                            do {
+                                let isEnabled = try await environment.app.publisher(
+                                    for: blockchain.app.configuration.recurring.buy.is.enabled,
+                                    as: Bool.self
+                                )
+                                    .compactMap(\.value)
+                                    .receive(on: environment.mainQueue)
+                                    .await()
+                                await send(.isRecurringBuyEnabled(isEnabled))
+                            } catch {
+                                await send(.isRecurringBuyEnabled(false))
+                            }
+                        },
 
-                    .run { send in
-                        do {
-                            let isDexEnabled = try await environment.app.publisher(
-                                for: blockchain.api.nabu.gateway.products["DEX"].is.eligible,
-                                as: Bool.self
-                            )
-                            .compactMap(\.value)
-                            .receive(on: environment.mainQueue)
-                            .await()
+                        .run { send in
+                            do {
+                                let isDexEnabled = try await environment.app.publisher(
+                                    for: blockchain.api.nabu.gateway.products["DEX"].is.eligible,
+                                    as: Bool.self
+                                )
+                                    .compactMap(\.value)
+                                    .receive(on: environment.mainQueue)
+                                    .await()
 
-                            await send(.binding(.set(\.$isDexEnabled, isDexEnabled)))
-                        } catch {
-                            await send(.binding(.set(\.$isDexEnabled, false)))
-                        }
-                    },
+                                await send(.binding(.set(\.$isDexEnabled, isDexEnabled)))
+                            } catch {
+                                await send(.binding(.set(\.$isDexEnabled, false)))
+                            }
+                        },
 
-                    .run { send in
-                        do {
-                            let isExternalBrokerageEnabled = try await environment.app.publisher(
-                                for: blockchain.app.is.external.brokerage,
-                                as: Bool.self
-                            )
-                            .compactMap(\.value)
-                            .receive(on: environment.mainQueue)
-                            .await()
+                        .run { send in
+                            do {
+                                let isExternalBrokerageEnabled = try await environment.app.publisher(
+                                    for: blockchain.app.is.external.brokerage,
+                                    as: Bool.self
+                                )
+                                    .compactMap(\.value)
+                                    .receive(on: environment.mainQueue)
+                                    .await()
 
-                            await send(.binding(.set(\.$isExternalBrokerageEnabled, isExternalBrokerageEnabled)))
-                        } catch {
-                            await send(.binding(.set(\.$isExternalBrokerageEnabled, false)))
-                        }
-                    },
+                                await send(.binding(.set(\.$isExternalBrokerageEnabled, isExternalBrokerageEnabled)))
+                            } catch {
+                                await send(.binding(.set(\.$isExternalBrokerageEnabled, false)))
+                            }
+                        },
 
+                        .run { [currency = state.currency] send in
+                            do {
+                                let isOnWatchlist = try await environment.app.publisher(
+                                    for: blockchain.ux.asset[currency.code].watchlist.is.on,
+                                    as: Bool.self
+                                )
+                                    .compactMap(\.value)
+                                    .receive(on: environment.mainQueue)
+                                    .await()
+
+                                await send(.isOnWatchlist(isOnWatchlist))
+                            } catch {
+                                await send(.isOnWatchlist(false))
+                            }
+                        },
                     .run { [currency = state.currency] send in
-                        do {
-                            let isOnWatchlist = try await environment.app.publisher(
-                                for: blockchain.ux.asset[currency.code].watchlist.is.on,
-                                as: Bool.self
-                            )
-                            .compactMap(\.value)
-                            .receive(on: environment.mainQueue)
-                            .await()
-                            
-                            await send(.isOnWatchlist(isOnWatchlist))
-                        } catch {
-                            await send(.isOnWatchlist(false))
+                        if let migrationInfo = try? await environment.app.get(blockchain.app.configuration.coinview.migration.tickers, as: [CoinMigrationInfo].self)
+                            .filter({ $0.old.code == currency.code })
+                            .first
+                        {
+                            await send(.isMigrated(migrationInfo))
                         }
                     }
                 )
@@ -125,18 +133,18 @@ public struct CoinViewReducer: Reducer {
                 return .merge(
                     Effect.send(.refresh),
 
-                    .publisher {
-                        NotificationCenter.default
-                            .publisher(for: .transaction)
-                            .receive(on: environment.mainQueue)
-                            .map { _ in .refresh }
-                    },
+                        .publisher {
+                            NotificationCenter.default
+                                .publisher(for: .transaction)
+                                .receive(on: environment.mainQueue)
+                                .map { _ in .refresh }
+                        },
 
-                    .publisher { [currency = state.currency] in
-                        environment.app.on(blockchain.ux.asset[currency.code].refresh)
-                            .receive(on: environment.mainQueue)
-                            .map { _ in .refresh }
-                    }
+                        .publisher { [currency = state.currency] in
+                            environment.app.on(blockchain.ux.asset[currency.code].refresh)
+                                .receive(on: environment.mainQueue)
+                                .map { _ in .refresh }
+                        }
                 )
 
             case .onDisappear:
@@ -308,6 +316,10 @@ public struct CoinViewReducer: Reducer {
                     }
                 )
             case .graph, .binding, .observation:
+                return .none
+
+            case .isMigrated(let info):
+                state.migrationInfo = info
                 return .none
             }
         }

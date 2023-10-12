@@ -13,6 +13,7 @@ public enum CoinViewError: Error, Equatable {
 
 public struct CoinViewState: Equatable {
     public let currency: CryptoCurrency
+    public var migrationInfo: CoinMigrationInfo?
     public var accounts: [Account.Snapshot]
     public var recurringBuys: [RecurringBuy]?
     public var error: CoinViewError?
@@ -153,6 +154,7 @@ public struct CoinViewState: Equatable {
         isExternalBrokerageEnabled: Bool = false,
         isRecurringBuyEnabled: Bool = false,
         assetInformation: AboutAssetInformation? = nil,
+        migrationInfo: CoinMigrationInfo? = nil,
         earnRates: EarnRates? = nil,
         error: CoinViewError? = nil,
         isFavorite: Bool? = nil,
@@ -167,6 +169,7 @@ public struct CoinViewState: Equatable {
         self.isFavorite = isFavorite
         self.graph = graph
         self.recurringBuys = recurringBuys
+        self.migrationInfo = migrationInfo
         self.isRecurringBuyEnabled = isRecurringBuyEnabled
         self.isDexEnabled = isDexEnabled
         self.isExternalBrokerageEnabled = isExternalBrokerageEnabled
