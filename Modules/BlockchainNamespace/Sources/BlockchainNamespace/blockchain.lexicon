@@ -2707,6 +2707,35 @@ blockchain:
 						+ blockchain.session.configuration.value
 			launch:
 				verification:
+			prove:
+				challenge:
+					dob:
+					+ blockchain.ux.type.story
+						next:
+						+ blockchain.ux.type.task
+					prefill:
+						id:
+						+ blockchain.db.type.string
+						+ blockchain.session.state.stored.value
+						info:
+						+ blockchain.session.state.stored.value
+					ssn:
+					+ blockchain.ux.type.story
+						next:
+						+ blockchain.ux.type.task
+				personal:
+					information:
+						confirmation:
+						+ blockchain.ux.type.story
+							address:
+							+ blockchain.ux.type.story
+							confirm:
+							+ blockchain.ux.type.task
+				phone:
+					number:
+					+ blockchain.ux.type.story
+						verification:
+						+ blockchain.ux.type.story
 			tier:
 			+ blockchain.db.type.enum
 				gold:

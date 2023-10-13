@@ -1,32 +1,22 @@
 import BlockchainUI
 import SwiftUI
 
-struct PersonalInformation: Codable {
-
-    struct Address: Hashable, Codable, Identifiable, CustomStringConvertible {
-        var id: String { string }
-        var string: String { lines.joined(separator: ", ") }
-        var description: String { string }
-        let lines: [String]
-    }
-
-    var firstName: String
-    var lastName: String
-    var address: Address
-    var addresses: [Address]
-    var dateOfBirth: Date
-    var SSN: String
-}
-
 public struct PersonalInformationConfirmationView: View {
+
+    @BlockchainApp var app
 
     let personalInformation: PersonalInformation
     @State private var edit: PersonalInformation {
         didSet { selectAddress = false }
     }
 
-    init(personalInformation: PersonalInformation) {
+    var completion: () -> Void
+
+    @StateObject var object = PersonalInformationConfirmationObject()
+
+    init(personalInformation: PersonalInformation, completion: @escaping () -> Void) {
         self.personalInformation = personalInformation
+        self.completion = completion
         _edit = .init(wrappedValue: personalInformation)
     }
 
@@ -46,21 +36,37 @@ public struct PersonalInformationConfirmationView: View {
             }
             .multilineTextAlignment(.leading)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            VStack {
+            VStack(alignment: .leading) {
+                if let error = object.error {
+                    Text(error.title)
+                        .typography(.caption2)
+                        .foregroundTexture(.semantic.title)
+                    Text(error.message)
+                        .lineLimit(nil)
+                        .typography(.caption1)
+                        .foregroundTexture(.semantic.error)
+                }
                 PrimaryButton(
                     title: L10n.next,
-                    isLoading: false,
+                    isLoading: object.isLoading,
                     action: {
-
+                        switch await object.confirm(personalInformation: edit) {
+                        case .success: completion()
+                        default: break
+                        }
                     }
                 )
             }
+            .multilineTextAlignment(.leading)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .background(Color.semantic.light)
         .onTapGesture {
             selected = nil
+        }
+        .onAppear {
+            $app.post(event: blockchain.ux.kyc.prove.personal.information.confirmation)
         }
     }
 
@@ -101,7 +107,7 @@ public struct PersonalInformationConfirmationView: View {
                     action: { selectAddress.toggle() },
                     label: {
                         HStack {
-                            Text(edit.address.string)
+                            Text(edit.address?.address ?? "Select Address")
                                 .typography(.body1)
                                 .foregroundColor(.semantic.title)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -140,7 +146,7 @@ public struct PersonalInformationConfirmationView: View {
                             .foregroundColor(.semantic.body)
                     },
                     byline: { 
-                        Text(shortDateFormatter.string(from: personalInformation.dateOfBirth))
+                        Text(personalInformation.dob)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.title)
                     }
@@ -155,9 +161,9 @@ public struct PersonalInformationConfirmationView: View {
                     byline: { 
                         Group {
                             if isSSNDisplayed {
-                                Text(personalInformation.SSN)
+                                Text(personalInformation.ssn)
                             } else {
-                                Text("•••••" + personalInformation.SSN.suffix(4))
+                                Text("•••••" + personalInformation.ssn.suffix(4))
                             }
                         }
                         .typography(.paragraph2)
@@ -182,39 +188,80 @@ public struct PersonalInformationConfirmationView: View {
     }
 
     @ViewBuilder func addresses() -> some View {
-        ScrollView {
-            DividedVStack {
-                ForEach(edit.addresses) { address in
-                    Button(
-                        action: {
-                            edit.address = address
-                        },
-                        label: {
-                            VStack(alignment: .leading, spacing: 0) {
-                                if let first = address.lines.first {
-                                    Text(first)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .typography(.paragraph2)
-                                        .foregroundColor(.semantic.title)
+        if let addresses = edit.addresses {
+            ScrollView {
+                DividedVStack {
+                    ForEach(addresses, id: \.self) { address in
+                        Button(
+                            action: { edit.address = address },
+                            label: {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    if let first = address.address {
+                                        Text(first)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .typography(.paragraph2)
+                                            .foregroundColor(.semantic.title)
+                                    }
+                                    if let second = address.extendedAddress {
+                                        Text(second)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .typography(.caption1)
+                                            .foregroundColor(.semantic.body)
+                                    }
                                 }
-                                if address.lines.dropFirst().count > 0 {
-                                    Text(address.lines.dropFirst().joined(separator: ", "))
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .typography(.caption1)
-                                        .foregroundColor(.semantic.body)
-                                }
+                                .frame(idealWidth: CGRect.screen.width, idealHeight: 48)
+                                .padding(.horizontal)
+                                .padding(.top, 16.pt)
+                                .background(Color.semantic.background)
                             }
-                            .frame(idealWidth: CGRect.screen.width, idealHeight: 48)
-                            .padding(.horizontal)
-                            .padding(.top, 16.pt)
-                            .background(Color.semantic.background)
-                        }
-                    )
+                        )
+                    }
                 }
+                .padding(.top, 16.pt)
             }
-            .padding(.top, 16.pt)
+            .background(Color.semantic.background)
         }
-        .background(Color.semantic.background)
+    }
+}
+
+@MainActor class PersonalInformationConfirmationObject: ObservableObject {
+
+    @Published var state: AsyncState<Ownership, UX.Error> = .idle
+    @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.KYCOnboardingService) var KYCOnboardingService
+
+    var isLoading: Bool {
+        switch state {
+        case .idle, .failure: return false
+        case .loading, .success: return true
+        }
+    }
+
+    var error: UX.Error? {
+        guard case .failure(let failure) = state else { return nil }
+        return UX.Error(error: failure)
+    }
+
+    @discardableResult
+    func confirm(personalInformation: PersonalInformation) async -> AsyncState<Ownership, UX.Error> {
+        state = .loading
+        do {
+            state = try await .success(KYCOnboardingService.confirm(personalInformation))
+        } catch {
+            state = .failure(UX.Error(error: error))
+        }
+        return state
+    }
+
+    @discardableResult
+    func reject(personalInformation: PersonalInformation) async -> AsyncState<Ownership, UX.Error> {
+        state = .loading
+        do {
+            state = try await .success(KYCOnboardingService.reject(personalInformation))
+        } catch {
+            state = .failure(UX.Error(error: error))
+        }
+        return state
     }
 }
 
@@ -222,50 +269,21 @@ struct PersonalInformationConfirmationView_Preview: PreviewProvider {
     static var previews: some View {
         PersonalInformationConfirmationView(
             personalInformation: PersonalInformation(
+                prefillId: "1",
                 firstName: "Oliver",
                 lastName: "Atkinson",
-                address: PersonalInformation.Address(lines: [
-                    "1 Coltsfoot Court",
-                    "Austin",
-                    "Texas",
-                    "USA"
-                ]),
                 addresses: [
-                    PersonalInformation.Address(lines: [
-                        "1 Coltsfoot Court",
-                        "Austin",
-                        "Texas",
-                        "USA"
-                    ]),
-                    PersonalInformation.Address(lines: [
-                        "2 Coltsfoot Court",
-                        "Austin",
-                        "Texas",
-                        "USA"
-                    ]),
-                    PersonalInformation.Address(lines: [
-                        "3 Coltsfoot Court",
-                        "Austin",
-                        "Texas",
-                        "USA"
-                    ])
-                    ,
-                    PersonalInformation.Address(lines: [
-                        "5 Coltsfoot Court",
-                        "Austin",
-                        "Texas",
-                        "USA"
-                    ]),
-                    PersonalInformation.Address(lines: [
-                        "6 Coltsfoot Court",
-                        "Austin",
-                        "Texas",
-                        "USA"
-                    ])
+                    Address(address: "1 Coltsfoot Court", extendedAddress: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", postalCode: "HG3 2WW"),
+                    Address(address: "2 Coltsfoot Court", extendedAddress: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", postalCode: "HG3 2WW"),
+                    Address(address: "3 Coltsfoot Court", extendedAddress: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", postalCode: "HG3 2WW"),
+                    Address(address: "4 Coltsfoot Court", extendedAddress: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", postalCode: "HG3 2WW")
                 ],
-                dateOfBirth: .distantPast,
-                SSN: "1234567890"
-            )
+                ssn: "1234567890",
+                dob: "04/03/1990"
+            ), 
+            completion: {
+                print(#fileID, #line)
+            }
         )
     }
 }

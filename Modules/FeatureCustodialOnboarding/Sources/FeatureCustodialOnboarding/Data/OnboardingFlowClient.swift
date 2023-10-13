@@ -1,16 +1,14 @@
+import Blockchain
 import NetworkKit
 
-class OnboardingFlowClient {
+public class OnboardingFlowClient {
 
-    let adapter: NetworkAdapterAPI
-    let requestBuilder: RequestBuilder
+    @Dependency(\.networkAdapter) var adapter
+    @Dependency(\.requestBuilder) var requestBuilder
 
-    init(adapter: NetworkAdapterAPI, requestBuilder: RequestBuilder) {
-        self.adapter = adapter
-        self.requestBuilder = requestBuilder
-    }
+    public init() {}
 
-    func next() async throws -> OnboardingFlow {
+    public func next() async throws -> OnboardingFlow {
         try await adapter.perform(
             request: requestBuilder.post(
                 path: "/onboarding/flow/next",

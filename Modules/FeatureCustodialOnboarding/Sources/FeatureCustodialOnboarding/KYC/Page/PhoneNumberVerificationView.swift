@@ -3,7 +3,8 @@ import SwiftUI
 
 public struct PhoneNumberVerificationView: View {
 
-    @State private var request = UUID()
+    @BlockchainApp var app
+
     @StateObject private var object = PhoneNumberVerificationObject()
 
     public var completion: () -> Void
@@ -50,7 +51,9 @@ public struct PhoneNumberVerificationView: View {
             } else {
                 MinimalButton(
                     title: L10n.resendSMS,
-                    action: { request = UUID() }
+                    action: {
+                        Task { await object.resend() }
+                    }
                 )
                 .background(
                     RoundedRectangle(cornerRadius: 28)
@@ -61,7 +64,10 @@ public struct PhoneNumberVerificationView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.light)
-        .task(id: request) { await object.submit() }
+        .task { await object.poll() }
+        .onAppear {
+            $app.post(event: blockchain.ux.kyc.prove.phone.number.verification)
+        }
     }
 }
 
@@ -72,7 +78,11 @@ public struct PhoneNumberVerification: Codable {
 @MainActor public class PhoneNumberVerificationObject: ObservableObject {
 
     @Published public var state: AsyncState<PhoneNumberVerification, Error> = .idle
+
     @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.KYCOnboardingService) var KYCOnboardingService
+
+    let backoff = ExponentialBackoff()
 
     public var isVerified: Bool {
         if case .success(let value) = state { return value.isVerified }
@@ -80,20 +90,37 @@ public struct PhoneNumberVerification: Codable {
     }
 
     @discardableResult
-    public func submit() async -> AsyncState<PhoneNumberVerification, Error> {
+    public func poll() async -> AsyncState<PhoneNumberVerification, Error> {
         state = .loading
         do {
-            // In the real world, we will want to poll for the result until it's been verified
-            // for await phoneNumber in client.checkPhoneNumberVerification() where !phoneNumber.isVerified {
-            //   try await mainQueue.sleep(for: .seconds(3))
-            //   state = .success(phoneNumber)
-            // }
-            try await mainQueue.sleep(for: .seconds(3))
-            state = .success(PhoneNumberVerification(isVerified: Bool.random()))
+            var inProgress = false
+            var result: InstantLink
+            repeat {
+                do {
+                    result = try await KYCOnboardingService.instantLink()
+                } catch {
+                    result = InstantLink(status: .inProgress)
+                    try await backoff.next()
+                }
+                inProgress = result.status == .inProgress
+                if inProgress {
+                    try await mainQueue.sleep(for: .seconds(3))
+                }
+            } while inProgress
+            state = .success(PhoneNumberVerification(isVerified: result.status == .verified))
         } catch {
             state = .failure(error)
         }
         return state
+    }
+
+    public func resend() async {
+        guard state == .loading else { return }
+        do {
+            try await KYCOnboardingService.requestInstantLinkResend()
+        } catch {
+            return
+        }
     }
 }
 

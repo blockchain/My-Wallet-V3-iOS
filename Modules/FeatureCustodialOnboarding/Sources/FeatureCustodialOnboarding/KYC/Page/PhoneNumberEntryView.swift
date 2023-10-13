@@ -3,6 +3,8 @@ import SwiftUI
 
 public struct PhoneNumberEntryView: View {
 
+    @BlockchainApp var app
+
     @State private var phoneNumber: String = ""
     @State private var pattern: String = #"\d{10}"#
 
@@ -37,7 +39,7 @@ public struct PhoneNumberEntryView: View {
             VStack {
                 PrimaryButton(
                     title: L10n.next,
-                    isLoading: object.state.isLoading,
+                    isLoading: object.isLoading,
                     action: {
                         switch await object.submit(phoneNumber: phoneNumber) {
                         case .success: completion()
@@ -51,6 +53,9 @@ public struct PhoneNumberEntryView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.semantic.light)
+        .onAppear {
+            $app.post(event: blockchain.ux.kyc.prove.phone.number)
+        }
     }
 }
 
@@ -114,12 +119,17 @@ struct PhoneNumberView: View {
 
     @Published var state: AsyncState<Void, UX.Error> = .idle
     @Dependency(\.mainQueue) var mainQueue
+    @Dependency(\.KYCOnboardingService) var KYCOnboardingService
+
+    var isLoading: Bool {
+        state != .idle
+    }
 
     @discardableResult
     func submit(phoneNumber: String) async -> AsyncState<Void, UX.Error> {
         state = .loading
         do {
-            try await mainQueue.sleep(for: .seconds(3))
+            try await KYCOnboardingService.requestInstantLink(mobileNumber: phoneNumber)
             state = .success
         } catch {
             state = .failure(UX.Error(error: error))

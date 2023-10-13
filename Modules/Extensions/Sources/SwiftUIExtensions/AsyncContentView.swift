@@ -28,6 +28,19 @@ extension AsyncState where Value == Void {
     @inlinable public static var success: Self { .success(()) }
 }
 
+extension AsyncState: Equatable {
+
+    public static func == (lhs: AsyncState<Value, Failure>, rhs: AsyncState<Value, Failure>) -> Bool {
+        switch (lhs, rhs) {
+        case (.idle, .idle): return true
+        case (.loading, .loading): return true
+        case let (.success(s1), .success(s2)): return isEqual(s1, s2)
+        case let (.failure(e1), .failure(e2)): return String(describing: e1) == String(describing: e2)
+        default: return false
+        }
+    }
+}
+
 public protocol LoadableObject<Output, Failure>: ObservableObject {
     associatedtype Output
     associatedtype Failure: Error
