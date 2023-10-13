@@ -129,13 +129,12 @@ public struct PricesScene: Reducer {
                 return .none
 
             case .onAssetTapped(let asset):
-                return .run { _ in
-                    app.post(
-                        action: blockchain.ux.asset[asset.currency.code].select.then.enter.into,
-                        value: blockchain.ux.asset[asset.currency.code],
-                        context: [blockchain.ux.asset.select.origin: "PRICES"]
-                    )
-                }
+                app.post(
+                    action: blockchain.ux.asset[asset.currency.code].select.then.enter.into,
+                    value: blockchain.ux.asset[asset.currency.code],
+                    context: [blockchain.ux.asset.select.origin: "PRICES"]
+                )
+                return .none
 
             case .binding, .topMoversAction:
                 return .none

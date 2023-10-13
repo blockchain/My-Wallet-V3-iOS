@@ -65,28 +65,23 @@ struct TradingLimitsReducer: Reducer {
             switch action {
             case .close:
                 let currentTier = state.unlockTradingState?.currentUserTier
-                return .run { _ in
-                    if let currentTier {
-                        analyticsRecorder.record(
-                            event: Events.tradingLimitsDismissed(
-                                tier: currentTier.rawValue
-                            )
+                if let currentTier {
+                    analyticsRecorder.record(
+                        event: Events.tradingLimitsDismissed(
+                            tier: currentTier.rawValue
                         )
-                    }
-                    close()
+                    )
                 }
+                close()
+                return .none
 
             case .fetchLimits:
                 state.loading = true
-                return .run { send in
-                    do {
-                        let limits = try await fetchLimitsOverview()
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.didFetchLimits(.success(limits)))
-                    } catch {
-                        await send(.didFetchLimits(.failure(error as! Nabu.Error)))
-                    }
+                return .publisher {
+                    fetchLimitsOverview()
+                        .receive(on: mainQueue)
+                        .map { .didFetchLimits(.success($0)) }
+                        .catch { .didFetchLimits(.failure($0)) }
                 }
 
             case .didFetchLimits(let result):

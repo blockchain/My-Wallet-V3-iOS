@@ -75,9 +75,8 @@ public struct WithdrawalLockInfoReducer: Reducer {
                 state.route = routeItent
                 return .none
             case .dismiss:
-                return .run { _ in
-                    closeAction?()
-                }
+                closeAction?()
+                return .none
             }
         }
     }

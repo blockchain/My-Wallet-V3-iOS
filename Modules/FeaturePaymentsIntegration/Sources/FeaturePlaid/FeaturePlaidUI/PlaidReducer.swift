@@ -64,17 +64,11 @@ public struct PlaidReducer: Reducer {
 
             case .getLinkTokenResponse(let response):
                 state.accountId = response.id
-                return .merge(
-                    .run { _ in
-                        // post blockchain event with received token so
-                        // LinkKit SDK can act on it
-                        app.post(
-                            value: response.linkToken,
-                            of: blockchain.ux.payment.method.plaid.event.receive.link.token
-                        )
-                    },
-                    Effect.send(.waitingForAccountLinkResult)
+                app.post(
+                    value: response.linkToken,
+                    of: blockchain.ux.payment.method.plaid.event.receive.link.token
                 )
+                return Effect.send(.waitingForAccountLinkResult)
 
             case .waitingForAccountLinkResult:
                 return .run { send in
@@ -131,26 +125,20 @@ public struct PlaidReducer: Reducer {
 
             case .updateSourceSelection:
                 let accountId = state.accountId
-                return .merge(
-                    .run { _ in
-                        // Update the transaction source
-                        app.post(
-                            event: blockchain.ux.payment.method.plaid.event.reload.linked_banks
-                        )
-                        app.post(
-                            event: blockchain.ux.transaction.action.select.payment.method,
-                            context: [
-                                blockchain.ux.transaction.action.select.payment.method.id: accountId
-                            ]
-                        )
-                    },
-                    Effect.send(.finished(success: true))
+                app.post(
+                    event: blockchain.ux.payment.method.plaid.event.reload.linked_banks
                 )
+                app.post(
+                    event: blockchain.ux.transaction.action.select.payment.method,
+                    context: [
+                        blockchain.ux.transaction.action.select.payment.method.id: accountId
+                    ]
+                )
+                return Effect.send(.finished(success: true))
 
             case .finished(let success):
-                return .run { _ in
-                    dismissFlow(success)
-                }
+                dismissFlow(success)
+                return .none
 
             case .finishedWithError(let error):
                 if let error {

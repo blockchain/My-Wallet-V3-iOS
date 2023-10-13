@@ -240,11 +240,10 @@ public struct SellEnterAmount: Reducer {
                 return .none
 
             case .onSelectSourceTapped:
-                return .run { _ in
-                    app.post(event: blockchain.ux.transaction.select.source.entry, context: [
-                        blockchain.ux.transaction.select.source.is.first.in.flow: false
-                    ])
-                }
+                app.post(event: blockchain.ux.transaction.select.source.entry, context: [
+                    blockchain.ux.transaction.select.source.is.first.in.flow: false
+                ])
+                return .none
 
             case .onMinMaxAmountsFetched(let minMaxValues):
                 state.transactionMinMaxValues = minMaxValues

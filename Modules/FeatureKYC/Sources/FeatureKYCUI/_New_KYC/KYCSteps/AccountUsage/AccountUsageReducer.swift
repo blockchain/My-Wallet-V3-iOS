@@ -42,22 +42,20 @@ enum AccountUsage {
                     return Effect.send(.loadForm)
 
                 case .onComplete:
-                    return .run { _ in onComplete() }
+                    onComplete()
+                    return .none
 
                 case .dismiss:
-                    return .run { _ in dismiss() }
+                    dismiss()
+                    return .none
 
                 case .loadForm:
                     state = .loading
-                    return .run { send in
-                        do {
-                            let result = try await loadForm()
-                                .receive(on: mainQueue)
-                                .await()
-                            await send(.formDidLoad(.success(result)))
-                        } catch {
-                            await send(.formDidLoad(.failure(error as! NabuNetworkError)))
-                        }
+                    return .publisher {
+                        loadForm()
+                            .receive(on: mainQueue)
+                            .map { .formDidLoad(.success($0)) }
+                            .catch { .formDidLoad(.failure($0)) }
                     }
 
                 case .formDidLoad(let result):

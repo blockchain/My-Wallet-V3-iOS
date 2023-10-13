@@ -76,7 +76,8 @@ public struct InstitutionListReducer: Reducer {
                 state.result = .success(account)
                 return .none
             case .showTransferDetails:
-                return .run { _ in environment.showTransferDetails() }
+                environment.showTransferDetails()
+                return .none
             case .select(let account, let institution):
                 state.selection = .init(
                     data: .init(
@@ -99,7 +100,8 @@ public struct InstitutionListReducer: Reducer {
             case .bank:
                 return .none
             case .dismiss:
-                return .run { _ in environment.dismiss() }
+                environment.dismiss()
+                return .none
             case .failure(let error):
                 state.result = .failure(error)
                 return .none

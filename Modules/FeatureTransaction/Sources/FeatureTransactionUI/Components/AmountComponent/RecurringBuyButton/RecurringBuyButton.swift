@@ -107,10 +107,9 @@ struct RecurringBuyButtonReducer: Reducer {
                     }
                 )
             case .buttonTapped:
-                return .run { _ in
-                    app.post(value: true, of: blockchain.ux.transaction.recurring.buy.button.tapped.once)
-                    recurringBuyButtonTapped()
-                }
+                app.post(value: true, of: blockchain.ux.transaction.recurring.buy.button.tapped.once)
+                recurringBuyButtonTapped()
+                return .none
             case .binding:
                 return .none
             }

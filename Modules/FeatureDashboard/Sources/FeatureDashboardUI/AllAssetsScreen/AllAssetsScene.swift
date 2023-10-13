@@ -101,13 +101,12 @@ public struct AllAssetsScene: Reducer {
                 return .none
 
             case .onAssetTapped(let assetInfo):
-                return .run { _ in
-                    app.post(
-                        action: blockchain.ux.asset[assetInfo.currency.code].select.then.enter.into,
-                        value: blockchain.ux.asset[assetInfo.currency.code],
-                        context: [blockchain.ux.asset.select.origin: "ASSETS"]
-                    )
-                }
+                app.post(
+                    action: blockchain.ux.asset[assetInfo.currency.code].select.then.enter.into,
+                    value: blockchain.ux.asset[assetInfo.currency.code],
+                    context: [blockchain.ux.asset.select.origin: "ASSETS"]
+                )
+                return .none
 
             case .onConfirmFilterTapped:
                 state.filterPresented = false

@@ -29,9 +29,8 @@ struct TiersStatusViewReducer: Reducer {
                 guard tier > state.latestApprovedTier else {
                     return .none
                 }
-                return .run { _ in
-                    presentKYCFlow(tier)
-                }
+                presentKYCFlow(tier)
+                return .none
 
             default:
                 return .none

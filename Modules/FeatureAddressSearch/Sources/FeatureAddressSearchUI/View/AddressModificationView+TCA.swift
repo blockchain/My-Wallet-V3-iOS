@@ -145,13 +145,11 @@ struct AddressModificationReducer: Reducer {
                     country: state.country
                 )
                 if config.shouldSaveAddressOnCompletion {
-                    return .run { send in
-                        do {
-                            let address = try await addressService.save(address: address).await()
-                            await send(AddressModificationAction.updateAddressResponse(.success(address)))
-                        } catch {
-                            await send(AddressModificationAction.updateAddressResponse(.failure(error as! AddressServiceError)))
-                        }
+                    return .publisher {
+                        addressService.save(address: address)
+                            .map { AddressModificationAction.updateAddressResponse(.success($0)) }
+                            .catch { AddressModificationAction.updateAddressResponse(.failure($0)) }
+                            .receive(on: mainQueue)
                     }
                 } else {
                     return Effect.send(.updateAddressResponse(.success(address)))
@@ -181,15 +179,12 @@ struct AddressModificationReducer: Reducer {
                     return .none
                 }
                 state.loading = true
-                return .run { send in
-                    do {
-                        let details = try await addressSearchService
-                            .fetchAddress(addressId: addressId)
-                            .await()
-                        await send(.didReceiveAdressDetailsResult(.success(details)))
-                    } catch {
-                        await send(.didReceiveAdressDetailsResult(.failure(error as! AddressSearchServiceError)))
-                    }
+                return .publisher {
+                    addressSearchService
+                        .fetchAddress(addressId: addressId)
+                        .map { Action.didReceiveAdressDetailsResult(.success($0)) }
+                        .catch { Action.didReceiveAdressDetailsResult(.failure($0)) }
+                        .receive(on: mainQueue)
                 }
 
             case .didReceiveAdressDetailsResult(let result):
@@ -229,15 +224,12 @@ struct AddressModificationReducer: Reducer {
 
             case .fetchPrefilledAddress:
                 state.loading = true
-                return .run { send in
-                    do {
-                        let address = try await addressService
-                            .fetchAddress()
-                            .await()
-                        await send(AddressModificationAction.didReceivePrefilledAddressResult(.success(address)))
-                    } catch {
-                        await send(AddressModificationAction.didReceivePrefilledAddressResult(.failure(error as! AddressServiceError)))
-                    }
+                return .publisher {
+                    addressService
+                        .fetchAddress()
+                        .map { Action.didReceivePrefilledAddressResult(.success($0)) }
+                        .catch { Action.didReceivePrefilledAddressResult(.failure($0)) }
+                        .receive(on: mainQueue)
                 }
 
             case .didReceivePrefilledAddressResult(.success(let address)):
@@ -259,9 +251,8 @@ struct AddressModificationReducer: Reducer {
                 return Effect.send(.complete(.abandoned))
 
             case .complete(let addressResult):
-                return .run { _ in
-                    onComplete?(addressResult)
-                }
+                onComplete?(addressResult)
+                return .none
 
             case .binding:
                 return .none

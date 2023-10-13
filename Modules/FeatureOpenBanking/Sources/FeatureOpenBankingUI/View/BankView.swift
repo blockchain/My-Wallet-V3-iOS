@@ -91,14 +91,13 @@ public struct BankReducer: Reducer {
             case .request:
                 state.ui = .communicating(to: state.name)
                 state.showActions = false
+                environment.openBanking.reset()
                 return .merge(
                     .publisher {
                         Just(())
                             .delay(for: .seconds(90), scheduler: environment.scheduler)
                             .map { BankAction.showActions }
-                    },
-                    .run { _ in
-                        environment.openBanking.reset()
+                            .receive(on: environment.scheduler)
                     },
                     .publisher { [data = state.data] in
                         environment.openBanking.start(data)
@@ -132,10 +131,8 @@ public struct BankReducer: Reducer {
 
             case .launchAuthorisation(let url):
                 state.ui = .waiting(for: state.name)
-                return .merge(
-                    .run { _ in environment.openURL.open(url) },
-                    .cancel(id: ID.LaunchBank())
-                )
+                environment.openURL.open(url)
+                return .cancel(id: ID.LaunchBank())
 
             case .finalise(let output):
                 state.showActions = true
@@ -161,7 +158,8 @@ public struct BankReducer: Reducer {
                 )
 
             case .dismiss:
-                return .run { _ in environment.dismiss() }
+                environment.dismiss()
+                return .none
 
             case .finished, .cancel:
                 return .merge(

@@ -46,18 +46,11 @@ struct EmailVerificationHelpReducer: Reducer {
 
             case .alert(.presented(.sendVerificationEmail)):
                 state.sendingVerificationEmail = true
-                return .run { [state] send in
-                    do {
-                        try await emailVerificationService.sendVerificationEmail(to: state.emailAddress)
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.didReceiveEmailSendingResponse(.success(0)))
-                    } catch {
-                        guard let error = error as? UpdateEmailAddressError else {
-                            return
-                        }
-                        await send(.didReceiveEmailSendingResponse(.failure(error)))
-                    }
+                return .publisher { [state] in
+                    emailVerificationService.sendVerificationEmail(to: state.emailAddress)
+                        .receive(on: mainQueue)
+                        .map { .didReceiveEmailSendingResponse(.success(0)) }
+                        .catch { .didReceiveEmailSendingResponse(.failure($0)) }
                 }
 
             case .didReceiveEmailSendingResponse(let result):

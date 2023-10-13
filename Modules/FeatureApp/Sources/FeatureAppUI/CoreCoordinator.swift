@@ -206,14 +206,13 @@ struct MainAppReducerCore: Reducer {
         Reduce { state, action in
             switch action {
             case .start:
-                return .run { _ in
-                    syncPinKeyWithICloud(
-                        blockchainSettings: environment.blockchainSettings,
-                        legacyGuid: environment.legacyGuidRepository,
-                        legacySharedKey: environment.legacySharedKeyRepository,
-                        credentialsStore: environment.credentialsStore
-                    )
-                }
+                syncPinKeyWithICloud(
+                    blockchainSettings: environment.blockchainSettings,
+                    legacyGuid: environment.legacyGuidRepository,
+                    legacySharedKey: environment.legacySharedKeyRepository,
+                    credentialsStore: environment.credentialsStore
+                )
+                return .none
 
             case .appForegrounded:
                 let isLoggedIn = state.isLoggedIn
@@ -448,14 +447,8 @@ struct MainAppReducerCore: Reducer {
                 )
 
             case .onboarding(.pin(.handleAuthentication(let password))):
-                return .merge(
-                    .run { _ in
-                        environment.app.post(event: blockchain.ux.user.event.authenticated.pin)
-                    },
-                    Effect.send(
-                        .fetchWallet(password: password)
-                    )
-                )
+                environment.app.post(event: blockchain.ux.user.event.authenticated.pin)
+                return Effect.send(.fetchWallet(password: password))
 
             case .onboarding(.pin(.pinCreated)):
                 environment.loadingViewPresenter.showCircular()
@@ -493,32 +486,36 @@ struct MainAppReducerCore: Reducer {
                 )
 
                 return .merge(
-                    .run { _ in
-                        try await environment.forgetWalletService
+                    .publisher {
+                        environment.forgetWalletService
                             .forget()
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: environment.mainQueue)
-                            .await()
                     },
-                    .run { _ in
-                        try await environment
+                    .publisher {
+                        environment
                             .pushNotificationsRepository
                             .revokeToken()
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: environment.mainQueue)
-                            .await()
                     },
-                    .run { _ in
-                        try await environment
+                    .publisher {
+                        environment
                             .mobileAuthSyncService
                             .updateMobileSetup(isMobileSetup: false)
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: environment.mainQueue)
-                            .await()
                     },
-                    .run { _ in
-                        try await environment
+                    .publisher {
+                        environment
                             .mobileAuthSyncService
                             .verifyCloudBackup(hasCloudBackup: false)
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: environment.mainQueue)
-                            .await()
                     }
                 )
             case .onboarding(.welcomeScreen(.informWalletFetched(let context))):
@@ -584,34 +581,37 @@ struct MainAppReducerCore: Reducer {
                 else {
                     return .none
                 }
-                return .run { _ in
-                    do {
-                        try await environment
-                            .accountRecoveryService
-                            .resetVerificationStatus(guid: guid, sharedKey: sharedKey)
-                            .await()
-                    } catch {
-                        environment.analyticsRecorder.record(
-                            event: AnalyticsEvents.New.AccountRecoveryCoreFlow.accountRecoveryFailed
-                        )
-                    }
+                return .publisher {
+                    environment
+                        .accountRecoveryService
+                        .resetVerificationStatus(guid: guid, sharedKey: sharedKey)
+                        .catch { _ in
+                            environment.analyticsRecorder.record(
+                                event: AnalyticsEvents.New.AccountRecoveryCoreFlow.accountRecoveryFailed
+                            )
+                            return Just(())
+                        }
+                        .map { .none }
+                        .receive(on: environment.mainQueue)
                 }
 
             case .mobileAuthSync(let isLogin):
                 return .merge(
-                    .run { _ in
-                        try await environment
+                    .publisher {
+                        environment
                             .mobileAuthSyncService
                             .updateMobileSetup(isMobileSetup: isLogin)
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: environment.mainQueue)
-                            .await()
                     },
-                    .run { _ in
-                        try await environment
+                    .publisher {
+                        environment
                             .mobileAuthSyncService
                             .verifyCloudBackup(hasCloudBackup: isLogin)
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: environment.mainQueue)
-                            .await()
                     }
                 )
 

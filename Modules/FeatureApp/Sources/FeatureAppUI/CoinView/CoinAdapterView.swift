@@ -26,7 +26,7 @@ import PlatformUIKit
 import SwiftUI
 import ToolKit
 
-public struct CoinAdapterView: View {
+@MainActor public struct CoinAdapterView: View {
 
     let app: AppProtocol
     let store: Store<CoinViewState, CoinViewAction>

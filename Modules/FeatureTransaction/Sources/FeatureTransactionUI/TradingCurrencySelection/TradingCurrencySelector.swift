@@ -34,14 +34,12 @@ enum TradingCurrency {
             Reduce { _, action in
                 switch action {
                 case .close:
-                    return .run { _ in
-                        closeHandler()
-                    }
+                    closeHandler()
+                    return .none
 
                 case .didSelect(let fiatCurrency):
-                    return .run { _ in
-                        selectionHandler(fiatCurrency)
-                    }
+                    selectionHandler(fiatCurrency)
+                    return .none
                 }
             }
         }

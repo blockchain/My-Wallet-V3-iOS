@@ -166,15 +166,12 @@ struct EmailVerificationReducer: Reducer {
                 }
 
             case .loadVerificationState, .alert(.presented(.loadVerificationState)):
-                return .run { send in
-                    do {
-                        let status = try await emailVerificationService
-                            .checkEmailVerificationStatus()
-                            .receive(on: mainQueue).await()
-                        await send(.didReceiveEmailVerficationResponse(.success(status)))
-                    } catch {
-                        await send(.didReceiveEmailVerficationResponse(.failure(error as! EmailVerificationCheckError)))
-                    }
+                return .publisher {
+                    emailVerificationService
+                        .checkEmailVerificationStatus()
+                        .receive(on: mainQueue)
+                        .map { .didReceiveEmailVerficationResponse(.success($0)) }
+                        .catch { .didReceiveEmailVerficationResponse(.failure($0)) }
                 }
 
             case .alert(.presented(.dismiss)), .alert(.dismiss):
@@ -198,9 +195,8 @@ struct EmailVerificationReducer: Reducer {
                 switch subaction {
                 case .acknowledgeEmailVerification:
                     flowCompletionCallback?(.completed)
-                    return .run { _ in
-                        app.post(event: blockchain.ux.kyc.event.status.did.change)
-                    }
+                    app.post(event: blockchain.ux.kyc.event.status.did.change)
+                    return .none
                 }
 
             case .emailVerificationHelp(let subaction):

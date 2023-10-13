@@ -44,16 +44,12 @@ public struct DeletionConfirmReducer: Reducer {
                     return Effect.send(.validateConfirmationInput)
                 }
                 state.isLoading = true
-                return .run { send in
-                    do {
-                        try await userDeletionRepository
-                            .deleteUser(with: nil)
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.showResultScreen(result: .success(())))
-                    } catch {
-                        await send(.showResultScreen(result: .failure(error as! NetworkError)))
-                    }
+                return .publisher {
+                    userDeletionRepository
+                        .deleteUser(with: nil)
+                        .receive(on: mainQueue)
+                        .map { .showResultScreen(result: .success(())) }
+                        .catch { .showResultScreen(result: .failure($0)) }
                 }
             case .validateConfirmationInput:
                 state.validateConfirmationInputField()

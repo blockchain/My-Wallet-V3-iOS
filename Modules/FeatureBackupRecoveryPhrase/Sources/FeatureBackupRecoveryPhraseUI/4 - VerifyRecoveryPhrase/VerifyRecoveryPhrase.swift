@@ -99,9 +99,8 @@ public struct VerifyRecoveryPhrase: Reducer {
 
             case .onPhraseVerifyComplete:
                 state.backupPhraseStatus = .success
-                return .run { _ in
-                    onNext()
-                }
+                onNext()
+                return .none
 
             case .onPhraseVerifyBackupFailed:
                 state.backupPhraseStatus = .readyToVerify

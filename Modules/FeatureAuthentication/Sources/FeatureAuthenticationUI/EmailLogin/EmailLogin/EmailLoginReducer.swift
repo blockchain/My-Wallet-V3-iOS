@@ -177,12 +177,11 @@ struct EmailLoginReducer: Reducer {
             // MARK: - Transitions and Navigations
 
             case .onAppear:
-                return .run { _ in
-                    analyticsRecorder.record(
-                        event: .loginViewed
-                    )
-                    app.post(event: blockchain.ux.user.authentication.sign.in)
-                }
+                app.post(event: blockchain.ux.user.authentication.sign.in)
+                analyticsRecorder.record(
+                    event: .loginViewed
+                )
+                return .none
 
             case .route(let route):
                 if route?.route != nil {
@@ -197,12 +196,8 @@ struct EmailLoginReducer: Reducer {
 
             case .continueButtonTapped:
                 state.isLoading = true
-                return .merge(
-                    Effect.send(.setupSessionToken),
-                    .run { _ in
-                        app.post(event: blockchain.ux.user.authentication.sign.in.continue.tap)
-                    }
-                )
+                app.post(event: blockchain.ux.user.authentication.sign.in.continue.tap)
+                return Effect.send(.setupSessionToken)
 
             // MARK: - Email
 
@@ -221,16 +216,12 @@ struct EmailLoginReducer: Reducer {
                 }
                 state.isLoading = true
                 state.verifyDeviceState?.sendEmailButtonIsLoading = true
-                return .run { [emailAddress = state.emailAddress] send in
-                    do {
-                        try await deviceVerificationService
-                            .sendDeviceVerificationEmail(to: emailAddress)
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.didSendDeviceVerificationEmail(.success(.noValue)))
-                    } catch {
-                        await send(.didSendDeviceVerificationEmail(.failure(error as! DeviceVerificationServiceError)))
-                    }
+                return .publisher { [emailAddress = state.emailAddress] in
+                    deviceVerificationService
+                        .sendDeviceVerificationEmail(to: emailAddress)
+                        .receive(on: mainQueue)
+                        .map { .didSendDeviceVerificationEmail(.success(.noValue)) }
+                        .catch { .didSendDeviceVerificationEmail(.failure($0)) }
                 }
 
             case .didSendDeviceVerificationEmail(let response):
@@ -261,17 +252,13 @@ struct EmailLoginReducer: Reducer {
                 return Effect.send(.navigate(to: .verifyDevice))
 
             case .setupSessionToken:
-                return .run { send in
-                    do {
-                        let token = try await sessionTokenService
-                            .setupSessionToken()
-                            .map { _ in EmptyValue.noValue }
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(EmailLoginAction.setupSessionTokenReceived(.success(token)))
-                    } catch {
-                        await send(.setupSessionTokenReceived(.failure(error as! SessionTokenServiceError)))
-                    }
+                return .publisher {
+                    sessionTokenService
+                        .setupSessionToken()
+                        .map { _ in EmptyValue.noValue }
+                        .receive(on: mainQueue)
+                        .map { .setupSessionTokenReceived(.success($0)) }
+                        .catch { .setupSessionTokenReceived(.failure($0)) }
                 }
 
             case .setupSessionTokenReceived(.success):

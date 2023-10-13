@@ -49,15 +49,11 @@ extension AccountUsage {
 
                     case .submit, .alert(.presented(.submit)):
                         state.submissionState = .loading
-                        return .run { [form = state.form] send in
-                            do {
-                                try await submitForm(form)
-                                    .receive(on: mainQueue)
-                                    .await()
-                                await send(.submissionDidComplete(.success(Empty())))
-                            } catch {
-                                await send(.submissionDidComplete(.failure(error as! NabuNetworkError)))
-                            }
+                        return .publisher { [form = state.form] in
+                            submitForm(form)
+                                .receive(on: mainQueue)
+                                .map { .submissionDidComplete(.success(Empty())) }
+                                .catch { .submissionDidComplete(.failure($0)) }
                         }
 
                     case .submissionDidComplete(let result):

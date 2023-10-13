@@ -71,15 +71,12 @@ public struct WithdrawalLocksReducer: Reducer {
             case .present(withdrawalLocks: let withdrawalLocks):
                 let updated = state.withdrawalLocks != withdrawalLocks
                 state.withdrawalLocks = withdrawalLocks
-                return .run { _ in
-                    if updated {
-                        mainQueue.schedule {
-                            updateViewAction?(
-                                withdrawalLocks?.items.isEmpty == false
-                            )
-                        }
-                    }
+                if updated {
+                    updateViewAction?(
+                        withdrawalLocks?.items.isEmpty == false
+                    )
                 }
+                return .none
             case .route(let routeItent):
                 state.route = routeItent
                 return .none

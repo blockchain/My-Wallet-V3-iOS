@@ -58,15 +58,13 @@ public struct ManualBackupSeedPhrase: Reducer {
                 )
             case .onCopyReturn:
                 state.recoveryPhraseCopied = false
-                return .run { _ in
-                    UIPasteboard.general.clear()
-                }
+                UIPasteboard.general.clear()
+                return .none
 
             case .onNextTap:
                 onNext()
-                return .run { _ in
-                    UIPasteboard.general.clear()
-                }
+                UIPasteboard.general.clear()
+                return .none
             }
         }
     }

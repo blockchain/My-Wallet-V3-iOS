@@ -33,6 +33,7 @@ public enum PasswordRequiredAction: Equatable, BindableAction {
     case forgetWalletTapped
     case forgotPasswordTapped
     case openExternalLink(URL)
+    case none
 }
 
 // MARK: - Properties
@@ -151,31 +152,35 @@ public struct PasswordRequiredReducer: Reducer {
                 return .none
             case .alert(.presented(.forgetWallet)):
                 return .merge(
-                    .run { _ in
-                        try await forgetWalletService
+                    .publisher {
+                        forgetWalletService
                             .forget()
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: mainQueue)
-                            .await()
                     },
-                    .run { _ in
-                        try await pushNotificationsRepository
+                    .publisher {
+                        pushNotificationsRepository
                             .revokeToken()
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: mainQueue)
-                            .await()
                     }
                     .cancellable(id: PasswordRequiredCancellations.RevokeTokenId()),
-                    .run { _ in
-                        try await mobileAuthSyncService
+                    .publisher {
+                        mobileAuthSyncService
                             .updateMobileSetup(isMobileSetup: false)
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: mainQueue)
-                            .await()
                     }
                     .cancellable(id: PasswordRequiredCancellations.UpdateMobileSetupId()),
-                    .run { _ in
-                        try await mobileAuthSyncService
+                    .publisher {
+                        mobileAuthSyncService
                             .verifyCloudBackup(hasCloudBackup: false)
+                            .catch { _ in Just(()) }
+                            .map { .none }
                             .receive(on: mainQueue)
-                            .await()
                     }
                     .cancellable(id: PasswordRequiredCancellations.VerifyCloudBackupId())
                 )
@@ -188,6 +193,8 @@ public struct PasswordRequiredReducer: Reducer {
                 )
             case .openExternalLink(let url):
                 externalAppOpener.open(url)
+                return .none
+            case .none:
                 return .none
             }
         }

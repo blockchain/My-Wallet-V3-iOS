@@ -222,16 +222,12 @@ struct AppReducerCore: Reducer {
                     Effect.send(.core(.onboarding(.start)))
                 )
             case .walletPersistence(.begin):
-                let crashlyticsRecorder = environment.crashlyticsRecorder
-                return .run { send in
-                    do {
-                        try await environment.walletRepoPersistence
-                            .beginPersisting()
-                            .await()
-                        await send(AppAction.walletPersistence(.persisted(.success(EmptyValue.noValue))))
-                    } catch {
-                        await send(AppAction.walletPersistence(.persisted(.failure(error as! WalletRepoPersistenceError))))
-                    }
+                return .publisher {
+                    environment.walletRepoPersistence
+                        .beginPersisting()
+                        .map { Action.walletPersistence(.persisted(.success(EmptyValue.noValue))) }
+                        .catch { Action.walletPersistence(.persisted(.failure($0))) }
+                        .receive(on: environment.mainQueue)
                 }
                 .cancellable(
                     id: AppCancellations.WalletPersistenceId(),

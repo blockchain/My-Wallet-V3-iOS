@@ -30,14 +30,12 @@ struct UnlockTradingReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .closeButtonTapped:
-                return .run { _ in
-                    dismiss()
-                }
+                dismiss()
+                return .none
 
             case .unlockButtonTapped(let requiredTier):
-                return .run { _ in
-                    unlock(requiredTier)
-                }
+                unlock(requiredTier)
+                return .none
 
             case .binding:
                 return .none

@@ -31,18 +31,14 @@ public struct GraphViewReducer: Reducer {
                 }
                 state.isFetching = true
                 state.interval = interval
-                return .run { [date = state.date] send in
-                    do {
-                        let data = try await historicalPriceService.fetch(
-                            series: interval,
-                            relativeTo: date
-                        )
-                        .receive(on: mainQueue)
-                        .await()
-                        await send(.fetched(.success(data)))
-                    } catch {
-                        await send(.fetched(.failure(error as! NetworkError)))
-                    }
+                return .publisher { [date = state.date] in
+                    historicalPriceService.fetch(
+                        series: interval,
+                        relativeTo: date
+                    )
+                    .receive(on: mainQueue)
+                    .map { .fetched(.success($0)) }
+                    .catch { .fetched(.failure($0)) }
                 }
                 .cancellable(id: CancellableID.fetch)
             case .fetched(let data):

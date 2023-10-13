@@ -57,16 +57,12 @@ struct SuperAppContent: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .merge(
-                    .run { _ in
-                        app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
-                    },
-                    .run { send in
-                        for await isDeFiOnly in app.stream(blockchain.app.is.DeFi.only, as: Bool.self) {
-                            await send(.onTradingModeEnabledFetched(isDeFiOnly.value?.not ?? true))
-                        }
+                app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
+                return .run { send in
+                    for await isDeFiOnly in app.stream(blockchain.app.is.DeFi.only, as: Bool.self) {
+                        await send(.onTradingModeEnabledFetched(isDeFiOnly.value?.not ?? true))
                     }
-                )
+                }
             case .refresh:
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
@@ -89,9 +85,8 @@ struct SuperAppContent: Reducer {
                 state.headerState.hasError = true
                 return .none
             case .onDisappear:
-                return .run { _ in
-                    app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
-                }
+                app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
+                return .none
             case .header:
                 return .none
             case .trading:

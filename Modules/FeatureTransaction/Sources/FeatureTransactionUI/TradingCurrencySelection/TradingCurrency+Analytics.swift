@@ -27,11 +27,10 @@ struct TradingCurrencyAnalyticsReducer: Reducer {
         Reduce { _, action in
             switch action {
             case .didSelect(let currency):
-                return .run { _ in
-                    analyticsRecorder.record(
-                        event: AnalyticsEvents.New.TradingCurrency.fiatCurrencySelected(currency: currency.code)
-                    )
-                }
+                analyticsRecorder.record(
+                    event: AnalyticsEvents.New.TradingCurrency.fiatCurrencySelected(currency: currency.code)
+                )
+                return .none
 
             default:
                 return .none

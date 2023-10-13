@@ -209,23 +209,17 @@ struct AddressSearchReducer: Reducer {
                     }
                 }
                 state.isSearchResultsLoading = true
-                return .run { [state] send in
-                    do {
-                        let addresses = try await addressSearchService
-                            .fetchAddresses(
-                                searchText: searchText,
-                                containerId: state.containerSearch?.containerId,
-                                countryCode: country,
-                                sateCode: state.address?.state
-                            )
-                            .await()
-                        await send(.didReceiveAddressesResult(.success(addresses)))
-                    } catch let error as AddressSearchServiceError {
-                        await send(.didReceiveAddressesResult(.failure(error)))
-                    }
-                    catch {
-                        print("\(error.localizedDescription)")
-                    }
+                return .publisher { [state] in
+                    addressSearchService
+                        .fetchAddresses(
+                            searchText: searchText,
+                            containerId: state.containerSearch?.containerId,
+                            countryCode: country,
+                            sateCode: state.address?.state
+                        )
+                        .receive(on: mainQueue)
+                        .map { .didReceiveAddressesResult(.success($0)) }
+                        .catch { .didReceiveAddressesResult(.failure($0)) }
                 }
                 .debounce(
                     id: AddressSearchIdentifier(),

@@ -142,11 +142,9 @@ public struct AvailableBalanceDetailViewReducer: Reducer {
                     .init(title: "\(LocalizedIds.availableTo) \(action.name)", content: .text(available.displayString))
                 ]
                 return .none
-            case .okayButtonTapped,
-                    .closeButtonTapped:
-                return .run { _ in
-                    closeAction?()
-                }
+            case .okayButtonTapped, .closeButtonTapped:
+                closeAction?()
+                return .none
             }
         }
     }

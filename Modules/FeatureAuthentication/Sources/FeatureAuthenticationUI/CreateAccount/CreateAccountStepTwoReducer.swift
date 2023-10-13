@@ -242,21 +242,17 @@ struct CreateAccountStepTwoReducer: Reducer {
                 return .merge(
                     Effect.send(.triggerAuthenticate),
                     .cancel(id: CreateAccountStepTwoIds.RecaptchaId()),
-                    .run { [state] send in
-                        do {
-                            let wallet = try await walletCreationService
-                                .createWallet(
-                                    state.emailAddress,
-                                    state.password,
-                                    accountName,
-                                    recaptchaToken
-                                )
-                                .receive(on: mainQueue)
-                                .await()
-                            await send(.accountCreation(.success(wallet)))
-                        } catch {
-                            await send(.accountCreation(.failure(error as! WalletCreationServiceError)))
-                        }
+                    Effect.publisher { [state] in
+                        walletCreationService
+                            .createWallet(
+                                state.emailAddress,
+                                state.password,
+                                accountName,
+                                recaptchaToken
+                            )
+                            .receive(on: mainQueue)
+                            .map { .accountCreation(.success($0)) }
+                            .catch { .accountCreation(.failure($0)) }
                     }
                     .cancellable(id: CreateAccountStepTwoIds.CreationId(), cancelInFlight: true)
                 )
@@ -275,15 +271,11 @@ struct CreateAccountStepTwoReducer: Reducer {
                     return .none
                 }
 
-                return .run { send in
-                    do {
-                        let data = try await recaptchaService.verifyForSignup()
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(CreateAccountStepTwoAction.createAccount(.success(data)))
-                    } catch {
-                        await send(CreateAccountStepTwoAction.createAccount(.failure(error as! GoogleRecaptchaError)))
-                    }
+                return .publisher {
+                    recaptchaService.verifyForSignup()
+                        .receive(on: mainQueue)
+                        .map { .createAccount(.success($0)) }
+                        .catch { .createAccount(.failure($0)) }
                 }
                 .cancellable(id: CreateAccountStepTwoIds.RecaptchaId(), cancelInFlight: true)
 
@@ -298,21 +290,17 @@ struct CreateAccountStepTwoReducer: Reducer {
                 let accountName = NonLocalizedConstants.defiWalletTitle
                 return .merge(
                     Effect.send(.triggerAuthenticate),
-                    .run { [emailAddress = state.emailAddress, password = state.password] send in
-                        do {
-                            let context = try await walletCreationService
-                                .importWallet(
-                                    emailAddress,
-                                    password,
-                                    accountName,
-                                    mnemonic
-                                )
-                                .receive(on: mainQueue)
-                                .await()
-                            await send(.accountImported(.success(context)))
-                        } catch {
-                            await send(.accountImported(.failure(error as! WalletCreationServiceError)))
-                        }
+                    Effect.publisher { [emailAddress = state.emailAddress, password = state.password] in
+                        walletCreationService
+                            .importWallet(
+                                emailAddress,
+                                password,
+                                accountName,
+                                mnemonic
+                            )
+                            .receive(on: mainQueue)
+                            .map { .accountImported(.success($0)) }
+                            .catch { .accountImported(.failure($0)) }
                     }
                     .cancellable(id: CreateAccountStepTwoIds.ImportId(), cancelInFlight: true)
                 )
@@ -357,21 +345,19 @@ struct CreateAccountStepTwoReducer: Reducer {
                         .cancel(id: CreateAccountStepTwoIds.CreationId()),
                         .cancel(id: CreateAccountStepTwoIds.ImportId()),
                         .run { [countryId = state.country.id] _ in
-                            try await walletCreationService
-                                .updateCurrencyForNewWallets(countryId, context.guid, context.sharedKey)
-                                .receive(on: mainQueue)
-                                .await()
-                        },
-                        .run { send in
                             do {
-                                let result = try await walletFetcherService
-                                    .fetchWallet(context.guid, context.sharedKey, context.password)
+                                try await walletCreationService
+                                    .updateCurrencyForNewWallets(countryId, context.guid, context.sharedKey)
                                     .receive(on: mainQueue)
                                     .await()
-                                await send(CreateAccountStepTwoAction.walletFetched(.success(result)))
-                            } catch {
-                                await send(CreateAccountStepTwoAction.walletFetched(.failure(error as! WalletFetcherServiceError)))
                             }
+                        },
+                        .publisher {
+                            walletFetcherService
+                                .fetchWallet(context.guid, context.sharedKey, context.password)
+                                .receive(on: mainQueue)
+                                .map { .walletFetched(.success($0)) }
+                                .catch { .walletFetched(.failure($0)) }
                         }
                     )
                 )
@@ -395,9 +381,8 @@ struct CreateAccountStepTwoReducer: Reducer {
                 return .none
 
             case .informWalletFetched:
-                return .run { _ in
-                    app?.post(event: blockchain.ux.user.authentication.sign.up.address.submit)
-                }
+                app?.post(event: blockchain.ux.user.authentication.sign.up.address.submit)
+                return .none
 
             case .accountImported(.success(.right(.noValue))):
                 // this will only be true in case of legacy wallet

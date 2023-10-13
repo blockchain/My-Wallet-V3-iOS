@@ -92,14 +92,12 @@ public struct AccountPicker: Reducer {
 
             case .rowsLoaded(.success(.accountPickerRowDidTap(let id))):
                 state.selected = id
-                return .run { _ in
-                    rowSelected(id)
-                }
+                rowSelected(id)
+                return .none
             case .rowsLoaded(.success(.ux(let ux))):
                 state.ux = ux
-                return .run { _ in
-                    uxSelected(ux)
-                }
+                uxSelected(ux)
+                return .none
 
             case .prefetching(.fetch(indices: let indices)):
                 guard case .loaded(.success(let sections)) = state.sections else {
@@ -238,9 +236,8 @@ public struct AccountPicker: Reducer {
 
             case .onSegmentSelectionChanged(let segmentControlSelection):
                 state.header.segmentControlSelection = segmentControlSelection
-                return .run { _ in
-                    onSegmentSelectionChanged?(segmentControlSelection)
-                }
+                onSegmentSelectionChanged?(segmentControlSelection)
+                return .none
 
             case .subscribeToUpdates:
                 return .merge(

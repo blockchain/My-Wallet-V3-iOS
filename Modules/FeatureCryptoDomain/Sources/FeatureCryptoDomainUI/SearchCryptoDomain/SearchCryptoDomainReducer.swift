@@ -149,16 +149,14 @@ struct SearchCryptoDomain: Reducer {
                     return Effect.send(.searchDomainsWithUsername)
                 }
                 state.isSearchResultsLoading = true
-                return .run { send in
-                    do {
-                        let results = try await searchDomainRepository
+                return .publisher {
+                    searchDomainRepository
                             .searchResults(searchKey: key, freeOnly: isFreeOnly)
                             .receive(on: mainQueue)
-                            .await()
-                        await send(.didReceiveDomainsResult(.success(results), isFreeOnly))
-                    } catch {
-                        await send(.didReceiveDomainsResult(.failure(error as! SearchDomainRepositoryError), isFreeOnly))
-                    }
+                            .map {
+                                .didReceiveDomainsResult(.success($0), isFreeOnly)
+                            }
+                            .catch { .didReceiveDomainsResult(.failure($0), isFreeOnly) }
                 }
                 .debounce(
                     id: SearchCryptoDomainId.SearchDebounceId(),
@@ -193,23 +191,20 @@ struct SearchCryptoDomain: Reducer {
                 state.selectedPremiumDomain = domain
                 return .merge(
                     Effect.send(.set(\.$isPremiumDomainBottomSheetShown, true)),
-                    .run { send in
-                        do {
-                            let orderResult = try await userInfoProvider()
-                                .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
-                                .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
-                                    orderDomainRepository
-                                        .createDomainOrder(
-                                            isFree: false,
-                                            domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
-                                            resolutionRecords: userInfo.resolutionRecords
-                                        )
-                                }
-                                .receive(on: mainQueue).await()
-                            await send(.didSelectPremiumDomain(.success(orderResult)))
-                        } catch {
-                            await send(.didSelectPremiumDomain(.failure(error as! OrderDomainRepositoryError)))
-                        }
+                    Effect.publisher {
+                        userInfoProvider()
+                            .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
+                            .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
+                                orderDomainRepository
+                                    .createDomainOrder(
+                                        isFree: false,
+                                        domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
+                                        resolutionRecords: userInfo.resolutionRecords
+                                    )
+                            }
+                            .receive(on: mainQueue)
+                            .map { .didSelectPremiumDomain(.success($0)) }
+                            .catch { .didSelectPremiumDomain(.failure($0)) }
                     }
                 )
 

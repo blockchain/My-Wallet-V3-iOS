@@ -109,9 +109,8 @@ public struct PrefillButtons: Reducer {
                 return .none
 
             case .select(let moneyValue, let size):
-                return .run { _ in
-                    onValueSelected(moneyValue, size)
-                }
+                onValueSelected(moneyValue, size)
+                return .none
             }
         }
     }

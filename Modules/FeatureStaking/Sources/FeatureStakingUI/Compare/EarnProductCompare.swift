@@ -18,9 +18,8 @@ struct EarnProductCompare: Reducer {
             state.currentStep = step
             return .none
         case .onDismiss:
-            return .run { _ in
-                onDismiss()
-            }
+            onDismiss()
+            return .none
         }
     }
 }

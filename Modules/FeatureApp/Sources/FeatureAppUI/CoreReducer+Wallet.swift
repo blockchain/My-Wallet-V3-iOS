@@ -48,15 +48,11 @@ struct WalletReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .wallet(.fetch(let password)):
-                return .run { send in
-                        do {
-                            let wallet = try await environment.walletService.fetch(password)
+                return .publisher {
+                        environment.walletService.fetch(password)
                                 .receive(on: environment.mainQueue)
-                                .await()
-                            await send(.wallet(.walletFetched(.success(wallet))))
-                        } catch {
-                            await send(.wallet(.walletFetched(.failure(error as! WalletError))))
-                        }
+                                .map { Action.wallet(.walletFetched(.success($0))) }
+                                .catch { Action.wallet(.walletFetched(.failure($0))) }
                     }
                     .cancellable(id: WalletCancelations.FetchId, cancelInFlight: true)
 

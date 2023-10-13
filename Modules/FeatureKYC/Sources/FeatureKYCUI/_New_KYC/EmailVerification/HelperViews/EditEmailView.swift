@@ -61,18 +61,11 @@ struct EditEmailReducer: Reducer {
                     return .none
                 }
                 state.savingEmailAddress = true
-                return .run { [emailAddress = state.emailAddress] send in
-                    do {
-                        try await emailVerificationService.updateEmailAddress(to: emailAddress)
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.didReceiveSaveResponse(.success(0)))
-                    } catch {
-                        guard let error = error as? UpdateEmailAddressError else {
-                            return
-                        }
-                        await send(.didReceiveSaveResponse(.failure(error)))
-                    }
+                return .publisher { [emailAddress = state.emailAddress] in
+                    emailVerificationService.updateEmailAddress(to: emailAddress)
+                        .receive(on: mainQueue)
+                        .map { .didReceiveSaveResponse(.success(0)) }
+                        .catch { .didReceiveSaveResponse(.failure($0)) }
                 }
 
             case .didReceiveSaveResponse(let response):

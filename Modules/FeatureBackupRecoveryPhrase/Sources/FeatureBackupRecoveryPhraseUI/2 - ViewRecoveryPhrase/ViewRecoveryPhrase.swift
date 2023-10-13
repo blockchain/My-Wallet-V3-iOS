@@ -1,4 +1,5 @@
 import BlockchainNamespace
+import Combine
 import ComposableArchitecture
 import FeatureBackupRecoveryPhraseDomain
 import PlatformKit
@@ -58,9 +59,8 @@ public struct ViewRecoveryPhrase: Reducer {
                 return .none
 
             case .onRecoveryPhraseComponentsFetchedFailed:
-                return .run { _ in
-                    onFailed()
-                }
+                onFailed()
+                return .none
 
             case .onCopyTap:
                 state.recoveryPhraseCopied = true
@@ -76,9 +76,8 @@ public struct ViewRecoveryPhrase: Reducer {
                 )
             case .onCopyReturn:
                 state.recoveryPhraseCopied = false
-                return .run { _ in
-                    UIPasteboard.general.clear()
-                }
+                UIPasteboard.general.clear()
+                return .none
 
             case .onBackupToIcloudTap:
                 state.backupLoading = true
@@ -100,9 +99,8 @@ public struct ViewRecoveryPhrase: Reducer {
 
             case .onBackupToIcloudComplete:
                 state.backupLoading = false
-                return .run { _ in
-                    onIcloudBackedUp()
-                }
+                onIcloudBackedUp()
+                return .none
 
             case .onBackupManuallyTap:
                 UIPasteboard.general.clear()
@@ -113,10 +111,12 @@ public struct ViewRecoveryPhrase: Reducer {
                 state.blurEnabled = false
                 if state.exposureEmailSent == false {
                     state.exposureEmailSent = true
-                    return .run { _ in
-                        try await recoveryPhraseRepository
+                    return .publisher {
+                        recoveryPhraseRepository
                             .sendExposureAlertEmail()
-                            .await()
+                            .catch { _ in Just(()) }
+                            .map { .none }
+                            .receive(on: mainQueue)
                     }
                 }
                 return .none
@@ -127,6 +127,8 @@ public struct ViewRecoveryPhrase: Reducer {
 
             case .onDoneTap:
                 onDone()
+                return .none
+            case .none:
                 return .none
             }
         }

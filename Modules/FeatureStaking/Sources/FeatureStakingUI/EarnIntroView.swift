@@ -231,16 +231,14 @@ public struct EarnIntro: Reducer {
     public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.Effect<Action> {
         switch action {
         case .onAppear:
-            return .run { _ in
-                app.state.set(blockchain.ux.earn.intro.did.show, to: true)
-            }
+            app.state.set(blockchain.ux.earn.intro.did.show, to: true)
+            return .none
         case .didChangeStep(let step):
             state.currentStep = step
             return .none
         case .onDismiss:
-            return .run { _ in
-                onDismiss()
-            }
+            onDismiss()
+            return .none
         }
     }
 

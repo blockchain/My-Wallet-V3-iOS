@@ -128,16 +128,12 @@ public struct NotificationPreferencesReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { send in
-                    do {
-                        let preferences = try await notificationPreferencesRepository
-                            .fetchPreferences()
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.onFetchedSettings(.success(preferences)))
-                    } catch {
-                        await send(.onFetchedSettings(.failure(error as! NetworkError)))
-                    }
+                return .publisher {
+                    notificationPreferencesRepository
+                        .fetchPreferences()
+                        .receive(on: mainQueue)
+                        .map { .onFetchedSettings(.success($0)) }
+                        .catch { .onFetchedSettings(.failure($0)) }
                 }
 
             case .route(let routeItent):
@@ -145,16 +141,12 @@ public struct NotificationPreferencesReducer: Reducer {
                 return .none
 
             case .onReloadTap:
-                return .run { send in
-                    do {
-                        let preferences = try await notificationPreferencesRepository
-                            .fetchPreferences()
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.onFetchedSettings(.success(preferences)))
-                    } catch {
-                        await send(.onFetchedSettings(.failure(error as! NetworkError)))
-                    }
+                return .publisher {
+                    notificationPreferencesRepository
+                        .fetchPreferences()
+                        .receive(on: mainQueue)
+                        .map { .onFetchedSettings(.success($0)) }
+                        .catch { .onFetchedSettings(.failure($0)) }
                 }
 
             case .notificationDetailsChanged(let action):

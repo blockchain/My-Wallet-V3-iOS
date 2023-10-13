@@ -231,30 +231,22 @@ struct WalletPairingReducer: Reducer {
     }
 
     private func resendSMSCode() -> Effect<WalletPairingAction> {
-        .run { send in
-            do {
-                try await smsService
-                    .request()
-                    .receive(on: mainQueue)
-                    .await()
-                await send(.didResendSMSCode(.success(.noValue)))
-            } catch {
-                await send(.didResendSMSCode(.failure(error as! SMSServiceError)))
-            }
+        .publisher {
+            smsService
+                .request()
+                .receive(on: mainQueue)
+                .map { .didResendSMSCode(.success(.noValue)) }
+                .catch { .didResendSMSCode(.failure($0)) }
         }
     }
 
     private func setupSessionToken() -> Effect<WalletPairingAction> {
-        .run { send in
-            do {
-                try await sessionTokenService
-                    .setupSessionToken()
-                    .receive(on: mainQueue)
-                    .await()
-                await send(.didSetupSessionToken(.success(.noValue)))
-            } catch {
-                await send(.didSetupSessionToken(.failure(error as! SessionTokenServiceError)))
-            }
+        .publisher {
+            sessionTokenService
+                .setupSessionToken()
+                .receive(on: mainQueue)
+                .map { .didSetupSessionToken(.success(.noValue)) }
+                .catch { .didSetupSessionToken(.failure($0)) }
         }
     }
 

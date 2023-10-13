@@ -542,6 +542,9 @@ import XCTest
         }
         await assertDidPerformSignIn()
 
+        await testStore.receive(.none)
+        await testStore.receive(.none)
+
         // when
         await testStore.send(.appForegrounded)
         await mockMainQueue.advance()
@@ -618,6 +621,8 @@ import XCTest
 
     /// send logout to clear pending effects after logged in.
     private func logout(file: StaticString = #file, line: UInt = #line) async {
+        await testStore.receive(.none)
+        await testStore.receive(.none)
         await testStore.send(.loggedIn(.logout)) { state in
             state.loggedIn = nil
             state.onboarding = .init(

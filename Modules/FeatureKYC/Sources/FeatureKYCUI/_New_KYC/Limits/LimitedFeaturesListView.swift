@@ -68,14 +68,12 @@ struct LimitedFeaturesListReducer: Reducer {
                 return .enter(into: .viewTiers, context: .none)
 
             case .verify:
-                return .run { _ in
-                    presentKYCFlow(.verified)
-                }
+                presentKYCFlow(.verified)
+                return .none
 
             case .supportCenterLinkTapped:
-                return .run { _ in
-                    openURL(.customerSupport)
-                }
+                openURL(.customerSupport)
+                return .none
 
             case .tiersStatusViewAction(let action):
                 switch action {

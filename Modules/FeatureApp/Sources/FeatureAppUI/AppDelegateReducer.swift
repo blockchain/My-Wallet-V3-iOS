@@ -39,6 +39,7 @@ public enum AppDelegateAction: Equatable {
         completionHandler: (UIBackgroundFetchResult) -> Void
     )
     case applyCertificatePinning
+    case none
 }
 
 extension AppDelegateAction {
@@ -99,15 +100,13 @@ struct AppDelegateReducer: Reducer {
             switch action {
             case .didFinishLaunching(let window):
                 state.window = window
+                environment.app.post(event: blockchain.app.did.finish.launching)
                 return .merge(
-                    .run { _ in
-                        try await environment.assetsRemoteService
+                    .publisher {
+                        environment.assetsRemoteService
                             .refreshCache
+                            .map { .none }
                             .receive(on: environment.mainQueue)
-                            .await()
-                    },
-                    .run { _ in
-                        environment.app.post(event: blockchain.app.did.finish.launching)
                     },
                     .run { send in
                         do {
@@ -144,20 +143,18 @@ struct AppDelegateReducer: Reducer {
                 )
             case .didEnterBackground(let application):
                 return .run { send in
-                    try await environment.backgroundAppHandler
-                        .appEnteredBackground(application)
-                        .receive(on: environment.mainQueue)
-                        .await()
-                    await send(.handleDelayedEnterBackground)
+                    do {
+                        try await environment.backgroundAppHandler
+                            .appEnteredBackground(application)
+                            .receive(on: environment.mainQueue)
+                            .await()
+                        await send(.handleDelayedEnterBackground)
+                    }
                 }
                 .cancellable(id: BackgroundTaskId(), cancelInFlight: true)
             case .handleDelayedEnterBackground:
-                return .merge(
-                    .run { _ in
-                        environment.app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
-                    },
-                    .cancel(id: BackgroundTaskId())
-                )
+                environment.app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
+                return .cancel(id: BackgroundTaskId())
             case .didBecomeActive:
                 UIApplication.shared.applicationIconBadgeNumber = 0
                 return .merge(
@@ -191,9 +188,10 @@ struct AppDelegateReducer: Reducer {
             case .userActivity:
                 return .none
             case .applyCertificatePinning:
-                return .run { _ in
-                    environment.certificatePinner.pinCertificateIfNeeded()
-                }
+                environment.certificatePinner.pinCertificateIfNeeded()
+                return .none
+            case .none:
+                return .none
             }
         }
     }
@@ -208,11 +206,8 @@ private func applyBlurFilter(
     guard let view = window else {
         return .none
     }
-    return .run { _ in
-        DispatchQueue.main.async {
-            handler.applyEffect(on: view)
-        }
-    }
+    handler.applyEffect(on: view)
+    return .none
 }
 
 private func removeBlurFilter(
@@ -222,11 +217,8 @@ private func removeBlurFilter(
     guard let view = window else {
         return .none
     }
-    return .run { _ in
-        DispatchQueue.main.async {
-            handler.removeEffect(from: view)
-        }
-    }
+    handler.removeEffect(from: view)
+    return .none
 }
 
 private func enableSift(

@@ -161,13 +161,11 @@ struct RecurringBuyFrequencySelectorReducer: Reducer {
                     appState.set(blockchain.ux.transaction.action.select.recurring.buy.frequency, to: frequency.rawValue)
                 }
                 app.post(event: blockchain.ux.transaction.checkout.recurring.buy.frequency)
-                return .run { _ in
-                    dismiss?()
-                }
+                dismiss?()
+                return .none
             case .closeButtonTapped:
-                return .run { _ in
-                    dismiss?()
-                }
+                dismiss?()
+                return .none
             }
         }
     }

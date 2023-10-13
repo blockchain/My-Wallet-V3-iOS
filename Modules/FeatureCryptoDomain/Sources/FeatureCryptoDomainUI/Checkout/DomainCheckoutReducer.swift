@@ -89,24 +89,20 @@ struct DomainCheckout: Reducer {
                     return .none
                 }
                 state.isLoading = true
-                return .run { send in
-                    do {
-                        try await userInfoProvider()
-                            .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
-                            .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
-                                orderDomainRepository
-                                    .createDomainOrder(
-                                        isFree: true,
-                                        domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
-                                        resolutionRecords: userInfo.resolutionRecords
-                                    )
-                            }
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.didClaimDomain(.success(.noValue)))
-                    } catch {
-                        await send(.didClaimDomain(.failure(error as! OrderDomainRepositoryError)))
-                    }
+                return .publisher {
+                    userInfoProvider()
+                        .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
+                        .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
+                            orderDomainRepository
+                                .createDomainOrder(
+                                    isFree: true,
+                                    domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
+                                    resolutionRecords: userInfo.resolutionRecords
+                                )
+                        }
+                        .receive(on: mainQueue)
+                        .map { _ in .didClaimDomain(.success(.noValue)) }
+                        .catch { .didClaimDomain(.failure($0)) }
                 }
 
             case .didClaimDomain(let result):

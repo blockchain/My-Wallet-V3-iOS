@@ -51,12 +51,8 @@ struct AllowAccessReducer: Reducer {
                         Effect.send(.showCameraDeniedAlert)
                     )
                 }
-                return .merge(
-                    .run { _ in
-                        allowCameraAccess()
-                    },
-                    Effect.send(.dismiss)
-                )
+                allowCameraAccess()
+                return Effect.send(.dismiss)
             case .showCameraDeniedAlert:
                 showCameraDeniedAlert()
                 return .none

@@ -15,9 +15,8 @@ public struct DexIntro: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { _ in
-                    app.state.set(blockchain.ux.currency.exchange.dex.intro.did.show, to: true)
-                }
+                app.state.set(blockchain.ux.currency.exchange.dex.intro.did.show, to: true)
+                return .none
             case .didChangeStep(let step):
                 state.currentStep = step
                 return .none

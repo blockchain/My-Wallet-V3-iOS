@@ -33,16 +33,12 @@ public struct AssetListReducer: Reducer {
             switch action {
             case .onAppear:
                 state.isLoading = true
-                return .run { send in
-                    do {
-                        let assets = try await assetProviderService
-                            .fetchAssetsFromEthereumAddress()
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.fetchedAssets(.success(assets)))
-                    } catch {
-                        await send(.fetchedAssets(.failure(error as! AssetProviderServiceError)))
-                    }
+                return .publisher {
+                    assetProviderService
+                        .fetchAssetsFromEthereumAddress()
+                        .receive(on: mainQueue)
+                        .map { .fetchedAssets(.success($0)) }
+                        .catch { .fetchedAssets(.failure($0)) }
                 }
                 .cancellable(
                     id: AssetListCancellation.RequestAssetsKeyId(),
@@ -75,32 +71,24 @@ public struct AssetListReducer: Reducer {
                 guard let cursor = state.next else {
                     impossible("Cannot page without cursor")
                 }
-                return .run { send in
-                    do {
-                        let assets = try await assetProviderService
-                            .fetchAssetsFromEthereumAddressWithCursor(cursor)
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.fetchedAssets(.success(assets)))
-                    } catch {
-                        await send(.fetchedAssets(.failure(error as! AssetProviderServiceError)))
-                    }
+                return .publisher {
+                    assetProviderService
+                        .fetchAssetsFromEthereumAddressWithCursor(cursor)
+                        .receive(on: mainQueue)
+                        .map { .fetchedAssets(.success($0)) }
+                        .catch { .fetchedAssets(.failure($0)) }
                 }
                 .cancellable(
                     id: AssetListCancellation.RequestPageAssetsKeyId(),
                     cancelInFlight: true
                 )
             case .copyEthereumAddressTapped:
-                return .run { send in
-                    do {
-                        let address = try await assetProviderService
-                            .address
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.copyEthereumAddress(.success(address)))
-                    } catch {
-                        await send(.copyEthereumAddress(.failure(error as! AssetProviderServiceError)))
-                    }
+                return .publisher {
+                    assetProviderService
+                        .address
+                        .receive(on: mainQueue)
+                        .map { .copyEthereumAddress(.success($0)) }
+                        .catch { .copyEthereumAddress(.failure($0)) }
                 }
             case .copyEthereumAddress(let result):
                 guard let address = try? result.get() else { return .none }

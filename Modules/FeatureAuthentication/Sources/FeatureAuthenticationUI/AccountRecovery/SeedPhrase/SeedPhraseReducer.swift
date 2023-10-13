@@ -308,21 +308,17 @@ struct SeedPhraseReducer: Reducer {
                 let accountName = NonLocalizedConstants.defiWalletTitle
                 return .concatenate(
                     Effect.send(.triggerAuthenticate),
-                    .run { [emailAddress = state.emailAddress] send in
-                        do {
-                            let context = try await walletCreationService
-                                .createWallet(
-                                    emailAddress,
-                                    password,
-                                    accountName,
-                                    nil
-                                )
-                                .receive(on: mainQueue)
-                                .await()
-                            await send(.accountCreation(.success(context)))
-                        } catch {
-                            await send(.accountCreation(.failure(error as! WalletCreationServiceError)))
-                        }
+                    Effect.publisher { [emailAddress = state.emailAddress] in
+                        walletCreationService
+                            .createWallet(
+                                emailAddress,
+                                password,
+                                accountName,
+                                nil
+                            )
+                            .receive(on: mainQueue)
+                            .map { .accountCreation(.success($0)) }
+                            .catch { .accountCreation(.failure($0)) }
                     }
                     .cancellable(id: CreateAccountStepTwoIds.CreationId(), cancelInFlight: true)
                 )
@@ -401,21 +397,17 @@ struct SeedPhraseReducer: Reducer {
                 // There's no error handling as any error will be overruled by the CoreCoordinator
                 return .merge(
                     .cancel(id: WalletRecoveryIds.AccountRecoveryAfterResetId()),
-                    .run { send in
-                        do {
-                            let context = try await walletFetcherService
-                                .fetchWalletAfterAccountRecovery(
-                                    info.walletContext.guid,
-                                    info.walletContext.sharedKey,
-                                    info.walletContext.password,
-                                    info.offlineToken
-                                )
-                                .receive(on: mainQueue)
-                                .await()
-                            await send(.walletFetched(.success(context)))
-                        } catch {
-                            await send(.walletFetched(.failure(error as! WalletFetcherServiceError)))
-                        }
+                    .publisher {
+                        walletFetcherService
+                            .fetchWalletAfterAccountRecovery(
+                                info.walletContext.guid,
+                                info.walletContext.sharedKey,
+                                info.walletContext.password,
+                                info.offlineToken
+                            )
+                            .receive(on: mainQueue)
+                            .map { .walletFetched(.success($0)) }
+                            .catch { .walletFetched(.failure($0)) }
                     }
                     .cancellable(id: WalletRecoveryIds.WalletFetchAfterRecoveryId())
                 )
@@ -459,17 +451,13 @@ struct SeedPhraseReducer: Reducer {
                 state.isLoading = true
                 return .concatenate(
                     Effect.send(.triggerAuthenticate),
-                    .run { send in
-                        do {
-                            let context = try await walletRecoveryService
-                                .recoverFromMetadata(mnemonic)
-                                .receive(on: mainQueue)
-                                .mapError(WalletRecoveryError.restoreFailure)
-                                .await()
-                            await send(.restored(.success(context)))
-                        } catch {
-                            await send(.restored(.failure(error as! WalletRecoveryError)))
-                        }
+                    Effect.publisher {
+                        walletRecoveryService
+                            .recoverFromMetadata(mnemonic)
+                            .receive(on: mainQueue)
+                            .mapError(WalletRecoveryError.restoreFailure)
+                            .map { .restored(.success($0)) }
+                            .catch { .restored(.failure($0)) }
                     }
                     .cancellable(id: WalletRecoveryIds.RecoveryId(), cancelInFlight: true)
                 )

@@ -42,20 +42,16 @@ public struct AuthorizeDeviceReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .handleAuthorization(let authorized):
-                return .run { [loginRequestInfo = state.loginRequestInfo] send in
-                    do {
-                        try await deviceVerificationService
-                            .authorizeVerifyDevice(
-                                from: loginRequestInfo.sessionId,
-                                payload: loginRequestInfo.base64Str,
-                                confirmDevice: authorized
-                            )
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.showAuthorizationResult(.success(.noValue)))
-                    } catch {
-                        await send(.showAuthorizationResult(.failure(error as! AuthorizeVerifyDeviceError)))
-                    }
+                return .publisher { [loginRequestInfo = state.loginRequestInfo] in
+                    deviceVerificationService
+                        .authorizeVerifyDevice(
+                            from: loginRequestInfo.sessionId,
+                            payload: loginRequestInfo.base64Str,
+                            confirmDevice: authorized
+                        )
+                        .receive(on: mainQueue)
+                        .map { .showAuthorizationResult(.success(.noValue)) }
+                        .catch { .showAuthorizationResult(.failure($0)) }
                 }
             case .showAuthorizationResult(let result):
                 switch result {

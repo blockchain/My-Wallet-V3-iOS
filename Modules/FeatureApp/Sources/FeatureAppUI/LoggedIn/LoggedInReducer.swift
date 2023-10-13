@@ -133,17 +133,15 @@ struct LoggedInReducer: Reducer {
             case .showPostSignUpOnboardingFlow:
                 // display new onboarding flow
                 state.displayPostSignUpOnboardingFlow = true
-                return .run { _ in
-                    app.post(event: blockchain.ux.onboarding.intro.event.show.sign.up)
-                }
+                app.post(event: blockchain.ux.onboarding.intro.event.show.sign.up)
+                return .none
             case .didShowPostSignUpOnboardingFlow:
                 state.displayPostSignUpOnboardingFlow = false
                 return .none
             case .showPostSignInOnboardingFlow:
                 state.displayPostSignInOnboardingFlow = true
-                return .run { _ in
-                    app.post(event: blockchain.ux.onboarding.intro.event.show.sign.in)
-                }
+                app.post(event: blockchain.ux.onboarding.intro.event.show.sign.in)
+                return .none
             case .didShowPostSignInOnboardingFlow:
                 state.displayPostSignInOnboardingFlow = false
                 return .none
@@ -204,9 +202,8 @@ struct NamespaceReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .logout:
-                return .run { _ in
-                    app.signOut()
-                }
+                app.signOut()
+                return .none
             default:
                 return .none
             }

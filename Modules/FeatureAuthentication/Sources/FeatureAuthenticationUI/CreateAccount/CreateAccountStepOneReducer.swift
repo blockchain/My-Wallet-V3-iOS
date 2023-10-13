@@ -262,19 +262,15 @@ struct CreateAccountStepOneReducer: Reducer {
                 }
                 let country = state.country?.id
                 let countryState = state.countryState?.id
-                return .merge(
-                    .run { _ in
-                        app?.state.transaction { state in
-                            state.set(blockchain.ux.user.authentication.sign.up.address.country.code, to: country ?? "N/A")
-                            if let countryState {
-                                state.set(blockchain.ux.user.authentication.sign.up.address.country.state, to: countryState)
-                            } else {
-                                state.clear(blockchain.ux.user.authentication.sign.up.address.country.state)
-                            }
-                        }
-                    },
-                    Effect.send(.navigate(to: .createWalletStepTwo))
-                )
+                app?.state.transaction { state in
+                    state.set(blockchain.ux.user.authentication.sign.up.address.country.code, to: country ?? "N/A")
+                    if let countryState {
+                        state.set(blockchain.ux.user.authentication.sign.up.address.country.state, to: countryState)
+                    } else {
+                        state.clear(blockchain.ux.user.authentication.sign.up.address.country.state)
+                    }
+                }
+                return Effect.send(.navigate(to: .createWalletStepTwo))
 
             case .validateReferralCode:
                 return .publisher { [referralCode = state.referralCode] in
@@ -384,24 +380,21 @@ struct CreateAccountStepOneReducer: Reducer {
                 return Effect.send(.informWalletFetched(context))
 
             case .createWalletStepTwo(.accountCreation(.failure(let error))):
-                return .run { _ in
-                    app?.post(
-                        event: blockchain.ux.user.authentication.sign.up.did.fail,
-                        context: [
-                            blockchain.ux.user.authentication.sign.up.did.fail.error: String(describing: error)
-                        ]
-                    )
-                }
+                app?.post(
+                    event: blockchain.ux.user.authentication.sign.up.did.fail,
+                    context: [
+                        blockchain.ux.user.authentication.sign.up.did.fail.error: String(describing: error)
+                    ]
+                )
+                return .none
 
             case .createWalletStepTwo(.createButtonTapped):
-                return .run { _ in
-                    app?.post(event: blockchain.ux.user.authentication.sign.up.create.tap)
-                }
+                app?.post(event: blockchain.ux.user.authentication.sign.up.create.tap)
+                return .none
 
             case .createWalletStepTwo(.accountCreation(.success)):
-                return .run { _ in
-                    app?.post(event: blockchain.ux.user.authentication.sign.up.did.succeed)
-                }
+                app?.post(event: blockchain.ux.user.authentication.sign.up.did.succeed)
+                return .none
 
             case .alert(.dismiss), .alert(.presented(.dismiss)):
                 state.failureAlert = nil
@@ -417,18 +410,14 @@ struct CreateAccountStepOneReducer: Reducer {
                 return .none
 
             case .onAppear:
-                return .merge(
-                    .run { _ in
-                        app?.post(event: blockchain.ux.user.authentication.sign.up)
-                    },
-                    .publisher {
-                        signUpCountriesService
-                            .countries
-                            .replaceError(with: [])
-                            .map(CreateAccountStepOneAction.signUpCountriesFetched)
-                            .receive(on: mainQueue)
-                    }
-                )
+                app?.post(event: blockchain.ux.user.authentication.sign.up)
+                return .publisher {
+                    signUpCountriesService
+                        .countries
+                        .replaceError(with: [])
+                        .map(CreateAccountStepOneAction.signUpCountriesFetched)
+                        .receive(on: mainQueue)
+                }
 
             case .signUpCountriesFetched(let countries):
                 if countries.isNotEmpty {

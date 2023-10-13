@@ -160,7 +160,8 @@ struct EndReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .dismiss:
-                return .run { _ in dismiss() }
+                dismiss()
+                return .none
             case .onAppear:
                 return .none
             }

@@ -142,9 +142,8 @@ public struct AvailableBalanceViewReducer: Reducer {
                 return .none
 
             case .viewTapped:
-                return .run { _ in
-                    onViewTapped?()
-                }
+                onViewTapped?()
+                return .none
             }
         }
     }

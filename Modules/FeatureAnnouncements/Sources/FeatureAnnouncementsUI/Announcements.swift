@@ -33,6 +33,7 @@ public struct Announcements: Reducer {
         case delete(Announcement)
         case onAnnouncementsFetched([Announcement])
         case hideCompletion
+        case none
     }
 
     // MARK: - Properties
@@ -107,19 +108,21 @@ public struct Announcements: Reducer {
             guard let announcement, !announcement.read else {
                 return .none
             }
-            return .run { _ in
-                try await Publishers.MergeMany(services.map { service in service.setRead(announcement: announcement) })
+            return .publisher {
+                Publishers.MergeMany(services.map { service in service.setRead(announcement: announcement) })
                     .collect()
+                    .catch { _ in Just([()]) }
+                    .map { _ in Announcements.Action.none }
                     .receive(on: mainQueue)
-                    .await()
             }
         case .dismiss(let announcement, let action):
             return .merge(
-                Effect.run { _ in
-                    try await Publishers.MergeMany(services.map { service in service.setDismissed(announcement, with: action) })
+                Effect.publisher {
+                    Publishers.MergeMany(services.map { service in service.setDismissed(announcement, with: action) })
                         .collect()
+                        .catch { _ in Just([()]) }
+                        .map { _ in Announcements.Action.none }
                         .receive(on: mainQueue)
-                        .await()
                 },
                 Effect.send(.read(state.announcements.last)),
                 Effect.send(.delete(announcement))
@@ -134,6 +137,8 @@ public struct Announcements: Reducer {
             return Effect.send(.read(announcements.last))
         case .hideCompletion:
             state.showCompletion = false
+            return .none
+        case .none:
             return .none
         }
     }

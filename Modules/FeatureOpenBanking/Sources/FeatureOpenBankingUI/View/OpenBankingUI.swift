@@ -87,7 +87,8 @@ public struct OpenBankingReducer: Reducer {
                 environment.eventPublisher.send(.success(()))
                 return .none
             case .bank(.cancel):
-                return .run { _ in environment.cancel() }
+                environment.cancel()
+                return .none
             case .institutionList, .bank:
                 return .none
             }

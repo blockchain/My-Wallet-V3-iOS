@@ -32,15 +32,11 @@ struct IdentityVerificationReducer: Reducer {
 
             case .fetchSupportedDocumentTypes:
                 state.isLoading = true
-                return .run { send in
-                    do {
-                        let result = try await supportedDocumentTypes()
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.didReceiveSupportedDocumentTypesResult(.success(result)))
-                    } catch {
-                        await send(.didReceiveSupportedDocumentTypesResult(.failure(error as! NabuNetworkError)))
-                    }
+                return .publisher {
+                    supportedDocumentTypes()
+                        .receive(on: mainQueue)
+                        .map { .didReceiveSupportedDocumentTypesResult(.success($0)) }
+                        .catch { .didReceiveSupportedDocumentTypesResult(.failure($0)) }
                 }
 
             case .didReceiveSupportedDocumentTypesResult(let result):

@@ -61,22 +61,18 @@ struct InterestAccountListReducer: Reducer {
                 return Effect.send(.loadInterestAccounts)
             case .loadInterestAccounts:
                 state.loadingStatus = .fetchingRewardsAccounts
-                return .run { send in
-                    do {
-                        let response = try await environment
-                            .fiatCurrencyService
-                            .displayCurrencyPublisher
-                            .flatMap { [environment] fiatCurrency in
-                                environment
-                                    .accountOverviewRepository
-                                    .fetchInterestAccountOverviewListForFiatCurrency(fiatCurrency)
-                            }
-                            .receive(on: environment.mainQueue)
-                            .await()
-                        await send(.didReceiveInterestAccountResponse(.success(response)))
-                    } catch {
-                        await send(.didReceiveInterestAccountResponse(.failure(error as! InterestAccountOverviewError)))
-                    }
+                return .publisher {
+                    environment
+                        .fiatCurrencyService
+                        .displayCurrencyPublisher
+                        .flatMap { [environment] fiatCurrency in
+                            environment
+                                .accountOverviewRepository
+                                .fetchInterestAccountOverviewListForFiatCurrency(fiatCurrency)
+                        }
+                        .receive(on: environment.mainQueue)
+                        .map { .didReceiveInterestAccountResponse(.success($0)) }
+                        .catch { .didReceiveInterestAccountResponse(.failure($0)) }
                 }
             case .interestAccountButtonTapped(let selected, let action):
                 switch action {

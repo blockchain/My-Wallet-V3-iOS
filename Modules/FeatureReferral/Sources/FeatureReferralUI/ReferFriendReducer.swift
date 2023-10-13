@@ -94,9 +94,8 @@ struct ReferFriendAnalytics: Reducer {
             guard let event = state.analyticsEvent(for: action) else {
                 return .none
             }
-            return .run { _ in
-                analyticsRecorder.record(event: event)
-            }
+            analyticsRecorder.record(event: event)
+            return .none
         }
     }
 }

@@ -67,18 +67,15 @@ enum PersonalInfo {
                     return .none
 
                 case .close:
-                    return .run { _ in onClose() }
+                    onClose()
+                    return .none
 
                 case .loadForm:
-                    return .run { send in
-                        do {
-                            let form = try await loadForm()
-                                .receive(on: mainQueue)
-                                .await()
-                            await send(.formDidLoad(.success(form)))
-                        } catch {
-                            await send(.formDidLoad(.failure(error as! KYCFlowError)))
-                        }
+                    return .publisher {
+                        loadForm()
+                            .receive(on: mainQueue)
+                            .map { .formDidLoad(.success($0)) }
+                            .catch { .formDidLoad(.failure($0)) }
                     }
 
                 case .formDidLoad(let result):
@@ -103,23 +100,20 @@ enum PersonalInfo {
                         return .none
                     }
                     state.formSubmissionState = .loading
-                    return .run { [form = state.form] send in
-                        do {
-                            let result = try await submitForm(form)
-                                .map(Empty.init)
-                                .receive(on: mainQueue)
-                                .await()
-                            await send(.submissionResultReceived(.success(result)))
-                        } catch {
-                            await send(.submissionResultReceived(.failure(error as! KYCFlowError)))
-                        }
+                    return .publisher { [form = state.form] in
+                        submitForm(form)
+                            .map(Empty.init)
+                            .receive(on: mainQueue)
+                            .map { .submissionResultReceived(.success($0)) }
+                            .catch { .submissionResultReceived(.failure($0)) }
                     }
 
                 case .submissionResultReceived(let result):
                     switch result {
                     case .success:
                         state.formSubmissionState = .success(Empty())
-                        return .run { _ in onComplete() }
+                        onComplete()
+                        return .none
 
                     case .failure(let error):
                         state.formSubmissionState = .failure(

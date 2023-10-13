@@ -90,22 +90,18 @@ struct ChangePasswordReducer: Reducer {
                     }
                     .eraseToAnyPublisher()
 
-                return .run { [new = state.new] send in
-                    do {
-                        try await test
-                            .flatMap { [passwordRepository] passwordOk -> AnyPublisher<Void, PasswordRepositoryError> in
-                                if passwordOk {
-                                    return passwordRepository.changePassword(password: new)
-                                } else {
-                                    return .failure(.invalidPassword)
-                                }
+                return .publisher { [new = state.new] in
+                    test
+                        .flatMap { [passwordRepository] passwordOk -> AnyPublisher<Void, PasswordRepositoryError> in
+                            if passwordOk {
+                                return passwordRepository.changePassword(password: new)
+                            } else {
+                                return .failure(.invalidPassword)
                             }
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.didUpdatePassword(.success(())))
-                    } catch {
-                        await send(.didUpdatePassword(.failure(error as! PasswordRepositoryError)))
-                    }
+                        }
+                        .receive(on: mainQueue)
+                        .map { .didUpdatePassword(.success(())) }
+                        .catch { .didUpdatePassword(.failure($0)) }
                 }
             case .didUpdatePassword(.failure(let error)):
                 state.loading = false

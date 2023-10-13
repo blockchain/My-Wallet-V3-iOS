@@ -162,12 +162,10 @@ struct OnboardingReducer: Reducer {
                 state.passwordRequiredState = nil
                 state.pinState = nil
                 state.welcomeState = .init()
+                appSettings.clear()
+                credentialsStore.erase()
 
                 return .merge(
-                    .run { _ in
-                        appSettings.clear()
-                        credentialsStore.erase()
-                    },
                     .run { _ in
                         try await forgetWalletService.forget().await()
                     },

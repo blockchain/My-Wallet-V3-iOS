@@ -21,14 +21,12 @@ public struct SwapEnterAmountAnalytics: Reducer {
                 return .none
 
             case .onPreviewTapped:
-                return .run { _ in
-                    app.post(event: blockchain.ux.transaction.enter.amount.button.confirm.tap)
-                }
+                app.post(event: blockchain.ux.transaction.enter.amount.button.confirm.tap)
+                return .none
 
             case .onMaxButtonTapped:
-                return .run { _ in
-                    app.post(event: blockchain.ux.transaction.enter.amount.button.max.tap)
-                }
+                app.post(event: blockchain.ux.transaction.enter.amount.button.max.tap)
+                return .none
 
             case .onChangeInputTapped:
                 let value = state.isEnteringFiat
@@ -37,14 +35,12 @@ public struct SwapEnterAmountAnalytics: Reducer {
                 return .none
 
             case .onSelectSourceTapped:
-                return .run { _ in
-                    app.post(event: blockchain.ux.transaction.enter.amount.button.change.source)
-                }
+                app.post(event: blockchain.ux.transaction.enter.amount.button.change.source)
+                return .none
 
             case .onSelectTargetTapped:
-                return .run { _ in
-                    app.post(event: blockchain.ux.transaction.enter.amount.button.change.target)
-                }
+                app.post(event: blockchain.ux.transaction.enter.amount.button.change.target)
+                return .none
 
             case .onSelectFromCryptoAccountAction(let action):
                 switch action {
@@ -53,10 +49,8 @@ public struct SwapEnterAmountAnalytics: Reducer {
                     if let selectedAccountRow = state.selectFromCryptoAccountState?.swapAccountRows.filter({ $0.id == id }).first,
                        let currency = selectedAccountRow.currency
                     {
-                        return .run { _ in
-                            app.state.set(blockchain.ux.transaction.source.id, to: currency.code)
-                            app.post(event: blockchain.ux.transaction.enter.amount.swap.source.selected)
-                        }
+                        app.state.set(blockchain.ux.transaction.source.id, to: currency.code)
+                        app.post(event: blockchain.ux.transaction.enter.amount.swap.source.selected)
                     }
                     return .none
                 default:
@@ -86,10 +80,9 @@ public struct SwapEnterAmountAnalytics: Reducer {
                 }
 
             case .didFetchPairs(let source, let target):
-                return .run { _ in
-                    app.state.set(blockchain.ux.transaction.source.id, to: source.currency.code)
-                    app.state.set(blockchain.ux.transaction.source.target.id, to: target.currency.code)
-                }
+                app.state.set(blockchain.ux.transaction.source.id, to: source.currency.code)
+                app.state.set(blockchain.ux.transaction.source.target.id, to: target.currency.code)
+                return .none
 
             default:
                 return .none
