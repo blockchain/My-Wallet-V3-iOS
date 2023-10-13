@@ -93,14 +93,6 @@ extension OnboardingCarouselView {
                     .typography(.title3)
                     .foregroundColor(.semantic.title)
 
-                FinancialPromotionApprovalView()
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 16).fill(Color.semantic.background)
-                    )
-                    .frame(maxWidth: .infinity)
-                    .padding([.horizontal], Spacing.padding2)
-
                 Spacer()
             }
         }
@@ -133,12 +125,16 @@ extension OnboardingCarouselView {
         VStack(spacing: .zero) {
             Spacer()
             VStack(spacing: Spacing.padding2) {
-                PrimaryButton(title: LocalizationConstants.Tour.createAccountButtonTitle) {
-                    viewStore.send(.createAccount)
-                }
                 if manualLoginEnabled {
-                    SecondaryButton(title: LocalizationConstants.Tour.manualLoginButtonTitle) {
-                        viewStore.send(.manualLogin)
+                    PrimaryDoubleButton(
+                        leadingTitle: LocalizationConstants.Tour.createAccountButtonTitle,
+                        leadingAction: { viewStore.send(.createAccount) },
+                        trailingTitle: LocalizationConstants.Tour.manualLoginButtonTitle, 
+                        trailingAction: { viewStore.send(.manualLogin) }
+                    )
+                } else {
+                    PrimaryButton(title: LocalizationConstants.Tour.createAccountButtonTitle) {
+                        viewStore.send(.createAccount)
                     }
                 }
                 MinimalDoubleButton(
@@ -147,6 +143,14 @@ extension OnboardingCarouselView {
                     trailingTitle: LocalizationConstants.Tour.loginButtonTitle,
                     trailingAction: { viewStore.send(.logIn) }
                 )
+
+                FinancialPromotionApprovalView()
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 16).fill(Color.semantic.background)
+                    )
+                    .frame(maxWidth: .infinity)
+                    .padding([.horizontal], Spacing.padding2)
             }
         }
         .padding(.horizontal, Spacing.padding3)

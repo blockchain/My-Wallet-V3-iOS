@@ -33,6 +33,7 @@ struct TradingDashboardView: View {
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
 
     @StateObject private var onboarding = CustodialOnboardingService()
+    @State private var displayDisclaimer: Bool = false
 
     struct ViewState: Equatable {
         let balance: BalanceInfo?
@@ -52,15 +53,29 @@ struct TradingDashboardView: View {
     }
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            if onboarding.isSynchronized {
-                if onboarding.isFinished {
-                    dashboardView
+        ZStack(alignment: .top) {
+            ScrollView(showsIndicators: false) {
+                if onboarding.isSynchronized {
+                    if onboarding.isFinished {
+                        dashboardView
+                    } else {
+                        onboardingView
+                    }
                 } else {
-                    onboardingView
+                    loadingView
                 }
-            } else {
-                loadingView
+            }
+            .padding(.top, displayDisclaimer ? 68.pt : 0.pt)
+            if onboarding.isFinished {
+                FinancialPromotionDisclaimerView(display: $displayDisclaimer)
+                    .padding()
+                    .roundedBackgroundWithShadow(
+                        edges: .bottom,
+                        fill: Color.semantic.light,
+                        radius: shadowRadius(forScrollOffset: scrollOffset.y),
+                        padding: .init(top: 0, leading: 16, bottom: 0, trailing: 16)
+                    )
+                    .padding([.top, .bottom], 8.pt)
             }
         }
         .superAppNavigationBar(
@@ -84,6 +99,18 @@ struct TradingDashboardView: View {
         .onAppear {
             $app.post(event: blockchain.ux.home.dashboard)
             onboarding.request()
+        }
+    }
+
+    func shadowRadius(forScrollOffset offset: CGFloat) -> CGFloat {
+        let lowerBound: CGFloat = 30
+        let upperBound: CGFloat = 70
+        if offset < lowerBound {
+            return 0
+        } else if offset > upperBound {
+            return 8
+        } else {
+            return ((offset - lowerBound) / (upperBound - lowerBound)) * 8
         }
     }
 
