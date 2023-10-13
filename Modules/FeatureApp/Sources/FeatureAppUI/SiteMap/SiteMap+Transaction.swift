@@ -230,19 +230,18 @@ private struct IfEligible<Content: View>: View {
     @ViewBuilder var content: () -> Content
 
     @State var isEligible: Bool?
-    @State var isVerified: Bool?
+    @State var isSynchronized: Bool = false
 
     var body: some View {
-        if let isVerified {
-            switch (isEligible ?? true, isVerified) {
-            case (true, true): content()
-            case (false, true): IneligibleView()
-            case (_, false): SiteMapView(blockchain.ux.kyc.trading.unlock.more)
+        if isSynchronized {
+            if isEligible ?? true {
+                content()
+            } else {
+                IneligibleView()
             }
         } else {
             BlockchainProgressView()
-                .bindings {
-                    subscribe($isVerified, to: blockchain.user.is.verified)
+                .bindings(managing: { state in isSynchronized = state.isSynchronized }) {
                     subscribe($isEligible, to: blockchain.api.nabu.gateway.user.products.product.is.eligible)
                 }
         }

@@ -160,14 +160,13 @@ struct TradingDashboardView: View {
             if !viewStore.isZeroBalance {
                 if isRejected {
                     rejectedView
-                } else {
-                    DashboardAssetSectionView(
-                        store: store.scope(
-                            state: \.assetsState,
-                            action: TradingDashboard.Action.assetsAction
-                        )
-                    )
                 }
+                DashboardAssetSectionView(
+                    store: store.scope(
+                        state: \.assetsState,
+                        action: TradingDashboard.Action.assetsAction
+                    )
+                )
             }
 
             if !isRejected {
