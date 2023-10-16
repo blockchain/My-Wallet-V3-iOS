@@ -7,6 +7,7 @@ import FeatureProductsDomain
 import SwiftUI
 
 struct AppLoaderView<Content: View>: View {
+    @Dependency(\.app) var app
     @StateObject var loaderService = AppLoaderService()
     let content: Content
     @State var didFinish: Bool = false
@@ -22,6 +23,9 @@ struct AppLoaderView<Content: View>: View {
           .task {
             _ = try? await loaderService.loadAppDependencies()
             withAnimation { didFinish = true }
+          }
+          .onAppear{
+              app.post(event: blockchain.app.loader.did.appear)
           }
       }
     }

@@ -7,7 +7,6 @@ import FeatureProductsDomain
 import ToolKit
 
 public final class ProductsRepository: ProductsRepositoryAPI {
-
     private enum CacheKey: Hashable {
         case products
     }
@@ -25,9 +24,24 @@ public final class ProductsRepository: ProductsRepositoryAPI {
             cache: cache,
             fetch: { [app] _ in
                 app.publisher(for: blockchain.user.is.external.brokerage, as: Bool.self)
-                    .compactMap(\.value)
+                    .compactMap { result in
+                        switch result {
+                        case .value(let value, _):
+                            return value
+                        case .error(let error, _):
+                            app.post(error: error)
+                            if  case FetchResult.Error.keyDoesNotExist = error {
+                                return nil
+                            }
+                            return false
+                        }
+                    }
                     .flatMap { isExternalTrading -> AnyPublisher<Set<ProductValue>, Nabu.Error> in
-                        client
+                        app.post(
+                            event: blockchain.app.will.fetch.products,
+                            context: [blockchain.user.is.external.brokerage: isExternalTrading]
+                        )
+                        return client
                             .fetchProductsData(product: isExternalTrading ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
                             .map { $0.values.compacted().set }
                             .eraseToAnyPublisher()

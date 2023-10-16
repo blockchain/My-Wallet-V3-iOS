@@ -828,6 +828,10 @@ blockchain:
 				time:
 				+ blockchain.db.type.date
 				+ blockchain.session.state.shared.value
+		loader:
+			did:
+				appear:
+				+ blockchain.ux.type.analytics.state
 		mode:
 		+ blockchain.session.state.preference.value
 			defi:
@@ -875,6 +879,9 @@ blockchain:
 		+ blockchain.session.state.preference.value
 		+ blockchain.session.state.shared.value
 		will:
+			fetch:
+				products:
+				+ blockchain.ux.type.analytics.state
 			resign:
 				active:
 	coin:

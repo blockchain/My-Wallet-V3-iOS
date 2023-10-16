@@ -44,7 +44,17 @@ final class NabuUserSessionObserver: Client.Observer {
             .store(in: &bag)
 
         app.on(blockchain.session.event.did.sign.in, blockchain.ux.kyc.event.status.did.change, blockchain.ux.home.event.did.pull.to.refresh)
-            .flatMap { [userService] _ in userService.fetchUser() }
+            .flatMap { [userService, app] _ in userService.fetchUser()
+                    .handleEvents(
+                        receiveCompletion: { completion in
+                            guard case .failure(let error) = completion else {
+                                return
+                            }
+                            app.post(error: error)
+                        }
+                    )
+                    .eraseToAnyPublisher()
+            }
             .sink(to: NabuUserSessionObserver.fetched(user:), on: self)
             .store(in: &bag)
 

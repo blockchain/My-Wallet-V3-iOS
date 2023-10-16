@@ -1041,6 +1041,7 @@ public extension I_blockchain_app {
 	var `fraud`: L_blockchain_app_fraud { .init("\(__).fraud") }
 	var `is`: L_blockchain_app_is { .init("\(__).is") }
 	var `launched`: L_blockchain_app_launched { .init("\(__).launched") }
+	var `loader`: L_blockchain_app_loader { .init("\(__).loader") }
 	var `mode`: L_blockchain_app_mode { .init("\(__).mode") }
 	var `number`: L_blockchain_app_number { .init("\(__).number") }
 	var `performance`: L_blockchain_app_performance { .init("\(__).performance") }
@@ -3312,6 +3313,24 @@ public final class L_blockchain_app_launched_at_time: L, I_blockchain_app_launch
 	public override class var localized: String { NSLocalizedString("blockchain.app.launched.at.time", comment: "") }
 }
 public protocol I_blockchain_app_launched_at_time: I_blockchain_db_type_date, I_blockchain_session_state_shared_value {}
+public final class L_blockchain_app_loader: L, I_blockchain_app_loader {
+	public override class var localized: String { NSLocalizedString("blockchain.app.loader", comment: "") }
+}
+public protocol I_blockchain_app_loader: I {}
+public extension I_blockchain_app_loader {
+	var `did`: L_blockchain_app_loader_did { .init("\(__).did") }
+}
+public final class L_blockchain_app_loader_did: L, I_blockchain_app_loader_did {
+	public override class var localized: String { NSLocalizedString("blockchain.app.loader.did", comment: "") }
+}
+public protocol I_blockchain_app_loader_did: I {}
+public extension I_blockchain_app_loader_did {
+	var `appear`: L_blockchain_app_loader_did_appear { .init("\(__).appear") }
+}
+public final class L_blockchain_app_loader_did_appear: L, I_blockchain_app_loader_did_appear {
+	public override class var localized: String { NSLocalizedString("blockchain.app.loader.did.appear", comment: "") }
+}
+public protocol I_blockchain_app_loader_did_appear: I_blockchain_ux_type_analytics_state {}
 public final class L_blockchain_app_mode: L, I_blockchain_app_mode {
 	public override class var localized: String { NSLocalizedString("blockchain.app.mode", comment: "") }
 }
@@ -3498,8 +3517,20 @@ public final class L_blockchain_app_will: L, I_blockchain_app_will {
 }
 public protocol I_blockchain_app_will: I {}
 public extension I_blockchain_app_will {
+	var `fetch`: L_blockchain_app_will_fetch { .init("\(__).fetch") }
 	var `resign`: L_blockchain_app_will_resign { .init("\(__).resign") }
 }
+public final class L_blockchain_app_will_fetch: L, I_blockchain_app_will_fetch {
+	public override class var localized: String { NSLocalizedString("blockchain.app.will.fetch", comment: "") }
+}
+public protocol I_blockchain_app_will_fetch: I {}
+public extension I_blockchain_app_will_fetch {
+	var `products`: L_blockchain_app_will_fetch_products { .init("\(__).products") }
+}
+public final class L_blockchain_app_will_fetch_products: L, I_blockchain_app_will_fetch_products {
+	public override class var localized: String { NSLocalizedString("blockchain.app.will.fetch.products", comment: "") }
+}
+public protocol I_blockchain_app_will_fetch_products: I_blockchain_ux_type_analytics_state {}
 public final class L_blockchain_app_will_resign: L, I_blockchain_app_will_resign {
 	public override class var localized: String { NSLocalizedString("blockchain.app.will.resign", comment: "") }
 }
