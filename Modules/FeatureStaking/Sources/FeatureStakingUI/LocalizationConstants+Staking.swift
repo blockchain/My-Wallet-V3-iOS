@@ -244,8 +244,8 @@ extension Localization.Earn.Intro {
     static let button = NSLocalizedString("Start Earning", comment: "Staking: Intro button")
 
     enum Intro {
-        static let title = NSLocalizedString("Earn", comment: "Staking: Intro title")
-        static let description = NSLocalizedString("Get the most out of your crypto.\nDeposit and earn up to 10%.", comment: "Staking: Intro description")
+        static let title = NSLocalizedString("A new way to Earn", comment: "Staking: Intro title")
+        static let description = NSLocalizedString("Get the most out of your crypto.\nDeposit and earn interest.", comment: "Staking: Intro description")
     }
 
     enum Passive {
