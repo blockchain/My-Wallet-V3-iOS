@@ -92,6 +92,11 @@ extension LocalizationConstants.NFT.Screen.Detail {
         comment: ""
     )
 
+    static let network = NSLocalizedString(
+        "Network",
+        comment: ""
+    )
+
     static let creator = NSLocalizedString("Creator", comment: "")
 
     static let about = NSLocalizedString("About", comment: "")

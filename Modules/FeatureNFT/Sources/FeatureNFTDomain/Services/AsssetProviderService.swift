@@ -97,9 +97,11 @@ public final class AssetProviderService: AssetProviderServiceAPI {
                         repository.fetchAssets(address: address, network: network.networkConfig.networkTicker)
                             .mapError(AssetProviderServiceError.network)
                             .map { assets -> [NFTAssets.Asset] in
-                                assets.nfts.map { asset in
-                                    NFTAssets.Asset(value: asset, network: network)
-                                }
+                                assets.nfts
+                                    .filter { $0.media.isNotNil }
+                                    .map { asset in
+                                        NFTAssets.Asset(value: asset, network: network)
+                                    }
                             }
                             .replaceError(with: [])
                     }

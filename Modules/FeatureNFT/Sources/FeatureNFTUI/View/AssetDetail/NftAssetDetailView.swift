@@ -40,6 +40,8 @@ struct NftAssetDetailView: View {
                         }
                         AssetDescriptionView(asset: asset)
                             .padding([.leading, .trailing], Spacing.padding2)
+                        networkContent
+                            .padding([.leading, .trailing], Spacing.padding2)
                     }
                     if let metadata = asset.value.metadata?.atributes {
                         TraitGridView(metadata: metadata)
@@ -69,6 +71,28 @@ struct NftAssetDetailView: View {
                     }
                 )
         }
+    }
+
+    @ViewBuilder var networkContent: some View {
+        VStack(alignment: .leading, spacing: Spacing.padding1) {
+            Text(LocalizationId.network)
+                .typography(.body2)
+                .foregroundColor(.semantic.text)
+            HStack(spacing: Spacing.padding1) {
+                asset.network.logoResource.image
+                    .frame(width: 24.pt, height: 24.pt)
+                Text(asset.network.networkConfig.shortName)
+                    .typography(.paragraph2)
+                    .foregroundColor(.semantic.title)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(Spacing.padding2)
+            .background(
+                RoundedRectangle(cornerRadius: 16.0)
+                    .foregroundColor(Color.semantic.background)
+            )
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     @ViewBuilder func dismiss() -> some View {
@@ -134,7 +158,7 @@ struct NftAssetDetailView: View {
             VStack(alignment: .leading, spacing: Spacing.padding1) {
                 Text(LocalizationId.properties)
                     .typography(.body2)
-                    .foregroundColor(metadata.isEmpty ? .clear : .semantic.muted)
+                    .foregroundColor(metadata.isEmpty ? .clear : .semantic.text)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 VStack(spacing: 0) {
                     ForEach(metadata) {
@@ -220,26 +244,28 @@ struct NftAssetDetailView: View {
             VStack(alignment: .leading, spacing: Spacing.padding2) {
                 Text(title)
                     .typography(.body2)
-                    .foregroundColor(.semantic.title)
+                    .foregroundColor(.semantic.text)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(rich: text)
-                    .lineLimit(isExpanded ? nil : 3)
-                    .typography(.paragraph1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.semantic.title)
-                if !isExpanded, text.count > 160 {
-                    SmallMinimalButton(title: LocalizationId.readMore) {
-                        withAnimation {
-                            isExpanded.toggle()
+                VStack(alignment: .leading, spacing: Spacing.padding2) {
+                    Text(rich: text)
+                        .lineLimit(isExpanded ? nil : 3)
+                        .typography(.paragraph1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(.semantic.title)
+                    if !isExpanded, text.count > 160 {
+                        SmallMinimalButton(title: LocalizationId.readMore) {
+                            withAnimation {
+                                isExpanded.toggle()
+                            }
                         }
                     }
                 }
+                .padding(16.0)
+                .background(
+                    RoundedRectangle(cornerRadius: 16.0)
+                        .foregroundColor(Color.semantic.background)
+                )
             }
-            .padding(16.0)
-            .background(
-                RoundedRectangle(cornerRadius: 16.0)
-                    .foregroundColor(Color.semantic.background)
-            )
         }
     }
 }

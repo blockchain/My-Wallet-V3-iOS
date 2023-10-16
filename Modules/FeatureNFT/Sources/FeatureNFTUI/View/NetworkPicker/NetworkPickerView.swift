@@ -62,13 +62,17 @@ struct NetworkPickerButton: View {
                 ]
             )
         } label: {
-            HStack(spacing: 0) {
-                Icon
-                    .network
-                    .small()
-                    .color(.semantic.title)
-                    .circle(backgroundColor: .semantic.light)
-                    .padding(.trailing, Spacing.padding1)
+            HStack(spacing: Spacing.padding1) {
+                if let evm = currentNetwork.evmNetwork {
+                    evm.logoResource.image
+                        .frame(width: 24.pt, height: 24.pt)
+                } else {
+                    Icon
+                        .network
+                        .small()
+                        .color(.semantic.title)
+                        .circle(backgroundColor: .semantic.light)
+                }
 
                 Text(L10n.title)
                     .typography(.paragraph2)
@@ -117,7 +121,8 @@ struct NetworkPickerView: View {
                         TableRow(
                             leading: {
                                 if let evm = network.evmNetwork {
-                                    evm.nativeAsset.logo(size: 24.pt)
+                                    evm.logoResource.image
+                                        .frame(width: 24.pt, height: 24.pt)
                                 } else {
                                     Icon
                                         .network
