@@ -7,7 +7,6 @@ import Errors
 import Foundation
 import ToolKit
 
-#if DEBUG
 public class ReplayNetworkCommunicator: NetworkCommunicatorAPI {
 
     public struct Key: Hashable {
@@ -261,8 +260,6 @@ private func __filePath(for url: URL, method: String?, in directory: String) -> 
                 .replacingOccurrences(of: "/", with: "_")
         )
 }
-
-#endif
 
 extension URLSessionWebSocketTask.Message {
     func toData() -> Data? {
