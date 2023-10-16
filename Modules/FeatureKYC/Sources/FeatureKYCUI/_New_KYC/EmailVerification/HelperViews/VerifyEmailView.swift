@@ -11,7 +11,7 @@ private typealias L10n = LocalizationConstants.NewKYC
 struct VerifyEmailState: Equatable {
 
     var emailAddress: String
-    var cannotOpenMailAppAlert: AlertState<VerifyEmailAction>?
+    @PresentationState var cannotOpenMailAppAlert: AlertState<VerifyEmailAction.AlertAction>?
 
     init(emailAddress: String) {
         self.emailAddress = emailAddress
@@ -19,37 +19,43 @@ struct VerifyEmailState: Equatable {
 }
 
 enum VerifyEmailAction: Equatable {
+    enum AlertAction {
+        case dismiss
+        case present
+    }
     case tapCheckInbox
     case tapGetEmailNotReceivedHelp
-    case presentCannotOpenMailAppAlert
-    case dismissCannotOpenMailAppAlert
+    case alert(PresentationAction<AlertAction>)
 }
 
-struct VerifyEmailReducer: ReducerProtocol {
+struct VerifyEmailReducer: Reducer {
     
     typealias State = VerifyEmailState
     typealias Action = VerifyEmailAction
 
-    var openMailApp: () -> EffectTask<Bool>
+    var openMailApp: () async -> Bool
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .tapCheckInbox:
-                return openMailApp()
-                    .map { didSucceed in
-                        didSucceed ? .dismissCannotOpenMailAppAlert : .presentCannotOpenMailAppAlert
+                return .run { [openMailApp] send in
+                    if await openMailApp() {
+                        await send(.alert(.presented(.dismiss)))
+                        return
                     }
+                    await send(.alert(.presented(.present)))
+                }
 
             case .tapGetEmailNotReceivedHelp:
                 return .none
 
-            case .presentCannotOpenMailAppAlert:
+            case .alert(.presented(.present)):
                 // NOTE: this should happen only on Simulators
                 state.cannotOpenMailAppAlert = AlertState(title: .init("Cannot Open Mail App"))
                 return .none
 
-            case .dismissCannotOpenMailAppAlert:
+            case .alert(.presented(.dismiss)), .alert(.dismiss):
                 state.cannotOpenMailAppAlert = nil
                 return .none
             }
@@ -62,7 +68,7 @@ struct VerifyEmailView: View {
     let store: Store<VerifyEmailState, VerifyEmailAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Spacing.padding3) {
                 Spacer()
                 ZStack {
@@ -100,7 +106,12 @@ struct VerifyEmailView: View {
                 }
             }
             .padding(Spacing.padding2)
-            .alert(store.scope(state: \.cannotOpenMailAppAlert), dismiss: .dismissCannotOpenMailAppAlert)
+            .alert(
+                store: store.scope(
+                    state: \.$cannotOpenMailAppAlert,
+                    action: { .alert($0) }
+                )
+            )
         }
         .background(Color.semantic.light.ignoresSafeArea())
         .accessibility(identifier: "KYC.EmailVerification.verify.container")
@@ -112,25 +123,25 @@ struct VerifyEmailView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             VerifyEmailView(
-                store: .init(
+                store: Store(
                     initialState: .init(
                         emailAddress: "test@example.com"
                     ),
-                    reducer: VerifyEmailReducer(
-                        openMailApp: { EffectTask(value: true) }
-                    )
+                    reducer: {
+                        VerifyEmailReducer { false }
+                    }
                 )
             )
             .preferredColorScheme(.light)
 
             VerifyEmailView(
-                store: .init(
+                store: Store(
                     initialState: .init(
                         emailAddress: "test@example.com"
                     ),
-                    reducer: VerifyEmailReducer(
-                        openMailApp: { EffectTask(value: true) }
-                    )
+                    reducer: {
+                        VerifyEmailReducer { true }
+                    }
                 )
             )
             .preferredColorScheme(.dark)

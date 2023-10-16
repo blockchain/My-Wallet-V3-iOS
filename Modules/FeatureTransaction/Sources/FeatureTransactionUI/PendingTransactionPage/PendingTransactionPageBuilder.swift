@@ -236,6 +236,7 @@ struct PendingTransactionDialogView<Footer: View>: View {
                 .multilineTextAlignment(.center)
                 actions
             }
+            .padding(.horizontal, Spacing.padding2)
             .padding(.vertical)
             .padding(.bottom, Spacing.padding2)
         }
@@ -330,3 +331,25 @@ struct PendingTransactionDialogView<Footer: View>: View {
         }
     }
 }
+
+#if DEBUG
+
+struct PendingTransaction_Previews: PreviewProvider {
+
+    static var previews: some View {
+        PendingTransactionView(
+            model: .init(
+                state: .inProgress(
+                    .init(
+                        title: "Buying $10.00 of Ethereum",
+                        message: "Your Ethereum purchase is processing. Hang tight!",
+                        actions: [.init(title: "OK")]
+                    )
+                ),
+                currency: .crypto(.ethereum)
+            )
+        )
+    }
+}
+
+#endif

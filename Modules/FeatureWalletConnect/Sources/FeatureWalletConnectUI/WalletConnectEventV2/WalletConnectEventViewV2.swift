@@ -114,7 +114,7 @@ public struct WalletConnectEventViewV2: View {
                 ZStack(alignment: .trailing) {
                     if let networks = model.details?.chains {
                         ForEach(0..<networks.count, id: \.self) { i in
-                            if let url = networks[i].nativeAsset.logoURL {
+                            if let url = networks[i].logoURL {
                                 ZStack {
                                     AsyncMedia(url: url)
                                         .aspectRatio(contentMode: .fill)

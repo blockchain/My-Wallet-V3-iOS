@@ -21,12 +21,15 @@ enum AddressModificationAction: Equatable, BindableAction {
     case closeError
     case cancelEdit
     case showStateDoesNotMatchAlert
-    case stateDoesNotMatch
     case showAlert(title: String, message: String)
-    case dismissAlert
+    case alert(PresentationAction<Alert>)
     case showGenericError
     case complete(AddressResult)
     case binding(BindingAction<AddressModificationState>)
+
+    enum Alert: Equatable {
+        case stateDoesNotMatch
+    }
 }
 
 struct AddressModificationState: Equatable {
@@ -53,14 +56,15 @@ struct AddressModificationState: Equatable {
     var screenSubtitle: String?
     var saveButtonTitle: String?
     var isStateFieldVisible: Bool { country == Address.Constants.usIsoCode }
-    var failureAlert: AlertState<AddressModificationAction>?
+    @PresentationState var failureAlert: AlertState<AddressModificationAction.Alert>?
 
     init(
         addressDetailsId: String? = nil,
         country: String? = nil,
         state: String? = nil,
         isPresentedFromSearchView: Bool,
-        error: Nabu.Error? = nil
+        error: Nabu.Error? = nil,
+        failureAlert: AlertState<AddressModificationAction.Alert>? = nil
     ) {
         self.addressDetailsId = addressDetailsId
         self.isPresentedFromSearchView = isPresentedFromSearchView
@@ -69,6 +73,7 @@ struct AddressModificationState: Equatable {
         self.state = state
         self.stateName = state?.stateWithoutUSPrefix.map { usaStates[$0] ?? "" } ?? ""
         self.country = country ?? ""
+        self.failureAlert = failureAlert
     }
 
     init(
@@ -100,7 +105,7 @@ extension AddressModificationState {
     }
 }
 
-struct AddressModificationReducer: ReducerProtocol {
+struct AddressModificationReducer: Reducer {
 
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let config: AddressSearchFeatureConfig.AddressEditScreenConfig
@@ -125,7 +130,7 @@ struct AddressModificationReducer: ReducerProtocol {
     typealias State = AddressModificationState
     typealias Action = AddressModificationAction
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -140,12 +145,14 @@ struct AddressModificationReducer: ReducerProtocol {
                     country: state.country
                 )
                 if config.shouldSaveAddressOnCompletion {
-                    return addressService
-                        .save(address: address)
-                        .receive(on: mainQueue)
-                        .catchToEffect(AddressModificationAction.updateAddressResponse)
+                    return .publisher {
+                        addressService.save(address: address)
+                            .map { AddressModificationAction.updateAddressResponse(.success($0)) }
+                            .catch { AddressModificationAction.updateAddressResponse(.failure($0)) }
+                            .receive(on: mainQueue)
+                    }
                 } else {
-                    return EffectTask(value: .updateAddressResponse(.success(address)))
+                    return Effect.send(.updateAddressResponse(.success(address)))
                 }
 
             case .updateAddressResponse(let result):
@@ -153,15 +160,15 @@ struct AddressModificationReducer: ReducerProtocol {
                 switch result {
                 case .success(let address):
                     state.updateAddressInputs(address: address)
-                    return EffectTask(value: .complete(.saved(address)))
+                    return Effect.send(.complete(.saved(address)))
                 case .failure(let error):
                     state.error = error.nabuError
-                    return EffectTask(value: .showGenericError)
+                    return Effect.send(.showGenericError)
                 }
 
             case .showGenericError:
-                return EffectTask(
-                    value: .showAlert(
+                return Effect.send(
+                    .showAlert(
                         title: LocalizationConstants.Errors.error,
                         message: LocalizationConstants.AddressSearch.Form.Errors.genericError
                     )
@@ -172,13 +179,13 @@ struct AddressModificationReducer: ReducerProtocol {
                     return .none
                 }
                 state.loading = true
-                return addressSearchService
-                    .fetchAddress(addressId: addressId)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        .didReceiveAdressDetailsResult(result)
-                    }
+                return .publisher {
+                    addressSearchService
+                        .fetchAddress(addressId: addressId)
+                        .map { Action.didReceiveAdressDetailsResult(.success($0)) }
+                        .catch { Action.didReceiveAdressDetailsResult(.failure($0)) }
+                        .receive(on: mainQueue)
+                }
 
             case .didReceiveAdressDetailsResult(let result):
                 state.loading = false
@@ -190,7 +197,7 @@ struct AddressModificationReducer: ReducerProtocol {
                        state.isNotEmpty,
                        state != address.state
                     {
-                        return EffectTask(value: .showStateDoesNotMatchAlert)
+                        return Effect.send(.showStateDoesNotMatchAlert)
                     } else {
                         state.updateAddressInputs(address: address)
                         return .none
@@ -208,19 +215,22 @@ struct AddressModificationReducer: ReducerProtocol {
 
                 guard let addressDetailsId = state.addressDetailsId else {
                     if state.shouldFetchPrefilledAddress {
-                        return EffectTask(value: .fetchPrefilledAddress)
+                        return Effect.send(.fetchPrefilledAddress)
                     } else {
                         return .none
                     }
                 }
-                return EffectTask(value: .fetchAddressDetails(addressId: addressDetailsId))
+                return Effect.send(.fetchAddressDetails(addressId: addressDetailsId))
 
             case .fetchPrefilledAddress:
                 state.loading = true
-                return addressService
-                    .fetchAddress()
-                    .receive(on: mainQueue)
-                    .catchToEffect(AddressModificationAction.didReceivePrefilledAddressResult)
+                return .publisher {
+                    addressService
+                        .fetchAddress()
+                        .map { Action.didReceivePrefilledAddressResult(.success($0)) }
+                        .catch { Action.didReceivePrefilledAddressResult(.failure($0)) }
+                        .receive(on: mainQueue)
+                }
 
             case .didReceivePrefilledAddressResult(.success(let address)):
                 state.loading = false
@@ -238,12 +248,11 @@ struct AddressModificationReducer: ReducerProtocol {
                 return .none
 
             case .cancelEdit:
-                return EffectTask(value: .complete(.abandoned))
+                return Effect.send(.complete(.abandoned))
 
             case .complete(let addressResult):
-                return .fireAndForget {
-                    onComplete?(addressResult)
-                }
+                onComplete?(addressResult)
+                return .none
 
             case .binding:
                 return .none
@@ -251,15 +260,11 @@ struct AddressModificationReducer: ReducerProtocol {
             case .showAlert(let title, let message):
                 state.failureAlert = AlertState(
                     title: TextState(verbatim: title),
-                    message: TextState(verbatim: message),
-                    dismissButton: .default(
-                        TextState(LocalizationConstants.okString),
-                        action: .send(.dismissAlert)
-                    )
+                    message: TextState(verbatim: message)
                 )
                 return .none
 
-            case .dismissAlert:
+            case .alert(.dismiss):
                 state.failureAlert = nil
                 return .none
 
@@ -274,7 +279,7 @@ struct AddressModificationReducer: ReducerProtocol {
                     )
                 )
                 return .none
-            case .stateDoesNotMatch:
+            case .alert:
                 return .none
             }
         }

@@ -6,7 +6,7 @@ import ComposableArchitecture
 import FeatureProductsDomain
 import SwiftUI
 
-struct SuperAppHeader: ReducerProtocol {
+struct SuperAppHeader: Reducer {
     struct State: Equatable {
         var isRefreshing: Bool = false
         var hasError: Bool = false
@@ -21,7 +21,7 @@ struct SuperAppHeader: ReducerProtocol {
         case binding(BindingAction<State>)
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
     }
 }
@@ -215,7 +215,7 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             SuperAppHeaderView(
-                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: SuperAppHeader()),
+                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: { SuperAppHeader() }),
                 currentSelection: .constant(.trading),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(false),
@@ -224,7 +224,7 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
             .previewDisplayName("Trading Selected")
 
             SuperAppHeaderView(
-                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: SuperAppHeader()),
+                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: { SuperAppHeader() }),
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(false),
@@ -233,7 +233,7 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
             .previewDisplayName("DeFi Selected")
 
             SuperAppHeaderView(
-                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: SuperAppHeader()),
+                store: Store(initialState: .init(totalBalance: .create(major: 278_031.12, currency: .fiat(.GBP))), reducer: { SuperAppHeader() }),
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(true),

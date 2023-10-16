@@ -16,11 +16,11 @@ public struct FeatureNotificationPreferencesView: View {
 
     public init(store: Store<NotificationPreferencesState, NotificationPreferencesAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             PrimaryNavigationView {
                 VStack(alignment: .leading, spacing: 20) {
                     headerSection
@@ -65,7 +65,7 @@ extension FeatureNotificationPreferencesView {
     }
 
     var optionsSection: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 10) {
                 if case .data(let preferences) = viewStore.state.viewState {
                     ForEach(preferences) { notificationPreference in
@@ -89,7 +89,7 @@ extension FeatureNotificationPreferencesView {
     }
 
     var errorSection: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: 8, content: {
                 Spacer()
                 Text(LocalizationConstants.NotificationPreferences.Error.Title.titleString)

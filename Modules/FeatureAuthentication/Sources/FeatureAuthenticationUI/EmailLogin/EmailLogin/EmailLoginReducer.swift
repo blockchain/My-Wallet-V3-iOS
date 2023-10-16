@@ -19,7 +19,7 @@ public enum EmailLoginAction: Equatable, NavigationAction {
         case dismiss
     }
 
-    case alert(AlertAction)
+    case alert(PresentationAction<AlertAction>)
 
     // MARK: - Transitions and Navigations
 
@@ -63,7 +63,7 @@ public struct EmailLoginState: Equatable, NavigationState {
 
     // MARK: - Alert State
 
-    var alert: AlertState<EmailLoginAction>?
+    @PresentationState var alert: AlertState<EmailLoginAction.AlertAction>?
 
     // MARK: - Email
 
@@ -83,7 +83,7 @@ public struct EmailLoginState: Equatable, NavigationState {
     }
 }
 
-struct EmailLoginReducer: ReducerProtocol {
+struct EmailLoginReducer: Reducer {
 
     typealias State = EmailLoginState
     typealias Action = EmailLoginAction
@@ -153,39 +153,38 @@ struct EmailLoginReducer: ReducerProtocol {
         self.appStoreInformationRepository = appStoreInformationRepository
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
 
             // MARK: - Alert
 
-            case .alert(.show(let title, let message)):
+            case .alert(.presented(.show(let title, let message))):
                 state.alert = AlertState(
                     title: TextState(verbatim: title),
                     message: TextState(verbatim: message),
                     dismissButton: .default(
                         TextState(LocalizationConstants.continueString),
-                        action: .send(.alert(.dismiss))
+                        action: .send(.dismiss)
                     )
                 )
                 return .none
 
-            case .alert(.dismiss):
+            case .alert(.dismiss), .alert(.presented(.dismiss)):
                 state.alert = nil
                 return .none
 
             // MARK: - Transitions and Navigations
 
             case .onAppear:
-                return .fireAndForget {
-                    analyticsRecorder.record(
-                        event: .loginViewed
-                    )
-                    app.post(event: blockchain.ux.user.authentication.sign.in)
-                }
+                app.post(event: blockchain.ux.user.authentication.sign.in)
+                analyticsRecorder.record(
+                    event: .loginViewed
+                )
+                return .none
 
             case .route(let route):
-                if let routeValue = route?.route {
+                if route?.route != nil {
                     state.verifyDeviceState = .init(emailAddress: state.emailAddress)
                     state.route = route
                     return .none
@@ -197,12 +196,8 @@ struct EmailLoginReducer: ReducerProtocol {
 
             case .continueButtonTapped:
                 state.isLoading = true
-                return .merge(
-                    EffectTask(value: .setupSessionToken),
-                    .fireAndForget {
-                        app.post(event: blockchain.ux.user.authentication.sign.in.continue.tap)
-                    }
-                )
+                app.post(event: blockchain.ux.user.authentication.sign.in.continue.tap)
+                return Effect.send(.setupSessionToken)
 
             // MARK: - Email
 
@@ -221,18 +216,13 @@ struct EmailLoginReducer: ReducerProtocol {
                 }
                 state.isLoading = true
                 state.verifyDeviceState?.sendEmailButtonIsLoading = true
-                return deviceVerificationService
-                    .sendDeviceVerificationEmail(to: state.emailAddress)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result -> EmailLoginAction in
-                        switch result {
-                        case .success:
-                            return .didSendDeviceVerificationEmail(.success(.noValue))
-                        case .failure(let error):
-                            return .didSendDeviceVerificationEmail(.failure(error))
-                        }
-                    }
+                return .publisher { [emailAddress = state.emailAddress] in
+                    deviceVerificationService
+                        .sendDeviceVerificationEmail(to: emailAddress)
+                        .receive(on: mainQueue)
+                        .map { .didSendDeviceVerificationEmail(.success(.noValue)) }
+                        .catch { .didSendDeviceVerificationEmail(.failure($0)) }
+                }
 
             case .didSendDeviceVerificationEmail(let response):
                 state.isLoading = false
@@ -241,11 +231,13 @@ struct EmailLoginReducer: ReducerProtocol {
                     switch error {
                     case .recaptchaError,
                          .missingSessionToken:
-                        return EffectTask(
-                            value: .alert(
-                                .show(
-                                    title: EmailLoginLocalization.Alerts.SignInError.title,
-                                    message: EmailLoginLocalization.Alerts.SignInError.message
+                        return Effect.send(
+                            .alert(
+                                .presented(
+                                    .show(
+                                        title: EmailLoginLocalization.Alerts.SignInError.title,
+                                        message: EmailLoginLocalization.Alerts.SignInError.message
+                                    )
                                 )
                             )
                         )
@@ -257,28 +249,31 @@ struct EmailLoginReducer: ReducerProtocol {
                         break
                     }
                 }
-                return EffectTask(value: .navigate(to: .verifyDevice))
+                return Effect.send(.navigate(to: .verifyDevice))
 
             case .setupSessionToken:
-                return sessionTokenService
-                    .setupSessionToken()
-                    .map { _ in EmptyValue.noValue }
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(EmailLoginAction.setupSessionTokenReceived)
+                return .publisher {
+                    sessionTokenService
+                        .setupSessionToken()
+                        .map { _ in EmptyValue.noValue }
+                        .receive(on: mainQueue)
+                        .map { .setupSessionTokenReceived(.success($0)) }
+                        .catch { .setupSessionTokenReceived(.failure($0)) }
+                }
 
             case .setupSessionTokenReceived(.success):
-                return EffectTask(value: .sendDeviceVerificationEmail)
+                return Effect.send(.sendDeviceVerificationEmail)
 
             case .setupSessionTokenReceived(.failure(let error)):
                 state.isLoading = false
                 errorRecorder.error(error)
-                return EffectTask(
-                    value:
+                return Effect.send(
                     .alert(
-                        .show(
-                            title: EmailLoginLocalization.Alerts.GenericNetworkError.title,
-                            message: EmailLoginLocalization.Alerts.GenericNetworkError.message
+                        .presented(
+                            .show(
+                                title: EmailLoginLocalization.Alerts.GenericNetworkError.title,
+                                message: EmailLoginLocalization.Alerts.GenericNetworkError.message
+                            )
                         )
                     )
                 )
@@ -328,14 +323,14 @@ struct EmailLoginReducer: ReducerProtocol {
 
 // MARK: - Private
 
-struct EmailLoginAnalytics: ReducerProtocol {
+struct EmailLoginAnalytics: Reducer {
 
     typealias Action = EmailLoginAction
     typealias State = EmailLoginState
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .sendDeviceVerificationEmail:

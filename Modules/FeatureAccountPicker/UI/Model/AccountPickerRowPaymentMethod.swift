@@ -2,10 +2,19 @@
 
 import BlockchainComponentLibrary
 import Errors
-import PlatformKit
 import SwiftUI
 
 extension AccountPickerRow {
+
+    public struct Capabilities: Hashable {
+        let canWithdrawal: Bool?
+        let canDeposit: Bool?
+
+        public init(canWithdrawal: Bool?, canDeposit: Bool?) {
+            self.canWithdrawal = canWithdrawal
+            self.canDeposit = canDeposit
+        }
+    }
 
     public struct PaymentMethod: Equatable {
 

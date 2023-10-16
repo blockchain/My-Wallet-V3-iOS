@@ -5,24 +5,27 @@ import FeatureExternalTradingMigrationDomain
 import SwiftUI
 
 struct BakktAssetMigrationView: View {
-    typealias L10n = LocalizationConstants.ExternalTradingMigration.AssetMigration
+    typealias L10n = NonLocalizedConstants.ExternalTradingMigration.AssetMigration
 
     @Dependency(\.app) var app
     var beforeMigrationBalances: [Balance]
     var afterMigrationBalance: Balance
     var onDone: () -> Void
     var onGoBack: () -> Void
+    var isLoading: Bool = false
 
     init(
         beforeMigrationBalances: [Balance],
         afterMigrationBalance: Balance,
         onDone: @escaping () -> Void,
-        onGoBack: @escaping () -> Void
+        onGoBack: @escaping () -> Void,
+        isLoading: Bool
     ) {
         self.beforeMigrationBalances = beforeMigrationBalances
         self.afterMigrationBalance = afterMigrationBalance
         self.onDone = onDone
         self.onGoBack = onGoBack
+        self.isLoading = isLoading
     }
 
     var body: some View {
@@ -101,9 +104,11 @@ struct BakktAssetMigrationView: View {
 
             termsAndConditions
 
-            PrimaryButton(title: "Upgrade") {
+            PrimaryButton(title: NonLocalizedConstants.ExternalTradingMigration.upgradeButton,
+                          isLoading: isLoading) {
                 onDone()
             }
+            .disabled(isLoading)
         }
         .padding(.horizontal, Spacing.padding2)
         .foregroundStyle(.primary)
@@ -126,7 +131,7 @@ struct BakktAssetMigrationView: View {
     }
 
     @ViewBuilder var termsAndConditions: some View {
-        Text("Consolidating your assets into Bitcoin (BTC) does not have any costs involved. Supported assets in your balances will remain the same.")
+        Text(L10n.disclaimer)
             .typography(.micro)
             .foregroundColor(.semantic.body)
     }
@@ -146,7 +151,8 @@ struct BakktAssetMigrationView_Preview: PreviewProvider {
                     amount: .one(currency: .bitcoin)
                 ),
                 onDone: {},
-                onGoBack: {}
+                onGoBack: {},
+                isLoading: true
             )
         }
     }
@@ -166,7 +172,8 @@ struct AssetMigrationRow: View {
         SimpleBalanceRow(
             leadingTitle: balance.currency.name,
             leadingDescription: balance.currency.code,
-            trailingTitle: balance.amount.toDisplayString(includeSymbol: true),
+            trailingTitle:
+                "~" + balance.amount.toDisplayString(includeSymbol: true),
             trailingDescription:
                 balance.amount.cryptoValue?.toFiatAmount(with: price)?.toDisplayString(includeSymbol: true)
         ) {

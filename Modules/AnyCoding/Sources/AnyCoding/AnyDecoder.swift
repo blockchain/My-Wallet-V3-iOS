@@ -71,6 +71,8 @@ open class AnyDecoder: AnyDecoderProtocol, TopLevelDecoder {
         switch (any, T.self) {
         case (let any as AnyJSON, _):
             return try convert(any.__unwrapped, to: T.self) ?? any.__unwrapped
+        case (is NSNull, _):
+            return nil
         case (let time as TimeInterval, is Date.Type):
             return Date(timeIntervalSince1970: time)
         case (let string as String, is URL.Type):

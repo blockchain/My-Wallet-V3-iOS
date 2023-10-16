@@ -5,24 +5,25 @@ import BlockchainUI
 import NetworkKit
 import TestKit
 
-final class InstitutionListTests: OpenBankingTestCase {
+@MainActor final class InstitutionListTests: OpenBankingTestCase {
 
     typealias Store = TestStore<
         InstitutionListState,
-        InstitutionListAction,
-        InstitutionListState,
-        InstitutionListAction,
-        Void
+        InstitutionListAction
     >
 
     private var store: Store!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        store = .init(
-            initialState: .init(),
-            reducer: InstitutionListReducer(environment: environment)
-        )
+        do {
+            Task { @MainActor in
+                store = .init(
+                    initialState: .init(),
+                    reducer: { InstitutionListReducer(environment: environment) }
+                )
+            }
+        }
     }
 
     func test_initial_state() throws {
@@ -32,29 +33,29 @@ final class InstitutionListTests: OpenBankingTestCase {
         XCTAssertNil(state.route)
     }
 
-    func test_fetch() throws {
-        store.send(.fetch)
-        scheduler.run()
-        store.receive(.fetched(createAccount)) { [self] state in
+    func test_fetch() async throws {
+        await store.send(.fetch)
+        await scheduler.run()
+        await store.receive(.fetched(createAccount)) { [self] state in
             state.result = .success(createAccount)
         }
     }
 
-    func test_show_transfer_details() throws {
-        store.send(.showTransferDetails)
+    func test_show_transfer_details() async throws {
+        await store.send(.showTransferDetails)
         XCTAssertTrue(showTransferDetails)
     }
 
-    func test_dismiss() throws {
-        store.send(.dismiss)
+    func test_dismiss() async throws {
+        await store.send(.dismiss)
         XCTAssertTrue(dismiss)
     }
 
-    func approve() {
-        store.send(.fetched(createAccount)) { [self] state in
+    func approve() async {
+        await store.send(.fetched(createAccount)) { [self] state in
             state.result = .success(createAccount)
         }
-        store.send(.select(createAccount, institution)) { [self] state in
+        await store.send(.select(createAccount, institution)) { [self] state in
             state.selection = .init(
                 data: .init(
                     account: createAccount,
@@ -66,28 +67,28 @@ final class InstitutionListTests: OpenBankingTestCase {
         }
     }
 
-    func test_select_institution() throws {
-        approve()
+    func test_select_institution() async throws {
+        await approve()
     }
 
-    func test_bank_cancel() throws {
-        approve()
+    func test_bank_cancel() async throws {
+        await approve()
 
-        scheduler.advance()
+        await scheduler.advance()
 
-        store.receive(.route(.navigate(to: .bank))) { state in
+        await store.receive(.route(.navigate(to: .bank))) { state in
             state.route = .navigate(to: .bank)
         }
 
-        store.send(.bank(.cancel)) { state in
+        await store.send(.bank(.cancel)) { state in
             state.route = nil
             state.result = nil
         }
-        store.receive(.fetch)
+        await store.receive(.fetch)
 
-        scheduler.advance()
+        await scheduler.advance()
 
-        store.receive(.fetched(createAccount)) { [self] state in
+        await store.receive(.fetched(createAccount)) { [self] state in
             state.result = .success(createAccount)
         }
     }

@@ -59,7 +59,7 @@ public enum OpenBankingAction: Equatable {
     case bank(BankAction)
 }
 
-public struct OpenBankingReducer: ReducerProtocol {
+public struct OpenBankingReducer: Reducer {
 
     public typealias State = OpenBankingState
     public typealias Action = OpenBankingAction
@@ -70,7 +70,7 @@ public struct OpenBankingReducer: ReducerProtocol {
         self.environment = environment
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Scope(state: /State.institutionList, action: /Action.institutionList) {
             InstitutionListReducer(environment: environment)
         }
@@ -87,7 +87,8 @@ public struct OpenBankingReducer: ReducerProtocol {
                 environment.eventPublisher.send(.success(()))
                 return .none
             case .bank(.cancel):
-                return .fireAndForget(environment.cancel)
+                environment.cancel()
+                return .none
             case .institutionList, .bank:
                 return .none
             }

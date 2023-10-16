@@ -23,7 +23,7 @@ struct InterestAccountDetailsView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if viewStore.isLoading {
                 LoadingStateView(title: "")
                     .onAppear {
@@ -177,9 +177,9 @@ struct InterestAccountDetailsView_Previews: PreviewProvider {
 
     static var previews: some View {
         InterestAccountDetailsView(
-            store: .init(
+            store: Store(
                 initialState: state,
-                reducer: InterestAccountDetailsReducer()
+                reducer: { InterestAccountDetailsReducer() }
             )
         )
     }

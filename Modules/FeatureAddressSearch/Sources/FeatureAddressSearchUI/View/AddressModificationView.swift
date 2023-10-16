@@ -10,6 +10,7 @@ import SwiftUI
 import ToolKit
 import UIComponentsKit
 
+@MainActor
 struct AddressModificationView: View {
 
     private typealias L10n = LocalizationConstants.AddressSearch
@@ -29,7 +30,7 @@ struct AddressModificationView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: .zero) {
                 if !viewStore.isPresentedFromSearchView {
                     PrimaryNavigationView {
@@ -46,7 +47,7 @@ struct AddressModificationView: View {
     }
 
     private var content: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ScrollView {
                 form
                 .padding(.bottom, Spacing.padding3)
@@ -57,24 +58,22 @@ struct AddressModificationView: View {
                 .onAppear {
                     viewStore.send(.onAppear)
                 }
-                .alert(
-                    store.scope(state: \.failureAlert),
-                    dismiss: .dismissAlert
-                )
+                .alert(store: store.scope(state: \.$failureAlert, action: { .alert($0) }))
             }
             .background(Color.semantic.light.ignoresSafeArea())
         }
     }
 
+    @MainActor
     private var form: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Spacing.padding3) {
                 header
                 VStack(spacing: Spacing.padding1) {
                     Input(
-                        text: viewStore.binding(\.$line1),
+                        text: viewStore.$line1,
                         isFirstResponder: viewStore
-                            .binding(\.$selectedInputField)
+                            .$selectedInputField
                             .equals(.line1),
                         label: L10n.Form.addressLine1,
                         placeholder: L10n.Form.Placeholder.line1,
@@ -88,9 +87,9 @@ struct AddressModificationView: View {
                     .autocorrectionDisabled()
 
                     Input(
-                        text: viewStore.binding(\.$line2),
+                        text: viewStore.$line2,
                         isFirstResponder: viewStore
-                            .binding(\.$selectedInputField)
+                            .$selectedInputField
                             .equals(.line2),
                         label: L10n.Form.addressLine2,
                         placeholder: L10n.Form.Placeholder.line2,
@@ -103,9 +102,9 @@ struct AddressModificationView: View {
                     .autocorrectionDisabled()
 
                     Input(
-                        text: viewStore.binding(\.$city),
+                        text: viewStore.$city,
                         isFirstResponder: viewStore
-                            .binding(\.$selectedInputField)
+                            .$selectedInputField
                             .equals(.city),
                         label: L10n.Form.city,
                         defaultBorderColor: .clear,
@@ -119,9 +118,9 @@ struct AddressModificationView: View {
                     HStack(spacing: Spacing.padding2) {
                         if viewStore.isStateFieldVisible {
                             Input(
-                                text: viewStore.binding(\.$stateName),
+                                text: viewStore.$stateName,
                                 isFirstResponder: viewStore
-                                    .binding(\.$selectedInputField)
+                                    .$selectedInputField
                                     .equals(.state),
                                 label: L10n.Form.state,
                                 defaultBorderColor: .clear,
@@ -134,9 +133,9 @@ struct AddressModificationView: View {
                             .autocorrectionDisabled()
                         }
                         Input(
-                            text: viewStore.binding(\.$postcode),
+                            text: viewStore.$postcode,
                             isFirstResponder: viewStore
-                                .binding(\.$selectedInputField)
+                                .$selectedInputField
                                 .equals(.zip),
                             label: L10n.Form.zip,
                             defaultBorderColor: .clear,
@@ -161,7 +160,7 @@ struct AddressModificationView: View {
     }
 
     private var footer: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             PrimaryButton(
                 title: viewStore.saveButtonTitle ?? L10n.Buttons.save,
                 isLoading: viewStore.state.loading
@@ -185,7 +184,7 @@ struct AddressModificationView: View {
     }
 
     private var header: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if let subtitle = viewStore.screenSubtitle {
                 VStack(alignment: .leading, spacing: Spacing.padding1) {
                     HStack {
@@ -233,15 +232,25 @@ struct AddressModification_Previews: PreviewProvider {
                 store: Store(
                     initialState: .init(
                         addressDetailsId: MockServices.addressId,
-                        isPresentedFromSearchView: false
+                        isPresentedFromSearchView: false,
+                        failureAlert: .init(
+                            title: TextState(verbatim: LocalizationConstants.AddressSearch.Form.Errors.cannotEditStateTitle),
+                            message: TextState(verbatim: LocalizationConstants.AddressSearch.Form.Errors.cannotEditStateMessage),
+                            dismissButton: .default(
+                                TextState(LocalizationConstants.okString),
+                                action: .send(.stateDoesNotMatch)
+                            )
+                        )
                     ),
-                    reducer: AddressModificationReducer(
-                        mainQueue: .main,
-                        config: .init(title: "Title", subtitle: "Subtitle"),
-                        addressService: MockServices(),
-                        addressSearchService: MockServices(),
-                        onComplete: { _ in }
-                    )
+                    reducer: {
+                        AddressModificationReducer(
+                            mainQueue: .main,
+                            config: .init(title: "Title", subtitle: "Subtitle"),
+                            addressService: MockServices(),
+                            addressSearchService: MockServices(),
+                            onComplete: { _ in }
+                        )
+                    }
                 )
             )
         }

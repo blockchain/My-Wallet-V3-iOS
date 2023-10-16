@@ -11,7 +11,7 @@ struct LivePricesView: View {
     let list: LivePricesList
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 LivePricesHeader(
                     offset: viewStore.binding(
@@ -66,7 +66,7 @@ struct PriceListView_Previews: PreviewProvider {
 
     static var store = Store(
         initialState: tourState,
-        reducer: NoOpReducer()
+        reducer: { NoOpReducer() }
     )
 
     static var previews: some View {

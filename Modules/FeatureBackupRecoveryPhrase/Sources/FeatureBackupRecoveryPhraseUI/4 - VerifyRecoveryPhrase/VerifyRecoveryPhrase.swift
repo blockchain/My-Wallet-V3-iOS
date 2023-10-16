@@ -4,7 +4,7 @@ import Extensions
 import FeatureBackupRecoveryPhraseDomain
 import WalletPayloadKit
 
-public struct VerifyRecoveryPhrase: ReducerProtocol {
+public struct VerifyRecoveryPhrase: Reducer {
 
     public let mainQueue: AnySchedulerOf<DispatchQueue>
     public let recoveryPhraseRepository: RecoveryPhraseRepositoryAPI
@@ -31,23 +31,22 @@ public struct VerifyRecoveryPhrase: ReducerProtocol {
     public typealias State = VerifyRecoveryPhraseState
     public typealias Action = VerifyRecoveryPhraseAction
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return recoveryPhraseService
-                    .recoveryPhraseComponents()
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        switch result {
-                        case .success(let words):
-                            return .onRecoveryPhraseComponentsFetchSuccess(words)
-                        case .failure:
-                            return .onRecoveryPhraseComponentsFetchedFailed
-                        }
+                return .run { send in
+                    do {
+                        let words = try await recoveryPhraseService
+                            .recoveryPhraseComponents()
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.onRecoveryPhraseComponentsFetchSuccess(words))
+                    } catch {
+                        await send(.onRecoveryPhraseComponentsFetchedFailed)
                     }
+                }
 
             case .onRecoveryPhraseComponentsFetchSuccess(let words):
                 var generator = generator
@@ -74,9 +73,9 @@ public struct VerifyRecoveryPhrase: ReducerProtocol {
 
             case .onVerifyTap:
                 if state.selectedWords.map(\.label) == state.availableWords.map(\.label) {
-                    return EffectTask(value: .onPhraseVerifySuccess)
+                    return Effect.send(.onPhraseVerifySuccess)
                 }
-                return EffectTask(value: .onPhraseVerifyFailed)
+                return Effect.send(.onPhraseVerifyFailed)
 
             case .onPhraseVerifyFailed:
                 state.backupPhraseStatus = .failed
@@ -84,27 +83,24 @@ public struct VerifyRecoveryPhrase: ReducerProtocol {
 
             case .onPhraseVerifySuccess:
                 state.backupPhraseStatus = .loading
-                return recoveryPhraseService
-                    .markBackupVerified()
-                    .map { _ in
-                        recoveryPhraseRepository.updateMnemonicBackup()
+                return .run { send in
+                    do {
+                        try await recoveryPhraseService
+                            .markBackupVerified()
+                            .map { _ in
+                                recoveryPhraseRepository.updateMnemonicBackup()
+                            }
+                            .receive(on: mainQueue).await()
+                        await send(.onPhraseVerifyComplete)
+                    } catch {
+                        await send(.onPhraseVerifyBackupFailed)
                     }
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        switch result {
-                        case .success:
-                            return .onPhraseVerifyComplete
-                        case .failure:
-                            return .onPhraseVerifyBackupFailed
-                        }
-                    }
+                }
 
             case .onPhraseVerifyComplete:
                 state.backupPhraseStatus = .success
-                return .fireAndForget {
-                    onNext()
-                }
+                onNext()
+                return .none
 
             case .onPhraseVerifyBackupFailed:
                 state.backupPhraseStatus = .readyToVerify

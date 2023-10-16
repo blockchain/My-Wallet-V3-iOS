@@ -10,7 +10,7 @@ import Localization
 import ToolKit
 import XCTest
 
-final class PersonalInfoReducerTests: XCTestCase {
+@MainActor final class PersonalInfoReducerTests: XCTestCase {
 
     private struct RecordedInvocations {
         var onClose: Int = 0
@@ -25,10 +25,7 @@ final class PersonalInfoReducerTests: XCTestCase {
 
     private var testStore: TestStore<
         PersonalInfo.State,
-        PersonalInfo.Action,
-        PersonalInfo.State,
-        PersonalInfo.Action,
-        Void
+        PersonalInfo.Action
     >!
 
     private var testScheduler: TestSchedulerOf<DispatchQueue>!
@@ -39,37 +36,41 @@ final class PersonalInfoReducerTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         testScheduler = DispatchQueue.test
+        let loadForm: () -> AnyPublisher<[FormQuestion], KYCFlowError> = { [weak self] in
+            guard let self else { return .empty() }
+            switch stubbedResults.loadForm {
+            case .success(let result):
+                return .just(result)
+            case .failure(let error):
+                return .failure(error)
+            }
+        }
+        let submitForm: (Form) -> AnyPublisher<Void, KYCFlowError> = { [weak self] _ in
+            guard let self else { return .empty() }
+            recordedInvocations.submitForm += 1
+            switch stubbedResults.submitForm {
+            case .success(let result):
+                return .just(result)
+            case .failure(let error):
+                return .failure(error)
+            }
+        }
         testStore = TestStore(
             initialState: PersonalInfo.State(),
-            reducer: PersonalInfo.Reducer(
-                onClose: { [weak self] in
-                    self?.recordedInvocations.onClose += 1
-                },
-                onComplete: { [weak self] in
-                    self?.recordedInvocations.onComplete += 1
-                },
-                loadForm: { [weak self] in
-                    guard let self else { return .empty() }
-                    switch stubbedResults.loadForm {
-                    case .success(let result):
-                        return .just(result)
-                    case .failure(let error):
-                        return .failure(error)
-                    }
-                },
-                submitForm: { [weak self] _ in
-                    guard let self else { return .empty() }
-                    recordedInvocations.submitForm += 1
-                    switch stubbedResults.submitForm {
-                    case .success(let result):
-                        return .just(result)
-                    case .failure(let error):
-                        return .failure(error)
-                    }
-                },
-                analyticsRecorder: MockAnalyticsRecorder(),
-                mainQueue: testScheduler.eraseToAnyScheduler()
-            )
+            reducer: {
+                PersonalInfo.PersonalInfoReducer(
+                    onClose: { [weak self] in
+                        self?.recordedInvocations.onClose += 1
+                    },
+                    onComplete: { [weak self] in
+                        self?.recordedInvocations.onComplete += 1
+                    },
+                    loadForm: loadForm,
+                    submitForm: submitForm,
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    mainQueue: testScheduler.eraseToAnyScheduler()
+                )
+            }
         )
     }
 
@@ -79,12 +80,12 @@ final class PersonalInfoReducerTests: XCTestCase {
         try super.tearDownWithError()
     }
 
-    func test_loadsForm_success() throws {
+    func test_loadsForm_success() async throws {
         let expectedQuestions = FormQuestion.personalInfoQuestions(firstName: nil, lastName: nil, dateOfBirth: nil)
         stubbedResults.loadForm = .success(expectedQuestions)
-        testStore.send(.loadForm)
-        testScheduler.advance()
-        testStore.receive(.formDidLoad(.success(expectedQuestions))) {
+        await testStore.send(.loadForm)
+        await testScheduler.advance()
+        await testStore.receive(.formDidLoad(.success(expectedQuestions))) {
             $0.form = .init(
                 header: .init(
                     title: LocalizationConstants.NewKYC.Steps.PersonalInfo.title,
@@ -96,18 +97,18 @@ final class PersonalInfoReducerTests: XCTestCase {
         }
     }
 
-    func test_loadsForm_failure() throws {
-        testStore.send(.loadForm)
-        testScheduler.advance()
-        testStore.receive(.formDidLoad(.failure(.invalidForm)))
+    func test_loadsForm_failure() async throws {
+        await testStore.send(.loadForm)
+        await testScheduler.advance()
+        await testStore.receive(.formDidLoad(.failure(.invalidForm)))
     }
 
-    func test_submitForm_emptyForm() throws {
-        testStore.send(.submit)
+    func test_submitForm_emptyForm() async throws {
+        await testStore.send(.submit)
         XCTAssertEqual(recordedInvocations.submitForm, 0)
     }
 
-    func test_submitsForm_filledForm_success() throws {
+    func test_submitsForm_filledForm_success() async throws {
         let newForm: Form = .init(
             nodes: FormQuestion.personalInfoQuestions(
                 firstName: "Johnny",
@@ -115,21 +116,21 @@ final class PersonalInfoReducerTests: XCTestCase {
                 dateOfBirth: Calendar.current.eighteenYearsAgo
             )
         )
-        testStore.send(.binding(.set(\.$form, newForm))) {
+        await testStore.send(.binding(.set(\.$form, newForm))) {
             $0.form = newForm
         }
-        testStore.send(.submit) {
+        await testStore.send(.submit) {
             $0.formSubmissionState = .loading
         }
         XCTAssertEqual(recordedInvocations.submitForm, 1)
-        testScheduler.advance()
-        testStore.receive(.submissionResultReceived(.success(Empty()))) {
+        await testScheduler.advance()
+        await testStore.receive(.submissionResultReceived(.success(Empty()))) {
             $0.formSubmissionState = .success(Empty())
         }
         XCTAssertEqual(recordedInvocations.onComplete, 1)
     }
 
-    func test_submitsForm_filledForm_failure() throws {
+    func test_submitsForm_filledForm_failure() async throws {
         let newForm: Form = .init(
             nodes: FormQuestion.personalInfoQuestions(
                 firstName: "Johnny",
@@ -137,16 +138,16 @@ final class PersonalInfoReducerTests: XCTestCase {
                 dateOfBirth: Calendar.current.eighteenYearsAgo
             )
         )
-        testStore.send(.binding(.set(\.$form, newForm))) {
+        await testStore.send(.binding(.set(\.$form, newForm))) {
             $0.form = newForm
         }
         stubbedResults.submitForm = .failure(.invalidForm)
-        testStore.send(.submit) {
+        await testStore.send(.submit) {
             $0.formSubmissionState = .loading
         }
         XCTAssertEqual(recordedInvocations.submitForm, 1)
-        testScheduler.advance()
-        testStore.receive(.submissionResultReceived(.failure(.invalidForm))) {
+        await testScheduler.advance()
+        await testStore.receive(.submissionResultReceived(.failure(.invalidForm))) {
             $0.formSubmissionState = .failure(
                 FailureState<PersonalInfo.Action>.init(
                     title: "Something went wrong",
@@ -159,13 +160,13 @@ final class PersonalInfoReducerTests: XCTestCase {
             )
         }
         XCTAssertEqual(recordedInvocations.onComplete, 0)
-        testStore.send(.dismissSubmissionFailureAlert) {
+        await testStore.send(.dismissSubmissionFailureAlert) {
             $0.formSubmissionState = .idle
         }
     }
 
-    func test_close() throws {
-        testStore.send(.close)
+    func test_close() async throws {
+        await testStore.send(.close)
         XCTAssertEqual(recordedInvocations.onClose, 1)
     }
 }

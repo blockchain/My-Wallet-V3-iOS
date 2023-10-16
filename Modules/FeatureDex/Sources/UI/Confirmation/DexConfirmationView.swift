@@ -15,7 +15,7 @@ struct DexConfirmationView: View {
 
     init(store: StoreOf<DexConfirmation>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     @ViewBuilder
@@ -38,31 +38,31 @@ struct DexConfirmationView: View {
             .background(Color.semantic.light.ignoresSafeArea())
             .bindings {
                 subscribe(
-                    viewStore.binding(\.$networkFiatExchangeRate),
+                    viewStore.$networkFiatExchangeRate,
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.networkFee.currency.code].fiat.quote.value
                 )
             }
             .bindings {
                 subscribe(
-                    viewStore.binding(\.$fromFiatExchangeRate),
+                    viewStore.$fromFiatExchangeRate,
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.from.currency.code].fiat.quote.value
                 )
             }
             .bindings {
                 subscribe(
-                    viewStore.binding(\.$toFiatExchangeRate),
+                    viewStore.$toFiatExchangeRate,
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.to.currency.code].fiat.quote.value
                 )
             }
             .bindings {
                 subscribe(
-                    viewStore.binding(\.$productFeeFiatExchangeRate),
+                    viewStore.$productFeeFiatExchangeRate,
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.productFee?.currency.code].fiat.quote.value
                 )
             }
             PrimaryNavigationLink(
                 destination: pendingTransactionView,
-                isActive: viewStore.binding(\.$didConfirm),
+                isActive: viewStore.$didConfirm,
                 label: EmptyView.init
             )
         }
@@ -74,7 +74,7 @@ struct DexConfirmationView: View {
 
     @ViewBuilder
     private var pendingTransactionView: some View {
-        IfLet(viewStore.binding(\.$pendingTransaction), then: { $state in
+        IfLet(viewStore.$pendingTransaction, then: { $state in
             PendingTransactionView(
                 state: state,
                 dismiss: { presentationMode.wrappedValue.dismiss() }
@@ -390,31 +390,29 @@ struct DexConfirmationView_Previews: PreviewProvider {
     @ViewBuilder
     static var previews: some View {
         DexConfirmationView(
-            store: .init(
+            store: Store(
                 initialState: .preview,
-                reducer: DexConfirmation(app: app)
+                reducer: { DexConfirmation(app: app) }
             )
         )
         .app(app)
         .previewDisplayName("Confirmation")
 
         DexConfirmationView(
-            store: .init(
-                initialState: .preview.setup { state in
-                    state.newQuote = DexConfirmation.State.Quote.preview()
-                },
-                reducer: DexConfirmation(app: app)
+            store: Store(
+                initialState: .preview,
+                reducer: { DexConfirmation(app: app) }
             )
         )
         .app(app)
         .previewDisplayName("Price updated")
 
         DexConfirmationView(
-            store: .init(
+            store: Store(
                 initialState: .preview.setup { state in
                     state.quote.enoughBalance = false
                 },
-                reducer: DexConfirmation(app: app)
+                reducer: { DexConfirmation(app: app) }
             )
         )
         .app(app)

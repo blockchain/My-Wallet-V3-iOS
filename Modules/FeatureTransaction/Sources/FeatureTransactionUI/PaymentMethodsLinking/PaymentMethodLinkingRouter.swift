@@ -2,6 +2,7 @@
 
 import BlockchainNamespace
 import Combine
+import ComposableArchitecture
 import DIKit
 import FeaturePlaidUI
 import MoneyKit
@@ -245,16 +246,18 @@ final class PaymentMethodLinkingRouter: PaymentMethodLinkingRouterAPI {
         completion: @escaping (PaymentMethodsLinkingFlowResult) -> Void
     ) {
         let app: AppProtocol = DIKit.resolve()
-        let view = PlaidView(store: .init(
+        let view = PlaidView(store: Store(
             initialState: PlaidState(),
-            reducer: PlaidReducer(
-                app: app,
-                mainQueue: .main,
-                plaidRepository: DIKit.resolve(),
-                dismissFlow: { success in
-                    completion(success ? .completed(nil) : .abandoned)
-                }
-            )
+            reducer: {
+                PlaidReducer(
+                    app: app,
+                    mainQueue: .main,
+                    plaidRepository: DIKit.resolve(),
+                    dismissFlow: { success in
+                        completion(success ? .completed(nil) : .abandoned)
+                    }
+                )
+            }
         )).app(app)
 
         let viewController = UIHostingController(rootView: view)

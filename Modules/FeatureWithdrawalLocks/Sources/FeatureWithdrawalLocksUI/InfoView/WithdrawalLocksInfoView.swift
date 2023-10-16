@@ -37,7 +37,7 @@ public enum WithdrawalLocksInfoRoute: NavigationRoute {
     }
 }
 
-public struct WithdrawalLockInfoReducer: ReducerProtocol {
+public struct WithdrawalLockInfoReducer: Reducer {
 
     public typealias State = WithdrawalLocksInfoState
     public typealias Action = WithdrawalLocksInfoAction
@@ -56,19 +56,18 @@ public struct WithdrawalLockInfoReducer: ReducerProtocol {
         self.closeAction = closeAction
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .loadWithdrawalLocks:
-                return .merge(
+                return .publisher {
                     withdrawalLockService
                         .withdrawalLocks
                         .receive(on: mainQueue)
-                        .eraseToEffect()
                         .map { withdrawalLocks in
                                 .present(withdrawalLocks: withdrawalLocks)
                         }
-                )
+                }
             case .present(withdrawalLocks: let withdrawalLocks):
                 state.withdrawalLocks = withdrawalLocks
                 return .none
@@ -76,9 +75,8 @@ public struct WithdrawalLockInfoReducer: ReducerProtocol {
                 state.route = routeItent
                 return .none
             case .dismiss:
-                return .fireAndForget {
-                    closeAction?()
-                }
+                closeAction?()
+                return .none
             }
         }
     }
@@ -97,7 +95,7 @@ public struct WithdrawalLocksInfoView: View {
     @Environment(\.openURL) private var openURL
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack(alignment: .top) {
                 HStack {
                     Spacer()
@@ -180,14 +178,11 @@ struct WithdrawalLocksInfoView_PreviewProvider: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
             WithdrawalLocksInfoView(store:
-                .init(
-                    initialState: .init(
-                        amountAvailable: "$191.12"
-                    ),
-                    reducer: WithdrawalLockInfoReducer(
+                Store(initialState: .init(amountAvailable: "$191.12")) {
+                    WithdrawalLockInfoReducer(
                         withdrawalLockService: NoOpWithdrawalLocksService()
                     )
-                )
+                }
             )
         }
     }

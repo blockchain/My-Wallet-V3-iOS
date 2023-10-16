@@ -13,7 +13,7 @@ public struct ViewIntroBackupView: View {
 
     public init(store: Store<ViewIntroBackupState, ViewIntroBackupAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -56,11 +56,11 @@ public struct ViewIntroBackupView: View {
 
     var consentRowsSection: some View {
         VStack(alignment: .leading) {
-            selectionRow(text: Localization.rowText1, isOn: viewStore.binding(\.$checkBox1IsOn))
+            selectionRow(text: Localization.rowText1, isOn: viewStore.$checkBox1IsOn)
 
-            selectionRow(text: Localization.rowText2, isOn: viewStore.binding(\.$checkBox2IsOn))
+            selectionRow(text: Localization.rowText2, isOn: viewStore.$checkBox2IsOn)
 
-            selectionRow(text: Localization.rowText3, isOn: viewStore.binding(\.$checkBox3IsOn))
+            selectionRow(text: Localization.rowText3, isOn: viewStore.$checkBox3IsOn)
         }
     }
 
@@ -110,9 +110,9 @@ public struct ViewIntroBackupView: View {
 
 struct ViewIntroBackupView_Previews: PreviewProvider {
     static var previews: some View {
-        ViewIntroBackupView(store: .init(
+        ViewIntroBackupView(store: Store(
             initialState: .init(recoveryPhraseBackedUp: false),
-            reducer: ViewIntroBackup(onSkip: {}, onNext: {})
+            reducer: { ViewIntroBackup(onSkip: {}, onNext: {}) }
         ))
     }
 }

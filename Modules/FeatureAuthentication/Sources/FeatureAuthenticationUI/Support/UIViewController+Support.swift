@@ -14,16 +14,18 @@ extension UIViewController {
     ) {
         let controller = UIHostingController<SupportView>(
             rootView: SupportView(
-                store: .init(
+                store: Store(
                     initialState: .init(
                         applicationVersion: Bundle.applicationVersion ?? "",
                         bundleIdentifier: Bundle.main.bundleIdentifier ?? ""
                     ),
-                    reducer: SupportViewReducer(
-                        appStoreInformationRepository: DIKit.resolve(),
-                        analyticsRecorder: DIKit.resolve(),
-                        externalAppOpener: DIKit.resolve()
-                    )
+                    reducer: {
+                        SupportViewReducer(
+                            appStoreInformationRepository: DIKit.resolve(),
+                            analyticsRecorder: DIKit.resolve(),
+                            externalAppOpener: DIKit.resolve()
+                        )
+                    }
                 )
             )
         )

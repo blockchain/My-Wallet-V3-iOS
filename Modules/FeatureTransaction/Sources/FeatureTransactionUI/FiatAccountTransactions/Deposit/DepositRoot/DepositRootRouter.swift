@@ -170,24 +170,30 @@ final class DepositRootRouter: RIBs.Router<DepositRootInteractable>, DepositRoot
 
         analyticsRecorder.record(event: AnalyticsEvents.New.Withdrawal.linkBankClicked(origin: .deposit))
 
+        let dismiss: (Bool) -> Void = { [weak self] success in
+            guard let self else {
+                return
+            }
+            dismissBankLinkingFlow()
+            detachChild(router)
+            if success {
+                interactor.bankLinkingComplete()
+            } else {
+                interactor.bankLinkingClosed(isInteractive: true)
+            }
+        }
+
         let app: AppProtocol = DIKit.resolve()
         let view = PlaidView(store: .init(
             initialState: PlaidState(),
-            reducer: PlaidReducer(
-                app: app,
-                mainQueue: .main,
-                plaidRepository: DIKit.resolve(),
-                dismissFlow: { [weak self] success in
-                    guard let self else { return }
-                    dismissBankLinkingFlow()
-                    detachChild(router)
-                    if success {
-                        interactor.bankLinkingComplete()
-                    } else {
-                        interactor.bankLinkingClosed(isInteractive: true)
-                    }
-                }
-            )
+            reducer: {
+                PlaidReducer(
+                    app: app,
+                    mainQueue: .main,
+                    plaidRepository: DIKit.resolve(),
+                    dismissFlow: dismiss
+                )
+            }
         )).app(app)
 
         let viewController = UIHostingController(rootView: view)

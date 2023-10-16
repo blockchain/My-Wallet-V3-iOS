@@ -3,7 +3,7 @@
 import Algorithms
 import Foundation
 
-public struct PrefetchingReducer: ReducerProtocol {
+public struct PrefetchingReducer: Reducer {
     let mainQueue: AnySchedulerOf<DispatchQueue>
 
     public init(
@@ -15,18 +15,18 @@ public struct PrefetchingReducer: ReducerProtocol {
     public typealias State = PrefetchingState
     public typealias Action = PrefetchingAction
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
 
             case .onAppear(index: let index):
                 state.seen.insert(index)
-                return EffectTask(value: .fetchIfNeeded)
+                return Effect.send(.fetchIfNeeded)
                     .debounce(id: FetchId(), for: state.debounce, scheduler: mainQueue)
 
             case .requeue(indices: let indices):
                 state.fetchedIndices.subtract(indices)
-                return EffectTask(value: .fetchIfNeeded)
+                return Effect.send(.fetchIfNeeded)
                     .debounce(id: FetchId(), for: state.debounce, scheduler: mainQueue)
 
             case .fetchIfNeeded:
@@ -44,8 +44,8 @@ public struct PrefetchingReducer: ReducerProtocol {
                 if indicesToFetch.isEmpty {
                     return .none
                 } else {
-                    return EffectTask(
-                        value: .fetch(
+                    return Effect.send(
+                        .fetch(
                             indices: indicesToFetch
                         )
                     )

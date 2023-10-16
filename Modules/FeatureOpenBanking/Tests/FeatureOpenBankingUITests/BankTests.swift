@@ -6,16 +6,12 @@ import BlockchainUI
 import NetworkKit
 import TestKit
 
-final class BankLinkTests: OpenBankingTestCase {
+@MainActor final class BankLinkTests: OpenBankingTestCase {
 
-    typealias Store = TestStore<
+    private typealias Store = TestStore<
         BankState,
-        BankAction,
-        BankState,
-        BankAction,
-        Void
+        BankAction
     >
-
     private var store: Store!
 
     // swiftlint:disable:next force_try
@@ -27,10 +23,14 @@ final class BankLinkTests: OpenBankingTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        store = .init(
-            initialState: initialState,
-            reducer: BankReducer(environment: environment)
-        )
+        do {
+            Task { @MainActor in
+                store = .init(
+                    initialState: initialState,
+                    reducer: { BankReducer(environment: environment) }
+                )
+            }
+        }
     }
 
     var initialState: BankState {
@@ -43,48 +43,47 @@ final class BankLinkTests: OpenBankingTestCase {
     }
 
     func test_initial_state() throws {
-
         let state = initialState
         XCTAssertEqual(state.account, createAccount)
         XCTAssertEqual(state.name, "Monzo")
         XCTAssertNil(state.ui)
     }
 
-    func test_request_and_wait_for_approval_with_failure() throws {
+    func test_request_and_wait_for_approval_with_failure() async throws {
 
         network[
             URLRequest(.get, "https://api.blockchain.info/nabu-gateway/payments/banktransfer/a44d7d14-15f0-4ceb-bf32-bdcb6c6b393c")
         ] = nil
 
-        store.send(.request) { state in
+        await store.send(.request) { state in
             state.ui = .communicating(to: state.name)
         }
 
-        scheduler.advance(by: .seconds(1))
+        await scheduler.advance(by: .seconds(1))
 
-        store.send(.failure(.timeout)) { state in
+        await store.send(.failure(.timeout)) { state in
             state.ui = .pending()
             state.showActions = true
         }
-        store.send(.cancel)
+        await store.send(.cancel)
     }
 
-    func test_request() throws {
+    func test_request() async throws {
 
         let url = try account.attributes.authorisationUrl.unwrap()
 
-        store.send(.request) { state in
+        await store.send(.request) { state in
             state.ui = .communicating(to: state.name)
         }
-        scheduler.advance()
-        store.receive(.waitingForConsent) { state in
+        await scheduler.advance()
+        await store.receive(.waitingForConsent) { state in
             state.ui = .waiting(for: state.name)
         }
 
         app.state.set(blockchain.ux.payment.method.open.banking.is.authorised, to: true)
-        scheduler.advance()
-        store.receive(.launchAuthorisation(url))
-        store.receive(.finalise(.linked(account, institution: institution))) { state in
+        await scheduler.advance()
+        await store.receive(.launchAuthorisation(url))
+        await store.receive(.finalise(.linked(account, institution: institution))) { state in
             state.ui = .linked(institution: state.name)
             state.showActions = true
         }
@@ -92,27 +91,24 @@ final class BankLinkTests: OpenBankingTestCase {
         XCTAssertEqual(openedURL, url)
     }
 
-    func test_fail() throws {
-        store.send(.failure(.bankTransferAccountAlreadyLinked)) { [self] state in
+    func test_fail() async throws {
+        await store.send(.failure(.bankTransferAccountAlreadyLinked)) { [self] state in
             state.ui = .error(.bankTransferAccountAlreadyLinked, in: environment)
             state.showActions = true
         }
     }
 
-    func test_dismiss() throws {
-        store.send(.dismiss)
+    func test_dismiss() async throws {
+        await store.send(.dismiss)
         XCTAssertTrue(dismiss)
     }
 }
 
-final class BankPaymentTests: OpenBankingTestCase {
+@MainActor final class BankPaymentTests: OpenBankingTestCase {
 
     typealias Store = TestStore<
         BankState,
-        BankAction,
-        BankState,
-        BankAction,
-        Void
+        BankAction
     >
 
     private var store: Store!
@@ -140,10 +136,14 @@ final class BankPaymentTests: OpenBankingTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        store = .init(
-            initialState: initialState,
-            reducer: BankReducer(environment: environment)
-        )
+        do {
+            Task { @MainActor in
+                store = .init(
+                    initialState: initialState,
+                    reducer: { BankReducer(environment: environment) }
+                )
+            }
+        }
     }
 
     var initialState: BankState {
@@ -157,22 +157,22 @@ final class BankPaymentTests: OpenBankingTestCase {
         XCTAssertNil(state.ui)
     }
 
-    func test_request() throws {
+    func test_request() async throws {
 
-        store.send(.request) { state in
+        await store.send(.request) { state in
             state.ui = .communicating(to: state.name)
         }
 
-        scheduler.advance()
+        await scheduler.advance()
 
-        store.receive(.waitingForConsent) { state in
+        await store.receive(.waitingForConsent) { state in
             state.ui = .waiting(for: state.name)
         }
 
         app.state.set(blockchain.ux.payment.method.open.banking.is.authorised, to: true)
-        scheduler.advance()
+        await scheduler.advance()
 
-        store.receive(.finalise(.deposited(details))) { [self] state in
+        await store.receive(.finalise(.deposited(details))) { [self] state in
             state.ui = .deposit(success: details, in: environment)
             state.showActions = true
         }

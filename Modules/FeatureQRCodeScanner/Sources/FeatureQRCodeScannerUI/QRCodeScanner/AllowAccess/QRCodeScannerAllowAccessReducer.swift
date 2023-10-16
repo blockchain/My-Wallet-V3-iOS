@@ -21,7 +21,7 @@ struct AllowAccessState: Equatable {
     var showWalletConnectRow: Bool
 }
 
-struct AllowAccessReducer: ReducerProtocol {
+struct AllowAccessReducer: Reducer {
 
     typealias State = AllowAccessState
     typealias Action = AllowAccessAction
@@ -33,29 +33,26 @@ struct AllowAccessReducer: ReducerProtocol {
     let showsWalletConnectRow: () -> AnyPublisher<Bool, Never>
     let openWalletConnectUrl: (String) -> Void
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return showsWalletConnectRow()
-                    .eraseToEffect()
-                    .map(AllowAccessAction.showsWalletConnectRow)
+                return .publisher {
+                    showsWalletConnectRow()
+                        .map(AllowAccessAction.showsWalletConnectRow)
+                }
             case .showsWalletConnectRow(let display):
                 state.showWalletConnectRow = display
                 return .none
             case .allowCameraAccess:
                 guard !cameraAccessDenied() else {
                     return .concatenate(
-                        EffectTask(value: .dismiss),
-                        EffectTask(value: .showCameraDeniedAlert)
+                        Effect.send(.dismiss),
+                        Effect.send(.showCameraDeniedAlert)
                     )
                 }
-                return .merge(
-                    .fireAndForget {
-                        allowCameraAccess()
-                    },
-                    EffectTask(value: .dismiss)
-                )
+                allowCameraAccess()
+                return Effect.send(.dismiss)
             case .showCameraDeniedAlert:
                 showCameraDeniedAlert()
                 return .none

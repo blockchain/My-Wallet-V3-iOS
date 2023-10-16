@@ -55,7 +55,7 @@ public struct SeedPhraseView: View {
 
     public init(store: Store<SeedPhraseState, SeedPhraseAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     // MARK: - SwiftUI
@@ -185,7 +185,7 @@ public struct SeedPhraseView: View {
                 trailing: Layout.trailingPadding
             )
         )
-        .alert(store.scope(state: \.failureAlert), dismiss: .alert(.dismiss))
+        .alert(store: store.scope(state: \.$failureAlert, action: { .alert($0) }))
         .background(Color.semantic.light.ignoresSafeArea())
     }
 
@@ -303,23 +303,25 @@ extension View {
 struct SeedPhraseView_Previews: PreviewProvider {
     static var previews: some View {
         SeedPhraseView(
-            store: .init(
+            store: Store(
                 initialState: .init(context: .restoreWallet, emailAddress: ""),
-                reducer: SeedPhraseReducer(
-                    mainQueue: .main,
-                    externalAppOpener: ToLogAppOpener(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    walletRecoveryService: .noop,
-                    walletCreationService: .noop,
-                    walletFetcherService: .noop,
-                    accountRecoveryService: NoOpAccountRecoveryService(),
-                    errorRecorder: NoOpErrorRecoder(),
-                    recaptchaService: NoOpGoogleRecatpchaService(),
-                    validator: NoOpValidator(),
-                    passwordValidator: PasswordValidator(),
-                    signUpCountriesService: NoOpSignupCountryService(),
-                    app: App.preview
-                )
+                reducer: {
+                    SeedPhraseReducer(
+                        mainQueue: .main,
+                        externalAppOpener: ToLogAppOpener(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        walletRecoveryService: .noop,
+                        walletCreationService: .noop,
+                        walletFetcherService: .noop,
+                        accountRecoveryService: NoOpAccountRecoveryService(),
+                        errorRecorder: NoOpErrorRecoder(),
+                        recaptchaService: NoOpGoogleRecatpchaService(),
+                        validator: NoOpValidator(),
+                        passwordValidator: PasswordValidator(),
+                        signUpCountriesService: NoOpSignupCountryService(),
+                        app: App.preview
+                    )
+                }
             )
         )
     }

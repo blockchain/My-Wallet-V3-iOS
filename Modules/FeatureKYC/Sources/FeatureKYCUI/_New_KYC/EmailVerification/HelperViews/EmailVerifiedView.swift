@@ -20,12 +20,12 @@ enum EmailVerifiedAction: Equatable {
     case acknowledgeEmailVerification
 }
 
-struct EmailVerifiedReducer: ReducerProtocol {
+struct EmailVerifiedReducer: Reducer {
     
     typealias State = EmailVerifiedState
     typealias Action = EmailVerifiedAction
     
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { _, _ in .none }
     }
 }
@@ -45,7 +45,7 @@ struct EmailVerifiedView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ConfettiCannonView(confetti) { action in
                 VStack(spacing: Spacing.padding3) {
                     Spacer()
@@ -105,21 +105,21 @@ struct EmailVerifiedView: View {
 struct EmailVerifiedView_Previews: PreviewProvider {
     static var previews: some View {
         EmailVerifiedView(
-            store: .init(
+            store: Store(
                 initialState: .init(
                     emailAddress: "test@example.com"
                 ),
-                reducer: EmailVerifiedReducer()
+                reducer: { EmailVerifiedReducer() }
             )
         )
         .preferredColorScheme(.light)
 
         EmailVerifiedView(
-            store: .init(
+            store: Store(
                 initialState: .init(
                     emailAddress: "test@example.com"
                 ),
-                reducer: EmailVerifiedReducer()
+                reducer: { EmailVerifiedReducer() }
             )
         )
         .preferredColorScheme(.dark)

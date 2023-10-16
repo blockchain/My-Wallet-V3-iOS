@@ -13,6 +13,7 @@ extension LocalizationConstants {
             enum Empty {}
             enum Detail {}
         }
+        enum NetworkPicker {}
     }
 }
 
@@ -30,6 +31,23 @@ extension LocalizationConstants.NFT.Screen.List {
     static let title = NSLocalizedString(
         "Your Collectibles",
         comment: "Your Collectibles"
+    )
+}
+
+extension LocalizationConstants.NFT.NetworkPicker {
+    static let title = NSLocalizedString(
+        "Network",
+        comment: ""
+    )
+
+    static let allNetworks = NSLocalizedString(
+        "All",
+        comment: ""
+    )
+
+    static let selectNetwork = NSLocalizedString(
+        "Select network",
+        comment: ""
     )
 }
 

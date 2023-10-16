@@ -16,7 +16,7 @@ enum UnlockTradingAction: Equatable, BindableAction {
     case unlockButtonTapped(KYC.Tier)
 }
 
-struct UnlockTradingReducer: ReducerProtocol {
+struct UnlockTradingReducer: Reducer {
 
     typealias State = UnlockTradingState
     typealias Action = UnlockTradingAction
@@ -25,19 +25,17 @@ struct UnlockTradingReducer: ReducerProtocol {
     let unlock: (KYC.Tier) -> Void
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .closeButtonTapped:
-                return .fireAndForget {
-                    dismiss()
-                }
+                dismiss()
+                return .none
 
             case .unlockButtonTapped(let requiredTier):
-                return .fireAndForget {
-                    unlock(requiredTier)
-                }
+                unlock(requiredTier)
+                return .none
 
             case .binding:
                 return .none
@@ -49,14 +47,14 @@ struct UnlockTradingReducer: ReducerProtocol {
 
 // MARK: - Analytics
 
-struct UnlockTradingAnalyticsReducer: ReducerProtocol {
+struct UnlockTradingAnalyticsReducer: Reducer {
 
     typealias State = UnlockTradingState
     typealias Action = UnlockTradingAction
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .binding:
@@ -67,7 +65,7 @@ struct UnlockTradingAnalyticsReducer: ReducerProtocol {
 
             case .unlockButtonTapped:
                 let userTier = state.currentUserTier
-                return .fireAndForget {
+                return .run { _ in
                     analyticsRecorder.record(
                         event: Events.tradingLimitsGetVerifiedCTAClicked(
                             tier: userTier.rawValue

@@ -164,7 +164,7 @@ struct DexAllowanceView: View {
     @ViewBuilder
     private var networkLogo: some View {
         if let network = model.network {
-            network.nativeAsset.logo(size: 16.pt)
+            network.logo(size: 16.pt)
         }
     }
 

@@ -51,7 +51,7 @@ public enum AvailableBalanceViewAction: Equatable {
 
 // MARK: - Reducer
 
-public struct AvailableBalanceViewReducer: ReducerProtocol {
+public struct AvailableBalanceViewReducer: Reducer {
     
     public typealias State = AvailableBalanceViewState
     public typealias Action = AvailableBalanceViewAction
@@ -92,33 +92,37 @@ public struct AvailableBalanceViewReducer: ReducerProtocol {
         )
     }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
 
                 return .merge(
-                    balancePublisher
-                        .receive(on: mainQueue)
-                        .eraseToEffect()
-                        .map(AvailableBalanceViewAction.updateBalance),
+                    .publisher {
+                        balancePublisher
+                            .receive(on: mainQueue)
+                            .map(AvailableBalanceViewAction.updateBalance)
+                    },
 
-                    availableBalancePublisher
-                        .receive(on: mainQueue)
-                        .eraseToEffect()
-                        .map(AvailableBalanceViewAction.updateAvailableBalance),
+                    .publisher {
+                        availableBalancePublisher
+                            .receive(on: mainQueue)
+                            .map(AvailableBalanceViewAction.updateAvailableBalance)
+                    },
 
-                    feesPublisher
-                        .receive(on: mainQueue)
-                        .eraseToEffect()
-                        .map(AvailableBalanceViewAction.updateFees),
+                    .publisher {
+                        feesPublisher
+                            .receive(on: mainQueue)
+                            .map(AvailableBalanceViewAction.updateFees)
+                    },
 
-                    app
-                        .publisher(for: blockchain.ux.transaction.id, as: String.self)
-                        .compactMap(\.value)
-                        .compactMap { AssetAction(rawValue: $0) }
-                        .eraseToEffect()
-                        .map(AvailableBalanceViewAction.updateAssetAction)
+                    .publisher {
+                        app
+                            .publisher(for: blockchain.ux.transaction.id, as: String.self)
+                            .compactMap(\.value)
+                            .compactMap { AssetAction(rawValue: $0) }
+                            .map(AvailableBalanceViewAction.updateAssetAction)
+                    }
                 )
 
             case .updateAvailableBalance(let fiatValue):
@@ -138,9 +142,8 @@ public struct AvailableBalanceViewReducer: ReducerProtocol {
                 return .none
 
             case .viewTapped:
-                return .fireAndForget {
-                    onViewTapped?()
-                }
+                onViewTapped?()
+                return .none
             }
         }
     }
@@ -155,7 +158,7 @@ public struct AvailableBalanceView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             HStack {
                 if let action = viewStore.action {
                     Text("\(LocalizationConstants.availableTo) \(action.name)")
@@ -196,9 +199,9 @@ public struct AvailableBalanceView: View {
 struct AvailableBalanceView_Previews: PreviewProvider {
     static var previews: some View {
         AvailableBalanceView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: AvailableBalanceViewReducer.preview
+                reducer: { AvailableBalanceViewReducer.preview }
             )
         )
     }

@@ -6,7 +6,7 @@ import Errors
 import FeatureExternalTradingMigrationDomain
 import Foundation
 
-public struct ExternalTradingMigration: ReducerProtocol {
+public struct ExternalTradingMigration: Reducer {
     public enum Flow {
         case existingUsersNoAssets
         case existingUserAssetsNoConsolidationNeeded
@@ -17,6 +17,8 @@ public struct ExternalTradingMigration: ReducerProtocol {
 
     public struct State: Equatable {
         @BindingState var migrationInProgressPresented: Bool = false
+        @BindingState var upgradeError: UX.Error?
+
         public init(flow: Flow? = nil) {
             self.flow = flow
         }
@@ -24,6 +26,7 @@ public struct ExternalTradingMigration: ReducerProtocol {
         var flow: Flow?
         var migrationInfo: ExternalTradingMigrationInfo?
         var showConsolidatedAssets: Bool = false
+        var isSubmittingMigration: Bool = false
     }
 
     public enum Action: Equatable, BindableAction {
@@ -32,9 +35,12 @@ public struct ExternalTradingMigration: ReducerProtocol {
         case setNavigation(isActive: Bool)
         case onContinue
         case onUpgrade
+        case onUpgradeSuccess
+        case onUpgradeFailure(UX.Error)
         case binding(BindingAction<State>)
         case migrationInProgressModalDismissed(Bool)
         case onFlowComplete
+        case onFlowDismiss
     }
 
     // MARK: - Properties
@@ -52,21 +58,22 @@ public struct ExternalTradingMigration: ReducerProtocol {
         self.externalTradingMigrationService = externalTradingMigrationService
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .initialize:
                 return .run { send in
                     if let migrationInfo = try? await externalTradingMigrationService
-                        .fetchMigrationInfo() {
+                        .fetchMigrationInfo()
+                    {
                         await send(.fetchMigrationState(migrationInfo))
                     }
                 }
             case .fetchMigrationState(let migrationInfo):
                 state.migrationInfo = migrationInfo
 
-                if migrationInfo.consolidatedBalances.beforeMigration.isNotEmpty {
+                if migrationInfo.consolidatedBalances?.beforeMigration.isNotEmpty == true {
                     state.flow = .existingUserAssetsConsolidationNeeded
                     return .none
                 }
@@ -90,20 +97,36 @@ public struct ExternalTradingMigration: ReducerProtocol {
             case .onFlowComplete:
                 state.migrationInProgressPresented = false
                 app.post(event: blockchain.user.event.did.update)
-                app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
+                app.post(event: blockchain.app.exit.to.pin)
                 return .none
 
             case .onUpgrade:
-                state.migrationInProgressPresented = true
-                return .run { [externalTradingMigrationService] _ in
+                state.isSubmittingMigration = true
+                return .run { [externalTradingMigrationService] send in
                     do {
                         try await externalTradingMigrationService.startMigration()
+                        await send(.onUpgradeSuccess)
                     } catch {
-                        print(error.localizedDescription)
+                        let error = UX.Error(error: error)
+                        await send(.onUpgradeFailure(error))
                     }
                 }
+
+            case .onUpgradeSuccess:
+                state.migrationInProgressPresented = true
+                return .none
+
+            case .onUpgradeFailure(let error):
+                state.migrationInProgressPresented = false
+                state.upgradeError = error
+                return .none
+
             case .migrationInProgressModalDismissed(let dismissed):
                 state.migrationInProgressPresented = dismissed
+                return .none
+
+            case .onFlowDismiss:
+                app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
                 return .none
 
             case .binding:

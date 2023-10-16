@@ -14,7 +14,7 @@ struct EditEmailState: Equatable {
     var emailAddress: String
     var isEmailValid: Bool
     var savingEmailAddress: Bool = false
-    var saveEmailFailureAlert: AlertState<EditEmailAction>?
+    @PresentationState var saveEmailFailureAlert: AlertState<EditEmailAction.AlertAction>?
 
     init(emailAddress: String) {
         self.emailAddress = emailAddress
@@ -23,14 +23,19 @@ struct EditEmailState: Equatable {
 }
 
 enum EditEmailAction: Equatable {
+    enum AlertAction {
+        case dismiss
+        case save
+    }
+
     case didAppear
     case didChangeEmailAddress(String)
     case didReceiveSaveResponse(Result<Int, UpdateEmailAddressError>)
-    case dismissSaveEmailFailureAlert
+    case alert(PresentationAction<AlertAction>)
     case save
 }
 
-struct EditEmailReducer: ReducerProtocol {
+struct EditEmailReducer: Reducer {
     
     typealias State = EditEmailState
     typealias Action = EditEmailAction
@@ -39,7 +44,7 @@ struct EditEmailReducer: ReducerProtocol {
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let validateEmail: (String) -> Bool = { $0.isEmail }
     
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .didAppear:
@@ -51,22 +56,17 @@ struct EditEmailReducer: ReducerProtocol {
                 state.isEmailValid = validateEmail(emailAddress)
                 return .none
 
-            case .save:
+            case .save, .alert(.presented(.save)):
                 guard state.isEmailValid else {
                     return .none
                 }
                 state.savingEmailAddress = true
-                return emailVerificationService.updateEmailAddress(to: state.emailAddress)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        switch result {
-                        case .success:
-                            return .didReceiveSaveResponse(.success(0))
-                        case .failure(let error):
-                            return .didReceiveSaveResponse(.failure(error))
-                        }
-                    }
+                return .publisher { [emailAddress = state.emailAddress] in
+                    emailVerificationService.updateEmailAddress(to: emailAddress)
+                        .receive(on: mainQueue)
+                        .map { .didReceiveSaveResponse(.success(0)) }
+                        .catch { .didReceiveSaveResponse(.failure($0)) }
+                }
 
             case .didReceiveSaveResponse(let response):
                 state.savingEmailAddress = false
@@ -89,7 +89,7 @@ struct EditEmailReducer: ReducerProtocol {
                     return .none
                 }
 
-            case .dismissSaveEmailFailureAlert:
+            case .alert(.dismiss), .alert(.presented(.dismiss)):
                 state.saveEmailFailureAlert = nil
                 return .none
             }
@@ -104,7 +104,7 @@ struct EditEmailView: View {
     @State private var isEmailFieldFirstResponder: Bool = true
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ActionableView(
                 buttons: [
                     .init(
@@ -164,8 +164,10 @@ struct EditEmailView: View {
                 }
             )
             .alert(
-                store.scope(state: \.saveEmailFailureAlert),
-                dismiss: .dismissSaveEmailFailureAlert
+                store: store.scope(
+                    state: \.$saveEmailFailureAlert,
+                    action: { .alert($0) }
+                )
             )
             .onAppear {
                 viewStore.send(.didAppear)
@@ -181,49 +183,57 @@ struct EditEmailView_Previews: PreviewProvider {
     static var previews: some View {
         // Invalid state: empty email
         EditEmailView(
-            store: .init(
+            store: Store(
                 initialState: .init(emailAddress: ""),
-                reducer: EditEmailReducer(
-                    emailVerificationService: NoOpEmailVerificationService(),
-                    mainQueue: .main
-                )
+                reducer: {
+                    EditEmailReducer(
+                        emailVerificationService: NoOpEmailVerificationService(),
+                        mainQueue: .main
+                    )
+                }
             )
         )
 
         // Invalid state: invalid email typed by user
         EditEmailView(
-            store: .init(
+            store: Store(
                 initialState: .init(emailAddress: "invalid.com"),
-                reducer: EditEmailReducer(
-                    emailVerificationService: NoOpEmailVerificationService(),
-                    mainQueue: .main
-                )
+                reducer: {
+                    EditEmailReducer(
+                        emailVerificationService: NoOpEmailVerificationService(),
+                        mainQueue: .main
+                    )
+                }
             )
         )
 
         // Valid state
         EditEmailView(
-            store: .init(
+            store: Store(
                 initialState: .init(emailAddress: "test@example.com"),
-                reducer: EditEmailReducer(
-                    emailVerificationService: NoOpEmailVerificationService(),
-                    mainQueue: .main
-                )
+                reducer: {
+                    EditEmailReducer(
+                        emailVerificationService: NoOpEmailVerificationService(),
+                        mainQueue: .main
+                    )
+                }
             )
         )
 
         // Loading state
         EditEmailView(
-            store: .init(
+            store: Store(
                 initialState: {
                     var state = EditEmailState(emailAddress: "test@example.com")
                     state.savingEmailAddress = true
                     return state
                 }(),
-                reducer: EditEmailReducer(
-                    emailVerificationService: NoOpEmailVerificationService(),
-                    mainQueue: .main
-                )
+                reducer: {
+                    EditEmailReducer(
+                        emailVerificationService: NoOpEmailVerificationService(),
+                        mainQueue: .main
+                    )
+                }
             )
         )
     }

@@ -22,17 +22,18 @@ public enum PasswordRequiredAction: Equatable, BindableAction {
     public enum AlertAction: Equatable {
         case show(title: String, message: String)
         case dismiss
+        case forgetWallet
     }
 
-    case alert(AlertAction)
+    case alert(PresentationAction<AlertAction>)
     case binding(BindingAction<PasswordRequiredState>)
     case start
     case continueButtonTapped
     case authenticate(String)
     case forgetWalletTapped
-    case forgetWallet
     case forgotPasswordTapped
     case openExternalLink(URL)
+    case none
 }
 
 // MARK: - Properties
@@ -41,7 +42,7 @@ public struct PasswordRequiredState: Equatable {
 
     // MARK: - Alert
 
-    var alert: AlertState<PasswordRequiredAction>?
+    @PresentationState var alert: AlertState<PasswordRequiredAction.AlertAction>?
 
     // MARK: - Constant Info
 
@@ -60,7 +61,7 @@ public struct PasswordRequiredState: Equatable {
     }
 }
 
-public struct PasswordRequiredReducer: ReducerProtocol {
+public struct PasswordRequiredReducer: Reducer {
 
     public typealias State = PasswordRequiredState
     public typealias Action = PasswordRequiredAction
@@ -88,21 +89,21 @@ public struct PasswordRequiredReducer: ReducerProtocol {
         self.forgetWalletService = forgetWalletService
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .alert(.show(let title, let message)):
+            case .alert(.presented(.show(let title, let message))):
                 state.alert = AlertState(
                     title: TextState(verbatim: title),
                     message: TextState(verbatim: message),
                     dismissButton: .default(
                         TextState(verbatim: LocalizationConstants.okString),
-                        action: .send(.alert(.dismiss))
+                        action: .send(.dismiss)
                     )
                 )
                 return .none
-            case .alert(.dismiss):
+            case .alert(.dismiss), .alert(.presented(.dismiss)):
                 state.alert = nil
                 return .none
             case .binding:
@@ -110,22 +111,29 @@ public struct PasswordRequiredReducer: ReducerProtocol {
             case .start:
                 return .none
             case .continueButtonTapped:
-                return walletPayloadService
-                    .requestUsingSharedKey()
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .cancellable(id: PasswordRequiredCancellations.RequestSharedKeyId())
-                    .map { [state] result -> PasswordRequiredAction in
-                        switch result {
-                        case .success:
-                            return .authenticate(state.password)
-                        case .failure:
-                            return .alert(.show(
-                                title: LocalizationConstants.Authentication.failedToLoadWallet,
-                                message: LocalizationConstants.Errors.errorLoadingWalletIdentifierFromKeychain
-                            ))
-                        }
+                return .run { [password = state.password] send in
+                    do {
+                        try await walletPayloadService
+                            .requestUsingSharedKey()
+                            .receive(on: mainQueue)
+                            .await()
+
+                        await send(.authenticate(password))
+                    } catch {
+                        await send(
+                            .alert(
+                                .presented(
+                                    .show(
+                                        title: LocalizationConstants.Authentication.failedToLoadWallet,
+                                        message: LocalizationConstants.Errors.errorLoadingWalletIdentifierFromKeychain
+                                    )
+                                )
+                            )
+                        )
                     }
+                }
+                .cancellable(id: PasswordRequiredCancellations.RequestSharedKeyId())
+
             case .authenticate:
                 return .none
             case .forgetWalletTapped:
@@ -138,45 +146,55 @@ public struct PasswordRequiredReducer: ReducerProtocol {
                     ),
                     secondaryButton: .cancel(
                         TextState(verbatim: LocalizationConstants.cancel),
-                        action: .send(.alert(.dismiss))
+                        action: .send(.dismiss)
                     )
                 )
                 return .none
-            case .forgetWallet:
+            case .alert(.presented(.forgetWallet)):
                 return .merge(
-                    forgetWalletService
-                        .forget()
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .fireAndForget(),
-                    pushNotificationsRepository
-                        .revokeToken()
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .cancellable(id: PasswordRequiredCancellations.RevokeTokenId())
-                        .fireAndForget(),
-                    mobileAuthSyncService
-                        .updateMobileSetup(isMobileSetup: false)
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .cancellable(id: PasswordRequiredCancellations.UpdateMobileSetupId())
-                        .fireAndForget(),
-                    mobileAuthSyncService
-                        .verifyCloudBackup(hasCloudBackup: false)
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .cancellable(id: PasswordRequiredCancellations.VerifyCloudBackupId())
-                        .fireAndForget()
+                    .publisher {
+                        forgetWalletService
+                            .forget()
+                            .catch { _ in Just(()) }
+                            .map { .none }
+                            .receive(on: mainQueue)
+                    },
+                    .publisher {
+                        pushNotificationsRepository
+                            .revokeToken()
+                            .catch { _ in Just(()) }
+                            .map { .none }
+                            .receive(on: mainQueue)
+                    }
+                    .cancellable(id: PasswordRequiredCancellations.RevokeTokenId()),
+                    .publisher {
+                        mobileAuthSyncService
+                            .updateMobileSetup(isMobileSetup: false)
+                            .catch { _ in Just(()) }
+                            .map { .none }
+                            .receive(on: mainQueue)
+                    }
+                    .cancellable(id: PasswordRequiredCancellations.UpdateMobileSetupId()),
+                    .publisher {
+                        mobileAuthSyncService
+                            .verifyCloudBackup(hasCloudBackup: false)
+                            .catch { _ in Just(()) }
+                            .map { .none }
+                            .receive(on: mainQueue)
+                    }
+                    .cancellable(id: PasswordRequiredCancellations.VerifyCloudBackupId())
                 )
             case .forgotPasswordTapped:
                 return .merge(
-                    EffectTask(value: .openExternalLink(
+                    Effect.send(.openExternalLink(
                        URL(string: Constants.HostURL.recoverPassword)!
-                   )),
-                    EffectTask(value: .forgetWallet)
+                    )),
+                    Effect.send(.alert(.presented(.forgetWallet)))
                 )
             case .openExternalLink(let url):
                 externalAppOpener.open(url)
+                return .none
+            case .none:
                 return .none
             }
         }

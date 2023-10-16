@@ -7,16 +7,7 @@ import MoneyKit
 
 final class TransactionFeeClientAPIMock: TransactionFeeClientAPI {
     var underlyingFees: AnyPublisher<TransactionFeeResponse, NetworkError> = .just(
-        .init(
-            gasLimit: 21000,
-            gasLimitContract: 75000,
-            regular: 2,
-            priority: 3
-        )
-    )
-
-    var underlyingNewFees: AnyPublisher<NewTransactionFeeResponse, NetworkError> = .just(
-        NewTransactionFeeResponse(
+        TransactionFeeResponse(
             gasLimit: "21000",
             gasLimitContract: "75000",
             normal: "2000000000",
@@ -29,12 +20,5 @@ final class TransactionFeeClientAPIMock: TransactionFeeClientAPI {
         contractAddress: String?
     ) -> AnyPublisher<TransactionFeeResponse, NetworkError> {
         underlyingFees
-    }
-
-    func newFees(
-        network: EVMNetworkConfig,
-        contractAddress: String?
-    ) -> AnyPublisher<NewTransactionFeeResponse, NetworkError> {
-        underlyingNewFees
     }
 }

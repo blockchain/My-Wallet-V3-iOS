@@ -11,7 +11,7 @@ import SwiftUI
 import TestKit
 import XCTest
 
-final class EmailVerificationSnapshotTests: XCTestCase {
+@MainActor final class EmailVerificationSnapshotTests: XCTestCase {
 
     private var rootStore: Store<EmailVerificationState, EmailVerificationAction>!
     private var mockEmailVerificationService: MockEmailVerificationService!
@@ -59,7 +59,7 @@ final class EmailVerificationSnapshotTests: XCTestCase {
         let view = EmailVerificationView(store: rootStore)
         view.viewStore.send(.presentStep(.emailVerificationHelp))
         mockEmailVerificationService.stubbedResults.sendVerificationEmail = .empty()
-        view.viewStore.send(.emailVerificationHelp(.sendVerificationEmail))
+        view.viewStore.send(.emailVerificationHelp(.alert(.presented(.sendVerificationEmail))))
         assert(view, on: .iPhoneSe)
     }
 
@@ -67,7 +67,7 @@ final class EmailVerificationSnapshotTests: XCTestCase {
         let view = EmailVerificationView(store: rootStore)
         view.viewStore.send(.presentStep(.emailVerificationHelp))
         mockEmailVerificationService.stubbedResults.sendVerificationEmail = .empty()
-        view.viewStore.send(.emailVerificationHelp(.sendVerificationEmail))
+        view.viewStore.send(.emailVerificationHelp(.alert(.presented(.sendVerificationEmail))))
         assert(view, on: .iPhoneX)
     }
 
@@ -93,17 +93,17 @@ final class EmailVerificationSnapshotTests: XCTestCase {
         assert(view, on: .iPhoneX)
     }
 
-    func test_iPhoneSE_snapshot_step_edit_saving() throws {
+    func test_iPhoneSE_snapshot_step_edit_saving() async throws {
         mockEmailVerificationService.stubbedResults.updateEmailAddress = .empty()
         let view = presentEditEmailScreen()
-        ViewStore(rootStore).send(.editEmailAddress(.save))
+        rootStore.send(.editEmailAddress(.save))
         assert(view, on: .iPhoneSe)
     }
 
     func test_iPhoneX_snapshot_step_edit_saving() throws {
         mockEmailVerificationService.stubbedResults.updateEmailAddress = .empty()
         let view = presentEditEmailScreen()
-        ViewStore(rootStore).send(.editEmailAddress(.save))
+        rootStore.send(.editEmailAddress(.save))
         assert(view, on: .iPhoneX)
     }
 
@@ -124,15 +124,17 @@ final class EmailVerificationSnapshotTests: XCTestCase {
     private func rebuildRootStore(emailAddress: String = "test@example.com") {
         rootStore = Store(
             initialState: EmailVerificationState(emailAddress: emailAddress),
-            reducer: EmailVerificationReducer(
+            reducer: {
+                EmailVerificationReducer(
                     analyticsRecorder: MockAnalyticsRecorder(),
                     emailVerificationService: mockEmailVerificationService,
                     flowCompletionCallback: { _ in },
-                    openMailApp: { .none },
+                    openMailApp: { true },
                     app: App.test,
-                    mainQueue: .immediate,
-                    pollingQueue: .immediate
-            )
+                    mainQueue: DispatchQueue.test.eraseToAnyScheduler(),
+                    pollingQueue: DispatchQueue.test.eraseToAnyScheduler()
+                )
+            }
         )
     }
 

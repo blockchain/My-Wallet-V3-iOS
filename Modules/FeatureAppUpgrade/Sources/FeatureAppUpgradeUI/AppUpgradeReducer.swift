@@ -6,14 +6,14 @@ public enum AppUpgradeAction: Equatable {
     case skip
 }
 
-public struct AppUpgradeReducer: ReducerProtocol {
+public struct AppUpgradeReducer: Reducer {
 
     public typealias State = AppUpgradeState
     public typealias Action = AppUpgradeAction
 
     public init() {}
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { _, action in
             switch action {
             case .skip:

@@ -4,8 +4,9 @@ import BlockchainNamespace
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import FeatureCoinDomain
+import Errors
 
-public struct GraphViewReducer: ReducerProtocol {
+public struct GraphViewReducer: Reducer {
     enum CancellableID: Hashable {
         case fetch
     }
@@ -17,25 +18,28 @@ public struct GraphViewReducer: ReducerProtocol {
     @Dependency(\.app) var app
     let historicalPriceService: HistoricalPriceService
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .onAppear(let context):
                 let interval: Series = defaultInterval(app, context) ?? state.interval
-                return EffectTask(value: .request(interval, force: true))
+                return Effect.send(.request(interval, force: true))
             case .request(let interval, let force):
                 guard force || interval != state.interval else {
                     return .none
                 }
                 state.isFetching = true
                 state.interval = interval
-                return historicalPriceService.fetch(
-                    series: interval,
-                    relativeTo: state.date
-                )
-                .receive(on: mainQueue)
-                .catchToEffect(GraphViewAction.fetched)
+                return .publisher { [date = state.date] in
+                    historicalPriceService.fetch(
+                        series: interval,
+                        relativeTo: date
+                    )
+                    .receive(on: mainQueue)
+                    .map { .fetched(.success($0)) }
+                    .catch { .fetched(.failure($0)) }
+                }
                 .cancellable(id: CancellableID.fetch)
             case .fetched(let data):
                 state.result = data

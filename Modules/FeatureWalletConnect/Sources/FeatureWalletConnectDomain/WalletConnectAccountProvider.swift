@@ -1,11 +1,11 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Coincore
 import Combine
 import DIKit
 import EthereumKit
 import Foundation
 import MoneyKit
-import PlatformKit
 
 public protocol WalletConnectAccountProviderAPI {
     func defaultAccount(network: EVMNetwork) -> AnyPublisher<SingleAccount, CryptoAssetError>

@@ -26,11 +26,6 @@ protocol TransactionFeeClientAPI {
         network: EVMNetworkConfig,
         contractAddress: String?
     ) -> AnyPublisher<TransactionFeeResponse, NetworkError>
-
-    func newFees(
-        network: EVMNetworkConfig,
-        contractAddress: String?
-    ) -> AnyPublisher<NewTransactionFeeResponse, NetworkError>
 }
 
 final class APIClient: TransactionPushClientAPI, TransactionFeeClientAPI {
@@ -41,14 +36,7 @@ final class APIClient: TransactionPushClientAPI, TransactionFeeClientAPI {
     private enum Endpoint {
 
         static func fees(network: EVMNetworkConfig) -> String {
-            switch network.networkTicker {
-            case "ETH":
-                return "/mempool/fees/eth"
-            case "MATIC":
-                return "/mempool/fees/matic"
-            default:
-                return "/currency/evm/fees/\(network.networkTicker)"
-            }
+            "/currency/evm/fees/\(network.networkTicker)"
         }
 
         static var pushTx: String {
@@ -57,14 +45,6 @@ final class APIClient: TransactionPushClientAPI, TransactionFeeClientAPI {
 
         static var pushTxEVM: String {
             "/currency/evm/pushTx"
-        }
-
-        static func transactions(for address: String) -> String {
-            "/v2/eth/data/account/\(address)/transactions"
-        }
-
-        static func transaction(with hash: String) -> String {
-            "/v2/eth/data/transaction/\(hash)"
         }
     }
 
@@ -92,21 +72,8 @@ final class APIClient: TransactionPushClientAPI, TransactionFeeClientAPI {
     ) -> AnyPublisher<TransactionFeeResponse, NetworkError> {
         var parameters: [URLQueryItem] = []
         if let contractAddress {
-            parameters.append(URLQueryItem(name: "contractAddress", value: contractAddress))
+            parameters.append(URLQueryItem(name: "identifier", value: contractAddress))
         }
-        let request = requestBuilder.get(
-            path: Endpoint.fees(network: network),
-            parameters: parameters
-        )!
-        return networkAdapter.perform(request: request)
-    }
-
-    func newFees(
-        network: EVMNetworkConfig,
-        contractAddress: String?
-    ) -> AnyPublisher<NewTransactionFeeResponse, NetworkError> {
-        let parameters: [URLQueryItem] = contractAddress
-            .flatMap { [URLQueryItem(name: "identifier", value: $0)] } ?? []
         let request = requestBuilder.get(
             path: Endpoint.fees(network: network),
             parameters: parameters

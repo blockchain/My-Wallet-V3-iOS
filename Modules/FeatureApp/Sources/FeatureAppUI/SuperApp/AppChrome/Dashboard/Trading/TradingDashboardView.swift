@@ -32,11 +32,6 @@ struct TradingDashboardView: View {
     @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
     var isRejected: Bool { kycState == blockchain.user.account.kyc.state.rejected[] }
 
-    @State private var externalTradingMigrationState: Tag?
-    var externalTradingMigrationIsAvailable: Bool {
-        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]
-    }
-
     @StateObject private var onboarding = CustodialOnboardingService()
     @State private var displayDisclaimer: Bool = false
 
@@ -74,7 +69,12 @@ struct TradingDashboardView: View {
             if onboarding.isFinished {
                 FinancialPromotionDisclaimerView(display: $displayDisclaimer)
                     .padding()
-                    .backgroundWithShadow(.bottom, fill: Color.semantic.light, radius: scrollOffset.y > 68 ? 8 : 0)
+                    .roundedBackgroundWithShadow(
+                        edges: .bottom,
+                        fill: Color.semantic.light,
+                        radius: shadowRadius(forScrollOffset: scrollOffset.y),
+                        padding: .init(top: 0, leading: 16, bottom: 0, trailing: 16)
+                    )
                     .padding([.top, .bottom], 8.pt)
             }
         }
@@ -94,12 +94,23 @@ struct TradingDashboardView: View {
         .background(Color.semantic.light.ignoresSafeArea(edges: .bottom))
         .bindings {
             subscribe($isBlocked, to: blockchain.user.is.blocked)
-            subscribe($externalTradingMigrationState, to: blockchain.api.nabu.gateway.user.external.brokerage.migration.state)
             subscribe($kycState, to: blockchain.user.account.kyc.state)
         }
         .onAppear {
             $app.post(event: blockchain.ux.home.dashboard)
             onboarding.request()
+        }
+    }
+
+    func shadowRadius(forScrollOffset offset: CGFloat) -> CGFloat {
+        let lowerBound: CGFloat = 30
+        let upperBound: CGFloat = 70
+        if offset < lowerBound {
+            return 0
+        } else if offset > upperBound {
+            return 8
+        } else {
+            return ((offset - lowerBound) / (upperBound - lowerBound)) * 8
         }
     }
 
@@ -127,11 +138,9 @@ struct TradingDashboardView: View {
                 )
                 .padding([.top], Spacing.padding3)
 
-                if !isRejected {
-                    QuickActionsView(
-                        tag: blockchain.ux.user.custodial.dashboard.quick.action
-                    )
-                }
+                QuickActionsView(
+                    tag: blockchain.ux.user.custodial.dashboard.quick.action
+                )
             }
 
             AnnouncementsView(
@@ -145,22 +154,19 @@ struct TradingDashboardView: View {
                 blockedView
             }
 
-            if externalTradingMigrationIsAvailable {
-                DashboardExternalMigrateView()
-                    .padding(.horizontal, Spacing.padding2)
-            }
+            DashboardExternalMigrateView()
+                .padding(.horizontal, Spacing.padding2)
 
             if !viewStore.isZeroBalance {
                 if isRejected {
                     rejectedView
-                } else {
-                    DashboardAssetSectionView(
-                        store: store.scope(
-                            state: \.assetsState,
-                            action: TradingDashboard.Action.assetsAction
-                        )
-                    )
                 }
+                DashboardAssetSectionView(
+                    store: store.scope(
+                        state: \.assetsState,
+                        action: TradingDashboard.Action.assetsAction
+                    )
+                )
             }
 
             if !isRejected {

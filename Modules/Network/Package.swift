@@ -25,6 +25,10 @@ let package = Package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"
         ),
+        .package(
+            url: "https://github.com/pointfreeco/swift-dependencies",
+            from: "1.0.0"
+        ),
         .package(name: "AnyCoding", path: "../AnyCoding"),
         .package(name: "Analytics", path: "../Analytics"),
         .package(name: "Test", path: "../Test"),
@@ -39,7 +43,8 @@ let package = Package(
                 .product(name: "AnalyticsKit", package: "Analytics"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "DIKit", package: "DIKit"),
-                .product(name: "Errors", package: "Errors")
+                .product(name: "Errors", package: "Errors"),
+                .product(name: "Dependencies", package: "swift-dependencies")
             ]
         ),
         .target(

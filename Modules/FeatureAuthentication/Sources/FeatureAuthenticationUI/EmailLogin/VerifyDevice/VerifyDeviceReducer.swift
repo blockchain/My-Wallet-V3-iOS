@@ -22,7 +22,7 @@ public enum VerifyDeviceAction: Equatable, NavigationAction {
         case dismiss
     }
 
-    case alert(AlertAction)
+    case alert(PresentationAction<AlertAction>)
 
     // MARK: - Navigation
 
@@ -53,6 +53,7 @@ public enum VerifyDeviceAction: Equatable, NavigationAction {
     case credentials(CredentialsAction)
     case upgradeAccount(UpgradeAccountAction)
 
+    case navigate(VerifyDeviceRoute)
     // MARK: - Utils
 
     case none
@@ -72,7 +73,7 @@ public struct VerifyDeviceState: Equatable, NavigationState {
 
     // MARK: - Alert State
 
-    var alert: AlertState<VerifyDeviceAction>?
+    @PresentationState var alert: AlertState<VerifyDeviceAction.AlertAction>?
 
     // MARK: - Credentials
 
@@ -97,7 +98,7 @@ public struct VerifyDeviceState: Equatable, NavigationState {
     }
 }
 
-struct VerifyDeviceReducer: ReducerProtocol {
+struct VerifyDeviceReducer: Reducer {
 
     typealias State = VerifyDeviceState
     typealias Action = VerifyDeviceAction
@@ -169,24 +170,24 @@ struct VerifyDeviceReducer: ReducerProtocol {
         self.appStoreInformationRepository = appStoreInformationRepository
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
 
             // MARK: - Alert
 
-            case .alert(.show(let title, let message)):
+            case .alert(.presented(.show(let title, let message))):
                 state.alert = AlertState(
                     title: TextState(verbatim: title),
                     message: TextState(verbatim: message),
                     dismissButton: .default(
                         TextState(LocalizationConstants.okString),
-                        action: .send(.alert(.dismiss))
+                        action: .send(.dismiss)
                     )
                 )
                 return .none
 
-            case .alert(.dismiss):
+            case .alert(.dismiss), .alert(.presented(.dismiss)):
                 state.alert = nil
                 return .none
 
@@ -196,7 +197,7 @@ struct VerifyDeviceReducer: ReducerProtocol {
                 let mailAppURL = URL(string: "message://")
                 let canOpenURL = mailAppURL != nil ? UIApplication.shared.canOpenURL(mailAppURL!) : false
                 state.showOpenMailAppButton = canOpenURL
-                return EffectTask(value: .pollWalletInfo)
+                return Effect.send(.pollWalletInfo)
 
             case .onWillDisappear:
                 return .cancel(id: VerifyDeviceCancellations.WalletInfoPollingId())
@@ -278,26 +279,25 @@ struct VerifyDeviceReducer: ReducerProtocol {
             // MARK: - Deeplink handling
 
             case .didReceiveWalletInfoDeeplink(let url):
-                return deviceVerificationService
-                    .handleLoginRequestDeeplink(url: url)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result -> VerifyDeviceAction in
-                        switch result {
-                        case .success(let walletInfo):
-                            return .didExtractWalletInfo(walletInfo)
-                        case .failure(let error):
-                            errorRecorder.error(error)
-                            switch error {
-                            case .failToDecodeBase64Component,
-                                 .failToDecodeToWalletInfo:
-                                return .fallbackToWalletIdentifier
-                            case .missingSessionToken(let sessionId, let base64Str),
-                                 .sessionTokenMismatch(let sessionId, let base64Str):
-                                return .checkIfConfirmationRequired(sessionId: sessionId, base64Str: base64Str)
-                            }
+                return .run { send in
+                    do {
+                        let walletInfo = try await deviceVerificationService
+                            .handleLoginRequestDeeplink(url: url)
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.didExtractWalletInfo(walletInfo))
+                    } catch {
+                        errorRecorder.error(error)
+                        switch error as! WalletInfoError {
+                        case .failToDecodeBase64Component,
+                             .failToDecodeToWalletInfo:
+                            await send(.fallbackToWalletIdentifier)
+                        case .missingSessionToken(let sessionId, let base64Str),
+                             .sessionTokenMismatch(let sessionId, let base64Str):
+                            await send(.checkIfConfirmationRequired(sessionId: sessionId, base64Str: base64Str))
                         }
                     }
+                }
 
             case .didExtractWalletInfo(let walletInfo):
                 guard walletInfo.wallet?.email != nil, walletInfo.wallet?.emailCode != nil
@@ -311,34 +311,26 @@ struct VerifyDeviceReducer: ReducerProtocol {
                     )
                 }
                 state.credentialsContext = .walletInfo(walletInfo)
-                return app.publisher(
-                    for: blockchain.app.configuration.unified.sign_in.is.enabled,
-                    as: Bool.self
-                )
-                .prefix(1)
-                .replaceError(with: false)
-                .flatMap { featureEnabled -> EffectTask<VerifyDeviceAction> in
-                    guard
-                        featureEnabled,
+                return .run { send in
+                    let featureEnabled = (try? await app.get(blockchain.app.configuration.unified.sign_in.is.enabled, as: Bool.self)) ?? false
+
+                    guard featureEnabled,
                         walletInfo.shouldUpgradeAccount,
                         let userType = walletInfo.userType
                     else {
-                        return .merge(
-                            .cancel(id: VerifyDeviceCancellations.WalletInfoPollingId()),
-                            .navigate(to: .credentials)
-                        )
+                        await send(.navigate(.credentials))
+                        return
                     }
-                    return .merge(
-                        .cancel(id: VerifyDeviceCancellations.WalletInfoPollingId()),
-                        .navigate(to: .upgradeAccount(exchangeOnly: userType == .exchange))
-                    )
+                    await send(.navigate(.upgradeAccount(exchangeOnly: userType == .exchange)))
                 }
-                .receive(on: mainQueue)
-                .eraseToEffect()
-
+            case .navigate(let route):
+                return .merge(
+                    .cancel(id: VerifyDeviceCancellations.WalletInfoPollingId()),
+                    .navigate(to: route)
+                )
             case .fallbackToWalletIdentifier:
                 state.credentialsContext = .walletIdentifier(guid: "")
-                return EffectTask(value: .navigate(to: .credentials))
+                return Effect.send(.navigate(to: .credentials))
 
             case .checkIfConfirmationRequired:
                 return .none
@@ -346,27 +338,27 @@ struct VerifyDeviceReducer: ReducerProtocol {
             // MARK: - WalletInfo polling
 
             case .pollWalletInfo:
-                return deviceVerificationService
-                    .pollForWalletInfo()
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .cancellable(id: VerifyDeviceCancellations.WalletInfoPollingId())
-                    .map { result -> VerifyDeviceAction in
-                        guard case .success(let pollResult) = result else {
-                            return .none
-                        }
-                        return .didPolledWalletInfo(pollResult)
+                return .run { send in
+                    let pollResult = try? await deviceVerificationService
+                        .pollForWalletInfo()
+                        .receive(on: mainQueue)
+                        .await()
+                    guard let pollResult else {
+                        return
                     }
+                    await send(.didPolledWalletInfo(pollResult))
+                }
+                .cancellable(id: VerifyDeviceCancellations.WalletInfoPollingId())
 
             case .didPolledWalletInfo(let result):
                 // extract wallet info once the polling endpoint receives a value
                 switch result {
                 case .success(let walletInfo):
                     analyticsRecorder.record(event: .loginRequestApproved(.magicLink))
-                    return EffectTask(value: .didExtractWalletInfo(walletInfo))
+                    return Effect.send(.didExtractWalletInfo(walletInfo))
                 case .failure(.requestDenied):
                     analyticsRecorder.record(event: .loginRequestDenied(.magicLink))
-                    return EffectTask(value: .deviceRejected)
+                    return Effect.send(.deviceRejected)
                 case .failure:
                     return .none
                 }
@@ -452,14 +444,14 @@ struct VerifyDeviceReducer: ReducerProtocol {
 
 // MARK: - Private
 
-struct VerifyDeviceAnalytics: ReducerProtocol {
+struct VerifyDeviceAnalytics: Reducer {
 
     typealias State = VerifyDeviceState
     typealias Action = VerifyDeviceAction
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .didExtractWalletInfo(let walletInfo):

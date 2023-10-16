@@ -9,46 +9,21 @@ public protocol EthereumFeeServiceAPI {
     /// Streams a single `EthereumTransactionFee`, representing suggested fee amounts based on mempool.
     /// Never fails, uses default Fee values if network call fails.
     /// - Parameter cryptoCurrency: An EVM Native token or ERC20 token.
-    func fees(network: EVMNetwork, contractAddress: String?) -> AnyPublisher<EthereumTransactionFee, Never>
+    func fees(network: EVMNetwork, contractAddress: String?) -> AnyPublisher<EVMTransactionFee, Never>
 }
 
 extension EthereumFeeServiceAPI {
 
-    public func fees(network: EVMNetwork) -> AnyPublisher<EthereumTransactionFee, Never> {
+    public func fees(network: EVMNetwork) -> AnyPublisher<EVMTransactionFee, Never> {
         fees(network: network, contractAddress: nil)
     }
 
-    public func fees(network: EVMNetwork, cryptoCurrency: CryptoCurrency) -> AnyPublisher<EthereumTransactionFee, Never> {
+    public func fees(network: EVMNetwork, cryptoCurrency: CryptoCurrency) -> AnyPublisher<EVMTransactionFee, Never> {
         fees(network: network, contractAddress: cryptoCurrency.assetModel.kind.erc20ContractAddress)
     }
 }
 
 final class EthereumFeeService: EthereumFeeServiceAPI {
-
-    // MARK: - CryptoFeeServiceAPI
-
-    func fees(network: EVMNetwork, contractAddress: String?) -> AnyPublisher<EthereumTransactionFee, Never> {
-        switch network.networkConfig.networkTicker {
-        case _EVMNetwork.polygon.rawValue, _EVMNetwork.ethereum.rawValue:
-            return client
-                .fees(
-                    network: network.networkConfig,
-                    contractAddress: contractAddress
-                )
-                .map { EthereumTransactionFee(response: $0, network: network) }
-                .replaceError(with: EthereumTransactionFee.default(network: network))
-                .eraseToAnyPublisher()
-        default:
-            return client
-                .newFees(
-                    network: network.networkConfig,
-                    contractAddress: contractAddress
-                )
-                .map { EthereumTransactionFee(response: $0, network: network) }
-                .replaceError(with: EthereumTransactionFee.default(network: network))
-                .eraseToAnyPublisher()
-        }
-    }
 
     // MARK: - Private Properties
 
@@ -59,24 +34,27 @@ final class EthereumFeeService: EthereumFeeServiceAPI {
     init(client: TransactionFeeClientAPI = resolve()) {
         self.client = client
     }
+
+    // MARK: - CryptoFeeServiceAPI
+
+    func fees(network: EVMNetwork, contractAddress: String?) -> AnyPublisher<EVMTransactionFee, Never> {
+        client
+            .fees(
+                network: network.networkConfig,
+                contractAddress: contractAddress
+            )
+            .map { EVMTransactionFee(response: $0, network: network) }
+            .replaceError(with: EVMTransactionFee.default(network: network))
+            .eraseToAnyPublisher()
+    }
 }
 
-extension EthereumTransactionFee {
-
-    fileprivate init(response: NewTransactionFeeResponse, network: EVMNetwork) {
-        self.init(
-            regularMinor: response.normal,
-            priorityMinor: response.high,
-            gasLimit: response.gasLimit,
-            gasLimitContract: response.gasLimitContract,
-            network: network
-        )
-    }
+extension EVMTransactionFee {
 
     fileprivate init(response: TransactionFeeResponse, network: EVMNetwork) {
         self.init(
-            regularGwei: response.regular,
-            priorityGwei: response.priority,
+            regularMinor: response.normal,
+            priorityMinor: response.high,
             gasLimit: response.gasLimit,
             gasLimitContract: response.gasLimitContract,
             network: network

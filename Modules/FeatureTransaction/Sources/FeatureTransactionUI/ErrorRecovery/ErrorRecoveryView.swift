@@ -41,7 +41,7 @@ struct ErrorRecoveryState: Equatable {
     let callouts: [Callout]
 }
 
-struct ErrorRecovery: ReducerProtocol {
+struct ErrorRecovery: Reducer {
 
     enum Action {
         case closeTapped
@@ -51,7 +51,7 @@ struct ErrorRecovery: ReducerProtocol {
     let close: () -> Void
     let calloutTapped: (ErrorRecoveryState.Callout) -> Void
 
-    var body: some ReducerProtocol<ErrorRecoveryState, Action> {
+    var body: some Reducer<ErrorRecoveryState, Action> {
         Reduce { _, action in
             switch action {
             case .closeTapped:
@@ -72,7 +72,7 @@ struct ErrorRecoveryView: View {
 
     init(store: StoreOf<ErrorRecovery>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     @ViewBuilder
@@ -147,10 +147,12 @@ struct ErrorRecoveryView_Previews: PreviewProvider {
         ErrorRecoveryView(
             store: Store(
                 initialState: state,
-                reducer: ErrorRecovery(
-                    close: {},
-                    calloutTapped: { _ in }
-                )
+                reducer: {
+                    ErrorRecovery(
+                        close: {},
+                        calloutTapped: { _ in }
+                    )
+                }
             )
         )
     }

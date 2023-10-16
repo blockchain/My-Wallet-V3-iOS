@@ -8,6 +8,7 @@ import FeatureCryptoDomainDomain
 import Localization
 import SwiftUI
 
+@MainActor
 struct DomainCheckoutView: View {
 
     private typealias LocalizedString = LocalizationConstants.FeatureCryptoDomain.DomainCheckout
@@ -20,13 +21,13 @@ struct DomainCheckoutView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             checkoutView
                 .primaryNavigation(title: LocalizedString.navigationTitle)
                 .navigationRoute(in: store)
-                .bottomSheet(isPresented: viewStore.binding(\.$isRemoveBottomSheetShown)) {
+                .bottomSheet(isPresented: viewStore.$isRemoveBottomSheetShown) {
                     createRemoveBottomSheet(
-                        domain: viewStore.binding(\.$removeCandidate),
+                        domain: viewStore.$removeCandidate,
                         removeButtonTapped: {
                             viewStore.send(.removeDomain(viewStore.removeCandidate), animation: .linear)
                         }
@@ -37,7 +38,7 @@ struct DomainCheckoutView: View {
 
     @ViewBuilder
     private var checkoutView: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if !viewStore.selectedDomains.isEmpty {
                 VStack(spacing: Spacing.padding2) {
                     selectedDomains
@@ -80,7 +81,7 @@ struct DomainCheckoutView: View {
     }
 
     private var selectedDomains: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ScrollView {
                 LazyVStack {
                     ForEach(viewStore.selectedDomains, id: \.domainName) { domain in
@@ -111,11 +112,11 @@ struct DomainCheckoutView: View {
     }
 
     private var termsRow: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             HStack(alignment: .center, spacing: Spacing.padding1) {
                 PrimarySwitch(
                     accessibilityLabel: Accessibility.termsSwitch,
-                    isOn: viewStore.binding(\.$termsSwitchIsOn)
+                    isOn: viewStore.$termsSwitchIsOn
                 )
                 Text(
                     String(
@@ -134,10 +135,10 @@ struct DomainCheckoutView: View {
         domain: Binding<SearchDomainResult?>,
         removeButtonTapped: @escaping (() -> Void)
     ) -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             RemoveDomainActionView(
                 domain: domain,
-                isShown: viewStore.binding(\.$isRemoveBottomSheetShown),
+                isShown: viewStore.$isRemoveBottomSheetShown,
                 removeButtonTapped: removeButtonTapped
             )
         }
@@ -152,15 +153,17 @@ struct DomainCheckoutView: View {
 struct DomainCheckView_Previews: PreviewProvider {
     static var previews: some View {
         DomainCheckoutView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: DomainCheckout(
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    orderDomainRepository: OrderDomainRepository(
-                        apiClient: OrderDomainClient.mock
-                    ),
-                    userInfoProvider: { .empty() }
-                )
+                reducer: {
+                    DomainCheckout(
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        orderDomainRepository: OrderDomainRepository(
+                            apiClient: OrderDomainClient.mock
+                        ),
+                        userInfoProvider: { .empty() }
+                    )
+                }
             )
         )
     }

@@ -23,18 +23,20 @@ public struct TourViewAdapter: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             OnboardingCarouselView(
                 store: Store(
                     initialState: TourState(),
-                    reducer: TourReducer(
-                        enabledCurrenciesService: resolve(),
-                        priceService: resolve(),
-                        createAccountAction: { viewStore.send(.navigate(to: .createWallet)) },
-                        restoreAction: { viewStore.send(.navigate(to: .restoreWallet)) },
-                        logInAction: { viewStore.send(.navigate(to: .emailLogin)) },
-                        manualLoginAction: { viewStore.send(.navigate(to: .manualLogin)) }
-                    )
+                    reducer: {
+                        TourReducer(
+                            enabledCurrenciesService: resolve(),
+                            priceService: resolve(),
+                            createAccountAction: { viewStore.send(.navigate(to: .createWallet)) },
+                            restoreAction: { viewStore.send(.navigate(to: .restoreWallet)) },
+                            logInAction: { viewStore.send(.navigate(to: .emailLogin)) },
+                            manualLoginAction: { viewStore.send(.navigate(to: .manualLogin)) }
+                        )
+                    }
                 ),
                 manualLoginEnabled: manualLoginEnabled
             )

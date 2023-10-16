@@ -2,6 +2,7 @@
 
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import ComposableArchitecture
 import PlatformKit
 import PlatformUIKit
 import RxCocoa
@@ -76,55 +77,61 @@ public final class AmountTranslationView: UIView, AmountViewable {
             rootView: AvailableBalanceView(
                 store: .init(
                     initialState: .init(),
-                    reducer: AvailableBalanceViewReducer(
-                        app: app,
-                        balancePublisher: presenter.interactor.accountBalancePublisher,
-                        availableBalancePublisher: presenter.maxLimitPublisher,
-                        feesPublisher: presenter.interactor.transactionFeePublisher,
-                        transactionIsFeeLessPublisher: presenter.interactor.transactionIsFeeLessPublisher,
-                        onViewTapped: {
-                            presenter.interactor.availableBalanceViewTapped()
-                        }
-                    )
+                    reducer: {
+                        AvailableBalanceViewReducer(
+                            app: app,
+                            balancePublisher: presenter.interactor.accountBalancePublisher,
+                            availableBalancePublisher: presenter.maxLimitPublisher,
+                            feesPublisher: presenter.interactor.transactionFeePublisher,
+                            transactionIsFeeLessPublisher: presenter.interactor.transactionIsFeeLessPublisher,
+                            onViewTapped: {
+                                presenter.interactor.availableBalanceViewTapped()
+                            }
+                        )
+                    }
                 )
             )
         ) : nil
         self.prefillViewController = prefillButtonsEnabled ? UIHostingController(
             rootView: PrefillButtonsView(
-                store: .init(
+                store: Store(
                     initialState: .init(),
-                    reducer: PrefillButtons(
-                        app: app,
-                        lastPurchasePublisher: presenter.lastPurchasePublisher,
-                        maxLimitPublisher: presenter.maxLimitPublisher,
-                        onValueSelected: { [app, weak presenter] prefillMoneyValue, size in
-                            guard let presenter else { return }
-                            switch size {
-                            case .max:
-                                app.post(event: blockchain.ux.transaction.enter.amount.quick.fill.max)
-                            default:
-                                app.post(
-                                    value: prefillMoneyValue,
-                                    of: blockchain.ux.transaction.enter.amount.quick.fill.amount[size].value
-                                )
-                                presenter.interactor.set(amount: prefillMoneyValue.moneyValue)
+                    reducer: {
+                        PrefillButtons(
+                            app: app,
+                            lastPurchasePublisher: presenter.lastPurchasePublisher,
+                            maxLimitPublisher: presenter.maxLimitPublisher,
+                            onValueSelected: { [app, weak presenter] prefillMoneyValue, size in
+                                guard let presenter else { return }
+                                switch size {
+                                case .max:
+                                    app.post(event: blockchain.ux.transaction.enter.amount.quick.fill.max)
+                                default:
+                                    app.post(
+                                        value: prefillMoneyValue,
+                                        of: blockchain.ux.transaction.enter.amount.quick.fill.amount[size].value
+                                    )
+                                    presenter.interactor.set(amount: prefillMoneyValue.moneyValue)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 )
             )
         ) : nil
 
         self.recurringBuyFrequencySelector = shouldShowRecurringBuyFrequency ? UIHostingController(
             rootView: RecurringBuyButton(
-                store: .init(
+                store: Store(
                     initialState: .init(),
-                    reducer: RecurringBuyButtonReducer(
-                        app: app,
-                        recurringBuyButtonTapped: {
-                            presenter.interactor.recurringBuyButtonTapped()
-                        }
-                    )
+                    reducer: {
+                        RecurringBuyButtonReducer(
+                            app: app,
+                            recurringBuyButtonTapped: {
+                                presenter.interactor.recurringBuyButtonTapped()
+                            }
+                        )
+                    }
                 ),
                 trailingView: { Icon.chevronDown.color(.semantic.title) }
             )

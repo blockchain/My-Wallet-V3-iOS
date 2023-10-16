@@ -2,11 +2,10 @@
 
 import ComposableArchitecture
 import MoneyKit
-import PlatformKit
 import FeatureTourDomain
 import SwiftUI
 
-public struct TourReducer: ReducerProtocol {
+public struct TourReducer: Reducer {
     
     public typealias State = TourState
     public typealias Action = TourAction
@@ -38,7 +37,7 @@ public struct TourReducer: ReducerProtocol {
         self.priceService = priceService
     }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .createAccount:
@@ -78,11 +77,11 @@ public struct TourReducer: ReducerProtocol {
     }
 }
 
-struct NoOpReducer: ReducerProtocol {
+struct NoOpReducer: Reducer {
     typealias State = TourState
     typealias Action = TourAction
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { _, _ in .none }
     }
 }

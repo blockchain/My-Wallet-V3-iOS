@@ -207,7 +207,7 @@ final class QRCodeScannerViewController: UIViewController, UINavigationControlle
                 informationalOnly: informationalOnly,
                 showWalletConnectRow: true
             ),
-            reducer: reducer
+            reducer: { reducer }
         )
         let view = QRCodeScannerAllowAccessView(store: allowAccessStore)
         let hostingController = UIHostingController(rootView: view)

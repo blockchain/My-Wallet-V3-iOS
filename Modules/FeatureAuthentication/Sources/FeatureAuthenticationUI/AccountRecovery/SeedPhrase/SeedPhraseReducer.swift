@@ -37,7 +37,7 @@ public enum SeedPhraseAction: Equatable {
         case dismiss
     }
 
-    case alert(AlertAction)
+    case alert(PresentationAction<AlertAction>)
     case didChangeSeedPhrase(String)
     case didChangeSeedPhraseScore(MnemonicValidationScore)
     case validateSeedPhrase
@@ -92,7 +92,7 @@ public struct SeedPhraseState: Equatable {
     var lostFundsWarningState: LostFundsWarningState?
     var importWalletState: ImportWalletState?
     var secondPasswordNoticeState: SecondPasswordNoticeReducer.State?
-    var failureAlert: AlertState<SeedPhraseAction>?
+    @PresentationState var failureAlert: AlertState<SeedPhraseAction.AlertAction>?
     var isLoading: Bool
 
     var accountResettable: Bool {
@@ -118,7 +118,7 @@ public struct SeedPhraseState: Equatable {
     }
 }
 
-struct SeedPhraseReducer: ReducerProtocol {
+struct SeedPhraseReducer: Reducer {
 
     typealias State = SeedPhraseState
     typealias Action = SeedPhraseAction
@@ -167,7 +167,7 @@ struct SeedPhraseReducer: ReducerProtocol {
         self.app = app
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         main
             .ifLet(\.secondPasswordNoticeState, action: /Action.secondPasswordNotice) {
                 SecondPasswordNoticeReducer(
@@ -212,29 +212,26 @@ struct SeedPhraseReducer: ReducerProtocol {
             }
     }
 
-    var main: some ReducerProtocol<State, Action> { // Divide and conquer to compile.
-        Reduce { state, action -> EffectTask<Action> in
+    var main: some Reducer<State, Action> { // Divide and conquer to compile.
+        Reduce { state, action -> Effect<Action> in
             switch action {
 
             case .didChangeSeedPhrase(let seedPhrase):
                 state.seedPhrase = seedPhrase
-                return EffectTask(value: .validateSeedPhrase)
+                return Effect.send(.validateSeedPhrase)
 
             case .didChangeSeedPhraseScore(let score):
                 state.seedPhraseScore = score
                 return .none
 
             case .validateSeedPhrase:
-                return validator
-                    .validate(phrase: state.seedPhrase)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result -> SeedPhraseAction in
-                        guard case .success(let score) = result else {
-                            return .none
-                        }
-                        return .didChangeSeedPhraseScore(score)
-                    }
+                return .run { [seedPhrase = state.seedPhrase] send in
+                    let score = try await validator
+                        .validate(phrase: seedPhrase)
+                        .receive(on: mainQueue)
+                        .await()
+                    await send(.didChangeSeedPhraseScore(score))
+                }
 
             case .setResetPasswordScreenVisible(let isVisible):
                 state.isResetPasswordScreenVisible = isVisible
@@ -293,16 +290,16 @@ struct SeedPhraseReducer: ReducerProtocol {
 
             case .resetAccountWarning(.retryButtonTapped),
                  .resetAccountWarning(.onDisappear):
-                return EffectTask(value: .setResetAccountBottomSheetVisible(false))
+                return Effect.send(.setResetAccountBottomSheetVisible(false))
 
             case .resetAccountWarning(.continueResetButtonTapped):
                 return .concatenate(
-                    EffectTask(value: .setResetAccountBottomSheetVisible(false)),
-                    EffectTask(value: .setLostFundsWarningScreenVisible(true))
+                    Effect.send(.setResetAccountBottomSheetVisible(false)),
+                    Effect.send(.setLostFundsWarningScreenVisible(true))
                 )
 
             case .lostFundsWarning(.goBackButtonTapped):
-                return EffectTask(value: .setLostFundsWarningScreenVisible(false))
+                return Effect.send(.setLostFundsWarningScreenVisible(false))
 
             case .lostFundsWarning(.resetPassword(.reset(let password))):
                 guard state.nabuInfo != nil else {
@@ -310,18 +307,20 @@ struct SeedPhraseReducer: ReducerProtocol {
                 }
                 let accountName = NonLocalizedConstants.defiWalletTitle
                 return .concatenate(
-                    EffectTask(value: .triggerAuthenticate),
-                    walletCreationService
-                        .createWallet(
-                            state.emailAddress,
-                            password,
-                            accountName,
-                            nil
-                        )
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .cancellable(id: CreateAccountStepTwoIds.CreationId(), cancelInFlight: true)
-                        .map(SeedPhraseAction.accountCreation)
+                    Effect.send(.triggerAuthenticate),
+                    Effect.publisher { [emailAddress = state.emailAddress] in
+                        walletCreationService
+                            .createWallet(
+                                emailAddress,
+                                password,
+                                accountName,
+                                nil
+                            )
+                            .receive(on: mainQueue)
+                            .map { .accountCreation(.success($0)) }
+                            .catch { .accountCreation(.failure($0)) }
+                    }
+                    .cancellable(id: CreateAccountStepTwoIds.CreationId(), cancelInFlight: true)
                 )
 
             case .accountCreation(.failure(let error)):
@@ -329,11 +328,13 @@ struct SeedPhraseReducer: ReducerProtocol {
                 let message = error.localizedDescription
                 state.lostFundsWarningState?.resetPasswordState?.isLoading = false
                 return .merge(
-                    EffectTask(
-                        value: .alert(
-                            .show(
-                                title: title,
-                                message: message
+                    Effect.send(
+                        .alert(
+                            .presented(
+                                .show(
+                                    title: title,
+                                    message: message
+                                )
                             )
                         )
                     ),
@@ -346,39 +347,44 @@ struct SeedPhraseReducer: ReducerProtocol {
                 }
                 return .merge(
                     .cancel(id: CreateAccountStepTwoIds.CreationId()),
-                    accountRecoveryService
-                        .recoverUser(
-                            guid: context.guid,
-                            sharedKey: context.sharedKey,
-                            userId: nabuInfo.userId,
-                            recoveryToken: nabuInfo.recoveryToken
-                        )
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .cancellable(id: WalletRecoveryIds.AccountRecoveryAfterResetId(), cancelInFlight: false)
-                        .map { result -> SeedPhraseAction in
-                            guard case .success(let offlineToken) = result else {
-                                analyticsRecorder.record(
-                                    event: AnalyticsEvents.New.AccountRecoveryFlow.accountRecoveryFailed
+                    .run { send in
+                        do {
+                            let offlineToken = try await accountRecoveryService
+                                .recoverUser(
+                                    guid: context.guid,
+                                    sharedKey: context.sharedKey,
+                                    userId: nabuInfo.userId,
+                                    recoveryToken: nabuInfo.recoveryToken
                                 )
-                                // show recovery failures if the endpoint fails
-                                return .lostFundsWarning(
-                                    .resetPassword(
-                                        .setResetAccountFailureVisible(true)
-                                    )
-                                )
-                            }
+                                .receive(on: mainQueue)
+                                .await()
                             analyticsRecorder.record(
                                 event: AnalyticsEvents.New.AccountRecoveryFlow
                                     .accountPasswordReset(hasRecoveryPhrase: false)
                             )
-                            return .accountRecovered(
-                                AccountResetContext(
-                                    walletContext: context,
-                                    offlineToken: offlineToken
+                            await send(
+                                .accountRecovered(
+                                    AccountResetContext(
+                                        walletContext: context,
+                                        offlineToken: offlineToken
+                                    )
+                                )
+                            )
+                        } catch {
+                            analyticsRecorder.record(
+                                event: AnalyticsEvents.New.AccountRecoveryFlow.accountRecoveryFailed
+                            )
+                            // show recovery failures if the endpoint fails
+                            await send(
+                                .lostFundsWarning(
+                                    .resetPassword(
+                                        .setResetAccountFailureVisible(true)
+                                    )
                                 )
                             )
                         }
+                    }
+                    .cancellable(id: WalletRecoveryIds.AccountRecoveryAfterResetId(), cancelInFlight: false)
                 )
 
             case .accountRecovered(let info):
@@ -391,17 +397,19 @@ struct SeedPhraseReducer: ReducerProtocol {
                 // There's no error handling as any error will be overruled by the CoreCoordinator
                 return .merge(
                     .cancel(id: WalletRecoveryIds.AccountRecoveryAfterResetId()),
-                    walletFetcherService
-                        .fetchWalletAfterAccountRecovery(
-                            info.walletContext.guid,
-                            info.walletContext.sharedKey,
-                            info.walletContext.password,
-                            info.offlineToken
-                        )
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .cancellable(id: WalletRecoveryIds.WalletFetchAfterRecoveryId())
-                        .map(SeedPhraseAction.walletFetched)
+                    .publisher {
+                        walletFetcherService
+                            .fetchWalletAfterAccountRecovery(
+                                info.walletContext.guid,
+                                info.walletContext.sharedKey,
+                                info.walletContext.password,
+                                info.offlineToken
+                            )
+                            .receive(on: mainQueue)
+                            .map { .walletFetched(.success($0)) }
+                            .catch { .walletFetched(.failure($0)) }
+                    }
+                    .cancellable(id: WalletRecoveryIds.WalletFetchAfterRecoveryId())
                 )
 
             case .walletFetched(.success(.left(.noValue))):
@@ -409,14 +417,14 @@ struct SeedPhraseReducer: ReducerProtocol {
                 return .none
 
             case .walletFetched(.success(.right(let context))):
-                return EffectTask(value: .informWalletFetched(context))
+                return Effect.send(.informWalletFetched(context))
 
             case .walletFetched(.failure(let error)):
                 let title = LocalizationConstants.ErrorAlert.title
                 let message = error.errorDescription ?? LocalizationConstants.ErrorAlert.message
-                return EffectTask(
-                    value: .alert(
-                        .show(title: title, message: message)
+                return Effect.send(
+                    .alert(
+                        .presented(.show(title: title, message: message))
                     )
                 )
 
@@ -428,10 +436,10 @@ struct SeedPhraseReducer: ReducerProtocol {
                 return .none
 
             case .importWallet(.goBackButtonTapped):
-                return EffectTask(value: .setImportWalletScreenVisible(false))
+                return Effect.send(.setImportWalletScreenVisible(false))
 
             case .importWallet(.createAccount(.triggerAuthenticate)):
-                return EffectTask(value: .triggerAuthenticate)
+                return Effect.send(.triggerAuthenticate)
 
             case .importWallet:
                 return .none
@@ -442,14 +450,16 @@ struct SeedPhraseReducer: ReducerProtocol {
             case .restoreWallet(.metadataRecovery(let mnemonic)):
                 state.isLoading = true
                 return .concatenate(
-                    EffectTask(value: .triggerAuthenticate),
-                    walletRecoveryService
-                        .recoverFromMetadata(mnemonic)
-                        .receive(on: mainQueue)
-                        .mapError(WalletRecoveryError.restoreFailure)
-                        .catchToEffect()
-                        .cancellable(id: WalletRecoveryIds.RecoveryId(), cancelInFlight: true)
-                        .map(SeedPhraseAction.restored)
+                    Effect.send(.triggerAuthenticate),
+                    Effect.publisher {
+                        walletRecoveryService
+                            .recoverFromMetadata(mnemonic)
+                            .receive(on: mainQueue)
+                            .mapError(WalletRecoveryError.restoreFailure)
+                            .map { .restored(.success($0)) }
+                            .catch { .restored(.failure($0)) }
+                    }
+                    .cancellable(id: WalletRecoveryIds.RecoveryId(), cancelInFlight: true)
                 )
             case .restoreWallet:
                 return .none
@@ -462,14 +472,14 @@ struct SeedPhraseReducer: ReducerProtocol {
                 state.isLoading = false
                 return .merge(
                     .cancel(id: WalletRecoveryIds.RecoveryId()),
-                    EffectTask(value: .informWalletFetched(context))
+                    Effect.send(.informWalletFetched(context))
                 )
 
             case .restored(.failure(.restoreFailure(.recovery(.unableToRecoverFromMetadata)))):
                 state.isLoading = false
                 return .merge(
                     .cancel(id: WalletRecoveryIds.RecoveryId()),
-                    EffectTask(value: .setImportWalletScreenVisible(true))
+                    Effect.send(.setImportWalletScreenVisible(true))
                 )
 
             case .restored(.failure(.restoreFailure(let error))):
@@ -478,7 +488,7 @@ struct SeedPhraseReducer: ReducerProtocol {
                 let message = error.errorDescription ?? LocalizationConstants.Errors.genericError
                 return .merge(
                     .cancel(id: WalletRecoveryIds.RecoveryId()),
-                    EffectTask(value: .alert(.show(title: title, message: message)))
+                    Effect.send(.alert(.presented(.show(title: title, message: message))))
                 )
 
             case .imported(.success):
@@ -488,7 +498,7 @@ struct SeedPhraseReducer: ReducerProtocol {
                 guard state.importWalletState != nil else {
                     return .none
                 }
-                return EffectTask(value: .importWallet(.importWalletFailed(error)))
+                return Effect.send(.importWallet(.importWalletFailed(error)))
 
             case .open(let urlContent):
                 guard let url = urlContent.url else {
@@ -500,18 +510,18 @@ struct SeedPhraseReducer: ReducerProtocol {
             case .triggerAuthenticate:
                 return .none
 
-            case .alert(.show(let title, let message)):
+            case .alert(.presented(.show(let title, let message))):
                 state.failureAlert = AlertState(
                     title: TextState(verbatim: title),
                     message: TextState(verbatim: message),
                     dismissButton: .default(
                         TextState(LocalizationConstants.okString),
-                        action: .send(.alert(.dismiss))
+                        action: .send(.dismiss)
                     )
                 )
                 return .none
 
-            case .alert(.dismiss):
+            case .alert(.presented(.dismiss)), .alert(.dismiss):
                 state.failureAlert = nil
                 return .none
 

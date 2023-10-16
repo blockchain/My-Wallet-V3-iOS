@@ -67,14 +67,16 @@ public struct EarnDashboardView: View {
             }
             .sheet(isPresented: $showIntro, content: {
                 EarnIntroView(
-                    store: .init(
+                    store: Store(
                         initialState: .init(products: object.products),
-                        reducer: EarnIntro(
-                            app: app,
-                            onDismiss: {
-                                showIntro = false
-                            }
-                        )
+                        reducer: {
+                            EarnIntro(
+                                app: app,
+                                onDismiss: {
+                                    showIntro = false
+                                }
+                            )
+                        }
                     )
                 )
             })
@@ -85,11 +87,13 @@ public struct EarnDashboardView: View {
                             products: object.products,
                             model: object.model
                         ),
-                        reducer: EarnProductCompare(
-                            onDismiss: {
-                                showCompare = false
-                            }
-                        )
+                        reducer: {
+                            EarnProductCompare(
+                                onDismiss: {
+                                    showCompare = false
+                                }
+                            )
+                        }
                     )
                 )
             })

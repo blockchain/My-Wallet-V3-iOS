@@ -4,7 +4,7 @@ import BlockchainUI
 import ComposableArchitecture
 import Foundation
 
-public struct SwapSelectAccount: ReducerProtocol {
+public struct SwapSelectAccount: Reducer {
     public let app: AppProtocol
 
     public init(app: AppProtocol) {
@@ -41,7 +41,7 @@ public struct SwapSelectAccount: ReducerProtocol {
         case onCloseTapped
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { _, action in
             switch action {
             default:

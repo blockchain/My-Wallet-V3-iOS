@@ -21,27 +21,29 @@ struct ContentView: View {
         }
         .sheet(isPresented: $claimFlowShown) {
             ClaimIntroductionView(
-                store: .init(
+                store: Store(
                     initialState: .init(),
-                    reducer: ClaimIntroduction(
-                        analyticsRecorder: _AnalyticsEventRecorderAPI(),
-                        externalAppOpener: _ExternalAppOpener(),
-                        searchDomainRepository: SearchDomainRepository(
-                            apiClient: SearchDomainClient.mock
-                        ),
-                        orderDomainRepository: OrderDomainRepository(
-                            apiClient: OrderDomainClient.mock
-                        ),
-                        userInfoProvider: {
-                            .just(
-                                OrderDomainUserInfo(
-                                    nabuUserId: "mockUserId",
-                                    nabuUserName: "Firstname",
-                                    resolutionRecords: []
+                    reducer: {
+                        ClaimIntroduction(
+                            analyticsRecorder: _AnalyticsEventRecorderAPI(),
+                            externalAppOpener: _ExternalAppOpener(),
+                            searchDomainRepository: SearchDomainRepository(
+                                apiClient: SearchDomainClient.mock
+                            ),
+                            orderDomainRepository: OrderDomainRepository(
+                                apiClient: OrderDomainClient.mock
+                            ),
+                            userInfoProvider: {
+                                .just(
+                                    OrderDomainUserInfo(
+                                        nabuUserId: "mockUserId",
+                                        nabuUserName: "Firstname",
+                                        resolutionRecords: []
+                                    )
                                 )
-                            )
-                        }
-                    )
+                            }
+                        )
+                    }
                 )
             )
         }

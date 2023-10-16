@@ -75,17 +75,27 @@ struct DashboardAssetRowView_Previews: PreviewProvider {
             delta: nil,
             rawQuote: nil
         )
-        DashboardAssetRowView(store: .init(initialState: .init(
-            type: .custodial,
-            isLastRow: false,
-            asset: assetBalanceInfo
-        ), reducer: DashboardAssetRow(app: resolve())))
+        DashboardAssetRowView(
+            store: Store(
+                initialState: DashboardAssetRow.State(
+                    type: .custodial,
+                    isLastRow: false,
+                    asset: assetBalanceInfo
+                ),
+                reducer: { DashboardAssetRow(app: resolve()) }
+            )
+        )
     }
 }
 
 extension AssetBalanceInfo {
-    fileprivate var networkTag: TagView? {
-        guard let network, currency.code != network.nativeAsset.code else { return nil }
-        return TagView(text: network.networkConfig.shortName, variant: .outline)
+    @ViewBuilder
+    fileprivate var networkTag: some View {
+        if let network {
+            TagView(
+                text: network.networkConfig.shortName,
+                variant: .outline
+            )
+        }
     }
 }

@@ -11,7 +11,7 @@ import XCTest
 @testable import BlockchainApp
 @testable import FeatureAppUI
 
-class PinReducerTests: XCTestCase {
+@MainActor class PinReducerTests: XCTestCase {
 
     var settingsApp: MockBlockchainSettingsApp!
 
@@ -31,20 +31,22 @@ class PinReducerTests: XCTestCase {
         XCTAssertFalse(state.creating)
     }
 
-    func test_verify_state_is_changed_correctly_per_action() {
+    func test_verify_state_is_changed_correctly_per_action() async {
         let testStore = TestStore(
             initialState: PinCore.State(),
-            reducer: PinReducer(
-                alertPresenter: MockAlertViewPresenter()
-            )
+            reducer: {
+                PinReducer(
+                    alertPresenter: MockAlertViewPresenter()
+                )
+            }
         )
 
-        testStore.send(.authenticate) { state in
+        await testStore.send(.authenticate) { state in
             state.authenticate = true
             state.creating = false
         }
 
-        testStore.send(.create) { state in
+        await testStore.send(.create) { state in
             state.creating = true
             state.authenticate = false
         }

@@ -3,7 +3,6 @@
 import BlockchainUI
 import ComposableArchitecture
 import Localization
-import PlatformUIKit
 import SwiftUI
 
 public struct OnboardingCarouselView: View {
@@ -19,7 +18,7 @@ public struct OnboardingCarouselView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 Image("logo-blockchain-black", bundle: Bundle.featureTour)
                     .padding([.top, .horizontal], Spacing.padding3)
@@ -76,7 +75,6 @@ extension OnboardingCarouselView {
         }
 
         @ViewBuilder private func makeCarouselView(image: Image?, text: String) -> some View {
-            let isSmallDevice = DevicePresenter.type <= .compact
             VStack(spacing: Spacing.padding2) {
 
                 FinancialPromotionDisclaimerView()
@@ -86,7 +84,7 @@ extension OnboardingCarouselView {
                     image
                         .resizable()
                         .scaledToFit()
-                        .frame(height: isSmallDevice ? 230 : 300)
+                        .frame(height: compactDesign() ? 230 : 300)
                 }
 
                 Text(text)
@@ -160,13 +158,17 @@ extension OnboardingCarouselView {
     }
 }
 
+func compactDesign() -> Bool {
+    CGRect.screen.size.max <= 667
+}
+
 struct TourView_Previews: PreviewProvider {
 
     static var previews: some View {
         OnboardingCarouselView(
             store: Store(
                 initialState: TourState(),
-                reducer: NoOpReducer()
+                reducer: { NoOpReducer() }
             ),
             manualLoginEnabled: false
         )

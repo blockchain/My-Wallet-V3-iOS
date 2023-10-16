@@ -967,11 +967,6 @@ extension LocalizationConstants.Transaction.Deposit.Confirmation.DepositACHTerms
         comment: "Terms located in the bottom of the deposit confirmation screen"
     )
 
-    public static let descriptionBakkt = NSLocalizedString(
-        "By placing this order, you authorize Bakkt to debit %@ from your bank account.",
-        comment: "Terms located in the bottom of the deposit confirmation screen"
-    )
-
     public static let readMoreButton = NSLocalizedString(
         "Read more",
         comment: "Read More Button to open details of terms and conditions from Deposit Screen"

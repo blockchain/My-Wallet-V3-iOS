@@ -1,6 +1,7 @@
-#if canImport(UIKit)
 import Extensions
 import SwiftUI
+
+#if canImport(UIKit)
 import UIKit
 
 public let shortDateFormatter = {
@@ -118,7 +119,7 @@ public struct DatePickerInputView: View {
         self.placeholder = placeholder
     }
 
-    var body: some View {
+    public var body: some View {
         TextField(placeholder, text: binding)
     }
 

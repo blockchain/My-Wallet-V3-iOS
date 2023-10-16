@@ -9,6 +9,7 @@ import SwiftUI
 import UnifiedActivityDomain
 import UnifiedActivityUI
 
+@MainActor
 public struct AllActivitySceneView: View {
     @BlockchainApp var app
     @Environment(\.context) var context
@@ -44,7 +45,7 @@ public struct AllActivitySceneView: View {
                 },
                 scrollOffset: nil
             )
-            .bottomSheet(isPresented: viewStore.binding(\.$pendingInfoPresented)) {
+            .bottomSheet(isPresented: viewStore.$pendingInfoPresented) {
                 pendingActivityInfoSheet
             }
         }
@@ -58,7 +59,7 @@ public struct AllActivitySceneView: View {
                     .foregroundColor(.WalletSemantic.title)
                 Spacer()
                 IconButton(icon: .navigationCloseButton()) {
-                    ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
+                    ViewStore(store, observe: { $0 }).send(.binding(.set(\.$pendingInfoPresented, false)))
                 }
                 .frame(width: 24.pt, height: 24.pt)
             }
@@ -74,7 +75,7 @@ public struct AllActivitySceneView: View {
             PrimaryButton(
                 title: LocalizationConstants.SuperApp.AllActivity.pendingActivityCTAButton,
                 action: {
-                    ViewStore(store).send(.binding(.set(\.$pendingInfoPresented, false)))
+                    ViewStore(store, observe: { $0 }).send(.binding(.set(\.$pendingInfoPresented, false)))
                 }
             )
             .padding(.horizontal, Spacing.padding2)
@@ -85,8 +86,8 @@ public struct AllActivitySceneView: View {
     @ViewBuilder
     func searchBarSection(viewStore: ViewStoreOf<AllActivityScene>) -> some View {
         SearchBar(
-            text: viewStore.binding(\.$searchText),
-            isFirstResponder: viewStore.binding(\.$isSearching),
+            text: viewStore.$searchText,
+            isFirstResponder: viewStore.$isSearching,
             cancelButtonText: LocalizationConstants.SuperApp.AllActivity.cancelButton,
             placeholder: LocalizationConstants.SuperApp.AllActivity.searchPlaceholder
         )

@@ -9,6 +9,10 @@ import PlatformKit
 import ToolKit
 import UnifiedActivityDomain
 
+private func explorerUrl(coin: String) -> String {
+    "https://www.blockchain.com/\(coin.lowercased())/tx"
+}
+
 public enum ActivityDetailsAdapter {
     public static func createActivityDetails(with activity: CustodialActivityEvent.Crypto) -> ActivityDetail.GroupedItems {
         let group1 = ActivityDetail.GroupedItems.Item(
@@ -42,11 +46,23 @@ public enum ActivityDetailsAdapter {
             copyAction
         ])
 
+        let normalizedTxHash = activity.txHash.splitIfNotEmpty(separator: ":").first.map(String.init)
+        let txHash = normalizedTxHash ?? activity.txHash
+        let url = activity.amount.currency.network()?.networkConfig.explorerUrl ?? explorerUrl(coin: activity.amount.code)
+        let floatingActions = [
+            ActivityItem.Button(
+                text: LocalizationConstants.SuperApp.ActivityDetails.viewOnExplorer,
+                style: .secondary,
+                actionType: .opneURl,
+                actionData: "\(url)/\(txHash)"
+            )
+        ]
+
         return ActivityDetail.GroupedItems(
             title: activity.title(),
             icon: activity.leadingImage(),
             itemGroups: [group1, group2, group3],
-            floatingActions: []
+            floatingActions: floatingActions
         )
     }
 
@@ -138,11 +154,23 @@ public enum ActivityDetailsAdapter {
             copyAction
         ])
 
+        let normalizedTxHash = activity.withdrawalTxHash?.splitIfNotEmpty(separator: ":").first.map(String.init)
+        let txHash = normalizedTxHash ?? activity.withdrawalTxHash ?? ""
+        let url = activity.amounts.withdrawal.currency.cryptoCurrency?.network()?.networkConfig.explorerUrl ?? explorerUrl(coin: activity.amounts.withdrawal.code)
+        let floatingActions = [
+            ActivityItem.Button(
+                text: LocalizationConstants.SuperApp.ActivityDetails.viewOnExplorer,
+                style: .secondary,
+                actionType: .opneURl,
+                actionData: "\(url)/\(txHash)"
+            )
+        ]
+
         return ActivityDetail.GroupedItems(
             title: activity.title(),
             icon: activity.leadingImage(),
             itemGroups: [group1, group2, group3],
-            floatingActions: []
+            floatingActions: floatingActions
         )
     }
 

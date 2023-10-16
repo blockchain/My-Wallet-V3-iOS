@@ -132,14 +132,16 @@ public final class PlaidLinkObserver: Client.Observer {
 
         let view = PlaidView(store: .init(
             initialState: PlaidState(accountId: accountId),
-            reducer: PlaidReducer(
-                app: app,
-                mainQueue: .main,
-                plaidRepository: DIKit.resolve(),
-                dismissFlow: { _ in
-                    presentingViewController?.dismiss(animated: true)
-                }
-            )
+            reducer: {
+                PlaidReducer(
+                    app: app,
+                    mainQueue: .main,
+                    plaidRepository: DIKit.resolve(),
+                    dismissFlow: { _ in
+                        presentingViewController?.dismiss(animated: true)
+                    }
+                )
+            }
         )).app(app)
 
         let hostedViewController = UIHostingController(rootView: view)

@@ -2,12 +2,12 @@
 
 import ComposableArchitecture
 
-public struct AssetPicker: ReducerProtocol {
+public struct AssetPicker: Reducer {
 
     @Dependency(\.dexService) var dexService
     @Dependency(\.mainQueue) var mainQueue
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -15,10 +15,12 @@ public struct AssetPicker: ReducerProtocol {
                 state.searchResults = state.allData.filtered(by: state.searchText)
                 return .none
             case .onAppear:
-                return dexService.pendingActivity(state.currentNetwork)
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onPendingTransactionStatus)
-                    .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
+                return .publisher { [currentNetwork = state.currentNetwork] in
+                    dexService.pendingActivity(currentNetwork)
+                        .receive(on: mainQueue)
+                        .map(Action.onPendingTransactionStatus)
+                }
+                .cancellable(id: CancellationID.pendingActivity, cancelInFlight: true)
             case .onDismiss:
                 return .none
             case .onAssetTapped:

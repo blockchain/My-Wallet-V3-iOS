@@ -18,7 +18,7 @@ struct LostFundsWarningState: Equatable {
     var isResetPasswordScreenVisible: Bool = false
 }
 
-struct LostFundsWarningReducer: ReducerProtocol {
+struct LostFundsWarningReducer: Reducer {
 
     typealias State = LostFundsWarningState
     typealias Action = LostFundsWarningAction
@@ -43,7 +43,7 @@ struct LostFundsWarningReducer: ReducerProtocol {
         self.errorRecorder = errorRecorder
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onDisappear:
@@ -54,7 +54,7 @@ struct LostFundsWarningReducer: ReducerProtocol {
             case .goBackButtonTapped:
                 return .none
             case .resetAccountButtonTapped:
-                return EffectTask(value: .setResetPasswordScreenVisible(true))
+                return Effect.send(.setResetPasswordScreenVisible(true))
             case .resetPassword:
                 return .none
             case .setResetPasswordScreenVisible(let isVisible):

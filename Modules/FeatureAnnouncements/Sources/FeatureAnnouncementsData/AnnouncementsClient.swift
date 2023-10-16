@@ -5,7 +5,6 @@ import Errors
 import FeatureAnnouncementsDomain
 import Foundation
 import NetworkKit
-import PlatformKit
 import ToolKit
 
 final class AnnouncementsClient: AnnouncementsClientAPI {
@@ -60,7 +59,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
 
     // MARK: - Properties
 
-    private let userService: NabuUserServiceAPI
+    private let emailProvider: AnnouncementsEmailProviderAPI
     private let networkAdapter: NetworkAdapterAPI
     private let requestBuilder: RequestBuilder
     private let deviceInfo: DeviceInfo
@@ -71,16 +70,16 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
         deviceInfo: DeviceInfo,
         networkAdapter: NetworkAdapterAPI,
         requestBuilder: RequestBuilder,
-        userService: NabuUserServiceAPI
+        emailProvider: AnnouncementsEmailProviderAPI
     ) {
         self.deviceInfo = deviceInfo
         self.networkAdapter = networkAdapter
         self.requestBuilder = requestBuilder
-        self.userService = userService
+        self.emailProvider = emailProvider
     }
 
     func fetchMessages() -> AnyPublisher<[Announcement], NabuNetworkError> {
-        emailPublisher
+        emailProvider.email
             .flatMap { [requestBuilder, networkAdapter] email -> AnyPublisher<[Announcement], NabuNetworkError> in
                 let request = requestBuilder.get(
                     path: Path.getMessages,
@@ -96,7 +95,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
     }
 
     func setRead(announcement: Announcement) -> AnyPublisher<Void, NabuNetworkError> {
-        emailPublisher
+        emailProvider.email
             .flatMap { [weak self] email -> AnyPublisher<Void, NabuNetworkError> in
                 guard let self else {
                     return .empty()
@@ -111,7 +110,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
     }
 
     func setTapped(announcement: Announcement) -> AnyPublisher<Void, NabuNetworkError> {
-        emailPublisher
+        emailProvider.email
             .flatMap { [weak self] email -> AnyPublisher<Void, NabuNetworkError> in
                 guard let self else {
                     return .empty()
@@ -130,7 +129,7 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
         _ announcement: Announcement,
         with action: Announcement.Action
     ) -> AnyPublisher<Void, NabuNetworkError> {
-        emailPublisher
+        emailProvider.email
             .flatMap { [weak self] email -> AnyPublisher<Void, NabuNetworkError> in
                 guard let self else {
                     return .empty()
@@ -164,13 +163,5 @@ final class AnnouncementsClient: AnnouncementsClientAPI {
         )!
 
         return networkAdapter.perform(request: request)
-    }
-
-    private var emailPublisher: AnyPublisher<String, NabuNetworkError> {
-        userService
-            .user
-            .map(\.email.address)
-            .mapError(\.nabu)
-            .eraseToAnyPublisher()
     }
 }

@@ -6,12 +6,14 @@ import SwiftUI
 
 struct BakktConsentView: View {
     @Dependency(\.app) var app
-    typealias L10n = LocalizationConstants.ExternalTradingMigration.Consent
+    typealias L10n = NonLocalizedConstants.ExternalTradingMigration.Consent
+    @Environment(\.openURL) var openURL
     var hasAssetsToConsolidate: Bool = false
     var onDone: (() -> Void)?
     var onContinue: (() -> Void)?
+    var isLoading: Bool = false
     var continueButtonEnabled: Bool {
-        consentItems.allSatisfy(\.isApproved)
+        consentItems.allSatisfy(\.isApproved) && !isLoading
     }
 
     @State var consentItems: [MigrationConsentElement]
@@ -19,10 +21,11 @@ struct BakktConsentView: View {
     init(
         hasAssetsToConsolidate: Bool,
         onDone: (() -> Void)? = nil,
-        onContinue: (() -> Void)? = nil
+        onContinue: (() -> Void)? = nil,
+        isLoading: Bool
     ) {
         self.hasAssetsToConsolidate = hasAssetsToConsolidate
-        self.consentItems = hasAssetsToConsolidate ?
+        let items = hasAssetsToConsolidate ?
         [
             MigrationConsentElement(type: .supportedAssets),
             MigrationConsentElement(type: .transactions),
@@ -37,8 +40,10 @@ struct BakktConsentView: View {
             MigrationConsentElement(type: .defiWallet)
         ]
 
+        _consentItems = .init(wrappedValue: items)
         self.onDone = onDone
         self.onContinue = onContinue
+        self.isLoading = isLoading
     }
 
     var body: some View {
@@ -54,7 +59,6 @@ struct BakktConsentView: View {
                     labelsView
                     consentItemsView
                     Spacer()
-                    termsAndConditions
                 }
             }
             bottomView
@@ -79,16 +83,20 @@ struct BakktConsentView: View {
     @ViewBuilder
     var bottomView: some View {
         VStack(spacing: Spacing.padding2) {
+            termsAndConditions
             if hasAssetsToConsolidate {
-                PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton, action: {
+                PrimaryButton(title: NonLocalizedConstants.ExternalTradingMigration.continueButton,
+                              action: {
                     onContinue?()
-                })
+                }
+                )
                 .disabled(!continueButtonEnabled)
             } else {
                 PrimaryButton(
-                    title: LocalizationConstants.ExternalTradingMigration.upgradeButton,
+                    title: NonLocalizedConstants.ExternalTradingMigration.upgradeButton,
+                    isLoading: isLoading,
                     action: {
-                    onDone?()
+                        onDone?()
                     }
                 )
                 .disabled(!continueButtonEnabled)
@@ -121,7 +129,11 @@ struct BakktConsentView: View {
                 .multilineTextAlignment(.center)
 
             if hasAssetsToConsolidate {
-                SmallMinimalButton(title: LocalizationConstants.ExternalTradingMigration.learnMoreButton) {}
+                SmallMinimalButton(title: NonLocalizedConstants.ExternalTradingMigration.learnMoreButton) {
+                    if let url = URL(string: "https://support.blockchain.com/hc/en-us/articles/10613027459868-Texas-Update-Upgrading-Your-Account-for-Enhanced-Crypto-Trading") {
+                        openURL(url)
+                    }
+                }
             }
         }
     }
@@ -139,8 +151,14 @@ struct BakktConsentView: View {
 
 struct BakktConsentView_Preview: PreviewProvider {
     static var previews: some View {
-        BakktConsentView(hasAssetsToConsolidate: false)
-        BakktConsentView(hasAssetsToConsolidate: true)
+        BakktConsentView(
+            hasAssetsToConsolidate: false,
+            isLoading: false
+        )
+        BakktConsentView(
+            hasAssetsToConsolidate: true,
+            isLoading: false
+        )
     }
 }
 
@@ -156,30 +174,30 @@ struct MigrationConsentElement: Identifiable {
     var title: String {
         switch type {
         case .supportedAssets:
-            return LocalizationConstants.ExternalTradingMigration.Consent.SupportedAssets.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.title
         case .transactions:
-            return LocalizationConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
         case .migrationPeriod:
-            return LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
         case .historicalData:
-            return LocalizationConstants.ExternalTradingMigration.Consent.HistoricalData.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.title
         case .defiWallet:
-            return LocalizationConstants.ExternalTradingMigration.Consent.DefiWallet.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.title
         }
     }
 
     var message: String {
         switch type {
         case .supportedAssets:
-            return LocalizationConstants.ExternalTradingMigration.Consent.SupportedAssets.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.message
         case .transactions:
-            return LocalizationConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
         case .migrationPeriod:
-            return LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
         case .historicalData:
-            return LocalizationConstants.ExternalTradingMigration.Consent.HistoricalData.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.message
         case .defiWallet:
-            return LocalizationConstants.ExternalTradingMigration.Consent.DefiWallet.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.message
         }
     }
 }
@@ -194,31 +212,31 @@ enum MigrationConsentItem: String, CaseIterable {
     var title: String {
         switch self {
         case .supportedAssets:
-            return LocalizationConstants.ExternalTradingMigration.Consent.SupportedAssets.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.title
         case .transactions:
-            return LocalizationConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
         case .migrationPeriod:
-            return LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
         case .historicalData:
-            return LocalizationConstants.ExternalTradingMigration.Consent.HistoricalData.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.title
         case .defiWallet:
-            return LocalizationConstants.ExternalTradingMigration.Consent.DefiWallet.title
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.title
         }
     }
 
     var description: String {
         switch self {
         case .supportedAssets:
-            return LocalizationConstants.ExternalTradingMigration.Consent.SupportedAssets.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.message
         case .transactions:
-            return LocalizationConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
 
         case .migrationPeriod:
-            return LocalizationConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
         case .historicalData:
-            return LocalizationConstants.ExternalTradingMigration.Consent.HistoricalData.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.message
         case .defiWallet:
-            return LocalizationConstants.ExternalTradingMigration.Consent.DefiWallet.message
+            return NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.message
         }
     }
 }

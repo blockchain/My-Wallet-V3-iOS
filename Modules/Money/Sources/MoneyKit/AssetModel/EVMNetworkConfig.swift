@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BigInt
+import Foundation
 
 public struct EVMNetworkConfig: Hashable, Codable {
 
@@ -8,6 +9,7 @@ public struct EVMNetworkConfig: Hashable, Codable {
         name: "Ethereum",
         chainID: 1,
         nativeAsset: "ETH",
+        logoURL: "https://raw.githubusercontent.com/blockchain/coin-definitions/master/extensions/blockchains/ethereum/info/logo.png",
         explorerUrl: "https://www.blockchain.com/eth/tx",
         networkTicker: "ETH",
         nodeURL: "https://api.blockchain.info/eth/nodes/rpc",
@@ -18,6 +20,7 @@ public struct EVMNetworkConfig: Hashable, Codable {
     public let chainID: BigUInt
     public let nativeAsset: String
     public let explorerUrl: String
+    public let logoURL: URL?
     public let networkTicker: String
     public let nodeURL: String?
     public let shortName: String
@@ -35,15 +38,17 @@ public struct EVMNetworkConfig: Hashable, Codable {
         name: String,
         chainID: BigUInt,
         nativeAsset: String,
+        logoURL: URL?,
         explorerUrl: String,
         networkTicker: String,
         nodeURL: String?,
         shortName: String
     ) {
-        self.name = name
         self.chainID = chainID
-        self.nativeAsset = nativeAsset
         self.explorerUrl = explorerUrl
+        self.logoURL = logoURL
+        self.name = name
+        self.nativeAsset = nativeAsset
         self.networkTicker = networkTicker
         self.nodeURL = nodeURL
         self.shortName = shortName
@@ -53,6 +58,10 @@ public struct EVMNetworkConfig: Hashable, Codable {
 public struct EVMNetwork: Hashable, Equatable, Codable {
     public let networkConfig: EVMNetworkConfig
     public let nativeAsset: CryptoCurrency
+
+    public var logoURL: URL? {
+        networkConfig.logoURL ?? nativeAsset.logoURL
+    }
 
     public init(networkConfig: EVMNetworkConfig, nativeAsset: CryptoCurrency) {
         self.networkConfig = networkConfig
@@ -92,7 +101,8 @@ extension EVMNetworkConfig {
         self.init(
             name: response.name,
             chainID: BigUInt(chainID),
-            nativeAsset: response.nativeAsset,
+            nativeAsset: response.nativeAsset, 
+            logoURL: response.logoPngUrl.flatMap(URL.init),
             explorerUrl: response.explorerUrl,
             networkTicker: response.networkTicker,
             nodeURL: response.nodeUrls?.first,

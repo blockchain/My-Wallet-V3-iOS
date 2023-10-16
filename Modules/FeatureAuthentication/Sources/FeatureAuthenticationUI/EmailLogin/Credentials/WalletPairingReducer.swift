@@ -51,7 +51,7 @@ struct WalletPairingState: Equatable {
     }
 }
 
-struct WalletPairingReducer: ReducerProtocol {
+struct WalletPairingReducer: Reducer {
 
     typealias State = WalletPairingState
     typealias Action = WalletPairingAction
@@ -85,7 +85,7 @@ struct WalletPairingReducer: ReducerProtocol {
         self.errorRecorder = errorRecorder
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
 
@@ -131,151 +131,138 @@ struct WalletPairingReducer: ReducerProtocol {
 
     private func approveEmailAuthorization(
         _ state: WalletPairingState
-    ) -> EffectTask<WalletPairingAction> {
+    ) -> Effect<WalletPairingAction> {
         guard let emailCode = state.emailCode else {
             // we still need to display an alert and poll here,
             // since we might end up here in case of a deeplink failure
-            return EffectTask(value: .needsEmailAuthorization)
+            return Effect.send(.needsEmailAuthorization)
         }
-        return deviceVerificationService
-            .authorizeLogin(emailCode: emailCode)
-            .receive(on: mainQueue)
-            .catchToEffect()
-            .map { result -> WalletPairingAction in
-                if case .failure(let error) = result {
-                    // If failed, an `Authorize Log In` will be sent to user for manual authorization
-                    errorRecorder.error(error)
-                    // we only want to handle `.expiredEmailCode` case, silent other errors...
-                    switch error {
-                    case .expiredEmailCode:
-                        return .needsEmailAuthorization
-                    case .missingSessionToken, .networkError, .recaptchaError, .missingWalletInfo, .timeout:
-                        break
-                    }
+        return .run { send in
+            do {
+                try await deviceVerificationService
+                    .authorizeLogin(emailCode: emailCode)
+                    .receive(on: mainQueue)
+                    .await()
+                await send(.startPolling)
+            } catch {
+                // If failed, an `Authorize Log In` will be sent to user for manual authorization
+                errorRecorder.error(error)
+                // we only want to handle `.expiredEmailCode` case, silent other errors...
+                switch error as! DeviceVerificationServiceError {
+                case .expiredEmailCode:
+                    await send(.needsEmailAuthorization)
+                case .missingSessionToken, .networkError, .recaptchaError, .missingWalletInfo, .timeout:
+                    break
                 }
-                return .startPolling
             }
+        }
     }
 
     private func authenticate(
        _ password: String,
        _ state: WalletPairingState,
        isAutoTrigger: Bool
-    ) -> EffectTask<WalletPairingAction> {
+    ) -> Effect<WalletPairingAction> {
        guard !state.walletGuid.isEmpty else {
            fatalError("GUID should not be empty")
        }
+
        return .concatenate(
            .cancel(id: WalletPairingCancelations.WalletIdentifierPollingTimerId()),
-           loginService
-               .login(walletIdentifier: state.walletGuid)
-               .receive(on: mainQueue)
-               .catchToEffect()
-               .map { result -> WalletPairingAction in
-                   switch result {
-                   case .success:
-                       if isAutoTrigger {
-                           // edge case handling: if auto triggered, we don't want to decrypt wallet
-                           return .none
-                       }
-                       return .decryptWalletWithPassword(password)
-                   case .failure(let error):
-                       return .authenticateDidFail(error)
+           .run { send in
+               do {
+                   try await loginService
+                       .login(walletIdentifier: state.walletGuid)
+                       .receive(on: mainQueue)
+                       .await()
+                   guard !isAutoTrigger else {
+                       await send(.none)
+                       return
                    }
+                   await send(.decryptWalletWithPassword(password))
+               } catch {
+                   await send(.authenticateDidFail(error as! LoginServiceError))
                }
+           }
        )
    }
 
     private func authenticateWithTwoFactorOTP(
        _ code: String,
        _ state: WalletPairingState
-    ) -> EffectTask<WalletPairingAction> {
+    ) -> Effect<WalletPairingAction> {
        guard !state.walletGuid.isEmpty else {
            fatalError("GUID should not be empty")
        }
-       return loginService
-           .login(
-               walletIdentifier: state.walletGuid,
-               code: code
-           )
-           .receive(on: mainQueue)
-           .catchToEffect()
-           .map { result -> WalletPairingAction in
-               switch result {
-               case .success:
-                   return .twoFactorOTPDidVerified
-               case .failure(let error):
-                   return .authenticateWithTwoFactorOTPDidFail(error)
-               }
-           }
+        return .run { send in
+            do {
+                try await loginService
+                    .login(
+                        walletIdentifier: state.walletGuid,
+                        code: code
+                    )
+                    .receive(on: mainQueue)
+                    .await()
+                await send(.twoFactorOTPDidVerified)
+            } catch {
+                await send(.authenticateWithTwoFactorOTPDidFail(error as! LoginServiceError))
+            }
+        }
    }
 
-    private func needsEmailAuthorization() -> EffectTask<WalletPairingAction> {
-        EffectTask(value: .startPolling)
+    private func needsEmailAuthorization() -> Effect<WalletPairingAction> {
+        Effect.send(.startPolling)
     }
 
     private func pollWalletIdentifier(
         _ state: WalletPairingState
-    ) -> EffectTask<WalletPairingAction> {
+    ) -> Effect<WalletPairingAction> {
         .concatenate(
             .cancel(id: WalletPairingCancelations.WalletIdentifierPollingId()),
-            emailAuthorizationService
-                .authorizeEmailPublisher()
-                .receive(on: mainQueue)
-                .catchToEffect()
-                .cancellable(id: WalletPairingCancelations.WalletIdentifierPollingId())
-                .map { result -> WalletPairingAction in
-                    // Authenticate if the wallet identifier exists in repo
-                    guard case .success = result else {
-                        return .none
-                    }
-                    return .authenticate(state.password)
-                }
+            .run { send in
+                try await emailAuthorizationService
+                    .authorizeEmailPublisher()
+                    .receive(on: mainQueue)
+                    .await()
+                await send(.authenticate(state.password))
+            }
+            .cancellable(id: WalletPairingCancelations.WalletIdentifierPollingId())
         )
     }
 
-    private func resendSMSCode() -> EffectTask<WalletPairingAction> {
-        smsService
-            .request()
-            .receive(on: mainQueue)
-            .catchToEffect()
-            .map { result -> WalletPairingAction in
-                switch result {
-                case .success:
-                    return .didResendSMSCode(.success(.noValue))
-                case .failure(let error):
-                    return .didResendSMSCode(.failure(error))
-                }
-            }
+    private func resendSMSCode() -> Effect<WalletPairingAction> {
+        .publisher {
+            smsService
+                .request()
+                .receive(on: mainQueue)
+                .map { .didResendSMSCode(.success(.noValue)) }
+                .catch { .didResendSMSCode(.failure($0)) }
+        }
     }
 
-    private func setupSessionToken() -> EffectTask<WalletPairingAction> {
-        sessionTokenService
-            .setupSessionToken()
-            .receive(on: mainQueue)
-            .catchToEffect()
-            .map { result -> WalletPairingAction in
-                switch result {
-                case .success:
-                    return .didSetupSessionToken(.success(.noValue))
-                case .failure(let error):
-                    return .didSetupSessionToken(.failure(error))
-                }
-            }
+    private func setupSessionToken() -> Effect<WalletPairingAction> {
+        .publisher {
+            sessionTokenService
+                .setupSessionToken()
+                .receive(on: mainQueue)
+                .map { .didSetupSessionToken(.success(.noValue)) }
+                .catch { .didSetupSessionToken(.failure($0)) }
+        }
     }
 
-    private func startPolling() -> EffectTask<WalletPairingAction> {
+    private func startPolling() -> Effect<WalletPairingAction> {
         // Poll the Guid every 2 seconds
-        EffectTask
-            .timer(
-                id: WalletPairingCancelations.WalletIdentifierPollingTimerId(),
-                every: 2,
-                on: pollingQueue
-            )
-            .map { _ in
-                .pollWalletIdentifier
+        Effect.run { send in
+            for await _ in pollingQueue.timer(interval: .seconds(2)) {
+                mainQueue.schedule {
+                    do {
+                        Task { @MainActor in
+                            send(.pollWalletIdentifier)
+                        }
+                    }
+                }
             }
-            .receive(on: mainQueue)
-            .eraseToEffect()
+        }
+        .cancellable(id: WalletPairingCancelations.WalletIdentifierPollingTimerId())
     }
 }

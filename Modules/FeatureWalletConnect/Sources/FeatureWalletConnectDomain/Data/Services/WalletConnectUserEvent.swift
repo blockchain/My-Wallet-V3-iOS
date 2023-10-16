@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Coincore
 import Foundation
-import PlatformKit
 import Web3Wallet
 
 public enum WalletConnectUserEvent {

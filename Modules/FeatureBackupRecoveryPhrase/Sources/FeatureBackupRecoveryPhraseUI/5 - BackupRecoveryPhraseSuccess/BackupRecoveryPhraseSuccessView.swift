@@ -11,7 +11,7 @@ public struct BackupRecoveryPhraseSuccessView: View {
 
     public init(store: Store<BackupRecoveryPhraseSuccessState, BackupRecoveryPhraseSuccessAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -53,9 +53,9 @@ public struct BackupRecoveryPhraseSuccessView: View {
 
 struct BackupRecoveryPhraseSuccessView_Previews: PreviewProvider {
     static var previews: some View {
-        BackupRecoveryPhraseSuccessView(store: .init(
+        BackupRecoveryPhraseSuccessView(store: Store(
             initialState: .init(),
-            reducer: BackupRecoveryPhraseSuccess(onNext: {})
+            reducer: { BackupRecoveryPhraseSuccess(onNext: {}) }
         ))
     }
 }

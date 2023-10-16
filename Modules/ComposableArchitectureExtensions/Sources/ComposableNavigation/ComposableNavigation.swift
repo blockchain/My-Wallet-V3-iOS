@@ -136,21 +136,21 @@ extension View {
     }
 }
 
-extension EffectTask where Action: NavigationAction {
+extension Effect where Action: NavigationAction {
 
     /// A navigation effect to continue a user-journey by navigating to a new screen.
     public static func dismiss() -> Self {
-        Self(value: .dismiss())
+        Self.send(.dismiss())
     }
 
     /// A navigation effect to continue a user-journey by navigating to a new screen.
-    public static func navigate(to route: Output.RouteType) -> Self {
-        Self(value: .navigate(to: route))
+    public static func navigate(to route: Action.RouteType) -> Self {
+        Self.send(.navigate(to: route))
     }
 
     /// A navigation effect that enters a new user journey context.
-    public static func enter(into route: Output.RouteType, context: EnterIntoContext = .default) -> Self {
-        Self(value: .enter(into: route, context: context))
+    public static func enter(into route: Action.RouteType, context: EnterIntoContext = .default) -> Self {
+        Self.send(.enter(into: route, context: context))
     }
 }
 
@@ -173,7 +173,7 @@ public struct NavigationRouteViewModifier<Route: NavigationRoute, EnvironmentObj
     public init(_ store: Store<State, Action>, _ environmentObject: EnvironmentObject?) {
         self.store = store
         self.environmentObject = environmentObject
-        self.viewStore = ViewStore(store.scope(state: \.route))
+        self.viewStore = ViewStore(store.scope(state: \.route, action: { $0 }), observe: { $0 })
     }
 
     public func body(content: Content) -> some View {
@@ -285,7 +285,7 @@ extension Binding where Value == Bool {
     }
 }
 
-extension ReducerProtocol where Action: NavigationAction, State: NavigationState {
+extension Reducer where Action: NavigationAction, State: NavigationState {
 
     @inlinable
     public func routing() -> _NavigationReducer<Self> {
@@ -293,7 +293,7 @@ extension ReducerProtocol where Action: NavigationAction, State: NavigationState
     }
 }
 
-public struct _NavigationReducer<Base: ReducerProtocol>: ReducerProtocol where Base.Action: NavigationAction, Base.State: NavigationState {
+public struct _NavigationReducer<Base: Reducer>: Reducer where Base.Action: NavigationAction, Base.State: NavigationState {
 
     @usableFromInline
     let base: Base
@@ -304,7 +304,7 @@ public struct _NavigationReducer<Base: ReducerProtocol>: ReducerProtocol where B
     }
 
     @inlinable
-    public func reduce(into state: inout Base.State, action: Base.Action) -> EffectTask<Base.Action> {
+    public func reduce(into state: inout Base.State, action: Base.Action) -> Effect<Base.Action> {
         guard let route = (/Action.route).extract(from: action) else {
             return self.base.reduce(into: &state, action: action)
         }

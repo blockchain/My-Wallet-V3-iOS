@@ -1,10 +1,16 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Coincore
 import DIKit
 import ToolKit
 import WalletConnectRelay
 import WalletPayloadKit
 import Web3Wallet
+
+public protocol WalletConnectTabSwapping {
+    func send(from account: BlockchainAccount, target: TransactionTarget)
+    func sign(from account: BlockchainAccount, target: TransactionTarget)
+}
 
 extension DependencyContainer {
 

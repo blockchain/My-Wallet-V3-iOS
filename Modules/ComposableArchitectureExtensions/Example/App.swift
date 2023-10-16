@@ -12,7 +12,7 @@ struct Demo: App {
                 ContentView(
                     store: Store(
                         initialState: ExampleState(name: "Root"),
-                        reducer: ExampleReducer()
+                        reducer: { ExampleReducer() }
                     )
                 )
             }
@@ -39,27 +39,30 @@ enum ExampleRoute: NavigationRoute, CaseIterable {
     case c
     case end
 
+    @MainActor
     @ViewBuilder
     func destination(in store: Store<ExampleState, ExampleAction>) -> some View {
-        let viewStore = ViewStore(store)
+        let viewStore = ViewStore(store, observe: { $0 })
         switch self {
         case .a, .b, .c:
             ContentView(
-                store: .init(
+                store: Store(
                     initialState: ExampleState(
                         name: String(describing: self),
                         lineage: viewStore.lineage + [viewStore.name]
                     ),
-                    reducer: ExampleReducer()
+                    reducer: { ExampleReducer() }
                 )
             )
         case .end:
             EndContentView(
-                store: .init(
+                store: Store(
                     initialState: EndState(name: "End"),
-                    reducer: EndReducer(
-                        dismiss: { viewStore.send(.dismiss()) }
-                    )
+                    reducer: {
+                        EndReducer(
+                            dismiss: { viewStore.send(.dismiss()) }
+                        )
+                    }
                 )
             )
         }
@@ -75,7 +78,7 @@ struct ContentView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { view in
+        WithViewStore(store, observe: { $0 }) { view in
             VStack(alignment: .leading) {
                 Text(view.lineage.joined(separator: "."))
                 Spacer()
@@ -116,7 +119,7 @@ struct EndContentView: View {
     }
 
     var body: some View {
-        WithViewStore(store) { view in
+        WithViewStore(store, observe: { $0 }) { view in
             VStack(spacing: 24) {
                 Text(view.name)
                     .onAppear {
@@ -130,34 +133,35 @@ struct EndContentView: View {
     }
 }
 
-struct ExampleReducer: ReducerProtocol {
+struct ExampleReducer: Reducer {
     typealias Action = ExampleAction
     typealias State = ExampleState
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .route:
                 return .none
             case .end:
-                return .fireAndForget { print("✅") }
+                return .run { _ in print("✅") }
             }
         }
         .routing()
     }
 }
 
-struct EndReducer: ReducerProtocol {
+struct EndReducer: Reducer {
     typealias Action = EndAction
     typealias State = EndState
 
     let dismiss: () -> Void
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .dismiss:
-                return .fireAndForget(dismiss)
+                dismiss()
+                return .none
             case .onAppear:
                 return .none
             }
@@ -170,7 +174,7 @@ struct ReducerContentView_Previews: PreviewProvider {
         ContentView(
             store: Store(
                 initialState: ExampleState(name: "Root"),
-                reducer: ExampleReducer()
+                reducer: { ExampleReducer() }
             )
         )
     }

@@ -3,7 +3,6 @@ import ComposableArchitecture
 import ComposableNavigation
 import Localization
 import SwiftUI
-import UIComponentsKit
 
 // TODO: Analytics (next release)
 // TODO: acessibility identifiers (next release)
@@ -19,7 +18,7 @@ public struct UserDeletionView: View {
 
     public init(store: Store<UserDeletionState, UserDeletionAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -177,7 +176,7 @@ struct UserDeletion_Previews: PreviewProvider {
         UserDeletionView(
             store: Store(
                 initialState: UserDeletionState(),
-                reducer: UserDeletionReducer.preview
+                reducer: { UserDeletionReducer.preview }
             )
         )
     }

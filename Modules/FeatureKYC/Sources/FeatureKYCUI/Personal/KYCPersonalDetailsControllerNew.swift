@@ -52,16 +52,18 @@ final class KYCPersonalDetailsControllerNew: KYCBaseViewController {
         let view = PersonalInfoView(
             store: Store(
                 initialState: PersonalInfo.State(),
-                reducer: PersonalInfo.Reducer(
-                    onClose: dismiss,
-                    onComplete: moveToNextStep,
-                    loadForm: loadForm,
-                    submitForm: { [onSubmission] form in
-                        onSubmission(form.pages.flatMap(\.nodes))
-                    },
-                    analyticsRecorder: analyticsRecorder,
-                    mainQueue: .main
-                )
+                reducer: {
+                    PersonalInfo.PersonalInfoReducer(
+                        onClose: dismiss,
+                        onComplete: moveToNextStep,
+                        loadForm: loadForm,
+                        submitForm: { [onSubmission] form in
+                            onSubmission(form.pages.flatMap(\.nodes))
+                        },
+                        analyticsRecorder: analyticsRecorder,
+                        mainQueue: .main
+                    )
+                }
             )
         )
         .background(Color.semantic.light.ignoresSafeArea())

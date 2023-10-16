@@ -17,7 +17,7 @@ private struct UpdateAccountIds: Hashable {
     let identities: Set<AnyHashable>
 }
 
-public struct AccountPicker: ReducerProtocol {
+public struct AccountPicker: Reducer {
     public typealias State = AccountPickerState
 
     public typealias Action = AccountPickerAction
@@ -71,7 +71,7 @@ public struct AccountPicker: ReducerProtocol {
         self.onSegmentSelectionChanged = onSegmentSelectionChanged
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Scope<
             AccountPicker.State,
             AccountPicker.Action,
@@ -92,21 +92,19 @@ public struct AccountPicker: ReducerProtocol {
 
             case .rowsLoaded(.success(.accountPickerRowDidTap(let id))):
                 state.selected = id
-                return .fireAndForget {
-                    rowSelected(id)
-                }
+                rowSelected(id)
+                return .none
             case .rowsLoaded(.success(.ux(let ux))):
                 state.ux = ux
-                return .fireAndForget {
-                    uxSelected(ux)
-                }
+                uxSelected(ux)
+                return .none
 
             case .prefetching(.fetch(indices: let indices)):
                 guard case .loaded(.success(let sections)) = state.sections else {
                     return .none
                 }
 
-                var effects: [EffectTask<AccountPickerAction>] = []
+                var effects: [Effect<AccountPickerAction>] = []
 
                 for section in sections.content {
                     if case .accounts(let rows) = section {
@@ -125,35 +123,29 @@ public struct AccountPicker: ReducerProtocol {
 
                         if !singleAccountIds.isEmpty {
                             effects.append(
-                                updateSingleAccounts(singleAccountIds)
-                                    .receive(on: mainQueue)
-                                    .catchToEffect()
-                                    .cancellable(id: UpdateAccountIds(identities: singleAccountIds), cancelInFlight: true)
-                                    .map { result in
-                                        switch result {
-                                        case .success(let balances):
-                                            return .updateSingleAccounts(balances)
-                                        case .failure:
-                                            return .prefetching(.requeue(indices: indices))
-                                        }
+                                .run { send in
+                                    do {
+                                        let balances = try await updateSingleAccounts(singleAccountIds).await()
+                                        await send(.updateSingleAccounts(balances))
+                                    } catch {
+                                        await send(.prefetching(.requeue(indices: indices)))
                                     }
+                                }
+                                .cancellable(id: UpdateAccountIds(identities: singleAccountIds), cancelInFlight: true)
                             )
                         }
 
                         if !accountGroupIds.isEmpty {
                             effects.append(
-                                updateAccountGroups(accountGroupIds)
-                                    .receive(on: mainQueue)
-                                    .catchToEffect()
-                                    .cancellable(id: UpdateAccountIds(identities: accountGroupIds), cancelInFlight: true)
-                                    .map { result in
-                                        switch result {
-                                        case .success(let balances):
-                                            return .updateAccountGroups(balances)
-                                        case .failure:
-                                            return .prefetching(.requeue(indices: indices))
-                                        }
+                                .run { send in
+                                    do {
+                                        let balances = try await updateAccountGroups(accountGroupIds).await()
+                                        await send(.updateAccountGroups(balances))
+                                    } catch {
+                                        await send(.prefetching(.requeue(indices: indices)))
                                     }
+                                }
+                                .cancellable(id: UpdateAccountIds(identities: accountGroupIds), cancelInFlight: true)
                             )
                         }
                     }
@@ -184,7 +176,7 @@ public struct AccountPicker: ReducerProtocol {
                 if requeue.isEmpty {
                     return .none
                 } else {
-                    return EffectTask(value: .prefetching(.requeue(indices: requeue)))
+                    return Effect.send(.prefetching(.requeue(indices: requeue)))
                 }
 
             case .updateAccountGroups(let values):
@@ -210,7 +202,7 @@ public struct AccountPicker: ReducerProtocol {
                 if requeue.isEmpty {
                     return .none
                 } else {
-                    return EffectTask(value: .prefetching(.requeue(indices: requeue)))
+                    return Effect.send(.prefetching(.requeue(indices: requeue)))
                 }
 
             case .rowsLoading:
@@ -244,36 +236,29 @@ public struct AccountPicker: ReducerProtocol {
 
             case .onSegmentSelectionChanged(let segmentControlSelection):
                 state.header.segmentControlSelection = segmentControlSelection
-                return .fireAndForget {
-                    onSegmentSelectionChanged?(segmentControlSelection)
-                }
+                onSegmentSelectionChanged?(segmentControlSelection)
+                return .none
 
             case .subscribeToUpdates:
                 return .merge(
-                    sections()
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .cancellable(id: UpdateSubscriptionId())
-                        .map { result in
-                            switch result {
-                            case .success(let section):
-                                return .updateSections(section)
-                            case .failure(let error):
-                                return .failedToUpdateRows(error)
-                            }
-                        },
-                    header()
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .cancellable(id: UpdateHeaderId(), cancelInFlight: true)
-                        .map { result in
-                            switch result {
-                            case .success(let header):
-                                return .updateHeader(header)
-                            case .failure(let error):
-                                return .failedToUpdateHeader(error)
-                            }
+                    .run { send in
+                        do {
+                            let section = try await sections().await()
+                            await send(.updateSections(section))
+                        } catch {
+                            await send(.failedToUpdateRows(error))
                         }
+                    }
+                    .cancellable(id: UpdateSubscriptionId()),
+                    .run { send in
+                        do {
+                            let header = try await header().await()
+                            await send(.updateHeader(header))
+                        } catch {
+                            await send(.failedToUpdateHeader(error))
+                        }
+                    }
+                    .cancellable(id: UpdateHeaderId(), cancelInFlight: true)
                 )
 
             default:

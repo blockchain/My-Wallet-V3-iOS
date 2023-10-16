@@ -7,7 +7,7 @@ import FeatureDexData
 import FeatureDexDomain
 import SwiftUI
 
-public struct DexDashboard: ReducerProtocol {
+public struct DexDashboard: Reducer {
 
     @Dependency(\.app) var app
 
@@ -17,7 +17,7 @@ public struct DexDashboard: ReducerProtocol {
         self.analyticsRecorder = analyticsRecorder
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Scope(state: \.main, action: /Action.mainAction) {
             DexMain()
@@ -28,13 +28,15 @@ public struct DexDashboard: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return app
-                    .publisher(for: blockchain.ux.currency.exchange.dex.intro.did.show, as: Bool.self)
-                    .replaceError(with: false)
-                    .first()
-                    .map { !$0 }
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect(Action.setIntro(isPresented:))
+                return .publisher {
+                    app
+                        .publisher(for: blockchain.ux.currency.exchange.dex.intro.did.show, as: Bool.self)
+                        .replaceError(with: false)
+                        .first()
+                        .map { !$0 }
+                        .receive(on: DispatchQueue.main)
+                        .map(Action.setIntro(isPresented:))
+                }
             case .setIntro(let isPresented):
                 state.showIntro = isPresented
                 return .none

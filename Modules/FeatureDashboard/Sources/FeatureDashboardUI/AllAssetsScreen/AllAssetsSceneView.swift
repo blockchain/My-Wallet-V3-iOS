@@ -17,7 +17,7 @@ public struct AllAssetsSceneView: View {
 
     public init(store: StoreOf<AllAssetsScene>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     @ViewBuilder
@@ -54,7 +54,7 @@ public struct AllAssetsSceneView: View {
             scrollOffset: nil
         )
         .bottomSheet(
-            isPresented: viewStore.binding(\.$filterPresented).animation(.spring()),
+            isPresented: viewStore.$filterPresented.animation(.spring()),
             content: {
                 filterSheet
             }
@@ -70,8 +70,8 @@ public struct AllAssetsSceneView: View {
     @ViewBuilder
     private var searchBarSection: some View {
         SearchBar(
-            text: viewStore.binding(\.$searchText),
-            isFirstResponder: viewStore.binding(\.$isSearching),
+            text: viewStore.$searchText,
+            isFirstResponder: viewStore.$isSearching,
             cancelButtonText: L10n.cancelButton,
             placeholder: L10n.searchPlaceholder
         )
@@ -156,7 +156,7 @@ public struct AllAssetsSceneView: View {
                 Spacer()
                 PrimarySwitch(
                     accessibilityLabel: "",
-                    isOn: viewStore.binding(\.$showSmallBalances)
+                    isOn: viewStore.$showSmallBalances
                 )
                 .frame(height: 32.pt)
                 .padding(.trailing, Spacing.padding2)

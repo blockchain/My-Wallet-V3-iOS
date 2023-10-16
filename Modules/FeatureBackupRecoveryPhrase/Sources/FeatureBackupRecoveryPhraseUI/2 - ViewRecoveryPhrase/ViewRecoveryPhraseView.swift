@@ -13,7 +13,7 @@ public struct ViewRecoveryPhraseView: View {
 
     public init(store: Store<ViewRecoveryPhraseState, ViewRecoveryPhraseAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -151,17 +151,19 @@ extension ViewRecoveryPhraseView {
 struct ViewRecoveryPhraseView_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
-            ViewRecoveryPhraseView(store: .init(
+            ViewRecoveryPhraseView(store: Store(
                 initialState: .init(recoveryPhraseBackedUp: false),
-                reducer: ViewRecoveryPhrase(
-                    recoveryPhraseRepository: resolve(),
-                    recoveryPhraseService: resolve(),
-                    cloudBackupService: resolve(),
-                    onNext: {},
-                    onDone: {},
-                    onFailed: {},
-                    onIcloudBackedUp: {}
-                )
+                reducer: {
+                    ViewRecoveryPhrase(
+                        recoveryPhraseRepository: resolve(),
+                        recoveryPhraseService: resolve(),
+                        cloudBackupService: resolve(),
+                        onNext: {},
+                        onDone: {},
+                        onFailed: {},
+                        onIcloudBackedUp: {}
+                    )
+                }
             ))
         }
     }

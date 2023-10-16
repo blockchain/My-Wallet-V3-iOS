@@ -29,6 +29,9 @@ open class ReturnsDecoder: ComputeDecoder {
         guard keyword.isNotComputeKeyword else { return nil }
         let empty = try empty(T.self, at: codingPath)
         computes.insert(Compute.JSON(codingPath: codingPath, returns: dictionary, empty: empty))
+        if Compute.isLogging {
+            id.peek("👾 ℹ️ → inserting \(keyword.type)")
+        }
         return empty
     }
 
@@ -38,6 +41,9 @@ open class ReturnsDecoder: ComputeDecoder {
         (isDecoding, computes) = (true, [])
         do {
             let value = try decode(T.self, from: any)
+            if Compute.isLogging, computes.isNotEmpty {
+                id.peek("👾 ℹ️ → found \(computes.count) to Compute")
+            }
             return computes.isEmpty ? .ready(value) : .computes(computes)
         } catch where computes.isNotEmpty {
             return .computes(computes)
@@ -46,6 +52,8 @@ open class ReturnsDecoder: ComputeDecoder {
 }
 
 open class ComputeDecoder: BlockchainNamespaceDecoder {
+
+    var id: String = UUID().uuidString
 
     override open func convert<T>(_ any: Any, to: T.Type) throws -> Any? {
         if let returns = try compute(any, as: T.self) { return returns }
@@ -63,18 +71,30 @@ open class ComputeDecoder: BlockchainNamespaceDecoder {
         defer { codingPath.removeLast() }
         guard let keyword = Compute.Keyword(returns: dictionary) else { throw AnyJSON.Error("Expected {returns} keyword, but got \(returns.keys.first!)") }
         if let computeType = keyword.computeType {
+            if Compute.isLogging {
+                id.peek("👾 ℹ️ → computing '\(keyword.type)' at \(codingPath.string)")
+            }
             do {
                 let computer = try decode(computeType, from: function)
                 let result = try computer.compute().throwIfError()
+                if Compute.isLogging {
+                    id.peek("👾 ℹ️ → '\(keyword.type)' returned (✅) \(result ?? "nil") at \(codingPath.string)")
+                }
                 guard let type = T.self as? any Decodable.Type else { return result }
                 return try decode(type, from: result as Any)
             } catch {
+                if Compute.isLogging {
+                    id.peek("👾 ℹ️ → '\(keyword.type)' failed (‼️) with \(error) at \(codingPath.string)")
+                }
                 guard let value = dictionary[Compute.key.default] else { throw error }
                 let existingCodingPath = codingPath
                 defer { codingPath = existingCodingPath }
                 codingPath = rootContainerCodingPath
                 codingPath.append(AnyCodingKey(Compute.key.default))
                 defer { codingPath.removeLast() }
+                if Compute.isLogging {
+                    id.peek("👾 ℹ️ → using \(value) at \(codingPath.string)")
+                }
                 guard let type = T.self as? any Decodable.Type else { return value }
                 return try decode(type, from: value)
             }

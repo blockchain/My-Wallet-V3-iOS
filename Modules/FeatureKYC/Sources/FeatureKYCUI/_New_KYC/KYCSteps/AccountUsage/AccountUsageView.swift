@@ -16,7 +16,7 @@ struct AccountUsageView: View {
     let store: Store<AccountUsage.State, AccountUsage.Action>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             LoadingView(
                 store: store,
                 success: { successStore in
@@ -45,27 +45,27 @@ struct AccountUsageView_Previews: PreviewProvider {
 
     static var previews: some View {
         AccountUsageView(
-            store: .init(
+            store: Store(
                 initialState: AccountUsage.State.loading,
-                reducer: AccountUsage.Reducer.preview
+                reducer: { AccountUsage.AccountUsageReducer.preview }
             )
         )
         .previewDisplayName("Account Usage View - loading")
 
         AccountUsageView(
-            store: .init(
+            store: Store(
                 initialState: AccountUsage.State.success(
                     AccountUsage.Form.State(
                         form: FeatureFormDomain.Form(nodes: AccountUsage.previewQuestions)
                     )
                 ),
-                reducer: AccountUsage.Reducer.preview
+                reducer: { AccountUsage.AccountUsageReducer.preview }
             )
         )
         .previewDisplayName("Account Usage View - success")
 
         AccountUsageView(
-            store: .init(
+            store: Store(
                 initialState: AccountUsage.State.failure(
                     FailureState(
                         title: "Error",
@@ -82,7 +82,7 @@ struct AccountUsageView_Previews: PreviewProvider {
                         ]
                     )
                 ),
-                reducer: AccountUsage.Reducer.preview
+                reducer: { AccountUsage.AccountUsageReducer.preview }
             )
         )
         .previewDisplayName("Account Usage View - failure")

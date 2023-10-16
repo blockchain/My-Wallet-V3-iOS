@@ -24,7 +24,7 @@ struct CreateAccountViewStepTwo: View {
 
     init(store: Store<CreateAccountStepTwoState, CreateAccountStepTwoAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -61,7 +61,7 @@ struct CreateAccountViewStepTwo: View {
             viewStore.send(.onWillDisappear)
         }
         .navigationRoute(in: store)
-        .sheet(item: viewStore.binding(\.$fatalError)) { error in
+        .sheet(item: viewStore.$fatalError) { error in
             ErrorView(
                 ux: error,
                 navigationBarClose: true,
@@ -129,7 +129,7 @@ extension CreateAccountViewStepTwo {
     private var emailField: some View {
         let shouldShowError = viewStore.inputValidationState == .invalid(.invalidEmail)
         return Input(
-            text: viewStore.binding(\.$emailAddress),
+            text: viewStore.$emailAddress,
             isFirstResponder: $focusedEmail,
             shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.email,
@@ -149,7 +149,7 @@ extension CreateAccountViewStepTwo {
         let shouldShowError = viewStore.passwordRulesBreached.isNotEmpty
         return VStack {
             Input(
-                text: viewStore.binding(\.$password),
+                text: viewStore.$password,
                 isFirstResponder: $focusedPassword,
                 shouldResignFirstResponderOnReturn: true,
                 label: LocalizedString.TextFieldTitle.password,
@@ -160,7 +160,7 @@ extension CreateAccountViewStepTwo {
                 isSecure: !viewStore.passwordFieldTextVisible,
                 trailing: {
                     PasswordEyeSymbolButton(
-                        isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
+                        isPasswordVisible: viewStore.$passwordFieldTextVisible
                     )
                 }
             )
@@ -185,7 +185,7 @@ extension CreateAccountViewStepTwo {
     private var passwordConfirmationField: some View {
         let shouldShowError = viewStore.inputConfirmationValidationState == .invalid(.passwordsDontMatch)
         return Input(
-            text: viewStore.binding(\.$passwordConfirmation),
+            text: viewStore.$passwordConfirmation,
             isFirstResponder: $focusedPasswordConfirmation,
             shouldResignFirstResponderOnReturn: true,
             label: LocalizedString.TextFieldTitle.passwordConfirmation,
@@ -196,7 +196,7 @@ extension CreateAccountViewStepTwo {
             isSecure: !viewStore.passwordFieldTextVisible,
             trailing: {
                 PasswordEyeSymbolButton(
-                    isPasswordVisible: viewStore.binding(\.$passwordFieldTextVisible)
+                    isPasswordVisible: viewStore.$passwordFieldTextVisible
                 )
             }
         )
@@ -218,7 +218,7 @@ extension CreateAccountViewStepTwo {
 
     private var bakktTermsAgreementView: some View {
         HStack(spacing: Spacing.baseline) {
-            Toggle(isOn: viewStore.binding(\.$bakktTermsAccepted)) {}
+            Toggle(isOn: viewStore.$bakktTermsAccepted) {}
                 .labelsHidden()
                 .accessibility(identifier: AccessibilityIdentifier.bakktTermsOfServiceButton)
             bakktAgreementText
@@ -338,23 +338,25 @@ struct CreateAccountViewStepTwo_Previews: PreviewProvider {
 
     static var previews: some View {
         CreateAccountViewStepTwo(
-            store: .init(
+            store: Store(
                 initialState: .init(
                     context: .createWallet,
                     country: SearchableItem(id: "1", title: "US"),
                     countryState: SearchableItem(id: "1", title: "State"),
                     referralCode: "id1"
                 ),
-                reducer: CreateAccountStepTwoReducer(
-                    mainQueue: .main,
-                    passwordValidator: PasswordValidator(),
-                    externalAppOpener: ToLogAppOpener(),
-                    analyticsRecorder: NoOpAnalyticsRecorder(),
-                    walletRecoveryService: .noop,
-                    walletCreationService: .noop,
-                    walletFetcherService: .noop,
-                    recaptchaService: NoOpGoogleRecatpchaService()
-                )
+                reducer: {
+                    CreateAccountStepTwoReducer(
+                        mainQueue: .main,
+                        passwordValidator: PasswordValidator(),
+                        externalAppOpener: ToLogAppOpener(),
+                        analyticsRecorder: NoOpAnalyticsRecorder(),
+                        walletRecoveryService: .noop,
+                        walletCreationService: .noop,
+                        walletFetcherService: .noop,
+                        recaptchaService: NoOpGoogleRecatpchaService()
+                    )
+                }
             )
         )
     }

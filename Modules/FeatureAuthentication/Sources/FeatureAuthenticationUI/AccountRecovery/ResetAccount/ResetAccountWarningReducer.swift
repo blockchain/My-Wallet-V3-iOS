@@ -12,7 +12,7 @@ public enum ResetAccountWarningAction: Equatable {
 
 struct ResetAccountWarningState: Equatable {}
 
-struct ResetAccountWarningReducer: ReducerProtocol {
+struct ResetAccountWarningReducer: Reducer {
 
     typealias State = ResetAccountWarningState
     typealias Action = ResetAccountWarningAction
@@ -23,7 +23,7 @@ struct ResetAccountWarningReducer: ReducerProtocol {
         self.analyticsRecorder = analyticsRecorder
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onDisappear:

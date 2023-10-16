@@ -137,9 +137,9 @@ final class EnterAmountPageBuilder {
         }
 
         let enterAmount = SwapEnterAmountView(
-            store: .init(
+            store: Store(
                 initialState: .init(sourceInformation: sourceInformation, targetInformation: targetInformation),
-                reducer: swapEnterAmountReducer
+                reducer: { swapEnterAmountReducer }
             ))
             .app(app)
             .navigationTitle(LocalizationConstants.Swap.swap)
@@ -219,9 +219,9 @@ final class EnterAmountPageBuilder {
         )
 
         let enterAmount = SellEnterAmountView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: sellEnterAmountReducer
+                reducer: { sellEnterAmountReducer }
             ))
             .batch {
                 set(blockchain.ux.transaction.checkout.article.plain.navigation.bar.button.back.tap.then.pop, to: true)

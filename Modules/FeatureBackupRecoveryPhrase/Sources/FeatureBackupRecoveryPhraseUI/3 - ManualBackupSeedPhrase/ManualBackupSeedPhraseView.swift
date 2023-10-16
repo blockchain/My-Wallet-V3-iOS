@@ -12,7 +12,7 @@ public struct ManualBackupSeedPhraseView: View {
 
     public init(store: Store<ManualBackupSeedPhraseState, ManualBackupSeedPhraseAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -102,12 +102,14 @@ extension ManualBackupSeedPhraseView {
 struct ManualBackupSeedPhraseView_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
-            ManualBackupSeedPhraseView(store: .init(
+            ManualBackupSeedPhraseView(store: Store(
                 initialState: .init(),
-                reducer: ManualBackupSeedPhrase(
-                    onNext: {},
-                    recoveryPhraseVerifyingService: resolve()
-                )
+                reducer: {
+                    ManualBackupSeedPhrase(
+                        onNext: {},
+                        recoveryPhraseVerifyingService: resolve()
+                    )
+                }
             ))
         }
     }

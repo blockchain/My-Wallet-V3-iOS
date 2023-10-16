@@ -31,7 +31,7 @@ enum TradingLimitsAction: Equatable {
     case unlockTrading(UnlockTradingAction)
 }
 
-struct TradingLimitsReducer: ReducerProtocol {
+struct TradingLimitsReducer: Reducer {
 
     typealias State = TradingLimitsState
     typealias Action = TradingLimitsAction
@@ -60,30 +60,29 @@ struct TradingLimitsReducer: ReducerProtocol {
         self.mainQueue = mainQueue
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .close:
                 let currentTier = state.unlockTradingState?.currentUserTier
-                return .fireAndForget {
-                    if let currentTier {
-                        analyticsRecorder.record(
-                            event: Events.tradingLimitsDismissed(
-                                tier: currentTier.rawValue
-                            )
+                if let currentTier {
+                    analyticsRecorder.record(
+                        event: Events.tradingLimitsDismissed(
+                            tier: currentTier.rawValue
                         )
-                    }
-                    close()
+                    )
                 }
+                close()
+                return .none
 
             case .fetchLimits:
                 state.loading = true
-                return fetchLimitsOverview()
-                    .eraseToAnyPublisher()
-                    .catchToEffect()
-                    .map(TradingLimitsAction.didFetchLimits)
-                    .receive(on: mainQueue)
-                    .eraseToEffect()
+                return .publisher {
+                    fetchLimitsOverview()
+                        .receive(on: mainQueue)
+                        .map { .didFetchLimits(.success($0)) }
+                        .catch { .didFetchLimits(.failure($0)) }
+                }
 
             case .didFetchLimits(let result):
                 state.loading = false
@@ -139,7 +138,7 @@ struct TradingLimitsView: View {
 
     init(store: Store<TradingLimitsState, TradingLimitsAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -205,9 +204,8 @@ struct TradingLimitsView_Previews: PreviewProvider {
 
     static var previews: some View {
         TradingLimitsView(
-            store: .init(
-                initialState: TradingLimitsState(),
-                reducer: TradingLimitsReducer(
+            store: Store(initialState: TradingLimitsState()) {
+                TradingLimitsReducer(
                     close: {},
                     openURL: { _ in },
                     presentKYCFlow: { _ in },
@@ -220,7 +218,7 @@ struct TradingLimitsView_Previews: PreviewProvider {
                     },
                     analyticsRecorder: NoOpAnalyticsRecorder()
                 )
-            )
+            }
         )
     }
 }

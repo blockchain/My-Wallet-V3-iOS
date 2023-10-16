@@ -11,7 +11,7 @@ extension ImageLocation {
             return .image(named: name, in: bundle)
         case .systemName(let name):
             return .image(systemName: name)
-        case .remote(url: let url):
+        case .remote(url: let url, fallback: _):
             return .image(at: url, placeholder: nil)
         }
     }

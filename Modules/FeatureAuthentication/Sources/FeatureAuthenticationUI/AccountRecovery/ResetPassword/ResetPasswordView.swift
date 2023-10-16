@@ -41,7 +41,7 @@ struct ResetPasswordView: View {
         store: Store<ResetPasswordState, ResetPasswordAction>
     ) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -199,14 +199,16 @@ struct ResetPasswordView: View {
 struct ResetPasswordView_Previews: PreviewProvider {
     static var previews: some View {
         ResetPasswordView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: ResetPasswordReducer(
-                    mainQueue: .main,
-                    passwordValidator: PasswordValidator(),
-                    externalAppOpener: NoOpExternalAppOpener(),
-                    errorRecorder: NoOpErrorRecoder()
-                )
+                reducer: {
+                    ResetPasswordReducer(
+                        mainQueue: .main,
+                        passwordValidator: PasswordValidator(),
+                        externalAppOpener: NoOpExternalAppOpener(),
+                        errorRecorder: NoOpErrorRecoder()
+                    )
+                }
             )
         )
     }

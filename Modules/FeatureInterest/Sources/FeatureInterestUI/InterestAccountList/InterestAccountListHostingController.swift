@@ -25,9 +25,11 @@ public final class InterestAccountListHostingController: UIViewController, Inter
                         interestAccountDetails: .init(uniqueElements: []),
                         loadingStatus: .fetchingAccountStatus
                     ),
-                    reducer: InterestAccountListReducer(
-                        environment: InterestAccountSelectionEnvironment.default
-                    )
+                    reducer: {
+                        InterestAccountListReducer(
+                            environment: InterestAccountSelectionEnvironment.default
+                        )
+                    }
                 ),
                 embeddedInNavigationView: embeddedInNavigationView
             )

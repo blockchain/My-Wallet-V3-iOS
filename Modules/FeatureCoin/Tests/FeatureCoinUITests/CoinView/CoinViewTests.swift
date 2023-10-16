@@ -21,7 +21,7 @@ final class CoinViewTests: XCTestCase {
 //        try? XCTSkipIf(true)
 //        let coinView = PrimaryNavigationView {
 //            CoinView(
-//                store: .init(
+//                store: Store(
 //                    initialState: .init(
 //                        currency: .bitcoin,
 //                        kycStatus: .gold,
@@ -53,7 +53,7 @@ final class CoinViewTests: XCTestCase {
 //        try? XCTSkipIf(true)
 //        let coinView = PrimaryNavigationView {
 //            CoinView(
-//                store: .init(
+//                store: Store(
 //                    initialState: .init(
 //                        currency: .ethereum,
 //                        kycStatus: .silver,
@@ -85,7 +85,7 @@ final class CoinViewTests: XCTestCase {
 //        try? XCTSkipIf(true)
 //        let coinView = PrimaryNavigationView {
 //            CoinView(
-//                store: .init(
+//                store: Store(
 //                    initialState: .init(
 //                        currency: .bitcoin,
 //                        kycStatus: .unverified,
@@ -113,7 +113,7 @@ final class CoinViewTests: XCTestCase {
 //    func test_CoinView_Error() {
 //        let coinView = PrimaryNavigationView {
 //            CoinView(
-//                store: .init(
+//                store: Store(
 //                    initialState: .init(
 //                        currency: .bitcoin,
 //                        kycStatus: .unverified,
@@ -138,7 +138,7 @@ final class CoinViewTests: XCTestCase {
 //    func test_CoinView_Loading() {
 //        let coinView = PrimaryNavigationView {
 //            CoinView(
-//                store: .init(
+//                store: Store(
 //                    initialState: .init(
 //                        currency: .stellar,
 //                        graph: .init(isFetching: true)
@@ -158,7 +158,7 @@ final class CoinViewTests: XCTestCase {
 //        try? XCTSkipIf(true)
 //        let coinView = PrimaryNavigationView {
 //            CoinView(
-//                store: .init(
+//                store: Store(
 //                    initialState: .init(
 //                        currency: .nonTradable,
 //                        kycStatus: .unverified,

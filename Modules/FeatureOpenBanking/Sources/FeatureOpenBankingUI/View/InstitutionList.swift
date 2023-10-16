@@ -47,7 +47,7 @@ public enum InstitutionListRoute: CaseIterable, NavigationRoute {
     }
 }
 
-public struct InstitutionListReducer: ReducerProtocol {
+public struct InstitutionListReducer: Reducer {
     
     public typealias State = InstitutionListState
     public typealias Action = InstitutionListAction
@@ -58,24 +58,26 @@ public struct InstitutionListReducer: ReducerProtocol {
         self.environment = environment
     }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .route(let route):
                 state.route = route
                 return .none
             case .fetch:
-                return environment.openBanking
-                    .createBankAccount()
-                    .receive(on: environment.scheduler)
-                    .map(InstitutionListAction.fetched)
-                    .catch(InstitutionListAction.failure)
-                    .eraseToEffect()
+                return .publisher {
+                    environment.openBanking
+                        .createBankAccount()
+                        .receive(on: environment.scheduler)
+                        .map(InstitutionListAction.fetched)
+                        .catch(InstitutionListAction.failure)
+                }
             case .fetched(let account):
                 state.result = .success(account)
                 return .none
             case .showTransferDetails:
-                return .fireAndForget(environment.showTransferDetails)
+                environment.showTransferDetails()
+                return .none
             case .select(let account, let institution):
                 state.selection = .init(
                     data: .init(
@@ -85,7 +87,7 @@ public struct InstitutionListReducer: ReducerProtocol {
                 )
                 return .merge(
                     .navigate(to: .bank),
-                    .fireAndForget {
+                    .run { _ in
                         environment.analytics.record(
                             event: .linkBankSelected(institution: institution.name, account: account)
                         )
@@ -94,11 +96,12 @@ public struct InstitutionListReducer: ReducerProtocol {
             case .bank(.cancel):
                 state.route = nil
                 state.result = nil
-                return EffectTask(value: .fetch)
+                return Effect.send(.fetch)
             case .bank:
                 return .none
             case .dismiss:
-                return .fireAndForget(environment.dismiss)
+                environment.dismiss()
+                return .none
             case .failure(let error):
                 state.result = .failure(error)
                 return .none
@@ -124,7 +127,7 @@ public struct InstitutionList: View {
     }
 
     public var body: some View {
-        WithViewStore(store.scope(state: \.result)) { viewStore in
+        WithViewStore(store.scope(state: \.result, action: { $0 }), observe: { $0 }) { viewStore in
             ZStack {
                 switch viewStore.state {
                 case .success(let account) where account.attributes.institutions != nil:
@@ -167,7 +170,7 @@ public struct InstitutionList: View {
     }
 
     @ViewBuilder var NoSearchResults: some View {
-        WithViewStore(store) { view in
+        WithViewStore(store, observe: { $0 }) { view in
             Spacer()
             Text(Localization.InstitutionList.Error.couldNotFindBank)
                 .typography(.paragraph1)
@@ -240,12 +243,11 @@ struct InstitutionList_Previews: PreviewProvider {
     static var previews: some View {
         PrimaryNavigationView {
             InstitutionList(
-                store: Store<InstitutionListState, InstitutionListAction>(
-                    initialState: InstitutionListState(),
-                    reducer: InstitutionListReducer(
+                store: Store(initialState: InstitutionListState()) {
+                    InstitutionListReducer(
                         environment: .mock
                     )
-                )
+                }
             )
         }
 

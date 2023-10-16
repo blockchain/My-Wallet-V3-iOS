@@ -46,7 +46,7 @@ public enum WalletPersistenceAction: Equatable {
     case persisted(Result<EmptyValue, WalletRepoPersistenceError>)
 }
 
-public struct AppReducer: ReducerProtocol {
+public struct AppReducer: Reducer {
     
     public typealias State = AppState
     public typealias Action = AppAction
@@ -59,7 +59,7 @@ public struct AppReducer: ReducerProtocol {
         self.environment = environment
     }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Scope(state: \.appSettings, action: /AppAction.appDelegate) {
             AppDelegateReducer(
                 environment: AppDelegateEnvironment(
@@ -133,22 +133,22 @@ public struct AppReducer: ReducerProtocol {
     }
 }
 
-struct AppReducerCore: ReducerProtocol {
+struct AppReducerCore: Reducer {
 
     typealias State = AppState
     typealias Action = AppAction
 
     let environment: AppEnvironment
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .appDelegate(.didFinishLaunching):
-                return .init(value: .core(.start))
+                return .send(.core(.start))
             case .appDelegate(.didEnterBackground):
                 return .none
             case .appDelegate(.willEnterForeground):
-                return EffectTask(value: .core(.appForegrounded))
+                return Effect.send(.core(.appForegrounded))
             case .appDelegate(.handleDelayedEnterBackground):
                 if environment.openBanking.isAuthorising {
                     return .none
@@ -176,67 +176,69 @@ struct AppReducerCore: ReducerProtocol {
                 }
 
                 return .merge(
-                    .fireAndForget {
+                    .run { _ in
                         environment.walletStateProvider.releaseState()
                     },
-                    .fireAndForget {
-                        environment.urlSession.reset {
-                            Logger.shared.debug("URLSession reset completed.")
-                        }
+                    .run { _ in
+                        await environment.urlSession.reset()
+                        Logger.shared.debug("URLSession reset completed.")
                     }
                 )
             case .appDelegate(.userActivity(let activity)):
                 state.appSettings.userActivityHandled = environment.deeplinkAppHandler.canHandle(
                     deeplink: .userActivity(activity)
                 )
-                return environment.deeplinkAppHandler
-                    .handle(deeplink: .userActivity(activity))
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect()
-                    .cancellable(id: AppCancellations.DeeplinkId())
-                    .map { result in
-                        guard let data = result.success else {
-                            return AppAction.core(.none)
-                        }
-                        return AppAction.core(.deeplink(data))
+                let context = DeeplinkContext.userActivity(activity)
+                return .run { send in
+                    do {
+                        let data = try await environment.deeplinkAppHandler
+                            .handle(deeplink: context)
+                            .await()
+                        await send(AppAction.core(.deeplink(data)))
+                    } catch {
+                        await send(AppAction.core(.none))
                     }
+                }
+                .cancellable(id: AppCancellations.DeeplinkId())
             case .appDelegate(.open(let url)):
                 state.appSettings.urlHandled = environment.deeplinkAppHandler.canHandle(deeplink: .url(url))
-                return environment.deeplinkAppHandler
-                    .handle(deeplink: .url(url))
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect()
-                    .cancellable(id: AppCancellations.DeeplinkId())
-                    .map { result in
-                        guard let data = result.success else {
-                            return AppAction.core(.none)
-                        }
-                        return AppAction.core(.deeplink(data))
+                return .run { send in
+                    do {
+                        let data = try await environment.deeplinkAppHandler
+                            .handle(deeplink: .url(url))
+                            .receive(on: environment.mainQueue)
+                            .await()
+                        await send(AppAction.core(.deeplink(data)))
+                    } catch {
+                        await send(AppAction.core(.none))
                     }
+                }
+                .cancellable(id: AppCancellations.DeeplinkId())
             case .core(.onboarding(.forgetWallet)):
                 return .none
             case .core(.start):
                 return .merge(
-                    EffectTask(value: .walletPersistence(.begin)),
-                    EffectTask(value: .core(.onboarding(.start)))
+                    Effect.send(.walletPersistence(.begin)),
+                    Effect.send(.core(.onboarding(.start)))
                 )
             case .walletPersistence(.begin):
-                let crashlyticsRecorder = environment.crashlyticsRecorder
-                return environment.walletRepoPersistence
-                    .beginPersisting()
-                    .receive(on: environment.mainQueue)
-                    .catchToEffect()
-                    .cancellable(
-                        id: AppCancellations.WalletPersistenceId(),
-                        cancelInFlight: true
-                    )
-                    .map { AppAction.walletPersistence(.persisted($0.map { _ in EmptyValue.noValue })) }
+                return .publisher {
+                    environment.walletRepoPersistence
+                        .beginPersisting()
+                        .map { Action.walletPersistence(.persisted(.success(EmptyValue.noValue))) }
+                        .catch { Action.walletPersistence(.persisted(.failure($0))) }
+                        .receive(on: environment.mainQueue)
+                }
+                .cancellable(
+                    id: AppCancellations.WalletPersistenceId(),
+                    cancelInFlight: true
+                )
             case .walletPersistence(.persisted(.failure(let error))):
                 // record the error if we encounter one and restart the persistence
                 environment.crashlyticsRecorder.error(error)
                 return .concatenate(
                     .cancel(id: AppCancellations.WalletPersistenceId()),
-                    EffectTask(value: .walletPersistence(.begin))
+                    Effect.send(.walletPersistence(.begin))
                 )
             case .walletPersistence(.persisted(.success)):
                 return .none

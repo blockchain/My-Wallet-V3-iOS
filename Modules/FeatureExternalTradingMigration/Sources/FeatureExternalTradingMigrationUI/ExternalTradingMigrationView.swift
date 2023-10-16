@@ -15,18 +15,27 @@ public struct ExternalTradingMigrationView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
-            Group {
-                content
-                    .sheet(
-                        isPresented: viewStore.$migrationInProgressPresented,
-                        content: {
+        Group {
+            content
+                .sheet(
+                    isPresented: viewStore.$migrationInProgressPresented,
+                    content: {
                         BakktMigrationInProgressView(onDone: {
                             viewStore.send(.onFlowComplete)
-                            })
-                        }
-                    )
-            }
+                        })
+                    }
+                )
+                .sheet(item: viewStore.$upgradeError) { error in
+                    PrimaryNavigationView {
+                        ErrorView(
+                            ux: error,
+                            dismiss: {
+                                viewStore.send(.onFlowDismiss)
+                            }
+                        )
+                        .interactiveDismissDisabled()
+                    }
+                }
         }
     }
 
@@ -49,7 +58,10 @@ public struct ExternalTradingMigrationView: View {
 
     @ViewBuilder var existingUserNoAssetsFlowView: some View {
         BakktTermsAndConditionsView(
-            onDone: {}
+            onDone: {
+                viewStore.send(.onUpgrade)
+            },
+            isLoading: viewStore.isSubmittingMigration
         )
     }
 
@@ -59,7 +71,8 @@ public struct ExternalTradingMigrationView: View {
             onDone: {
                 viewStore.send(.onUpgrade)
             },
-            onContinue: nil
+            onContinue: nil,
+            isLoading: viewStore.isSubmittingMigration
         )
     }
 
@@ -70,7 +83,8 @@ public struct ExternalTradingMigrationView: View {
                 onDone: nil,
                 onContinue: {
                     viewStore.send(.onContinue)
-                }
+                },
+                isLoading: viewStore.isSubmittingMigration
             )
 
             assetMigrationInfoNavigationLink
@@ -78,17 +92,20 @@ public struct ExternalTradingMigrationView: View {
     }
 
     @ViewBuilder var assetMigrationInfoNavigationLink: some View {
-        if let migrationInfo = viewStore.migrationInfo {
+        if let migrationInfo = viewStore.migrationInfo,
+           let consolidationBalances = migrationInfo.consolidatedBalances
+        {
             NavigationLink(
                 destination: BakktAssetMigrationView(
-                    beforeMigrationBalances: migrationInfo.consolidatedBalances.beforeMigration,
-                    afterMigrationBalance: migrationInfo.consolidatedBalances.afterMigration,
+                    beforeMigrationBalances: consolidationBalances.beforeMigration,
+                    afterMigrationBalance: consolidationBalances.afterMigration,
                     onDone: {
                         viewStore.send(.onUpgrade)
                     },
                     onGoBack: {
                         viewStore.send(.setNavigation(isActive: false))
-                    }
+                    },
+                    isLoading: viewStore.isSubmittingMigration
                 ),
                 isActive: viewStore.binding(
                     get: \.showConsolidatedAssets,
@@ -103,23 +120,29 @@ public struct ExternalTradingMigrationView: View {
 struct ExternalTradingMigrationView_Preview: PreviewProvider {
     static var previews: some View {
         ExternalTradingMigrationView(
-            store: .init(
+            store: Store(
                 initialState: .init(flow: .existingUserAssetsNoConsolidationNeeded),
-                reducer: ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                reducer: {
+                    ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                }
             )
         )
 
         ExternalTradingMigrationView(
-            store: .init(
+            store: Store(
                 initialState: .init(flow: .existingUsersNoAssets),
-                reducer: ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                reducer: {
+                    ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                }
             )
         )
 
         ExternalTradingMigrationView(
-            store: .init(
+            store: Store(
                 initialState: .init(flow: .existingUserAssetsConsolidationNeeded),
-                reducer: ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                reducer: {
+                    ExternalTradingMigration(app: App.preview, externalTradingMigrationService: ExternalTradingMigrationServiceMock())
+                }
             )
         )
     }

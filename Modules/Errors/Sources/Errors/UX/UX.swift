@@ -7,7 +7,7 @@ import OrderedCollections
 // swiftlint:disable type_name
 public enum UX {
 
-    public struct Error: Swift.Error {
+    public struct Error: Swift.Error, Identifiable {
 
         public typealias Metadata = OrderedDictionary<String, String>
 

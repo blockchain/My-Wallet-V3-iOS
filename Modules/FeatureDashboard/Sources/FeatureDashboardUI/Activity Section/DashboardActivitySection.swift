@@ -10,7 +10,7 @@ import MoneyKit
 import SwiftUI
 import UnifiedActivityDomain
 
-public struct DashboardActivitySection: ReducerProtocol {
+public struct DashboardActivitySection: Reducer {
     enum ViewState {
         case idle
         case empty
@@ -58,21 +58,25 @@ public struct DashboardActivitySection: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
                 state.viewState = .loading
                 if state.presentedAssetType.isCustodial {
-                    return custodialActivityRepository
-                        .activity()
-                        .receive(on: DispatchQueue.main)
-                        .eraseToEffect { .onActivityFetched($0) }
+                    return .publisher {
+                        custodialActivityRepository
+                            .activity()
+                            .receive(on: DispatchQueue.main)
+                            .map { .onActivityFetched($0) }
+                    }
                 } else {
-                    return activityRepository
-                        .activity
-                        .receive(on: DispatchQueue.main)
-                        .eraseToEffect { .onActivityFetched(.success($0)) }
+                    return .publisher {
+                        activityRepository
+                            .activity
+                            .receive(on: DispatchQueue.main)
+                            .map { .onActivityFetched(.success($0)) }
+                    }
                 }
 
             case .onAllActivityTapped:

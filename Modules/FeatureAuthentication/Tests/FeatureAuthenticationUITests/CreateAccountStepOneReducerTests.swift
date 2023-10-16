@@ -11,14 +11,11 @@ import ToolKitMock
 import UIComponentsKit
 import XCTest
 
-final class CreateAccountStepOneReducerTests: XCTestCase {
+@MainActor final class CreateAccountStepOneReducerTests: XCTestCase {
 
     private var testStore: TestStore<
         CreateAccountStepOneState,
-        CreateAccountStepOneAction,
-        CreateAccountStepOneState,
-        CreateAccountStepOneAction,
-        Void
+        CreateAccountStepOneAction
     >!
     private let mainScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
 
@@ -26,18 +23,20 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
         try super.setUpWithError()
         testStore = TestStore(
             initialState: CreateAccountStepOneState(context: .createWallet),
-            reducer: CreateAccountStepOneReducer(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                passwordValidator: PasswordValidator(),
-                externalAppOpener: MockExternalAppOpener(),
-                analyticsRecorder: MockAnalyticsRecorder(),
-                walletRecoveryService: .mock(),
-                walletCreationService: .mock(),
-                walletFetcherService: WalletFetcherServiceMock().mock(),
-                signUpCountriesService: MockSignUpCountriesService(),
-                recaptchaService: MockRecaptchaService(),
-                app: App.test
-            )
+            reducer: {
+                CreateAccountStepOneReducer(
+                    mainQueue: mainScheduler.eraseToAnyScheduler(),
+                    passwordValidator: PasswordValidator(),
+                    externalAppOpener: MockExternalAppOpener(),
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    walletRecoveryService: .mock(),
+                    walletCreationService: .mock(),
+                    walletFetcherService: WalletFetcherServiceMock().mock(),
+                    signUpCountriesService: MockSignUpCountriesService(),
+                    recaptchaService: MockRecaptchaService(),
+                    app: App.test
+                )
+            }
         )
     }
 
@@ -46,78 +45,80 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
         try super.tearDownWithError()
     }
 
-    func test_tapping_next_validates_input_invalidCountry() throws {
+    func test_tapping_next_validates_input_invalidCountry() async throws {
         // GIVEN: The form is invalid
         // WHEN: The user taps on the Next button in either part of the UI
-        testStore.send(.nextStepButtonTapped) {
+        await testStore.send(.nextStepButtonTapped) {
             $0.validatingInput = true
             $0.isGoingToNextStep = true
         }
         // THEN: The form is validated
-        mainScheduler.advance() // let the validation complete
+        await mainScheduler.advance() // let the validation complete
         // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.invalid(.noCountrySelected))) {
+        await testStore.receive(.didUpdateInputValidation(.invalid(.noCountrySelected))) {
             $0.validatingInput = false
             $0.inputValidationState = .invalid(.noCountrySelected)
         }
-        testStore.receive(.didUpdateReferralValidation(.unknown))
-        testStore.receive(.didValidateAfterFormSubmission)
+        await testStore.receive(.didUpdateReferralValidation(.unknown))
+        await testStore.receive(.didValidateAfterFormSubmission)
     }
 
-    func test_tapping_next_validates_input_invalidState() throws {
+    func test_tapping_next_validates_input_invalidState() async throws {
         // GIVEN: The form is invalid
-        fillFormCountryField()
+        await fillFormCountryField()
         // WHEN: The user taps on the Next button in either part of the UI
-        testStore.send(.nextStepButtonTapped) {
+        await testStore.send(.nextStepButtonTapped) {
             $0.validatingInput = true
             $0.isGoingToNextStep = true
         }
         // THEN: The form is validated
-        mainScheduler.advance() // let the validation complete
+        await mainScheduler.advance() // let the validation complete
         // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.invalid(.noCountryStateSelected))) {
+        await testStore.receive(.didUpdateInputValidation(.invalid(.noCountryStateSelected))) {
             $0.validatingInput = false
             $0.inputValidationState = .invalid(.noCountryStateSelected)
         }
-        testStore.receive(.didUpdateReferralValidation(.unknown))
-        testStore.receive(.didValidateAfterFormSubmission)
+        await testStore.receive(.didUpdateReferralValidation(.unknown))
+        await testStore.receive(.didValidateAfterFormSubmission)
     }
 
-    func test_tapping_next_goes_to_next_step_form() throws {
+    func test_tapping_next_goes_to_next_step_form() async throws {
         testStore = TestStore(
             initialState: CreateAccountStepOneState(context: .createWallet),
-            reducer: CreateAccountStepOneReducer(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                passwordValidator: PasswordValidator(),
-                externalAppOpener: MockExternalAppOpener(),
-                analyticsRecorder: MockAnalyticsRecorder(),
-                walletRecoveryService: .mock(),
-                walletCreationService: .failing(),
-                walletFetcherService: WalletFetcherServiceMock().mock(),
-                signUpCountriesService: MockSignUpCountriesService(),
-                recaptchaService: MockRecaptchaService(),
-                app: App.test
-            )
+            reducer: {
+                CreateAccountStepOneReducer(
+                    mainQueue: mainScheduler.eraseToAnyScheduler(),
+                    passwordValidator: PasswordValidator(),
+                    externalAppOpener: MockExternalAppOpener(),
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    walletRecoveryService: .mock(),
+                    walletCreationService: .failing(),
+                    walletFetcherService: WalletFetcherServiceMock().mock(),
+                    signUpCountriesService: MockSignUpCountriesService(),
+                    recaptchaService: MockRecaptchaService(),
+                    app: App.test
+                )
+            }
         )
         // GIVEN: The form is valid
-        fillFormWithValidData()
+        await fillFormWithValidData()
         // WHEN: The user taps on the Next button in either part of the UI
-        testStore.send(.nextStepButtonTapped) {
+        await testStore.send(.nextStepButtonTapped) {
             $0.validatingInput = true
             $0.isGoingToNextStep = true
         }
         // THEN: The form is validated
-        mainScheduler.advance() // let the validation complete
+        await mainScheduler.advance() // let the validation complete
         // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.valid)) {
+        await testStore.receive(.didUpdateInputValidation(.valid)) {
             $0.validatingInput = false
             $0.inputValidationState = .valid
         }
-        testStore.receive(.didUpdateReferralValidation(.unknown))
-        testStore.receive(.didValidateAfterFormSubmission)
+        await testStore.receive(.didUpdateReferralValidation(.unknown))
+        await testStore.receive(.didValidateAfterFormSubmission)
         // AND: The form submission creates an account
-        testStore.receive(.goToStepTwo)
-        testStore.receive(.route(.navigate(to: .createWalletStepTwo))) {
+        await testStore.receive(.goToStepTwo)
+        await testStore.receive(.route(.navigate(to: .createWalletStepTwo))) {
             $0.route = RouteIntent(route: .createWalletStepTwo, action: .navigateTo)
             $0.createWalletStateStepTwo = .init(
                 context: .createWallet,
@@ -130,26 +131,26 @@ final class CreateAccountStepOneReducerTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func fillFormWithValidData() {
-        fillFormCountryField()
-        fillFormCountryStateField()
+    private func fillFormWithValidData() async {
+        await fillFormCountryField()
+        await fillFormCountryStateField()
     }
 
-    private func fillFormCountryField(country: SearchableItem<String> = .init(id: "US", title: "United States")) {
-        testStore.send(.binding(.set(\.$country, country))) {
+    private func fillFormCountryField(country: SearchableItem<String> = .init(id: "US", title: "United States")) async {
+        await testStore.send(.binding(.set(\.$country, country))) {
             $0.country = country
         }
-        testStore.receive(.didUpdateInputValidation(.unknown))
-        testStore.receive(.binding(.set(\.$selectedAddressSegmentPicker, nil)))
-        testStore.receive(.route(nil))
+        await testStore.receive(.didUpdateInputValidation(.unknown))
+        await testStore.receive(.binding(.set(\.$selectedAddressSegmentPicker, nil)))
+        await testStore.receive(.route(nil))
     }
 
-    private func fillFormCountryStateField(state: SearchableItem<String> = SearchableItem(id: "FL", title: "Florida")) {
-        testStore.send(.binding(.set(\.$countryState, state))) {
+    private func fillFormCountryStateField(state: SearchableItem<String> = SearchableItem(id: "FL", title: "Florida")) async {
+        await testStore.send(.binding(.set(\.$countryState, state))) {
             $0.countryState = state
         }
-        testStore.receive(.didUpdateInputValidation(.unknown))
-        testStore.receive(.binding(.set(\.$selectedAddressSegmentPicker, nil)))
-        testStore.receive(.route(nil))
+        await testStore.receive(.didUpdateInputValidation(.unknown))
+        await testStore.receive(.binding(.set(\.$selectedAddressSegmentPicker, nil)))
+        await testStore.receive(.route(nil))
     }
 }

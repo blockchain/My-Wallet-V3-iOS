@@ -14,9 +14,9 @@ struct PersonalInfoView: View {
     let store: Store<PersonalInfo.State, PersonalInfo.Action>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             PrimaryForm(
-                form: viewStore.binding(\.$form),
+                form: viewStore.$form,
                 submitActionTitle: LocalizedStrings.submitActionTitle,
                 submitActionLoading: viewStore.formSubmissionState == .loading,
                 submitAction: {

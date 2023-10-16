@@ -59,7 +59,7 @@ public struct SwapEnterAmountView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
-        .sheet(isPresented: viewStore.binding(\.$showAccountSelect), content: {
+        .sheet(isPresented: viewStore.$showAccountSelect, content: {
             IfLetStore(
                 store.scope(
                     state: \.selectFromCryptoAccountState,
@@ -82,13 +82,13 @@ public struct SwapEnterAmountView: View {
         })
         .bindings {
             subscribe(
-                viewStore.binding(\.$sourceValuePrice),
+                viewStore.$sourceValuePrice,
                 to: blockchain.api.nabu.gateway.price.crypto[viewStore.sourceInformation?.currency.code].fiat[{ blockchain.user.currency.preferred.fiat.trading.currency }].quote.value
             )
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$defaultFiatCurrency),
+                viewStore.$defaultFiatCurrency,
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
         }

@@ -5,18 +5,10 @@ import ComposableArchitecture
 import DIKit
 @testable import FeatureTourUI
 import MoneyKit
-import PlatformKit
 import SnapshotTesting
 import XCTest
 
 final class TourViewTests: XCTestCase {
-
-    override static func setUp() {
-        super.setUp()
-        DependencyContainer.defined(by: modules {
-            DependencyContainer.mockDependencyContainer
-        })
-    }
 
     override func setUp() {
         _ = App.preview

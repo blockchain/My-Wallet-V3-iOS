@@ -47,7 +47,7 @@ enum PersonalInfo {
         case onViewAppear
     }
 
-    struct Reducer: ReducerProtocol {
+    struct PersonalInfoReducer: Reducer {
 
         typealias State = PersonalInfo.State
         typealias Action = PersonalInfo.Action
@@ -59,7 +59,7 @@ enum PersonalInfo {
         let analyticsRecorder: AnalyticsEventRecorderAPI // TODO: use me
         let mainQueue: AnySchedulerOf<DispatchQueue>
 
-        var body: some ReducerProtocol<State, Action> {
+        var body: some Reducer<State, Action> {
             BindingReducer()
             Reduce { state, action in
                 switch action {
@@ -67,14 +67,16 @@ enum PersonalInfo {
                     return .none
 
                 case .close:
-                    return .fireAndForget(onClose)
+                    onClose()
+                    return .none
 
                 case .loadForm:
-                    return loadForm()
-                        .catchToEffect()
-                        .map(Action.formDidLoad)
-                        .receive(on: mainQueue)
-                        .eraseToEffect()
+                    return .publisher {
+                        loadForm()
+                            .receive(on: mainQueue)
+                            .map { .formDidLoad(.success($0)) }
+                            .catch { .formDidLoad(.failure($0)) }
+                    }
 
                 case .formDidLoad(let result):
                     switch result {
@@ -98,18 +100,20 @@ enum PersonalInfo {
                         return .none
                     }
                     state.formSubmissionState = .loading
-                    return submitForm(state.form)
-                        .map(Empty.init)
-                        .catchToEffect()
-                        .map(Action.submissionResultReceived)
-                        .receive(on: mainQueue)
-                        .eraseToEffect()
+                    return .publisher { [form = state.form] in
+                        submitForm(form)
+                            .map(Empty.init)
+                            .receive(on: mainQueue)
+                            .map { .submissionResultReceived(.success($0)) }
+                            .catch { .submissionResultReceived(.failure($0)) }
+                    }
 
                 case .submissionResultReceived(let result):
                     switch result {
                     case .success:
                         state.formSubmissionState = .success(Empty())
-                        return .fireAndForget(onComplete)
+                        onComplete()
+                        return .none
 
                     case .failure(let error):
                         state.formSubmissionState = .failure(
@@ -138,7 +142,7 @@ enum PersonalInfo {
                     guard state.form.isEmpty else {
                         return .none
                     }
-                    return EffectTask(value: .loadForm)
+                    return Effect.send(.loadForm)
                 }
             }
         }
@@ -147,29 +151,27 @@ enum PersonalInfo {
 
 extension Store where State == PersonalInfo.State, Action == PersonalInfo.Action {
 
-    static let emptyPreview = Store(
-        initialState: PersonalInfo.State(),
-        reducer: PersonalInfo.Reducer(
-            onClose: {},
-            onComplete: {},
-            loadForm: {
-                .just(
-                    FormQuestion.personalInfoQuestions(
-                        firstName: nil,
-                        lastName: nil,
-                        dateOfBirth: nil
-                    )
-                )
-            },
-            submitForm: { _ in .empty() },
-            analyticsRecorder: NoOpAnalyticsRecorder(),
-            mainQueue: .main
-        )
-    )
+    static let emptyPreview = Store(initialState: PersonalInfo.State()) {
+        PersonalInfo.PersonalInfoReducer(
+           onClose: {},
+           onComplete: {},
+           loadForm: {
+               .just(
+                   FormQuestion.personalInfoQuestions(
+                       firstName: nil,
+                       lastName: nil,
+                       dateOfBirth: nil
+                   )
+               )
+           },
+           submitForm: { _ in .empty() },
+           analyticsRecorder: NoOpAnalyticsRecorder(),
+           mainQueue: .main
+       )
+    }
 
-    static let filledPreview = Store(
-        initialState: PersonalInfo.State(),
-        reducer: PersonalInfo.Reducer(
+    static let filledPreview = Store(initialState: PersonalInfo.State()) {
+        PersonalInfo.PersonalInfoReducer(
             onClose: {},
             onComplete: {},
             loadForm: {
@@ -185,7 +187,7 @@ extension Store where State == PersonalInfo.State, Action == PersonalInfo.Action
             analyticsRecorder: NoOpAnalyticsRecorder(),
             mainQueue: .main
         )
-    )
+    }
 }
 
 extension FormQuestion {

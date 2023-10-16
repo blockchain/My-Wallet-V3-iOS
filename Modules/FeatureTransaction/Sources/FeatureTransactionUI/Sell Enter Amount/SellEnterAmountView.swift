@@ -20,7 +20,7 @@ public struct SellEnterAmountView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
                 Color.semantic.light
                 VStack {
@@ -74,7 +74,7 @@ public struct SellEnterAmountView: View {
             }
             .bindings {
                 subscribe(
-                    viewStore.binding(\.$defaultFiatCurrency),
+                    viewStore.$defaultFiatCurrency,
                     to: blockchain.user.currency.preferred.fiat.trading.currency
                 )
             }

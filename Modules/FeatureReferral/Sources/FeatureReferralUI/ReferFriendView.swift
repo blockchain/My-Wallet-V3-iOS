@@ -18,7 +18,7 @@ public struct ReferFriendView: View {
 
     public init(store: Store<ReferFriendState, ReferFriendAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var referral: Referral { viewStore.referralInfo }
@@ -59,7 +59,7 @@ public struct ReferFriendView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
-        .sheet(isPresented: viewStore.binding(\.$isShareModalPresented)) {
+        .sheet(isPresented: viewStore.$isShareModalPresented) {
             ActivityViewController(
                 itemsToShare: [
                     ActivityItemSource(

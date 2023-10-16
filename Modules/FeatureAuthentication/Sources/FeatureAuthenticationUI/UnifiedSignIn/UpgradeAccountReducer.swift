@@ -56,7 +56,7 @@ public struct UpgradeAccountState: NavigationState {
     }
 }
 
-struct UpgradeAccountReducer: ReducerProtocol {
+struct UpgradeAccountReducer: Reducer {
 
     typealias State = UpgradeAccountState
     typealias Action = UpgradeAccountAction
@@ -123,7 +123,7 @@ struct UpgradeAccountReducer: ReducerProtocol {
         self.appStoreInformationRepository = appStoreInformationRepository
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
 

@@ -1,5 +1,6 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import Extensions
 import Localization
 
 extension LocalizationConstants {
@@ -13,6 +14,7 @@ extension LocalizationConstants {
         enum Label {}
         enum Link {}
         enum News {}
+        enum Migration {}
     }
 }
 
@@ -352,6 +354,34 @@ extension LocalizationConstants.Coin.Graph {
         static let retry = NSLocalizedString(
             "Retry",
             comment: "Coin View Graph: Retry on failure CTA"
+        )
+    }
+}
+
+extension LocalizationConstants.Coin.Migration {
+    static func title(currency: String) -> String {
+        NSLocalizedString(
+            "%@ has migrated",
+            comment: "Coin View Migration: title"
+        )
+        .interpolating(currency)
+    }
+
+    static func message(
+        oldCurrency: String,
+        newCurrency: String
+    ) -> String {
+        NSLocalizedString(
+            "%@ is now %@. View your balance in %@.",
+            comment: "Coin View Migraton: message"
+        )
+        .interpolating(oldCurrency, newCurrency, newCurrency)
+    }
+
+    static var viewButton: String {
+        NSLocalizedString(
+            "View",
+            comment: "Coin View button: View"
         )
     }
 }

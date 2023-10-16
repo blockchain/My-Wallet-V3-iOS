@@ -3,7 +3,7 @@
 import BlockchainUI
 import SwiftUI
 
-public struct DexConfirmation: ReducerProtocol {
+public struct DexConfirmation: Reducer {
 
     @Dependency(\.dexService) var dexService
 
@@ -13,7 +13,7 @@ public struct DexConfirmation: ReducerProtocol {
         self.app = app
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {

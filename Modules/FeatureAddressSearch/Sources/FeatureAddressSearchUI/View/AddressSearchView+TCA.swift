@@ -69,7 +69,7 @@ struct AddressSearchState: Equatable, NavigationState {
 
 struct AddressSearchEnvironment {}
 
-struct AddressSearchReducer: ReducerProtocol {
+struct AddressSearchReducer: Reducer {
 
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let config: AddressSearchFeatureConfig
@@ -94,13 +94,13 @@ struct AddressSearchReducer: ReducerProtocol {
     typealias State = AddressSearchState
     typealias Action = AddressSearchAction
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .binding(\.$searchText):
-                return EffectTask(
-                    value: .searchAddresses(
+                return Effect.send(
+                    .searchAddresses(
                         searchText: state.searchText,
                         country: state.address?.country
                     )
@@ -108,7 +108,7 @@ struct AddressSearchReducer: ReducerProtocol {
 
             case .selectAddress(let searchAddressResult):
                 if searchAddressResult.isAddressType {
-                    return EffectTask(value: .modifySelectedAddress(addressId: searchAddressResult.addressId))
+                    return Effect.send(.modifySelectedAddress(addressId: searchAddressResult.addressId))
                 } else {
                     let searchText = (searchAddressResult.text ?? "") + " "
                     state.searchText = searchText
@@ -116,8 +116,8 @@ struct AddressSearchReducer: ReducerProtocol {
                         containerId: searchAddressResult.addressId,
                         searchText: searchText
                     )
-                    return EffectTask(
-                        value: .searchAddresses(
+                    return Effect.send(
+                        .searchAddresses(
                             searchText: state.searchText,
                             country: state.address?.country
                         )
@@ -125,16 +125,16 @@ struct AddressSearchReducer: ReducerProtocol {
                 }
 
             case .modifySelectedAddress(let addressId):
-                return EffectTask(
-                    value: .navigate(to: .modifyAddress(
+                return Effect.send(
+                    .navigate(to: .modifyAddress(
                         selectedAddressId: addressId,
                         address: state.address
                     ))
                 )
 
             case .modifyAddress:
-                return EffectTask(
-                    value: .navigate(to: .modifyAddress(
+                return Effect.send(
+                    .navigate(to: .modifyAddress(
                         selectedAddressId: nil,
                         address: state.address
                     ))
@@ -146,8 +146,8 @@ struct AddressSearchReducer: ReducerProtocol {
                 guard state.address == .none else {
                     if state.searchResults.isEmpty {
                         state.containerSearch = nil
-                        return EffectTask(
-                            value: .searchAddresses(
+                        return Effect.send(
+                            .searchAddresses(
                                 searchText: state.address?.searchText,
                                 country: state.address?.country
                             )
@@ -185,15 +185,14 @@ struct AddressSearchReducer: ReducerProtocol {
 
             case .updateSelectedAddress(let address):
                 state.address = address
-                return EffectTask(value: .complete(.saved(address)))
+                return Effect.send(.complete(.saved(address)))
 
             case .cancelSearch:
-                return EffectTask(value: .complete(.abandoned))
+                return Effect.send(.complete(.abandoned))
 
             case .complete(let addressResult):
-                return .fireAndForget {
-                    onComplete(addressResult)
-                }
+                onComplete(addressResult)
+                return .none
 
             case .searchAddresses(let searchText, let country):
                 guard let searchText, searchText.isNotEmpty,
@@ -210,23 +209,23 @@ struct AddressSearchReducer: ReducerProtocol {
                     }
                 }
                 state.isSearchResultsLoading = true
-                return addressSearchService
-                    .fetchAddresses(
-                        searchText: searchText,
-                        containerId: state.containerSearch?.containerId,
-                        countryCode: country,
-                        sateCode: state.address?.state
-                    )
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .debounce(
-                        id: AddressSearchIdentifier(),
-                        for: .milliseconds(AddressSearchDebounceInMilliseconds),
-                        scheduler: mainQueue
-                    )
-                    .map { result in
-                            .didReceiveAddressesResult(result)
-                    }
+                return .publisher { [state] in
+                    addressSearchService
+                        .fetchAddresses(
+                            searchText: searchText,
+                            containerId: state.containerSearch?.containerId,
+                            countryCode: country,
+                            sateCode: state.address?.state
+                        )
+                        .receive(on: mainQueue)
+                        .map { .didReceiveAddressesResult(.success($0)) }
+                        .catch { .didReceiveAddressesResult(.failure($0)) }
+                }
+                .debounce(
+                    id: AddressSearchIdentifier(),
+                    for: .milliseconds(AddressSearchDebounceInMilliseconds),
+                    scheduler: mainQueue
+                )
 
             case .didReceiveAddressesResult(let result):
                 state.isSearchResultsLoading = false
@@ -243,12 +242,12 @@ struct AddressSearchReducer: ReducerProtocol {
                 case .updateAddressResponse(.success(let address)):
                     state.address = address
                     return .merge(
-                        EffectTask(value: .dismiss()),
-                        EffectTask(value: .updateSelectedAddress(address))
+                        Effect.send(.dismiss()),
+                        Effect.send(.updateSelectedAddress(address))
                     )
                 case .cancelEdit:
                     return .none
-                case .stateDoesNotMatch:
+                case .alert(.presented(.stateDoesNotMatch)):
                     state.route = nil
                     return .none
                 default:

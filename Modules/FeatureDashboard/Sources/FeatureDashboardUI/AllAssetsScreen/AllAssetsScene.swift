@@ -6,7 +6,7 @@ import MoneyKit
 import SwiftExtensions
 import ToolKit
 
-public struct AllAssetsScene: ReducerProtocol {
+public struct AllAssetsScene: Reducer {
     public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     public let app: AppProtocol
     public init(
@@ -56,7 +56,7 @@ public struct AllAssetsScene: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -66,21 +66,22 @@ public struct AllAssetsScene: ReducerProtocol {
                     as: Bool.self,
                     or: false
                 )
-                return app
-                    .publisher(
-                        for: blockchain.user.currency.preferred.fiat.display.currency,
-                        as: FiatCurrency.self
-                    )
-                    .compactMap(\.value)
-                    .flatMap { [state] fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
-                        let cryptoPublisher = state.presentedAssetType.isCustodial
-                        ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
-                        : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
-                        return cryptoPublisher
-                    }
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect()
-                    .map(Action.onBalancesFetched)
+                return .publisher { [state] in
+                    app
+                        .publisher(
+                            for: blockchain.user.currency.preferred.fiat.display.currency,
+                            as: FiatCurrency.self
+                        )
+                        .compactMap(\.value)
+                        .flatMap { fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
+                            let cryptoPublisher = state.presentedAssetType.isCustodial
+                            ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
+                            : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
+                            return cryptoPublisher
+                        }
+                        .receive(on: DispatchQueue.main)
+                        .map(Action.onBalancesFetched)
+                }
 
             case .binding(\.$searchText):
                 return .none
@@ -100,13 +101,12 @@ public struct AllAssetsScene: ReducerProtocol {
                 return .none
 
             case .onAssetTapped(let assetInfo):
-                return .fireAndForget {
-                    app.post(
-                        action: blockchain.ux.asset[assetInfo.currency.code].select.then.enter.into,
-                        value: blockchain.ux.asset[assetInfo.currency.code],
-                        context: [blockchain.ux.asset.select.origin: "ASSETS"]
-                    )
-                }
+                app.post(
+                    action: blockchain.ux.asset[assetInfo.currency.code].select.then.enter.into,
+                    value: blockchain.ux.asset[assetInfo.currency.code],
+                    context: [blockchain.ux.asset.select.origin: "ASSETS"]
+                )
+                return .none
 
             case .onConfirmFilterTapped:
                 state.filterPresented = false
@@ -118,7 +118,7 @@ public struct AllAssetsScene: ReducerProtocol {
                 return .none
 
             case .binding(\.$showSmallBalances):
-                return .fireAndForget { [state] in
+                return .run { [state] _ in
                     app.post(value: state.showSmallBalances, of: state.presentedAssetType.smallBalanceFilterTag)
                 }
 

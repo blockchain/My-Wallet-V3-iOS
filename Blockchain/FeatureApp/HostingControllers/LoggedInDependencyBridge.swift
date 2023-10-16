@@ -85,7 +85,6 @@ final class LoggedInDependencyBridge: LoggedInDependencyBridgeAPI {
 }
 
 final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
-
     private var wrapped: LoggedInBridge = SignedOutDependencyBridge()
 
     func register(bridge: LoggedInBridge) {
@@ -115,9 +114,11 @@ final class DynamicDependencyBridge: UIViewController, LoggedInBridge {
     func handleSupport() { wrapped.handleSupport() }
     func handleSecureChannel() { wrapped.handleSecureChannel() }
     func logoutAndForgetWallet() { wrapped.logoutAndForgetWallet() }
+    func exitToPinScreen() { wrapped.exitToPinScreen() }
 }
 
 class SignedOutDependencyBridge: UIViewController, LoggedInBridge {
+    func exitToPinScreen() {}
     func send(from account: BlockchainAccount) {}
     func send(from account: BlockchainAccount, target: TransactionTarget) {}
     func sign(from account: BlockchainAccount, target: TransactionTarget) {}

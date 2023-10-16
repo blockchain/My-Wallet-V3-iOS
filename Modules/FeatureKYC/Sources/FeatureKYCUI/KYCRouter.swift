@@ -490,10 +490,14 @@ final class KYCRouter: KYCRouterAPI {
             EmailVerificationView(
                 store: .init(
                     initialState: .init(emailAddress: emailAddress),
-                    reducer: buildEmailVerificationReducer(
-                        emailAddress: emailAddress,
-                        flowCompletion: flowCompletion
-                    )
+                    reducer: {
+                        buildEmailVerificationReducer(
+                            emailAddress: emailAddress,
+                            flowCompletion: flowCompletion,
+                            mainQueue: .main,
+                            pollingQueue: DispatchQueue.global(qos: .background).eraseToAnyScheduler()
+                        )
+                    }
                 )
             )
         )
@@ -501,20 +505,24 @@ final class KYCRouter: KYCRouterAPI {
 
     private func buildEmailVerificationReducer(
         emailAddress: String,
-        flowCompletion: @escaping (FlowResult) -> Void
+        flowCompletion: @escaping (FlowResult) -> Void,
+        mainQueue: AnySchedulerOf<DispatchQueue>,
+        pollingQueue: AnySchedulerOf<DispatchQueue>
     ) -> EmailVerificationReducer {
         EmailVerificationReducer(
             analyticsRecorder: analyticsRecorder,
             emailVerificationService: emailVerificationService,
             flowCompletionCallback: flowCompletion,
             openMailApp: { [externalAppOpener] in
-                    .future { callback in
-                        externalAppOpener.openMailApp { result in
-                            callback(.success(result))
-                        }
+                await withCheckedContinuation { continuation in
+                    externalAppOpener.openMailApp { result in
+                        continuation.resume(returning: result)
                     }
+                }
             },
-            app: app
+            app: app,
+            mainQueue: mainQueue,
+            pollingQueue: pollingQueue
         )
     }
 

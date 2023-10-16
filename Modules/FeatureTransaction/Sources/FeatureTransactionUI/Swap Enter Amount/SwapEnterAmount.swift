@@ -11,7 +11,7 @@ import Localization
 import MoneyKit
 import PlatformKit
 
-public struct SwapEnterAmount: ReducerProtocol {
+public struct SwapEnterAmount: Reducer {
     var defaultSwapPairsService: DefaultSwapCurrencyPairsServiceAPI
     var supportedPairsInteractorService: SupportedPairsInteractorServiceAPI
     var app: AppProtocol
@@ -214,7 +214,7 @@ public struct SwapEnterAmount: ReducerProtocol {
 
     // MARK: - Reducer
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
 
         Scope(state: \.self, action: /Action.self) {
@@ -232,23 +232,24 @@ public struct SwapEnterAmount: ReducerProtocol {
             switch action {
             case .onAppear:
                 return .merge(
-                    minMaxAmountsPublisher
-                        .eraseToEffect()
-                        .map(Action.onMinMaxAmountsFetched),
+                    .publisher {
+                        minMaxAmountsPublisher
+                            .map(Action.onMinMaxAmountsFetched)
+                    },
 
-                        .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
-                            guard sourceInformation == nil || targetInformation == nil else {
-                                return
-                            }
-
-                            if let pairs = await defaultSwapPairsService.getDefaultPairs(
-                                sourceInformation: sourceInformation,
-                                targetInformation: targetInformation
-                            ) {
-                                await send(.didFetchPairs(pairs.0, pairs.1))
-                                await send(.updateSourceBalance)
-                            }
+                    .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
+                        guard sourceInformation == nil || targetInformation == nil else {
+                            return
                         }
+
+                        if let pairs = await defaultSwapPairsService.getDefaultPairs(
+                            sourceInformation: sourceInformation,
+                            targetInformation: targetInformation
+                        ) {
+                            await send(.didFetchPairs(pairs.0, pairs.1))
+                            await send(.updateSourceBalance)
+                        }
+                    }
                 )
 
             case .didFetchSourceBalance(let moneyValue):
@@ -271,16 +272,16 @@ public struct SwapEnterAmount: ReducerProtocol {
 
             case .didFetchPairs(let sourcePair, let targetPair):
                 return .merge(
-                    EffectTask(value: .binding(.set(\.$sourceInformation, sourcePair))),
-                    EffectTask(value: .binding(.set(\.$targetInformation, targetPair))),
-                    EffectTask(value: .resetInput(newInput: nil))
+                    Effect.send(.binding(.set(\.$sourceInformation, sourcePair))),
+                    Effect.send(.binding(.set(\.$targetInformation, targetPair))),
+                    Effect.send(.resetInput(newInput: nil))
                 )
 
             case .onInputChanged(let text):
                 if text.isNotEmpty {
                     state.input.append(Character(text))
                 }
-                return .fireAndForget { [state] in
+                return .run { [state] _ in
                     if let amount = state.amountCryptoEntered {
                         onAmountChanged(amount)
                     }
@@ -288,7 +289,7 @@ public struct SwapEnterAmount: ReducerProtocol {
 
             case .onBackspace:
                 state.input.backspace()
-                return .fireAndForget { [state] in
+                return .run { [state] _ in
                     if let amount = state.amountCryptoEntered {
                         onAmountChanged(amount)
                     }
@@ -298,9 +299,9 @@ public struct SwapEnterAmount: ReducerProtocol {
                 let inputToFill = state.secondaryFieldText
                 state.isEnteringFiat.toggle()
                 if state.amountCryptoEntered?.isNotZero == true {
-                    return EffectTask(value: .resetInput(newInput: inputToFill))
+                    return Effect.send(.resetInput(newInput: inputToFill))
                 } else {
-                    return EffectTask(value: .resetInput(newInput: nil))
+                    return Effect.send(.resetInput(newInput: nil))
                 }
 
             case .checkTarget:
@@ -321,7 +322,7 @@ public struct SwapEnterAmount: ReducerProtocol {
                 let max = minMax.maxSpendableCryptoValue
                 state.isEnteringFiat = false
                 state.amountCryptoEntered = max
-                return EffectTask(value: .resetInput(newInput: max.toDisplayString(includeSymbol: false)))
+                return Effect.send(.resetInput(newInput: max.toDisplayString(includeSymbol: false)))
 
             case .onSelectSourceTapped:
                 state.selectFromCryptoAccountState = SwapFromAccountSelect.State(appMode: app.currentMode)
@@ -377,11 +378,11 @@ public struct SwapEnterAmount: ReducerProtocol {
                         state.showAccountSelect.toggle()
 
                         return .merge(
-                            currency == state.targetInformation?.currency ? EffectTask(value: .resetTarget) : .none,
-                            EffectTask(value: .binding(.set(\.$sourceInformation, sourceInformation))),
-                            EffectTask(value: .updateSourceBalance),
-                            EffectTask(value: .checkTarget),
-                            EffectTask(value: .resetInput(newInput: nil))
+                            currency == state.targetInformation?.currency ? Effect.send(.resetTarget) : .none,
+                            Effect.send(.binding(.set(\.$sourceInformation, sourceInformation))),
+                            Effect.send(.updateSourceBalance),
+                            Effect.send(.checkTarget),
+                            Effect.send(.resetInput(newInput: nil))
                         )
                     }
                     return .none
@@ -443,14 +444,14 @@ public struct SwapEnterAmount: ReducerProtocol {
     }
 }
 
-struct TransactionModelAdapterReducer: ReducerProtocol {
+struct TransactionModelAdapterReducer: Reducer {
     typealias State = SwapEnterAmount.State
     typealias Action = SwapEnterAmount.Action
 
     var onPairsSelected: (String, String) -> Void
     var onPreviewTapped: (MoneyValue) -> Void
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:

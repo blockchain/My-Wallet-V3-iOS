@@ -7,17 +7,16 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-public struct DexIntro: ReducerProtocol {
+public struct DexIntro: Reducer {
 
     @Dependency(\.app) var app
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .fireAndForget {
-                    app.state.set(blockchain.ux.currency.exchange.dex.intro.did.show, to: true)
-                }
+                app.state.set(blockchain.ux.currency.exchange.dex.intro.did.show, to: true)
+                return .none
             case .didChangeStep(let step):
                 state.currentStep = step
                 return .none

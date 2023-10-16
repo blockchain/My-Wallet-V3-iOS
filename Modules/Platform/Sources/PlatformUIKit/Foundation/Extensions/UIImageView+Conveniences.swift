@@ -71,7 +71,7 @@ extension UIImageView {
         switch content.imageResource {
         case .local(name: let name, bundle: let bundle):
             update(UIImage(named: name, in: bundle, with: nil))
-        case .remote(url: let url):
+        case .remote(url: let url, fallback: _):
             image = nil
             _ = NukeExtensions.loadImage(with: url, into: self)
         case .systemName(let value):

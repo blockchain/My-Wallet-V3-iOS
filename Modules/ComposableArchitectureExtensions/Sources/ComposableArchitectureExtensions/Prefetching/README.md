@@ -34,9 +34,9 @@ let exampleReducer = Reducer<ExampleState, ExampleAction, ExampleEnvironment> { 
 
     case .prefetching(.fetch(indices: let indices)):
         // Fetch your content as desired!
-        return environment
-                   .fetch(indices)
-                   .catchToEffect()
+        return .run { _ in
+            try await environment.fetch(indices).await()
+        }
     }
 }
 .combined(
@@ -72,7 +72,7 @@ PrefetchingState(
 If you want to requeue for fetching after errors, or if something is still loading, use the `requeue` action:
 
 ```swift
-return EffectTask(value: .prefetching(.requeue(indices)))
+return Effect.send(.prefetching(.requeue(indices)))
 ```
 
 ## Future improvements:

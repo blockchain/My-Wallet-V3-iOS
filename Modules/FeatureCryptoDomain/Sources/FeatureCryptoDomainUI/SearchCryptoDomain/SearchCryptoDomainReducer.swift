@@ -15,6 +15,7 @@ enum SearchCryptoDomainRoute: NavigationRoute {
 
     case checkout
 
+    @MainActor
     @ViewBuilder
     func destination(in store: Store<SearchCryptoDomainState, SearchCryptoDomainAction>) -> some View {
         switch self {
@@ -92,7 +93,7 @@ struct SearchCryptoDomainState: Equatable, NavigationState {
     }
 }
 
-struct SearchCryptoDomain: ReducerProtocol {
+struct SearchCryptoDomain: Reducer {
     typealias State = SearchCryptoDomainState
 
     typealias Action = SearchCryptoDomainAction
@@ -104,7 +105,7 @@ struct SearchCryptoDomain: ReducerProtocol {
     let orderDomainRepository: OrderDomainRepositoryAPI
     let userInfoProvider: () -> AnyPublisher<OrderDomainUserInfo, Error>
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -112,7 +113,7 @@ struct SearchCryptoDomain: ReducerProtocol {
                 state.isSearchTextValid = state.searchText.range(
                     of: TextRegex.noSpecialCharacters.rawValue, options: .regularExpression
                 ) != nil || state.searchText.isEmpty
-                return state.isSearchTextValid ? EffectTask(value: .searchDomains(key: state.searchText)) : .none
+                return state.isSearchTextValid ? Effect.send(.searchDomains(key: state.searchText)) : .none
 
             case .binding(\.$isPremiumDomainBottomSheetShown):
                 if !state.isPremiumDomainBottomSheetShown {
@@ -125,40 +126,43 @@ struct SearchCryptoDomain: ReducerProtocol {
                 return .none
 
             case .onAppear:
-                return EffectTask(value: .searchDomainsWithUsername)
+                return Effect.send(.searchDomainsWithUsername)
 
             case .searchDomainsWithUsername:
                 guard state.searchText.isEmpty else {
                     return .none
                 }
-                return userInfoProvider()
-                    .compactMap(\.nabuUserName)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        if case .success(let username) = result {
-                            return .searchDomains(key: username, freeOnly: true)
-                        }
-                        return .noop
+                return .run { send in
+                    do {
+                        let username = try await userInfoProvider()
+                            .compactMap(\.nabuUserName)
+                            .receive(on: mainQueue)
+                            .await()
+                        await send(.searchDomains(key: username, freeOnly: true))
+                    } catch {
+                        await send(.noop)
                     }
+                }
 
             case .searchDomains(let key, let isFreeOnly):
                 if key.isEmpty {
-                    return EffectTask(value: .searchDomainsWithUsername)
+                    return Effect.send(.searchDomainsWithUsername)
                 }
                 state.isSearchResultsLoading = true
-                return searchDomainRepository
-                    .searchResults(searchKey: key, freeOnly: isFreeOnly)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .debounce(
-                        id: SearchCryptoDomainId.SearchDebounceId(),
-                        for: .milliseconds(500),
-                        scheduler: mainQueue
-                    )
-                    .map { result in
-                            .didReceiveDomainsResult(result, isFreeOnly)
-                    }
+                return .publisher {
+                    searchDomainRepository
+                            .searchResults(searchKey: key, freeOnly: isFreeOnly)
+                            .receive(on: mainQueue)
+                            .map {
+                                .didReceiveDomainsResult(.success($0), isFreeOnly)
+                            }
+                            .catch { .didReceiveDomainsResult(.failure($0), isFreeOnly) }
+                }
+                .debounce(
+                    id: SearchCryptoDomainId.SearchDebounceId(),
+                    for: .milliseconds(500),
+                    scheduler: mainQueue
+                )
 
             case .didReceiveDomainsResult(let result, _):
                 state.isSearchResultsLoading = false
@@ -178,7 +182,7 @@ struct SearchCryptoDomain: ReducerProtocol {
                 }
                 state.selectedDomains.removeAll()
                 state.selectedDomains.append(domain)
-                return EffectTask(value: .navigate(to: .checkout))
+                return Effect.send(.navigate(to: .checkout))
 
             case .selectPremiumDomain(let domain):
                 guard domain.domainType == .premium else {
@@ -186,27 +190,22 @@ struct SearchCryptoDomain: ReducerProtocol {
                 }
                 state.selectedPremiumDomain = domain
                 return .merge(
-                    EffectTask(value: .set(\.$isPremiumDomainBottomSheetShown, true)),
-                    userInfoProvider()
-                        .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
-                        .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
-                            orderDomainRepository
-                                .createDomainOrder(
-                                    isFree: false,
-                                    domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
-                                    resolutionRecords: userInfo.resolutionRecords
-                                )
-                        }
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .map { result in
-                            switch result {
-                            case .success(let orderResult):
-                                return .didSelectPremiumDomain(.success(orderResult))
-                            case .failure(let error):
-                                return .didSelectPremiumDomain(.failure(error))
+                    Effect.send(.set(\.$isPremiumDomainBottomSheetShown, true)),
+                    Effect.publisher {
+                        userInfoProvider()
+                            .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
+                            .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
+                                orderDomainRepository
+                                    .createDomainOrder(
+                                        isFree: false,
+                                        domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
+                                        resolutionRecords: userInfo.resolutionRecords
+                                    )
                             }
-                        }
+                            .receive(on: mainQueue)
+                            .map { .didSelectPremiumDomain(.success($0)) }
+                            .catch { .didSelectPremiumDomain(.failure($0)) }
+                    }
                 )
 
             case .didSelectPremiumDomain(let result):
@@ -266,14 +265,14 @@ struct SearchCryptoDomain: ReducerProtocol {
 
 // MARK: - Private
 
-struct SearchCryptoDomainAnalytics: ReducerProtocol {
+struct SearchCryptoDomainAnalytics: Reducer {
 
     typealias State = SearchCryptoDomainState
     typealias Action = SearchCryptoDomainAction
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .didReceiveDomainsResult(.success, let isFreeOnly):
             if !isFreeOnly {

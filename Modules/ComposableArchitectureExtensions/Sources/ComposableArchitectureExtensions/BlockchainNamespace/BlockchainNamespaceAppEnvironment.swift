@@ -34,7 +34,7 @@ public struct BlockchainNamespaceEvent: Equatable {
     }
 }
 
-public struct BlockchainNamespaceReducer<State, Action>: ReducerProtocol where Action: BlockchainNamespaceObservationAction {
+public struct BlockchainNamespaceReducer<State, Action>: Reducer where Action: BlockchainNamespaceObservationAction {
 
     private let app: AppProtocol
     private let events: [Tag.Event]
@@ -49,21 +49,21 @@ public struct BlockchainNamespaceReducer<State, Action>: ReducerProtocol where A
     public func reduce(
         into state: inout State,
         action: Action
-    ) -> EffectTask<Action> {
+    ) -> Effect<Action> {
         guard let observation = (/Action.observation).extract(from: action) else {
             return .none
         }
         switch observation {
         case .start:
             let observers = keys.map { event in
-                app.on(event)
-                    .eraseToEffect()
-                    .map { Action.observation(.event($0.reference, context: $0.context)) }
-                    .cancellable(id: event)
+                Effect.publisher {
+                    app.on(event).map { Action.observation(.event($0.reference, context: $0.context)) }
+                }
+                .cancellable(id: event)
             }
             return .merge(observers)
         case .stop:
-            return .merge(keys.map(EffectTask.cancel(id:)))
+            return .merge(keys.map(Effect.cancel(id:)))
         case .event:
             return .none
         }

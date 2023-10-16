@@ -1,10 +1,12 @@
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
+
 import BlockchainComponentLibrary
 import BlockchainNamespace
+import Coincore
 import Combine
 import ComposableArchitecture
 import ComposableArchitectureExtensions
 import Localization
-import PlatformKit
 import SwiftUI
 import UIComponentsKit
 
@@ -67,7 +69,7 @@ public struct AccountPickerView<
                     cryptoBalances: [:],
                     currencyCodes: [:]
                 ),
-                reducer: accountPicker
+                reducer: { accountPicker }
             ),
             badgeView: badgeView,
             descriptionView: descriptionView,
@@ -103,7 +105,7 @@ public struct AccountPickerView<
             }
         )
         .onAppear {
-            ViewStore(store).send(.subscribeToUpdates)
+            ViewStore(store, observe: { $0 }).send(.subscribeToUpdates)
         }
     }
 
@@ -146,6 +148,7 @@ public struct AccountPickerView<
             List {
                 WithViewStore(
                     successStore,
+                    observe: { $0 },
                     removeDuplicates: { $0.identifier == $1.identifier },
                     content: { viewStore in
                         ForEach(viewStore.content) { section in
@@ -208,16 +211,16 @@ public struct AccountPickerView<
                     .background(Color.semantic.background)
                     .id(row.id)
                     .onAppear {
-                        ViewStore(store)
+                        ViewStore(store, observe: { $0 })
                             .send(.prefetching(.onAppear(index: index)))
                     }
                     .onChange(of: controlSelection, perform: { newValue in
-                        ViewStore(store)
+                        ViewStore(store, observe: { $0 })
                             .send(.onSegmentSelectionChanged(newValue))
 
                         let indices = Set(viewStore.content.accountRows.indices)
 
-                        ViewStore(store)
+                        ViewStore(store, observe: { $0 })
                             .send(.prefetching(.requeue(indices: indices)))
                     })
                 }
@@ -428,19 +431,21 @@ struct AccountPickerView_Previews: PreviewProvider {
                     cryptoBalances: cryptoBalances,
                     currencyCodes: currencyCodes
                 ),
-                reducer: AccountPicker(
-                    app: App.preview,
-                    rowSelected: { _ in },
-                    uxSelected: { _ in },
-                    backButtonTapped: {},
-                    closeButtonTapped: {},
-                    search: { _ in },
-                    sections: { Just(Array(accountPickerSections)).eraseToAnyPublisher() },
-                    updateSingleAccounts: { _ in .just([:]) },
-                    updateAccountGroups: { _ in .just([:]) },
-                    header: { Just(header.headerStyle).setFailureType(to: Error.self).eraseToAnyPublisher() },
-                    onSegmentSelectionChanged: { _ in }
-                )
+                reducer: {
+                    AccountPicker(
+                        app: App.preview,
+                        rowSelected: { _ in },
+                        uxSelected: { _ in },
+                        backButtonTapped: {},
+                        closeButtonTapped: {},
+                        search: { _ in },
+                        sections: { Just(Array(accountPickerSections)).eraseToAnyPublisher() },
+                        updateSingleAccounts: { _ in .just([:]) },
+                        updateAccountGroups: { _ in .just([:]) },
+                        header: { Just(header.headerStyle).setFailureType(to: Error.self).eraseToAnyPublisher() },
+                        onSegmentSelectionChanged: { _ in }
+                    )
+                }
             ),
             badgeView: { _ in EmptyView() },
             descriptionView: { _ in EmptyView() },

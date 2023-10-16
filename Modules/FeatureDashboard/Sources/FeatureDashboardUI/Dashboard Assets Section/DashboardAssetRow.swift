@@ -48,7 +48,7 @@ public enum PresentedAssetRowType: Decodable {
     }
 }
 
-public struct DashboardAssetRow: ReducerProtocol {
+public struct DashboardAssetRow: Reducer {
 
     public let app: AppProtocol
 
@@ -76,7 +76,7 @@ public struct DashboardAssetRow: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         EmptyReducer()
     }
 }

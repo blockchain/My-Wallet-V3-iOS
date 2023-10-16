@@ -19,7 +19,7 @@ public struct PricesSceneView: View {
 
     public init(store: StoreOf<PricesScene>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -67,8 +67,8 @@ public struct PricesSceneView: View {
 
     private var searchBarSection: some View {
         SearchBar(
-            text: viewStore.binding(\.$searchText),
-            isFirstResponder: viewStore.binding(\.$isSearching),
+            text: viewStore.$searchText,
+            isFirstResponder: viewStore.$isSearching,
             cancelButtonText: LocalizationConstants.SuperApp.Prices.Search.cancelButton,
             placeholder: LocalizationConstants.SuperApp.Prices.Search.searchPlaceholder
         )
@@ -90,7 +90,7 @@ public struct PricesSceneView: View {
         ]
         return PrimarySegmentedControl(
             items: items,
-            selection: viewStore.binding(\.$filter),
+            selection: viewStore.$filter,
             backgroundColor: Color.semantic.light
         )
     }

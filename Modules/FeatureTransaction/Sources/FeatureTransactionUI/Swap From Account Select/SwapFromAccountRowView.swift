@@ -39,13 +39,13 @@ struct SwapFromAccountRowView: View {
             viewStore.send(.onAppear)
         }
         .bindings {
-            subscribe(viewStore.binding(\.$balance), to: blockchain.coin.core.account[viewStore.accountId].balance.total)
-            subscribe(viewStore.binding(\.$networkLogo), to: blockchain.coin.core.account[viewStore.accountId].network.logo)
-            subscribe(viewStore.binding(\.$networkName), to: blockchain.coin.core.account[viewStore.accountId].network.name)
+            subscribe(viewStore.$balance, to: blockchain.coin.core.account[viewStore.accountId].balance.total)
+            subscribe(viewStore.$networkLogo, to: blockchain.coin.core.account[viewStore.accountId].network.logo)
+            subscribe(viewStore.$networkName, to: blockchain.coin.core.account[viewStore.accountId].network.name)
         }
         .bindings {
             if let currency = viewStore.currency {
-                subscribe(viewStore.binding(\.$price), to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
+                subscribe(viewStore.$price, to: blockchain.api.nabu.gateway.price.crypto[currency.code].fiat.quote.value)
             }
         }
     }

@@ -13,12 +13,12 @@ import Foundation
 import MoneyKit
 import SwiftUI
 
-public struct DexMain: ReducerProtocol {
+public struct DexMain: Reducer {
     @Dependency(\.dexService) var dexService
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.app) var app
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Scope(state: \.source, action: /Action.sourceAction) {
             DexCell()
@@ -29,28 +29,34 @@ public struct DexMain: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                let balances = dexService.balancesStream()
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onBalances)
-                    .cancellable(id: CancellationID.balances, cancelInFlight: true)
-
-                var supportedTokens = EffectTask<DexMain.Action>.none
-                if state.destination.supportedTokens.isEmpty {
-                    supportedTokens = dexService.supportedTokens()
+                let balances = Effect.publisher {
+                    dexService.balancesStream()
                         .receive(on: mainQueue)
-                        .eraseToEffect(Action.onSupportedTokens)
+                        .map(Action.onBalances)
+                }
+                .cancellable(id: CancellationID.balances, cancelInFlight: true)
+
+                var supportedTokens = Effect<DexMain.Action>.none
+                if state.destination.supportedTokens.isEmpty {
+                    supportedTokens = Effect.publisher {
+                        dexService.supportedTokens()
+                            .receive(on: mainQueue)
+                            .map(Action.onSupportedTokens)
+                    }
                 }
 
-                var availableNetworks = EffectTask<DexMain.Action>.none
+                var availableNetworks = Effect<DexMain.Action>.none
                 if state.availableNetworks.isEmpty {
-                    availableNetworks = dexService
-                        .availableChainsService
-                        .availableEvmChains()
-                        .result()
-                        .receive(on: mainQueue)
-                        .eraseToEffect(Action.onAvailableNetworksFetched)
+                    availableNetworks = Effect.publisher {
+                        dexService
+                            .availableChainsService
+                            .availableEvmChains()
+                            .result()
+                            .receive(on: mainQueue)
+                            .map(Action.onAvailableNetworksFetched)
+                    }
                 } else if let network = getThatCurrency(app: app)?.network() {
-                    availableNetworks = EffectTask<DexMain.Action>.run(operation: { send in
+                    availableNetworks = Effect<DexMain.Action>.run(operation: { send in
                         try await app.set(
                             blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value,
                             to: network.networkConfig.networkTicker
@@ -58,7 +64,7 @@ public struct DexMain: ReducerProtocol {
                     })
                 }
 
-                let refreshQuote = EffectTask<DexMain.Action>(value: .refreshQuote)
+                let refreshQuote = Effect<Action>.send(.refreshQuote)
 
                 return .merge(balances, supportedTokens, availableNetworks, refreshQuote)
 
@@ -95,10 +101,10 @@ public struct DexMain: ReducerProtocol {
                 } else {
                     flipBalances(with: &state)
                 }
-                return EffectTask.merge(
+                return Effect.merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
-                    EffectTask(value: .refreshQuote)
+                    Effect.send(.refreshQuote)
                         .debounce(
                             id: CancellationID.quoteDebounce,
                             for: .milliseconds(500),
@@ -142,7 +148,7 @@ public struct DexMain: ReducerProtocol {
             case .onBalances(let result):
                 switch result {
                 case .success(let balances):
-                    return EffectTask(value: .updateAvailableBalances(balances))
+                    return Effect.send(.updateAvailableBalances(balances))
                 case .failure:
                     return .none
                 }
@@ -158,10 +164,12 @@ public struct DexMain: ReducerProtocol {
                 state.quoteFetching = true
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
-                    fetchQuote(with: preInput)
-                        .receive(on: mainQueue)
-                        .eraseToEffect(Action.onQuote)
-                        .cancellable(id: CancellationID.quoteFetch, cancelInFlight: true)
+                    .publisher {
+                        fetchQuote(with: preInput)
+                            .receive(on: mainQueue)
+                            .map(Action.onQuote)
+                    }
+                    .cancellable(id: CancellationID.quoteFetch, cancelInFlight: true)
                 )
 
             case .onQuote(let result):
@@ -172,25 +180,27 @@ public struct DexMain: ReducerProtocol {
                 state.quoteFetching = false
                 state.quote = result
                 state.confirmation?.newQuote = DexConfirmation.State.Quote(quote: result.success)
-                return EffectTask(value: .refreshAllowance)
+                return Effect.send(.refreshAllowance)
 
                 // Allowance
             case .refreshAllowance:
                 guard let quote = state.quote?.success, state.allowance.result != .ok else {
                     return .none
                 }
-                return dexService
-                    .allowance(app: app, currency: quote.sellAmount.currency)
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onAllowance)
-                    .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
+                return .publisher {
+                    dexService
+                        .allowance(app: app, currency: quote.sellAmount.currency)
+                        .receive(on: mainQueue)
+                        .map(Action.onAllowance)
+                }
+                .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
 
             case .onAllowance(let result):
                 switch result {
                 case .success(let allowance):
-                    return EffectTask(value: .updateAllowance(allowance))
+                    return Effect.send(.updateAllowance(allowance))
                 case .failure:
-                    return EffectTask(value: .updateAllowance(nil))
+                    return Effect.send(.updateAllowance(nil))
                 }
             case .updateAllowance(let allowance):
                 let willRefresh = allowance == .ok
@@ -198,7 +208,7 @@ public struct DexMain: ReducerProtocol {
                     && state.quote?.success?.isValidated != true
                 state.allowance.result = allowance
                 if willRefresh {
-                    return EffectTask(value: .refreshQuote)
+                    return Effect.send(.refreshQuote)
                         .debounce(
                             id: CancellationID.quoteDebounce,
                             for: .milliseconds(100),
@@ -216,7 +226,7 @@ public struct DexMain: ReducerProtocol {
                 guard let network = preselectNetwork(app: app, from: networks) else {
                     return .none
                 }
-                return EffectTask(value: .onNetworkSelected(network))
+                return Effect.send(.onNetworkSelected(network))
 
             case .onAvailableNetworksFetched(.failure):
                 return .none
@@ -243,12 +253,14 @@ public struct DexMain: ReducerProtocol {
                     state.confirmation?.pendingTransaction = newState
                     return .merge(
                         .cancel(id: CancellationID.quoteFetch),
-                        dexService
-                            .executeTransaction(quote: quote)
-                            .receive(on: mainQueue)
-                            .eraseToEffect { output in
-                                Action.onTransaction(output, quote)
-                            }
+                        .publisher {
+                            dexService
+                                .executeTransaction(quote: quote)
+                                .receive(on: mainQueue)
+                                .map { output in
+                                    Action.onTransaction(output, quote)
+                                }
+                        }
                     )
                 }
                 return .cancel(id: CancellationID.quoteFetch)
@@ -269,10 +281,10 @@ public struct DexMain: ReducerProtocol {
             case .sourceAction(.onTapBalance), .sourceAction(.binding(\.$inputText)):
                 makeSourceActive(with: &state)
                 clearDuringTyping(with: &state)
-                return EffectTask.merge(
+                return Effect.merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
-                    EffectTask(value: .refreshQuote)
+                    Effect.send(.refreshQuote)
                         .debounce(
                             id: CancellationID.quoteDebounce,
                             for: .milliseconds(500),
@@ -308,10 +320,10 @@ public struct DexMain: ReducerProtocol {
             case .destinationAction(.binding(\.$inputText)):
                 makeDestinationActive(with: &state)
                 clearDuringTyping(with: &state)
-                return EffectTask.merge(
+                return Effect.merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
-                    EffectTask(value: .refreshQuote)
+                    Effect.send(.refreshQuote)
                         .debounce(
                             id: CancellationID.quoteDebounce,
                             for: .milliseconds(500),
@@ -323,7 +335,7 @@ public struct DexMain: ReducerProtocol {
                 return .merge(
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch),
-                    EffectTask(value: .refreshQuote)
+                    Effect.send(.refreshQuote)
                         .debounce(
                             id: CancellationID.quoteDebounce,
                             for: .milliseconds(100),
@@ -365,32 +377,36 @@ public struct DexMain: ReducerProtocol {
                 guard let quote = state.quote?.success else {
                     return .none
                 }
-                return dexService
-                    .allowancePoll(app: app, currency: quote.sellAmount.currency)
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onAllowance)
-                    .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
+                return .publisher {
+                    dexService
+                        .allowancePoll(app: app, currency: quote.sellAmount.currency)
+                        .receive(on: mainQueue)
+                        .map(Action.onAllowance)
+                }
+                .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
             case .binding(\.$currentSelectedNetworkTicker):
                 let value = state.currentSelectedNetworkTicker
                 guard let network = state.availableNetworks.first(where: { $0.networkConfig.networkTicker == value }) else {
                     return .none
                 }
-                return EffectTask(value: .onNetworkSelected(network))
+                return Effect.send(.onNetworkSelected(network))
             case .onNetworkSelected(let network):
                 guard network != state.currentNetwork, state.availableNetworks.contains(network) else {
                     return .none
                 }
                 state.currentNetwork = network
                 state.networkNativePrice = nil
-                return app
-                    .publisher(
-                        for: blockchain.api.nabu.gateway.price.crypto[network.nativeAsset.code].fiat.quote.value,
-                        as: FiatValue?.self
-                    )
-                    .replaceError(with: nil)
-                    .receive(on: DispatchQueue.main)
-                    .eraseToEffect(Action.onNetworkPrice)
-                    .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
+                return .publisher {
+                    app
+                        .publisher(
+                            for: blockchain.api.nabu.gateway.price.crypto[network.nativeAsset.code].fiat.quote.value,
+                            as: FiatValue?.self
+                        )
+                        .replaceError(with: nil)
+                        .receive(on: DispatchQueue.main)
+                        .map(Action.onNetworkPrice)
+                }
+                .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
             case .binding:
                 return .none
             }

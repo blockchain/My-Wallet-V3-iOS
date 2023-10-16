@@ -11,7 +11,10 @@ extension DependencyContainer {
             WalletConnectObserver(
                 app: DIKit.resolve(),
                 analyticsEventRecorder: DIKit.resolve(),
-                service: DIKit.resolve()
+                service: DIKit.resolve(), 
+                tabSwapping: { () -> WalletConnectTabSwapping in
+                    DIKit.resolve()
+                }
             )
         }
     }

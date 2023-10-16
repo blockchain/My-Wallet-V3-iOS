@@ -11,14 +11,11 @@ import ToolKitMock
 import UIComponentsKit
 import XCTest
 
-final class CreateAccountStepTwoReducerTests: XCTestCase {
+@MainActor final class CreateAccountStepTwoReducerTests: XCTestCase {
 
     private var testStore: TestStore<
         CreateAccountStepTwoState,
-        CreateAccountStepTwoAction,
-        CreateAccountStepTwoState,
-        CreateAccountStepTwoAction,
-        Void
+        CreateAccountStepTwoAction
     >!
     private let mainScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
 
@@ -31,16 +28,18 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
                 countryState: SearchableItem(id: "FL", title: "Florida"),
                 referralCode: ""
             ),
-            reducer: CreateAccountStepTwoReducer(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                passwordValidator: PasswordValidator(),
-                externalAppOpener: MockExternalAppOpener(),
-                analyticsRecorder: MockAnalyticsRecorder(),
-                walletRecoveryService: .mock(),
-                walletCreationService: .mock(),
-                walletFetcherService: WalletFetcherServiceMock().mock(),
-                recaptchaService: MockRecaptchaService()
-            )
+            reducer: {
+                CreateAccountStepTwoReducer(
+                    mainQueue: mainScheduler.eraseToAnyScheduler(),
+                    passwordValidator: PasswordValidator(),
+                    externalAppOpener: MockExternalAppOpener(),
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    walletRecoveryService: .mock(),
+                    walletCreationService: .mock(),
+                    walletFetcherService: WalletFetcherServiceMock().mock(),
+                    recaptchaService: MockRecaptchaService()
+                )
+            }
         )
     }
 
@@ -49,35 +48,35 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
         try super.tearDownWithError()
     }
 
-    func test_tapping_next_validates_input_invalidEmail() throws {
+    func test_tapping_next_validates_input_invalidEmail() async throws {
         // GIVEN: The form is invalid
         // no-op as form starts emapty
         // WHEN: The user taps on the Next button in either part of the UI
-        testStore.send(.createButtonTapped) {
+        await testStore.send(.createButtonTapped) {
             $0.validatingInput = true
         }
         // THEN: The form is validated
-        mainScheduler.advance() // let the validation complete
+        await mainScheduler.advance() // let the validation complete
         // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.invalid(.invalidEmail))) {
+        await testStore.receive(.didUpdateInputValidation(.invalid(.invalidEmail))) {
             $0.validatingInput = false
             $0.inputValidationState = .invalid(.invalidEmail)
             $0.inputConfirmationValidationState = .valid
         }
-        testStore.receive(.didValidateAfterFormSubmission)
+        await testStore.receive(.didValidateAfterFormSubmission)
     }
 
-    func test_tapping_next_validates_input_invalidPassword() throws {
+    func test_tapping_next_validates_input_invalidPassword() async throws {
         // GIVEN: The form is invalid
-        fillFormEmailField()
+        await fillFormEmailField()
         // WHEN: The user taps on the Next button in either part of the UI
-        testStore.send(.createButtonTapped) {
+        await testStore.send(.createButtonTapped) {
             $0.validatingInput = true
         }
         // THEN: The form is validated
-        mainScheduler.advance() // let the validation complete
+        await mainScheduler.advance() // let the validation complete
         // AND: The state is updated
-        testStore.receive(
+        await testStore.receive(
             .didUpdateInputValidation(
                 .invalid(
                     .weakPassword(
@@ -96,10 +95,10 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
             $0.inputValidationState = .invalid(.weakPassword([.lowercaseLetter, .uppercaseLetter, .number, .specialCharacter, .length]))
             $0.inputConfirmationValidationState = .valid
         }
-        testStore.receive(.didValidateAfterFormSubmission)
+        await testStore.receive(.didValidateAfterFormSubmission)
     }
 
-    func test_tapping_next_creates_an_account_when_valid_form() throws {
+    func test_tapping_next_creates_an_account_when_valid_form() async throws {
         testStore = TestStore(
             initialState: CreateAccountStepTwoState(
                 context: .createWallet,
@@ -107,40 +106,42 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
                 countryState: SearchableItem(id: "FL", title: "Florida"),
                 referralCode: ""
             ),
-            reducer: CreateAccountStepTwoReducer(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                passwordValidator: PasswordValidator(),
-                externalAppOpener: MockExternalAppOpener(),
-                analyticsRecorder: MockAnalyticsRecorder(),
-                walletRecoveryService: .mock(),
-                walletCreationService: .failing(),
-                walletFetcherService: WalletFetcherServiceMock().mock(),
-                recaptchaService: MockRecaptchaService()
-            )
+            reducer: {
+                CreateAccountStepTwoReducer(
+                    mainQueue: mainScheduler.eraseToAnyScheduler(),
+                    passwordValidator: PasswordValidator(),
+                    externalAppOpener: MockExternalAppOpener(),
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    walletRecoveryService: .mock(),
+                    walletCreationService: .failing(),
+                    walletFetcherService: WalletFetcherServiceMock().mock(),
+                    recaptchaService: MockRecaptchaService()
+                )
+            }
         )
         // GIVEN: The form is valid
-        fillFormWithValidData()
+        await fillFormWithValidData()
         // WHEN: The user taps on the Next button in either part of the UI
-        testStore.send(.createButtonTapped) {
+        await testStore.send(.createButtonTapped) {
             $0.validatingInput = true
         }
         // THEN: The form is validated
-        mainScheduler.advance() // let the validation complete
+        await mainScheduler.advance() // let the validation complete
         // AND: The state is updated
-        testStore.receive(.didUpdateInputValidation(.valid)) {
+        await testStore.receive(.didUpdateInputValidation(.valid)) {
             $0.validatingInput = false
             $0.inputConfirmationValidationState = .valid
             $0.inputValidationState = .valid
         }
-        testStore.receive(.didValidateAfterFormSubmission)
+        await testStore.receive(.didValidateAfterFormSubmission)
         // AND: The form submission creates an account
-        testStore.receive(.createOrImportWallet(.createWallet))
+        await testStore.receive(.createOrImportWallet(.createWallet))
         let token = ""
-        testStore.receive(.createAccount(.success(token))) {
+        await testStore.receive(.createAccount(.success(token))) {
             $0.isCreatingWallet = true
         }
-        testStore.receive(.triggerAuthenticate)
-        testStore.receive(.accountCreation(.failure(.creationFailure(.genericFailure)))) {
+        await testStore.receive(.triggerAuthenticate)
+        await testStore.receive(.accountCreation(.failure(.creationFailure(.genericFailure)))) {
             $0.isCreatingWallet = false
             $0.fatalError = UX.Error(
                 source: WalletCreationServiceError.creationFailure(.genericFailure),
@@ -153,16 +154,16 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func fillFormWithValidData() {
-        fillFormEmailField()
-        fillFormPasswordField()
+    private func fillFormWithValidData() async {
+        await fillFormEmailField()
+        await fillFormPasswordField()
     }
 
-    private func fillFormEmailField(email: String = "test@example.com") {
-        testStore.send(.binding(.set(\.$emailAddress, email))) {
+    private func fillFormEmailField(email: String = "test@example.com") async {
+        await testStore.send(.binding(.set(\.$emailAddress, email))) {
             $0.emailAddress = email
         }
-        testStore.receive(.didUpdateInputValidation(.unknown)) {
+        await testStore.receive(.didUpdateInputValidation(.unknown)) {
             $0.inputConfirmationValidationState = .valid
         }
     }
@@ -170,18 +171,18 @@ final class CreateAccountStepTwoReducerTests: XCTestCase {
     private func fillFormPasswordField(
         password: String = "MyPass124(",
         expectedScore: [PasswordValidationRule] = []
-    ) {
-        testStore.send(.binding(.set(\.$password, password))) {
+    ) async {
+        await testStore.send(.binding(.set(\.$password, password))) {
             $0.password = password
         }
-        testStore.receive(.didUpdateInputValidation(.unknown))
-        testStore.receive(.validatePasswordStrength)
-        mainScheduler.advance()
+        await testStore.receive(.didUpdateInputValidation(.unknown))
+        await testStore.receive(.validatePasswordStrength)
+        await mainScheduler.advance()
 
         if expectedScore.isEmpty {
-            testStore.receive(.didUpdatePasswordRules(expectedScore))
+            await testStore.receive(.didUpdatePasswordRules(expectedScore))
         } else {
-            testStore.receive(.didUpdatePasswordRules(expectedScore)) {
+            await testStore.receive(.didUpdatePasswordRules(expectedScore)) {
                 $0.passwordRulesBreached = expectedScore
             }
         }

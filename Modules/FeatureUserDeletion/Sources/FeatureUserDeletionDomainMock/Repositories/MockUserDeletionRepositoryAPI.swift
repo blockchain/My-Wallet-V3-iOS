@@ -1,7 +1,7 @@
 import Combine
 import Errors
+import Foundation
 @testable import FeatureUserDeletionDomain
-import ToolKit
 
 public final class MockUserDeletionRepositoryAPI: UserDeletionRepositoryAPI {
 

@@ -15,17 +15,14 @@ import XCTest
 @testable import FeatureAuthenticationMock
 @testable import ToolKitMock
 
-final class WelcomeReducerTests: XCTestCase {
+@MainActor final class WelcomeReducerTests: XCTestCase {
 
     private var app: AppProtocol!
     private var dummyUserDefaults: UserDefaults!
     private var mockMainQueue: TestSchedulerOf<DispatchQueue>!
     private var testStore: TestStore<
         WelcomeState,
-        WelcomeAction,
-        WelcomeState,
-        WelcomeAction,
-        Void
+        WelcomeAction
     >!
     private var cancellables = Set<AnyCancellable>()
 
@@ -37,29 +34,31 @@ final class WelcomeReducerTests: XCTestCase {
         app.remoteConfiguration.override(blockchain.app.configuration.manual.login.is.enabled[].reference, with: true)
         testStore = TestStore(
             initialState: .init(),
-            reducer: WelcomeReducer(
-                app: app,
-                mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                passwordValidator: PasswordValidator(),
-                sessionTokenService: MockSessionTokenService(),
-                deviceVerificationService: MockDeviceVerificationService(),
-                recaptchaService: MockRecaptchaService(),
-                buildVersionProvider: { "Test Version" },
-                errorRecorder: MockErrorRecorder(),
-                externalAppOpener: MockExternalAppOpener(),
-                analyticsRecorder: MockAnalyticsRecorder(),
-                walletRecoveryService: .mock(),
-                walletCreationService: .mock(),
-                walletFetcherService: WalletFetcherServiceMock().mock(),
-                signUpCountriesService: MockSignUpCountriesService(),
-                accountRecoveryService: MockAccountRecoveryService(),
-                checkReferralClient: MockCheckReferralClient(),
-                emailAuthorizationService: NoOpEmailAuthorizationService(),
-                smsService: NoOpSMSService(),
-                loginService: NoOpLoginService(),
-                seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
-                appStoreInformationRepository: NoOpAppStoreInformationRepository()
-            )
+            reducer: {
+                WelcomeReducer(
+                    app: app,
+                    mainQueue: mockMainQueue.eraseToAnyScheduler(),
+                    passwordValidator: PasswordValidator(),
+                    sessionTokenService: MockSessionTokenService(),
+                    deviceVerificationService: MockDeviceVerificationService(),
+                    recaptchaService: MockRecaptchaService(),
+                    buildVersionProvider: { "Test Version" },
+                    errorRecorder: MockErrorRecorder(),
+                    externalAppOpener: MockExternalAppOpener(),
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    walletRecoveryService: .mock(),
+                    walletCreationService: .mock(),
+                    walletFetcherService: WalletFetcherServiceMock().mock(),
+                    signUpCountriesService: MockSignUpCountriesService(),
+                    accountRecoveryService: MockAccountRecoveryService(),
+                    checkReferralClient: MockCheckReferralClient(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
+                    seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
+                )
+            }
         )
     }
 
@@ -76,35 +75,35 @@ final class WelcomeReducerTests: XCTestCase {
         XCTAssertNil(state.emailLoginState)
     }
 
-    func test_start_shows_manual_pairing_when_feature_flag_is_not_enabled_and_build_is_internal() {
+    func test_start_shows_manual_pairing_when_feature_flag_is_not_enabled_and_build_is_internal() async {
         BuildFlag.isInternal = true
         app.remoteConfiguration.override(blockchain.app.configuration.manual.login.is.enabled[].reference, with: true)
-        testStore.send(.start) { state in
+        await testStore.send(.start) { state in
             state.buildVersion = "Test Version"
         }
-        testStore.receive(.setManualPairingEnabled) { state in
+        await testStore.receive(.setManualPairingEnabled) { state in
             state.manualPairingEnabled = true
         }
     }
 
-    func test_start_does_not_shows_manual_pairing_when_feature_flag_is_not_enabled_and_build_is_not_internal() {
+    func test_start_does_not_shows_manual_pairing_when_feature_flag_is_not_enabled_and_build_is_not_internal() async {
         BuildFlag.isInternal = false
         app.remoteConfiguration.override(blockchain.app.configuration.manual.login.is.enabled[].reference, with: true)
-        testStore.send(.start) { state in
+        await testStore.send(.start) { state in
             state.buildVersion = "Test Version"
             state.manualPairingEnabled = false
         }
     }
 
-    func test_enter_into_should_update_welcome_route() {
+    func test_enter_into_should_update_welcome_route() async {
         let routes: [WelcomeRoute] = [
             .createWallet,
             .emailLogin,
             .restoreWallet,
             .manualLogin
         ]
-        routes.forEach { routeValue in
-            testStore.send(.navigate(to: routeValue)) { state in
+        for routeValue in routes {
+            await testStore.send(.navigate(to: routeValue)) { state in
                 switch routeValue {
                 case .createWallet:
                     state.createWalletState = .init(context: .createWallet)
@@ -123,14 +122,14 @@ final class WelcomeReducerTests: XCTestCase {
 //    func test_second_password_can_be_navigated_to_from_manual_login() {
 //        // given (we're in a flow)
 //        BuildFlag.isInternal = true
-//        testStore.send(.navigate(to: .manualLogin)) { state in
+//        await testStore.send(.navigate(to: .manualLogin)) { state in
 //            state.route = RouteIntent(route: .manualLogin, action: .navigateTo)
 //            state.manualCredentialsState = .init()
 //        }
 //
 //        // when
-//        testStore.send(.informSecondPasswordDetected)
-//        testStore.receive(.manualPairing(.navigate(to: .secondPasswordDetected))) { state in
+//        await testStore.send(.informSecondPasswordDetected)
+//        await testStore.receive(.manualPairing(.navigate(to: .secondPasswordDetected))) { state in
 //            state.manualCredentialsState?.route = RouteIntent(route: .secondPasswordDetected, action: .navigateTo)
 //            state.manualCredentialsState?.secondPasswordNoticeState = .init()
 //        }
@@ -138,22 +137,22 @@ final class WelcomeReducerTests: XCTestCase {
 //
 //    func test_second_password_can_be_navigated_to_from_email_login() {
 //        // given (we're in a flow)
-//        testStore.send(.navigate(to: .emailLogin)) { state in
+//        await testStore.send(.navigate(to: .emailLogin)) { state in
 //            state.route = RouteIntent(route: .emailLogin, action: .navigateTo)
 //            state.emailLoginState = .init()
 //        }
-//        testStore.send(.emailLogin(.navigate(to: .verifyDevice))) { state in
+//        await testStore.send(.emailLogin(.navigate(to: .verifyDevice))) { state in
 //            state.emailLoginState?.route = RouteIntent(route: .verifyDevice, action: .navigateTo)
 //            state.emailLoginState?.verifyDeviceState = .init(emailAddress: "")
 //        }
-//        testStore.send(.emailLogin(.verifyDevice(.navigate(to: .credentials)))) { state in
+//        await testStore.send(.emailLogin(.verifyDevice(.navigate(to: .credentials)))) { state in
 //            state.emailLoginState?.verifyDeviceState?.route = RouteIntent(route: .credentials, action: .navigateTo)
 //            state.emailLoginState?.verifyDeviceState?.credentialsState = .init()
 //        }
 //
 //        // when
-//        testStore.send(.informSecondPasswordDetected)
-//        testStore.receive(.emailLogin(.verifyDevice(.credentials(.navigate(to: .secondPasswordDetected))))) { state in
+//        await testStore.send(.informSecondPasswordDetected)
+//        await testStore.receive(.emailLogin(.verifyDevice(.credentials(.navigate(to: .secondPasswordDetected))))) { state in
 //            state.emailLoginState?.verifyDeviceState?.credentialsState?.route = RouteIntent(route: .secondPasswordDetected, action: .navigateTo)
 //            state.emailLoginState?.verifyDeviceState?.credentialsState?.secondPasswordNoticeState = .init()
 //        }

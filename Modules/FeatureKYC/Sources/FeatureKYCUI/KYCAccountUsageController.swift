@@ -72,13 +72,15 @@ final class KYCAccountUsageController: KYCBaseViewController {
         let view = AccountUsageView(
             store: .init(
                 initialState: AccountUsage.State.idle,
-                reducer: AccountUsage.Reducer(
-                    onComplete: continueToNextStep,
-                    dismiss: dismissWithAnimation,
-                    loadForm: { [form = publisher] in form },
-                    submitForm: accountUsageService.submitExtraKYCQuestions,
-                    analyticsRecorder: analyticsRecorder
-                )
+                reducer: {
+                    AccountUsage.AccountUsageReducer(
+                        onComplete: continueToNextStep,
+                        dismiss: dismissWithAnimation,
+                        loadForm: { [form = publisher] in form },
+                        submitForm: accountUsageService.submitExtraKYCQuestions,
+                        analyticsRecorder: analyticsRecorder
+                    )
+                }
             )
         )
         publisher

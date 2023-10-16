@@ -8,14 +8,12 @@ import ComposableNavigation
 import Localization
 import XCTest
 
+@MainActor
 final class AddressModificationReducerTests: XCTestCase {
 
     typealias TestStoreType = TestStore<
         AddressModificationState,
-        AddressModificationAction,
-        AddressModificationState,
-        AddressModificationAction,
-        Void
+        AddressModificationAction
     >
 
     private var testStore: TestStoreType!
@@ -28,28 +26,28 @@ final class AddressModificationReducerTests: XCTestCase {
         super.tearDown()
     }
 
-    func test_on_view_appear_with_address_id_fetches_address_details() throws {
+    func test_on_view_appear_with_address_id_fetches_address_details() async throws {
         testStore = .build(
             mainScheduler: mainScheduler,
             addressDetailsId: AddressDetailsSearchResult.sample().addressId
         )
 
-        testStore.send(.onAppear) {
+        await testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressEditScreenConfig.sample()
             $0.screenTitle = sample.title
             $0.screenSubtitle = sample.subtitle
             $0.saveButtonTitle = sample.saveAddressButtonTitle
         }
 
-        testStore.receive(.fetchAddressDetails(
+        await testStore.receive(.fetchAddressDetails(
             addressId: AddressDetailsSearchResult.sample().addressId)
         ) {
             $0.loading = true
         }
 
-        mainScheduler.advance()
+        await mainScheduler.advance()
 
-        testStore.receive(.didReceiveAdressDetailsResult(
+        await testStore.receive(.didReceiveAdressDetailsResult(
             .success(.sample())
         )) {
             $0.loading = false
@@ -58,7 +56,7 @@ final class AddressModificationReducerTests: XCTestCase {
         }
     }
 
-    func test_on_view_appear_with_address_id_fetches_address_details_states_does_not_match() throws {
+    func test_on_view_appear_with_address_id_fetches_address_details_states_does_not_match() async throws {
         testStore = .build(
             mainScheduler: mainScheduler,
             addressDetailsId: AddressDetailsSearchResult.sample().addressId,
@@ -66,9 +64,9 @@ final class AddressModificationReducerTests: XCTestCase {
             state: "MI"
         )
 
-        testStore.send(.didReceiveAdressDetailsResult(.success(.sample(state: "ME"))))
+        await testStore.send(.didReceiveAdressDetailsResult(.success(.sample(state: "ME"))))
 
-        testStore.receive(.showStateDoesNotMatchAlert) {
+        await testStore.receive(.showStateDoesNotMatchAlert) {
             let loc = LocalizationConstants.AddressSearch.Form.Errors.self
             $0.failureAlert = AlertState(
                 title: TextState(verbatim: loc.cannotEditStateTitle),
@@ -81,7 +79,7 @@ final class AddressModificationReducerTests: XCTestCase {
         }
     }
 
-    func test_on_view_appear_without_address_prefills_address() throws {
+    func test_on_view_appear_without_address_prefills_address() async throws {
         let address: Address = .sample()
         testStore = .build(
             mainScheduler: mainScheduler,
@@ -95,20 +93,20 @@ final class AddressModificationReducerTests: XCTestCase {
         XCTAssertEqual(state.state, address.state)
         XCTAssertEqual(state.country, address.country)
 
-        testStore.send(.onAppear) {
+        await testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressEditScreenConfig.sample()
             $0.screenTitle = sample.title
             $0.screenSubtitle = sample.subtitle
             $0.saveButtonTitle = sample.saveAddressButtonTitle
         }
 
-        testStore.receive(.fetchPrefilledAddress) {
+        await testStore.receive(.fetchPrefilledAddress) {
             $0.loading = true
         }
 
-        mainScheduler.advance()
+        await mainScheduler.advance()
 
-        testStore.receive(.didReceivePrefilledAddressResult(
+        await testStore.receive(.didReceivePrefilledAddressResult(
             .success(address)
         )) {
             $0.loading = false
@@ -116,7 +114,7 @@ final class AddressModificationReducerTests: XCTestCase {
         }
     }
 
-    func test_on_view_appear_with_address_and_with_search_it_does_not_prefetch_address() throws {
+    func test_on_view_appear_with_address_and_with_search_it_does_not_prefetch_address() async throws {
         let address: Address = .sample()
         testStore = .build(
             mainScheduler: mainScheduler,
@@ -134,7 +132,7 @@ final class AddressModificationReducerTests: XCTestCase {
         XCTAssertEqual(state.city, "")
         XCTAssertEqual(state.postcode, "")
 
-        testStore.send(.onAppear) {
+        await testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressEditScreenConfig.sample()
             $0.screenTitle = sample.title
             $0.screenSubtitle = sample.subtitle
@@ -142,7 +140,7 @@ final class AddressModificationReducerTests: XCTestCase {
         }
     }
 
-    func test_on_save_updates_address() throws {
+    func test_on_save_updates_address() async throws {
         let address: Address = .sample()
         testStore = .build(
             mainScheduler: mainScheduler,
@@ -152,40 +150,40 @@ final class AddressModificationReducerTests: XCTestCase {
             isPresentedFromSearchView: false
         )
 
-        testStore.send(.onAppear) {
+        await testStore.send(.onAppear) {
             let sample = AddressSearchFeatureConfig.AddressEditScreenConfig.sample()
             $0.screenTitle = sample.title
             $0.screenSubtitle = sample.subtitle
             $0.saveButtonTitle = sample.saveAddressButtonTitle
         }
 
-        testStore.receive(.fetchPrefilledAddress) {
+        await testStore.receive(.fetchPrefilledAddress) {
             $0.loading = true
         }
 
-        mainScheduler.advance()
+        await mainScheduler.advance()
 
-        testStore.receive(.didReceivePrefilledAddressResult(
+        await testStore.receive(.didReceivePrefilledAddressResult(
             .success(address)
         )) {
             $0.loading = false
             $0.updateAddressInputs(address: .sample())
         }
 
-        testStore.send(.updateAddress) {
+        await testStore.send(.updateAddress) {
             $0.loading = true
         }
 
-        mainScheduler.advance()
+        await mainScheduler.advance()
 
-        testStore.receive(.updateAddressResponse(
+        await testStore.receive(.updateAddressResponse(
             .success(address)
         )) {
             $0.loading = false
             $0.updateAddressInputs(address: .sample())
         }
 
-        testStore.receive(.complete(
+        await testStore.receive(.complete(
             .saved(address)
         ))
     }
@@ -207,13 +205,15 @@ extension TestStore {
                 isPresentedFromSearchView: isPresentedFromSearchView,
                 error: nil
             ),
-            reducer: AddressModificationReducer(
-                mainQueue: mainScheduler.eraseToAnyScheduler(),
-                config: .sample(),
-                addressService: MockAddressService(),
-                addressSearchService: MockAddressSearchService(),
-                onComplete: { _ in }
-            )
+            reducer: {
+                AddressModificationReducer(
+                    mainQueue: mainScheduler.eraseToAnyScheduler(),
+                    config: .sample(),
+                    addressService: MockAddressService(),
+                    addressSearchService: MockAddressSearchService(),
+                    onComplete: { _ in }
+                )
+            }
         )
     }
 }

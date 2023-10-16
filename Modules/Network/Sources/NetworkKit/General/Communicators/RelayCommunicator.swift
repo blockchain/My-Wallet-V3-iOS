@@ -151,7 +151,7 @@ public class EphemeralNetworkCommunicator: NetworkCommunicatorAPI {
     public var responseHandler: NetworkResponseHandlerAPI = NetworkResponseHandler()
 
     public init(
-        session: URLSession,
+        session: URLSession = .shared,
         isRecording: Bool = false,
         directory: String = NSTemporaryDirectory()
     ) {

@@ -16,7 +16,7 @@ public struct AppUpgradeView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .center, spacing: 16) {
                 Image(viewStore.state.logo, bundle: .module)
                     .resizable()
@@ -89,33 +89,33 @@ struct AppUpgradeView_Previews: PreviewProvider {
 
     static var previews: some View {
         AppUpgradeView(
-            store: .init(
+            store: Store(
                 initialState: AppUpgradeState(style: .unsupportedOS, url: ""),
-                reducer: AppUpgradeReducer()
+                reducer: { AppUpgradeReducer() }
             )
         )
         AppUpgradeView(
-            store: .init(
+            store: Store(
                 initialState: AppUpgradeState(style: .maintenance, url: ""),
-                reducer: AppUpgradeReducer()
+                reducer: { AppUpgradeReducer() }
             )
         )
         AppUpgradeView(
-            store: .init(
+            store: Store(
                 initialState: AppUpgradeState(style: .appMaintenance, url: ""),
-                reducer: AppUpgradeReducer()
+                reducer: { AppUpgradeReducer() }
             )
         )
         AppUpgradeView(
-            store: .init(
+            store: Store(
                 initialState: AppUpgradeState(style: .softUpgrade, url: ""),
-                reducer: AppUpgradeReducer()
+                reducer: { AppUpgradeReducer() }
             )
         )
         AppUpgradeView(
-            store: .init(
+            store: Store(
                 initialState: AppUpgradeState(style: .hardUpgrade, url: ""),
-                reducer: AppUpgradeReducer()
+                reducer: { AppUpgradeReducer() }
             )
         )
     }

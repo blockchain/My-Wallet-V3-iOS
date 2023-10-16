@@ -19,7 +19,7 @@ import MoneyKit
 import SwiftUI
 import UnifiedActivityDomain
 
-public struct ExternalTradingDashboard: ReducerProtocol {
+public struct ExternalTradingDashboard: Reducer {
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.tradingGetStartedCryptoBuyAmmountsService) var tradingGetStartedCryptoBuyAmmountsService
 
@@ -54,7 +54,7 @@ public struct ExternalTradingDashboard: ReducerProtocol {
 
     struct FetchBalanceId: Hashable {}
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Scope(state: \State.assetsState, action: /Action.assetsAction) { () -> DashboardAssetsSection in
             DashboardAssetsSection(
@@ -109,20 +109,22 @@ public struct ExternalTradingDashboard: ReducerProtocol {
                         }
                     }
                 }
-                .cancellable(id: FetchBalanceId.self, cancelInFlight: true)
+                .cancellable(id: FetchBalanceId(), cancelInFlight: true)
 
             case .balanceFetched(.success(let info)):
                 state.tradingBalance = info
                 if let balance = state.tradingBalance?.balance, balance.isZero {
-                    return EffectTask(value: .fetchGetStartedCryptoBuyAmmounts)
+                    return Effect.send(.fetchGetStartedCryptoBuyAmmounts)
                 } else {
                     return .none
                 }
 
             case .fetchGetStartedCryptoBuyAmmounts:
-                return .task(priority: .userInitiated) {
-                    await Action.onFetchGetStartedCryptoBuyAmmounts(
-                        TaskResult { try await tradingGetStartedCryptoBuyAmmountsService.cryptoBuyAmmounts() }
+                return .run(priority: .userInitiated) { send in
+                    await send(
+                        Action.onFetchGetStartedCryptoBuyAmmounts(
+                            TaskResult { try await tradingGetStartedCryptoBuyAmmountsService.cryptoBuyAmmounts() }
+                        )
                     )
                 }
 
@@ -154,7 +156,7 @@ public struct ExternalTradingDashboard: ReducerProtocol {
             case .activityAction(let action):
                 switch action {
                 case .onAllActivityTapped:
-                    return .fireAndForget { [context = state.context] in
+                    return .run { [context = state.context] _ in
                     if let context {
                         app.post(event: blockchain.ux.user.activity.all, context: context + [
                             blockchain.ux.user.activity.all.model: PresentedAssetType.custodial

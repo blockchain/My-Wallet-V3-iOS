@@ -1,6 +1,5 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import ComposableArchitecture
 @testable import FeatureKYCUI
 import SnapshotTesting
 import XCTest

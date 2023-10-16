@@ -45,7 +45,7 @@ struct ResetPasswordState: Equatable {
     }
 }
 
-struct ResetPasswordReducer: ReducerProtocol {
+struct ResetPasswordReducer: Reducer {
 
     typealias State = ResetPasswordState
     typealias Action = ResetPasswordAction
@@ -67,7 +67,7 @@ struct ResetPasswordReducer: ReducerProtocol {
         self.errorRecorder = errorRecorder
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
 

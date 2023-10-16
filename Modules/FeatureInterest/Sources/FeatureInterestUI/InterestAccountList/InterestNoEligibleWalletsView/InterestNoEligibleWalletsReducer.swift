@@ -6,20 +6,20 @@ import FeatureInterestDomain
 import Foundation
 import PlatformKit
 
-struct InterestNoEligibleWalletsReducer: ReducerProtocol {
+struct InterestNoEligibleWalletsReducer: Reducer {
     
     typealias State = InterestNoEligibleWalletsState
     typealias Action = InterestNoEligibleWalletsAction
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .startBuyTapped:
                 state.isRoutingToBuy = true
-                return EffectTask(value: .dismissNoEligibleWalletsScreen)
+                return Effect.send(.dismissNoEligibleWalletsScreen)
             case .startBuyOnDismissalIfNeeded:
                 if state.isRoutingToBuy {
-                    return EffectTask(value: .startBuyAfterDismissal(state.cryptoCurrency))
+                    return Effect.send(.startBuyAfterDismissal(state.cryptoCurrency))
                 }
                 return .none
             case .dismissNoEligibleWalletsScreen,

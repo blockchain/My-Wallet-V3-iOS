@@ -14,17 +14,20 @@ public final class ExternalTradingMigrationRepository: ExternalTradingMigrationR
     private let cachedProducts: CachedValueNew<CacheKey, ExternalTradingMigrationInfo, NetworkError>
     private let client: ExternalTradingMigrationClientAPI
 
-    public init(app: AppProtocol, client: ExternalTradingMigrationClientAPI) {
+    public init(
+        app: AppProtocol,
+        client: ExternalTradingMigrationClientAPI
+    ) {
         self.client = client
         let cache: AnyCache<CacheKey, ExternalTradingMigrationInfo> = InMemoryCache(
-            configuration: .default(),
+            configuration: .onUserStateChanged(),
             refreshControl: PerpetualCacheRefreshControl()
         )
         .eraseToAnyCache()
 
         self.cachedProducts = CachedValueNew(
             cache: cache,
-            fetch: { [app] _ in
+            fetch: { _ in
                 client
                     .fetchMigrationInfo()
                     .eraseToAnyPublisher()

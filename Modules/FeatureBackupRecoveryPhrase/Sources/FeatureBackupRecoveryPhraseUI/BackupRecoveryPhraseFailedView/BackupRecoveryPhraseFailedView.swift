@@ -10,7 +10,7 @@ public struct BackupRecoveryPhraseFailedView: View {
 
     public init(store: Store<BackupRecoveryPhraseFailedState, BackupRecoveryPhraseFailedAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {

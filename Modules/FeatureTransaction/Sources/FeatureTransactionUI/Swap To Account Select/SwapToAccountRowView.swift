@@ -38,7 +38,7 @@ struct SwapToAccountRowView: View {
         .onAppear {
             viewStore.send(.onAppear)
         }
-        .sheet(isPresented: viewStore.binding(\.$showAccountSelect), content: {
+        .sheet(isPresented: viewStore.$showAccountSelect, content: {
             IfLetStore(
                 store.scope(
                     state: \.swapSelectAccountState,
@@ -50,8 +50,8 @@ struct SwapToAccountRowView: View {
             )
         })
         .bindings {
-            subscribe(viewStore.binding(\.$price), to: blockchain.api.nabu.gateway.price.crypto[viewStore.currency.code].fiat.quote.value)
-            subscribe(viewStore.binding(\.$delta), to: blockchain.api.nabu.gateway.price.crypto[viewStore.currency.code].fiat.delta.since.yesterday)
+            subscribe(viewStore.$price, to: blockchain.api.nabu.gateway.price.crypto[viewStore.currency.code].fiat.quote.value)
+            subscribe(viewStore.$delta, to: blockchain.api.nabu.gateway.price.crypto[viewStore.currency.code].fiat.delta.since.yesterday)
         }
     }
 }

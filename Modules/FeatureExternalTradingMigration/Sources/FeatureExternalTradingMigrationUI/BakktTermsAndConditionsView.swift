@@ -6,8 +6,13 @@ import SwiftUI
 struct BakktTermsAndConditionsView: View {
     @State var termsApproved: Bool = false
     var onDone: () -> Void
+    var isLoading: Bool
     var termsAndConditionsUrl: URL? {
         URL(string: "https://bakkt.com/user-agreement-blockchain")
+    }
+
+    var continueDisabled: Bool {
+        isLoading || !termsApproved
     }
 
     var body: some View {
@@ -18,10 +23,10 @@ struct BakktTermsAndConditionsView: View {
             VStack(spacing: Spacing.padding2) {
                 termsAndConditions
 
-                PrimaryButton(title: LocalizationConstants.ExternalTradingMigration.continueButton) {
+                PrimaryButton(title: NonLocalizedConstants.ExternalTradingMigration.continueButton) {
                     onDone()
                 }
-                .disabled(!termsApproved)
+                .disabled(continueDisabled)
             }
         }
         .padding(.horizontal, Spacing.padding2)
@@ -30,7 +35,7 @@ struct BakktTermsAndConditionsView: View {
     @ViewBuilder var termsAndConditions: some View {
         HStack {
             Checkbox(isOn: $termsApproved)
-            Text(LocalizationConstants.ExternalTradingMigration.TermsAndConditions.disclaimer)
+            Text(NonLocalizedConstants.ExternalTradingMigration.TermsAndConditions.disclaimer)
                 .typography(.micro)
                 .foregroundColor(.semantic.body)
         }
@@ -39,6 +44,6 @@ struct BakktTermsAndConditionsView: View {
 
 struct BakktTermsAndConditionsView_Preview: PreviewProvider {
     static var previews: some View {
-        BakktTermsAndConditionsView(onDone: {})
+        BakktTermsAndConditionsView(onDone: {}, isLoading: false)
     }
 }

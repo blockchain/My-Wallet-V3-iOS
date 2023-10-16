@@ -14,7 +14,7 @@ public struct DexMainView: View {
 
     public init(store: StoreOf<DexMain>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -41,43 +41,48 @@ public struct DexMainView: View {
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$defaultFiatCurrency),
+                viewStore.$defaultFiatCurrency,
                 to: blockchain.user.currency.preferred.fiat.trading.currency
             )
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$isEligible),
+                viewStore.$isEligible,
                 to: blockchain.api.nabu.gateway.user.products.product["DEX"].is.eligible
             )
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$inegibilityReason),
+                viewStore.$inegibilityReason,
                 to: blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.message
             )
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$slippage),
+                viewStore.$slippage,
                 to: blockchain.ux.currency.exchange.dex.settings.slippage
             )
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$quoteByOutputEnabled),
+                viewStore.$quoteByOutputEnabled,
                 to: blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled
             )
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.$currentSelectedNetworkTicker),
+                viewStore.$currentSelectedNetworkTicker,
                 to: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value
             )
         }
         .bindings {
             subscribe(
-                viewStore.binding(\.allowance.$transactionHash),
+                viewStore.binding(
+                    get: \.allowance.transactionHash,
+                    send: {
+                        .binding(.set(\.allowance.$transactionHash, $0))
+                    }
+                ),
                 to: blockchain.ux.currency.exchange.dex.allowance.transactionId
             )
         }
@@ -99,7 +104,7 @@ public struct DexMainView: View {
                 to: blockchain.ux.currency.exchange.dex.allowance.sheet
             )
         }
-        .sheet(isPresented: viewStore.binding(\.$isConfirmationShown), content: {
+        .sheet(isPresented: viewStore.$isConfirmationShown, content: {
             IfLetStore(
                 store.scope(state: \.confirmation, action: DexMain.Action.confirmationAction),
                 then: { store in
@@ -339,7 +344,7 @@ extension DexMainView {
                         .circle(backgroundColor: .semantic.light)
 
                     if let network = viewStore.currentNetwork {
-                        network.nativeAsset.logo(size: 12.pt)
+                        network.logo(size: 12.pt)
                     }
                 }
                 .padding(.horizontal, Spacing.padding1)
@@ -593,7 +598,7 @@ struct DexMainView_Previews: PreviewProvider {
                     value: .create(major: 2.0, currency: usdt)
                 )
                 state.source.inputText = "1"
-                state.quote = .failure(DexUXError.insufficientFunds(usdt))
+                state.quote = Result<DexQuoteOutput, UX.Error>.failure(DexUXError.insufficientFunds(usdt))
             },
             dexService(with: allowanceRepository).setup { service in
                 service.quote = { _ in .just(.failure(.mockUxError)) }
@@ -607,12 +612,14 @@ struct DexMainView_Previews: PreviewProvider {
                 DexMainView(
                     store: Store(
                         initialState: state,
-                        reducer: withDependencies { dependencies in
-                            dependencies.dexService = dexService
-                            dependencies.app = app
-                        } operation: {
-                            DexMain()
-                                ._printChanges()
+                        reducer: {
+                            withDependencies { dependencies in
+                                dependencies.dexService = dexService
+                                dependencies.app = app
+                            } operation: {
+                                DexMain()
+                                    ._printChanges()
+                            }
                         }
                     )
                 )

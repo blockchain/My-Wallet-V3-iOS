@@ -17,7 +17,7 @@ import RemoteNotificationsKit
 import ToolKit
 import UIKit
 
-typealias AppDelegateEffect = EffectTask<AppDelegateAction>
+typealias AppDelegateEffect = Effect<AppDelegateAction>
 
 /// Used to cancel the background task if needed
 struct BackgroundTaskId: Hashable {}
@@ -39,6 +39,7 @@ public enum AppDelegateAction: Equatable {
         completionHandler: (UIBackgroundFetchResult) -> Void
     )
     case applyCertificatePinning
+    case none
 }
 
 extension AppDelegateAction {
@@ -87,37 +88,37 @@ public struct AppDelegateState: Equatable {
 }
 
 /// The reducer of the app delegate that describes the effects for each action.
-struct AppDelegateReducer: ReducerProtocol {
+struct AppDelegateReducer: Reducer {
 
     typealias State = AppDelegateState
     typealias Action = AppDelegateAction
 
     let environment: AppDelegateEnvironment
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .didFinishLaunching(let window):
                 state.window = window
+                environment.app.post(event: blockchain.app.did.finish.launching)
                 return .merge(
-                    environment.assetsRemoteService
-                        .refreshCache
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect()
-                        .fireAndForget(),
-
-                    .fireAndForget {
-                        environment.app.post(event: blockchain.app.did.finish.launching)
+                    .publisher {
+                        environment.assetsRemoteService
+                            .refreshCache
+                            .map { .none }
+                            .receive(on: environment.mainQueue)
                     },
-
-                    environment.app.publisher(for: blockchain.app.configuration.SSL.pinning.is.enabled, as: Bool.self)
-                        .prefix(1)
-                        .replaceError(with: true)
-                        .filter { $0 }
-                        .map(.applyCertificatePinning)
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect(),
-
+                    .run { send in
+                        do {
+                            try await environment.app.publisher(for: blockchain.app.configuration.SSL.pinning.is.enabled, as: Bool.self)
+                                .prefix(1)
+                                .replaceError(with: true)
+                                .filter { $0 }
+                                .receive(on: environment.mainQueue)
+                                .await()
+                            await send(.applyCertificatePinning)
+                        }
+                    },
                     setupWalletConnectV2(
                         projectId: InfoDictionaryHelper.value(for: .walletConnectId),
                         configurator: configureWalletConnectV2(projectId:)
@@ -133,40 +134,39 @@ struct AppDelegateReducer: ReducerProtocol {
             case .willEnterForeground(let application):
                 return .merge(
                     .cancel(id: BackgroundTaskId()),
-                    environment.backgroundAppHandler
-                        .appEnteredForeground(application)
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect()
-                        .fireAndForget()
+                    .run { _ in
+                        try await environment.backgroundAppHandler
+                            .appEnteredForeground(application)
+                            .receive(on: environment.mainQueue)
+                            .await()
+                    }
                 )
             case .didEnterBackground(let application):
-                return environment.backgroundAppHandler
-                        .appEnteredBackground(application)
-                        .receive(on: environment.mainQueue)
-                        .eraseToEffect()
-                        .cancellable(id: BackgroundTaskId(), cancelInFlight: true)
-                        .map { _ in .handleDelayedEnterBackground }
+                return .run { send in
+                    do {
+                        try await environment.backgroundAppHandler
+                            .appEnteredBackground(application)
+                            .receive(on: environment.mainQueue)
+                            .await()
+                        await send(.handleDelayedEnterBackground)
+                    }
+                }
+                .cancellable(id: BackgroundTaskId(), cancelInFlight: true)
             case .handleDelayedEnterBackground:
-                return .merge(
-                    .fireAndForget {
-                        environment.app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
-                    },
-                    .cancel(id: BackgroundTaskId())
-                )
+                environment.app.state.set(blockchain.app.is.ready.for.deep_link, to: false)
+                return .cancel(id: BackgroundTaskId())
             case .didBecomeActive:
+                UIApplication.shared.applicationIconBadgeNumber = 0
                 return .merge(
                     removeBlurFilter(
                         handler: environment.blurEffectHandler,
                         from: state.window
-                    ),
-                    .fireAndForget {
-                        UIApplication.shared.applicationIconBadgeNumber = 0
-                    }
+                    )
                 )
             case .open:
                 return .none
             case .didRegisterForRemoteNotifications(let result):
-                return .fireAndForget {
+                return .run { _ in
                     switch result {
                     case .success(let data):
                         environment.remoteNotificationTokenReceiver
@@ -177,8 +177,8 @@ struct AppDelegateReducer: ReducerProtocol {
                     }
                 }
             case .didReceiveRemoteNotification(let application, let userInfo, let completionHandler):
-                return .fireAndForget {
-                    environment.remoteNotificationBackgroundReceiver
+                return .run { _ in
+                    await environment.remoteNotificationBackgroundReceiver
                         .didReceiveRemoteNotification(
                             userInfo,
                             onApplicationState: application.applicationState,
@@ -188,9 +188,10 @@ struct AppDelegateReducer: ReducerProtocol {
             case .userActivity:
                 return .none
             case .applyCertificatePinning:
-                return .fireAndForget {
-                    environment.certificatePinner.pinCertificateIfNeeded()
-                }
+                environment.certificatePinner.pinCertificateIfNeeded()
+                return .none
+            case .none:
+                return .none
             }
         }
     }
@@ -205,9 +206,8 @@ private func applyBlurFilter(
     guard let view = window else {
         return .none
     }
-    return .fireAndForget {
-        handler.applyEffect(on: view)
-    }
+    handler.applyEffect(on: view)
+    return .none
 }
 
 private func removeBlurFilter(
@@ -217,15 +217,14 @@ private func removeBlurFilter(
     guard let view = window else {
         return .none
     }
-    return .fireAndForget {
-        handler.removeEffect(from: view)
-    }
+    handler.removeEffect(from: view)
+    return .none
 }
 
 private func enableSift(
     using service: FeatureAuthenticationDomain.SiftServiceAPI
 ) -> AppDelegateEffect {
-    .fireAndForget {
+    .run { _ in
         service.enable()
     }
 }
@@ -234,7 +233,7 @@ private func setupWalletConnectV2(
     projectId: String,
     configurator: @escaping (_ projectId: String) -> Void
 ) -> AppDelegateEffect {
-    .fireAndForget {
+    .run { _ in
         configurator(projectId)
     }
 }

@@ -15,23 +15,22 @@ enum TiersStatusViewAction: Equatable {
     case tierTapped(KYC.Tier)
 }
 
-struct TiersStatusViewReducer: ReducerProtocol {
+struct TiersStatusViewReducer: Reducer {
 
     typealias State = KYC.UserTiers
     typealias Action = TiersStatusViewAction
 
     let presentKYCFlow: (KYC.Tier) -> Void
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .tierTapped(let tier):
                 guard tier > state.latestApprovedTier else {
                     return .none
                 }
-                return .fireAndForget {
-                    presentKYCFlow(tier)
-                }
+                presentKYCFlow(tier)
+                return .none
 
             default:
                 return .none
@@ -47,7 +46,7 @@ struct TiersStatusView: View {
 
     init(store: Store<KYC.UserTiers, TiersStatusViewAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -128,15 +127,17 @@ struct SwiftUIView_Previews: PreviewProvider {
 
     static var previews: some View {
         TiersStatusView(
-            store: .init(
-                initialState: .init(
+            store: Store(
+                initialState: KYC.UserTiers(
                     tiers: [
-                        .init(tier: .verified, state: .pending)
+                        KYC.UserTier(tier: .verified, state: .pending)
                     ]
                 ),
-                reducer: TiersStatusViewReducer(
-                    presentKYCFlow: { _ in }
-                )
+                reducer: {
+                    TiersStatusViewReducer(
+                        presentKYCFlow: { _ in }
+                    )
+                }
             )
         )
     }

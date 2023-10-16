@@ -7,7 +7,7 @@ import FeatureDexData
 import FeatureDexDomain
 import SwiftUI
 
-public struct DexDashboardAnalytics: ReducerProtocol {
+public struct DexDashboardAnalytics: Reducer {
 
     private typealias Event = AnalyticsEvents.New.Dex
 
@@ -18,7 +18,7 @@ public struct DexDashboardAnalytics: ReducerProtocol {
         self.analyticsRecorder = analyticsRecorder
     }
 
-    public var body: some ReducerProtocol<DexDashboard.State, DexDashboard.Action> {
+    public var body: some Reducer<DexDashboard.State, DexDashboard.Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -35,7 +35,7 @@ public struct DexDashboardAnalytics: ReducerProtocol {
         }
     }
 
-    private func reduce(_ state: inout DexMain.State, _ action: DexMain.Action) -> EffectTask<DexDashboard.Action> {
+    private func reduce(_ state: inout DexMain.State, _ action: DexMain.Action) -> Effect<DexDashboard.Action> {
         switch action {
         case .refreshQuote:
             if state.source.isCurrentInput, let currency = state.source.currency, state.source.amount?.isPositive == true {
@@ -90,7 +90,7 @@ public struct DexDashboardAnalytics: ReducerProtocol {
         return .none
     }
 
-    private func reduce(_ state: inout DexIntro.State, _ action: DexIntro.Action) -> EffectTask<DexDashboard.Action> {
+    private func reduce(_ state: inout DexIntro.State, _ action: DexIntro.Action) -> Effect<DexDashboard.Action> {
         switch action {
         case .onAppear:
             record(.onboardingViewed)

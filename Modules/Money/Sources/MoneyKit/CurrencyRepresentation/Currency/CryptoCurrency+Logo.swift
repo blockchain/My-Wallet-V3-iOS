@@ -8,6 +8,33 @@ import SwiftUI
 import BlockchainComponentLibrary
 import BlockchainNamespace
 
+extension EVMNetwork {
+
+    public func logo(
+        size: Length = 24.pt,
+        showNetworkLogo: Bool? = nil
+    ) -> some View {
+        logoResource
+            .image
+            .frame(width: size, height: size)
+    }
+
+    public var logoResource: ImageLocation {
+        if isInTest {
+            return placeholder
+        }
+        return logoURLImageResource ?? placeholder
+    }
+
+    private var logoURLImageResource: ImageLocation? {
+        logoURL.flatMap { .remote(url: $0, fallback: placeholder) }
+    }
+
+    private var placeholder: ImageLocation {
+        placeholderImageLocation(networkConfig.shortName)
+    }
+}
+
 extension CryptoCurrency {
 
     public var color: Color {
@@ -58,11 +85,11 @@ extension CryptoCurrency {
         public var body: some View {
             ZStack(alignment: .bottomTrailing) {
                 currency.logoResource.image
-                if isShowingNetworkLogo, let network = currency.network(), network.nativeAsset != currency {
+                if isShowingNetworkLogo, let network = currency.network() {
                     Circle()
                         .fill(Color.semantic.background)
                         .inscribed(
-                            AsyncMedia(url: network.nativeAsset.logoURL)
+                            network.logoResource.image
                         )
                         .padding([.leading, .top], size.divided(by: 4))
                         .offset(x: size.divided(by: 6), y: size.divided(by: 6))

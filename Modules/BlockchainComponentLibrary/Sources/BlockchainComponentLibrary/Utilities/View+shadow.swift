@@ -16,6 +16,23 @@ extension View {
         .mask(Rectangle().padding(edges, -20))
     }
 
+    @warn_unqualified_access public func roundedBackgroundWithShadow(
+        edges: Edge.Set,
+        fill: Color = .semantic.background,
+        color shadow: Color = .semantic.dark.opacity(0.5),
+        radius: CGFloat = 8,
+        padding: EdgeInsets = .zero,
+        cornerRadius: CGFloat = 16
+    ) -> some View {
+        background(
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(fill)
+                .shadow(color: shadow, radius: radius)
+                .padding(padding)
+        )
+        .mask(RoundedRectangle(cornerRadius: cornerRadius).padding(edges, -20))
+    }
+
     @warn_unqualified_access public func overlayWithShadow(
         _ alignment: Alignment,
         startPoint: UnitPoint = .top,

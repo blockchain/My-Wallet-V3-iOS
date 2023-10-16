@@ -43,7 +43,7 @@ public struct SkipUpgradeState: Equatable, NavigationState {
     }
 }
 
-struct SkipUpgradeReducer: ReducerProtocol {
+struct SkipUpgradeReducer: Reducer {
 
     typealias State = SkipUpgradeState
     typealias Action = SkipUpgradeAction
@@ -110,7 +110,7 @@ struct SkipUpgradeReducer: ReducerProtocol {
         self.appStoreInformationRepository = appStoreInformationRepository
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
 

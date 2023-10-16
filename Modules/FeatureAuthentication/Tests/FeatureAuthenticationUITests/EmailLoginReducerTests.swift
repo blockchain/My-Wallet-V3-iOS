@@ -15,15 +15,12 @@ import XCTest
 @testable import FeatureAuthenticationMock
 @testable import ToolKitMock
 
-final class EmailLoginReducerTests: XCTestCase {
+@MainActor final class EmailLoginReducerTests: XCTestCase {
 
     private var mockMainQueue: TestSchedulerOf<DispatchQueue>!
     private var testStore: TestStore<
         EmailLoginState,
-        EmailLoginAction,
-        EmailLoginState,
-        EmailLoginAction,
-        Void
+        EmailLoginAction
     >!
 
     override func setUpWithError() throws {
@@ -31,27 +28,29 @@ final class EmailLoginReducerTests: XCTestCase {
         mockMainQueue = DispatchQueue.test
         testStore = TestStore(
             initialState: .init(),
-            reducer: EmailLoginReducer(
-                app: App.test,
-                mainQueue: mockMainQueue.eraseToAnyScheduler(),
-                sessionTokenService: MockSessionTokenService(),
-                deviceVerificationService: MockDeviceVerificationService(),
-                errorRecorder: MockErrorRecorder(),
-                externalAppOpener: MockExternalAppOpener(),
-                analyticsRecorder: MockAnalyticsRecorder(),
-                walletRecoveryService: .mock(),
-                walletCreationService: .mock(),
-                walletFetcherService: WalletFetcherServiceMock().mock(),
-                accountRecoveryService: MockAccountRecoveryService(),
-                recaptchaService: MockRecaptchaService(),
-                emailAuthorizationService: NoOpEmailAuthorizationService(),
-                smsService: NoOpSMSService(),
-                loginService: NoOpLoginService(),
-                seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
-                passwordValidator: PasswordValidator(),
-                signUpCountriesService: MockSignUpCountriesService(),
-                appStoreInformationRepository: NoOpAppStoreInformationRepository()
-            )
+            reducer: {
+                EmailLoginReducer(
+                    app: App.test,
+                    mainQueue: mockMainQueue.eraseToAnyScheduler(),
+                    sessionTokenService: MockSessionTokenService(),
+                    deviceVerificationService: MockDeviceVerificationService(),
+                    errorRecorder: MockErrorRecorder(),
+                    externalAppOpener: MockExternalAppOpener(),
+                    analyticsRecorder: MockAnalyticsRecorder(),
+                    walletRecoveryService: .mock(),
+                    walletCreationService: .mock(),
+                    walletFetcherService: WalletFetcherServiceMock().mock(),
+                    accountRecoveryService: MockAccountRecoveryService(),
+                    recaptchaService: MockRecaptchaService(),
+                    emailAuthorizationService: NoOpEmailAuthorizationService(),
+                    smsService: NoOpSMSService(),
+                    loginService: NoOpLoginService(),
+                    seedPhraseValidator: SeedPhraseValidator(words: Set(WordList.defaultWords)),
+                    passwordValidator: PasswordValidator(),
+                    signUpCountriesService: MockSignUpCountriesService(),
+                    appStoreInformationRepository: NoOpAppStoreInformationRepository()
+                )
+            }
         )
     }
 
@@ -73,49 +72,51 @@ final class EmailLoginReducerTests: XCTestCase {
 //        testStore.assert(
 //            .send(.onAppear),
 //            .receive(.setupSessionToken),
-//            .do { self.mockMainQueue.advance() },
+//            .do { self.await mockMainQueue.advance() },
 //            .receive(.none)
 //        )
 //    }
 
-    func test_send_device_verification_email_success() {
+    func test_send_device_verification_email_success() async {
         let validEmail = "valid@example.com"
-        testStore.send(.didChangeEmailAddress(validEmail)) { state in
+        await testStore.send(.didChangeEmailAddress(validEmail)) { state in
             state.emailAddress = validEmail
             state.isEmailValid = true
         }
-        testStore.send(.sendDeviceVerificationEmail) { state in
+        await testStore.send(.sendDeviceVerificationEmail) { state in
             state.isLoading = true
             state.verifyDeviceState?.sendEmailButtonIsLoading = true
         }
-        mockMainQueue.advance()
-        testStore.receive(.didSendDeviceVerificationEmail(.success(.noValue))) { state in
+        await mockMainQueue.advance()
+        await testStore.receive(.didSendDeviceVerificationEmail(.success(.noValue))) { state in
             state.isLoading = false
             state.verifyDeviceState?.sendEmailButtonIsLoading = false
         }
-        testStore.receive(.navigate(to: .verifyDevice)) { state in
+        await testStore.receive(.navigate(to: .verifyDevice)) { state in
             state.verifyDeviceState = .init(emailAddress: validEmail)
             state.route = RouteIntent(route: .verifyDevice, action: .navigateTo)
         }
     }
 
-    func test_send_device_verification_email_failure_network_error() {
+    func test_send_device_verification_email_failure_network_error() async {
         // should still go to verify device screen if it is a network error
-        testStore.send(.didSendDeviceVerificationEmail(.failure(.networkError(.unknown))))
-        testStore.receive(.navigate(to: .verifyDevice)) { state in
+        await testStore.send(.didSendDeviceVerificationEmail(.failure(.networkError(.unknown))))
+        await testStore.receive(.navigate(to: .verifyDevice)) { state in
             state.verifyDeviceState = .init(emailAddress: "")
             state.route = RouteIntent(route: .verifyDevice, action: .navigateTo)
         }
     }
 
-    func test_send_device_verification_email_failure_missing_session_token() {
+    func test_send_device_verification_email_failure_missing_session_token() async {
         // should not go to verify device screen if it is a missing session token error
-        testStore.send(.didSendDeviceVerificationEmail(.failure(.missingSessionToken)))
-        testStore.receive(
+        await testStore.send(.didSendDeviceVerificationEmail(.failure(.missingSessionToken)))
+        await testStore.receive(
             .alert(
-                .show(
-                    title: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SignInError.title,
-                    message: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SignInError.message
+                .presented(
+                    .show(
+                        title: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SignInError.title,
+                        message: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SignInError.message
+                    )
                 )
             )
         ) { state in
@@ -128,20 +129,22 @@ final class EmailLoginReducerTests: XCTestCase {
                 ),
                 dismissButton: .default(
                     TextState(LocalizationConstants.continueString),
-                    action: .send(.alert(.dismiss))
+                    action: .send(.dismiss)
                 )
             )
         }
     }
 
-    func test_send_device_verification_email_failure_recaptcha_error() {
+    func test_send_device_verification_email_failure_recaptcha_error() async {
         // should not go to verify device screen if it is a recaptcha error
-        testStore.send(.didSendDeviceVerificationEmail(.failure(.recaptchaError(.unknownError))))
-        testStore.receive(
+        await testStore.send(.didSendDeviceVerificationEmail(.failure(.recaptchaError(.unknownError))))
+        await testStore.receive(
             .alert(
-                .show(
-                    title: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SignInError.title,
-                    message: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SignInError.message
+                .presented(
+                    .show(
+                        title: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SignInError.title,
+                        message: LocalizationConstants.FeatureAuthentication.EmailLogin.Alerts.SignInError.message
+                    )
                 )
             )
         ) { state in
@@ -154,7 +157,7 @@ final class EmailLoginReducerTests: XCTestCase {
                 ),
                 dismissButton: .default(
                     TextState(LocalizationConstants.continueString),
-                    action: .send(.alert(.dismiss))
+                    action: .send(.dismiss)
                 )
             )
         }

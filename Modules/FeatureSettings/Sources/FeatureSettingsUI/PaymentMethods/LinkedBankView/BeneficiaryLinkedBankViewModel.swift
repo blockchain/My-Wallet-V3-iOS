@@ -43,7 +43,7 @@ final class BeneficiaryLinkedBankViewModel: LinkedBankViewModelAPI {
 
         if let icon = data.icon {
             self.badgeImageViewModel = .template(
-                image: .remote(url: icon),
+                image: .remote(url: icon, fallback: nil),
                 templateColor: .semantic.primary,
                 backgroundColor: .clear,
                 cornerRadius: .round,

@@ -7,7 +7,7 @@ import SnapshotTesting
 import SwiftUI
 import XCTest
 
-final class TiersStatusViewTests: XCTestCase {
+@MainActor final class TiersStatusViewTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
@@ -81,9 +81,9 @@ final class TiersStatusViewTests: XCTestCase {
 
     private func buildView(tiers: KYC.UserTiers) -> some View {
         TiersStatusView(
-            store: .init(
+            store: Store(
                 initialState: tiers,
-                reducer: TiersStatusViewReducer(presentKYCFlow: { _ in })
+                reducer: { TiersStatusViewReducer(presentKYCFlow: { _ in }) }
             )
         )
         // fix the frame to a size that fits the content otherwise tests fail on CI

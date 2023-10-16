@@ -13,4 +13,5 @@ public enum ViewRecoveryPhraseAction: Equatable {
     case onBackupToIcloudComplete
     case onRecoveryPhraseComponentsFetchSuccess([RecoveryPhraseWord])
     case onRecoveryPhraseComponentsFetchedFailed
+    case none
 }

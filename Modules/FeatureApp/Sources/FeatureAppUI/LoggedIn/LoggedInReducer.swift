@@ -42,6 +42,7 @@ public enum LoggedIn {
         case didShowPostSignUpOnboardingFlow
         case showPostSignInOnboardingFlow
         case didShowPostSignInOnboardingFlow
+        case exitToPinScreen
     }
 
     public struct State: Equatable {
@@ -55,7 +56,7 @@ public enum LoggedIn {
     }
 }
 
-struct LoggedInReducer: ReducerProtocol {
+struct LoggedInReducer: Reducer {
 
     typealias State = LoggedIn.State
     typealias Action = LoggedIn.Action
@@ -75,31 +76,33 @@ struct LoggedInReducer: ReducerProtocol {
     var remoteNotificationTokenSender: RemoteNotificationTokenSending
     var unifiedActivityService: UnifiedActivityPersistenceServiceAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .start(let context):
                 return .merge(
-                    .fireAndForget {
-                        unifiedActivityService
-                        .connect()
+                    .run { _ in
+                        unifiedActivityService.connect()
                     },
-                    exchangeRepository
-                        .syncDepositAddressesIfLinked()
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .fireAndForget(),
-                    remoteNotificationTokenSender
-                        .sendTokenIfNeeded()
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .fireAndForget(),
-                    remoteNotificationAuthorizer
-                        .requestAuthorizationIfNeeded()
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .fireAndForget(),
-                    .fireAndForget {
+                    .run { _ in
+                        try? await exchangeRepository
+                            .syncDepositAddressesIfLinked()
+                            .receive(on: mainQueue)
+                            .await()
+                    },
+                    .run { _ in
+                        try? await remoteNotificationTokenSender
+                            .sendTokenIfNeeded()
+                            .receive(on: mainQueue)
+                            .await()
+                    },
+                    .run { _ in
+                        try? await remoteNotificationAuthorizer
+                            .requestAuthorizationIfNeeded()
+                            .receive(on: mainQueue)
+                            .await()
+                    },
+                    .run { _ in
                         NotificationCenter.default.post(name: .login, object: nil)
                     },
                     handleStartup(
@@ -110,10 +113,10 @@ struct LoggedInReducer: ReducerProtocol {
                 let context = content.context
                 guard context == .executeDeeplinkRouting else {
                     guard context == .sendCrypto else {
-                        return EffectTask(value: .deeplinkHandled)
+                        return Effect.send(.deeplinkHandled)
                     }
                     state.displaySendCryptoScreen = true
-                    return EffectTask(value: .deeplinkHandled)
+                    return Effect.send(.deeplinkHandled)
                 }
                 // perform legacy routing
                 deeplinkRouter.routeIfNeeded()
@@ -124,23 +127,21 @@ struct LoggedInReducer: ReducerProtocol {
                 return .none
             case .handleNewWalletCreation:
                 app.post(event: blockchain.user.wallet.created)
-                return EffectTask(value: .showPostSignUpOnboardingFlow)
+                return Effect.send(.showPostSignUpOnboardingFlow)
             case .handleExistingWalletSignIn:
-                return EffectTask(value: .showPostSignInOnboardingFlow)
+                return Effect.send(.showPostSignInOnboardingFlow)
             case .showPostSignUpOnboardingFlow:
                 // display new onboarding flow
                 state.displayPostSignUpOnboardingFlow = true
-                return .fireAndForget {
-                    app.post(event: blockchain.ux.onboarding.intro.event.show.sign.up)
-                }
+                app.post(event: blockchain.ux.onboarding.intro.event.show.sign.up)
+                return .none
             case .didShowPostSignUpOnboardingFlow:
                 state.displayPostSignUpOnboardingFlow = false
                 return .none
             case .showPostSignInOnboardingFlow:
                 state.displayPostSignInOnboardingFlow = true
-                return .fireAndForget {
-                    app.post(event: blockchain.ux.onboarding.intro.event.show.sign.in)
-                }
+                app.post(event: blockchain.ux.onboarding.intro.event.show.sign.in)
+                return .none
             case .didShowPostSignInOnboardingFlow:
                 state.displayPostSignInOnboardingFlow = false
                 return .none
@@ -148,7 +149,7 @@ struct LoggedInReducer: ReducerProtocol {
                 state = LoggedIn.State()
                 return .cancel(id: LoggedInIdentifier())
             case .deleteWallet:
-                return EffectTask(value: .logout)
+                return Effect.send(.logout)
             case .stop:
                 // We need to cancel any running operations if we require pin entry.
                 // Although this is the same as logout and .wallet(.authenticateForBiometrics)
@@ -160,6 +161,9 @@ struct LoggedInReducer: ReducerProtocol {
                 return .none
             case .none:
                 return .none
+            case .exitToPinScreen:
+                state = LoggedIn.State()
+                return .cancel(id: LoggedInIdentifier())
             }
         }
         NamespaceReducer(app: app)
@@ -170,37 +174,36 @@ struct LoggedInReducer: ReducerProtocol {
 
 /// Handle the context of a logged in state, eg wallet creation, deeplink, etc
 /// - Parameter context: A `LoggedIn.Context` to be taken into account after logging in
-/// - Returns: An `EffectTask<LoggedIn.Action>` based on the context
+/// - Returns: An `Effect<LoggedIn.Action>` based on the context
 private func handleStartup(
     context: LoggedIn.Context
-) -> EffectTask<LoggedIn.Action> {
+) -> Effect<LoggedIn.Action> {
     switch context {
     case .wallet(let walletContext) where walletContext.isNew:
-        return EffectTask(value: .handleNewWalletCreation)
+        return Effect.send(.handleNewWalletCreation)
     case .wallet:
         // ignore existing/recovery wallet context
         return .none
     case .deeplink(let deeplinkContent):
-        return EffectTask(value: .deeplink(deeplinkContent))
+        return Effect.send(.deeplink(deeplinkContent))
     case .none:
-        return EffectTask(value: .handleExistingWalletSignIn)
+        return Effect.send(.handleExistingWalletSignIn)
     }
 }
 
-struct NamespaceReducer: ReducerProtocol {
+struct NamespaceReducer: Reducer {
 
     typealias State = LoggedIn.State
     typealias Action = LoggedIn.Action
 
     var app: AppProtocol
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .logout:
-                return .fireAndForget {
-                    app.signOut()
-                }
+                app.signOut()
+                return .none
             default:
                 return .none
             }

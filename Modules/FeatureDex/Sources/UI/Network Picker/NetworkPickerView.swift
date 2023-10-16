@@ -12,7 +12,7 @@ struct NetworkPickerView: View {
 
     init(store: StoreOf<NetworkPicker>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     var body: some View {
@@ -22,7 +22,7 @@ struct NetworkPickerView: View {
                     ForEach(viewStore.availableNetworks, id: \.networkConfig.networkTicker) { network in
                         TableRow(
                             leading: {
-                                network.nativeAsset.logo(size: 24.pt)
+                                network.logo(size: 24.pt)
                             },
                             title: network.networkConfig.shortName,
                             trailing: {
@@ -75,7 +75,7 @@ struct NetworkPickerView_Previews: PreviewProvider {
                 initialState: NetworkPicker.State(
                     currentNetwork: "ETH"
                 ),
-                reducer: NetworkPicker()._printChanges()
+                reducer: { NetworkPicker()._printChanges() }
             )
         )
         .app(App.preview)

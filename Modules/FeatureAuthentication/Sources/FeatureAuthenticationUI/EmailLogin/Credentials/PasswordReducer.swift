@@ -28,11 +28,11 @@ struct PasswordState: Equatable {
     }
 }
 
-struct PasswordReducer: ReducerProtocol {
+struct PasswordReducer: Reducer {
     typealias State = PasswordState
     typealias Action = PasswordAction
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .didChangePassword(let password):

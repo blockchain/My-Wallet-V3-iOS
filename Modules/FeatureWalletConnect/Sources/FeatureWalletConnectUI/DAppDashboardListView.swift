@@ -127,7 +127,7 @@ public struct DAppDashboardListView: View {
         } else {
             ZStack(alignment: .trailing) {
                 ForEach(0..<dapp.networks.count, id: \.self) { i in
-                    if let url = dapp.networks[i].nativeAsset.logoURL {
+                    if let url = dapp.networks[i].logoURL {
                         ZStack {
                             AsyncMedia(url: url)
                                 .aspectRatio(contentMode: .fill)
@@ -146,7 +146,7 @@ public struct DAppDashboardListView: View {
     @ViewBuilder
     func singleNetworkView(_ network: EVMNetwork) -> some View {
         HStack(spacing: Spacing.padding1) {
-            AsyncMedia(url: network.nativeAsset.logoURL)
+            AsyncMedia(url: network.logoURL)
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 18, height: 18)
 

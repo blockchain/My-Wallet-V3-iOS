@@ -5,7 +5,7 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-public struct SwapFromAccountRow: ReducerProtocol {
+public struct SwapFromAccountRow: Reducer {
     public let app: AppProtocol
     public init(
         app: AppProtocol
@@ -61,7 +61,7 @@ public struct SwapFromAccountRow: ReducerProtocol {
         }
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
@@ -79,7 +79,7 @@ public struct SwapFromAccountRow: ReducerProtocol {
 
 extension SwapFromAccountRow.State {
     var networkTag: TagView? {
-        guard let networkName, networkName != currency?.name, appMode == .pkw else {
+        guard let networkName, appMode == .pkw else {
             return nil
         }
         return TagView(text: networkName, variant: .outline)

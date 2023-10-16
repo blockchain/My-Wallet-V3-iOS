@@ -11,7 +11,7 @@ import UIComponentsKit
 struct EmailVerificationHelpState: Equatable {
     var emailAddress: String
     var sendingVerificationEmail: Bool = false
-    var sentFailedAlert: AlertState<EmailVerificationHelpAction>?
+    @PresentationState var sentFailedAlert: AlertState<EmailVerificationHelpAction.AlertAction>?
 
     init(emailAddress: String) {
         self.emailAddress = emailAddress
@@ -19,15 +19,18 @@ struct EmailVerificationHelpState: Equatable {
 }
 
 enum EmailVerificationHelpAction: Equatable {
+    enum AlertAction {
+        case dismiss
+        case sendVerificationEmail
+    }
     case editEmailAddress
-    case sendVerificationEmail
     case didReceiveEmailSendingResponse(Result<Int, UpdateEmailAddressError>)
-    case dismissEmailSendingFailureAlert
+    case alert(PresentationAction<AlertAction>)
 }
 
 private typealias L10n = LocalizationConstants.NewKYC
 
-struct EmailVerificationHelpReducer: ReducerProtocol {
+struct EmailVerificationHelpReducer: Reducer {
     
     typealias State = EmailVerificationHelpState
     typealias Action = EmailVerificationHelpAction
@@ -35,25 +38,20 @@ struct EmailVerificationHelpReducer: ReducerProtocol {
     let emailVerificationService: EmailVerificationServiceAPI
     let mainQueue: AnySchedulerOf<DispatchQueue>
     
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .editEmailAddress:
                 return .none
 
-            case .sendVerificationEmail:
+            case .alert(.presented(.sendVerificationEmail)):
                 state.sendingVerificationEmail = true
-                return emailVerificationService.sendVerificationEmail(to: state.emailAddress)
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        switch result {
-                        case .success:
-                            return .didReceiveEmailSendingResponse(.success(0))
-                        case .failure(let error):
-                            return .didReceiveEmailSendingResponse(.failure(error))
-                        }
-                    }
+                return .publisher { [state] in
+                    emailVerificationService.sendVerificationEmail(to: state.emailAddress)
+                        .receive(on: mainQueue)
+                        .map { .didReceiveEmailSendingResponse(.success(0)) }
+                        .catch { .didReceiveEmailSendingResponse(.failure($0)) }
+                }
 
             case .didReceiveEmailSendingResponse(let result):
                 state.sendingVerificationEmail = false
@@ -74,7 +72,7 @@ struct EmailVerificationHelpReducer: ReducerProtocol {
                     return .none
                 }
 
-            case .dismissEmailSendingFailureAlert:
+            case .alert(.presented(.dismiss)), .alert(.dismiss):
                 state.sentFailedAlert = nil
                 return .none
             }
@@ -87,7 +85,7 @@ struct EmailVerificationHelpView: View {
     let store: Store<EmailVerificationHelpState, EmailVerificationHelpAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: Spacing.padding3) {
                 Spacer()
                 ZStack(alignment: .bottomTrailing) {
@@ -127,7 +125,7 @@ struct EmailVerificationHelpView: View {
                         title: L10n.EmailVerificationHelp.sendEmailAgainButtonTitle,
                         isLoading: viewStore.sendingVerificationEmail
                     ) {
-                        viewStore.send(.sendVerificationEmail)
+                        viewStore.send(.alert(.presented(.sendVerificationEmail)))
                     }
                     PrimaryWhiteButton(title: L10n.EmailVerificationHelp.editEmailAddressButtonTitle) {
                         viewStore.send(.editEmailAddress)
@@ -136,8 +134,10 @@ struct EmailVerificationHelpView: View {
             }
             .padding(Spacing.padding2)
             .alert(
-                store.scope(state: \.sentFailedAlert),
-                dismiss: .dismissEmailSendingFailureAlert
+                store: store.scope(
+                    state: \.$sentFailedAlert,
+                    action: { .alert($0) }
+                )
             )
         }
         .background(Color.semantic.light.ignoresSafeArea())
@@ -149,23 +149,27 @@ struct EmailVerificationHelpView: View {
 struct EmailVerificationHelpView_Previews: PreviewProvider {
     static var previews: some View {
         EmailVerificationHelpView(
-            store: .init(
+            store: Store(
                 initialState: .init(emailAddress: "test@example.com"),
-                reducer: EmailVerificationHelpReducer(
-                    emailVerificationService: NoOpEmailVerificationService(),
-                    mainQueue: .main
-                )
+                reducer: {
+                    EmailVerificationHelpReducer(
+                        emailVerificationService: NoOpEmailVerificationService(),
+                        mainQueue: .main
+                    )
+                }
             )
         )
         .preferredColorScheme(.light)
 
         EmailVerificationHelpView(
-            store: .init(
+            store: Store(
                 initialState: .init(emailAddress: "test@example.com"),
-                reducer: EmailVerificationHelpReducer(
-                    emailVerificationService: NoOpEmailVerificationService(),
-                    mainQueue: .main
-                )
+                reducer: {
+                    EmailVerificationHelpReducer(
+                        emailVerificationService: NoOpEmailVerificationService(),
+                        mainQueue: .main
+                    )
+                }
             )
         )
         .preferredColorScheme(.dark)

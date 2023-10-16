@@ -12,12 +12,13 @@ import ToolKit
 
 private typealias L10n = LocalizationConstants.NewKYC.Steps.AccountUsage
 
+@MainActor
 struct AccountUsageForm: View {
 
     let store: Store<AccountUsage.Form.State, AccountUsage.Form.Action>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             if viewStore.form.isEmpty {
                 emptyFormView(viewStore)
             } else {
@@ -55,20 +56,16 @@ struct AccountUsageForm: View {
     private func filledFormView(
         _ viewStore: ViewStore<AccountUsage.Form.State, AccountUsage.Form.Action>
     ) -> some View {
-        LoadingStateAlertFailureWrapperView(
-            store: store.scope(state: \.submissionState),
-            dismiss: .dismissSubmissionError
-        ) {
-            PrimaryForm(
-                form: viewStore.binding(\.$form),
-                submitActionTitle: L10n.submitActionTitle,
-                submitActionLoading: viewStore.submissionState == .loading,
-                submitAction: {
-                    viewStore.send(.submit)
-                }
-            )
-            .background(Color.semantic.light.ignoresSafeArea())
-        }
+        PrimaryForm(
+            form: viewStore.$form,
+            submitActionTitle: L10n.submitActionTitle,
+            submitActionLoading: viewStore.submissionState == .loading,
+            submitAction: {
+                viewStore.send(.submit)
+            }
+        )
+        .background(Color.semantic.light.ignoresSafeArea())
+        .alert(store: store.scope(state: \.$alert, action: { .alert($0) }))
     }
 }
 
@@ -76,27 +73,31 @@ struct AccountUsageForm_Previews: PreviewProvider {
 
     static var previews: some View {
         AccountUsageForm(
-            store: .init(
+            store: Store(
                 initialState: AccountUsage.Form.State(
                     form: FeatureFormDomain.Form(nodes: AccountUsage.previewQuestions)
                 ),
-                reducer: AccountUsage.Form.Reducer(
-                    submitForm: { _ in .empty() },
-                    mainQueue: .main
-                )
+                reducer: {
+                    AccountUsage.Form.FormReducer(
+                        submitForm: { _ in .failure(.unknown) },
+                        mainQueue: .main
+                    )
+                }
             )
         )
         .previewDisplayName("Valid Form")
 
         AccountUsageForm(
-            store: .init(
+            store: Store(
                 initialState: AccountUsage.Form.State(
                     form: Form(nodes: [])
                 ),
-                reducer: AccountUsage.Form.Reducer(
-                    submitForm: { _ in .empty() },
-                    mainQueue: .main
-                )
+                reducer: {
+                    AccountUsage.Form.FormReducer(
+                        submitForm: { _ in .empty() },
+                        mainQueue: .main
+                    )
+                }
             )
         )
         .previewDisplayName("Empty Form (KYC step to be skipped)")

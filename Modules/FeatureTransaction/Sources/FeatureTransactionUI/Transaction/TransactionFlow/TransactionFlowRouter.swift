@@ -148,14 +148,16 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
     func presentRecurringBuyFrequencySelectorWithTransactionModel(_ transactionModel: TransactionModel) {
         let viewController = SelfSizingHostingController(
             rootView: RecurringBuyFrequencySelectorView(
-                store: .init(
+                store: Store(
                     initialState: .init(),
-                    reducer: RecurringBuyFrequencySelectorReducer(
-                        app: app,
-                        dismiss: {
-                            transactionModel.process(action: .returnToPreviousStep)
-                        }
-                    )
+                    reducer: {
+                        RecurringBuyFrequencySelectorReducer(
+                            app: app,
+                            dismiss: {
+                                transactionModel.process(action: .returnToPreviousStep)
+                            }
+                        )
+                    }
                 )
             )
         )
@@ -301,7 +303,7 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         let view = ErrorRecoveryView(
             store: Store(
                 initialState: ErrorRecoveryState(title: title, message: message, callouts: callouts),
-                reducer: ErrorRecovery(close: onClose, calloutTapped: onCalloutTapped)
+                reducer: { ErrorRecovery(close: onClose, calloutTapped: onCalloutTapped) }
             )
         )
         let viewController = UIHostingController(rootView: view)
@@ -593,23 +595,25 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
 
         let app: AppProtocol = DIKit.resolve()
         let view = PlaidView(
-            store: .init(
+            store: Store(
                 initialState: PlaidState(),
-                reducer: PlaidReducer(
-                    app: app,
-                    mainQueue: .main,
-                    plaidRepository: DIKit.resolve(),
-                    dismissFlow: { [weak self] success in
-                        presentingViewController.dismiss(animated: true) {
-                            self?.detachChild(router)
-                            if success {
-                                transactionModel.process(action: .bankAccountLinked(state.action))
-                            } else {
-                                transactionModel.process(action: .bankLinkingFlowDismissed(state.action))
+                reducer: {
+                    PlaidReducer(
+                        app: app,
+                        mainQueue: .main,
+                        plaidRepository: DIKit.resolve(),
+                        dismissFlow: { [weak self] success in
+                            presentingViewController.dismiss(animated: true) {
+                                self?.detachChild(router)
+                                if success {
+                                    transactionModel.process(action: .bankAccountLinked(state.action))
+                                } else {
+                                    transactionModel.process(action: .bankLinkingFlowDismissed(state.action))
+                                }
                             }
                         }
-                    }
-                )
+                    )
+                }
             )
         )
         .app(app)

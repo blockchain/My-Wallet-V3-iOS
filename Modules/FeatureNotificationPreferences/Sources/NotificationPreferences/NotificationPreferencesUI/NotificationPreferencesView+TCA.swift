@@ -72,7 +72,7 @@ public enum NotificationsSettingsRoute: NavigationRoute {
 
 // MARK: - Main Reducer
 
-public struct FeatureNotificationPreferencesMainReducer: ReducerProtocol {
+public struct FeatureNotificationPreferencesMainReducer: Reducer {
     
     public typealias State = NotificationPreferencesState
     public typealias Action = NotificationPreferencesAction
@@ -91,7 +91,7 @@ public struct FeatureNotificationPreferencesMainReducer: ReducerProtocol {
         self.notificationPreferencesRepository = notificationPreferencesRepository
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         NotificationPreferencesReducer(
             mainQueue: mainQueue,
             notificationPreferencesRepository: notificationPreferencesRepository,
@@ -105,7 +105,7 @@ public struct FeatureNotificationPreferencesMainReducer: ReducerProtocol {
 
 // MARK: - Environment
 
-public struct NotificationPreferencesReducer: ReducerProtocol {
+public struct NotificationPreferencesReducer: Reducer {
 
     public typealias State = NotificationPreferencesState
     public typealias Action = NotificationPreferencesAction
@@ -124,41 +124,46 @@ public struct NotificationPreferencesReducer: ReducerProtocol {
         self.notificationPreferencesRepository = notificationPreferencesRepository
     }
 
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return notificationPreferencesRepository
-                    .fetchPreferences()
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(NotificationPreferencesAction.onFetchedSettings)
+                return .publisher {
+                    notificationPreferencesRepository
+                        .fetchPreferences()
+                        .receive(on: mainQueue)
+                        .map { .onFetchedSettings(.success($0)) }
+                        .catch { .onFetchedSettings(.failure($0)) }
+                }
 
             case .route(let routeItent):
                 state.route = routeItent
                 return .none
 
             case .onReloadTap:
-                return notificationPreferencesRepository
-                    .fetchPreferences()
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map(NotificationPreferencesAction.onFetchedSettings)
+                return .publisher {
+                    notificationPreferencesRepository
+                        .fetchPreferences()
+                        .receive(on: mainQueue)
+                        .map { .onFetchedSettings(.success($0)) }
+                        .catch { .onFetchedSettings(.failure($0)) }
+                }
 
             case .notificationDetailsChanged(let action):
                 switch action {
                 case .save:
                     guard let preferences = state.notificationDetailsState?.updatedPreferences else { return .none }
-                    return notificationPreferencesRepository
-                        .update(preferences: preferences)
-                        .receive(on: mainQueue)
-                        .catchToEffect()
-                        .map { result in
-                            if case .failure = result {
-                                return NotificationPreferencesAction.onSaveFailed
-                            }
-                            return NotificationPreferencesAction.onReloadTap
+                    return .run { send in
+                        do {
+                            try await notificationPreferencesRepository
+                                .update(preferences: preferences)
+                                .receive(on: mainQueue)
+                                .await()
+                            await send(.onReloadTap)
+                        } catch {
+                            await send(.onSaveFailed)
                         }
+                    }
 
                 case .binding:
                     return .none
@@ -167,7 +172,7 @@ public struct NotificationPreferencesReducer: ReducerProtocol {
                 }
 
             case .onSaveFailed:
-                return EffectTask(value: .onReloadTap)
+                return Effect.send(.onReloadTap)
 
             case .onPreferenceSelected(let preference):
                 state.notificationDetailsState = NotificationPreferencesDetailsState(notificationPreference: preference)
@@ -243,19 +248,19 @@ extension NotificationPreferencesState {
     }
 }
 
-struct NotificationPreferencesAnalytics: ReducerProtocol {
+struct NotificationPreferencesAnalytics: Reducer {
 
     typealias Action = NotificationPreferencesAction
     typealias State = NotificationPreferencesState
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             guard let event = state.analyticsEvent(for: action) else {
                 return .none
             }
-            return .fireAndForget {
+            return .run { _ in
                 analyticsRecorder.record(event: event)
             }
         }

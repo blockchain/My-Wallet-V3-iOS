@@ -23,7 +23,7 @@ public struct GraphView: View {
 
     public init(store: Store<GraphViewState, GraphViewAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     @ViewBuilder
@@ -35,6 +35,7 @@ public struct GraphView: View {
         }
     }
 
+    @MainActor
     @ViewBuilder
     private var content: some View {
         VStack {
@@ -74,7 +75,7 @@ public struct GraphView: View {
                         selected: viewStore.selected
                     )
                     LineGraph(
-                        selection: viewStore.binding(\.$selected),
+                        selection: viewStore.$selected,
                         selectionTitle: { i, _ in
                             timestamp(value.series[i])
                         },
@@ -320,8 +321,10 @@ struct GraphViewPreviewProvider: PreviewProvider {
         GraphView(
             store: Store(
                 initialState: .init(),
-                reducer: GraphViewReducer(historicalPriceService: .preview)
-                    .dependency(\.app, App.preview)
+                reducer: {
+                    GraphViewReducer(historicalPriceService: .preview)
+                        .dependency(\.app, App.preview)
+                }
             )
         )
         .app(App.preview)

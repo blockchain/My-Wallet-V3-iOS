@@ -35,7 +35,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            exact: "0.59.0"
+            exact: "1.2.0"
         ),
         .package(path: "../Localization"),
         .package(path: "../UIComponents"),

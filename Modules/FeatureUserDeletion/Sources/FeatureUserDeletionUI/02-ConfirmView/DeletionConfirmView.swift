@@ -3,7 +3,6 @@ import ComposableArchitecture
 import ComposableNavigation
 import Localization
 import SwiftUI
-import UIComponentsKit
 
 private typealias LocalizedString = LocalizationConstants.UserDeletion.ConfirmationScreen
 
@@ -14,7 +13,7 @@ public struct DeletionConfirmView: View {
 
     public init(store: Store<DeletionConfirmState, DeletionConfirmAction>) {
         self.store = store
-        self.viewStore = ViewStore(store)
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     public var body: some View {
@@ -29,7 +28,7 @@ public struct DeletionConfirmView: View {
 
                     Text(LocalizedString.processing)
                         .typography(.title3)
-                        .foregroundColor(.textBody)
+                        .foregroundColor(.semantic.title)
                         .padding(.top, 16)
                 }
             } else {
@@ -65,10 +64,8 @@ public struct DeletionConfirmView: View {
 
             let shouldShowError = viewStore.shouldShowInvalidInputUI
             Input(
-                text: viewStore.binding(\.$textFieldText),
-                isFirstResponder: viewStore
-                    .binding(\.$firstResponder)
-                    .equals(.confirmation),
+                text: viewStore.$textFieldText,
+                isFirstResponder: viewStore.$firstResponder.equals(.confirmation),
                 label: LocalizedString.textField.label,
                 subText: shouldShowError ? LocalizedString.textField.errorSubText : nil,
                 subTextStyle: shouldShowError ? .error : .default,
@@ -97,13 +94,28 @@ public struct DeletionConfirmView: View {
 #if DEBUG
 
 struct DeletionConfirm_Previews: PreviewProvider {
+
+    static var loadingState: DeletionConfirmState {
+        var value = DeletionConfirmState()
+        value.isLoading = true
+        return value
+    }
+
     static var previews: some View {
-        DeletionConfirmView(
-            store: Store(
-                initialState: DeletionConfirmState(),
-                reducer: DeletionConfirmReducer.preview
+        Group {
+            DeletionConfirmView(
+                store: Store(
+                    initialState: DeletionConfirmState(),
+                    reducer: { DeletionConfirmReducer.preview }
+                )
             )
-        )
+            DeletionConfirmView(
+                store: Store(
+                    initialState: loadingState,
+                    reducer: { DeletionConfirmReducer.preview }
+                )
+            )
+        }
     }
 }
 

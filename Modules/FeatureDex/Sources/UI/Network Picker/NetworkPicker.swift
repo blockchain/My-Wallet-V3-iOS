@@ -6,7 +6,7 @@ import FeatureDexDomain
 import Foundation
 import MoneyKit
 
-struct NetworkPicker: ReducerProtocol {
+struct NetworkPicker: Reducer {
     @Dependency(\.dexService) var dexService
     @Dependency(\.mainQueue) var mainQueue
     @Dependency(\.app) var app
@@ -29,15 +29,17 @@ struct NetworkPicker: ReducerProtocol {
         case onAvailableNetworksFetched([EVMNetwork])
     }
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return dexService.availableChainsService
-                    .availableEvmChains()
-                    .replaceError(with: [])
-                    .receive(on: mainQueue)
-                    .eraseToEffect(Action.onAvailableNetworksFetched)
+                return .publisher {
+                    dexService.availableChainsService
+                        .availableEvmChains()
+                        .replaceError(with: [])
+                        .receive(on: mainQueue)
+                        .map(Action.onAvailableNetworksFetched)
+                }
 
             case .onAvailableNetworksFetched(let networks):
                 state.availableNetworks = networks

@@ -136,16 +136,7 @@ public struct MoneyValueCodeNetworkView: View {
     }
 
     private var networkToDisplay: EVMNetwork? {
-        guard let cryptoCurrency = currency.cryptoCurrency else {
-            return nil
-        }
-        guard let network = cryptoCurrency.network() else {
-            return nil
-        }
-        guard cryptoCurrency != network.nativeAsset else {
-            return nil
-        }
-        return network
+        currency.cryptoCurrency?.network()
     }
 }
 

@@ -15,7 +15,7 @@ enum DomainCheckoutRoute: NavigationRoute {
 
     @ViewBuilder
     func destination(in store: Store<DomainCheckout.State, DomainCheckout.Action>) -> some View {
-        let viewStore = ViewStore(store)
+        let viewStore = ViewStore(store, observe: { $0 })
         switch self {
         case .confirmation(let status):
             if let selectedDomain = viewStore.selectedDomains.first {
@@ -54,7 +54,7 @@ struct DomainCheckoutState: Equatable, NavigationState {
     }
 }
 
-struct DomainCheckout: ReducerProtocol {
+struct DomainCheckout: Reducer {
     typealias State = DomainCheckoutState
     typealias Action = DomainCheckoutAction
 
@@ -63,14 +63,14 @@ struct DomainCheckout: ReducerProtocol {
     let orderDomainRepository: OrderDomainRepositoryAPI
     let userInfoProvider: () -> AnyPublisher<OrderDomainUserInfo, Error>
 
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { state, action in
             switch action {
             case .route:
                 return .none
             case .binding(\State.$removeCandidate):
-                return EffectTask(value: Action.set((\State.$isRemoveBottomSheetShown), true))
+                return Effect.send(Action.set((\State.$isRemoveBottomSheetShown), true))
             case .binding(\State.$isRemoveBottomSheetShown):
                 if state.isRemoveBottomSheetShown {
                     state.removeCandidate = nil
@@ -83,32 +83,27 @@ struct DomainCheckout: ReducerProtocol {
                     return .none
                 }
                 state.selectedDomains.remove(domain)
-                return EffectTask(value: Action.set((\State.$isRemoveBottomSheetShown), false))
+                return Effect.send(Action.set((\State.$isRemoveBottomSheetShown), false))
             case .claimDomain:
                 guard let domain = state.selectedDomains.first else {
                     return .none
                 }
                 state.isLoading = true
-                return userInfoProvider()
-                    .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
-                    .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
-                        orderDomainRepository
-                            .createDomainOrder(
-                                isFree: true,
-                                domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
-                                resolutionRecords: userInfo.resolutionRecords
-                            )
-                    }
-                    .receive(on: mainQueue)
-                    .catchToEffect()
-                    .map { result in
-                        switch result {
-                        case .success:
-                            return .didClaimDomain(.success(.noValue))
-                        case .failure(let error):
-                            return .didClaimDomain(.failure(error))
+                return .publisher {
+                    userInfoProvider()
+                        .ignoreFailure(setFailureType: OrderDomainRepositoryError.self)
+                        .flatMap { [orderDomainRepository] userInfo -> AnyPublisher<OrderDomainResult, OrderDomainRepositoryError> in
+                            orderDomainRepository
+                                .createDomainOrder(
+                                    isFree: true,
+                                    domainName: domain.domainName.replacingOccurrences(of: ".blockchain", with: ""),
+                                    resolutionRecords: userInfo.resolutionRecords
+                                )
                         }
-                    }
+                        .receive(on: mainQueue)
+                        .map { _ in .didClaimDomain(.success(.noValue)) }
+                        .catch { .didClaimDomain(.failure($0)) }
+                }
 
             case .didClaimDomain(let result):
                 state.isLoading = false
@@ -131,14 +126,14 @@ struct DomainCheckout: ReducerProtocol {
     }
 }
 
-struct DomainCheckoutAnalytics: ReducerProtocol {
+struct DomainCheckoutAnalytics: Reducer {
 
     typealias State = DomainCheckoutState
     typealias Action = DomainCheckoutAction
 
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .binding((\DomainCheckoutState.$termsSwitchIsOn)):
             if state.termsSwitchIsOn {

@@ -10,7 +10,7 @@ struct PriceView: View {
     let store: Store<Price, PriceAction>
 
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             HStack(spacing: 16) {
                 viewStore.currency
                     .logo(size: 32.pt, showNetworkLogo: true)

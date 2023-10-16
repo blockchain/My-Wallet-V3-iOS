@@ -32,7 +32,7 @@ struct EarnProductCompareView: View {
 
     @ViewBuilder
     var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 ZStack {
                     Text(Localization.Earn.Compare.title)
@@ -66,7 +66,7 @@ struct EarnProductCompareView: View {
 
     @ViewBuilder
     private func carouselContentSection() -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             TabView(selection: viewStore.binding(get: \.currentStep, send: Action.didChangeStep)) {
                 ForEach(viewStore.steps) { step in
                     VStack {
@@ -81,7 +81,7 @@ struct EarnProductCompareView: View {
 
     @ViewBuilder
     private func buttonsSection() -> some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(spacing: .zero) {
                 Spacer()
                 PageControl(
@@ -352,9 +352,11 @@ struct EarnProductCompare_Previews: PreviewProvider {
                 products: products,
                 model: models
             ),
-            reducer: EarnProductCompare(
-                onDismiss: {}
-            )
+            reducer: {
+                EarnProductCompare(
+                    onDismiss: {}
+                )
+            }
         )
     }
 

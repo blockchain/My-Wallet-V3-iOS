@@ -15,7 +15,7 @@ public struct DexDashboardView: View {
     }
 
     public var body: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 DexMainView(
                     store: store.scope(state: \.main, action: DexDashboard.Action.mainAction)
@@ -30,7 +30,7 @@ public struct DexDashboardView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-            .sheet(isPresented: viewStore.binding(\.$showIntro), content: {
+            .sheet(isPresented: viewStore.$showIntro, content: {
                 DexIntroView(
                     store: store.scope(
                         state: \.intro,
@@ -89,9 +89,11 @@ struct DexDashboardView_Previews: PreviewProvider {
         DexDashboardView(
             store: Store(
                 initialState: .init(),
-                reducer: DexDashboard(
-                    analyticsRecorder: MockAnalyticsRecorder()
-                )
+                reducer: {
+                    DexDashboard(
+                        analyticsRecorder: MockAnalyticsRecorder()
+                    )
+                }
             )
         )
         .app(app)

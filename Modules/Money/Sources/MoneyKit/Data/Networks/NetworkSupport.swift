@@ -46,6 +46,7 @@ extension NetworkConfigResponse {
     struct Network: Codable {
         let explorerUrl: String
         let identifiers: JSONValue
+        let logoPngUrl: String?
         let memos: Bool
         let name: String
         let nativeAsset: String

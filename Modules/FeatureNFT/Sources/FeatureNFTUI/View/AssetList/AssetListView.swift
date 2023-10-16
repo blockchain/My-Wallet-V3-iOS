@@ -3,7 +3,6 @@
 import BlockchainComponentLibrary
 import ComposableArchitecture
 import ComposableNavigation
-import FeatureNFTData
 import FeatureNFTDomain
 import Localization
 import SwiftUI
@@ -28,7 +27,7 @@ public struct AssetListView: View {
     }
 
     private var contentView: some View {
-        WithViewStore(store) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             VStack {
                 if viewStore.isLoading || viewStore.shouldShowErrorState {
                     LoadingStateView(title: LocalizationId.fetchingYourNFTs)
@@ -60,7 +59,7 @@ public struct AssetListView: View {
         }
 
         var body: some View {
-            WithViewStore(store) { viewStore in
+            WithViewStore(store, observe: { $0 }) { viewStore in
                 ZStack(alignment: .bottom) {
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 16.0) {
@@ -140,7 +139,7 @@ public struct AssetListView: View {
         }
 
         var body: some View {
-            WithViewStore(store) { viewStore in
+            WithViewStore(store, observe: { $0 }) { viewStore in
                 VStack(alignment: .center, spacing: 16) {
                     Text(LocalizationId.headline)
                         .typography(.title1)
@@ -173,11 +172,13 @@ public struct AssetListView: View {
 struct AssetListView_Previews: PreviewProvider {
     static var previews: some View {
         AssetListView(
-            store: .init(
+            store: Store(
                 initialState: .init(),
-                reducer: AssetListReducer(
-                    assetProviderService: AssetProviderService.previewEmpty
-                )
+                reducer: {
+                    AssetListReducer(
+                        assetProviderService: AssetProviderService.previewEmpty
+                    )
+                }
             )
         )
     }
