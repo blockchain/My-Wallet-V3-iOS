@@ -63,7 +63,8 @@ public struct DashboardExternalMigrateView: View {
     var progressView: some View {
         ProgressView()
             .task {
-                let state = try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.state, as: Tag.self)
+                let state = try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.state, 
+                                               as: Tag.self)
                 switch state {
                 case blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]:
                     type = .inProgress

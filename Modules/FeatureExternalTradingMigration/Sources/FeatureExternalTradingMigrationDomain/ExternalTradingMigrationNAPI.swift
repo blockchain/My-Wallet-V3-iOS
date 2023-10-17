@@ -33,8 +33,6 @@ public final class ExternalTradingMigrationNAPI {
                     json.state = blockchain.api.nabu.gateway.user.external.brokerage.migration.state[][response.state.rawValue.lowercased()]
                 } else {
                     json.state = try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, as: Tag.self)
-
-                    let state = try? await app.get(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state, as: Tag.self)
                 }
 
                 return json.toJSON()

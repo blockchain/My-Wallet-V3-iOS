@@ -16,6 +16,7 @@
     "blockchain.app.configuration.request.console.logging": false,
     "blockchain.app.configuration.SSL.pinning.is.enabled": true,
     "blockchain.app.configuration.unified.sign_in.is.enabled": false,
+    "blockchain.app.configuration.external.trading.migration.is.enabled": false,
     "blockchain.ux.transaction[swap].checkout.is.enabled": true,
     "blockchain.ux.transaction[buy].checkout.is.enabled": true,
     "blockchain.ux.transaction[swap].checkout.exchange.rate.disclaimer.url": "https://support.blockchain.com/hc/en-us/articles/360061672651",
