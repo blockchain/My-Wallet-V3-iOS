@@ -126,7 +126,7 @@ public struct ExternalTradingMigration: Reducer {
                 return .none
 
             case .onFlowDismiss:
-                app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
+                app.post(event: blockchain.ux.home.return.home)
                 return .none
 
             case .binding:
