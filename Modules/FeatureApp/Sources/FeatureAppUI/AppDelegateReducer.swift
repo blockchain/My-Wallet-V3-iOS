@@ -142,14 +142,11 @@ struct AppDelegateReducer: Reducer {
                     }
                 )
             case .didEnterBackground(let application):
-                return .run { send in
-                    do {
-                        try await environment.backgroundAppHandler
-                            .appEnteredBackground(application)
-                            .receive(on: environment.mainQueue)
-                            .await()
-                        await send(.handleDelayedEnterBackground)
-                    }
+                return .publisher {
+                    environment.backgroundAppHandler
+                        .appEnteredBackground(application)
+                        .receive(on: environment.mainQueue)
+                        .map(.handleDelayedEnterBackground)
                 }
                 .cancellable(id: BackgroundTaskId(), cancelInFlight: true)
             case .handleDelayedEnterBackground:
