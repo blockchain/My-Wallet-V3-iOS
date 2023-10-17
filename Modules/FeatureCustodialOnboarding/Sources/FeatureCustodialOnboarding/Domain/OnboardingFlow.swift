@@ -44,7 +44,7 @@ extension OnboardingFlow: WhichFlowSequenceViewController {
         .verificationInProgress: makeVerificationInProgressFlowSequenceViewController,
         .loading: makeInProgressFlowSequenceViewController
     ]
-    
+
     public static func register(_ slug: OnboardingFlow.Slug, _ builder: @escaping (AnyJSON) throws -> FlowSequenceViewController) {
         lock.withLock { map[slug] = builder }
     }
@@ -57,7 +57,7 @@ extension OnboardingFlow: WhichFlowSequenceViewController {
                 throw "\(next_action.slug.value) has no associated view.".error()
             }
         } catch {
-            return FlowSequenceHostingViewController { completion in
+            return FlowSequenceHostingViewController { _ in
                 ErrorView(ux: UX.Error(error: error))
             }
         }
@@ -119,7 +119,7 @@ func makePersonalInformationConfirmationFlowSequenceViewController(_ metadata: A
 }
 
 func makeErrorFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
-    return try FlowSequenceHostingViewController { completion in
+    try FlowSequenceHostingViewController { _ in
         do {
             return try ErrorView(ux: UX.Error(nabu: metadata.decode(Nabu.Error.self)))
         } catch {

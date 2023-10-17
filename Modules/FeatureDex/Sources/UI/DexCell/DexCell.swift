@@ -146,7 +146,8 @@ private func favoriteSourceToken(
     }
 
     if let preselected = getThatSourceCurrency(app: app),
-       let preselectedBalance = state.filteredBalances.first(where: { $0.currency == preselected }) {
+       let preselectedBalance = state.filteredBalances.first(where: { $0.currency == preselected })
+    {
         eraseThatCurrency(app: app)
         return preselectedBalance
     }
@@ -168,7 +169,8 @@ private func favoriteDestinationToken(
     }
 
     if let preselected = getThatDestinationCurrency(app: app),
-       preselected.network() == network {
+       preselected.network() == network
+    {
         let preselectedBalance = state.filteredBalances
             .first(where: { $0.currency == preselected }) ?? .zero(preselected)
         eraseThatCurrency(app: app)

@@ -107,8 +107,8 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
                 guard let self else {
                     return .failure(ToolKitError.nullReference(Self.self))
                 }
-                return self.sourceAccount.actionableBalance
-                    .zip(self.calculateFee(with: pendingTransaction.feeLevel).asPublisher())
+                return sourceAccount.actionableBalance
+                    .zip(calculateFee(with: pendingTransaction.feeLevel).asPublisher())
                     .tryMap { actionableBalance, fees -> PendingTransaction in
                         let available = try actionableBalance - fees.fee.moneyValue
                         let zero: MoneyValue = .zero(currency: actionableBalance.currency)
@@ -129,7 +129,7 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
                 guard let self else {
                     return .failure(ToolKitError.nullReference(Self.self))
                 }
-                return self.doBuildConfirmations(pendingTransaction: pendingTransaction)
+                return doBuildConfirmations(pendingTransaction: pendingTransaction)
             }
             .asSingle()
             .flatMap(weak: self) { (self, pendingTransaction) in
@@ -159,11 +159,11 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
     ) -> AnyPublisher<PendingTransaction, Error> {
         fiatAmountAndFees(from: pendingTransaction)
             .zip(getFeeState(pendingTransaction: pendingTransaction))
-            .tryMap { [weak self] (fiatAmountAndFees, feeState) -> PendingTransaction in
+            .tryMap { [weak self] fiatAmountAndFees, feeState -> PendingTransaction in
                 guard let self else {
                     throw ToolKitError.nullReference(Self.self)
                 }
-                return self.doBuildConfirmations(
+                return doBuildConfirmations(
                     pendingTransaction: pendingTransaction,
                     amountInFiat: fiatAmountAndFees.amount.moneyValue,
                     feesInFiat: fiatAmountAndFees.fees.moneyValue,
@@ -457,7 +457,6 @@ final class WalletConnectTransactionEngine: OnChainTransactionEngine {
             }
             .eraseError()
             .eraseToAnyPublisher()
-
     }
 }
 

@@ -102,7 +102,7 @@ struct TestReducer: Reducer {
 
     let app: AppProtocol
 
-    var body: some Reducer<State, Action>  {
+    var body: some Reducer<State, Action> {
         BlockchainNamespaceReducer(app: app, events: [
             blockchain.db.type.string,
             blockchain.db.type.integer,

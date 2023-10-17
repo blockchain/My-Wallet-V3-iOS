@@ -53,7 +53,7 @@ struct WalletReducer: Reducer {
                                 .receive(on: environment.mainQueue)
                                 .map { Action.wallet(.walletFetched(.success($0))) }
                                 .catch { Action.wallet(.walletFetched(.failure($0))) }
-                    }
+                }
                     .cancellable(id: WalletCancelations.FetchId, cancelInFlight: true)
 
             case .wallet(.walletFetched(.success(let context))):

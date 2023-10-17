@@ -47,7 +47,7 @@ public enum WalletPersistenceAction: Equatable {
 }
 
 public struct AppReducer: Reducer {
-    
+
     public typealias State = AppState
     public typealias Action = AppAction
 
@@ -58,7 +58,7 @@ public struct AppReducer: Reducer {
     ) {
         self.environment = environment
     }
-    
+
     public var body: some Reducer<State, Action> {
         Scope(state: \.appSettings, action: /AppAction.appDelegate) {
             AppDelegateReducer(

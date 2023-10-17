@@ -17,15 +17,16 @@ public class FlowSequenceHostingViewController<RootView: View>: UIHostingControl
     private var subject: CurrentValueSubject<Bool, Never>
 
     public init(@ViewBuilder _ rootViewBuilder: (@escaping () -> Void) throws -> RootView) rethrows {
-        subject = CurrentValueSubject<Bool, Never>(false)
+        self.subject = CurrentValueSubject<Bool, Never>(false)
         try super.init(rootView: rootViewBuilder { [subject] in subject.send(true) })
     }
-    
-    @MainActor required dynamic init?(coder aDecoder: NSCoder) {
+
+    @available(*, unavailable)
+    @MainActor dynamic required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         _disableSafeArea = true
     }
@@ -51,12 +52,13 @@ public class FlowSequenceHostingViewController<RootView: View>: UIHostingControl
             rootViewController: UIHostingController(rootView: InProgressView())
         )
     }
-    
+
+    @available(*, unavailable)
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func viewDidAppear(_ animated: Bool) {
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setNavigationBarHidden(true, animated: animated)
         task = Task {
@@ -83,7 +85,7 @@ private struct PreviewNView: View {
 
     var body: some View {
         VStack {
-            [ 
+            [
                 Color.red,
                 Color.blue,
                 Color.yellow,

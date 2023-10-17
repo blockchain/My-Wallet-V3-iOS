@@ -52,7 +52,7 @@ public enum AvailableBalanceViewAction: Equatable {
 // MARK: - Reducer
 
 public struct AvailableBalanceViewReducer: Reducer {
-    
+
     public typealias State = AvailableBalanceViewState
     public typealias Action = AvailableBalanceViewAction
 
@@ -91,7 +91,7 @@ public struct AvailableBalanceViewReducer: Reducer {
             transactionIsFeeLessPublisher: .empty()
         )
     }
-    
+
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {

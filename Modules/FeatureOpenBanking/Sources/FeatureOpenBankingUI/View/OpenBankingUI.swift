@@ -77,7 +77,7 @@ public struct OpenBankingReducer: Reducer {
         Scope(state: /State.bank, action: /Action.bank) {
             BankReducer(environment: environment)
         }
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .bank(.failure(let error)),
                  .institutionList(.bank(.failure(let error))):
@@ -110,14 +110,14 @@ public struct OpenBankingView: View {
             case .institutionList:
                 CaseLet(
                     /OpenBankingState.institutionList,
-                     action: OpenBankingAction.institutionList,
-                     then: InstitutionList.init(store:)
+                    action: OpenBankingAction.institutionList,
+                    then: InstitutionList.init(store:)
                 )
             case .bank:
                 CaseLet(
                     /OpenBankingState.bank,
-                     action: OpenBankingAction.bank,
-                     then: BankView.init(store:)
+                    action: OpenBankingAction.bank,
+                    then: BankView.init(store:)
                 )
             }
         }

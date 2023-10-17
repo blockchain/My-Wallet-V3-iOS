@@ -5,7 +5,6 @@ import ComposableArchitecture
 import Foundation
 import UIKit
 
-
 public struct ReferFriendReducer: Reducer {
 
     public typealias State = ReferFriendState

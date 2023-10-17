@@ -21,10 +21,12 @@ public final class ExternalTradingMigrationService: ExternalTradingMigrationServ
     }
 
     public func fetchMigrationInfo() async throws -> ExternalTradingMigrationInfo? {
-        async let externalTradingMigrationIsEnabled = app.get(blockchain.app.configuration.external.trading.migration.is.enabled,
-                                                                        as: Bool.self)
-        
-        guard (try? await externalTradingMigrationIsEnabled) == true else {
+        async let externalTradingMigrationIsEnabled = app.get(
+            blockchain.app.configuration.external.trading.migration.is.enabled,
+            as: Bool.self
+        )
+
+        guard await (try? externalTradingMigrationIsEnabled) == true else {
             app.state.clear(blockchain.api.nabu.gateway.user.external.brokerage.migration.last.known.state)
             return nil
         }

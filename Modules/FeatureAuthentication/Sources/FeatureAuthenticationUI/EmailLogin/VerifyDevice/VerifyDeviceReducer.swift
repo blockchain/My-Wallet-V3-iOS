@@ -54,6 +54,7 @@ public enum VerifyDeviceAction: Equatable, NavigationAction {
     case upgradeAccount(UpgradeAccountAction)
 
     case navigate(VerifyDeviceRoute)
+
     // MARK: - Utils
 
     case none
@@ -312,7 +313,7 @@ struct VerifyDeviceReducer: Reducer {
                 }
                 state.credentialsContext = .walletInfo(walletInfo)
                 return .run { send in
-                    let featureEnabled = (try? await app.get(blockchain.app.configuration.unified.sign_in.is.enabled, as: Bool.self)) ?? false
+                    let featureEnabled = await (try? app.get(blockchain.app.configuration.unified.sign_in.is.enabled, as: Bool.self)) ?? false
 
                     guard featureEnabled,
                         walletInfo.shouldUpgradeAccount,
@@ -452,7 +453,7 @@ struct VerifyDeviceAnalytics: Reducer {
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .didExtractWalletInfo(let walletInfo):
                 analyticsRecorder.record(

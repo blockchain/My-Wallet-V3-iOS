@@ -36,14 +36,14 @@ enum EditEmailAction: Equatable {
 }
 
 struct EditEmailReducer: Reducer {
-    
+
     typealias State = EditEmailState
     typealias Action = EditEmailAction
 
     let emailVerificationService: EmailVerificationServiceAPI
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let validateEmail: (String) -> Bool = { $0.isEmail }
-    
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {

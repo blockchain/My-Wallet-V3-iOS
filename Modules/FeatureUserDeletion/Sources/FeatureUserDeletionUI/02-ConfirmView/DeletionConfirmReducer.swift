@@ -90,7 +90,7 @@ struct DeletionConfirmAnalytics: Reducer {
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .showResultScreen(.success):
                 analyticsRecorder.record(

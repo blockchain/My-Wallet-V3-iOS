@@ -143,6 +143,7 @@ extension LocalizationConstants {
                 NonLocalizedConstants.Bakkt.Checkout.buyDisclaimerBakkt()
                 .interpolating(fiatAmount, amount, asset)
             }
+
             static func sellDisclaimerBakkt(amount: String, asset: String) -> String {
                 NonLocalizedConstants
                     .Bakkt

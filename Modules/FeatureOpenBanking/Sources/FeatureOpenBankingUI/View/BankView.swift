@@ -63,7 +63,7 @@ public enum BankAction: Hashable, FailureAction {
 }
 
 public struct BankReducer: Reducer {
-    
+
     public typealias State = BankState
     public typealias Action = BankAction
 
@@ -186,14 +186,14 @@ public struct BankReducer: Reducer {
 }
 
 struct BankAnalyticsReducer: Reducer {
-    
+
     typealias State = BankState
     typealias Action = BankAction
 
     let analytics: AnalyticsEventRecorderAPI
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .failure(let error):
                 return .run { _ in

@@ -10,10 +10,10 @@ public struct CustodialOnboardingDashboardView: View {
     var externalTradingMigrationIsAvailable: Bool {
         externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]
     }
+
     var externalTradingMigrationIsPending: Bool {
         externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
     }
-
 
     public init(service: CustodialOnboardingService) {
         self.onboarding = service

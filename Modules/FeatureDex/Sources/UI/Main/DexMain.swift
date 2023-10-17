@@ -56,7 +56,7 @@ public struct DexMain: Reducer {
                             .map(Action.onAvailableNetworksFetched)
                     }
                 } else if let network = getThatCurrency(app: app)?.network() {
-                    availableNetworks = Effect<DexMain.Action>.run(operation: { send in
+                    availableNetworks = Effect<DexMain.Action>.run(operation: { _ in
                         try await app.set(
                             blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value,
                             to: network.networkConfig.networkTicker
@@ -393,7 +393,6 @@ public struct DexMain: Reducer {
                         .replaceError(with: nil)
                         .receive(on: DispatchQueue.main)
                         .map(Action.onNetworkPrice)
-                    
                 }
                 .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
             case .binding:
@@ -665,7 +664,6 @@ private func preselectNetwork(
     return networks
         .first(where: { $0.networkConfig == .ethereum }) ?? networks.first
 }
-
 
 func getThatCurrency(app: AppProtocol) -> CryptoCurrency? {
     if let source = getThatSourceCurrency(app: app) {

@@ -104,7 +104,7 @@ extension Session {
                             configuration[key] = String(decoding: remote[key].dataValue, as: UTF8.self)
                         }
                     }
-                    self._fetched = configuration
+                    _fetched = configuration
                     app.state.set(blockchain.app.configuration.remote.is.stale, to: false)
                 }
 

@@ -26,7 +26,7 @@ public struct DeletionResultReducer: Reducer {
 
     public var body: some Reducer<State, Action> {
         BindingReducer()
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .dismissFlow:
                 dismissFlow()

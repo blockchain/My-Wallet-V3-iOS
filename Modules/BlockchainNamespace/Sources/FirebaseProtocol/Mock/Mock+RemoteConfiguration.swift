@@ -42,7 +42,7 @@ extension Mock {
         public func addOnConfigUpdateListener(
             remoteConfigUpdateCompletion listener: @escaping (RemoteConfigUpdate?, Error?) -> Void
         ) -> ConfigUpdateListenerRegistration {
-            return ConfigUpdateListenerRegistration()
+            ConfigUpdateListenerRegistration()
         }
     }
 
@@ -51,7 +51,7 @@ extension Mock {
     }
 
     public class ConfigUpdateListenerRegistration: ConfigUpdateListenerRegistration_p {
-        public func remove() { }
+        public func remove() {}
     }
 
     public struct RemoteConfigurationValue: RemoteConfigurationValue_p {

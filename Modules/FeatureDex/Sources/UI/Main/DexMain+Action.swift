@@ -31,7 +31,7 @@ extension DexMain {
         case updateAvailableBalances([DexBalance])
 
         case onAvailableNetworksFetched(Result<[EVMNetwork], UX.Error>)
-        
+
         case onNetworkSelected(EVMNetwork)
         case onNetworkPrice(FiatValue?)
 

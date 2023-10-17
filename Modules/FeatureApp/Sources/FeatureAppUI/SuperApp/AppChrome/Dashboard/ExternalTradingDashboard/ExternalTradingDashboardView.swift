@@ -36,7 +36,7 @@ struct ExternalTradingDashboardView: View {
 
     @State var externalTradingMigrationState: Tag?
     var externalTradingMigrationIsPending: Bool {
-        return externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
+        externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
     }
 
     struct ViewState: Equatable {

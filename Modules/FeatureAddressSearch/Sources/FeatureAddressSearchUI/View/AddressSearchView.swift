@@ -24,7 +24,7 @@ enum AddressSearchRoute: NavigationRoute {
                     state: \.addressModificationState,
                     action: AddressSearchAction.addressModificationAction
                 ),
-                then: { AddressModificationView(store:$0) }
+                then: { AddressModificationView(store: $0) }
             )
         }
     }

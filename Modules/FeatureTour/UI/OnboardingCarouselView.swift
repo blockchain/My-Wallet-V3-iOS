@@ -129,7 +129,7 @@ extension OnboardingCarouselView {
                     PrimaryDoubleButton(
                         leadingTitle: LocalizationConstants.Tour.createAccountButtonTitle,
                         leadingAction: { viewStore.send(.createAccount) },
-                        trailingTitle: LocalizationConstants.Tour.manualLoginButtonTitle, 
+                        trailingTitle: LocalizationConstants.Tour.manualLoginButtonTitle,
                         trailingAction: { viewStore.send(.manualLogin) }
                     )
                 } else {

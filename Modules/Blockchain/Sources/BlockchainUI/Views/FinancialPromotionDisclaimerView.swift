@@ -14,7 +14,7 @@ public struct FinancialPromotionDisclaimerView: View {
 
     public var body: some View {
         Group {
-            if isSynchronized && text.isNil {
+            if isSynchronized, text.isNil {
                 EmptyView()
             } else if let text {
                 Text(rich: text)
@@ -45,11 +45,11 @@ public struct FinancialPromotionApprovalView: View {
     @State private var text: String?
     @State private var isSynchronized: Bool = false
 
-    public init() { }
+    public init() {}
 
     public var body: some View {
         Group {
-            if isSynchronized && text.isNil {
+            if isSynchronized, text.isNil {
                 EmptyView()
             } else if let text {
                 Text(rich: text)

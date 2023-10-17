@@ -65,7 +65,7 @@ public struct PasswordRequiredReducer: Reducer {
 
     public typealias State = PasswordRequiredState
     public typealias Action = PasswordRequiredAction
-    
+
     let mainQueue: AnySchedulerOf<DispatchQueue>
     let externalAppOpener: ExternalAppOpener
     let walletPayloadService: WalletPayloadServiceAPI

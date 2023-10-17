@@ -21,10 +21,10 @@ enum EmailVerifiedAction: Equatable {
 }
 
 struct EmailVerifiedReducer: Reducer {
-    
+
     typealias State = EmailVerifiedState
     typealias Action = EmailVerifiedAction
-    
+
     var body: some Reducer<State, Action> {
         Reduce { _, _ in .none }
     }

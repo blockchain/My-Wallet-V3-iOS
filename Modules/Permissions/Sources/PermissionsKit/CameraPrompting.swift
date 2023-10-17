@@ -145,4 +145,3 @@ extension CameraPromptingDelegate {
         topController.presentAlert(UIHostingController(rootView: alert))
     }
 }
-

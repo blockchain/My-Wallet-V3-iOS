@@ -28,7 +28,7 @@ struct IdentityVerificationReducer: Reducer {
             switch action {
             case .startVerification:
                 onCompletion()
-                return .none              
+                return .none
 
             case .fetchSupportedDocumentTypes:
                 state.isLoading = true

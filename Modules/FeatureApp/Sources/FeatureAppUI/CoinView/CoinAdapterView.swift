@@ -91,7 +91,7 @@ import ToolKit
                                 .replaceError(with: false)
                                 .flatMap { [recurringBuyProviderRepository] isRecurringBuyEnabled -> AnyPublisher<[FeatureCoinDomain.RecurringBuy], Error> in
                                     guard isRecurringBuyEnabled else { return .just([]) }
-                                    
+
                                     return recurringBuyProviderRepository
                                         .fetchRecurringBuysForCryptoCurrency(cryptoCurrency)
                                         .map { $0.map(RecurringBuy.init) }

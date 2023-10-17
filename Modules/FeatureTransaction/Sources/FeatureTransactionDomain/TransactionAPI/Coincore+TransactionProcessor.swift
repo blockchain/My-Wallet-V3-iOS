@@ -195,7 +195,7 @@ extension CoincoreAPI {
         case .send:
             return receiveAddress(from: target)
                 .map { receiveAddress in
-                    return TransactionProcessor(
+                    TransactionProcessor(
                         sourceAccount: account,
                         transactionTarget: receiveAddress,
                         engine: onChainEngine

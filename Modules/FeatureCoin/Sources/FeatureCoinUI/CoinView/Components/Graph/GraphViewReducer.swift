@@ -3,8 +3,8 @@
 import BlockchainNamespace
 import ComposableArchitecture
 import ComposableArchitectureExtensions
-import FeatureCoinDomain
 import Errors
+import FeatureCoinDomain
 
 public struct GraphViewReducer: Reducer {
     enum CancellableID: Hashable {

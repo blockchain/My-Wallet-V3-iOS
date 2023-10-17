@@ -480,7 +480,7 @@ struct CreateAccountStepOneReducer: Reducer {
 
 extension CreateAccountStepOneReducer {
 
-    fileprivate func validateInputs(
+    private func validateInputs(
         state: CreateAccountStepOneState
     ) -> AnyPublisher<CreateAccountStepOneState.InputValidationState, Never> {
         let hasValidCountry = state.country != nil
@@ -495,7 +495,7 @@ extension CreateAccountStepOneReducer {
         return .just(.valid)
     }
 
-    fileprivate func validateReferralInput(
+    private func validateReferralInput(
         code: String
     ) -> AnyPublisher<CreateAccountStepOneState.InputValidationState, Never> {
         guard code.range(
@@ -506,7 +506,7 @@ extension CreateAccountStepOneReducer {
         return .just(.unknown)
     }
 
-    fileprivate func checkReferralCode(_
+    private func checkReferralCode(_
         code: String
     ) -> AnyPublisher<CreateAccountStepOneState.InputValidationState, Never> {
         guard code.isNotEmpty, let client = checkReferralClient else { return .just(.unknown) }

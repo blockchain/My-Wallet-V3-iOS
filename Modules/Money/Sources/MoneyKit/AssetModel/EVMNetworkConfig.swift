@@ -101,7 +101,7 @@ extension EVMNetworkConfig {
         self.init(
             name: response.name,
             chainID: BigUInt(chainID),
-            nativeAsset: response.nativeAsset, 
+            nativeAsset: response.nativeAsset,
             logoURL: response.logoPngUrl.flatMap(URL.init),
             explorerUrl: response.explorerUrl,
             networkTicker: response.networkTicker,

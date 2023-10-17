@@ -49,6 +49,7 @@ public struct NFTAssets: Equatable {
             }
         }
     }
+
     public let assets: [Asset]
 }
 
@@ -98,7 +99,7 @@ public final class AssetProviderService: AssetProviderServiceAPI {
                             .mapError(AssetProviderServiceError.network)
                             .map { assets -> [NFTAssets.Asset] in
                                 assets.nfts
-                                    .filter { $0.media.isNotNil }
+                                    .filter(\.media.isNotNil)
                                     .map { asset in
                                         NFTAssets.Asset(value: asset, network: network)
                                     }

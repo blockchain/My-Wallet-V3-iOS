@@ -46,7 +46,6 @@ struct DexSettingsView: View {
         .background(Color.semantic.light)
     }
 
-
     @ViewBuilder
     private var extraSettings: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -146,7 +145,7 @@ struct DexSettingsView: View {
             Text(L10n.Settings.title)
                 .typography(.body2)
                 .foregroundColor(.semantic.title)
-            HStack{
+            HStack {
                 Spacer()
                 IconButton(icon: .navigationCloseButton()) {
                     presentationMode.wrappedValue.dismiss()

@@ -23,6 +23,7 @@ enum EmailVerificationHelpAction: Equatable {
         case dismiss
         case sendVerificationEmail
     }
+
     case editEmailAddress
     case didReceiveEmailSendingResponse(Result<Int, UpdateEmailAddressError>)
     case alert(PresentationAction<AlertAction>)
@@ -31,13 +32,13 @@ enum EmailVerificationHelpAction: Equatable {
 private typealias L10n = LocalizationConstants.NewKYC
 
 struct EmailVerificationHelpReducer: Reducer {
-    
+
     typealias State = EmailVerificationHelpState
     typealias Action = EmailVerificationHelpAction
 
     let emailVerificationService: EmailVerificationServiceAPI
     let mainQueue: AnySchedulerOf<DispatchQueue>
-    
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {

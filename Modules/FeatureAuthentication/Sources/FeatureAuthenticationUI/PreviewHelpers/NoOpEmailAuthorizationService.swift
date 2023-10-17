@@ -7,7 +7,7 @@ import ToolKit
 
 final class NoOpEmailAuthorizationService: EmailAuthorizationServiceAPI {
     func cancel() {}
-    
+
     func authorizeEmailPublisher() -> AnyPublisher<Void, FeatureAuthenticationDomain.EmailAuthorizationServiceError> {
         .just(())
     }

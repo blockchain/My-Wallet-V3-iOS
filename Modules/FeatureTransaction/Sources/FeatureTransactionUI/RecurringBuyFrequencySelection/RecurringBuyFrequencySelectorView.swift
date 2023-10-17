@@ -118,7 +118,7 @@ enum RecurringBuyFrequencySelectorAction: Equatable, BindableAction {
 // MARK: - Reducer
 
 struct RecurringBuyFrequencySelectorReducer: Reducer {
-    
+
     typealias State = RecurringBuyFrequencySelectorState
     typealias Action = RecurringBuyFrequencySelectorAction
 

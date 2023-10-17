@@ -1,9 +1,9 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import SwiftUI
 import BlockchainUI
-import Localization
 import FeatureCoinDomain
+import Localization
+import SwiftUI
 
 struct CoinMigrationCard: View {
     @BlockchainApp var app
@@ -18,13 +18,17 @@ struct CoinMigrationCard: View {
                 )
             },
             title: L10n.title(currency: migrationInfo.old.displayCode),
-            message: L10n.message(oldCurrency: migrationInfo.old.displayCode,
-                                          newCurrency: migrationInfo.new.displayCode),
+            message: L10n.message(
+                oldCurrency: migrationInfo.old.displayCode,
+                newCurrency: migrationInfo.new.displayCode
+            ),
             control: .init(
                 title: L10n.viewButton,
                 action: {
-                    $app.post(event: blockchain.ux.coinview.migration.view,
-                              context: [blockchain.ux.asset.id: migrationInfo.new.code])
+                    $app.post(
+                        event: blockchain.ux.coinview.migration.view,
+                        context: [blockchain.ux.asset.id: migrationInfo.new.code]
+                    )
                 }
             )
         )
@@ -46,7 +50,7 @@ struct CoinMigrationCard: View {
                 )
                 .offset(x: 7, y: 7)
 
-            Circle()                .fill(Color.semantic.background)
+            Circle().fill(Color.semantic.background)
                 .frame(height: 35)
                 .inscribed(
                     currency2.logo()

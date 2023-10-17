@@ -35,7 +35,7 @@ final class SweepImportedAddressesRepository: SweepImportedAddressesRepositoryAP
                 guard let self else {
                     return .just([])
                 }
-                return self.clearIfNeeded(result.value)
+                return clearIfNeeded(result.value)
                     .flatMap { _ -> AnyPublisher<[String], Never> in
                         app.publisher(for: blockchain.ux.sweep.imported.addresses.swept.addresses, as: [String].self)
                             .map(\.value)
@@ -48,7 +48,7 @@ final class SweepImportedAddressesRepository: SweepImportedAddressesRepositoryAP
             .handleEvents(
                 receiveOutput: { [weak self] value in
                     guard let self else { return }
-                    self.sweptBalances = value
+                    sweptBalances = value
                 }
             )
             .eraseToAnyPublisher()

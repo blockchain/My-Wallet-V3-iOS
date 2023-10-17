@@ -422,7 +422,7 @@ struct CredentialsReducer: Reducer {
                 externalAppOpener: externalAppOpener
             )
         }
-        .routing()  
+        .routing()
         Scope(state: \.walletPairingState, action: /Action.walletPairing) {
             WalletPairingReducer(
                 mainQueue: mainQueue,
@@ -625,7 +625,7 @@ struct CredentialsAnalytics: Reducer {
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .continueButtonTapped:
                 analyticsRecorder.record(

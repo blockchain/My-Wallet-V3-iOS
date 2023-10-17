@@ -104,8 +104,10 @@ struct BakktAssetMigrationView: View {
 
             termsAndConditions
 
-            PrimaryButton(title: NonLocalizedConstants.ExternalTradingMigration.upgradeButton,
-                          isLoading: isLoading) {
+            PrimaryButton(
+                title: NonLocalizedConstants.ExternalTradingMigration.upgradeButton,
+                isLoading: isLoading
+            ) {
                 onDone()
             }
             .disabled(isLoading)

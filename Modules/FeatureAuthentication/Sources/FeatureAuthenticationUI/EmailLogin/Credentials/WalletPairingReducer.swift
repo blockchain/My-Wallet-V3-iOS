@@ -159,41 +159,41 @@ struct WalletPairingReducer: Reducer {
     }
 
     private func authenticate(
-       _ password: String,
-       _ state: WalletPairingState,
-       isAutoTrigger: Bool
+        _ password: String,
+        _ state: WalletPairingState,
+        isAutoTrigger: Bool
     ) -> Effect<WalletPairingAction> {
-       guard !state.walletGuid.isEmpty else {
-           fatalError("GUID should not be empty")
-       }
+        guard !state.walletGuid.isEmpty else {
+            fatalError("GUID should not be empty")
+        }
 
-       return .concatenate(
-           .cancel(id: WalletPairingCancelations.WalletIdentifierPollingTimerId()),
-           .run { send in
-               do {
-                   try await loginService
-                       .login(walletIdentifier: state.walletGuid)
-                       .receive(on: mainQueue)
-                       .await()
-                   guard !isAutoTrigger else {
-                       await send(.none)
-                       return
-                   }
-                   await send(.decryptWalletWithPassword(password))
-               } catch {
-                   await send(.authenticateDidFail(error as! LoginServiceError))
-               }
-           }
-       )
-   }
+        return .concatenate(
+            .cancel(id: WalletPairingCancelations.WalletIdentifierPollingTimerId()),
+            .run { send in
+                do {
+                    try await loginService
+                        .login(walletIdentifier: state.walletGuid)
+                        .receive(on: mainQueue)
+                        .await()
+                    guard !isAutoTrigger else {
+                        await send(.none)
+                        return
+                    }
+                    await send(.decryptWalletWithPassword(password))
+                } catch {
+                    await send(.authenticateDidFail(error as! LoginServiceError))
+                }
+            }
+        )
+    }
 
     private func authenticateWithTwoFactorOTP(
-       _ code: String,
-       _ state: WalletPairingState
+        _ code: String,
+        _ state: WalletPairingState
     ) -> Effect<WalletPairingAction> {
-       guard !state.walletGuid.isEmpty else {
-           fatalError("GUID should not be empty")
-       }
+        guard !state.walletGuid.isEmpty else {
+            fatalError("GUID should not be empty")
+        }
         return .run { send in
             do {
                 try await loginService
@@ -208,7 +208,7 @@ struct WalletPairingReducer: Reducer {
                 await send(.authenticateWithTwoFactorOTPDidFail(error as! LoginServiceError))
             }
         }
-   }
+    }
 
     private func needsEmailAuthorization() -> Effect<WalletPairingAction> {
         Effect.send(.startPolling)

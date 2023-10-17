@@ -11,7 +11,7 @@ import ToolKit
 struct TransactionFetchIdentifier: Hashable {}
 
 struct InterestAccountListReducer: Reducer {
-    
+
     typealias State = InterestAccountListState
     typealias Action = InterestAccountListAction
 
@@ -221,14 +221,14 @@ struct InterestAccountListReducer: Reducer {
 }
 
 struct InterestReducerCore: Reducer {
-    
+
     typealias State = InterestAccountListState
     typealias Action = InterestAccountListAction
-    
+
     let environment: InterestAccountSelectionEnvironment
-    
+
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .interestAccountDetails(.dismissInterestDetailsScreen):
                 return .dismiss()

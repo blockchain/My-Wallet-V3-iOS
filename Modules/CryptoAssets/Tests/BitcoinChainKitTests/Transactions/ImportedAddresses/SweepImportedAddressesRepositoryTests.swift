@@ -22,7 +22,7 @@ final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
         let sut = SweepImportedAddressesRepository(app: testApp, now: now)
 
-        let expectation = self.expectation(description: "whoa")
+        let expectation = expectation(description: "whoa")
 
         sut.prepare()
             .sink { value in
@@ -53,7 +53,7 @@ final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
         testApp.state.set(blockchain.ux.sweep.imported.addresses.swept.addresses, to: ["a", "b"])
 
-        let expectation = self.expectation(description: "whoa")
+        let expectation = expectation(description: "whoa")
 
         sut.prepare()
             .sink { value in
@@ -89,7 +89,7 @@ final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
         let sut2 = SweepImportedAddressesRepository(app: testApp, now: { mockDate })
         // should clear any stored values
-        let expectation = self.expectation(description: "whoa")
+        let expectation = expectation(description: "whoa")
         sut2.prepare()
             .sink { value in
                 XCTAssertEqual(value, [])
@@ -120,7 +120,7 @@ final class SweepImportedAddressesRepositoryTests: XCTestCase {
 
         let sut2 = SweepImportedAddressesRepository(app: testApp, now: { mockDate })
         // should *NOT* clear any stored values
-        let expectation = self.expectation(description: "whoa")
+        let expectation = expectation(description: "whoa")
         sut2.prepare()
             .sink { value in
                 XCTAssertEqual(value, ["a", "b"])

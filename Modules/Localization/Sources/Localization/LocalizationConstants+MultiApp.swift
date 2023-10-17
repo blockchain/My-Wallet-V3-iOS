@@ -247,7 +247,7 @@ extension LocalizationConstants.SuperApp.Dashboard.GetStarted.Trading {
         "Your account is currently unable to access Blockchain.com custodial services. If you think this is an error, please contact support.",
         comment: "Blocked: Message"
     )
-    
+
     public static let blockedContactSupport = NSLocalizedString(
         "Contact Support",
         comment: "Blocked: Contact Support"

@@ -141,7 +141,7 @@ struct DashboardContent: Reducer {
                                 return app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self)
                             }
                         }
-                        
+
                         for await event in stream {
                             await send(DashboardContent.Action.tabs(event.value?.tabs))
                         }

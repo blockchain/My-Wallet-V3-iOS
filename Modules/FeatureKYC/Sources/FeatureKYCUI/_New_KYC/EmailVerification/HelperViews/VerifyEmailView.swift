@@ -24,13 +24,14 @@ enum VerifyEmailAction: Equatable {
         case dismiss
         case present
     }
+
     case tapCheckInbox
     case tapGetEmailNotReceivedHelp
     case alert(PresentationAction<AlertAction>)
 }
 
 struct VerifyEmailReducer: Reducer {
-    
+
     typealias State = VerifyEmailState
     typealias Action = VerifyEmailAction
 

@@ -17,7 +17,7 @@ extension AnalyticsEvents.New {
 }
 
 struct TradingCurrencyAnalyticsReducer: Reducer {
-    
+
     typealias State = TradingCurrency.State
     typealias Action = TradingCurrency.Action
 

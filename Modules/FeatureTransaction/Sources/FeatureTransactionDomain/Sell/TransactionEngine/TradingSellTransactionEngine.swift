@@ -66,21 +66,21 @@ final class TradingSellTransactionEngine: SellTransactionEngine {
     func initializeTransaction() -> Single<PendingTransaction> {
         actionableBalance
             .zip(walletCurrencyService.displayCurrency.eraseError())
-            .flatMap { [weak self] (actionableBalance, fiatCurrency) -> AnyPublisher<PendingTransaction, Error> in
+            .flatMap { [weak self] actionableBalance, fiatCurrency -> AnyPublisher<PendingTransaction, Error> in
                 guard let self else {
                     return .failure(ToolKitError.nullReference(Self.self))
                 }
                 let pendingTransaction = PendingTransaction(
-                    amount: .zero(currency: self.sourceAsset),
+                    amount: .zero(currency: sourceAsset),
                     available: actionableBalance,
-                    feeAmount: .zero(currency: self.sourceAsset),
-                    feeForFullAvailable: .zero(currency: self.sourceAsset),
-                    feeSelection: .empty(asset: self.sourceAsset),
+                    feeAmount: .zero(currency: sourceAsset),
+                    feeForFullAvailable: .zero(currency: sourceAsset),
+                    feeSelection: .empty(asset: sourceAsset),
                     selectedFiatCurrency: fiatCurrency
                 )
-                return self.updateLimits(
+                return updateLimits(
                     pendingTransaction: pendingTransaction,
-                    quote: .zero(self.sourceAsset.code, self.targetAsset.code)
+                    quote: .zero(sourceAsset.code, targetAsset.code)
                 )
                 .handlePendingOrdersError(initialValue: pendingTransaction)
             }

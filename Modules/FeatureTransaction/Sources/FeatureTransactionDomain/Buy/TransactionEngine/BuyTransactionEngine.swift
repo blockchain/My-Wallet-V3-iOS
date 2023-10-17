@@ -273,7 +273,7 @@ final class BuyTransactionEngine: TransactionEngine {
                     guard let self else {
                         return .failure(ToolKitError.nullReference(Self.self))
                     }
-                    return self.createOrderFromPendingTransaction(
+                    return createOrderFromPendingTransaction(
                         pendingTransaction,
                         quoteId: quote.quoteId!,
                         amount: quote.estimatedSourceAmount
@@ -294,10 +294,10 @@ final class BuyTransactionEngine: TransactionEngine {
                 guard let self else {
                     throw ToolKitError.nullReference(Self.self)
                 }
-                guard let sourceAccount = self.sourceAccount as? PaymentMethodAccount else {
+                guard let sourceAccount = sourceAccount as? PaymentMethodAccount else {
                     throw TransactionValidationFailure(state: .optionInvalid)
                 }
-                guard let destinationAccount = self.transactionTarget as? CryptoTradingAccount else {
+                guard let destinationAccount = transactionTarget as? CryptoTradingAccount else {
                     throw TransactionValidationFailure(state: .optionInvalid)
                 }
                 guard let crypto = destinationAccount.currencyType.cryptoCurrency else {
@@ -568,7 +568,7 @@ extension BuyTransactionEngine {
             .eraseToAnyPublisher()
     }
 
-    private func convertAmountIntoTradingCurrency(_ amount: MoneyValue) -> AnyPublisher<FiatValue, Error>  {
+    private func convertAmountIntoTradingCurrency(_ amount: MoneyValue) -> AnyPublisher<FiatValue, Error> {
         guard amount.isFiat.isNo else {
             return .just(amount.fiatValue!)
         }
