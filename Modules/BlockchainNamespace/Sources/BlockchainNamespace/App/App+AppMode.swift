@@ -12,14 +12,14 @@ public enum AppMode: String, Decodable, Equatable {
 extension AppProtocol {
     public func modePublisher() -> AnyPublisher<AppMode, Never> {
         publisher(for: blockchain.app.mode, as: AppMode.self)
-            .replaceError(with: .trading)
+            .replaceError(with: .pkw)
     }
 
     public var currentMode: AppMode {
-        state.get(blockchain.app.mode, as: AppMode.self, or: .trading)
+        state.get(blockchain.app.mode, as: AppMode.self, or: .pkw)
     }
 
     public func mode() async -> AppMode {
-        await get(blockchain.app.mode, as: AppMode.self, or: .trading)
+        await get(blockchain.app.mode, as: AppMode.self, or: .pkw)
     }
 }
