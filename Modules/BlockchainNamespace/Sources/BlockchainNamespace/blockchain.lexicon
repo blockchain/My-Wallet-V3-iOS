@@ -439,6 +439,11 @@ blockchain:
 					areas:
 					+ blockchain.db.type.array.of.strings
 					+ blockchain.session.configuration.value
+					migration:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 			firebase:
 				project:
 					id:

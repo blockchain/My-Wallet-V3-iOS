@@ -1767,11 +1767,30 @@ public final class L_blockchain_app_configuration_external_trading: L, I_blockch
 public protocol I_blockchain_app_configuration_external_trading: I {}
 public extension I_blockchain_app_configuration_external_trading {
 	var `areas`: L_blockchain_app_configuration_external_trading_areas { .init("\(__).areas") }
+	var `migration`: L_blockchain_app_configuration_external_trading_migration { .init("\(__).migration") }
 }
 public final class L_blockchain_app_configuration_external_trading_areas: L, I_blockchain_app_configuration_external_trading_areas {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.external.trading.areas", comment: "") }
 }
 public protocol I_blockchain_app_configuration_external_trading_areas: I_blockchain_db_type_array_of_strings, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_external_trading_migration: L, I_blockchain_app_configuration_external_trading_migration {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.external.trading.migration", comment: "") }
+}
+public protocol I_blockchain_app_configuration_external_trading_migration: I {}
+public extension I_blockchain_app_configuration_external_trading_migration {
+	var `is`: L_blockchain_app_configuration_external_trading_migration_is { .init("\(__).is") }
+}
+public final class L_blockchain_app_configuration_external_trading_migration_is: L, I_blockchain_app_configuration_external_trading_migration_is {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.external.trading.migration.is", comment: "") }
+}
+public protocol I_blockchain_app_configuration_external_trading_migration_is: I {}
+public extension I_blockchain_app_configuration_external_trading_migration_is {
+	var `enabled`: L_blockchain_app_configuration_external_trading_migration_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_app_configuration_external_trading_migration_is_enabled: L, I_blockchain_app_configuration_external_trading_migration_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.external.trading.migration.is.enabled", comment: "") }
+}
+public protocol I_blockchain_app_configuration_external_trading_migration_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_configuration_firebase: L, I_blockchain_app_configuration_firebase {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.firebase", comment: "") }
 }
