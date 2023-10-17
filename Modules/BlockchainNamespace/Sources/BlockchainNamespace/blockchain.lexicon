@@ -2810,6 +2810,11 @@ blockchain:
 				email:
 					verification:
 					+ blockchain.ux.type.story
+			verify:
+				email:
+				+ blockchain.ux.type.story
+					confirmed:
+					+ blockchain.ux.type.action
 		loading:
 			indicator:
 				event:
@@ -3766,9 +3771,16 @@ blockchain:
 						+ blockchain.ux.type.story
 						pin:
 						+ blockchain.ux.type.story
+							success:
+							+ blockchain.ux.type.action
 					cloud:
 						backup:
 							enable:
+					create:
+						pin:
+						+ blockchain.ux.type.story
+							success:
+							+ blockchain.ux.type.action
 					synchronize:
 						widget:
 					two_factor_authentication:

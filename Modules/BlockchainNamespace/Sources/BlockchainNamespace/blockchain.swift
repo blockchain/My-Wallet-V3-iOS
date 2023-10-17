@@ -9937,6 +9937,7 @@ public extension I_blockchain_ux_kyc {
 	var `trading`: L_blockchain_ux_kyc_trading { .init("\(__).trading") }
 	var `type`: L_blockchain_ux_kyc_type { .init("\(__).type") }
 	var `user`: L_blockchain_ux_kyc_user { .init("\(__).user") }
+	var `verify`: L_blockchain_ux_kyc_verify { .init("\(__).verify") }
 }
 public final class L_blockchain_ux_kyc_current: L, I_blockchain_ux_kyc_current {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.current", comment: "") }
@@ -10539,6 +10540,24 @@ public final class L_blockchain_ux_kyc_user_email_verification: L, I_blockchain_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.user.email.verification", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_user_email_verification: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_kyc_verify: L, I_blockchain_ux_kyc_verify {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.verify", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_verify: I {}
+public extension I_blockchain_ux_kyc_verify {
+	var `email`: L_blockchain_ux_kyc_verify_email { .init("\(__).email") }
+}
+public final class L_blockchain_ux_kyc_verify_email: L, I_blockchain_ux_kyc_verify_email {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.verify.email", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_verify_email: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_kyc_verify_email {
+	var `confirmed`: L_blockchain_ux_kyc_verify_email_confirmed { .init("\(__).confirmed") }
+}
+public final class L_blockchain_ux_kyc_verify_email_confirmed: L, I_blockchain_ux_kyc_verify_email_confirmed {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.verify.email.confirmed", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_verify_email_confirmed: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_loading: L, I_blockchain_ux_loading {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.loading", comment: "") }
 }
@@ -14099,6 +14118,7 @@ public extension I_blockchain_ux_user_account_security {
 	var `biometric`: L_blockchain_ux_user_account_security_biometric { .init("\(__).biometric") }
 	var `change`: L_blockchain_ux_user_account_security_change { .init("\(__).change") }
 	var `cloud`: L_blockchain_ux_user_account_security_cloud { .init("\(__).cloud") }
+	var `create`: L_blockchain_ux_user_account_security_create { .init("\(__).create") }
 	var `synchronize`: L_blockchain_ux_user_account_security_synchronize { .init("\(__).synchronize") }
 	var `two_factor_authentication`: L_blockchain_ux_user_account_security_two__factor__authentication { .init("\(__).two_factor_authentication") }
 }
@@ -14150,6 +14170,13 @@ public final class L_blockchain_ux_user_account_security_change_pin: L, I_blockc
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.security.change.pin", comment: "") }
 }
 public protocol I_blockchain_ux_user_account_security_change_pin: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_user_account_security_change_pin {
+	var `success`: L_blockchain_ux_user_account_security_change_pin_success { .init("\(__).success") }
+}
+public final class L_blockchain_ux_user_account_security_change_pin_success: L, I_blockchain_ux_user_account_security_change_pin_success {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.security.change.pin.success", comment: "") }
+}
+public protocol I_blockchain_ux_user_account_security_change_pin_success: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_user_account_security_cloud: L, I_blockchain_ux_user_account_security_cloud {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.security.cloud", comment: "") }
 }
@@ -14168,6 +14195,24 @@ public final class L_blockchain_ux_user_account_security_cloud_backup_enable: L,
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.security.cloud.backup.enable", comment: "") }
 }
 public protocol I_blockchain_ux_user_account_security_cloud_backup_enable: I {}
+public final class L_blockchain_ux_user_account_security_create: L, I_blockchain_ux_user_account_security_create {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.security.create", comment: "") }
+}
+public protocol I_blockchain_ux_user_account_security_create: I {}
+public extension I_blockchain_ux_user_account_security_create {
+	var `pin`: L_blockchain_ux_user_account_security_create_pin { .init("\(__).pin") }
+}
+public final class L_blockchain_ux_user_account_security_create_pin: L, I_blockchain_ux_user_account_security_create_pin {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.security.create.pin", comment: "") }
+}
+public protocol I_blockchain_ux_user_account_security_create_pin: I_blockchain_ux_type_story {}
+public extension I_blockchain_ux_user_account_security_create_pin {
+	var `success`: L_blockchain_ux_user_account_security_create_pin_success { .init("\(__).success") }
+}
+public final class L_blockchain_ux_user_account_security_create_pin_success: L, I_blockchain_ux_user_account_security_create_pin_success {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.security.create.pin.success", comment: "") }
+}
+public protocol I_blockchain_ux_user_account_security_create_pin_success: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_user_account_security_synchronize: L, I_blockchain_ux_user_account_security_synchronize {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.account.security.synchronize", comment: "") }
 }

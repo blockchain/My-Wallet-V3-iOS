@@ -10,6 +10,8 @@ import ToolKit
 /// PIN creation / changing / authentication. Responsible for routing screens during flow.
 public final class PinRouter: NSObject {
 
+    @Dependency(\.app) var app
+
     // MARK: - Properties
 
     /// The origin of the pin flow
@@ -67,6 +69,15 @@ public final class PinRouter: NSObject {
             authenticate(from: origin)
         case .enableBiometrics: // Here the origin is `.foreground`
             authenticate(from: flow.origin)
+        }
+
+        switch flow {
+        case .create, .createPin:
+            app.post(event: blockchain.ux.user.account.security.create.pin)
+        case .change:
+            app.post(event: blockchain.ux.user.account.security.change.pin)
+        default:
+            break
         }
     }
 
@@ -154,6 +165,7 @@ extension PinRouter {
         }
         let forwardRouting: PinRouting.RoutingType.Forward = { [weak self] input in
             self?.select(previousPin: input.pin)
+            self?.app.post(event: blockchain.ux.user.account.security.change.pin.success)
         }
 
         // Add cleanup to logout
@@ -238,6 +250,7 @@ extension PinRouter {
         }
         let forwardRouting: PinRouting.RoutingType.Forward = { [weak self] _ in
             self?.recorder.record("forwardRouting block called")
+            self?.app.post(event: blockchain.ux.user.account.security.create.pin.success)
             self?.finish()
         }
         let effectHandling: PinRouting.RoutingType.Effect = { [weak self] effect in
