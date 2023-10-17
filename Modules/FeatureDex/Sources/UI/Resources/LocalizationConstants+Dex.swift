@@ -107,7 +107,7 @@ extension L10n.NetworkPicker {
 extension L10n.Settings {
 
     static let title = NSLocalizedString(
-        "Allowed Slippage",
+        "Settings",
         comment: "Dex: Settings: title"
     )
 
@@ -327,7 +327,7 @@ extension L10n.Confirmation {
     )
 
     static let networkFee = NSLocalizedString(
-        "Network Fee",
+        "Gas fee",
         comment: "Dex: Main"
     )
 

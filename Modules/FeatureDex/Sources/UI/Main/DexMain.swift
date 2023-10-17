@@ -349,18 +349,6 @@ public struct DexMain: Reducer {
                 dismissKeyboard(&state)
                 return .none
 
-            case .onSelectNetworkTapped:
-                let networkPicker = blockchain.ux.currency.exchange.dex.network.picker
-                let detents = blockchain.ui.type.action.then.enter.into.detents
-                app.post(
-                    event: networkPicker.tap,
-                    context: [
-                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentNetwork?.networkConfig.networkTicker,
-                        detents: [detents.automatic.dimension]
-                    ]
-                )
-                return .none
-
             case .onInegibilityLearnMoreTap:
                 return .run { _ in
                     let url = try? await app.get(blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.learn.more) as URL
@@ -405,6 +393,7 @@ public struct DexMain: Reducer {
                         .replaceError(with: nil)
                         .receive(on: DispatchQueue.main)
                         .map(Action.onNetworkPrice)
+                    
                 }
                 .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
             case .binding:
@@ -430,7 +419,6 @@ extension DexConfirmation.State.Quote {
             from: quote.sellAmount,
             minimumReceivedAmount: quote.buyAmount.minimum ?? quote.buyAmount.amount,
             networkFee: quote.networkFee,
-            productFee: quote.productFee,
             slippage: slippage,
             to: quote.buyAmount.amount
         )

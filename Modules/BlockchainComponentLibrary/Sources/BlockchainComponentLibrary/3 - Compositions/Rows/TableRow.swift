@@ -93,7 +93,7 @@ public struct TableRow<Title: View, Byline: View, Leading: View, Trailing: View,
                 }
                 footer.padding(.top, 8)
             }
-            if tableRowChevron, !(trailing is Toggle<EmptyView>) {
+            if tableRowChevron, !(trailing is TableRowToggle) {
                 Icon.chevronRight
                     .color(.semantic.muted)
                     .micro()
@@ -227,12 +227,12 @@ extension TableRow {
         @ViewBuilder byline: () -> Byline = EmptyView.init,
         isOn: Binding<Bool>,
         @ViewBuilder footer: () -> Footer = EmptyView.init
-    ) where Trailing == Toggle<EmptyView> {
+    ) where Trailing == TableRowToggle {
         self.init(
             leading: leading,
             title: title,
             byline: byline,
-            trailing: { Toggle(isOn: isOn, label: EmptyView.init) },
+            trailing: { TableRowToggle(isOn: isOn) },
             footer: footer
         )
     }
@@ -243,12 +243,12 @@ extension TableRow {
         @ViewBuilder byline: () -> Byline = EmptyView.init,
         isOn: Binding<Bool>,
         @ViewBuilder footer: () -> Footer = EmptyView.init
-    ) where Title == TableRowTitle, Trailing == Toggle<EmptyView> {
+    ) where Title == TableRowTitle, Trailing == TableRowToggle {
         self.init(
             leading: leading,
             title: title,
             byline: byline,
-            trailing: { Toggle(isOn: isOn, label: EmptyView.init) },
+            trailing: { TableRowToggle(isOn: isOn) },
             footer: footer
         )
     }
@@ -259,12 +259,12 @@ extension TableRow {
         byline: TableRowByline,
         isOn: Binding<Bool>,
         @ViewBuilder footer: () -> Footer = EmptyView.init
-    ) where Title == TableRowTitle, Byline == TableRowByline, Trailing == Toggle<EmptyView> {
+    ) where Title == TableRowTitle, Byline == TableRowByline, Trailing == TableRowToggle {
         self.init(
             leading: leading,
             title: title,
             byline: byline,
-            trailing: { Toggle(isOn: isOn, label: EmptyView.init) },
+            trailing: { TableRowToggle(isOn: isOn) },
             footer: footer
         )
     }
@@ -363,6 +363,16 @@ extension TableRow {
             },
             footer: footer
         )
+    }
+}
+
+public struct TableRowToggle: View {
+    let isOn: Binding<Bool>
+    public var body: some View {
+        VStack(spacing: 0) {
+            Toggle(isOn: isOn, label: EmptyView.init)
+                .fixedSize(horizontal: true, vertical: true)
+        }
     }
 }
 
@@ -515,15 +525,15 @@ extension View {
 
 struct TableRow_Previews: PreviewProvider {
 
-    private static let loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    private static let loremIpsumShort = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    private static let loremIpsum: String = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    private static let loremIpsumShort: String = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
     @ViewBuilder static var rows: some View {
         TableRow(
             title: "Left Title",
             byline: "Left Byline",
             footer: {
-                Text(loremIpsum)
+                Text("Footer \(loremIpsum)")
                     .typography(.caption1)
                     .foregroundColor(.semantic.text)
                 TagView(text: "Fastest", variant: .success)
@@ -531,7 +541,7 @@ struct TableRow_Previews: PreviewProvider {
         )
         TableRow(
             title: "Left Title",
-            byline: TableRowByline(Text(loremIpsum)),
+            byline: TableRowByline("Byline \(loremIpsum)"),
             tag: { TagView(text: "New", variant: .new) },
             footer: {
                 HStack {
@@ -570,7 +580,7 @@ struct TableRow_Previews: PreviewProvider {
         )
         TableRow(
             title: "Left Title",
-            byline: "Left Byline",
+            byline: "Byline \(loremIpsum)",
             isOn: .constant(true)
         )
         TableRow(
@@ -589,7 +599,7 @@ struct TableRow_Previews: PreviewProvider {
         TableRow(
             leading: { Icon.placeholder.small() },
             title: "Left Title",
-            byline: TableRowByline(Text(loremIpsum)),
+            byline: TableRowByline("Byline \(loremIpsum)"),
             tag: { TagView(text: "New", variant: .new) },
             footer: {
                 HStack {
@@ -612,7 +622,7 @@ struct TableRow_Previews: PreviewProvider {
         TableRow(
             leading: { Icon.placeholder.small() },
             title: "Left Title",
-            byline: "Left Byline",
+            byline: "Byline \(loremIpsum)",
             isOn: .constant(true)
         )
         TableRow(

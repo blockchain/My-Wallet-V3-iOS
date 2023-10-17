@@ -54,12 +54,6 @@ struct DexConfirmationView: View {
                     to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.to.currency.code].fiat.quote.value
                 )
             }
-            .bindings {
-                subscribe(
-                    viewStore.$productFeeFiatExchangeRate,
-                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.productFee?.currency.code].fiat.quote.value
-                )
-            }
             PrimaryNavigationLink(
                 destination: pendingTransactionView,
                 isActive: viewStore.$didConfirm,
@@ -118,15 +112,24 @@ struct DexConfirmationView: View {
         exchangeRate: MoneyValue?,
         balance: DexBalance?
     ) -> some View {
-        TableRow(
-            title: {
+        VStack(alignment: .center, spacing: 8) {
+            HStack(alignment: .center, spacing: 8) {
+                if let value = cryptoValue.currency.network() {
+                    pillButton(imageURL: value.logoURL, label: value.networkConfig.shortName)
+                        .frame(maxWidth: .infinity)
+                }
+                pillButton(imageURL: cryptoValue.currency.logoURL, label: cryptoValue.currency.displayCode)
+                    .frame(maxWidth: .infinity)
+            }
+            HStack(alignment: .center, spacing: 8) {
                 Text(cryptoValue.toDisplayString(includeSymbol: false))
                     .typography(.title2.slashedZero())
                     .foregroundColor(.semantic.title)
                     .lineLimit(1)
                     .minimumScaleFactor(0.1)
-            },
-            byline: {
+                Spacer()
+            }
+            HStack(alignment: .center, spacing: 0) {
                 if let exchangeRate {
                     Text(cryptoValue.convert(using: exchangeRate).displayString)
                         .typography(.body1)
@@ -134,21 +137,41 @@ struct DexConfirmationView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
                 }
-            },
-            trailing: {
-                HStack(alignment: .center) {
-                    VStack(alignment: .trailing, spacing: 8.pt) {
-                        balancePill(cryptoValue.currency)
-                        balanceLabel(balance)
-                    }
-                }
+                Spacer()
+                balanceLabel(balance)
             }
-        )
-        .padding(.vertical, 4.pt)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.semantic.background)
-        )
+        }
+        .padding([.leading, .trailing], 16)
+        .padding([.top, .bottom], 18)
+        .foregroundColor(.semantic.title)
+        .background(Color.semantic.background)
+        .cornerRadius(Spacing.padding2)
+    }
+
+    @ViewBuilder
+    private func pillButton(
+        imageURL: URL?,
+        label: String
+    ) -> some View {
+        HStack(spacing: 8) {
+            AsyncMedia(
+                url: imageURL,
+                placeholder: EmptyView.init
+            )
+            .frame(width: 24, height: 24)
+            .padding(.leading, Spacing.padding1)
+            .padding(.vertical, Spacing.textSpacing)
+            Text(label)
+                .typography(.caption2)
+                .foregroundColor(.semantic.title)
+            Spacer()
+            Icon.chevronRight
+                .with(length: 12.pt)
+                .color(.semantic.muted)
+                .padding(.trailing, Spacing.padding1)
+        }
+        .background(Color.semantic.light)
+        .cornerRadius(Spacing.padding3)
     }
 
     @ViewBuilder
@@ -188,11 +211,11 @@ struct DexConfirmationView: View {
     private var rows: some View {
         DividedVStack {
             tableRow(
-                title: L10n.network,
+                title: L10n.allowedSlippage,
                 value: {
-                    tableRowTitle(viewStore.quote.from.currency.network()?.networkConfig.shortName ?? "")
+                    tableRowTitle(formatSlippage(viewStore.quote.slippage))
                 },
-                tooltip: nil
+                tooltip: (L10n.allowedSlippage, FeatureDexUI.L10n.Settings.body)
             )
             tableRow(
                 title: L10n.exchangeRate,
@@ -200,13 +223,6 @@ struct DexConfirmationView: View {
                     tableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
                 },
                 tooltip: nil
-            )
-            tableRow(
-                title: L10n.allowedSlippage,
-                value: {
-                    tableRowTitle(formatSlippage(viewStore.quote.slippage))
-                },
-                tooltip: (L10n.allowedSlippage, FeatureDexUI.L10n.Settings.body)
             )
             tableRow(
                 title: L10n.minAmount,
@@ -219,6 +235,13 @@ struct DexConfirmationView: View {
                 },
                 tooltip: (title: L10n.minAmount, message: L10n.minAmountDescription)
             )
+        }
+        .padding(.vertical, 6.pt)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.semantic.background)
+        )
+        DividedVStack {
             tableRow(
                 title: L10n.networkFee,
                 value: {
@@ -229,19 +252,6 @@ struct DexConfirmationView: View {
                 },
                 tooltip: (L10n.networkFee, L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode))
             )
-            if let productFee = viewStore.quote.productFee {
-                tableRow(
-                    title: L10n.blockchainFee,
-                    value: {
-                        valueWithQuote(
-                            productFee,
-                            using: viewStore.productFeeFiatExchangeRate
-                        )
-                    },
-                    tooltip: (L10n.blockchainFee, L10n.blockchainFeeDescription)
-                )
-
-            }
         }
         .padding(.vertical, 6.pt)
         .background(

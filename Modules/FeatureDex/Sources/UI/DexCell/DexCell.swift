@@ -26,6 +26,16 @@ public struct DexCell: Reducer {
                     state.inputText = balance.value.toDisplayString(includeSymbol: false)
                 }
                 return .none
+            case .onTapNetworkSelector:
+                let detents = blockchain.ui.type.action.then.enter.into.detents
+                app.post(
+                    event: blockchain.ux.currency.exchange.dex.network.picker.tap,
+                    context: [
+                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentNetwork?.networkConfig.networkTicker,
+                        detents: [detents.automatic.dimension]
+                    ]
+                )
+                return .none
             case .onTapCurrencySelector:
                 guard let currentNetwork = state.currentNetwork else {
                     return .none

@@ -18,7 +18,6 @@ final class QuotePayloadFactoryTests: XCTestCase {
             field: .source,
             isValidated: true,
             networkFee: bitcoin(major: 0.01),
-            productFee: ether(major: 0.1),
             sellAmount: bitcoin(major: 1),
             slippage: "0.1234",
             response: mockResponse
@@ -34,9 +33,6 @@ final class QuotePayloadFactoryTests: XCTestCase {
         XCTAssertEqual(result.slippageAllowed, "0.1234")
         XCTAssertEqual(result.networkFeeAmount, "0.01")
         XCTAssertEqual(result.networkFeeCurrency, "BTC")
-
-        XCTAssertEqual(result.blockchainFeeAmount, "0.1")
-        XCTAssertEqual(result.blockchainFeeCurrency, "ETH")
     }
 
     func testOutputLong() {
@@ -49,7 +45,6 @@ final class QuotePayloadFactoryTests: XCTestCase {
             field: .source,
             isValidated: true,
             networkFee: bitcoin("1234567"),
-            productFee: ether("123456789123456789"),
             sellAmount: bitcoin("112345678"),
             slippage: "0.123456789",
             response: mockResponse
@@ -65,9 +60,6 @@ final class QuotePayloadFactoryTests: XCTestCase {
         XCTAssertEqual(result.slippageAllowed, "0.123456789")
         XCTAssertEqual(result.networkFeeAmount, "0.01234567")
         XCTAssertEqual(result.networkFeeCurrency, "BTC")
-
-        XCTAssertEqual(result.blockchainFeeAmount, "0.123456789123456789")
-        XCTAssertEqual(result.blockchainFeeCurrency, "ETH")
     }
 
     private func ether(major: Decimal) -> CryptoValue {

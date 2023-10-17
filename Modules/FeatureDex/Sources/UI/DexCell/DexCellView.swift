@@ -16,16 +16,23 @@ public struct DexCellView: View {
     }
 
     public var body: some View {
-        TableRow(
-            title: { amountView },
-            byline: { fiatAmountView },
-            trailing: {
-                VStack(alignment: .trailing) {
-                    currencyPill
-                    balanceView
-                }
+        VStack(alignment: .center, spacing: 8) {
+            HStack(alignment: .center, spacing: 8) {
+                networkPill
+                    .frame(maxWidth: .infinity)
+                currencyPill
+                    .frame(maxWidth: .infinity)
             }
-        )
+            amountView
+            HStack(alignment: .center, spacing: 0) {
+                fiatAmountView
+                Spacer()
+                balanceView
+            }
+        }
+        .padding([.leading, .trailing], 16)
+        .padding([.top, .bottom], 18)
+        .foregroundColor(.semantic.title)
         .background(Color.semantic.background)
         .cornerRadius(Spacing.padding2)
         .onAppear {
@@ -137,59 +144,79 @@ extension DexCellView {
     }
 
     @ViewBuilder
+    private var networkPill: some View {
+        Button(
+            action: { viewStore.send(.onTapNetworkSelector) },
+            label: {
+                if let value = viewStore.currentNetwork {
+                    pillButton(imageURL: value.logoURL, label: value.networkConfig.shortName)
+                } else {
+                    pillButtonPlaceholder
+                }
+            }
+        )
+        .disabled(viewStore.style.isDestination)
+    }
+
+    @ViewBuilder
     private var currencyPill: some View {
         Button(
             action: { viewStore.send(.onTapCurrencySelector) },
             label: {
                 if let value = viewStore.currency {
-                    currencyPillBody(value)
+                    pillButton(imageURL: value.logoURL, label: value.displayCode)
                 } else {
-                    currencyPillPlaceholder
+                    pillButtonPlaceholder
                 }
             }
         )
     }
 
     @ViewBuilder
-    private func currencyPillBody(_ value: CryptoCurrency) -> some View {
-        HStack(spacing: 4) {
+    private func pillButton(
+        imageURL: URL?,
+        label: String
+    ) -> some View {
+        HStack(spacing: 8) {
             AsyncMedia(
-                url: value.logoURL,
+                url: imageURL,
                 placeholder: EmptyView.init
             )
-            .frame(width: 16, height: 16)
+            .frame(width: 24, height: 24)
             .padding(.leading, Spacing.padding1)
-            .padding(.vertical, Spacing.padding1)
-            Text(value.displayCode)
-                .typography(.body1)
+            .padding(.vertical, Spacing.textSpacing)
+            Text(label)
+                .typography(.caption2)
                 .foregroundColor(.semantic.title)
+            Spacer()
             Icon.chevronRight
                 .with(length: 12.pt)
                 .color(.semantic.muted)
                 .padding(.trailing, Spacing.padding1)
         }
         .background(Color.semantic.light)
-        .cornerRadius(Spacing.padding2)
+        .cornerRadius(Spacing.padding3)
     }
 
     @ViewBuilder
-    private var currencyPillPlaceholder: some View {
-        HStack(spacing: 4) {
+    private var pillButtonPlaceholder: some View {
+        HStack(spacing: 8) {
             Icon.coins
-                .micro()
+                .small()
                 .color(.white)
                 .padding(.leading, Spacing.padding1)
-                .padding(.vertical, Spacing.padding1)
+                .padding(.vertical, Spacing.textSpacing)
             Text(L10n.Main.select)
-                .typography(.body1)
+                .typography(.caption2)
                 .foregroundColor(.white)
+            Spacer()
             Icon.chevronRight
                 .with(length: 12.pt)
                 .color(.white)
                 .padding(.trailing, Spacing.padding1)
         }
         .background(Color.semantic.primary)
-        .cornerRadius(Spacing.padding2)
+        .cornerRadius(Spacing.padding3)
     }
 }
 
