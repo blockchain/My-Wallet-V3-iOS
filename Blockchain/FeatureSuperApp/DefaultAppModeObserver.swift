@@ -52,18 +52,27 @@ public final class DefaultAppModeObserver: Client.Observer {
         let useExternalTradingAccount = products.first(where: \.id == ProductIdentifier.useExternalTradingAccount)
 
         let isDefaultingEnabled = await app.get(blockchain.app.configuration.app.mode.defaulting.is.enabled, as: Bool.self, or: false)
-        let hasBeenDefaultedAlready = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
+
+        let hasBeenDefaultedToDefiAlready = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.pkw) ?? false
+
+        let hasBeenDefaultedToTradingAlready = (try? app.state.get(blockchain.app.mode.has.been.force.defaulted.to.mode, as: AppMode.self) == AppMode.trading) ?? false
 
         let decision = AppModeDecision(
             useTradingAccount: useTradingAccount,
             useExternalTradingAccount: useExternalTradingAccount,
             isDefaultingEnabled: isDefaultingEnabled,
-            hasBeenDefaultedAlready: hasBeenDefaultedAlready
+            hasBeenDefaultedToDefiAlready: hasBeenDefaultedToDefiAlready,
+            hasBeenDefaultedToTradingAlready: hasBeenDefaultedToTradingAlready
         )
 
         if decision.shouldDefaultToDeFi() {
             app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode)
             app.post(value: AppMode.pkw.rawValue, of: blockchain.app.mode.has.been.force.defaulted.to.mode)
+        }
+
+        if decision.shouldDefaultToTrading() {
+            app.post(value: AppMode.trading.rawValue, of: blockchain.app.mode)
+            app.post(value: AppMode.trading.rawValue, of: blockchain.app.mode.has.been.force.defaulted.to.mode)
         }
     }
 }
@@ -73,12 +82,12 @@ struct AppModeDecision {
     var useTradingAccount: ProductValue?
     var useExternalTradingAccount: ProductValue?
     var isDefaultingEnabled: Bool
-    var hasBeenDefaultedAlready: Bool
+    var hasBeenDefaultedToDefiAlready: Bool
+    var hasBeenDefaultedToTradingAlready: Bool
 
     func shouldDefaultToDeFi() -> Bool {
-
         guard isDefaultingEnabled else { return false }
-        guard !hasBeenDefaultedAlready else { return false }
+        guard !hasBeenDefaultedToDefiAlready else { return false }
 
         let isTradingAccountDisabled = (
             useTradingAccount?.defaultProduct == false || useTradingAccount?.enabled == false
@@ -89,5 +98,19 @@ struct AppModeDecision {
         )
 
         return isTradingAccountDisabled && isExternalTradingAccountDisabled
+    }
+
+
+    func shouldDefaultToTrading() -> Bool {
+        guard !hasBeenDefaultedToTradingAlready else { return false }
+
+        let isTradingAccountDisabled = (
+            useTradingAccount?.defaultProduct == false || useTradingAccount?.enabled == false
+        )
+        let isExternalTradingAccountDisabled = (
+            useExternalTradingAccount?.defaultProduct == false || useExternalTradingAccount?.enabled == false
+        )
+
+        return !isTradingAccountDisabled || !isExternalTradingAccountDisabled
     }
 }
