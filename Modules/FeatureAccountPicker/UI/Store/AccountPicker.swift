@@ -71,7 +71,7 @@ public struct AccountPicker: Reducer {
         self.onSegmentSelectionChanged = onSegmentSelectionChanged
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Scope<
             AccountPicker.State,
             AccountPicker.Action,
@@ -123,13 +123,13 @@ public struct AccountPicker: Reducer {
 
                         if !singleAccountIds.isEmpty {
                             effects.append(
-                                .run { send in
-                                    do {
-                                        let balances = try await updateSingleAccounts(singleAccountIds).await()
-                                        await send(.updateSingleAccounts(balances))
-                                    } catch {
-                                        await send(.prefetching(.requeue(indices: indices)))
-                                    }
+                                .publisher {
+                                    updateSingleAccounts(singleAccountIds)
+                                        .receive(on: mainQueue)
+                                        .map { balances in
+                                            .updateSingleAccounts(balances)
+                                        }
+                                        .catch { _ in .prefetching(.requeue(indices: indices)) }
                                 }
                                 .cancellable(id: UpdateAccountIds(identities: singleAccountIds), cancelInFlight: true)
                             )
@@ -137,13 +137,13 @@ public struct AccountPicker: Reducer {
 
                         if !accountGroupIds.isEmpty {
                             effects.append(
-                                .run { send in
-                                    do {
-                                        let balances = try await updateAccountGroups(accountGroupIds).await()
-                                        await send(.updateAccountGroups(balances))
-                                    } catch {
-                                        await send(.prefetching(.requeue(indices: indices)))
-                                    }
+                                .publisher {
+                                    updateAccountGroups(accountGroupIds)
+                                        .receive(on: mainQueue)
+                                        .map { balances in
+                                            .updateAccountGroups(balances)
+                                        }
+                                        .catch { _ in .prefetching(.requeue(indices: indices)) }
                                 }
                                 .cancellable(id: UpdateAccountIds(identities: accountGroupIds), cancelInFlight: true)
                             )
@@ -241,22 +241,21 @@ public struct AccountPicker: Reducer {
 
             case .subscribeToUpdates:
                 return .merge(
-                    .run { send in
-                        do {
-                            let section = try await sections().await()
-                            await send(.updateSections(section))
-                        } catch {
-                            await send(.failedToUpdateRows(error))
-                        }
+                    .publisher {
+                        sections()
+                            .receive(on: mainQueue)
+                            .map { section in
+                                .updateSections(section)
+                            }
                     }
                     .cancellable(id: UpdateSubscriptionId()),
-                    .run { send in
-                        do {
-                            let header = try await header().await()
-                            await send(.updateHeader(header))
-                        } catch {
-                            await send(.failedToUpdateHeader(error))
-                        }
+                    .publisher {
+                        header()
+                            .receive(on: mainQueue)
+                            .map { header in
+                                .updateHeader(header)
+                            }
+                            .catch { error in .failedToUpdateHeader(error) }
                     }
                     .cancellable(id: UpdateHeaderId(), cancelInFlight: true)
                 )
