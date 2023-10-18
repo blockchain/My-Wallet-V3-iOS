@@ -18,6 +18,7 @@ struct SuperAppHeader: Reducer {
     }
 
     enum Action: BindableAction {
+        case refresh
         case binding(BindingAction<State>)
     }
 
@@ -36,6 +37,7 @@ struct SuperAppHeaderView: View {
     @Binding var contentOffset: ModalSheetContext
     @Binding var isRefreshing: Bool
     @Binding var headerFrame: CGRect
+    @Binding var isPullToRefreshEnabled: Bool
 
     @StateObject private var contentFrame = ViewFrame()
     @StateObject private var menuContentFrame = ViewFrame()
@@ -55,13 +57,15 @@ struct SuperAppHeaderView: View {
         currentSelection: Binding<AppMode>,
         contentOffset: Binding<ModalSheetContext>,
         isRefreshing: Binding<Bool>,
-        headerFrame: Binding<CGRect>
+        headerFrame: Binding<CGRect>,
+        isPullToRefreshEnabled: Binding<Bool>
     ) {
         self.store = store
         _currentSelection = currentSelection
         _contentOffset = contentOffset
         _isRefreshing = isRefreshing
         _headerFrame = headerFrame
+        _isPullToRefreshEnabled = isPullToRefreshEnabled
     }
 
     var body: some View {
@@ -71,7 +75,7 @@ struct SuperAppHeaderView: View {
             content: { viewStore in
                 ZStack(alignment: .top) {
                     ProgressView()
-                        .offset(y: isSmallDevice ? 0.0 : calculateOffset())
+                        .offset(y: progressIndicatorOffset())
                         .zIndex(1)
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .opacity(isRefreshing ? 1.0 : opacityForRefreshIndicator(percentageOffset: 1.0))
@@ -83,15 +87,25 @@ struct SuperAppHeaderView: View {
                                     isRefreshing ? 0.0 : opacityForBalance(percentageOffset: 2.0)
                                 )
                                 .onTapGesture {
-                                    if isSmallDevice || viewStore.hasError {
-                                        if !isRefreshing {
-                                            task = Task { @MainActor in
-                                                guard !isRefreshing, !Task.isCancelled else { return }
-                                                isRefreshing = true
-                                                await refreshAction?()
-                                                withAnimation {
-                                                    isRefreshing = false
+                                    if isPullToRefreshEnabled {
+                                        if isSmallDevice || viewStore.hasError {
+                                            if !isRefreshing {
+                                                task = Task(priority: .userInitiated) { @MainActor in
+                                                    guard !isRefreshing, !Task.isCancelled else { return }
+                                                    isRefreshing = true
+                                                    await refreshAction?()
+                                                    withAnimation {
+                                                        isRefreshing = false
+                                                    }
                                                 }
+                                            }
+                                        }
+                                    } else {
+                                        task = Task(priority: .userInitiated) { @MainActor in
+                                            isRefreshing = true
+                                            await viewStore.send(.refresh, while: \.isRefreshing)
+                                            withAnimation {
+                                                isRefreshing = false
                                             }
                                         }
                                     }
@@ -120,10 +134,14 @@ struct SuperAppHeaderView: View {
                         return
                     }
                     appeared = true
-                    task = Task {
+                    task = Task(priority: .userInitiated) { @MainActor in
                         try await Task.sleep(nanoseconds: 1 * 1000000000)
                         isRefreshing = true
-                        await refreshAction?()
+                        if isPullToRefreshEnabled {
+                            await refreshAction?()
+                        } else {
+                            await viewStore.send(.refresh, while: \.isRefreshing)
+                        }
                         withAnimation {
                             isRefreshing = false
                         }
@@ -142,6 +160,7 @@ struct SuperAppHeaderView: View {
                         .ignoresSafeArea()
                 )
                 .onChange(of: contentOffset) { contentOffset in
+                    guard isPullToRefreshEnabled else { return }
                     if contentOffset.progress < 1 {
                         isPullingDown = false
                     }
@@ -167,6 +186,13 @@ struct SuperAppHeaderView: View {
 
     // MARK: Private Helpers
 
+    private func progressIndicatorOffset() -> CGFloat {
+        guard isPullToRefreshEnabled else {
+            return 0.0
+        }
+        return isSmallDevice ? 0.0 : calculateOffset()
+    }
+
     private func opacity(percentageOffset: CGFloat) -> CGFloat {
         contentOffset.progress * percentageOffset
     }
@@ -176,6 +202,7 @@ struct SuperAppHeaderView: View {
     }
 
     private func opacityForRefreshIndicator(percentageOffset: CGFloat) -> CGFloat {
+        guard isPullToRefreshEnabled else { return 0.0 }
         if contentOffset.progress < 1.0 {
             return 0.0
         }
@@ -183,7 +210,10 @@ struct SuperAppHeaderView: View {
     }
 
     private func opacityForBalance(percentageOffset: CGFloat) -> CGFloat {
-        if contentOffset.progress > 1.1 || contentOffset.progress < 0.8 {
+        if contentOffset.progress < 0.8 {
+            return 1.0 - reverseOpacity(percentageOffset: percentageOffset)
+        }
+        if contentOffset.progress > 1.1, isPullToRefreshEnabled {
             return 1.0 - reverseOpacity(percentageOffset: percentageOffset)
         }
         return opacity(percentageOffset: percentageOffset)
@@ -219,7 +249,8 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
                 currentSelection: .constant(.trading),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(false),
-                headerFrame: .constant(.zero)
+                headerFrame: .constant(.zero),
+                isPullToRefreshEnabled: .constant(false)
             )
             .previewDisplayName("Trading Selected")
 
@@ -228,7 +259,8 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(false),
-                headerFrame: .constant(.zero)
+                headerFrame: .constant(.zero),
+                isPullToRefreshEnabled: .constant(false)
             )
             .previewDisplayName("DeFi Selected")
 
@@ -237,7 +269,8 @@ struct SuperAppHeaderView_Previews: PreviewProvider {
                 currentSelection: .constant(.pkw),
                 contentOffset: .constant(ModalSheetContext(progress: 1.0, offset: .zero)),
                 isRefreshing: .constant(true),
-                headerFrame: .constant(.zero)
+                headerFrame: .constant(.zero),
+                isPullToRefreshEnabled: .constant(false)
             )
             .previewDisplayName("Pull to refresh")
         }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SuperAppContentViewSmallDevice: View {
     @Environment(\.isSmallDevice) var isSmallDevice
+    @Environment(\.colorScheme) var colorScheme
 
     @BlockchainApp var app
     let store: StoreOf<SuperAppContent>
@@ -24,6 +25,7 @@ struct SuperAppContentViewSmallDevice: View {
 
     /// `True` when a pull to refresh is triggered, otherwise `false`
     @Binding var isRefreshing: Bool
+    @State var isPullToRefreshEnabled: Bool = false
 
     @State private var headerFrame: CGRect = .zero
 
@@ -35,30 +37,46 @@ struct SuperAppContentViewSmallDevice: View {
                     currentSelection: $currentModeSelection,
                     contentOffset: $contentOffset,
                     isRefreshing: $isRefreshing,
-                    headerFrame: $headerFrame
+                    headerFrame: $headerFrame,
+                    isPullToRefreshEnabled: $isPullToRefreshEnabled
                 )
                 .onAppear {
                     viewStore.send(.onAppear)
+                    if !isPullToRefreshEnabled {
+                        viewStore.send(.refresh)
+                    }
                 }
                 .onDisappear {
                     viewStore.send(.onDisappear)
                 }
                 .onAppear {
-                    app.post(value: currentModeSelection.rawValue, of: blockchain.app.mode)
+                    update(colorScheme: colorScheme)
                 }
                 .onChange(of: currentModeSelection) { newValue in
                     app.post(value: newValue.rawValue, of: blockchain.app.mode)
                 }
-                .bindings {
-                    subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
-                }
+                .bindings(
+                    managing: { update in
+                        if case .didSynchronize = update, isDeFiOnly {
+                            currentModeSelection = .pkw
+                        }
+                    },
+                    {
+                        subscribe($isPullToRefreshEnabled, to: blockchain.ux.app.pull.to.refresh.is.enabled)
+                        subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
+                        subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
+                        subscribe($isExternalTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product["USE_EXTERNAL_TRADING_ACCOUNT"].is.eligible)
+                    }
+                )
                 .onChange(of: isTradingEnabled) { newValue in
                     if currentModeSelection == .trading, newValue == false {
                         currentModeSelection = .pkw
                     }
                 }
                 .refreshable {
-                    await viewStore.send(.refresh, while: \.isRefreshing)
+                    if isPullToRefreshEnabled {
+                        await viewStore.send(.refresh, while: \.isRefreshing)
+                    }
                 }
                 SuperAppDashboardContentView(
                     currentModeSelection: $currentModeSelection,
@@ -78,4 +96,14 @@ struct SuperAppContentViewSmallDevice: View {
             }
         })
     }
+
+    private func update(colorScheme: ColorScheme) {
+        let interface = blockchain.ui.device.settings.interface
+        app.state.transaction { state in
+            state.set(interface.style, to: colorScheme == .dark ? interface.style.dark[] : interface.style.light[])
+            state.set(interface.is.dark, to: colorScheme == .dark)
+            state.set(interface.is.light, to: colorScheme == .light)
+        }
+    }
+
 }
