@@ -9,14 +9,16 @@ jobs:
     name: Trigger Build with comment
     if: contains(github.event.comment.html_url, '/pull/')
     runs-on: [ubuntu-latest]
+    permissions:
+      pull-requests: read
 
     steps:
       - name: "Get PR's details"
         id: get_pr_details
         run: |
           PR=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.issue.pull_request.url }})
-          echo "branch=$(echo $PR | jq -r '.head.ref')" >> "$GITHUB_OUTPUT"
-          echo "sha=$(echo $PR | jq -r '.head.sha')" >> "$GITHUB_OUTPUT"
+          echo "branch=$(echo $PR | jq -r '.head.ref')" >> "$GITHUB_ENV"
+          echo "sha=$(echo $PR | jq -r '.head.sha')" >> "$GITHUB_ENV"
       - name: PR comment
         env:
           BITRISE_BUILD_TRIGGER_TOKEN: ${{ secrets.BITRISE_BUILD_TRIGGER_TOKEN }}
@@ -28,9 +30,9 @@ jobs:
               "build_trigger_token":"${{ secrets.BITRISE_BUILD_TRIGGER_TOKEN }}"
             },
             "build_params":{
-              "branch": "${{ steps.get_pr_details.outputs.branch }}",
+              "branch": "'$branch'",
               "workflow_id": "run-tests",
-              "commit_hash": "${{ steps.get_pr_details.outputs.sha }}",
+              "commit_hash": "'$sha'",
               "pull_request_id": "${{ github.event.issue.number }}"
             },
             "triggered_by":"curl"
