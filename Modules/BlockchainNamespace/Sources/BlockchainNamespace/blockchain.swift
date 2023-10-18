@@ -10546,6 +10546,7 @@ public final class L_blockchain_ux_kyc_verify: L, I_blockchain_ux_kyc_verify {
 public protocol I_blockchain_ux_kyc_verify: I {}
 public extension I_blockchain_ux_kyc_verify {
 	var `email`: L_blockchain_ux_kyc_verify_email { .init("\(__).email") }
+	var `with`: L_blockchain_ux_kyc_verify_with { .init("\(__).with") }
 }
 public final class L_blockchain_ux_kyc_verify_email: L, I_blockchain_ux_kyc_verify_email {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.verify.email", comment: "") }
@@ -10558,6 +10559,24 @@ public final class L_blockchain_ux_kyc_verify_email_confirmed: L, I_blockchain_u
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.verify.email.confirmed", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_verify_email_confirmed: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_kyc_verify_with: L, I_blockchain_ux_kyc_verify_with {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.verify.with", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_verify_with: I {}
+public extension I_blockchain_ux_kyc_verify_with {
+	var `veriff`: L_blockchain_ux_kyc_verify_with_veriff { .init("\(__).veriff") }
+}
+public final class L_blockchain_ux_kyc_verify_with_veriff: L, I_blockchain_ux_kyc_verify_with_veriff {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.verify.with.veriff", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_verify_with_veriff: I {}
+public extension I_blockchain_ux_kyc_verify_with_veriff {
+	var `introduction`: L_blockchain_ux_kyc_verify_with_veriff_introduction { .init("\(__).introduction") }
+}
+public final class L_blockchain_ux_kyc_verify_with_veriff_introduction: L, I_blockchain_ux_kyc_verify_with_veriff_introduction {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.verify.with.veriff.introduction", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_verify_with_veriff_introduction: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_loading: L, I_blockchain_ux_loading {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.loading", comment: "") }
 }

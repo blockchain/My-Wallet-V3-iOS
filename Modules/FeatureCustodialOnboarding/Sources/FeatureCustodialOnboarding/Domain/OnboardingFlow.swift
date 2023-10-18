@@ -24,6 +24,7 @@ extension OnboardingFlow.Slug {
     public static let verificationInProgress: Self = "VERIFICATION_IN_PROGRESS"
     public static let loading: Self = "LOADING"
     public static let veriff: Self = "VERIFF"
+    public static let veriffIntroduction: Self = "VERIFF_INTRODUCTION"
     public static let error: Self = "ERROR"
 }
 
@@ -42,7 +43,8 @@ extension OnboardingFlow: WhichFlowSequenceViewController {
         .provePhoneNumberEntry: makePhoneNumberEntryFlowSequenceViewController,
         .provePhoneNumberVerification: makePhoneNumberVerificationFlowSequenceViewController,
         .verificationInProgress: makeVerificationInProgressFlowSequenceViewController,
-        .loading: makeInProgressFlowSequenceViewController
+        .loading: makeInProgressFlowSequenceViewController,
+        .veriffIntroduction: makeVeriffIntroductionFlowSequenceViewController
     ]
 
     public static func register(_ slug: OnboardingFlow.Slug, _ builder: @escaping (AnyJSON) throws -> FlowSequenceViewController) {
@@ -83,6 +85,12 @@ func makeInProgressFlowSequenceViewController(_ metadata: AnyJSON) throws -> Flo
 func makeVerificationInProgressFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
     FlowSequenceHostingViewController { _ in
         VerificationInProgressView()
+    }
+}
+
+func makeVeriffIntroductionFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
+    FlowSequenceHostingViewController { completion in
+        VeriffManualInputIntroductionView(completion: completion)
     }
 }
 

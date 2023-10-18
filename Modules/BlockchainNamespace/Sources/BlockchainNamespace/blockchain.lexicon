@@ -2815,6 +2815,10 @@ blockchain:
 				+ blockchain.ux.type.story
 					confirmed:
 					+ blockchain.ux.type.action
+				with:
+					veriff:
+						introduction:
+						+ blockchain.ux.type.story
 		loading:
 			indicator:
 				event:
