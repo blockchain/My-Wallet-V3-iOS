@@ -37,13 +37,25 @@ public enum ActivityDetailsAdapter {
             text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
             style: .secondary,
             actionType: .copy,
-            actionData: activity.txHash
+            actionData: activity.identifier
         )))
 
         let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
             activity.dateRow(),
-            activity.transactionRow(),
+            activity.transactionIdRow(),
             copyAction
+        ])
+
+        let copyHashAction = ItemType.leaf(.button(.init(
+            text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionHashButtonLabel,
+            style: .secondary,
+            actionType: .copy,
+            actionData: activity.txHash
+        )))
+
+        let group4 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
+            activity.transactionHashRow(),
+            copyHashAction
         ])
 
         let normalizedTxHash = activity.txHash.splitIfNotEmpty(separator: ":").first.map(String.init)
@@ -61,7 +73,7 @@ public enum ActivityDetailsAdapter {
         return ActivityDetail.GroupedItems(
             title: activity.title(),
             icon: activity.leadingImage(),
-            itemGroups: [group1, group2, group3],
+            itemGroups: [group1, group2, group3, group4],
             floatingActions: floatingActions
         )
     }
@@ -75,9 +87,17 @@ public enum ActivityDetailsAdapter {
             activity.statusRow()
         ])
 
+        let copyAction = ItemType.leaf(.button(.init(
+            text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
+            style: .secondary,
+            actionType: .copy,
+            actionData: activity.identifier
+        )))
+
         let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
             activity.dateRow(),
-            activity.transactionRow()
+            activity.transactionRow(),
+            copyAction
         ])
 
         return ActivityDetail.GroupedItems(
@@ -150,9 +170,23 @@ public enum ActivityDetailsAdapter {
 
         let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
             activity.dateRow(),
-            activity.transactionRow(),
+            activity.transactionIdRow(),
             copyAction
         ])
+
+        var group4: ActivityDetail.GroupedItems.Item?
+        if  let hashRow = activity.transactionHashRow() {
+            let copyHashAction = ItemType.leaf(.button(.init(
+                text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionHashButtonLabel,
+                style: .secondary,
+                actionType: .copy,
+                actionData: activity.identifier
+            )))
+            group4 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
+                hashRow,
+                copyHashAction
+            ])
+        }
 
         let normalizedTxHash = activity.withdrawalTxHash?.splitIfNotEmpty(separator: ":").first.map(String.init)
         let txHash = normalizedTxHash ?? activity.withdrawalTxHash ?? ""
@@ -166,43 +200,17 @@ public enum ActivityDetailsAdapter {
             )
         ]
 
+        let itemGroups: [ActivityDetail.GroupedItems.Item]
+        if let group4 {
+            itemGroups = [group1, group2, group3, group4]
+        } else {
+            itemGroups = [group1, group2, group3]
+        }
         return ActivityDetail.GroupedItems(
             title: activity.title(),
             icon: activity.leadingImage(),
-            itemGroups: [group1, group2, group3],
+            itemGroups: itemGroups,
             floatingActions: floatingActions
-        )
-    }
-
-    public static func createActivityDetails(from account: String, type: ActivityProductType, activity: EarnActivity) -> ActivityDetail.GroupedItems {
-        let group1 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [activity.amountRow()])
-
-        let items = [
-            activity.statusRow(),
-            activity.fromRow(),
-            activity.toRow(accountName: account)
-        ].compactMap { $0 }
-
-        let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: items)
-
-        let copyAction = ItemType.leaf(.button(.init(
-            text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
-            style: .secondary,
-            actionType: .copy,
-            actionData: activity.id
-        )))
-
-        let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
-            activity.dateRow(),
-            activity.transactionRow(),
-            copyAction
-        ])
-
-        return ActivityDetail.GroupedItems(
-            title: activity.title(product: type),
-            icon: activity.leadingImage(),
-            itemGroups: [group1, group2, group3],
-            floatingActions: []
         )
     }
 }
@@ -546,7 +554,7 @@ extension CustodialActivityEvent.Crypto {
         ))
     }
 
-    fileprivate func transactionRow() -> ItemType {
+    fileprivate func transactionIdRow() -> ItemType {
         let leadingItemStyle = ActivityItem.Text.Style(
             typography: .paragraph2,
             color: .text
@@ -562,6 +570,37 @@ extension CustodialActivityEvent.Crypto {
                 .text(
                     .init(
                         value: LocalizationConstants.SuperApp.ActivityDetails.transactionIdLabel,
+                        style: leadingItemStyle
+                    )
+                )
+            ],
+            trailing: [
+                .text(
+                    .init(
+                        value: identifier,
+                        style: trailingItemStyle
+                    )
+                )
+            ]
+        ))
+    }
+
+    fileprivate func transactionHashRow() -> ItemType {
+        let leadingItemStyle = ActivityItem.Text.Style(
+            typography: .paragraph2,
+            color: .text
+        )
+
+        let trailingItemStyle = ActivityItem.Text.Style(
+            typography: .paragraph2,
+            color: .title
+        )
+
+        return ItemType.compositionView(.init(
+            leading: [
+                .text(
+                    .init(
+                        value: LocalizationConstants.SuperApp.ActivityDetails.transactionHashLabel,
                         style: leadingItemStyle
                     )
                 )
@@ -1430,7 +1469,7 @@ extension SwapActivityItemEvent {
         ))
     }
 
-    fileprivate func transactionRow() -> ItemType {
+    fileprivate func transactionIdRow() -> ItemType {
         let leadingItemStyle = ActivityItem.Text.Style(
             typography: .paragraph2,
             color: .text
@@ -1460,37 +1499,11 @@ extension SwapActivityItemEvent {
             ]
         ))
     }
-}
 
-extension EarnActivity {
-    fileprivate func leadingImage() -> ImageType {
-        if let logoURL = currency.cryptoCurrency?.logoURL?.absoluteString {
-            return ImageType.smallTag(
-                .init(
-                    main: logoURL,
-                    tag: ActivityRemoteIcons.earn.url(mode: .dark)
-                )
-            )
-        } else {
-            return ImageType.smallTag(
-                .init(
-                    main: ActivityRemoteIcons.earn.url(mode: .dark),
-                    tag: nil
-                )
-            )
+    fileprivate func transactionHashRow() -> ItemType? {
+        guard withdrawalTxHash.isNotNilOrEmpty, depositTxHash.isNotNilOrEmpty else {
+            return nil
         }
-    }
-
-    fileprivate func title(product: ActivityProductType) -> String {
-        switch type {
-        case .interestEarned:
-            return activityTitle(product: product).interpolating(currency.code)
-        default:
-            return "\(currency.code) \(activityTitle(product: product))"
-        }
-    }
-
-    fileprivate func amountRow() -> ItemType {
         let leadingItemStyle = ActivityItem.Text.Style(
             typography: .paragraph2,
             color: .text
@@ -1505,7 +1518,7 @@ extension EarnActivity {
             leading: [
                 .text(
                     .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.amountLabel,
+                        value: LocalizationConstants.SuperApp.ActivityDetails.transactionHashLabel,
                         style: leadingItemStyle
                     )
                 )
@@ -1513,187 +1526,11 @@ extension EarnActivity {
             trailing: [
                 .text(
                     .init(
-                        value: value.toDisplayString(includeSymbol: true),
+                        value: withdrawalTxHash ?? depositTxHash ?? "",
                         style: trailingItemStyle
                     )
                 )
             ]
         ))
-    }
-
-    fileprivate func statusRow() -> ItemType {
-        let leadingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .text
-        )
-
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.statusLabel,
-                        style: leadingItemStyle
-                    )
-                )
-            ],
-            trailing: [
-                state.toBadge()
-            ]
-        ))
-    }
-
-    fileprivate func fromRow() -> ItemType? {
-        let leadingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .text
-        )
-
-        let trailingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .title
-        )
-
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.fromLabel,
-                        style: leadingItemStyle
-                    )
-                )
-            ],
-            trailing: [
-                .text(
-                    .init(
-                        value: "Blockchain.com",
-                        style: trailingItemStyle
-                    )
-                )
-            ]
-        ))
-    }
-
-    fileprivate func toRow(accountName: String) -> ItemType? {
-        let leadingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .text
-        )
-
-        let trailingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .title
-        )
-
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.toLabel,
-                        style: leadingItemStyle
-                    )
-                )
-            ],
-            trailing: [
-                .text(
-                    .init(
-                        value: accountName,
-                        style: trailingItemStyle
-                    )
-                )
-            ]
-        ))
-    }
-
-    fileprivate func dateRow() -> ItemType {
-        let leadingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .text
-        )
-
-        let trailingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .title
-        )
-
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.dateLabel,
-                        style: leadingItemStyle
-                    )
-                )
-            ],
-            trailing: [
-                .text(
-                    .init(
-                        value: DateFormatter.elegantDateFormatter.string(from: date.insertedAt),
-                        style: trailingItemStyle
-                    )
-                )
-            ]
-        ))
-    }
-
-    fileprivate func transactionRow() -> ItemType {
-        let leadingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .text
-        )
-
-        let trailingItemStyle = ActivityItem.Text.Style(
-            typography: .paragraph2,
-            color: .title
-        )
-
-        return ItemType.compositionView(.init(
-            leading: [
-                .text(
-                    .init(
-                        value: LocalizationConstants.SuperApp.ActivityDetails.transactionIdLabel,
-                        style: leadingItemStyle
-                    )
-                )
-            ],
-            trailing: [
-                .text(
-                    .init(
-                        value: id,
-                        style: trailingItemStyle
-                    )
-                )
-            ]
-        ))
-    }
-}
-
-extension EarnActivity.State {
-    fileprivate func toBadge() -> LeafItemType {
-        switch self {
-        case .pending:
-            return LeafItemType.badge(
-                .init(
-                    value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
-                    style: .default
-                ))
-        case .failed:
-            return LeafItemType.badge(
-                .init(
-                    value: LocalizationConstants.SuperApp.ActivityDetails.failedStatus,
-                    style: .error
-                ))
-        case .complete:
-            return LeafItemType.badge(
-                .init(
-                    value: LocalizationConstants.SuperApp.ActivityDetails.completeStatus,
-                    style: .success
-                ))
-        default:
-            return LeafItemType.badge(
-                .init(
-                    value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
-                    style: .default
-                ))
-        }
     }
 }

@@ -353,6 +353,11 @@ extension LocalizationConstants.SuperApp.ActivityDetails {
         comment: "Transaction ID"
     )
 
+    public static let transactionHashLabel = NSLocalizedString(
+        "Transaction Hash",
+        comment: "Transaction Hash"
+    )
+
     public static let cashedOut = NSLocalizedString(
         "Cashed out",
         comment: "Cashed out"
@@ -436,6 +441,11 @@ extension LocalizationConstants.SuperApp.ActivityDetails {
     public static let copyTransactionButtonLabel = NSLocalizedString(
         "Copy Transaction ID",
         comment: "Copy Transaction ID"
+    )
+
+    public static let copyTransactionHashButtonLabel = NSLocalizedString(
+        "Copy Transaction Hash",
+        comment: "Copy Transaction Hash"
     )
 
     public static let viewOnExplorer = NSLocalizedString(
