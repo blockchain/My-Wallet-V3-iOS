@@ -7460,6 +7460,7 @@ public final class L_blockchain_ux_app: L, I_blockchain_ux_app {
 public protocol I_blockchain_ux_app: I {}
 public extension I_blockchain_ux_app {
 	var `mode`: L_blockchain_ux_app_mode { .init("\(__).mode") }
+	var `pull`: L_blockchain_ux_app_pull { .init("\(__).pull") }
 }
 public final class L_blockchain_ux_app_mode: L, I_blockchain_ux_app_mode {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.app.mode", comment: "") }
@@ -7484,6 +7485,38 @@ public final class L_blockchain_ux_app_mode_switcher_tapped: L, I_blockchain_ux_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.app.mode.switcher.tapped", comment: "") }
 }
 public protocol I_blockchain_ux_app_mode_switcher_tapped: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_app_pull: L, I_blockchain_ux_app_pull {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.app.pull", comment: "") }
+}
+public protocol I_blockchain_ux_app_pull: I {}
+public extension I_blockchain_ux_app_pull {
+	var `to`: L_blockchain_ux_app_pull_to { .init("\(__).to") }
+}
+public final class L_blockchain_ux_app_pull_to: L, I_blockchain_ux_app_pull_to {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.app.pull.to", comment: "") }
+}
+public protocol I_blockchain_ux_app_pull_to: I {}
+public extension I_blockchain_ux_app_pull_to {
+	var `refresh`: L_blockchain_ux_app_pull_to_refresh { .init("\(__).refresh") }
+}
+public final class L_blockchain_ux_app_pull_to_refresh: L, I_blockchain_ux_app_pull_to_refresh {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.app.pull.to.refresh", comment: "") }
+}
+public protocol I_blockchain_ux_app_pull_to_refresh: I {}
+public extension I_blockchain_ux_app_pull_to_refresh {
+	var `is`: L_blockchain_ux_app_pull_to_refresh_is { .init("\(__).is") }
+}
+public final class L_blockchain_ux_app_pull_to_refresh_is: L, I_blockchain_ux_app_pull_to_refresh_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.app.pull.to.refresh.is", comment: "") }
+}
+public protocol I_blockchain_ux_app_pull_to_refresh_is: I {}
+public extension I_blockchain_ux_app_pull_to_refresh_is {
+	var `enabled`: L_blockchain_ux_app_pull_to_refresh_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_ux_app_pull_to_refresh_is_enabled: L, I_blockchain_ux_app_pull_to_refresh_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.app.pull.to.refresh.is.enabled", comment: "") }
+}
+public protocol I_blockchain_ux_app_pull_to_refresh_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_asset: L, I_blockchain_ux_asset {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.asset", comment: "") }
 }

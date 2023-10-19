@@ -63,7 +63,8 @@ struct SuperAppContent: Reducer {
                         await send(.onTradingModeEnabledFetched(isDeFiOnly.value?.not ?? true))
                     }
                 }
-            case .refresh:
+            case .refresh,
+                 .header(.refresh):
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
                 state.headerState.isRefreshing = true

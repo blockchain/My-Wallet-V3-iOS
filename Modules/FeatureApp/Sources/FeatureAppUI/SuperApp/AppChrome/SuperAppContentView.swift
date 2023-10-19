@@ -24,6 +24,8 @@ struct SuperAppContentView: View {
     /// `True` when a pull to refresh is triggered, otherwise `false`
     @Binding var isRefreshing: Bool
 
+    @State var isPullToRefreshEnabled: Bool = false
+
     @State private var hideBalanceAfterRefresh = false
     @Environment(\.colorScheme) var colorScheme
 
@@ -34,10 +36,14 @@ struct SuperAppContentView: View {
                 currentSelection: $currentModeSelection,
                 contentOffset: $contentOffset,
                 isRefreshing: $isRefreshing,
-                headerFrame: .constant(.zero)
+                headerFrame: .constant(.zero),
+                isPullToRefreshEnabled: $isPullToRefreshEnabled
             )
             .onAppear {
                 viewStore.send(.onAppear)
+                if !isPullToRefreshEnabled {
+                    viewStore.send(.refresh)
+                }
             }
             .onDisappear {
                 viewStore.send(.onDisappear)
@@ -64,6 +70,7 @@ struct SuperAppContentView: View {
                     }
                 },
                 {
+                    subscribe($isPullToRefreshEnabled, to: blockchain.ux.app.pull.to.refresh.is.enabled)
                     subscribe($currentModeSelection.removeDuplicates().animation(), to: blockchain.app.mode)
                     subscribe($isDeFiOnly, to: blockchain.app.is.DeFi.only)
                     subscribe($isExternalTradingEnabled, to: blockchain.api.nabu.gateway.user.products.product["USE_EXTERNAL_TRADING_ACCOUNT"].is.eligible)
@@ -85,7 +92,9 @@ struct SuperAppContentView: View {
                 } catch {}
             }
             .refreshable {
-                await viewStore.send(.refresh, while: \.isRefreshing)
+                if isPullToRefreshEnabled {
+                    await viewStore.send(.refresh, while: \.isRefreshing)
+                }
             }
             .sheet(isPresented: .constant(true), content: {
                 SuperAppDashboardContentView(

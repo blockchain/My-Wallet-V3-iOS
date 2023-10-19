@@ -1953,6 +1953,13 @@ blockchain:
 				switcher:
 					tapped:
 					+ blockchain.ux.type.action
+			pull:
+				to:
+					refresh:
+						is:
+							enabled:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.configuration.value
 		asset:
 		+ blockchain.db.collection
 		+ blockchain.ux.type.story
