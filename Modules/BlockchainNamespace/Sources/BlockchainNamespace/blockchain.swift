@@ -9740,9 +9740,33 @@ public final class L_blockchain_ux_finproms_disclaimer: L, I_blockchain_ux_finpr
 }
 public protocol I_blockchain_ux_finproms_disclaimer: I {}
 public extension I_blockchain_ux_finproms_disclaimer {
+	var `is`: L_blockchain_ux_finproms_disclaimer_is { .init("\(__).is") }
 	var `tap`: L_blockchain_ux_finproms_disclaimer_tap { .init("\(__).tap") }
 	var `text`: L_blockchain_ux_finproms_disclaimer_text { .init("\(__).text") }
 }
+public final class L_blockchain_ux_finproms_disclaimer_is: L, I_blockchain_ux_finproms_disclaimer_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.is", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_disclaimer_is: I {}
+public extension I_blockchain_ux_finproms_disclaimer_is {
+	var `dismiss`: L_blockchain_ux_finproms_disclaimer_is_dismiss { .init("\(__).dismiss") }
+	var `dismissed`: L_blockchain_ux_finproms_disclaimer_is_dismissed { .init("\(__).dismissed") }
+}
+public final class L_blockchain_ux_finproms_disclaimer_is_dismiss: L, I_blockchain_ux_finproms_disclaimer_is_dismiss {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.is.dismiss", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_disclaimer_is_dismiss: I {}
+public extension I_blockchain_ux_finproms_disclaimer_is_dismiss {
+	var `enabled`: L_blockchain_ux_finproms_disclaimer_is_dismiss_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_ux_finproms_disclaimer_is_dismiss_enabled: L, I_blockchain_ux_finproms_disclaimer_is_dismiss_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.is.dismiss.enabled", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_disclaimer_is_dismiss_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_finproms_disclaimer_is_dismissed: L, I_blockchain_ux_finproms_disclaimer_is_dismissed {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.is.dismissed", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_disclaimer_is_dismissed: I_blockchain_db_type_boolean, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_finproms_disclaimer_tap: L, I_blockchain_ux_finproms_disclaimer_tap {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer.tap", comment: "") }
 }

@@ -121,14 +121,6 @@ struct DeFiDashboardView: View {
                         }
 
                         DashboardHelpSectionView()
-
-                        FinancialPromotionApprovalView()
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 16).fill(Color.semantic.background)
-                            )
-                            .frame(maxWidth: .infinity)
-                            .padding(.horizontal, Spacing.padding2)
                     }
                 }
                 .scrollOffset($scrollOffset)
