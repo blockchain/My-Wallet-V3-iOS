@@ -73,7 +73,8 @@ public struct AppReducer: Reducer {
                     blurEffectHandler: environment.blurEffectHandler,
                     backgroundAppHandler: environment.backgroundAppHandler,
                     assetsRemoteService: environment.assetsRemoteService,
-                    mainQueue: environment.mainQueue
+                    mainQueue: environment.mainQueue,
+                    crashlyticsRecorder: environment.crashlyticsRecorder
                 )
             )
         }

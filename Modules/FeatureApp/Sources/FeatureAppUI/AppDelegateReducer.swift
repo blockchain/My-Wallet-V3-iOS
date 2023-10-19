@@ -68,6 +68,7 @@ struct AppDelegateEnvironment {
     var backgroundAppHandler: BackgroundAppHandlerAPI
     var assetsRemoteService: AssetsRemoteServiceAPI
     var mainQueue: AnySchedulerOf<DispatchQueue>
+    var crashlyticsRecorder: Recording
 }
 
 /// The state of the app delegate
@@ -124,7 +125,9 @@ struct AppDelegateReducer: Reducer {
                         configurator: configureWalletConnectV2(projectId:)
                     ),
 
-                    enableSift(using: environment.siftService)
+                    enableSift(using: environment.siftService),
+                    registerCrashlyticsUserId(app: environment.app, 
+                                              crashlyticsRecorder: environment.crashlyticsRecorder)
                 )
             case .willResignActive:
                 return applyBlurFilter(
@@ -226,6 +229,17 @@ private func enableSift(
 ) -> AppDelegateEffect {
     .run { _ in
         service.enable()
+    }
+}
+
+private func registerCrashlyticsUserId(app: AppProtocol,
+                                       crashlyticsRecorder: Recording) -> AppDelegateEffect {
+    .run { _ in
+        for await userId in app.stream(blockchain.user.id, as: String.self) {
+            if let userIdValue = userId.value {
+                crashlyticsRecorder.setUserId(for: userIdValue)
+            }
+        }
     }
 }
 

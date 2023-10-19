@@ -42,6 +42,11 @@ final class CrashlyticsRecorder: Recording {
         return String(name)
     }
 
+    /// Sets the user id on Crashlytics.
+    func setUserId(for id: String) {
+        crashlytics.setUserID(id)
+    }
+
     /// For a given error, returns the string reflection of its type plus its name. Differs from the default NSError.domain because it won't contain
     ///  any memory address and also has the error name.
     /// e.g. for an Error `Error.nameOfTheError(params ...)` nested inside a class `Class` in a framework
