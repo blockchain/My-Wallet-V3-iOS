@@ -6,12 +6,11 @@ import Extensions
 import Foundation
 
 extension NetworkError {
-
     func analyticsEvent(
         for request: NetworkRequest,
         decodeErrorResponse: ((ServerErrorResponse) -> String?)? = nil
     ) -> AnalyticsEvent? {
-        ClientNetworkError(
+        ClientNetworkErrorEvent(
             error_code: code,
             http_error: String(describing: error),
             http_method: request.urlRequest.httpMethod,
@@ -20,7 +19,48 @@ extension NetworkError {
     }
 }
 
-struct ClientNetworkError: AnalyticsEvent {
+extension NetworkRequest {
+    func analyticsEvent() -> AnalyticsEvent {
+        ClientNetworkRequestEvent(http_method: urlRequest.httpMethod, path: urlRequest.url?.path)
+    }
+}
+
+struct ClientNetworkRequestEvent: AnalyticsEvent {
+
+    var type: AnalyticsEventType { .nabu }
+    var name: String { "Client Network Request" }
+
+    private(set) var params: [String: Any]? = [:]
+
+    init(
+        http_method: String?,
+        path: String?
+    ) {
+        params?["http_method"] ?= http_method
+        params?["path"] ?= path
+    }
+}
+
+struct ClientNetworkResponseEvent: AnalyticsEvent {
+
+    var type: AnalyticsEventType { .nabu }
+    var name: String { "Client Network Response" }
+
+    private(set) var params: [String: Any]? = [:]
+
+    init(
+        http_method: String?,
+        path: String?,
+        response: String?
+    ) {
+        params?["http_method"] ?= http_method
+        params?["path"] ?= path
+        params?["status_code"] ?= response
+    }
+}
+
+
+struct ClientNetworkErrorEvent: AnalyticsEvent {
 
     var type: AnalyticsEventType { .nabu }
     var name: String { "Client Network Error" }

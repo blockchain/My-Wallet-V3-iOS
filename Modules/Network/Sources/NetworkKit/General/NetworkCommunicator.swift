@@ -130,6 +130,7 @@ final class NetworkCommunicator: NetworkCommunicatorAPI {
     ) -> AnyPublisher<ServerResponse, NetworkError> {
         var start: Date = Date()
         let lock = NSLock()
+        eventRecorder?.record(event: request.analyticsEvent())
         return requestInterceptor.process(request)
             .flatMap { [session] request in
                 session.erasedDataTaskPublisher(
@@ -147,6 +148,7 @@ final class NetworkCommunicator: NetworkCommunicatorAPI {
                         defer { lock.unlock() }
                         response.peek("🌎 ↓ \(httpResponse.statusCode) in \(Date().timeIntervalSince(start))ms", \.url)
                     }
+
                     networkDebugLogger.storeRequest(
                         request.urlRequest,
                         response: response,
@@ -182,6 +184,7 @@ final class NetworkCommunicator: NetworkCommunicatorAPI {
                     request.decoder.decodeFailureToString(errorResponse: serverErrorResponse)
                 }
             }
+            .recordSuccess(on: eventRecorder, request: request)
             .eraseToAnyPublisher()
     }
 
@@ -251,6 +254,23 @@ extension AnyPublisher where Output == ServerResponse,
                     return
                 }
                 recorder?.record(event: event)
+            }
+        )
+        .eraseToAnyPublisher()
+    }
+
+    fileprivate func recordSuccess(
+        on recorder: AnalyticsEventRecorderAPI?,
+        request: NetworkRequest
+    ) -> AnyPublisher<ServerResponse, NetworkError> {
+        handleEvents(
+            receiveOutput: { response in
+                if let httpResponse = response.response {
+                    let event = ClientNetworkResponseEvent(http_method: request.urlRequest.httpMethod,
+                                                           path: request.urlRequest.url?.path,
+                                                           response: "\(httpResponse.statusCode)")
+                    recorder?.record(event: event)
+                }
             }
         )
         .eraseToAnyPublisher()
