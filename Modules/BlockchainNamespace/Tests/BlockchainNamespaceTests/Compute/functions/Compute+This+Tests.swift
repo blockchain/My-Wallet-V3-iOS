@@ -51,6 +51,40 @@ final class ComputeThisTests: ComputeTestCase {
         try await assert(json, equals: "b")
     }
 
+
+    func test_maintenace_os_check() async throws {
+        try await app.set(blockchain.ui.device.os.version, to: "17.1")
+
+        let json = [
+            "minimumAppVersion": [
+                "{returns}": [
+                    "this": [
+                        "value": "202310.3.0",
+                        "condition": [
+                            "{returns}": [
+                                "comparison": [
+                                    "equal": [
+                                        "lhs": [
+                                            "{returns}": [
+                                                "from": [
+                                                    "reference": "blockchain.ui.device.os.version"
+                                                ]
+                                            ]
+                                        ],
+                                        "rhs": "17.1"
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                "default": "202309.1.2"
+            ]
+        ]
+
+        try await assert(json, equals: ["minimumAppVersion": "202310.3.0"])
+    }
+
     func test_skata() async throws {
 
         try await app.set(blockchain.db.type.array.of.strings, to: [String]())
