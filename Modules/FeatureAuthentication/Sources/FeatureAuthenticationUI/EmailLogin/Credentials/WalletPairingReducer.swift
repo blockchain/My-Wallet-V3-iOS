@@ -137,24 +137,21 @@ struct WalletPairingReducer: Reducer {
             // since we might end up here in case of a deeplink failure
             return Effect.send(.needsEmailAuthorization)
         }
-        return .run { send in
-            do {
-                try await deviceVerificationService
-                    .authorizeLogin(emailCode: emailCode)
-                    .receive(on: mainQueue)
-                    .await()
-                await send(.startPolling)
-            } catch {
-                // If failed, an `Authorize Log In` will be sent to user for manual authorization
-                errorRecorder.error(error)
-                // we only want to handle `.expiredEmailCode` case, silent other errors...
-                switch error as! DeviceVerificationServiceError {
-                case .expiredEmailCode:
-                    await send(.needsEmailAuthorization)
-                case .missingSessionToken, .networkError, .recaptchaError, .missingWalletInfo, .timeout:
-                    break
+        return .publisher {
+            deviceVerificationService
+                .authorizeLogin(emailCode: emailCode)
+                .receive(on: mainQueue)
+                .map { .startPolling }
+                .catch { error in
+                    errorRecorder.error(error)
+                    switch error {
+                    case .expiredEmailCode:
+                        return .needsEmailAuthorization
+                    case .missingSessionToken, .networkError, .recaptchaError, .missingWalletInfo, .timeout:
+                        break
+                    }
+                    return .none
                 }
-            }
         }
     }
 
@@ -169,20 +166,17 @@ struct WalletPairingReducer: Reducer {
 
        return .concatenate(
            .cancel(id: WalletPairingCancelations.WalletIdentifierPollingTimerId()),
-           .run { send in
-               do {
-                   try await loginService
-                       .login(walletIdentifier: state.walletGuid)
-                       .receive(on: mainQueue)
-                       .await()
-                   guard !isAutoTrigger else {
-                       await send(.none)
-                       return
-                   }
-                   await send(.decryptWalletWithPassword(password))
-               } catch {
-                   await send(.authenticateDidFail(error as! LoginServiceError))
-               }
+           .publisher {
+               loginService
+                    .login(walletIdentifier: state.walletGuid)
+                    .receive(on: mainQueue)
+                    .map { _ -> Action in
+                        guard !isAutoTrigger else {
+                            return .none
+                        }
+                        return .decryptWalletWithPassword(password)
+                    }
+                    .catch { .authenticateDidFail($0) }
            }
        )
    }
@@ -194,19 +188,15 @@ struct WalletPairingReducer: Reducer {
        guard !state.walletGuid.isEmpty else {
            fatalError("GUID should not be empty")
        }
-        return .run { send in
-            do {
-                try await loginService
-                    .login(
-                        walletIdentifier: state.walletGuid,
-                        code: code
-                    )
-                    .receive(on: mainQueue)
-                    .await()
-                await send(.twoFactorOTPDidVerified)
-            } catch {
-                await send(.authenticateWithTwoFactorOTPDidFail(error as! LoginServiceError))
-            }
+        return .publisher {
+            loginService
+                .login(
+                    walletIdentifier: state.walletGuid,
+                    code: code
+                )
+                .receive(on: mainQueue)
+                .map { .twoFactorOTPDidVerified }
+                .catch { .authenticateWithTwoFactorOTPDidFail($0) }
         }
    }
 
@@ -219,12 +209,12 @@ struct WalletPairingReducer: Reducer {
     ) -> Effect<WalletPairingAction> {
         .concatenate(
             .cancel(id: WalletPairingCancelations.WalletIdentifierPollingId()),
-            .run { send in
-                try await emailAuthorizationService
+            .publisher {
+                emailAuthorizationService
                     .authorizeEmailPublisher()
                     .receive(on: mainQueue)
-                    .await()
-                await send(.authenticate(state.password))
+                    .map { .authenticate(state.password) }
+                    .catch { _ in .none }
             }
             .cancellable(id: WalletPairingCancelations.WalletIdentifierPollingId())
         )
