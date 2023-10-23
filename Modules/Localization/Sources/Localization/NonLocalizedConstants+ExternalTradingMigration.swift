@@ -61,7 +61,7 @@ extension NonLocalizedConstants.ExternalTradingMigration {
         public enum SupportedAssets {
             public static let title = NSLocalizedString("Supported Assets", comment: "ExternalTradingMigration: Supported Assets")
             public static let message = NSLocalizedString(
-                "Some crypto assets will no longer be supported on your new experience. In case you have balances on any of these, you will be able to consolidate them into either Bitcoin (BTC) or Ethereum (ETH) without any costs involved to ensure your funds remain secure and easily manageable.",
+                "Some crypto assets will no longer be supported on your new experience. In case you have balances on any of these, you will be able to consolidate them into Bitcoin (BTC) without any costs involved to ensure your funds remain secure and easily manageable.",
                 comment: "ExternalTradingMigration: Updated Message"
             )
         }

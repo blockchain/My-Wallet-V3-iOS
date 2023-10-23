@@ -177,7 +177,7 @@ struct AssetMigrationRow: View {
             trailingTitle:
                 "~" + balance.amount.toDisplayString(includeSymbol: true),
             trailingDescription:
-                balance.amount.cryptoValue?.toFiatAmount(with: price)?.toDisplayString(includeSymbol: true)
+                "~" + (balance.amount.cryptoValue?.toFiatAmount(with: price)?.toDisplayString(includeSymbol: true) ?? "")
         ) {
             balance.currency.logo()
         }

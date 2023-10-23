@@ -50,30 +50,32 @@ extension ExternalAppOpener {
     }
 
     public func openMailApp(completionHandler: @escaping (Bool) -> Void) {
-        let emailActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        emailActionSheet.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil))
+        DispatchQueue.main.async {
+            let emailActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            emailActionSheet.addAction(UIAlertAction(title: LocalizationConstants.cancel, style: .cancel, handler: nil))
 
-        let actions = MailApps
-            .allCases
-            .compactMap { $0.action(completionHandler) }
+            let actions = MailApps
+                .allCases
+                .compactMap { $0.action(completionHandler) }
 
-        guard actions.isNotEmpty else {
-            completionHandler(false)
-            return
-        }
-
-        guard actions.count > 1 else {
-            if let title = actions.first?.title, let app = MailApps(rawValue: title), let url = app.url {
-                open(url, completionHandler: completionHandler)
-            } else {
+            guard actions.isNotEmpty else {
                 completionHandler(false)
+                return
             }
-            return
+
+            guard actions.count > 1 else {
+                if let title = actions.first?.title, let app = MailApps(rawValue: title), let url = app.url {
+                    open(url, completionHandler: completionHandler)
+                } else {
+                    completionHandler(false)
+                }
+                return
+            }
+
+            actions.forEach(emailActionSheet.addAction)
+
+            UIApplication.shared.firstKeyWindow?.topMostViewController?.present(emailActionSheet, animated: true)
         }
-
-        actions.forEach(emailActionSheet.addAction)
-
-        UIApplication.shared.firstKeyWindow?.topMostViewController?.present(emailActionSheet, animated: true)
     }
 
     public func openSettingsApp() {
@@ -81,22 +83,26 @@ extension ExternalAppOpener {
     }
 
     public func openSettingsApp(completionHandler: @escaping (Bool) -> Void) {
-        guard let url = URL(string: UIApplication.openSettingsURLString) else {
-            completionHandler(false)
-            return
+        DispatchQueue.main.async {
+            guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                completionHandler(false)
+                return
+            }
+            open(url, completionHandler: completionHandler)
         }
-        open(url, completionHandler: completionHandler)
     }
 }
 
 extension UIApplication: ExternalAppOpener {
 
     public func open(_ url: URL, completionHandler: @escaping (Bool) -> Void) {
-        guard canOpenURL(url) else {
-            completionHandler(false)
-            return
+        DispatchQueue.main.async { [weak self] in
+            guard let self, canOpenURL(url) else {
+                completionHandler(false)
+                return
+            }
+            open(url, options: [.universalLinksOnly: false], completionHandler: completionHandler)
         }
-        open(url, options: [.universalLinksOnly: false], completionHandler: completionHandler)
     }
 }
 

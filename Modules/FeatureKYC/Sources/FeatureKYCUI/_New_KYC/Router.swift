@@ -433,8 +433,10 @@ extension Router {
             flowCompletionCallback: flowCompletion,
             openMailApp: {
                 await withCheckedContinuation { continuation in
-                    openMailApp { result in
-                        continuation.resume(returning: result)
+                    mainQueue.schedule {
+                        openMailApp { result in
+                            continuation.resume(returning: result)
+                        }
                     }
                 }
             },

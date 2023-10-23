@@ -515,8 +515,10 @@ final class KYCRouter: KYCRouterAPI {
             flowCompletionCallback: flowCompletion,
             openMailApp: { [externalAppOpener] in
                 await withCheckedContinuation { continuation in
-                    externalAppOpener.openMailApp { result in
-                        continuation.resume(returning: result)
+                    mainQueue.schedule {
+                        externalAppOpener.openMailApp { result in
+                            continuation.resume(returning: result)
+                        }
                     }
                 }
             },
