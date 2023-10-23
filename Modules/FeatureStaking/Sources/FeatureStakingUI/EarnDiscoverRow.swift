@@ -21,6 +21,7 @@ struct EarnDiscoverRow: View {
     let product: EarnProduct
     let currency: CryptoCurrency
     let isEligible: Bool
+    let isVerified: Bool
 
     var body: some View {
         TableRow(
@@ -69,7 +70,9 @@ struct EarnDiscoverRow: View {
         var action = L_blockchain_ui_type_action.JSON(.empty)
         let tradingIsNotZeroOrDust = tradingBalance.isNotZeroOrDust(using: exchangeRate) ?? false
         let pkwIsNotZeroOrDust = pkwBalance.isNotZeroOrDust(using: exchangeRate) ?? false
-        if !isEligible {
+        if !isVerified, !isEligible {
+            action.then.emit = blockchain.ux.kyc.launch.verification
+        } else if !isEligible {
             action.then.enter.into = $app[blockchain.ux.earn.discover.product.not.eligible]
         } else if tradingIsNotZeroOrDust || pkwIsNotZeroOrDust {
             action.then.emit = product.deposit(currency)

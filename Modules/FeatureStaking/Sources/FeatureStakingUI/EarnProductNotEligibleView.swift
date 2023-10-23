@@ -18,21 +18,12 @@ public struct EarnProductNotEligibleView: View {
 
     public var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                IconButton(
-                    icon: .close,
-                    action: {
-                        $app.post(event: story.article.plain.navigation.bar.button.close.tap)
-                    }
-                )
-                .frame(width: 24.pt, height: 24.pt)
-            }
             Spacer()
             Icon.interestCircle
                 .color(.semantic.title)
                 .circle(backgroundColor: .semantic.light)
                 .frame(width: 88.pt, height: 88.pt)
+                .padding(.top, Spacing.padding3)
             Spacer()
                 .frame(minHeight: 24.pt)
             Text(L10n.notEligibleTitle)
@@ -68,3 +59,16 @@ public struct EarnProductNotEligibleView: View {
         }
     }
 }
+
+#if DEBUG
+
+struct EarnProductNotEligible_Previews: PreviewProvider {
+    static var previews: some View {
+        Color.red
+            .bottomSheet(isPresented: .constant(true)) {
+                EarnProductNotEligibleView(story: blockchain.ux.earn.type.hub.product.not.eligible)
+            }
+    }
+}
+
+#endif

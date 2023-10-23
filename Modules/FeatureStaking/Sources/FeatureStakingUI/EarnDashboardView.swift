@@ -111,7 +111,7 @@ public struct EarnDashboardView: View {
                 selectedTab: $selected,
                 totalBalance: object.totalBalance,
                 backgroundColor: Color.semantic.light
-            ) { id, product, currency, _ in
+            ) { id, product, currency, _, _ in
                 EarnPortfolioRow(id: id, product: product, currency: currency)
             }
             .id(blockchain.ux.earn.portfolio[])
@@ -136,8 +136,8 @@ public struct EarnDashboardView: View {
                     .frame(maxHeight: 144.pt)
                 }
             },
-            content: { id, product, currency, eligible in
-                EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible)
+            content: { id, product, currency, eligible, verified in
+                EarnDiscoverRow(id: id, product: product, currency: currency, isEligible: eligible, isVerified: verified)
             }
         )
         .id(blockchain.ux.earn.discover[])
@@ -214,17 +214,17 @@ extension EarnDashboardView {
         func fetch(app: AppProtocol) {
 
             func model(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<Model?, Never> {
-                app.publisher(
-                    for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance,
-                    as: MoneyValue.self
-                )
-                .map(\.value)
-                .combineLatest(
+                let publishers = Publishers.CombineLatest4(
                     app.publisher(
                         for: blockchain.api.nabu.gateway.price.crypto[asset.code].fiat,
                         as: blockchain.api.nabu.gateway.price.crypto.fiat
                     )
                     .replaceError(with: L_blockchain_api_nabu_gateway_price_crypto_fiat.JSON()),
+                    app.publisher(
+                        for: blockchain.user.account.kyc[blockchain.user.account.tier.gold].state,
+                        as: Tag.self
+                    )
+                    .replaceError(with: blockchain.user.account.kyc.state.none[]),
                     app.publisher(
                         for: blockchain.user.earn.product[product.value].asset[asset.code].is.eligible
                     )
@@ -234,7 +234,15 @@ extension EarnDashboardView {
                     )
                     .replaceError(with: Double.zero)
                 )
-                .map { balance, price, isEligible, rate -> Model in
+
+                return app.publisher(
+                    for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance,
+                    as: MoneyValue.self
+                )
+                .map(\.value)
+                .combineLatest(publishers)
+                .map { balance, values -> Model in
+                    let (price, kycStatus, isEligible, rate) = values
                     let fiat: MoneyValue?
                     do {
                         fiat = try balance?.convert(using: price.quote.value(MoneyValue.self))
@@ -248,7 +256,8 @@ extension EarnDashboardView {
                         isEligible: isEligible,
                         crypto: balance,
                         fiat: fiat,
-                        rate: rate
+                        rate: rate,
+                        isVerified: kycStatus == blockchain.user.account.kyc.state.verified[]
                     )
                 }
                 .prepend(nil)

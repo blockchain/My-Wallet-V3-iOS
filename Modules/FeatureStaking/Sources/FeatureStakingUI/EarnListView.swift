@@ -15,7 +15,7 @@ struct EarnListView<Header: View, Content: View>: View {
     let model: [Model]?
     let totalBalance: MoneyValue?
     let header: () -> Header
-    let content: (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
+    let content: (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool, Bool) -> Content
     let backgroundColor: Color
 
     @Binding var selectedTab: Tag
@@ -28,7 +28,7 @@ struct EarnListView<Header: View, Content: View>: View {
         totalBalance: MoneyValue?,
         backgroundColor: Color = Color.semantic.background,
         @ViewBuilder header: @escaping () -> Header = EmptyView.init,
-        @ViewBuilder content: @escaping (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool) -> Content
+        @ViewBuilder content: @escaping (L & I_blockchain_ux_earn_type_hub_product_asset, EarnProduct, CryptoCurrency, Bool, Bool) -> Content
     ) {
         self.hub = hub
         self.model = model
@@ -198,7 +198,7 @@ struct EarnListView<Header: View, Content: View>: View {
                         .hideListRowSeparator()
                     }
                     ForEach(filtered, id: \.self) { item in
-                        content(hub.product.asset, item.product, item.asset, item.isEligible)
+                        content(hub.product.asset, item.product, item.asset, item.isEligible, item.isVerified)
                             .listRowSeparatorTint(Color.semantic.light)
                             .context(
                                 [
@@ -269,6 +269,7 @@ struct Model: Hashable {
     let crypto: MoneyValue?
     let fiat: MoneyValue?
     let rate: Double
+    let isVerified: Bool
 }
 
 extension EarnListView {

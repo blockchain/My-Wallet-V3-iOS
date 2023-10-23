@@ -371,7 +371,8 @@ struct EarnProductCompare_Previews: PreviewProvider {
                 isEligible: false,
                 crypto: nil,
                 fiat: nil,
-                rate: Double(0.0355) * Double(idx + 1)
+                rate: Double(0.0355) * Double(idx + 1),
+                isVerified: true
             )
         }
     }
