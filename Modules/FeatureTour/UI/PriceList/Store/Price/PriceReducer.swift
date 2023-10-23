@@ -32,7 +32,6 @@ struct PriceReducer: Reducer {
                 return .run { [currency = state.currency] send in
                     let priceSeries = try await priceService
                         .priceSeries(of: currency, in: FiatCurrency.USD, within: .day(.oneHour))
-                        .receive(on: mainQueue)
                         .await()
                     if let latestPrice = priceSeries.prices.last {
                         await send(

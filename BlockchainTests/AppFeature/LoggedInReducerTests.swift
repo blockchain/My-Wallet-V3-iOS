@@ -126,6 +126,8 @@ import XCTest
         await testStore.send(.start(context))
 
         // then
+        await testStore.receive(.none)
+        await testStore.receive(.none)
         await testStore.receive(.handleNewWalletCreation)
 
         await testStore.receive(.showPostSignUpOnboardingFlow) { state in
@@ -141,6 +143,8 @@ import XCTest
         await testStore.send(.start(context))
 
         // then
+        await testStore.receive(.none)
+        await testStore.receive(.none)
         await testStore.receive(.handleExistingWalletSignIn)
 
         await testStore.receive(.showPostSignInOnboardingFlow) { state in
@@ -156,6 +160,8 @@ import XCTest
         await testStore.send(.start(context))
 
         // then
+        await testStore.receive(.none)
+        await testStore.receive(.none)
         await testStore.receive(.deeplink(uriContent)) { state in
             state.displaySendCryptoScreen = true
         }
@@ -173,6 +179,8 @@ import XCTest
         await testStore.send(.start(context))
 
         // then
+        await testStore.receive(.none)
+        await testStore.receive(.none)
         await testStore.receive(.deeplink(uriContent))
 
         XCTAssertTrue(mockDeepLinkRouter.routeIfNeededCalled)
@@ -184,6 +192,9 @@ import XCTest
 
     private func performSignIn(file: StaticString = #file, line: UInt = #line) async {
         await testStore.send(.start(.none))
+        await testStore.receive(.none)
+        await testStore.receive(.none)
+
         await testStore.receive(.handleExistingWalletSignIn)
         await testStore.receive(.showPostSignInOnboardingFlow) {
             $0.displayPostSignInOnboardingFlow = true

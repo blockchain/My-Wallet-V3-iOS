@@ -481,7 +481,6 @@ struct CreateAccountStepTwoReducer: Reducer {
                             }
                             return listOfStates.contains("\(country.id)-\(stateId)")
                         }
-                        .receive(on: mainQueue)
                         .await()
 
                         if let isExternalTrading {

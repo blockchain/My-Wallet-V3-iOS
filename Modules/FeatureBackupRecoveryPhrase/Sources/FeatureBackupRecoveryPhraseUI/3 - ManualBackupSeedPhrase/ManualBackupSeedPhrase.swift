@@ -46,16 +46,12 @@ public struct ManualBackupSeedPhrase: Reducer {
 
             case .onCopyTap:
                 state.recoveryPhraseCopied = true
+                UIPasteboard.general.string = state.availableWords.recoveryPhrase
 
-                return .merge(
-                    .run { [availableWords = state.availableWords] _ in
-                        UIPasteboard.general.string = availableWords.recoveryPhrase
-                    },
-                    .run { send in
-                        try await Task.sleep(nanoseconds: NSEC_PER_SEC * 20)
-                        await send(.onCopyReturn)
-                    }
-                )
+                return .run { send in
+                    try await Task.sleep(nanoseconds: NSEC_PER_SEC * 20)
+                    await send(.onCopyReturn)
+                }
             case .onCopyReturn:
                 state.recoveryPhraseCopied = false
                 UIPasteboard.general.clear()

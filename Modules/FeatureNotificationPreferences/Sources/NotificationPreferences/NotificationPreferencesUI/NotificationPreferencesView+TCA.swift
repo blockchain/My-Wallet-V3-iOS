@@ -157,7 +157,6 @@ public struct NotificationPreferencesReducer: Reducer {
                         do {
                             try await notificationPreferencesRepository
                                 .update(preferences: preferences)
-                                .receive(on: mainQueue)
                                 .await()
                             await send(.onReloadTap)
                         } catch {

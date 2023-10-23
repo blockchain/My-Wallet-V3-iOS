@@ -542,6 +542,8 @@ import XCTest
         }
         await assertDidPerformSignIn()
 
+        await testStore.receive(.loggedIn(.none))
+        await testStore.receive(.loggedIn(.none))
         await testStore.receive(.none)
         await testStore.receive(.none)
 
@@ -621,6 +623,8 @@ import XCTest
 
     /// send logout to clear pending effects after logged in.
     private func logout(file: StaticString = #file, line: UInt = #line) async {
+        await testStore.receive(.loggedIn(.none))
+        await testStore.receive(.loggedIn(.none))
         await testStore.receive(.none)
         await testStore.receive(.none)
         await testStore.send(.loggedIn(.logout)) { state in

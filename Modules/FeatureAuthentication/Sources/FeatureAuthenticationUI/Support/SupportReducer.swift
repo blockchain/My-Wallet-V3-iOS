@@ -70,7 +70,6 @@ struct SupportViewReducer: Reducer {
                                 applicationVersion,
                                 bundleId: "com.rainydayapps.Blockchain"
                             )
-                            .receive(on: mainQueue)
                             .await()
                         await send(.appStoreVersionInformationReceived(applicationInfo))
                     } catch {

@@ -45,16 +45,11 @@ public struct ReferFriendReducer: Reducer {
 
             case .onCopyTapped:
                 state.codeIsCopied = true
-
-                return .merge(
-                    .run { [referralCode = state.referralInfo.code] _ in
-                        UIPasteboard.general.string = referralCode
-                    },
-                    .run { send in
-                        try await Task.sleep(nanoseconds: NSEC_PER_SEC * 2)
-                        await send(.onCopyReturn)
-                    }
-                )
+                UIPasteboard.general.string = state.referralInfo.code
+                return .run { send in
+                    try await Task.sleep(nanoseconds: NSEC_PER_SEC * 2)
+                    await send(.onCopyReturn)
+                }
             }
         }
         ReferFriendAnalytics(analyticsRecorder: analyticsRecorder)

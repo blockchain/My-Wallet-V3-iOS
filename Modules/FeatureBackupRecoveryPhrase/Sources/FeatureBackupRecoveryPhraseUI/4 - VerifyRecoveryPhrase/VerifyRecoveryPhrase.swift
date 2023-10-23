@@ -40,7 +40,6 @@ public struct VerifyRecoveryPhrase: Reducer {
                     do {
                         let words = try await recoveryPhraseService
                             .recoveryPhraseComponents()
-                            .receive(on: mainQueue)
                             .await()
                         await send(.onRecoveryPhraseComponentsFetchSuccess(words))
                     } catch {
@@ -90,7 +89,7 @@ public struct VerifyRecoveryPhrase: Reducer {
                             .map { _ in
                                 recoveryPhraseRepository.updateMnemonicBackup()
                             }
-                            .receive(on: mainQueue).await()
+                            .await()
                         await send(.onPhraseVerifyComplete)
                     } catch {
                         await send(.onPhraseVerifyBackupFailed)

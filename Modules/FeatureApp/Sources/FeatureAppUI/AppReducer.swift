@@ -190,29 +190,22 @@ struct AppReducerCore: Reducer {
                     deeplink: .userActivity(activity)
                 )
                 let context = DeeplinkContext.userActivity(activity)
-                return .run { send in
-                    do {
-                        let data = try await environment.deeplinkAppHandler
-                            .handle(deeplink: context)
-                            .await()
-                        await send(AppAction.core(.deeplink(data)))
-                    } catch {
-                        await send(AppAction.core(.none))
-                    }
+                return .publisher {
+                    environment.deeplinkAppHandler
+                        .handle(deeplink: context)
+                        .receive(on: environment.mainQueue)
+                        .map { .core(.deeplink($0)) }
+                        .catch { _ in .core(.none) }
                 }
                 .cancellable(id: AppCancellations.DeeplinkId())
             case .appDelegate(.open(let url)):
                 state.appSettings.urlHandled = environment.deeplinkAppHandler.canHandle(deeplink: .url(url))
-                return .run { send in
-                    do {
-                        let data = try await environment.deeplinkAppHandler
-                            .handle(deeplink: .url(url))
-                            .receive(on: environment.mainQueue)
-                            .await()
-                        await send(AppAction.core(.deeplink(data)))
-                    } catch {
-                        await send(AppAction.core(.none))
-                    }
+                return .publisher {
+                    environment.deeplinkAppHandler
+                        .handle(deeplink: .url(url))
+                        .receive(on: environment.mainQueue)
+                        .map { .core(.deeplink($0)) }
+                        .catch { _ in .core(.none) }
                 }
                 .cancellable(id: AppCancellations.DeeplinkId())
             case .core(.onboarding(.forgetWallet)):

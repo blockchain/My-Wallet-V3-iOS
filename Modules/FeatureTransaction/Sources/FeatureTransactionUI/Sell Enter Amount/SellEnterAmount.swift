@@ -293,11 +293,10 @@ public struct SellEnterAmount: Reducer {
 
             case .onBackspace:
                 state.rawInput.backspace()
-                return .run { [state] _ in
-                    if let amount = state.amountCryptoEntered {
-                        onAmountChanged(amount)
-                    }
+                if let amount = state.amountCryptoEntered {
+                    onAmountChanged(amount)
                 }
+                return .none
 
             case .onValidationStateFetched(let validationState):
                 if validationState != .canExecute, let warningHint = validationState.recoveryWarningHint {

@@ -70,7 +70,6 @@ public struct Announcements: Reducer {
                     try await app
                         .on(blockchain.ux.home.event.did.pull.to.refresh)
                         .debounce(for: .seconds(1), scheduler: mainQueue)
-                        .receive(on: mainQueue)
                         .await()
                     await send(Action.fetchAnnouncements(true))
                 }
@@ -100,7 +99,6 @@ public struct Announcements: Reducer {
             return .run { [services, announcement] send in
                 try await Publishers.MergeMany(services.map { service in service.handle(announcement) })
                     .collect()
-                    .receive(on: mainQueue)
                     .await()
                 await send(Action.dismiss(announcement, .open))
             }

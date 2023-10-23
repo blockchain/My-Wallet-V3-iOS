@@ -80,30 +80,29 @@ struct LoggedInReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .start(let context):
+                unifiedActivityService.connect()
+                NotificationCenter.default.post(name: .login, object: nil)
                 return .merge(
-                    .run { _ in
-                        unifiedActivityService.connect()
-                    },
-                    .run { _ in
-                        try? await exchangeRepository
+                    .publisher {
+                        exchangeRepository
                             .syncDepositAddressesIfLinked()
                             .receive(on: mainQueue)
-                            .await()
+                            .map { .none }
+                            .catch { _ in .none }
                     },
-                    .run { _ in
-                        try? await remoteNotificationTokenSender
+                    .publisher {
+                        remoteNotificationTokenSender
                             .sendTokenIfNeeded()
                             .receive(on: mainQueue)
-                            .await()
+                            .map { .none }
+                            .catch { _ in .none }
                     },
-                    .run { _ in
-                        try? await remoteNotificationAuthorizer
+                    .publisher {
+                        remoteNotificationAuthorizer
                             .requestAuthorizationIfNeeded()
                             .receive(on: mainQueue)
-                            .await()
-                    },
-                    .run { _ in
-                        NotificationCenter.default.post(name: .login, object: nil)
+                            .map { .none }
+                            .catch { _ in .none }
                     },
                     handleStartup(
                         context: context

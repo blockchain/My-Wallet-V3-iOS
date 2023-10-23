@@ -228,7 +228,6 @@ struct SeedPhraseReducer: Reducer {
                 return .run { [seedPhrase = state.seedPhrase] send in
                     let score = try await validator
                         .validate(phrase: seedPhrase)
-                        .receive(on: mainQueue)
                         .await()
                     await send(.didChangeSeedPhraseScore(score))
                 }
@@ -356,7 +355,6 @@ struct SeedPhraseReducer: Reducer {
                                     userId: nabuInfo.userId,
                                     recoveryToken: nabuInfo.recoveryToken
                                 )
-                                .receive(on: mainQueue)
                                 .await()
                             analyticsRecorder.record(
                                 event: AnalyticsEvents.New.AccountRecoveryFlow

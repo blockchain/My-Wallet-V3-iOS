@@ -280,24 +280,22 @@ struct VerifyDeviceReducer: Reducer {
             // MARK: - Deeplink handling
 
             case .didReceiveWalletInfoDeeplink(let url):
-                return .run { send in
-                    do {
-                        let walletInfo = try await deviceVerificationService
-                            .handleLoginRequestDeeplink(url: url)
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.didExtractWalletInfo(walletInfo))
-                    } catch {
-                        errorRecorder.error(error)
-                        switch error as! WalletInfoError {
-                        case .failToDecodeBase64Component,
-                             .failToDecodeToWalletInfo:
-                            await send(.fallbackToWalletIdentifier)
-                        case .missingSessionToken(let sessionId, let base64Str),
-                             .sessionTokenMismatch(let sessionId, let base64Str):
-                            await send(.checkIfConfirmationRequired(sessionId: sessionId, base64Str: base64Str))
+                return .publisher {
+                    deviceVerificationService
+                        .handleLoginRequestDeeplink(url: url)
+                        .map { .didExtractWalletInfo($0) }
+                        .catch { error in
+                            errorRecorder.error(error)
+                            switch error {
+                            case .failToDecodeBase64Component,
+                                 .failToDecodeToWalletInfo:
+                                return .fallbackToWalletIdentifier
+                            case .missingSessionToken(let sessionId, let base64Str),
+                                 .sessionTokenMismatch(let sessionId, let base64Str):
+                                return .checkIfConfirmationRequired(sessionId: sessionId, base64Str: base64Str)
+                            }
                         }
-                    }
+                        .receive(on: mainQueue)
                 }
 
             case .didExtractWalletInfo(let walletInfo):
@@ -342,7 +340,6 @@ struct VerifyDeviceReducer: Reducer {
                 return .run { send in
                     let pollResult = try? await deviceVerificationService
                         .pollForWalletInfo()
-                        .receive(on: mainQueue)
                         .await()
                     guard let pollResult else {
                         return

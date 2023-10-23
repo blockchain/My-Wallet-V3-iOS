@@ -54,7 +54,7 @@ struct InterestAccountDetailsReducer: Reducer {
                             .map { moneyValue -> MoneyValue in
                                 balance.convert(using: moneyValue)
                             }
-                            .receive(on: mainQueue).await()
+                            .await()
                         await send(.interestAccountFiatBalanceFetched(amount))
                     } catch {
                         await send(.interestAccountFiatBalanceFetchFailed)
@@ -93,7 +93,6 @@ struct InterestAccountDetailsReducer: Reducer {
                             canTransfer,
                             canWithdraw
                         )
-                        .receive(on: mainQueue)
                         .map { isTransferAvailable, isWithdrawAvailable -> [AssetAction] in
                             var actions: [AssetAction] = []
                             if isWithdrawAvailable {

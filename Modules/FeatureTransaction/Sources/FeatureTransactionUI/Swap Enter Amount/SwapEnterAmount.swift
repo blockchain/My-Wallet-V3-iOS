@@ -281,19 +281,17 @@ public struct SwapEnterAmount: Reducer {
                 if text.isNotEmpty {
                     state.input.append(Character(text))
                 }
-                return .run { [state] _ in
-                    if let amount = state.amountCryptoEntered {
-                        onAmountChanged(amount)
-                    }
+                if let amount = state.amountCryptoEntered {
+                    onAmountChanged(amount)
                 }
+                return .none
 
             case .onBackspace:
                 state.input.backspace()
-                return .run { [state] _ in
-                    if let amount = state.amountCryptoEntered {
-                        onAmountChanged(amount)
-                    }
+                if let amount = state.amountCryptoEntered {
+                    onAmountChanged(amount)
                 }
+                return .none
 
             case .onChangeInputTapped:
                 let inputToFill = state.secondaryFieldText

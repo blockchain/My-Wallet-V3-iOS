@@ -115,7 +115,6 @@ struct AppDelegateReducer: Reducer {
                                 .prefix(1)
                                 .replaceError(with: true)
                                 .filter { $0 }
-                                .receive(on: environment.mainQueue)
                                 .await()
                             await send(.applyCertificatePinning)
                         }
@@ -140,7 +139,6 @@ struct AppDelegateReducer: Reducer {
                     .run { _ in
                         try await environment.backgroundAppHandler
                             .appEnteredForeground(application)
-                            .receive(on: environment.mainQueue)
                             .await()
                     }
                 )

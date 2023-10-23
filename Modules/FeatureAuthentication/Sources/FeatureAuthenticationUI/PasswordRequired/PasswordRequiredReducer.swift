@@ -115,7 +115,6 @@ public struct PasswordRequiredReducer: Reducer {
                     do {
                         try await walletPayloadService
                             .requestUsingSharedKey()
-                            .receive(on: mainQueue)
                             .await()
 
                         await send(.authenticate(password))

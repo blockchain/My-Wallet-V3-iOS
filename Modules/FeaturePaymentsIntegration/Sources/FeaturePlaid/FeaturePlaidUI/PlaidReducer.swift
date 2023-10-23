@@ -38,28 +38,21 @@ public struct PlaidReducer: Reducer {
                 return Effect.send(.getLinkTokenForExistingAccount(accountId))
 
             case .startLinkingNewBank:
-                return .run { send in
-                    do {
-                        let accountInfo = try await plaidRepository
-                            .getLinkToken()
-                            .receive(on: mainQueue).await()
-                        await send(.getLinkTokenResponse(accountInfo))
-                    } catch {
-                        await send(.finishedWithError(error as? NabuError))
-                    }
+                return .publisher {
+                    plaidRepository
+                        .getLinkToken()
+                        .map { .getLinkTokenResponse($0) }
+                        .catch { .finishedWithError($0) }
+                        .receive(on: mainQueue)
                 }
 
             case .getLinkTokenForExistingAccount(let accountId):
-                return .run { send in
-                    do {
-                        let accountInfo = try await plaidRepository
+                return .publisher {
+                    plaidRepository
                             .getLinkToken(accountId: accountId)
+                            .map { .getLinkTokenResponse($0) }
+                            .catch { .finishedWithError($0) }
                             .receive(on: mainQueue)
-                            .await()
-                        await send(.getLinkTokenResponse(accountInfo))
-                    } catch {
-                        await send(.finishedWithError(error as? NabuError))
-                    }
                 }
 
             case .getLinkTokenResponse(let response):
@@ -74,7 +67,6 @@ public struct PlaidReducer: Reducer {
                 return .run { send in
                     do {
                         let event = try await app.on(blockchain.ux.payment.method.plaid.event.finished)
-                            .receive(on: mainQueue)
                             .map { event -> PlaidAction in
                                 do {
                                     let success = blockchain.ux.payment.method.plaid.event.receive.success
@@ -102,23 +94,18 @@ public struct PlaidReducer: Reducer {
                     // This should not happen
                     return Effect.send(.finishedWithError(nil))
                 }
-                return .run { send in
-                    do {
-                        try await plaidRepository
-                            .updatePlaidAccount(accountId, attributes: attribute)
-                            .receive(on: mainQueue)
-                            .await()
-                        await send(.waitForActivation(accountId))
-                    } catch {
-                        await send(.finishedWithError(error as? NabuError))
-                    }
+                return .publisher {
+                    plaidRepository
+                        .updatePlaidAccount(accountId, attributes: attribute)
+                        .map { _ in .waitForActivation(accountId) }
+                        .catch { .finishedWithError($0) }
+                        .receive(on: mainQueue)
                 }
 
             case .waitForActivation(let accountId):
                 return .run { send in
                     try await plaidRepository
                         .waitForActivationOfLinkedBank(id: accountId)
-                        .receive(on: mainQueue)
                         .await()
                     await send(.updateSourceSelection)
                 }

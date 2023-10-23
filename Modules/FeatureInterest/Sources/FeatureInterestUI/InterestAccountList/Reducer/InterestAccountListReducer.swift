@@ -52,7 +52,6 @@ struct InterestAccountListReducer: Reducer {
                     let isVerified = try await environment
                         .kycVerificationService
                         .isKYCVerified
-                        .receive(on: environment.mainQueue)
                         .await()
                     await send(.didReceiveKYCVerificationResponse(isVerified))
                 }
@@ -131,7 +130,6 @@ struct InterestAccountListReducer: Reducer {
                                     )
                                     .eraseToAnyPublisher()
                                 }
-                                .receive(on: environment.mainQueue)
                                 .await()
 
                             if areAccountsAvailable {

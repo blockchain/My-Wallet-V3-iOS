@@ -136,7 +136,6 @@ struct SearchCryptoDomain: Reducer {
                     do {
                         let username = try await userInfoProvider()
                             .compactMap(\.nabuUserName)
-                            .receive(on: mainQueue)
                             .await()
                         await send(.searchDomains(key: username, freeOnly: true))
                     } catch {
