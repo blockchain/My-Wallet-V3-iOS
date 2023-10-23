@@ -59,7 +59,6 @@ public struct UserDeletionReducer: Reducer {
     }
 }
 
-
 #if DEBUG
 
 extension UserDeletionReducer {

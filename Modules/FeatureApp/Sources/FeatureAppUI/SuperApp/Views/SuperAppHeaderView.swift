@@ -81,8 +81,10 @@ struct SuperAppHeaderView: View {
                         .opacity(isRefreshing ? 1.0 : opacityForRefreshIndicator(percentageOffset: 1.0))
                     VStack {
                         VStack(spacing: balanceMenuPadding) {
-                            TotalBalanceView(balance: viewStore.totalBalance,
-                                             hasError: viewStore.hasError)
+                            TotalBalanceView(
+                                balance: viewStore.totalBalance,
+                                hasError: viewStore.hasError
+                            )
                                 .opacity(
                                     isRefreshing ? 0.0 : opacityForBalance(percentageOffset: 2.0)
                                 )

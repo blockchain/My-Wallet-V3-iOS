@@ -320,7 +320,6 @@ struct EmailLoginReducer: Reducer {
     }
 }
 
-
 // MARK: - Private
 
 struct EmailLoginAnalytics: Reducer {
@@ -331,7 +330,7 @@ struct EmailLoginAnalytics: Reducer {
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .sendDeviceVerificationEmail:
                 analyticsRecorder.record(

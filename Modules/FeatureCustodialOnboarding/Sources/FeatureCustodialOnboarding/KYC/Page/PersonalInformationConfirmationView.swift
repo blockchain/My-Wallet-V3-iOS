@@ -132,7 +132,7 @@ public struct PersonalInformationConfirmationView: View {
                         addresses()
                     }
                 }
-                Button(L10n.changeAddress, action: { })
+                Button(L10n.changeAddress, action: {})
                     .typography(.caption1)
                     .foregroundColor(.semantic.primary)
                     .padding(4.pt)
@@ -145,7 +145,7 @@ public struct PersonalInformationConfirmationView: View {
                             .typography(.caption1)
                             .foregroundColor(.semantic.body)
                     },
-                    byline: { 
+                    byline: {
                         Text(personalInformation.dob)
                             .typography(.paragraph2)
                             .foregroundColor(.semantic.title)
@@ -153,12 +153,12 @@ public struct PersonalInformationConfirmationView: View {
                 )
                 PrimaryDivider()
                 TableRow(
-                    title: { 
+                    title: {
                         Text(L10n.socialSecurityNumber)
                             .typography(.caption1)
                             .foregroundColor(.semantic.body)
                     },
-                    byline: { 
+                    byline: {
                         Group {
                             if isSSNDisplayed {
                                 Text(personalInformation.ssn)
@@ -280,7 +280,7 @@ struct PersonalInformationConfirmationView_Preview: PreviewProvider {
                 ],
                 ssn: "1234567890",
                 dob: "04/03/1990"
-            ), 
+            ),
             completion: {
                 print(#fileID, #line)
             }

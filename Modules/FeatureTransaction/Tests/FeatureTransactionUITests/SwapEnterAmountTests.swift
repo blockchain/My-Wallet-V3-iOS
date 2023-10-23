@@ -142,14 +142,14 @@ class SwapEnterAmountTests: XCTestCase {
              initialState: state,
              reducer: {
                  SwapEnterAmount(
-                    app: App.test,
-                    defaultSwaptPairsService: mockDefaultPairsService,
-                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                    minMaxAmountsPublisher: minMaxAmountsPublisher,
-                    dismiss: completionHandlerSpy.onDismiss,
-                    onPairsSelected: completionHandlerSpy.onPairsSelected,
-                    onAmountChanged: completionHandlerSpy.onAmountChanged,
-                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                     app: App.test,
+                     defaultSwaptPairsService: mockDefaultPairsService,
+                     supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                     minMaxAmountsPublisher: minMaxAmountsPublisher,
+                     dismiss: completionHandlerSpy.onDismiss,
+                     onPairsSelected: completionHandlerSpy.onPairsSelected,
+                     onAmountChanged: completionHandlerSpy.onAmountChanged,
+                     onPreviewTapped: completionHandlerSpy.onPreviewTapped
                  )
              }
          )
@@ -173,14 +173,14 @@ class SwapEnterAmountTests: XCTestCase {
              initialState: state,
              reducer: {
                  SwapEnterAmount(
-                    app: App.test,
-                    defaultSwaptPairsService: mockDefaultPairsService,
-                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                    minMaxAmountsPublisher: minMaxAmountsPublisher,
-                    dismiss: completionHandlerSpy.onDismiss,
-                    onPairsSelected: completionHandlerSpy.onPairsSelected,
-                    onAmountChanged: completionHandlerSpy.onAmountChanged,
-                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                     app: App.test,
+                     defaultSwaptPairsService: mockDefaultPairsService,
+                     supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                     minMaxAmountsPublisher: minMaxAmountsPublisher,
+                     dismiss: completionHandlerSpy.onDismiss,
+                     onPairsSelected: completionHandlerSpy.onPairsSelected,
+                     onAmountChanged: completionHandlerSpy.onAmountChanged,
+                     onPreviewTapped: completionHandlerSpy.onPreviewTapped
                  )
              }
          )
@@ -209,14 +209,14 @@ class SwapEnterAmountTests: XCTestCase {
              initialState: state,
              reducer: {
                  SwapEnterAmount(
-                    app: App.test,
-                    defaultSwaptPairsService: mockDefaultPairsService,
-                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-                    minMaxAmountsPublisher: minMaxAmountsPublisher,
-                    dismiss: completionHandlerSpy.onDismiss,
-                    onPairsSelected: completionHandlerSpy.onPairsSelected,
-                    onAmountChanged: completionHandlerSpy.onAmountChanged,
-                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                     app: App.test,
+                     defaultSwaptPairsService: mockDefaultPairsService,
+                     supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                     minMaxAmountsPublisher: minMaxAmountsPublisher,
+                     dismiss: completionHandlerSpy.onDismiss,
+                     onPairsSelected: completionHandlerSpy.onPairsSelected,
+                     onAmountChanged: completionHandlerSpy.onAmountChanged,
+                     onPreviewTapped: completionHandlerSpy.onPreviewTapped
                  )
              }
          )

@@ -181,10 +181,10 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
                reducer: {
                    ViewIntroBackup(
-                    onSkip: { [weak self] in
+                       onSkip: { [weak self] in
                         self?.onSkip()
                     },
-                    onNext: { [weak self] in
+                       onNext: { [weak self] in
                         self?.onNext()
                     }
                    )
@@ -207,19 +207,19 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
                initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
                reducer: {
                    ViewRecoveryPhrase(
-                    recoveryPhraseRepository: resolve(),
-                    recoveryPhraseService: resolve(),
-                    cloudBackupService: resolve(),
-                    onNext: { [weak self] in
+                       recoveryPhraseRepository: resolve(),
+                       recoveryPhraseService: resolve(),
+                       cloudBackupService: resolve(),
+                       onNext: { [weak self] in
                         self?.onNext()
                     },
-                    onDone: { [weak self] in
+                       onDone: { [weak self] in
                         self?.onDone()
                     },
-                    onFailed: { [weak self] in
+                       onFailed: { [weak self] in
                         self?.onFailed()
                     },
-                    onIcloudBackedUp: { [weak self] in
+                       onIcloudBackedUp: { [weak self] in
                         self?.step = .backupPhraseSuccess
                         self?.onNext()
                     }

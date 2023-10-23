@@ -45,7 +45,7 @@ let package = Package(
                 .product(
                     name: "NetworkKit",
                     package: "Network"
-                ),
+                )
             ]
         ),
         .testTarget(

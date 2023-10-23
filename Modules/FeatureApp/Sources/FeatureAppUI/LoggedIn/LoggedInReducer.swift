@@ -199,7 +199,7 @@ struct NamespaceReducer: Reducer {
     var app: AppProtocol
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .logout:
                 app.signOut()

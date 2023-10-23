@@ -24,7 +24,7 @@ struct AppLoaderView<Content: View>: View {
             _ = try? await loaderService.loadAppDependencies()
             withAnimation { didFinish = true }
           }
-          .onAppear{
+          .onAppear {
               app.post(event: blockchain.app.loader.did.appear)
           }
       }

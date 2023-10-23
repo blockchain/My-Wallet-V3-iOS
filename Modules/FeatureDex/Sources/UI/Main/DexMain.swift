@@ -56,7 +56,7 @@ public struct DexMain: Reducer {
                             .map(Action.onAvailableNetworksFetched)
                     }
                 } else if let network = getThatCurrency(app: app)?.network() {
-                    availableNetworks = Effect<DexMain.Action>.run(operation: { send in
+                    availableNetworks = Effect<DexMain.Action>.run(operation: { _ in
                         try await app.set(
                             blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value,
                             to: network.networkConfig.networkTicker
@@ -349,18 +349,6 @@ public struct DexMain: Reducer {
                 dismissKeyboard(&state)
                 return .none
 
-            case .onSelectNetworkTapped:
-                let networkPicker = blockchain.ux.currency.exchange.dex.network.picker
-                let detents = blockchain.ui.type.action.then.enter.into.detents
-                app.post(
-                    event: networkPicker.tap,
-                    context: [
-                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentNetwork?.networkConfig.networkTicker,
-                        detents: [detents.automatic.dimension]
-                    ]
-                )
-                return .none
-
             case .onInegibilityLearnMoreTap:
                 return .run { _ in
                     let url = try? await app.get(blockchain.api.nabu.gateway.user.products.product["DEX"].ineligible.learn.more) as URL
@@ -430,7 +418,6 @@ extension DexConfirmation.State.Quote {
             from: quote.sellAmount,
             minimumReceivedAmount: quote.buyAmount.minimum ?? quote.buyAmount.amount,
             networkFee: quote.networkFee,
-            productFee: quote.productFee,
             slippage: slippage,
             to: quote.buyAmount.amount
         )
@@ -677,7 +664,6 @@ private func preselectNetwork(
     return networks
         .first(where: { $0.networkConfig == .ethereum }) ?? networks.first
 }
-
 
 func getThatCurrency(app: AppProtocol) -> CryptoCurrency? {
     if let source = getThatSourceCurrency(app: app) {

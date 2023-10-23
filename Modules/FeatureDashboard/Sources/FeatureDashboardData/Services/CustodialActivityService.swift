@@ -44,7 +44,12 @@ class CustodialActivityService: CustodialActivityServiceAPI {
     }
 
     func getActivity(fiatCurrency: FiatCurrency) -> AsyncStream<[ActivityEntry]> {
-        let assets = coincore.cryptoAssets
+        let assets = coincore.cryptoAssets.filter { asset in
+            asset.asset.assetModel.supports(product: .custodialWalletBalance) ||
+            asset.asset.assetModel.supports(product: .interestBalance) ||
+            asset.asset.assetModel.supports(product: .activeRewardsBalance) ||
+            asset.asset.assetModel.supports(product: .staking)
+        }
         var streams: [(String, AnyPublisher<[ActivityEntry], Never>)] = [
             (
                 "fiat \(fiatCurrency)",
@@ -66,23 +71,28 @@ class CustodialActivityService: CustodialActivityServiceAPI {
                 })
             )
 
-            streams.append(
-                ("staking \(asset.asset)", stakingActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
-                    ActivityEntryAdapter.createEntry(with: item, type: .staking)
-                })
-            )
+            if asset.asset.supports(product: .staking) {
+                streams.append(
+                    ("staking \(asset.asset)", stakingActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                        ActivityEntryAdapter.createEntry(with: item, type: .staking)
+                    })
+                )
+            }
+            if asset.asset.supports(product: .interestBalance) {
+                streams.append(
+                    ("savings \(asset.asset)", savingsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                        ActivityEntryAdapter.createEntry(with: item, type: .saving)
+                    })
+                )
+            }
 
-            streams.append(
-                ("savings \(asset.asset)", savingsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
-                    ActivityEntryAdapter.createEntry(with: item, type: .saving)
-                })
-            )
-
-            streams.append(
-                ("active rewards \(asset.asset)", activeRewardsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
-                    ActivityEntryAdapter.createEntry(with: item, type: .activeRewards)
-                })
-            )
+            if asset.asset.supports(product: .activeRewardsBalance) {
+                streams.append(
+                    ("active rewards \(asset.asset)", activeRewardsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
+                        ActivityEntryAdapter.createEntry(with: item, type: .activeRewards)
+                    })
+                )
+            }
 
             streams.append(
                 ("swap \(asset.asset)", swapActivity.fetchActivity(cryptoCurrency: asset.asset, directions: [.internal]).replaceError(with: []).mapEach { item in

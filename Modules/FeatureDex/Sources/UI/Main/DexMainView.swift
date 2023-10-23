@@ -121,12 +121,11 @@ public struct DexMainView: View {
     @ViewBuilder
     private var content: some View {
         VStack(spacing: Spacing.padding2) {
-            Spacer()
-                .frame(height: Spacing.padding1)
-            quickActionsSection
             inputSection
-            estimatedFee
-                .padding(.top, Spacing.padding2)
+            HStack(spacing: Spacing.padding1) {
+                estimatedFee
+                settingsButton
+            }
             allowanceButton
             continueButton
             extraButton
@@ -318,58 +317,6 @@ extension DexMainView {
         .background(Color.semantic.background)
         .cornerRadius(Spacing.padding2)
     }
-}
-
-extension DexMainView {
-
-    @ViewBuilder
-    private var quickActionsSection: some View {
-        HStack(spacing: Spacing.padding2) {
-            netWorkPickerButton
-            settingsButton
-        }
-    }
-
-    @ViewBuilder
-    private var netWorkPickerButton: some View {
-        Button {
-            viewStore.send(.onSelectNetworkTapped)
-        } label: {
-            HStack(spacing: 0) {
-                ZStack(alignment: .bottomTrailing) {
-                    Icon
-                        .network
-                        .small()
-                        .color(.semantic.title)
-                        .circle(backgroundColor: .semantic.light)
-
-                    if let network = viewStore.currentNetwork {
-                        network.logo(size: 12.pt)
-                    }
-                }
-                .padding(.horizontal, Spacing.padding1)
-                .padding(.vertical, Spacing.padding1)
-
-                Text(L10n.Main.network)
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.title)
-
-                Spacer()
-
-                Text(viewStore.currentNetwork?.networkConfig.shortName ?? "")
-                    .typography(.paragraph2)
-                    .foregroundColor(.semantic.body)
-
-                Icon
-                    .chevronRight
-                    .micro()
-                    .color(.semantic.body)
-                    .padding(.horizontal, Spacing.padding1)
-            }
-            .background(Color.semantic.background)
-            .cornerRadius(16, corners: .allCorners)
-        }
-    }
 
     @ViewBuilder
     private var settingsButton: some View {
@@ -382,10 +329,9 @@ extension DexMainView {
                     .small()
                     .color(.semantic.title)
             }
-            .padding(.horizontal, Spacing.padding2)
-            .padding(.vertical, Spacing.padding1)
+            .padding(Spacing.padding2)
             .background(Color.semantic.background)
-            .cornerRadius(16, corners: .allCorners)
+            .cornerRadius(Spacing.padding2, corners: .allCorners)
         }
     }
 }
@@ -423,7 +369,7 @@ extension DexMainView {
                         Icon.arrowDown
                             .small()
                             .color(.semantic.title)
-                            .circle(backgroundColor: .semantic.background)
+                            .circle(backgroundColor: .semantic.background, isInscribed: false)
                     }
                 }
             )

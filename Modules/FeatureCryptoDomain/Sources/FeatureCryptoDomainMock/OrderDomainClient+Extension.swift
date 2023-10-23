@@ -1,8 +1,8 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 #if DEBUG
-@testable import FeatureCryptoDomainData
 import Combine
+@testable import FeatureCryptoDomainData
 import Foundation
 import NetworkKit
 

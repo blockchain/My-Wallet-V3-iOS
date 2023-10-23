@@ -90,7 +90,7 @@ public struct PlaidReducer: Reducer {
                                 }
                             }
                             .await()
-                            
+
                         await send(event)
                     } catch {
                         await send(.finished(success: false))

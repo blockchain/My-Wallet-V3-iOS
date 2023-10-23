@@ -54,16 +54,16 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
     func initializeTransaction() -> Single<PendingTransaction> {
         walletCurrencyService.displayCurrency.eraseError().prefix(1)
             .zip(actionableBalance)
-            .tryMap { [weak self] (fiatCurrency, actionableBalance) -> PendingTransaction in
+            .tryMap { [weak self] fiatCurrency, actionableBalance -> PendingTransaction in
                 guard let self else {
                     throw ToolKitError.nullReference(Self.self)
                 }
                 return PendingTransaction(
-                    amount: .zero(currency: self.sourceAsset),
+                    amount: .zero(currency: sourceAsset),
                     available: actionableBalance,
-                    feeAmount: .zero(currency: self.sourceAsset),
-                    feeForFullAvailable: .zero(currency: self.sourceAsset),
-                    feeSelection: .empty(asset: self.sourceAsset),
+                    feeAmount: .zero(currency: sourceAsset),
+                    feeForFullAvailable: .zero(currency: sourceAsset),
+                    feeSelection: .empty(asset: sourceAsset),
                     selectedFiatCurrency: fiatCurrency
                 )
             }
@@ -71,9 +71,9 @@ final class TradingToTradingSwapTransactionEngine: SwapTransactionEngine {
                 guard let self else {
                     return .failure(ToolKitError.nullReference(Self.self))
                 }
-                return self.updateLimits(
+                return updateLimits(
                     pendingTransaction: pendingTransaction,
-                    quote: .zero(self.sourceAccount.currencyType.code, self.target.currencyType.code)
+                    quote: .zero(sourceAccount.currencyType.code, target.currencyType.code)
                 )
                 .handlePendingOrdersError(initialValue: pendingTransaction)
             }

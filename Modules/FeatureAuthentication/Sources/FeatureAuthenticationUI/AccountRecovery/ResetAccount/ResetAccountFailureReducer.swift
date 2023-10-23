@@ -39,7 +39,7 @@ struct ResetAccountFailureReducer: Reducer {
     }
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .open(let urlContent):
                 guard let url = urlContent.url else {

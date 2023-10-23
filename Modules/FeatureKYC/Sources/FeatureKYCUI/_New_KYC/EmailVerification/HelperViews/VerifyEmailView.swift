@@ -1,6 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import BlockchainComponentLibrary
+import Blockchain
+import BlockchainUI
 import ComposableArchitecture
 import Localization
 import SwiftUI
@@ -23,13 +24,14 @@ enum VerifyEmailAction: Equatable {
         case dismiss
         case present
     }
+
     case tapCheckInbox
     case tapGetEmailNotReceivedHelp
     case alert(PresentationAction<AlertAction>)
 }
 
 struct VerifyEmailReducer: Reducer {
-    
+
     typealias State = VerifyEmailState
     typealias Action = VerifyEmailAction
 

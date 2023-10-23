@@ -25,10 +25,9 @@ public class AppLoaderService: ObservableObject {
         do {
             async let fetchProducts = productsService.fetchProducts().await()
             async let fetchMigrationInfo = externalTradingMigrationService.fetchMigrationInfo()
-            let _ : [Any?] = try await [fetchProducts, fetchMigrationInfo]
+            let _: [Any?] = try await [fetchProducts, fetchMigrationInfo]
             return true
-        }
-        catch let error {
+        } catch {
             app.post(error: error)
             return true
         }

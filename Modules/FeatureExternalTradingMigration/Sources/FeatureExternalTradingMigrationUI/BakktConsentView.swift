@@ -85,8 +85,9 @@ struct BakktConsentView: View {
         VStack(spacing: Spacing.padding2) {
             termsAndConditions
             if hasAssetsToConsolidate {
-                PrimaryButton(title: NonLocalizedConstants.ExternalTradingMigration.continueButton,
-                              action: {
+                PrimaryButton(
+                    title: NonLocalizedConstants.ExternalTradingMigration.continueButton,
+                    action: {
                     onContinue?()
                 }
                 )

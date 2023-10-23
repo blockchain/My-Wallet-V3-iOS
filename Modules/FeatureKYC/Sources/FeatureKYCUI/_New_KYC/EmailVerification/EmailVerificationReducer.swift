@@ -45,6 +45,7 @@ enum EmailVerificationAction: Equatable {
         case dismiss
         case loadVerificationState
     }
+
     case closeButtonTapped
     case didAppear
     case didDisappear

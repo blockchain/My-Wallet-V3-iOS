@@ -17,7 +17,8 @@ class MockRecorder: Recording {
     func error(_ error: Error) {}
     func error(_ errorMessage: String) {}
     func error() {}
-
+    func setUserId(for id: String) {}
+    
     func recordIllegalUIOperationIfNeeded() {}
 }
 

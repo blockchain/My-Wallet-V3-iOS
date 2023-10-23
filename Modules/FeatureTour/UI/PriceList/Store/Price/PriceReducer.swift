@@ -7,7 +7,7 @@ import Foundation
 import MoneyKit
 
 struct PriceReducer: Reducer {
-    
+
     typealias State = Price
     typealias Action = PriceAction
 

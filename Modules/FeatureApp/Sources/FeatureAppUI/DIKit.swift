@@ -176,9 +176,11 @@ private final class WalletConnectTabSwap: WalletConnectTabSwapping {
     init(tabSwapping: TabSwapping) {
         self.tabSwapping = tabSwapping
     }
+
     func send(from account: BlockchainAccount, target: TransactionTarget) {
         tabSwapping.send(from: account, target: target)
     }
+
     func sign(from account: BlockchainAccount, target: TransactionTarget) {
         tabSwapping.sign(from: account, target: target)
     }

@@ -10,10 +10,10 @@ public struct CustodialOnboardingDashboardView: View {
     var externalTradingMigrationIsAvailable: Bool {
         externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.available[]
     }
+
     var externalTradingMigrationIsPending: Bool {
         externalTradingMigrationState == blockchain.api.nabu.gateway.user.external.brokerage.migration.state.pending[]
     }
-
 
     public init(service: CustodialOnboardingService) {
         self.onboarding = service
@@ -105,6 +105,7 @@ struct CustodialOnboardingTaskListView: View {
 
     @BlockchainApp var app
     @ObservedObject var service: CustodialOnboardingService
+    @State var isEmailVerified: Bool = false
 
     var body: some View {
         DividedVStack(spacing: 0) {
@@ -118,6 +119,7 @@ struct CustodialOnboardingTaskListView: View {
             .onTapGesture {
                 $app.post(event: blockchain.ux.user.custodial.onboarding.dashboard.verify.email.paragraph.row.tap)
             }
+            .disabled(isEmailVerified)
             CustodialOnboardingTaskRowView(
                 icon: .identification,
                 tint: .semantic.primary,
@@ -145,6 +147,9 @@ struct CustodialOnboardingTaskListView: View {
             set(blockchain.ux.user.custodial.onboarding.dashboard.verify.email.paragraph.row.tap.then.emit, to: blockchain.ux.user.custodial.onboarding.dashboard.configuration.verify.email)
             set(blockchain.ux.user.custodial.onboarding.dashboard.verify.identity.paragraph.row.tap.then.emit, to: blockchain.ux.user.custodial.onboarding.dashboard.configuration.verify.identity)
             set(blockchain.ux.user.custodial.onboarding.dashboard.buy.crypto.paragraph.row.tap.then.emit, to: blockchain.ux.user.custodial.onboarding.dashboard.configuration.buy.crypto)
+        }
+        .bindings {
+            subscribe($isEmailVerified, to: blockchain.user.email.is.verified)
         }
     }
 }

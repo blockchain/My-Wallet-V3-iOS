@@ -16,7 +16,6 @@ public struct NetworkAdapterDependencyKey: DependencyKey {
     )
 }
 
-
 public struct RequestBuilderDependencyKey: DependencyKey {
 
     public static var liveValue: RequestBuilder = resolve(

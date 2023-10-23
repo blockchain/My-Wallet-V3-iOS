@@ -1,10 +1,10 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Combine
-import Errors
-import FeatureAnnouncementsDomain
-import FeatureAnnouncementsData
 import DIKit
+import Errors
+import FeatureAnnouncementsData
+import FeatureAnnouncementsDomain
 import PlatformKit
 
 // MARK: - Blockchain Module

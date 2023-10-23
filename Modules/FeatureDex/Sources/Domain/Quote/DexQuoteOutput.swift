@@ -19,7 +19,6 @@ public struct DexQuoteOutput: Equatable {
     public let field: Field
     public let isValidated: Bool
     public let networkFee: CryptoValue
-    public let productFee: CryptoValue?
     public let sellAmount: CryptoValue
     public let slippage: String
 
@@ -30,7 +29,6 @@ public struct DexQuoteOutput: Equatable {
         field: Field,
         isValidated: Bool,
         networkFee: CryptoValue,
-        productFee: CryptoValue?,
         sellAmount: CryptoValue,
         slippage: String,
         response: DexQuoteResponse
@@ -39,7 +37,6 @@ public struct DexQuoteOutput: Equatable {
         self.field = field
         self.isValidated = isValidated
         self.networkFee = networkFee
-        self.productFee = productFee
         self.sellAmount = sellAmount
         self.slippage = slippage
         self.response = response
@@ -76,8 +73,6 @@ public struct DexQuoteOutput: Equatable {
         guard let sellAmount = cryptoValue(from: response.quote.sellAmount, currenciesService: currenciesService) else {
             return nil
         }
-        let productFee: CryptoValue? =  response.quote.bcdcFee
-            .flatMap { cryptoValue(from: $0, currenciesService: currenciesService) }
 
         let minimumBuyAmount: CryptoValue? = minumumCryptoValue(
             from: response.quote.buyAmount,
@@ -91,7 +86,6 @@ public struct DexQuoteOutput: Equatable {
             field: field,
             isValidated: !request.params.skipValidation,
             networkFee: networkFee,
-            productFee: productFee,
             sellAmount: sellAmount,
             slippage: request.params.slippage,
             response: response
@@ -211,7 +205,6 @@ extension DexQuoteOutput {
             field: .source,
             isValidated: false,
             networkFee: .create(major: Double(0.125), currency: .ethereum),
-            productFee: .create(major: Double(0.5), currency: buy),
             sellAmount: sell,
             slippage: "0.003",
             response: response

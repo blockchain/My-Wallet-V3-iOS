@@ -294,8 +294,8 @@ extension Icon {
     public static let `filterv2` = Icon(name: "Filter v2")
     public static let `fingerprint` = Icon(name: "Fingerprint")
     public static let `flag` = Icon(name: "Flag")
-    public static let `flashOff` = Icon(name: "Flash Off")
-    public static let `flashOn` = Icon(name: "Flash On")
+    public static let `flashOn` = Icon(name: "flash-on")
+    public static let `flashOnFilled` = Icon(name: "flash-on-filled")
     public static let `fire` = Icon(name: "fire")
     public static let `fireFilled` = Icon(name: "fire filled")
     public static let `flip` = Icon(name: "flip")
@@ -477,8 +477,8 @@ extension Icon {
         .filterv2,
         .fingerprint,
         .flag,
-        .flashOff,
         .flashOn,
+        .flashOnFilled,
         .flip,
         .flipFilled,
         .fullscreen,

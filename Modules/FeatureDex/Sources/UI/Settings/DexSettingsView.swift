@@ -36,18 +36,81 @@ struct DexSettingsView: View {
 
     @ViewBuilder
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(spacing: 16) {
             header
-                .padding(.vertical, Spacing.padding3)
-            picker
-                .padding(.bottom, Spacing.padding2)
-            Text(L10n.Settings.body)
-                .typography(.paragraph1)
+            slippageView
+            // Not yet enabled:
+            // extraSettings
+        }
+        .padding(Spacing.padding2)
+        .background(Color.semantic.light)
+    }
+
+    @ViewBuilder
+    private var extraSettings: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Cross-chain only")
+                .typography(.body2)
                 .foregroundColor(.semantic.body)
                 .lineSpacing(4)
+
+            DividedVStack {
+                tableRow(
+                    icon: .flashOn,
+                    title: "Express",
+                    body: "Reduces cross-chain transaction time to 5-30s (max $20k).",
+                    isOn: .constant(true)
+                )
+                tableRow(
+                    icon: .flashOn,
+                    title: "Arrival gas",
+                    body: "Swap some of your tokens for gas on destination chain.",
+                    isOn: .constant(true)
+                )
+            }
+            .padding(.vertical, 6.pt)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.semantic.background)
+            )
         }
-        .padding(.horizontal, Spacing.padding2)
-        .background(Color.semantic.background.ignoresSafeArea())
+    }
+
+    @ViewBuilder
+    private func tableRow(
+        icon: Icon,
+        title: String,
+        body: String,
+        isOn: Binding<Bool>
+    ) -> some View {
+        TableRow(
+            leading: { icon.color(.semantic.title).small() },
+            title: { TableRowTitle(title) },
+            byline: { TableRowByline(body) },
+            isOn: isOn
+        )
+    }
+
+    @ViewBuilder
+    private var slippageView: some View {
+        VStack(alignment: .leading, spacing: Spacing.padding1) {
+            Text("Allowed slippage")
+                .typography(.body2)
+                .foregroundColor(.semantic.body)
+                .lineSpacing(4)
+            VStack(alignment: .leading, spacing: Spacing.padding2) {
+                picker
+                Text(L10n.Settings.body)
+                    .typography(.paragraph1)
+                    .foregroundColor(.semantic.body)
+                    .lineSpacing(Spacing.textSpacing)
+            }
+            .padding(Spacing.padding2)
+            .background(
+                RoundedRectangle(cornerRadius: Spacing.padding2)
+                    .fill(Color.semantic.background)
+            )
+        }
     }
 
     @ViewBuilder
@@ -78,13 +141,15 @@ struct DexSettingsView: View {
 
     @ViewBuilder
     private var header: some View {
-        HStack(spacing: 0) {
+        ZStack {
             Text(L10n.Settings.title)
                 .typography(.body2)
                 .foregroundColor(.semantic.title)
-            Spacer()
-            IconButton(icon: .navigationCloseButton()) {
-                presentationMode.wrappedValue.dismiss()
+            HStack {
+                Spacer()
+                IconButton(icon: .navigationCloseButton()) {
+                    presentationMode.wrappedValue.dismiss()
+                }
             }
         }
     }

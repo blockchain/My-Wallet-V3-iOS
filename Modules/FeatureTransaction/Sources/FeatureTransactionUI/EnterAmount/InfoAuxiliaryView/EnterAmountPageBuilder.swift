@@ -199,8 +199,6 @@ final class EnterAmountPageBuilder {
             .ignoreFailure(setFailureType: Never.self)
             .eraseToAnyPublisher()
 
-
-
         let sellEnterAmountReducer = SellEnterAmount(
             app: resolve(),
             onAmountChanged: { [weak self] amount in

@@ -95,7 +95,10 @@ public struct PasswordRequiredView: View {
     }
 
     private var passwordField: some View {
-        WithViewStore(store, observe: { $0 }, content: { viewStore in
+        WithViewStore(
+            store,
+            observe: { $0 },
+            content: { viewStore in
                 VStack(alignment: .leading, spacing: Spacing.padding1) {
                     Input(
                         text: viewStore.$password,
@@ -127,7 +130,10 @@ public struct PasswordRequiredView: View {
     }
 
     private var forgetWalletSection: some View {
-        WithViewStore(store, observe: { $0 }, content: { viewStore in
+        WithViewStore(
+            store,
+            observe: { $0 },
+            content: { viewStore in
                 VStack(spacing: Spacing.padding2) {
                     Text(LocalizedString.forgetWalletDescription)
                         .typography(.caption1)

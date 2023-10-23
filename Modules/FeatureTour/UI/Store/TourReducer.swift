@@ -1,12 +1,12 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import ComposableArchitecture
-import MoneyKit
 import FeatureTourDomain
+import MoneyKit
 import SwiftUI
 
 public struct TourReducer: Reducer {
-    
+
     public typealias State = TourState
     public typealias Action = TourAction
 
@@ -36,7 +36,7 @@ public struct TourReducer: Reducer {
         self.manualLoginAction = manualLoginAction
         self.priceService = priceService
     }
-    
+
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {

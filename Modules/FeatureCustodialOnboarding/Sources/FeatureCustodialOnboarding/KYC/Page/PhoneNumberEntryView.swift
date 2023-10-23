@@ -28,7 +28,7 @@ public struct PhoneNumberEntryView: View {
                     .foregroundColor(.semantic.body)
                 PhoneNumberView(phoneNumber: $phoneNumber)
                     .padding(.top, 16.pt)
-                if case let .failure(error) = object.state {
+                if case .failure(let error) = object.state {
                     Text(error.message)
                         .typography(.caption1)
                         .foregroundColor(.semantic.error)

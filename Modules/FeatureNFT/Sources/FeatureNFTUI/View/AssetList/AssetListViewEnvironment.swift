@@ -4,6 +4,4 @@ import FeatureNFTDomain
 import Foundation
 import UIKit
 
-public struct AssetListViewEnvironment {
-
-}
+public struct AssetListViewEnvironment {}

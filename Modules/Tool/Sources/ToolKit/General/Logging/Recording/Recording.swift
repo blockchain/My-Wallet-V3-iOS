@@ -8,7 +8,7 @@ public protocol Recordable {
 }
 
 /// Composition of all recording types
-public typealias Recording = ErrorRecording & MessageRecording & UIOperationRecording
+public typealias Recording = ErrorRecording & MessageRecording & UIOperationRecording & UserIdSetting
 
 /// Can be used to record any `String` message
 public protocol MessageRecording {
@@ -18,6 +18,11 @@ public protocol MessageRecording {
 /// Can be used to record any `Error` message
 public protocol ErrorRecording {
     func error(_ error: Error)
+}
+
+/// Sets the User Id 
+public protocol UserIdSetting {
+    func setUserId(for id: String)
 }
 
 /// Records any illegal UI operation

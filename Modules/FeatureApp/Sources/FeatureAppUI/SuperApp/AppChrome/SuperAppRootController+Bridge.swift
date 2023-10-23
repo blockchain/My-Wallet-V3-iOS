@@ -21,7 +21,7 @@ extension SuperAppRootController: SuperAppRootControllableLoggedInBridge {
     public func exitToPinScreen() {
         global.send(.exitToPinScreen)
     }
-    
+
     public func alert(_ content: AlertViewContent) {
         alertViewPresenter.notify(content: content, in: topMostViewController ?? self)
     }

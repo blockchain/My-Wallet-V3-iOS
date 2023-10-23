@@ -68,7 +68,7 @@ struct ClaimBenefitsView: View {
                 title: LocalizedString.BenefitsList.SimplifyTransaction.title,
                 subtitle: LocalizedString.BenefitsList.SimplifyTransaction.description,
                 leading: {
-                    Icon.flashOn
+                    Icon.flashOnFilled
                         .color(.semantic.primary)
                         .frame(width: 24, height: 24)
                 },

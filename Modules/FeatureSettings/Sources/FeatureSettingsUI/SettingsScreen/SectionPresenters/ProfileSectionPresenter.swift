@@ -79,7 +79,7 @@ final class ProfileSectionPresenter: SettingsSectionPresenting {
                         )
                     )
                 }
-                
+
                 return .loaded(
                     next: .some(
                         SettingsSectionViewModel(

@@ -8,7 +8,7 @@ import MoneyKit
 import PlatformKit
 
 struct InterestAccountDetailsReducer: Reducer {
-    
+
     typealias State = InterestAccountDetailsState
     typealias Action = InterestAccountDetailsAction
 

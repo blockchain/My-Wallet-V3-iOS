@@ -73,10 +73,10 @@ public enum NotificationsSettingsRoute: NavigationRoute {
 // MARK: - Main Reducer
 
 public struct FeatureNotificationPreferencesMainReducer: Reducer {
-    
+
     public typealias State = NotificationPreferencesState
     public typealias Action = NotificationPreferencesAction
-    
+
     public let mainQueue: AnySchedulerOf<DispatchQueue>
     public let analyticsRecorder: AnalyticsEventRecorderAPI
     public let notificationPreferencesRepository: NotificationPreferencesRepositoryAPI

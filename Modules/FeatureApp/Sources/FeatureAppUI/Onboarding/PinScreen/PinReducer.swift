@@ -39,8 +39,7 @@ public enum PinCore {
         }
     }
 
-    public struct Environment {
-    }
+    public struct Environment {}
 }
 
 struct PinReducer: Reducer {

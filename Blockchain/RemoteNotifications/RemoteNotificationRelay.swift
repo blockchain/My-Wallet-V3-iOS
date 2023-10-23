@@ -128,7 +128,5 @@ extension RemoteNotificationRelay: UNUserNotificationCenterDelegate {
 }
 
 extension UNNotificationPresentationOptions {
-    static let defaultPresentationOptions: UNNotificationPresentationOptions = {
-        [.banner, .list, .badge, .sound]
-    }()
+    static let defaultPresentationOptions: UNNotificationPresentationOptions = [.banner, .list, .badge, .sound]
 }

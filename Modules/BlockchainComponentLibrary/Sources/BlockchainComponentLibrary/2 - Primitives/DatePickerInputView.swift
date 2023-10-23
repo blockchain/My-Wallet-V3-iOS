@@ -76,6 +76,7 @@ public final class DatePickerTextField: UITextField {
         inputAccessoryView = toolBar
     }
 
+    @available(*, unavailable)
     public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -88,15 +89,15 @@ public final class DatePickerTextField: UITextField {
         resignFirstResponder()
     }
 
-    public override func textRect(forBounds bounds: CGRect) -> CGRect {
-        CGRectInset(bounds, 10, 0)
+    override public func textRect(forBounds bounds: CGRect) -> CGRect {
+        bounds.insetBy(dx: 10, dy: 0)
     }
 
-    public override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        CGRectInset(bounds, 10, 0)
+    override public func editingRect(forBounds bounds: CGRect) -> CGRect {
+        bounds.insetBy(dx: 10, dy: 0)
     }
 
-    public override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+    override public func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         var rect = super.rightViewRect(forBounds: bounds)
         rect.origin.x -= 10
         return rect

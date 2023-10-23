@@ -20,7 +20,6 @@ public struct SellEnterAmount: Reducer {
     public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never>
     public var validationStatePublisher: AnyPublisher<TransactionValidationState, Never>
 
-
     public init(
         app: AppProtocol,
         onAmountChanged: @escaping (MoneyValue) -> Void,
@@ -142,7 +141,6 @@ public struct SellEnterAmount: Reducer {
         case resetInput(newInput: String?)
         case onMinMaxAmountsFetched(TransactionMinMaxValues)
         case onValidationStateFetched(TransactionValidationState)
-
     }
 
     struct Price: Decodable, Equatable {
@@ -212,7 +210,6 @@ public struct SellEnterAmount: Reducer {
                         validationStatePublisher
                             .map(Action.onValidationStateFetched)
                     }
-
                 )
 
             case .onAppear:

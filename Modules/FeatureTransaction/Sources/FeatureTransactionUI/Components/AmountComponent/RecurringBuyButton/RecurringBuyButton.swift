@@ -80,7 +80,7 @@ enum RecurringBuyButtonAction: Equatable, BindableAction {
 }
 
 struct RecurringBuyButtonReducer: Reducer {
-    
+
     typealias State = RecurringBuyButtonState
     typealias Action = RecurringBuyButtonAction
 
@@ -89,7 +89,7 @@ struct RecurringBuyButtonReducer: Reducer {
 
     var body: some Reducer<State, Action> {
         BindingReducer()
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .refresh:
                 return .merge(

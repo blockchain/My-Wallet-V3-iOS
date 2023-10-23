@@ -2,8 +2,8 @@
 
 import AnalyticsKit
 import BlockchainComponentLibrary
-import FeatureCryptoDomainDomain
 @testable import FeatureCryptoDomainData
+import FeatureCryptoDomainDomain
 @testable import FeatureCryptoDomainMock
 @testable import FeatureCryptoDomainUI
 import SwiftUI
@@ -54,11 +54,11 @@ private struct _ExternalAppOpener: ExternalAppOpener {
     func openMailApp(completionHandler: @escaping (Bool) -> Void) {
         print("openMailApp:")
     }
-    
+
     func openSettingsApp(completionHandler: @escaping (Bool) -> Void) {
         print("openSettingsApp:")
     }
-    
+
     func open(_ url: URL, completionHandler: @escaping (Bool) -> Void) {
         print("open: \(url)")
     }

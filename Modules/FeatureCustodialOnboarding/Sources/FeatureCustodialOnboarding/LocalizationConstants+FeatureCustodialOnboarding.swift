@@ -62,4 +62,14 @@ extension LocalizationConstants.CustodialOnboarding {
     static let address = NSLocalizedString("Address", comment: "Address")
     static let changeAddress = NSLocalizedString("Change address manually ->", comment: "Change address manually ->")
     static let socialSecurityNumber = NSLocalizedString("Social Security Number (SSN)", comment: "Social Security Number (SSN)")
+
+    static let verifyMyID = NSLocalizedString("Verify my ID", comment: "Verify my ID")
+    static let getYouVerified = NSLocalizedString("Let’s get you verified to trade", comment: "Let’s get you verified to trade")
+    static let protectYourAccount = NSLocalizedString("Help us verify your identity and protect your account by providing the following information", comment: "Help us verify your identity and protect your account by providing the following information")
+    static let aboutTwoMinutes = NSLocalizedString("About 2 minutes", comment: "About 2 minutes")
+    static let requireDateOfBirth = NSLocalizedString("• Date of birth", comment: "• Date of birth")
+    static let requireName = NSLocalizedString("• First and Last Name", comment: "• First and Last Name")
+    static let requireAddress = NSLocalizedString("• Home address", comment: "• Home address")
+    static let requireSSN = NSLocalizedString("• Social Security Number", comment: "• Social Security Number")
+
 }

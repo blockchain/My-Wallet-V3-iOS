@@ -7,7 +7,7 @@ func registerGeolocationNAPI() async throws {
     try await app.register(
         napi: blockchain.api.nabu.gateway.geo,
         domain: blockchain.api.nabu.gateway.geo.location,
-        repository: { tag in
+        repository: { _ in
             do {
                 let response = try await client.geolocation()
                 var json = L_blockchain_api_nabu_gateway_geo_location.JSON()
@@ -31,7 +31,6 @@ private struct Geolocation: Decodable {
     var headerCFIpCity, headerCFIpCountry, headerCFIpContinent: String?
     var headerCFIpLongitude, headerCFIpLatitude: String?
 }
-
 
 private class GeolocationClient {
 

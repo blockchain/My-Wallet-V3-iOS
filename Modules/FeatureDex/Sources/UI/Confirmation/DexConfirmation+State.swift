@@ -16,7 +16,6 @@ extension DexConfirmation {
         @BindingState var networkFiatExchangeRate: MoneyValue?
         @BindingState var fromFiatExchangeRate: MoneyValue?
         @BindingState var toFiatExchangeRate: MoneyValue?
-        @BindingState var productFeeFiatExchangeRate: MoneyValue?
 
         var sourceBalance: DexBalance? {
             balances.first(where: { $0.currency == quote.from.currency })
@@ -34,7 +33,6 @@ extension DexConfirmation.State {
         var from: CryptoValue
         var minimumReceivedAmount: CryptoValue
         var networkFee: CryptoValue
-        var productFee: CryptoValue?
         var slippage: Double
         var to: CryptoValue
         var exchangeRate: MoneyValuePair {
@@ -50,7 +48,6 @@ extension DexConfirmation.State.Quote {
             from: CryptoValue.create(major: 0.05, currency: from),
             minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: to),
             networkFee: CryptoValue.create(major: 0.005, currency: from),
-            productFee: CryptoValue.create(major: 1.2, currency: .bitcoin),
             slippage: 0.0013,
             to: CryptoValue.create(major: 399917.445189445, currency: to)
         )

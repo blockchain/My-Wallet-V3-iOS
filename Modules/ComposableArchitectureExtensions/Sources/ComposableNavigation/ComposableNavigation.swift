@@ -140,17 +140,17 @@ extension Effect where Action: NavigationAction {
 
     /// A navigation effect to continue a user-journey by navigating to a new screen.
     public static func dismiss() -> Self {
-        Self.send(.dismiss())
+        send(.dismiss())
     }
 
     /// A navigation effect to continue a user-journey by navigating to a new screen.
     public static func navigate(to route: Action.RouteType) -> Self {
-        Self.send(.navigate(to: route))
+        send(.navigate(to: route))
     }
 
     /// A navigation effect that enters a new user journey context.
     public static func enter(into route: Action.RouteType, context: EnterIntoContext = .default) -> Self {
-        Self.send(.enter(into: route, context: context))
+        send(.enter(into: route, context: context))
     }
 }
 
@@ -306,9 +306,9 @@ public struct _NavigationReducer<Base: Reducer>: Reducer where Base.Action: Navi
     @inlinable
     public func reduce(into state: inout Base.State, action: Base.Action) -> Effect<Base.Action> {
         guard let route = (/Action.route).extract(from: action) else {
-            return self.base.reduce(into: &state, action: action)
+            return base.reduce(into: &state, action: action)
         }
         defer { state.route = route as? RouteIntent<State.RouteType> }
-        return self.base.reduce(into: &state, action: action)
+        return base.reduce(into: &state, action: action)
     }
 }

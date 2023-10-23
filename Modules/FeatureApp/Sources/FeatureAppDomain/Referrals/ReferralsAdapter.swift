@@ -27,7 +27,6 @@ final class ReferralsAdapter: ReferralAdapterAPI {
             .eraseToAnyPublisher()
     }
 
-
     func hasReferral() -> AnyPublisher<Referral?, Never> {
         referralService.fetchReferralCampaign()
             .combineLatest(externalBrokerageActive())

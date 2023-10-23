@@ -18,8 +18,6 @@ public struct DexQuoteResponse: Decodable, Equatable {
         }
     }
 
-
-
     public struct Amount: Decodable, Equatable {
         public var address: String?
         public var amount: String

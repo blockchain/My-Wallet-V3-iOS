@@ -1,14 +1,20 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
 
 extension NonLocalizedConstants.ExternalTradingMigration {
-    public static let upgradeButton = NSLocalizedString("Upgrade",
-                                                 comment: "ExternalTradingMigration: Upgrade")
-    public static let learnMoreButton = NSLocalizedString("Learn more",
-                                                   comment: "ExternalTradingMigration: Learn more")
-    public static let continueButton = NSLocalizedString("Continue",
-                                                  comment: "ExternalTradingMigration: Continue")
+    public static let upgradeButton = NSLocalizedString(
+        "Upgrade",
+        comment: "ExternalTradingMigration: Upgrade"
+    )
+    public static let learnMoreButton = NSLocalizedString(
+        "Learn more",
+        comment: "ExternalTradingMigration: Learn more"
+    )
+    public static let continueButton = NSLocalizedString(
+        "Continue",
+        comment: "ExternalTradingMigration: Continue"
+    )
 
     public enum TermsAndConditions {
         public static let disclaimer = NSLocalizedString("By checking this box, I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided above. By agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account. Bakkt’s User Agreement.", comment: "ExternalTradingMigration: Bakkt disclaimer")
@@ -52,7 +58,7 @@ extension NonLocalizedConstants.ExternalTradingMigration {
             )
         }
 
-        public  enum SupportedAssets {
+        public enum SupportedAssets {
             public static let title = NSLocalizedString("Supported Assets", comment: "ExternalTradingMigration: Supported Assets")
             public static let message = NSLocalizedString(
                 "Some crypto assets will no longer be supported on your new experience. In case you have balances on any of these, you will be able to consolidate them into Bitcoin (BTC) without any costs involved to ensure your funds remain secure and easily manageable.",
@@ -142,7 +148,6 @@ extension NonLocalizedConstants.Bakkt {
         )
     }
 }
-
 
 extension NonLocalizedConstants.Bakkt.Checkout {
     public static func buyDisclaimerBakkt() -> String {

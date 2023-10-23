@@ -36,7 +36,6 @@ class SellEnterAmountTests: XCTestCase {
 
     lazy var validationStatePublisher: AnyPublisher<TransactionValidationState, Never> = .just(.canExecute)
 
-
     override func setUpWithError() throws {
         try super.setUpWithError()
         completionHandlerSpy = SellEnterAmountCompletionHandlerSpy()

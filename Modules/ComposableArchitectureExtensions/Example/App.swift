@@ -138,7 +138,7 @@ struct ExampleReducer: Reducer {
     typealias State = ExampleState
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .route:
                 return .none
@@ -157,7 +157,7 @@ struct EndReducer: Reducer {
     let dismiss: () -> Void
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .dismiss:
                 dismiss()

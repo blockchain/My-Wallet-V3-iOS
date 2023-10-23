@@ -1,5 +1,5 @@
-import BlockchainUI
 import BlockchainNamespace
+import BlockchainUI
 import ComposableArchitecture
 import FeatureStakingDomain
 import Foundation

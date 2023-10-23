@@ -11,7 +11,7 @@ public struct NotificationPreferencesDetailsReducer: Reducer {
 
     public init() {}
 
-    public var body: some Reducer<State,Action> {
+    public var body: some Reducer<State, Action> {
         BindingReducer()
         Reduce { _, action in
             switch action {

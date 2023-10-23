@@ -18,14 +18,14 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Blockchain"),
-        .package(path: "../Network"),
+        .package(path: "../Network")
     ],
     targets: [
         .target(
             name: "FeatureCustomerSupportUI",
             dependencies: [
                 .product(name: "Blockchain", package: "Blockchain"),
-                .product(name: "NetworkKit", package: "Network"),
+                .product(name: "NetworkKit", package: "Network")
             ]
         ),
         .testTarget(

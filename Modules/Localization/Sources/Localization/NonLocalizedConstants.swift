@@ -1,4 +1,4 @@
-//Copyright © Blockchain Luxembourg S.A. All rights reserved.
+// Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import Foundation
 
@@ -15,4 +15,3 @@ public enum NonLocalizedConstants {
         public enum Checkout {}
     }
 }
-

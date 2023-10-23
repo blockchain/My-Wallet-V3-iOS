@@ -23,7 +23,7 @@ public struct SiteMap {
     ) throws -> some View {
         switch ref {
         case blockchain.ux.kyc.trading.unlock.more:
-            let isVerified = (try app.state.get(blockchain.user.is.verified) as? Bool) ?? false
+            let isVerified = try (app.state.get(blockchain.user.is.verified) as? Bool) ?? false
             UnlockTradingView(
                 store: Store(
                     initialState: UnlockTradingState(currentUserTier: isVerified ? .verified : .unverified),

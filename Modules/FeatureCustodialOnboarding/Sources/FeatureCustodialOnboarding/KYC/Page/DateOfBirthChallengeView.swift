@@ -29,7 +29,7 @@ public struct DateOfBirthChallengeView: View {
                                 .fill(Color.white)
                         )
                         .frame(height: 44.pt)
-                    if case let .failure(error) = object.state {
+                    if case .failure(let error) = object.state {
                         Text(error.message)
                             .typography(.caption1)
                             .foregroundColor(.semantic.error)

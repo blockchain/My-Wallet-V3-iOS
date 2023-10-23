@@ -126,9 +126,9 @@ enum QuotePayloadFactory {
             slippageAllowed: quote.slippage,
             networkFeeAmount: "\(quote.networkFee.displayMajorValue)",
             networkFeeCurrency: quote.networkFee.currency.code,
-            blockchainFeeAmount: quote.productFee.flatMap { "\($0.displayMajorValue)" },
+            blockchainFeeAmount: nil,
             blockchainFeeAmountUsd: nil,
-            blockchainFeeCurrency: quote.productFee?.code,
+            blockchainFeeCurrency: nil,
             inputNetwork: network?.networkConfig.networkTicker,
             outputNetwork: network?.networkConfig.networkTicker
         )

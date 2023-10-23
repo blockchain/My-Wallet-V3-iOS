@@ -2586,6 +2586,14 @@ blockchain:
 				+ blockchain.db.type.string
 				+ blockchain.session.configuration.value
 			disclaimer:
+				is:
+					dismiss:
+						enabled:
+						+ blockchain.db.type.boolean
+						+ blockchain.session.configuration.value
+					dismissed:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.state.stored.value
 				tap:
 				+ blockchain.session.configuration.value
 				+ blockchain.ux.type.action
@@ -2817,6 +2825,15 @@ blockchain:
 				email:
 					verification:
 					+ blockchain.ux.type.story
+			verify:
+				email:
+				+ blockchain.ux.type.story
+					confirmed:
+					+ blockchain.ux.type.action
+				with:
+					veriff:
+						introduction:
+						+ blockchain.ux.type.story
 		loading:
 			indicator:
 				event:
@@ -3773,9 +3790,16 @@ blockchain:
 						+ blockchain.ux.type.story
 						pin:
 						+ blockchain.ux.type.story
+							success:
+							+ blockchain.ux.type.action
 					cloud:
 						backup:
 							enable:
+					create:
+						pin:
+						+ blockchain.ux.type.story
+							success:
+							+ blockchain.ux.type.action
 					synchronize:
 						widget:
 					two_factor_authentication:

@@ -10,11 +10,11 @@ final class NoOpLoginService: LoginServiceAPI {
     var authenticator: AnyPublisher<WalletPayloadKit.WalletAuthenticatorType, Never> {
         .empty()
     }
-    
+
     func login(walletIdentifier: String) -> AnyPublisher<Void, FeatureAuthenticationDomain.LoginServiceError> {
         .just(())
     }
-    
+
     func login(walletIdentifier: String, code: String) -> AnyPublisher<Void, FeatureAuthenticationDomain.LoginServiceError> {
         .just(())
     }

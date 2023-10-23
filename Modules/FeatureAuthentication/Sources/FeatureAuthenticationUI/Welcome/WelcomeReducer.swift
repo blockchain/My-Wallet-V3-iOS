@@ -59,6 +59,7 @@ public struct WelcomeState: Equatable, NavigationState {
       get { _emailLoginState?.first }
       set { _emailLoginState = newValue.map { [$0] } }
     }
+
     private var _emailLoginState: [EmailLoginState]?
     public var restoreWalletState: SeedPhraseState?
     public var manualPairingEnabled: Bool
@@ -177,7 +178,7 @@ public struct WelcomeReducer: Reducer {
                 state.buildVersion = buildVersionProvider()
                 if BuildFlag.isInternal {
                     return .run { send in
-                        let isEnabled = (try? await app.get(blockchain.app.configuration.manual.login.is.enabled, as: Bool.self)) ?? false
+                        let isEnabled = await (try? app.get(blockchain.app.configuration.manual.login.is.enabled, as: Bool.self)) ?? false
                         guard isEnabled else {
                             return
                         }
@@ -386,7 +387,7 @@ struct WelcomeAnalytics: Reducer {
     let analyticsRecorder: AnalyticsEventRecorderAPI
 
     var body: some Reducer<State, Action> {
-        Reduce { state, action in
+        Reduce { _, action in
             switch action {
             case .route(let route):
                 guard let routeValue = route?.route else {

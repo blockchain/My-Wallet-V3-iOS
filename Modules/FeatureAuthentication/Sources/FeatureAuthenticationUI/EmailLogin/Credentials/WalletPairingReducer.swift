@@ -156,13 +156,13 @@ struct WalletPairingReducer: Reducer {
     }
 
     private func authenticate(
-       _ password: String,
-       _ state: WalletPairingState,
-       isAutoTrigger: Bool
+        _ password: String,
+        _ state: WalletPairingState,
+        isAutoTrigger: Bool
     ) -> Effect<WalletPairingAction> {
-       guard !state.walletGuid.isEmpty else {
-           fatalError("GUID should not be empty")
-       }
+        guard !state.walletGuid.isEmpty else {
+            fatalError("GUID should not be empty")
+        }
 
        return .concatenate(
            .cancel(id: WalletPairingCancelations.WalletIdentifierPollingTimerId()),
@@ -182,8 +182,8 @@ struct WalletPairingReducer: Reducer {
    }
 
     private func authenticateWithTwoFactorOTP(
-       _ code: String,
-       _ state: WalletPairingState
+        _ code: String,
+        _ state: WalletPairingState
     ) -> Effect<WalletPairingAction> {
        guard !state.walletGuid.isEmpty else {
            fatalError("GUID should not be empty")
@@ -198,7 +198,7 @@ struct WalletPairingReducer: Reducer {
                 .map { .twoFactorOTPDidVerified }
                 .catch { .authenticateWithTwoFactorOTPDidFail($0) }
         }
-   }
+    }
 
     private func needsEmailAuthorization() -> Effect<WalletPairingAction> {
         Effect.send(.startPolling)

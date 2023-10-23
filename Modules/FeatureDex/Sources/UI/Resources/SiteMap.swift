@@ -29,10 +29,10 @@ public struct SiteMap {
             DexSettingsView(slippage: slippage)
 
         case blockchain.ux.currency.exchange.dex.network.picker.sheet:
-            let selectedNetworkTicker = try context[blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network].decode(String.self)
+            let value: String? = try? context[blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network].decode(String.self)
             NetworkPickerView(
                 store: StoreOf<NetworkPicker>(
-                    initialState: NetworkPicker.State(currentNetwork: selectedNetworkTicker),
+                    initialState: NetworkPicker.State(currentNetwork: value),
                     reducer: { NetworkPicker() }
                 )
             )

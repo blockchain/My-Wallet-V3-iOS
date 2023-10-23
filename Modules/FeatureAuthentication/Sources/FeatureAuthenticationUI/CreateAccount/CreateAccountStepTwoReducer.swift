@@ -500,7 +500,7 @@ struct CreateAccountStepTwoReducer: Reducer {
 }
 
 extension CreateAccountStepTwoReducer {
-    fileprivate func validateInputs(
+    private func validateInputs(
         state: CreateAccountStepTwoState
     ) -> CreateAccountStepTwoState.InputValidationState {
         guard state.emailAddress.isEmail else {

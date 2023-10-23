@@ -30,7 +30,7 @@ public final class ProductsRepository: ProductsRepositoryAPI {
                             return value
                         case .error(let error, _):
                             app.post(error: error)
-                            if  case FetchResult.Error.keyDoesNotExist = error {
+                            if case FetchResult.Error.keyDoesNotExist = error {
                                 return nil
                             }
                             return false

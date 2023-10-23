@@ -13,6 +13,7 @@ extension LocalizationConstants {
             enum Empty {}
             enum Detail {}
         }
+
         enum NetworkPicker {}
     }
 }

@@ -9,6 +9,8 @@ import UIComponentsKit
 /// Entry point to the Email Verification flow
 public struct EmailVerificationView: View {
 
+    @BlockchainApp var app
+
     let store: Store<EmailVerificationState, EmailVerificationAction>
     @ObservedObject private(set) var viewStore: ViewStore<EmailVerificationState, EmailVerificationAction>
 
@@ -52,6 +54,9 @@ public struct EmailVerificationView: View {
                             action: EmailVerificationAction.emailVerified
                         )
                     )
+                    .onAppear {
+                        $app.post(event: blockchain.ux.kyc.verify.email.confirmed)
+                    }
                     .removeNavigationBarItems()
                 } else {
                     // Default Root View
@@ -76,6 +81,9 @@ public struct EmailVerificationView: View {
             }
             .onAppEnteredForeground {
                 viewStore.send(.didEnterForeground)
+            }
+            .onAppear {
+                $app.post(event: blockchain.ux.kyc.verify.email)
             }
             .background(Color.semantic.light)
             .accessibility(identifier: "KYC.EmailVerification.container")

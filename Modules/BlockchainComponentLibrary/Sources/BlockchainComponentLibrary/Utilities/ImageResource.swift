@@ -31,7 +31,7 @@ private struct RemoteImageLocationView: View {
     var body: some View {
         AsyncMedia(
             url: url,
-            failure: { _  in
+            failure: { _ in
                 if let fallback {
                     fallback.image
                 }

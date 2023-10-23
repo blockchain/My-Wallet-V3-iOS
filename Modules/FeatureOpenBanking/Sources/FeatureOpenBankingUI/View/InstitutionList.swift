@@ -48,7 +48,7 @@ public enum InstitutionListRoute: CaseIterable, NavigationRoute {
 }
 
 public struct InstitutionListReducer: Reducer {
-    
+
     public typealias State = InstitutionListState
     public typealias Action = InstitutionListAction
 
@@ -57,7 +57,7 @@ public struct InstitutionListReducer: Reducer {
     public init(environment: OpenBankingEnvironment) {
         self.environment = environment
     }
-    
+
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {

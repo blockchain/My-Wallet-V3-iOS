@@ -7,7 +7,7 @@ import Foundation
 import PlatformKit
 
 struct InterestNoEligibleWalletsReducer: Reducer {
-    
+
     typealias State = InterestNoEligibleWalletsState
     typealias Action = InterestNoEligibleWalletsAction
 

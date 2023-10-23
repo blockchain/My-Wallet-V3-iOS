@@ -69,7 +69,7 @@ private typealias L10n = LocalizationConstants.NewKYC
     func test_closes_flow_as_abandoned_when_closeButton_tapped() async throws {
         XCTAssertEqual(recordedInvocations.flowCompletionCallback, [])
         await testStore.send(.closeButtonTapped)
-        XCTAssertEqual(self.recordedInvocations.flowCompletionCallback, [.abandoned])
+        XCTAssertEqual(recordedInvocations.flowCompletionCallback, [.abandoned])
     }
 
     func test_polls_verificationStatus_every_few_seconds_while_on_screen() async throws {
@@ -229,7 +229,7 @@ private typealias L10n = LocalizationConstants.NewKYC
     func test_email_verified_continue_calls_flowCompletion_as_completed() async throws {
         XCTAssertEqual(recordedInvocations.flowCompletionCallback, [])
         await testStore.send(.emailVerified(.acknowledgeEmailVerification))
-        XCTAssertEqual(self.recordedInvocations.flowCompletionCallback, [.completed])
+        XCTAssertEqual(recordedInvocations.flowCompletionCallback, [.completed])
     }
 
     // MARK: Edit Email State Manipulation

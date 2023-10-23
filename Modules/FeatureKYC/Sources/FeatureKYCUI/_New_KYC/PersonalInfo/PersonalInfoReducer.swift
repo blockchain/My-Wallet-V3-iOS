@@ -153,9 +153,9 @@ extension Store where State == PersonalInfo.State, Action == PersonalInfo.Action
 
     static let emptyPreview = Store(initialState: PersonalInfo.State()) {
         PersonalInfo.PersonalInfoReducer(
-           onClose: {},
-           onComplete: {},
-           loadForm: {
+            onClose: {},
+            onComplete: {},
+            loadForm: {
                .just(
                    FormQuestion.personalInfoQuestions(
                        firstName: nil,
@@ -164,10 +164,10 @@ extension Store where State == PersonalInfo.State, Action == PersonalInfo.Action
                    )
                )
            },
-           submitForm: { _ in .empty() },
-           analyticsRecorder: NoOpAnalyticsRecorder(),
-           mainQueue: .main
-       )
+            submitForm: { _ in .empty() },
+            analyticsRecorder: NoOpAnalyticsRecorder(),
+            mainQueue: .main
+        )
     }
 
     static let filledPreview = Store(initialState: PersonalInfo.State()) {

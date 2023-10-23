@@ -26,6 +26,16 @@ public struct DexCell: Reducer {
                     state.inputText = balance.value.toDisplayString(includeSymbol: false)
                 }
                 return .none
+            case .onTapNetworkSelector:
+                let detents = blockchain.ui.type.action.then.enter.into.detents
+                app.post(
+                    event: blockchain.ux.currency.exchange.dex.network.picker.tap,
+                    context: [
+                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentNetwork?.networkConfig.networkTicker,
+                        detents: [detents.automatic.dimension]
+                    ]
+                )
+                return .none
             case .onTapCurrencySelector:
                 guard let currentNetwork = state.currentNetwork else {
                     return .none
@@ -136,7 +146,8 @@ private func favoriteSourceToken(
     }
 
     if let preselected = getThatSourceCurrency(app: app),
-       let preselectedBalance = state.filteredBalances.first(where: { $0.currency == preselected }) {
+       let preselectedBalance = state.filteredBalances.first(where: { $0.currency == preselected })
+    {
         eraseThatCurrency(app: app)
         return preselectedBalance
     }
@@ -158,7 +169,8 @@ private func favoriteDestinationToken(
     }
 
     if let preselected = getThatDestinationCurrency(app: app),
-       preselected.network() == network {
+       preselected.network() == network
+    {
         let preselectedBalance = state.filteredBalances
             .first(where: { $0.currency == preselected }) ?? .zero(preselected)
         eraseThatCurrency(app: app)
