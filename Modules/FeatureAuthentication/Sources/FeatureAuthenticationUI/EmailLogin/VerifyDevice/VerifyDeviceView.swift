@@ -67,6 +67,8 @@ struct VerifyDeviceView: View {
         static let buttonSpacing: CGFloat = 10
     }
 
+    @BlockchainApp var app
+
     private let store: Store<VerifyDeviceState, VerifyDeviceAction>
 
     init(store: Store<VerifyDeviceState, VerifyDeviceAction>) {
@@ -99,6 +101,9 @@ struct VerifyDeviceView: View {
                 }
                 .multilineTextAlignment(.center)
                 buttonSection
+            }
+            .onAppear {
+                $app.post(event: blockchain.ux.user.authentication.sign.in.verify.device)
             }
             .onAppear {
                 viewStore.send(.onAppear)

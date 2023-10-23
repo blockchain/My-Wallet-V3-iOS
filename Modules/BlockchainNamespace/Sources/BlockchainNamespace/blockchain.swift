@@ -14403,6 +14403,7 @@ public extension I_blockchain_ux_user_authentication_sign_in {
 	var `did`: L_blockchain_ux_user_authentication_sign_in_did { .init("\(__).did") }
 	var `enter`: L_blockchain_ux_user_authentication_sign_in_enter { .init("\(__).enter") }
 	var `unlock`: L_blockchain_ux_user_authentication_sign_in_unlock { .init("\(__).unlock") }
+	var `verify`: L_blockchain_ux_user_authentication_sign_in_verify { .init("\(__).verify") }
 }
 public final class L_blockchain_ux_user_authentication_sign_in_continue: L, I_blockchain_ux_user_authentication_sign_in_continue {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.in.continue", comment: "") }
@@ -14467,6 +14468,17 @@ public final class L_blockchain_ux_user_authentication_sign_in_unlock_wallet_pas
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.in.unlock.wallet.password.required", comment: "") }
 }
 public protocol I_blockchain_ux_user_authentication_sign_in_unlock_wallet_password_required: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_user_authentication_sign_in_verify: L, I_blockchain_ux_user_authentication_sign_in_verify {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.in.verify", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_in_verify: I {}
+public extension I_blockchain_ux_user_authentication_sign_in_verify {
+	var `device`: L_blockchain_ux_user_authentication_sign_in_verify_device { .init("\(__).device") }
+}
+public final class L_blockchain_ux_user_authentication_sign_in_verify_device: L, I_blockchain_ux_user_authentication_sign_in_verify_device {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.in.verify.device", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_in_verify_device: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_user_authentication_sign_up: L, I_blockchain_ux_user_authentication_sign_up {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up", comment: "") }
 }

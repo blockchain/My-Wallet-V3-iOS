@@ -439,30 +439,5 @@ struct VerifyDeviceReducer: Reducer {
                 appStoreInformationRepository: appStoreInformationRepository
             )
         }
-        VerifyDeviceAnalytics(analyticsRecorder: analyticsRecorder)
-    }
-}
-
-// MARK: - Private
-
-struct VerifyDeviceAnalytics: Reducer {
-
-    typealias State = VerifyDeviceState
-    typealias Action = VerifyDeviceAction
-
-    let analyticsRecorder: AnalyticsEventRecorderAPI
-
-    var body: some Reducer<State, Action> {
-        Reduce { _, action in
-            switch action {
-            case .didExtractWalletInfo(let walletInfo):
-                analyticsRecorder.record(
-                    event: .deviceVerified(info: walletInfo)
-                )
-                return .none
-            default:
-                return .none
-            }
-        }
     }
 }

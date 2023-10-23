@@ -26,23 +26,11 @@ extension AnalyticsEvents.New {
         case loginRequestDenied(LoginSource)
         case loginTwoStepVerificationEntered
         case loginTwoStepVerificationDenied
-        case deviceVerified(
-            wallet: WalletInfo
-        )
 
         var type: AnalyticsEventType { .nabu }
 
         var params: [String: Any]? {
             switch self {
-            case .deviceVerified(let info):
-                let walletInfoDecoded: [String: Any] = [
-                    "guid_first_four": String(info.wallet?.guid.prefix(4) ?? ""),
-                    "has_cloud_backup": info.wallet?.hasCloudBackup ?? false,
-                    "is_mobile_setup": info.wallet?.isMobileSetup ?? false,
-                    "mobile_device_type": Device.iOS.rawValue
-                ]
-                return ["wallet": walletInfoDecoded]
-
             case .loginPasswordEntered,
                  .loginTwoStepVerificationEntered,
                  .loginViewed,
@@ -96,14 +84,6 @@ extension AnalyticsEvents.New.LoginFlow {
     static func loginClicked() -> Self {
         .loginClicked(
             origin: .navigation
-        )
-    }
-
-    /// This returns the case `.deviceVerified` with default parameters
-    /// - Parameter info: The `WalletInfo` as received from the deeplink
-    static func deviceVerified(info: WalletInfo) -> Self {
-        .deviceVerified(
-            wallet: info
         )
     }
 }

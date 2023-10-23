@@ -3841,6 +3841,9 @@ blockchain:
 								password:
 									required:
 									+ blockchain.ux.type.story
+						verify:
+							device:
+							+ blockchain.ux.type.story
 					up:
 					+ blockchain.ux.type.story
 						address:
