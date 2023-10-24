@@ -91,9 +91,9 @@ struct DashboardAssetRowView_Previews: PreviewProvider {
 extension AssetBalanceInfo {
     @ViewBuilder
     fileprivate var networkTag: some View {
-        if let network {
+        if let network, let evm = network.evmNetwork {
             TagView(
-                text: network.networkConfig.shortName,
+                text: evm.networkConfig.shortName,
                 variant: .outline
             )
         }

@@ -213,8 +213,8 @@ extension LocalizationConstants.SuperApp.Dashboard.BalancesFailing {
     )
 
     public static let alertCardMessage = NSLocalizedString(
-        "We couldn’t load the balances and activity of the %@ network at this time.",
-        comment: "We couldn’t load the balances and activity of the %@ network at this time."
+        "We couldn’t load the balances and activity of %@ network(s) at this time.",
+        comment: "We couldn’t load the balances and activity of %@ network(s) at this time."
     )
 
     public static let learnMore = NSLocalizedString(

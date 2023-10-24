@@ -57,13 +57,13 @@ public struct DashboardAssetsSection: Reducer {
         /// `true` if requests failing
         var failedLoadingBalances: Bool = false
         /// An array of failing networks as per backend
-        var balancesFailingForNetworks: [EVMNetwork]?
+        var balancesFailingForNetworks: [AssetBalanceInfoNetwork]?
         @BindingState var alertCardSeen = false
 
         var seeAllButtonHidden = true
 
         var balancesFailingForNetworksTitles: String? {
-            balancesFailingForNetworks?.map(\.networkConfig.shortName).joined(separator: ", ")
+            balancesFailingForNetworks?.map(\.networkOrAssetName).joined(separator: ", ")
         }
 
         public init(presentedAssetsType: PresentedAssetType) {

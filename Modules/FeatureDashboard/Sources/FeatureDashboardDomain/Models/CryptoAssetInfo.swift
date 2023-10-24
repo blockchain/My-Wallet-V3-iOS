@@ -11,7 +11,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     public let delta: Decimal?
     public var actions: AvailableActions?
     public var fastRising: Bool?
-    public var network: EVMNetwork?
+    public var network: AssetBalanceInfoNetwork?
 
     public let balanceFailingForNetwork: Bool?
 
@@ -39,7 +39,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         delta: Decimal?,
         actions: AvailableActions? = nil,
         fastRising: Bool? = nil,
-        network: EVMNetwork? = nil,
+        network: AssetBalanceInfoNetwork? = nil,
         balanceFailingForNetwork: Bool = false,
         rawQuote: MoneyValue?
     ) {
@@ -66,5 +66,22 @@ public struct FiatBalancesInfo: Equatable, Hashable {
     public init(balances: [AssetBalanceInfo], tradingCurrency: FiatCurrency) {
         self.balances = balances
         self.tradingCurrency = tradingCurrency
+    }
+}
+
+public struct AssetBalanceInfoNetwork: Equatable, Codable, Hashable {
+    public let currency: CryptoCurrency
+    public let evmNetwork: EVMNetwork?
+
+    public init(currency: CryptoCurrency, evmNetwork: EVMNetwork?) {
+        self.currency = currency
+        self.evmNetwork = evmNetwork
+    }
+
+    public var networkOrAssetName: String {
+        guard let evmNetwork else {
+            return currency.name
+        }
+        return evmNetwork.networkConfig.shortName
     }
 }

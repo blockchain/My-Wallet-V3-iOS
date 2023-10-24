@@ -137,12 +137,13 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 app.publisher(for: blockchain.app.configuration.prices.rising.fast.percent, as: Double.self)
                     .replaceError(with: 15)
             )
-            .map { (quote: MoneyValue, yesterday: MoneyValue, multiplier: Int, fastRisingMinDelta: Double) -> AssetBalanceInfo in
+            .map { [enabledCurrenciesService] (quote: MoneyValue, yesterday: MoneyValue, multiplier: Int, fastRisingMinDelta: Double) -> AssetBalanceInfo in
                 let delta = try? MoneyValue.delta(yesterday, quote).roundTo(places: 2)
                 let isFastRising = Decimal(fastRisingMinDelta / 100).isLessThanOrEqualTo(delta ?? 0)
-                var network: EVMNetwork?
+                var network: AssetBalanceInfoNetwork?
                 if let cryptoCurrency = balance.currency.cryptoCurrency {
-                    network = self.enabledCurrenciesService.network(for: cryptoCurrency)
+                    let evmNetwork = enabledCurrenciesService.network(for: cryptoCurrency)
+                    network = AssetBalanceInfoNetwork(currency: cryptoCurrency, evmNetwork: evmNetwork)
                 }
                 return AssetBalanceInfo(
                     cryptoBalance: balance.available * multiplier,
@@ -404,8 +405,11 @@ extension AssetBalanceInfo {
                     exchangeRate: fiatPrice.moneyValue
                 )
             }
-            let network = enabledCurrenciesService.network(for: balance.currency)
-            let failingNetwork = networks.first(where: { $0.errorLoadingBalances && $0.currency == network?.nativeAsset }).isNotNil
+            let evmNetwork = enabledCurrenciesService.network(for: balance.currency)
+            let failingNetwork = networks.first(where: { network in
+                network.errorLoadingBalances && (network.currency == evmNetwork?.nativeAsset || network.currency == balance.currency)
+            }).isNotNil
+            let network = AssetBalanceInfoNetwork(currency: balance.currency, evmNetwork: evmNetwork)
             return AssetBalanceInfo(
                 cryptoBalance: balance.moneyValue,
                 fiatBalance: fiatBalance,
