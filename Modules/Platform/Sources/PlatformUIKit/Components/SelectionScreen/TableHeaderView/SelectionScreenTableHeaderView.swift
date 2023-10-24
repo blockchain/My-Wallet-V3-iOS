@@ -49,7 +49,7 @@ public final class SelectionScreenTableHeaderView: UIView {
     }
 
     private func setup() {
-        fromNib(in: .module)
+        fromNib(in: Bundle.platformUIKit)
         clipsToBounds = true
         backgroundColor = .semantic.background
     }

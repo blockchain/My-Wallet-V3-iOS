@@ -101,7 +101,7 @@ public final class BadgeView: UIView {
     }
 
     private func setup() {
-        fromNib(in: .module)
+        fromNib(in: Bundle.platformUIKit)
         clipsToBounds = true
     }
 }

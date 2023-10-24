@@ -12,7 +12,7 @@ final class ActivityIndicatorLoadingContainerView: UIView {
 
     init() {
         super.init(frame: UIScreen.main.bounds)
-        fromNib(in: .module)
+        fromNib(in: Bundle.platformUIKit)
         messageLabel.font = Font(.branded(.montserratRegular), size: .standard(.medium(.h3))).result
         messageLabel.accessibility = Accessibility(
             id: Accessibility.Identifier.LoadingView.statusLabel,

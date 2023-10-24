@@ -28,12 +28,12 @@ public final class DigitPadView: UIView {
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        fromNib(in: .module)
+        fromNib(in: Bundle.platformUIKit)
     }
 
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        fromNib(in: .module)
+        fromNib(in: Bundle.platformUIKit)
     }
 
     override public func layoutSubviews() {

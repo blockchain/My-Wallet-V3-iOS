@@ -42,7 +42,7 @@ public final class AnnouncementCardView: UIView {
     }
 
     private func setup() {
-        fromNib(in: .module)
+        fromNib(in: Bundle.platformUIKit)
         clipsToBounds = true
         backgroundColor = viewModel.background.color
         backgroundImageView.image = viewModel.background.image
