@@ -15,7 +15,7 @@ struct SuperAppContentViewSmallDevice: View {
     @BlockchainApp var app
     let store: StoreOf<SuperAppContent>
     /// The current selected app mode
-    @Binding var currentModeSelection: AppMode
+    @State var currentModeSelection: AppMode
     /// The content offset for the modal sheet
     @Binding var contentOffset: ModalSheetContext
 

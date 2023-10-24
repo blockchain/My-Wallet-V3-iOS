@@ -6,29 +6,21 @@ import SwiftUI
 
 /// Contains the interactive or static chrome
 public struct SuperAppContainerChrome: View {
-    /// The current selected app mode
-    @State private var currentModeSelection: AppMode
+    @BlockchainApp var app
     /// The content offset for the modal sheet
     @State private var contentOffset: ModalSheetContext = .init(progress: 1.0, offset: .zero)
     /// `True` when a pull to refresh is triggered, otherwise `false`
     @State private var isRefreshing: Bool = false
 
-    private var app: AppProtocol
     private let isSmallDevice: Bool
     private let store: StoreOf<SuperAppContent>
+    @ObservedObject var viewStore: ViewStoreOf<SuperAppContent>
 
-    init(app: AppProtocol, isSmallDevice: Bool) {
-        self.app = app
+    init(store: StoreOf<SuperAppContent>,
+         isSmallDevice: Bool) {
         self.isSmallDevice = isSmallDevice
-        self.store = Store(
-            initialState: .init(),
-            reducer: {
-                SuperAppContent(
-                    app: app
-                )
-            }
-        )
-        self.currentModeSelection = app.currentMode
+        self.store = store
+        self.viewStore = ViewStore(store, observe: { $0 })
     }
 
     @ViewBuilder
@@ -36,21 +28,27 @@ public struct SuperAppContainerChrome: View {
         if isIos15, isSmallDevice {
             SuperAppContentViewSmallDevice(
                 store: store,
-                currentModeSelection: $currentModeSelection,
+                currentModeSelection: viewStore.appMode,
                 contentOffset: $contentOffset,
                 isRefreshing: $isRefreshing
             )
             .isSmallDevice(isSmallDevice)
             .app(app)
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         } else {
             AppLoaderView {
                 SuperAppContentView(
                     store: store,
-                    currentModeSelection: $currentModeSelection,
+                    currentModeSelection: viewStore.appMode,
                     contentOffset: $contentOffset,
                     isRefreshing: $isRefreshing
                 )
                 .app(app)
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
             }
         }
     }

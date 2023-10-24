@@ -19,6 +19,7 @@ import StoreKit
 import SwiftUI
 import ToolKit
 import UIKit
+import ComposableArchitecture
 
 public protocol SuperAppRootControllable: UIViewController {
     func clear()
@@ -53,7 +54,6 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
     @Inject var walletConnectObserver: WalletConnectObserver
 
     var pinRouter: PinRouter?
-
     lazy var bottomSheetPresenter = BottomSheetPresenting()
 
     public init(
@@ -64,7 +64,17 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
         self.global = ViewStore(global, observe: { $0 })
         self.app = app
         self.siteMap = siteMap
-        super.init(rootView: SuperAppContainerChrome(app: app, isSmallDevice: isSmallDevice()))
+        let store = Store(
+            initialState: .init(appMode: app.currentMode),
+            reducer: {
+                SuperAppContent(
+                    app: app
+                )
+            }
+        )
+        let containerChrome = SuperAppContainerChrome(store: store,
+                                                      isSmallDevice: isSmallDevice())
+        super.init(rootView: containerChrome)
 
         subscribeFrequentActions(to: app)
         subscribeExitToPin()

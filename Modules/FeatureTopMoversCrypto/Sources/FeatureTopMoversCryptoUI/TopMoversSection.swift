@@ -65,6 +65,7 @@ public struct TopMoversSection: Reducer {
                 return .publisher {
                     app
                         .modePublisher()
+                        .receive(on: DispatchQueue.main)
                         .map(TopMoversSection.Action.onAppModeFetched)
                 }
 

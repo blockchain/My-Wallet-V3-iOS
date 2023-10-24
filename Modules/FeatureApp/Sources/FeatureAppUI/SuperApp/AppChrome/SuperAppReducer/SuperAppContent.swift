@@ -21,6 +21,7 @@ struct SuperAppContent: Reducer {
         var externalTrading: DashboardContent.State = .init(appMode: .trading)
         var trading: DashboardContent.State = .init(appMode: .trading)
         var defi: DashboardContent.State = .init(appMode: .pkw)
+        var appMode: AppMode
     }
 
     enum Action {
@@ -29,6 +30,7 @@ struct SuperAppContent: Reducer {
         case refresh
         case onTotalBalanceFetched(TaskResult<TotalBalanceInfo>)
         case onTradingModeEnabledFetched(Bool)
+        case onAppModeFetched(AppMode)
         case header(SuperAppHeader.Action)
         case trading(DashboardContent.Action)
         case externalTrading(DashboardContent.Action)
@@ -58,13 +60,16 @@ struct SuperAppContent: Reducer {
             switch action {
             case .onAppear:
                 app.state.set(blockchain.app.is.ready.for.deep_link, to: true)
-                return .run { send in
-                    for await isDeFiOnly in app.stream(blockchain.app.is.DeFi.only, as: Bool.self) {
-                        await send(.onTradingModeEnabledFetched(isDeFiOnly.value?.not ?? true))
-                    }
-                }
-            case .refresh,
-                 .header(.refresh):
+                return .merge(
+                    .run { send in
+                        for await isDeFiOnly in app.stream(blockchain.app.is.DeFi.only, as: Bool.self) {
+                            await send(.onTradingModeEnabledFetched(isDeFiOnly.value?.not ?? true))
+                        }
+                    },
+                    .run { send in
+                        await send(.onAppModeFetched( await app.mode()))
+                    })
+            case .refresh:
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
                 state.headerState.isRefreshing = true
@@ -99,6 +104,10 @@ struct SuperAppContent: Reducer {
 
             case .onTradingModeEnabledFetched(let enabled):
                 state.headerState.tradingEnabled = enabled
+                return .none
+
+            case .onAppModeFetched(let appMode):
+                state.appMode = appMode
                 return .none
             }
         }
