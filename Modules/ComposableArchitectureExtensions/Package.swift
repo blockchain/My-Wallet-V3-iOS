@@ -27,7 +27,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/apple/swift-algorithms.git",
-            branch: "main"
+            exact: "1.1.0"
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-custom-dump",

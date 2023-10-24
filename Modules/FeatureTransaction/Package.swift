@@ -43,7 +43,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/apple/swift-algorithms.git",
-            from: "1.0.0"
+            exact: "1.1.0"
         ),
         .package(
             url: "https://github.com/attaswift/BigInt.git",

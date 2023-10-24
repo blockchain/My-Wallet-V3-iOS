@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/krzyzanowskim/CryptoSwift.git",
-            from: "1.5.1"
+            from: "1.8.0"
         ),
         .package(
             url: "https://github.com/oliveratkinson-bc/wallet-core.git",

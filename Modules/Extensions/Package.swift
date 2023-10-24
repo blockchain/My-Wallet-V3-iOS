@@ -19,7 +19,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/apple/swift-algorithms.git",
-            branch: "main"
+            exact: "1.1.0"
         ),
         .package(
             url: "https://github.com/apple/swift-collections.git",
@@ -27,7 +27,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/apple/swift-async-algorithms.git",
-            revision: "cf70e78632e990cd041fef21044e54fa5fdd1c56"
+            exact: "0.1.0"
         ),
         .package(
             url: "https://github.com/pointfreeco/combine-schedulers",

@@ -35,11 +35,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/krzyzanowskim/CryptoSwift.git",
-            from: "1.5.1"
+            from: "1.8.0"
         ),
         .package(
-            url: "https://github.com/jackpooleybc/MetadataHDWalletKit",
-            revision: "cbd5bc9e2dfd9720a348c09392947fd37a83b304"
+            url: "https://github.com/paulo-bc/MetadataHDWalletKit",
+            exact: "1.0.0"
         ),
         .package(path: "../Network"),
         .package(path: "../Errors"),
