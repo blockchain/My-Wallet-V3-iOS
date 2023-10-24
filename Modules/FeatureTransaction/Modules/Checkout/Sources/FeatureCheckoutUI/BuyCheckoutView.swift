@@ -625,7 +625,7 @@ import PassKit
 private struct _ApplePayButton: UIViewRepresentable {
     func updateUIView(_ uiView: PKPaymentButton, context: Context) {}
     func makeUIView(context: Context) -> PKPaymentButton {
-        PKPaymentButton(paymentButtonType: .plain, paymentButtonStyle: .black)
+        PKPaymentButton(paymentButtonType: .plain, paymentButtonStyle: .automatic)
     }
 }
 
