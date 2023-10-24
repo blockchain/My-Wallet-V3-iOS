@@ -580,6 +580,8 @@ targets:
         FRAMEWORK_SEARCH_PATHS:
           - $(PROJECT_DIR)/Carthage/Build/
         OTHER_LDFLAGS:
+          - -Wl
+          - -ld_classic
           - -ObjC
         SWIFT_OBJC_BRIDGING_HEADER: Blockchain/Blockchain-Bridging-Header.h
         OTHER_SWIFT_FLAGS: $(inherited)
