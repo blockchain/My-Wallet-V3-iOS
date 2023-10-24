@@ -59,7 +59,13 @@ class WalletEncoderTests: XCTestCase {
                 }
                 XCTFail("should provide a payload")
             } receiveValue: { encodedPayload in
-                XCTAssertEqual(encodedPayload.payloadContext.value, expectedEncodedPayload)
+                do {
+                    let walletResponse = try JSONDecoder().decode(WalletResponse.self, from: encodedPayload.payloadContext.value)
+                    let expectedWalletResponse = try JSONDecoder().decode(WalletResponse.self, from: expectedEncodedPayload)
+                    XCTAssertEqual(walletResponse, expectedWalletResponse)
+                } catch {
+                    XCTFail("could not decode wallet response")
+                }
                 XCTAssertEqual(encodedPayload.wrapper, wrapper)
                 expectation.fulfill()
             }
@@ -108,7 +114,13 @@ class WalletEncoderTests: XCTestCase {
                 }
                 XCTFail("should provide a payload")
             } receiveValue: { walletCreationPayload in
-                XCTAssertEqual(walletCreationPayload.innerPayload, encoded)
+                do {
+                    let decodedWrapper = try JSONDecoder().decode(InnerWrapper.self, from: walletCreationPayload.innerPayload)
+                    let expectedWrapper = try JSONDecoder().decode(InnerWrapper.self, from: encoded)
+                    XCTAssertEqual(decodedWrapper, expectedWrapper)
+                } catch {
+                    XCTFail("could not decode inner wrapper")
+                }
                 XCTAssertEqual(walletCreationPayload.checksum, "some-checksum")
                 XCTAssertEqual(walletCreationPayload.length, encoded.count)
                 XCTAssertEqual(walletCreationPayload.guid, wrapper.wallet.guid)
