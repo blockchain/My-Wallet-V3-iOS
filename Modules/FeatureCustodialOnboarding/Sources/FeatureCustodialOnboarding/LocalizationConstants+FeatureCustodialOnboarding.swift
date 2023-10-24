@@ -41,6 +41,7 @@ extension LocalizationConstants.CustodialOnboarding {
     static let phoneNumber = NSLocalizedString("Phone Number", comment: "Phone Number")
     static let weNeedToVerify = NSLocalizedString("We need to verify your phone number", comment: "We need to verify your phone number")
     static let next = NSLocalizedString("Next", comment: "Next")
+    static let confirm = NSLocalizedString("Confirm", comment: "Confirm")
     static let phoneNumberPlaceholder = NSLocalizedString("(123) 456-7890", comment: "(123) 456-7890")
 
     static let deviceVerified = NSLocalizedString("Your device is verified!", comment: "Your device is verified!")
@@ -55,7 +56,7 @@ extension LocalizationConstants.CustodialOnboarding {
     static let addYourDateOfBirth = NSLocalizedString("Add your date of birth and we will auto populate the personal information associated with your phone", comment: "Add your date of birth and we will auto populate the personal information associated with your phone")
 
     static let confirmYourDetails = NSLocalizedString("Confirm your details", comment: "Confirm your details")
-    static let checkYourInformation = NSLocalizedString("Check that your information is correct", comment: "Check that your information is correct")
+    static let checkYourInformation = NSLocalizedString("Make sure everything is correct", comment: "Make sure everything is correct")
 
     static let firstName = NSLocalizedString("First name", comment: "First name")
     static let lastName = NSLocalizedString("Last name", comment: "Last name")

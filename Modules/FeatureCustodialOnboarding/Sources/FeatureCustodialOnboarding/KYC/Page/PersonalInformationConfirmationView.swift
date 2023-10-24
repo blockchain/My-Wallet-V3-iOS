@@ -47,7 +47,7 @@ public struct PersonalInformationConfirmationView: View {
                         .foregroundTexture(.semantic.error)
                 }
                 PrimaryButton(
-                    title: L10n.next,
+                    title: L10n.confirm,
                     isLoading: object.isLoading,
                     action: {
                         switch await object.confirm(personalInformation: edit) {
