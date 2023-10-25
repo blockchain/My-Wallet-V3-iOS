@@ -89,7 +89,9 @@ enum VGS {
                 }
             }
 
-            input.setContentHuggingPriority(.defaultHigh, for: .vertical)
+            input.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            input.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+            input.setContentHuggingPriority(.defaultLow, for: .vertical)
             input.setContentHuggingPriority(.defaultLow, for: .horizontal)
         }
 
