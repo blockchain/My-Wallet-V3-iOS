@@ -69,7 +69,8 @@ struct SuperAppContent: Reducer {
                     .run { send in
                         await send(.onAppModeFetched( await app.mode()))
                     })
-            case .refresh:
+            case .refresh,
+                 .header(.refresh):
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
                 state.headerState.isRefreshing = true
