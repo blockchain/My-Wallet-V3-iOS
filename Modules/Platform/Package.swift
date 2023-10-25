@@ -28,7 +28,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/uber/RIBs.git",
-            from: "0.13.2"
+            from: "0.16.0"
         ),
         .package(
             url: "https://github.com/RxSwiftCommunity/RxDataSources.git",
@@ -40,7 +40,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/marmelroy/PhoneNumberKit.git",
-            from: "3.5.6"
+            from: "3.5.9"
         ),
         .package(
             url: "https://github.com/apple/swift-algorithms.git",

@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import FeatureCardPaymentDomain
-import Stripe
+import StripePayments
 import UIComponentsKit
 import UIKit
 
@@ -22,10 +22,6 @@ class StripeUIClient: NSObject, StripeUIClientAPI {
             presenter.redirect()
             return
         }
-
-        var configuration = PaymentSheet.Configuration()
-        configuration.apiClient = STPAPIClient(publishableKey: publishableApiKey)
-        configuration.allowsDelayedPaymentMethods = true
 
         self.presentingVC = presentingVC
 

@@ -38,7 +38,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/WalletConnect/WalletConnectSwiftV2",
-            exact: "1.8.7"
+            exact: "1.9.0"
         ),
         .package(path: "../Analytics"),
         .package(path: "../Blockchain"),

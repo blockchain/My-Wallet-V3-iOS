@@ -27,7 +27,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
-            from: "1.11.1"
+            from: "1.14.2"
         ),
         .package(
             url: "https://github.com/apple/swift-markdown.git",
@@ -35,7 +35,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/airbnb/lottie-ios.git",
-            from: "4.2.0"
+            from: "4.3.3"
         ),
         .package(
             url: "https://github.com/kean/Nuke.git",

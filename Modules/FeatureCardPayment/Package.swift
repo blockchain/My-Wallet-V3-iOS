@@ -35,7 +35,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/stripe/stripe-ios",
-            from: "22.8.0"
+            from: "23.18.0"
         ),
         .package(
             url: "https://github.com/checkout/frames-ios.git",
@@ -83,14 +83,14 @@ let package = Package(
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "UIComponents", package: "UIComponents"),
                 .product(name: "Frames", package: "frames-ios"),
-                .product(name: "Stripe", package: "stripe-ios")
+                .product(name: "StripePayments", package: "stripe-ios")
             ]
         ),
         .target(
             name: "FeatureCardPaymentDependencies",
             dependencies: [
                 .product(name: "Frames", package: "frames-ios"),
-                .product(name: "Stripe", package: "stripe-ios")
+                .product(name: "StripePayments", package: "stripe-ios")
             ],
             swiftSettings: [.unsafeFlags(["-suppress-warnings"])]
         )

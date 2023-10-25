@@ -172,13 +172,13 @@ packages:
     version: 2.1.5
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing.git
-    version: 1.11.1
+    version: 1.14.2
   ComposableArchitecture:
     url: https://github.com/pointfreeco/swift-composable-architecture.git
     version: 1.2.0
   Intercom:
     url: https://github.com/intercom/intercom-ios.git
-    version: 15.2.3
+    version: 16.2.1
   DIKit:
     url: https://github.com/dchatzieleftheriou-bc/DIKit.git
     version: 1.0.1
@@ -196,13 +196,13 @@ packages:
     version: 1.0.25
   LinkKit:
     url: https://github.com/plaid/plaid-link-ios.git
-    from: 4.5.1
+    from: 4.6.5
   VGSCollectSDK:
     url: https://github.com/verygoodsecurity/vgs-collect-ios
-    version: 1.15.0  
+    version: 1.15.1
   RecaptchaEnterprise:
     url: https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk.git
-    version: 18.2.1
+    version: 18.3.0
   Analytics:
     path: Modules/Analytics
   Blockchain:

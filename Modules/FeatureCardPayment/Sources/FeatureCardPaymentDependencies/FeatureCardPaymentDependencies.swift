@@ -1,2 +1,2 @@
 @_exported import Frames
-@_exported import Stripe
+@_exported import StripePayments

@@ -4,7 +4,7 @@ import Combine
 import DIKit
 import FeatureCardPaymentDomain
 import Foundation
-import Stripe
+import StripePayments
 import UIKit
 
 public class StripeClient: CardAcquirerClientAPI {

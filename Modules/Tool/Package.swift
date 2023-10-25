@@ -21,8 +21,8 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.3.1"),
-        .package(url: "https://github.com/groue/GRDBQuery.git", from: "0.6.0"),
+        .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.20.2"),
+        .package(url: "https://github.com/groue/GRDBQuery.git", from: "0.7.0"),
         .package(
             url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
             exact: "1.0.1"

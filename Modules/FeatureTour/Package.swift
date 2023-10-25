@@ -31,7 +31,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-snapshot-testing",
-            from: "1.11.1"
+            from: "1.14.2"
         ),
         .package(url: "https://github.com/dchatzieleftheriou-bc/DIKit.git", exact: "1.0.1"),
         .package(path: "../Blockchain"),
