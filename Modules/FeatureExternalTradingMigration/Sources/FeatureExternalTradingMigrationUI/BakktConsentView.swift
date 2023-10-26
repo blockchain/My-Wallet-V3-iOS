@@ -252,7 +252,8 @@ struct ExpandingTableRow: View {
             leading: {
                 Checkbox(isOn: $item.isApproved)
             },
-            title: { Text(item.title)
+            title: { 
+                Text(item.title)
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
             },
@@ -276,5 +277,6 @@ struct ExpandingTableRow: View {
                 }
             }
         )
+        .background(Color.semantic.background)
     }
 }
