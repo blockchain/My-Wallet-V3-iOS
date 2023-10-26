@@ -257,6 +257,15 @@ extension TransactionAction {
                 )
                 .withUpdatedBackstack(oldState: oldState)
             }
+            
+            // The select source is already done outside the transaction flow via SendEntryView
+            if action == .send {
+                return TransactionState(
+                    action: action,
+                    source: sourceAccount,
+                    step: .selectTarget
+                )
+            }
 
             return TransactionState(
                 action: action,
