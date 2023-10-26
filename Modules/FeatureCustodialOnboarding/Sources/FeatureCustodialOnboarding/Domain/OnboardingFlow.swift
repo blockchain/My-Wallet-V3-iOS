@@ -18,8 +18,7 @@ extension OnboardingFlow {
 
 extension OnboardingFlow.Slug {
     public static let prove: Self = "PROVE"
-    public static let proveDateOfBirthChallenge: Self = "PROVE_DOB_CHALLENGE"
-    public static let provePhoneNumberEntry: Self = "PROVE_PHONE_NUMBER_ENTRY"
+    public static let proveChallenge: Self = "PROVE_CHALLENGE"
     public static let provePhoneNumberVerification: Self = "PROVE_PHONE_NUMBER_VERIFICATION"
     public static let verificationInProgress: Self = "VERIFICATION_IN_PROGRESS"
     public static let loading: Self = "LOADING"
@@ -39,8 +38,7 @@ extension OnboardingFlow: WhichFlowSequenceViewController {
 
     public private(set) static var map: [OnboardingFlow.Slug: (AnyJSON) throws -> FlowSequenceViewController] = [
         .error: makeErrorFlowSequenceViewController,
-        .proveDateOfBirthChallenge: makeDateOfBirthChallengeFlowSequenceViewController,
-        .provePhoneNumberEntry: makePhoneNumberEntryFlowSequenceViewController,
+        .proveChallenge: makeChallengeFlowSequenceViewController(_:),
         .provePhoneNumberVerification: makePhoneNumberVerificationFlowSequenceViewController,
         .verificationInProgress: makeVerificationInProgressFlowSequenceViewController,
         .loading: makeInProgressFlowSequenceViewController,
@@ -94,21 +92,20 @@ func makeVeriffIntroductionFlowSequenceViewController(_ metadata: AnyJSON) throw
     }
 }
 
-func makePhoneNumberEntryFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
-    FlowSequenceHostingViewController { completion in
-        PhoneNumberEntryView(completion: completion)
+func makeChallengeFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
+    let challenge: ChallengeType = try metadata["challenge_type"].decode(ChallengeType.self)
+    return FlowSequenceHostingViewController { completion in
+        ChallengeView(
+            challenge: challenge,
+            toLegacyKYC: {},
+            completion: completion
+        )
     }
 }
 
 func makePhoneNumberVerificationFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
     FlowSequenceHostingViewController { completion in
         PhoneNumberVerificationView(completion: completion)
-    }
-}
-
-func makeDateOfBirthChallengeFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
-    FlowSequenceHostingViewController { completion in
-        DateOfBirthChallengeView(completion: completion)
     }
 }
 

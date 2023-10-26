@@ -27,8 +27,23 @@ public class KYCOnboardingService {
         )
     }
 
-    public func requestInstantLink(mobileNumber: String) async throws {
-        try await proveClient.requestInstantLink(mobileNumber: mobileNumber)
+    public func requestInstantLink(
+        mobileNumber: String,
+        last4Ssn: String?,
+        dateOfBirth: Date?
+    ) async throws {
+        guard let dateOfBirth else {
+            return try await proveClient.requestInstantLink(
+                mobileNumber: mobileNumber,
+                dateOfBirth: nil,
+                last4Ssn: last4Ssn
+            )
+        }
+        return try await proveClient.requestInstantLink(
+            mobileNumber: mobileNumber,
+            dateOfBirth: dobFormatter.string(from: dateOfBirth),
+            last4Ssn: nil
+        )
     }
 
     public func requestInstantLinkResend() async throws {
@@ -45,11 +60,11 @@ public class KYCOnboardingService {
     }
 
     public func challenge(dateOfBirth: Date) async throws -> Challenge {
-        try await challenge(dateOfBirth: dobFormatter.string(from: dateOfBirth))
+        try await challenge(dateOfBirth: dobFormatter.string(from: dateOfBirth), last4Ssn: nil)
     }
 
-    public func challenge(dateOfBirth: String) async throws -> Challenge {
-        let challenge = try await proveClient.challenge(dateOfBirth: dateOfBirth)
+    public func challenge(dateOfBirth: String?, last4Ssn: String?) async throws -> Challenge {
+        let challenge = try await proveClient.challenge(dateOfBirth: dateOfBirth, last4Ssn: last4Ssn)
         try await app.transaction { app in
             try await app.set(blockchain.ux.kyc.prove.challenge.prefill.id, to: challenge.prefill.prefillId)
             try await app.set(blockchain.ux.kyc.prove.challenge.prefill.info, to: challenge.prefill.json())

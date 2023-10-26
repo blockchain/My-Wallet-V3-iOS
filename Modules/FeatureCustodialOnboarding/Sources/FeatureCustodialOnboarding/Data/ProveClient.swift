@@ -19,6 +19,16 @@ public struct Challenge: Codable, Hashable {
     public var prefill: PersonalInformation
 }
 
+public struct ChallengeData: Codable, Hashable {
+    public var last4Ssn: String?
+    public var dob: String?
+}
+
+public enum ChallengeType: String, Codable, Hashable {
+    case ssn = "SSN"
+    case dob = "DOB"
+}
+
 public struct PersonalInformation: Codable, Hashable {
     public var prefillId: String
     public var firstName, lastName: String
@@ -52,12 +62,17 @@ public class ProveClient {
 
     public init() {}
 
-    public func requestInstantLink(mobileNumber: String) async throws {
+    public func requestInstantLink(
+        mobileNumber: String,
+        dateOfBirth: String?,
+        last4Ssn: String?
+    ) async throws {
         try await adapter.perform(
             request: requestBuilder.post(
                 path: "/onboarding/prove/possession/instant-link",
                 body: [
-                    "mobileNumber": OnboardingFlow.Slug.allCases
+                    "mobileNumber": OnboardingFlow.Slug.allCases,
+                    "challengeData": ChallengeData(last4Ssn: last4Ssn, dob: dateOfBirth)
                 ].json()
             )
             .or(throw: "Could not build request in \(#fileID).\(#function)".error())
@@ -84,13 +99,16 @@ public class ProveClient {
         .await()
     }
 
-    public func challenge(dateOfBirth: String) async throws -> Challenge {
+    public func challenge(dateOfBirth: String?, last4Ssn: String?) async throws -> Challenge {
         try await adapter.perform(
             request: requestBuilder.post(
                 path: "/onboarding/prove/ownership/pre-fill",
                 body: [
-                    "dob": dateOfBirth
-                ].json()
+                    "dob": dateOfBirth,
+                    "ssn": last4Ssn
+                ]
+                .compactMapValues { $0 }
+                .json()
             )
             .or(throw: "Could not build request in \(#fileID).\(#function)".error())
         )

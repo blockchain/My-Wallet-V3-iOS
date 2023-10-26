@@ -38,8 +38,12 @@ extension LocalizationConstants.CustodialOnboarding {
     static let successfullyReceivedInformationCountdown = NSLocalizedString("We've successfully received your information and it's being reviewed.\n\nThis could take up to **60 seconds**.\nWe'll notify you via email about the status of your application.", comment: "KYC Pending message")
     static let cta = NSLocalizedString("Go to my Account", comment: "KYC Pending: CTA")
 
+    static let findYourInfo = NSLocalizedString("Let's begin by finding your info", comment: "Let's begin by finding your info")
+    static let findYourInfoSubtitle = NSLocalizedString("By providing your last four digits of your SSN, we can pre-fill your contact information to expedite account creation.", comment: "Find your info subtitle")
+    static let findYourInfoFooter = NSLocalizedString("By providing the last four digits of your SSN, we will attempt to find your information to expedite your request.\n\nBy continuing you accept our [Terms and Conditions](https://blockchain.com/legal/terms).", comment: "Find your info footer")
+    static let noUsNumber = NSLocalizedString("I don't have a US number", comment: "I don't have a US number")
+
     static let phoneNumber = NSLocalizedString("Phone Number", comment: "Phone Number")
-    static let weNeedToVerify = NSLocalizedString("We need to verify your phone number", comment: "We need to verify your phone number")
     static let next = NSLocalizedString("Next", comment: "Next")
     static let confirm = NSLocalizedString("Confirm", comment: "Confirm")
     static let phoneNumberPlaceholder = NSLocalizedString("(123) 456-7890", comment: "(123) 456-7890")
@@ -51,9 +55,7 @@ extension LocalizationConstants.CustodialOnboarding {
     static let sentALink = NSLocalizedString("We've sent a link via SMS to +1 (123) 456 7890. Follow it to continue with verification.", comment: "We've sent a link via SMS to +1 (123) 456 7890. Follow it to continue with verification.")
     static let resendSMS = NSLocalizedString("Resend SMS", comment: "Resend SMS")
 
-    static let verifyIn60 = NSLocalizedString("Verify in less than 60 seconds ", comment: "Verify in less than 60 seconds")
     static let dateOfBirth = NSLocalizedString("Date of birth", comment: "Date of birth")
-    static let addYourDateOfBirth = NSLocalizedString("Add your date of birth and we will auto populate the personal information associated with your phone", comment: "Add your date of birth and we will auto populate the personal information associated with your phone")
 
     static let confirmYourDetails = NSLocalizedString("Confirm your details", comment: "Confirm your details")
     static let checkYourInformation = NSLocalizedString("Make sure everything is correct", comment: "Make sure everything is correct")
@@ -63,6 +65,10 @@ extension LocalizationConstants.CustodialOnboarding {
     static let address = NSLocalizedString("Address", comment: "Address")
     static let changeAddress = NSLocalizedString("Change address manually ->", comment: "Change address manually ->")
     static let socialSecurityNumber = NSLocalizedString("Social Security Number (SSN)", comment: "Social Security Number (SSN)")
+
+    static let ssnLast4 = NSLocalizedString("Last 4 SSN", comment: "Last 4 SSN")
+    static let ssnLast4Placeholder = NSLocalizedString("Enter last 4 of SSN", comment: "Placeholder: Enter last 4 of SSN")
+    static let ssnLast4Caption = NSLocalizedString("Social Security Number", comment: "Social Security Number")
 
     static let verifyMyID = NSLocalizedString("Verify my ID", comment: "Verify my ID")
     static let getYouVerified = NSLocalizedString("Let’s get you verified to trade", comment: "Let’s get you verified to trade")
