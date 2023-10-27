@@ -50,8 +50,6 @@ public struct SiteMap {
             BuyOtherCryptoView()
         case blockchain.ux.upsell.after.successful.swap:
             UpsellPassiveRewardsView()
-        case blockchain.ux.nft.collection:
-            AssetListViewController()
         case blockchain.ux.nft, isDescendant(of: blockchain.ux.nft):
             try NFTSiteMap().view(for: ref, in: context)
         case blockchain.ux.web:

@@ -6,7 +6,8 @@ public struct Assets: Equatable {
     public let nfts: [Asset_v2]
 
     init(_ model: NftCollection) {
-        self.nfts = model.assets.flatMap(\.result).map(Asset_v2.init)
+        self.nfts = model.assets.flatMap(\.result)
+            .map(Asset_v2.init)
     }
 }
 
@@ -24,7 +25,6 @@ public struct Asset_v2: Equatable, Identifiable {
     public let metadata: AssetMetadata?
     public let possibleSpam: Bool
     public let collectionVerified: Bool
-    public let lastSyncDate: String?
 }
 
 public struct Media_v2: Equatable {
@@ -82,7 +82,6 @@ extension Asset_v2 {
         }
         self.possibleSpam = model.possibleSpam
         self.collectionVerified = model.collectionVerified
-        self.lastSyncDate = model.lastSyncDate
     }
 }
 

@@ -1,14 +1,10 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainComponentLibrary
-import ComposableArchitecture
 import FeatureNFTDomain
-import Localization
 import SwiftUI
 
 struct NftAssetDetailView: View {
-    private typealias LocalizationId = LocalizationConstants.NFT.Screen.Detail
-
     @State private var webViewPresented = false
     @Environment(\.presentationMode) private var presentationMode
     private let url: URL
@@ -75,7 +71,7 @@ struct NftAssetDetailView: View {
 
     @ViewBuilder var networkContent: some View {
         VStack(alignment: .leading, spacing: Spacing.padding1) {
-            Text(LocalizationId.network)
+            Text(L10n.Screen.Detail.network)
                 .typography(.body2)
                 .foregroundColor(.semantic.text)
             HStack(spacing: Spacing.padding1) {
@@ -117,16 +113,14 @@ struct NftAssetDetailView: View {
                     .blur(radius: 30)
                     .opacity(0.9)
                     AssetViewRepresentable(
-                        imageURL: URL(
-                            string: url
-                        ),
+                        imageURL: URL(string: url),
                         size: proxy.size.width - Spacing.padding4
                     )
                 }
                 .frame(minHeight: proxy.size.width - Spacing.padding4)
                 .padding([.top, .leading], Spacing.padding2)
                 MinimalButton(
-                    title: LocalizationId.viewOnOpenSea,
+                    title: L10n.Screen.Detail.viewOnOpenSea,
                     leadingView: {
                         Icon
                             .newWindow
@@ -156,7 +150,7 @@ struct NftAssetDetailView: View {
 
         var body: some View {
             VStack(alignment: .leading, spacing: Spacing.padding1) {
-                Text(LocalizationId.properties)
+                Text(L10n.Screen.Detail.properties)
                     .typography(.body2)
                     .foregroundColor(metadata.isEmpty ? .clear : .semantic.text)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -208,7 +202,7 @@ struct NftAssetDetailView: View {
                         }
                     },
                     title: TableRowTitle(asset.creatorDisplayValue ?? ""),
-                    byline: TableRowByline(LocalizationId.creator)
+                    byline: TableRowByline(L10n.Screen.Detail.creator)
                 )
                 .background(
                     RoundedRectangle(cornerRadius: Spacing.padding2)
@@ -217,7 +211,7 @@ struct NftAssetDetailView: View {
 
                 if let description = asset.value.metadata?.description, !description.isEmpty {
                     ExpandableRichTextBlock(
-                        title: LocalizationId.descripton,
+                        title: L10n.Screen.Detail.descripton,
                         text: description
                     )
                 }
@@ -253,7 +247,7 @@ struct NftAssetDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(.semantic.title)
                     if !isExpanded, text.count > 160 {
-                        SmallMinimalButton(title: LocalizationId.readMore) {
+                        SmallMinimalButton(title: L10n.Screen.Detail.readMore) {
                             withAnimation {
                                 isExpanded.toggle()
                             }

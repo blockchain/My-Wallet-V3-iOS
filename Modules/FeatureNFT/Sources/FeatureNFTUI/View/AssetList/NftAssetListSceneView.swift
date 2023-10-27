@@ -5,15 +5,11 @@ import BlockchainNamespace
 import Combine
 import Dependencies
 import DIKit
-import Errors
 import FeatureNFTDomain
-import Localization
 import MoneyKit
 import SwiftUI
 
 public struct NftAssetListSceneView: View {
-
-    private typealias L10n = LocalizationConstants.NFT.Screen.List
 
     @BlockchainApp var app
 
@@ -241,7 +237,7 @@ public struct NftAssetListSceneView: View {
                     }
                 )
                 .aspectRatio(contentMode: .fill)
-                AsyncMedia(url: network.nativeAsset.logoURL)
+                AsyncMedia(url: network.logoURL)
                     .padding([.trailing, .bottom], Spacing.padding1)
                     .frame(width: 32, height: 32)
             }
@@ -257,8 +253,6 @@ public struct NftAssetListSceneView: View {
 
     struct NoNFTsView: View {
 
-        private typealias L10n = LocalizationConstants.NFT.Screen.Empty
-
         @BlockchainApp private var app
         @State private var isPressed: Bool = false
         @State private var isVerified: Bool = false
@@ -270,17 +264,17 @@ public struct NftAssetListSceneView: View {
                 Spacer()
                 VStack(spacing: 8) {
                     Image("hero", bundle: .featureNFTUI)
-                    Text(L10n.headline)
+                    Text(L10n.Screen.Empty.headline)
                         .typography(.title3)
                         .multilineTextAlignment(.center)
-                    Text(L10n.subheadline)
+                    Text(L10n.Screen.Empty.subheadline)
                         .typography(.body1)
                         .foregroundColor(.semantic.text)
                         .multilineTextAlignment(.center)
                 }
                 HStack {
                     SecondaryButton(
-                        title: L10n.buy,
+                        title: L10n.Screen.Empty.buy,
                         leadingView: {
                             Icon
                                 .newWindow
@@ -293,7 +287,7 @@ public struct NftAssetListSceneView: View {
                         }
                     )
                     PrimaryButton(
-                        title: L10n.receive,
+                        title: L10n.Screen.Empty.receive,
                         leadingView: {
                             Icon
                                 .walletReceive
@@ -369,10 +363,12 @@ extension NftAssetListSceneView {
                 .combineLatest($assets)
                 .map { network, assets in
                     guard let assets else { return [] }
-                    guard case .specific(let evmNetwork) = network else {
+                    switch network {
+                    case .specific(let value):
+                        return assets.filter { $0.network == value }
+                    case .all:
                         return assets
                     }
-                    return assets.filter { $0.network == evmNetwork }
                 }
                 .receive(on: DispatchQueue.main)
                 .assign(to: &$filteredAssets)

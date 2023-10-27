@@ -1,26 +1,18 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
-import Localization
+import Foundation
 
-// swiftlint:disable all
-
-// MARK: Groups
-
-extension LocalizationConstants {
-    enum NFT {
-        enum Screen {
-            enum List {}
-            enum Empty {}
-            enum Detail {}
-        }
-
-        enum NetworkPicker {}
+enum L10n {
+    enum Screen {
+        enum List {}
+        enum Empty {}
+        enum Detail {}
     }
+
+    enum NetworkPicker {}
 }
 
-// MARK: - AssetListView
-
-extension LocalizationConstants.NFT.Screen.List {
+extension L10n.Screen.List {
     static let fetchingYourNFTs = NSLocalizedString(
         "Fetching Your NFTs",
         comment: ""
@@ -35,7 +27,7 @@ extension LocalizationConstants.NFT.Screen.List {
     )
 }
 
-extension LocalizationConstants.NFT.NetworkPicker {
+extension L10n.NetworkPicker {
     static let title = NSLocalizedString(
         "Network",
         comment: ""
@@ -52,7 +44,7 @@ extension LocalizationConstants.NFT.NetworkPicker {
     )
 }
 
-extension LocalizationConstants.NFT.Screen.Empty {
+extension L10n.Screen.Empty {
     static let headline = NSLocalizedString(
         "Add NFTs to your DeFi Wallet",
         comment: ""
@@ -79,9 +71,7 @@ extension LocalizationConstants.NFT.Screen.Empty {
     )
 }
 
-// MARK: - AssetDetailView
-
-extension LocalizationConstants.NFT.Screen.Detail {
+extension L10n.Screen.Detail {
 
     static let viewOnOpenSea = NSLocalizedString(
         "View on OpenSea",

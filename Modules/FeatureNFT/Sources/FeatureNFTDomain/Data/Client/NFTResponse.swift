@@ -19,7 +19,6 @@ struct NftAsset: Decodable {
     let metadata: NftMetadata?
     let possibleSpam: Bool
     let collectionVerified: Bool
-    let lastSyncDate: String?
 
     enum CodingKeys: String, CodingKey {
         case tokenAddress = "token_address"
@@ -30,7 +29,6 @@ struct NftAsset: Decodable {
         case metadata = "normalized_metadata"
         case possibleSpam = "possible_spam"
         case collectionVerified = "verified_collection"
-        case lastSyncDate = "last_token_uri_sync"
     }
 
     init(from decoder: Decoder) throws {
@@ -44,7 +42,6 @@ struct NftAsset: Decodable {
         self.metadata = try container.decodeIfPresent(NftMetadata.self, forKey: NftAsset.CodingKeys.metadata)
         self.possibleSpam = try container.decode(Bool.self, forKey: NftAsset.CodingKeys.possibleSpam)
         self.collectionVerified = try container.decode(Bool.self, forKey: NftAsset.CodingKeys.collectionVerified)
-        self.lastSyncDate = try container.decodeIfPresent(String.self, forKey: NftAsset.CodingKeys.lastSyncDate)
     }
 }
 

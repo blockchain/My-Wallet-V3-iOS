@@ -2,22 +2,12 @@
 
 import Combine
 import Errors
+import Foundation
 import MoneyKit
-import ToolKit
 
 public enum AssetProviderServiceError: Error, Equatable {
     case failedToFetchEthereumWallet
-    case network(NabuNetworkError)
-}
-
-public struct NFTAssetPage: Equatable {
-    public let assets: [Asset]
-    public let cursor: String?
-
-    init(_ response: AssetPageResponse) {
-        self.assets = response.assets
-        self.cursor = response.next
-    }
+    case network(NetworkError)
 }
 
 public struct NFTAssets: Equatable {
@@ -56,8 +46,6 @@ public struct NFTAssets: Equatable {
 public protocol AssetProviderServiceAPI {
     var address: AnyPublisher<String, AssetProviderServiceError> { get }
     func fetchAssets() -> AnyPublisher<NFTAssets, AssetProviderServiceError>
-    func fetchAssetsFromEthereumAddress() -> AnyPublisher<NFTAssetPage, AssetProviderServiceError>
-    func fetchAssetsFromEthereumAddressWithCursor(_ cursor: String) -> AnyPublisher<NFTAssetPage, AssetProviderServiceError>
 }
 
 public final class AssetProviderService: AssetProviderServiceAPI {
@@ -111,38 +99,6 @@ public final class AssetProviderService: AssetProviderServiceAPI {
                         let assets = value.flatMap { $0 }
                         return NFTAssets(assets: assets)
                     }
-            }
-            .eraseToAnyPublisher()
-    }
-
-    public func fetchAssetsFromEthereumAddress()
-        -> AnyPublisher<NFTAssetPage, AssetProviderServiceError>
-    {
-        ethereumWalletAddressPublisher
-            .replaceError(
-                with: AssetProviderServiceError.failedToFetchEthereumWallet
-            )
-            .flatMap { [repository] address in
-                repository
-                    .fetchAssetsFromEthereumAddress(address)
-                    .map(NFTAssetPage.init)
-                    .mapError(AssetProviderServiceError.network)
-            }
-            .eraseToAnyPublisher()
-    }
-
-    public func fetchAssetsFromEthereumAddressWithCursor(
-        _ cursor: String
-    ) -> AnyPublisher<NFTAssetPage, AssetProviderServiceError> {
-        ethereumWalletAddressPublisher
-            .replaceError(
-                with: AssetProviderServiceError.failedToFetchEthereumWallet
-            )
-            .flatMap { [repository] address in
-                repository
-                    .fetchAssetsFromEthereumAddress(address, pageKey: cursor)
-                    .map(NFTAssetPage.init)
-                    .mapError(AssetProviderServiceError.network)
             }
             .eraseToAnyPublisher()
     }

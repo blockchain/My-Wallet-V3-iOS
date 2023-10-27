@@ -4,11 +4,8 @@ import BlockchainComponentLibrary
 import BlockchainNamespace
 import Combine
 import Extensions
-import Localization
 import MoneyKit
 import SwiftUI
-
-private typealias L10n = LocalizationConstants.NFT.NetworkPicker
 
 public enum Network: Codable, Equatable, Hashable, Identifiable {
     case all
@@ -26,7 +23,7 @@ public enum Network: Codable, Equatable, Hashable, Identifiable {
     public var title: String {
         switch self {
         case .all:
-            return L10n.allNetworks
+            return L10n.NetworkPicker.allNetworks
         case .specific(let network):
             return network.networkConfig.shortName
         }
@@ -74,7 +71,7 @@ struct NetworkPickerButton: View {
                         .circle(backgroundColor: .semantic.light)
                 }
 
-                Text(L10n.title)
+                Text(L10n.NetworkPicker.title)
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)
 
@@ -169,7 +166,7 @@ struct NetworkPickerView: View {
     @ViewBuilder
     var header: some View {
         HStack(spacing: Spacing.padding2) {
-            Text(L10n.selectNetwork)
+            Text(L10n.NetworkPicker.selectNetwork)
                 .typography(.body2)
                 .foregroundColor(.semantic.title)
             Spacer()

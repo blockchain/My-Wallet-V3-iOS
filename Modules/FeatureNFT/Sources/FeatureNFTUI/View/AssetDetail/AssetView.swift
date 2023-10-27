@@ -2,7 +2,6 @@ import Foundation
 import Nuke
 import NukeUI
 import SwiftUI
-import UIComponentsKit
 import UIKit
 
 final class AssetView: UIView {
@@ -95,6 +94,22 @@ final class AssetView: UIView {
         let group = UIMotionEffectGroup()
         group.motionEffects = [horizontal, vertical]
         view.addMotionEffect(group)
+    }
+}
+
+extension UIView {
+    
+    @discardableResult
+    fileprivate func constraint(edgesTo other: UIView) -> [NSLayoutConstraint] {
+        let constraints = [
+            topAnchor.constraint(equalTo: other.topAnchor),
+            leftAnchor.constraint(equalTo: other.leftAnchor),
+            rightAnchor.constraint(equalTo: other.rightAnchor),
+            bottomAnchor.constraint(equalTo: other.bottomAnchor)
+        ]
+        translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate(constraints)
+        return constraints
     }
 }
 
