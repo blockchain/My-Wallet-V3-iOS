@@ -58,6 +58,18 @@ public struct DashboardExternalMigrateView: View {
                 )
             }
         }
+        .batch {
+            // for analytics purposes
+            if let type, type != .notAvailable {
+                set(
+                    blockchain.ux.dashboard.external.trading.migration.notification.type,
+                    to: type
+                )
+            }
+        }
+        .onAppear {
+            app.post(event: blockchain.ux.dashboard.external.trading.migration.notification.shown)
+        }
     }
 
     var progressView: some View {
@@ -153,7 +165,7 @@ public struct DashboardExternalMigrateView: View {
 }
 
 extension DashboardExternalMigrateView {
-    public enum MigrationType {
+    public enum MigrationType: String {
         case notAvailable
         case upgrade
         case reviewTerms

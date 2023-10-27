@@ -38,6 +38,9 @@ struct BakktMigrationInProgressView: View {
                 onDone()
             }
         }
+        .onAppear {
+            app.post(event: blockchain.ux.dashboard.external.trading.migration.in.progress)
+        }
         .padding(.top, Spacing.padding2)
         .padding(.horizontal, Spacing.padding3)
         .background(Color.semantic.light.ignoresSafeArea())

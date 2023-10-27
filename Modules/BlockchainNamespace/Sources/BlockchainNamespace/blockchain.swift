@@ -8964,9 +8964,45 @@ public final class L_blockchain_ux_dashboard_external_trading_migration: L, I_bl
 }
 public protocol I_blockchain_ux_dashboard_external_trading_migration: I_blockchain_ux_type_story {}
 public extension I_blockchain_ux_dashboard_external_trading_migration {
+	var `error`: L_blockchain_ux_dashboard_external_trading_migration_error { .init("\(__).error") }
+	var `in`: L_blockchain_ux_dashboard_external_trading_migration_in { .init("\(__).in") }
+	var `notification`: L_blockchain_ux_dashboard_external_trading_migration_notification { .init("\(__).notification") }
 	var `start`: L_blockchain_ux_dashboard_external_trading_migration_start { .init("\(__).start") }
 	var `success`: L_blockchain_ux_dashboard_external_trading_migration_success { .init("\(__).success") }
+	var `tos`: L_blockchain_ux_dashboard_external_trading_migration_tos { .init("\(__).tos") }
+	var `upgrade`: L_blockchain_ux_dashboard_external_trading_migration_upgrade { .init("\(__).upgrade") }
 }
+public final class L_blockchain_ux_dashboard_external_trading_migration_error: L, I_blockchain_ux_dashboard_external_trading_migration_error {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.error", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_error: I_blockchain_ux_type_analytics, I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_dashboard_external_trading_migration_in: L, I_blockchain_ux_dashboard_external_trading_migration_in {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.in", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_in: I {}
+public extension I_blockchain_ux_dashboard_external_trading_migration_in {
+	var `progress`: L_blockchain_ux_dashboard_external_trading_migration_in_progress { .init("\(__).progress") }
+}
+public final class L_blockchain_ux_dashboard_external_trading_migration_in_progress: L, I_blockchain_ux_dashboard_external_trading_migration_in_progress {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.in.progress", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_in_progress: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_dashboard_external_trading_migration_notification: L, I_blockchain_ux_dashboard_external_trading_migration_notification {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.notification", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_notification: I {}
+public extension I_blockchain_ux_dashboard_external_trading_migration_notification {
+	var `shown`: L_blockchain_ux_dashboard_external_trading_migration_notification_shown { .init("\(__).shown") }
+	var `type`: L_blockchain_ux_dashboard_external_trading_migration_notification_type { .init("\(__).type") }
+}
+public final class L_blockchain_ux_dashboard_external_trading_migration_notification_shown: L, I_blockchain_ux_dashboard_external_trading_migration_notification_shown {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.notification.shown", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_notification_shown: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_dashboard_external_trading_migration_notification_type: L, I_blockchain_ux_dashboard_external_trading_migration_notification_type {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.notification.type", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_notification_type: I_blockchain_db_type_string {}
 public final class L_blockchain_ux_dashboard_external_trading_migration_start: L, I_blockchain_ux_dashboard_external_trading_migration_start {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.start", comment: "") }
 }
@@ -8989,6 +9025,28 @@ public final class L_blockchain_ux_dashboard_external_trading_migration_success_
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.success.message.dismissed", comment: "") }
 }
 public protocol I_blockchain_ux_dashboard_external_trading_migration_success_message_dismissed: I_blockchain_db_type_boolean, I_blockchain_session_state_stored_value {}
+public final class L_blockchain_ux_dashboard_external_trading_migration_tos: L, I_blockchain_ux_dashboard_external_trading_migration_tos {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.tos", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_tos: I {}
+public extension I_blockchain_ux_dashboard_external_trading_migration_tos {
+	var `confirm`: L_blockchain_ux_dashboard_external_trading_migration_tos_confirm { .init("\(__).confirm") }
+}
+public final class L_blockchain_ux_dashboard_external_trading_migration_tos_confirm: L, I_blockchain_ux_dashboard_external_trading_migration_tos_confirm {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.tos.confirm", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_tos_confirm: I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_dashboard_external_trading_migration_upgrade: L, I_blockchain_ux_dashboard_external_trading_migration_upgrade {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.upgrade", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_upgrade: I {}
+public extension I_blockchain_ux_dashboard_external_trading_migration_upgrade {
+	var `confirm`: L_blockchain_ux_dashboard_external_trading_migration_upgrade_confirm { .init("\(__).confirm") }
+}
+public final class L_blockchain_ux_dashboard_external_trading_migration_upgrade_confirm: L, I_blockchain_ux_dashboard_external_trading_migration_upgrade_confirm {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.external.trading.migration.upgrade.confirm", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_external_trading_migration_upgrade_confirm: I_blockchain_ux_type_action {}
 public final class L_blockchain_ux_dashboard_fiat: L, I_blockchain_ux_dashboard_fiat {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.fiat", comment: "") }
 }

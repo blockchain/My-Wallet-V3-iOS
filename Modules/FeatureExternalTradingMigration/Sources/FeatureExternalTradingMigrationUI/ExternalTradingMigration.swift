@@ -101,6 +101,11 @@ public struct ExternalTradingMigration: Reducer {
                 return .none
 
             case .onUpgrade:
+                if state.flow == .existingUsersNoAssets {
+                    app.post(event: blockchain.ux.dashboard.external.trading.migration.tos.confirm)
+                } else {
+                    app.post(event: blockchain.ux.dashboard.external.trading.migration.upgrade.confirm)
+                }
                 state.isSubmittingMigration = true
                 return .run { [externalTradingMigrationService] send in
                     do {
@@ -119,6 +124,7 @@ public struct ExternalTradingMigration: Reducer {
             case .onUpgradeFailure(let error):
                 state.migrationInProgressPresented = false
                 state.upgradeError = error
+                app.post(event: blockchain.ux.dashboard.external.trading.migration.error)
                 return .none
 
             case .migrationInProgressModalDismissed(let dismissed):

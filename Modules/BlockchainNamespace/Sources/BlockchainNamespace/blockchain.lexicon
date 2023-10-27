@@ -2368,6 +2368,17 @@ blockchain:
 				trading:
 					migration:
 					+ blockchain.ux.type.story
+						error:
+						+ blockchain.ux.type.action
+						+ blockchain.ux.type.analytics
+						in:
+							progress:
+							+ blockchain.ux.type.action
+						notification:
+							shown:
+							+ blockchain.ux.type.action
+							type:
+							+ blockchain.db.type.string
 						start:
 						+ blockchain.ux.type.task
 						success:
@@ -2375,6 +2386,12 @@ blockchain:
 								dismissed:
 								+ blockchain.db.type.boolean
 								+ blockchain.session.state.stored.value
+						tos:
+							confirm:
+							+ blockchain.ux.type.action
+						upgrade:
+							confirm:
+							+ blockchain.ux.type.action
 			fiat:
 				account:
 					action:
