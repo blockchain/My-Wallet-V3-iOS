@@ -37,11 +37,13 @@ public final class BuyOtherCryptoObserver: Client.Observer {
                 }
                 group.addTask {
                     for await _ in app.on(blockchain.ux.transaction["buy"].event.did.finish) {
+                        try await Task.sleep(nanoseconds: NSEC_PER_SEC * 3)
                         app.post(event: blockchain.ux.buy.another.asset.entry)
                     }
 
                     for await _ in app.on(blockchain.ux.transaction["sell"].event.did.finish) {
                         if app.currentMode == .trading {
+                            try await Task.sleep(nanoseconds: NSEC_PER_SEC * 3)
                             app.post(event: blockchain.ux.buy.another.asset.entry)
                         }
                     }
