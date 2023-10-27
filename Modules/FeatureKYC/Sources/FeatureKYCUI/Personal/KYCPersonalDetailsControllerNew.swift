@@ -67,7 +67,19 @@ final class KYCPersonalDetailsControllerNew: KYCBaseViewController {
             )
         )
         .background(Color.semantic.light.ignoresSafeArea())
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            image: Icon.chevronLeft.uiImage,
+            style: .plain,
+            target: self,
+            action: #selector(onDone)
+        )
+
         embed(view)
+    }
+
+    @objc func onDone() {
+        dismiss()
     }
 
     private func loadForm() -> AnyPublisher<[FormQuestion], KYCFlowError> {
