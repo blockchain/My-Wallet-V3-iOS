@@ -278,6 +278,10 @@ public struct SwapEnterAmount: Reducer {
                 )
 
             case .onInputChanged(let text):
+                guard state.sourceInformation != nil, state.targetInformation != nil else {
+                    return .none
+                }
+
                 if text.isNotEmpty {
                     state.input.append(Character(text))
                 }
