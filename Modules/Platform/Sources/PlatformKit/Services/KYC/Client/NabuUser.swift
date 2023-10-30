@@ -42,7 +42,6 @@ public struct NabuUser: Decodable, Equatable {
     public let address: UserAddress?
     public let email: Email
     public let mobile: Mobile?
-    public let status: KYC.AccountStatus
     public let state: UserState
     public let tiers: KYC.UserState?
     public let currencies: Currencies
@@ -70,7 +69,6 @@ public struct NabuUser: Decodable, Equatable {
     private enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case address
-        case status = "kycState"
         case state
         case tags
         case tiers
@@ -112,7 +110,6 @@ public struct NabuUser: Decodable, Equatable {
         self.address = address
         self.email = email
         self.mobile = mobile
-        self.status = status
         self.state = state
         self.currencies = currencies
         self.tags = tags
@@ -139,7 +136,6 @@ public struct NabuUser: Decodable, Equatable {
         self.email = try Email(from: decoder)
         self.currencies = try values.decode(Currencies.self, forKey: .currencies)
         self.mobile = try? Mobile(from: decoder)
-        self.status = (try? values.decode(KYC.AccountStatus.self, forKey: .status)) ?? .none
         self.state = (try? values.decode(UserState.self, forKey: .state)) ?? .none
         self.tags = try values.decodeIfPresent(Tags.self, forKey: .tags)
         self.needsDocumentResubmission = try values.decodeIfPresent(DocumentResubmission.self, forKey: .needsDocumentResubmission)
