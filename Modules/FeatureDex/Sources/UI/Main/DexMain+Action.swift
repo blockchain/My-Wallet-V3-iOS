@@ -33,7 +33,6 @@ extension DexMain {
         case onAvailableNetworksFetched(Result<[EVMNetwork], UX.Error>)
 
         case onNetworkSelected(EVMNetwork)
-        case onNetworkPrice(FiatValue?)
 
         case refreshQuote
         case onQuote(Result<DexQuoteOutput, UX.Error>)

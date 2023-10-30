@@ -13,6 +13,7 @@ final class DexAllowanceRepository: DexAllowanceRepositoryAPI {
     private struct Key: Hashable {
         let address: String
         let currency: CryptoCurrency
+        let allowanceSpender: String
     }
 
     private let currenciesService: EnabledCurrenciesServiceAPI
@@ -37,13 +38,13 @@ final class DexAllowanceRepository: DexAllowanceRepositoryAPI {
         )
     }
 
-    func fetch(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error> {
-        cache.get(key: Key(address: address, currency: currency))
+    func fetch(address: String, currency: CryptoCurrency, allowanceSpender: String) -> AnyPublisher<DexAllowanceOutput, Error> {
+        cache.get(key: Key(address: address, currency: currency, allowanceSpender: allowanceSpender))
     }
 
-    func poll(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error> {
+    func poll(address: String, currency: CryptoCurrency, allowanceSpender: String) -> AnyPublisher<DexAllowanceOutput, Error> {
         Deferred { [client, currenciesService] in
-            Self.makeRequest(client, currenciesService, Key(address: address, currency: currency))
+            Self.makeRequest(client, currenciesService, Key(address: address, currency: currency, allowanceSpender: allowanceSpender))
         }
         .poll(
             until: \.isOK,
@@ -55,6 +56,7 @@ final class DexAllowanceRepository: DexAllowanceRepositoryAPI {
         let network = service.network(for: key.currency)
         return DexAllowanceRequest(
             addressOwner: key.address,
+            spender: key.allowanceSpender,
             currency: key.currency.assetModel.kind.erc20ContractAddress ?? Constants.nativeAssetAddress,
             network: network?.networkConfig.networkTicker ?? ""
         )
@@ -116,12 +118,17 @@ final class DexAllowanceRepositoryPreview: DexAllowanceRepositoryAPI {
 
     func fetch(
         address: String,
-        currency: CryptoCurrency
+        currency: CryptoCurrency,
+        allowanceSpender: String
     ) -> AnyPublisher<DexAllowanceOutput, Error> {
         .just(DexAllowanceOutput(currency: currency, address: address, allowance: allowance))
     }
 
-    func poll(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error> {
+    func poll(
+        address: String,
+        currency: CryptoCurrency,
+        allowanceSpender: String
+    ) -> AnyPublisher<DexAllowanceOutput, Error> {
         .just(DexAllowanceOutput(currency: currency, address: address, allowance: allowance))
     }
 }

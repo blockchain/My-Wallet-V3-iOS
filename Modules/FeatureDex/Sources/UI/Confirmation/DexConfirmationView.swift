@@ -36,24 +36,6 @@ struct DexConfirmationView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.semantic.light.ignoresSafeArea())
-            .bindings {
-                subscribe(
-                    viewStore.$networkFiatExchangeRate,
-                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.networkFee.currency.code].fiat.quote.value
-                )
-            }
-            .bindings {
-                subscribe(
-                    viewStore.$fromFiatExchangeRate,
-                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.from.currency.code].fiat.quote.value
-                )
-            }
-            .bindings {
-                subscribe(
-                    viewStore.$toFiatExchangeRate,
-                    to: blockchain.api.nabu.gateway.price.crypto[viewStore.quote.to.currency.code].fiat.quote.value
-                )
-            }
             PrimaryNavigationLink(
                 destination: pendingTransactionView,
                 isActive: viewStore.$didConfirm,
@@ -87,14 +69,12 @@ struct DexConfirmationView: View {
     private var swap: some View {
         ZStack {
             VStack {
-                target(
-                    viewStore.quote.from,
-                    exchangeRate: viewStore.fromFiatExchangeRate,
+                DexConfirmationTargetView(
+                    value: viewStore.quote.from,
                     balance: viewStore.sourceBalance
                 )
-                target(
-                    viewStore.quote.to,
-                    exchangeRate: viewStore.toFiatExchangeRate,
+                DexConfirmationTargetView(
+                    value: viewStore.quote.to,
                     balance: viewStore.destinationBalance
                 )
             }
@@ -107,115 +87,14 @@ struct DexConfirmationView: View {
     }
 
     @ViewBuilder
-    private func target(
-        _ cryptoValue: CryptoValue,
-        exchangeRate: MoneyValue?,
-        balance: DexBalance?
-    ) -> some View {
-        VStack(alignment: .center, spacing: 8) {
-            HStack(alignment: .center, spacing: 8) {
-                if let value = cryptoValue.currency.network() {
-                    pillButton(imageURL: value.logoURL, label: value.networkConfig.shortName)
-                        .frame(maxWidth: .infinity)
-                }
-                pillButton(imageURL: cryptoValue.currency.logoURL, label: cryptoValue.currency.displayCode)
-                    .frame(maxWidth: .infinity)
-            }
-            HStack(alignment: .center, spacing: 8) {
-                Text(cryptoValue.toDisplayString(includeSymbol: false))
-                    .typography(.title2.slashedZero())
-                    .foregroundColor(.semantic.title)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.1)
-                Spacer()
-            }
-            HStack(alignment: .center, spacing: 0) {
-                if let exchangeRate {
-                    Text(cryptoValue.convert(using: exchangeRate).displayString)
-                        .typography(.body1)
-                        .foregroundColor(.semantic.body)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
-                }
-                Spacer()
-                balanceLabel(balance)
-            }
-        }
-        .padding([.leading, .trailing], 16)
-        .padding([.top, .bottom], 18)
-        .foregroundColor(.semantic.title)
-        .background(Color.semantic.background)
-        .cornerRadius(Spacing.padding2)
-    }
-
-    @ViewBuilder
-    private func pillButton(
-        imageURL: URL?,
-        label: String
-    ) -> some View {
-        HStack(spacing: 8) {
-            AsyncMedia(
-                url: imageURL,
-                placeholder: EmptyView.init
-            )
-            .frame(width: 24, height: 24)
-            .padding(.leading, Spacing.padding1)
-            .padding(.vertical, Spacing.textSpacing)
-            Text(label)
-                .typography(.caption2)
-                .foregroundColor(.semantic.title)
-            Spacer()
-            Icon.chevronRight
-                .with(length: 12.pt)
-                .color(.semantic.muted)
-                .padding(.trailing, Spacing.padding1)
-        }
-        .background(Color.semantic.light)
-        .cornerRadius(Spacing.padding3)
-    }
-
-    @ViewBuilder
-    private func balancePill(_ currency: CryptoCurrency) -> some View {
-        VStack(spacing: 4) {
-            HStack {
-                currency.logo(size: 16.pt)
-                    .padding(.leading, 8.pt)
-                    .padding(.vertical, 8.pt)
-                Text(currency.displayCode)
-                    .typography(.body1)
-                    .foregroundColor(.semantic.title)
-                    .padding(.trailing, 8.pt)
-            }
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.semantic.light)
-            )
-        }
-    }
-
-    @ViewBuilder
-    private func balanceLabel(_ balance: DexBalance?) -> some View {
-        if let balance {
-            HStack(spacing: 4) {
-                Text(FeatureDexUI.L10n.Main.balance)
-                    .typography(.micro)
-                    .foregroundColor(.semantic.body)
-                Text(balance.value.displayString)
-                    .typography(.micro)
-                    .foregroundColor(.semantic.title)
-            }
-        }
-    }
-
-    @ViewBuilder
     private var rows: some View {
         DividedVStack {
             tableRow(
-                title: L10n.allowedSlippage,
+                title: L10n.allowedSlippageTitle,
                 value: {
                     tableRowTitle(formatSlippage(viewStore.quote.slippage))
                 },
-                tooltip: (L10n.allowedSlippage, FeatureDexUI.L10n.Settings.body)
+                tooltip: (L10n.allowedSlippageTitle, L10n.allowedSlippageTooltip)
             )
             tableRow(
                 title: L10n.exchangeRate,
@@ -227,11 +106,7 @@ struct DexConfirmationView: View {
             tableRow(
                 title: L10n.minAmount,
                 value: {
-                    valueWithQuote(
-                        viewStore.quote.minimumReceivedAmount,
-                        using: viewStore.toFiatExchangeRate,
-                        isEstimated: false
-                    )
+                    ValueWithQuoteView(value: viewStore.quote.minimumReceivedAmount, isEstimated: false)
                 },
                 tooltip: (title: L10n.minAmount, message: L10n.minAmountDescription)
             )
@@ -242,55 +117,21 @@ struct DexConfirmationView: View {
                 .fill(Color.semantic.background)
         )
         DividedVStack {
-            tableRow(
-                title: L10n.networkFee,
-                value: {
-                    valueWithQuote(
-                        viewStore.quote.networkFee,
-                        using: viewStore.networkFiatExchangeRate
-                    )
-                },
-                tooltip: (L10n.networkFee, L10n.networkFeeDescription.interpolating(viewStore.quote.networkFee.displayCode))
-            )
+            ForEach(viewStore.quote.fees.indexed(), id: \.index) { _, fee in
+                tableRow(
+                    title: fee.title,
+                    value: {
+                        ValueWithQuoteView(value: fee.value, isEstimated: true)
+                    },
+                    tooltip: fee.tooltip
+                )
+            }
         }
         .padding(.vertical, 6.pt)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.semantic.background)
         )
-    }
-
-    @ViewBuilder
-    private func valueWithQuote(
-        _ cryptoValue: CryptoValue,
-        using exchangeRate: MoneyValue?,
-        isEstimated: Bool = true
-    ) -> some View {
-        VStack(alignment: .trailing) {
-            TableRowTitle(valueWithQuoteTitle(cryptoValue, isEstimated: isEstimated))
-            if let byline = valueWithQuoteByline(cryptoValue, using: exchangeRate, isEstimated: isEstimated) {
-                TableRowByline(byline)
-            }
-        }
-    }
-
-    private func valueWithQuoteTitle(
-        _ cryptoValue: CryptoValue,
-        isEstimated: Bool
-    ) -> String {
-        isEstimated ? "~ \(cryptoValue.displayString)" : cryptoValue.displayString
-    }
-
-    private func valueWithQuoteByline(
-        _ cryptoValue: CryptoValue,
-        using exchangeRate: MoneyValue?,
-        isEstimated: Bool
-    ) -> String? {
-        guard let exchangeRate else {
-            return nil
-        }
-        let string = cryptoValue.convert(using: exchangeRate).displayString
-        return isEstimated ? "~ \(string)" : string
     }
 
     @ViewBuilder
@@ -389,6 +230,66 @@ struct DexConfirmationView: View {
                     ]
                 )
             }
+        }
+    }
+
+    struct ValueWithQuoteView: View {
+        let value: CryptoValue
+        let isEstimated: Bool
+        @State var exchangeRate: MoneyValue?
+
+        var body: some View {
+            VStack(alignment: .trailing) {
+                TableRowTitle(title)
+                if let byline {
+                    TableRowByline(byline)
+                }
+            }
+            .bindings {
+                subscribe(
+                    $exchangeRate,
+                    to: blockchain.api.nabu.gateway.price.crypto[value.code].fiat.quote.value
+                )
+            }
+        }
+
+        private var byline: String? {
+            guard let exchangeRate else {
+                return nil
+            }
+            let string = value.convert(using: exchangeRate).displayString
+            return isEstimated ? "~ \(string)" : string
+        }
+
+        private var title: String {
+            isEstimated ? "~ \(value.displayString)" : value.displayString
+        }
+    }
+}
+
+extension DexQuoteOutput.Fee {
+    fileprivate var title: String {
+        switch type {
+        case .network:
+            return L10n.Confirmation.networkFee
+        case .express:
+            return L10n.Confirmation.expressFee
+        case .total:
+            return L10n.Confirmation.totalFee
+        }
+    }
+
+    fileprivate var tooltip: (title: String, message: String)? {
+        switch type {
+        case .network:
+            return (
+                L10n.Confirmation.networkFee,
+                L10n.Confirmation.networkFeeDescription.interpolating(value.displayCode)
+            )
+        case .express:
+            return nil
+        case .total:
+            return nil
         }
     }
 }

@@ -44,8 +44,12 @@ public struct CryptoCurrency: Currency, Hashable, Codable, Comparable, CustomDeb
     /// - Parameters:
     ///   - erc20Address:             An ERC-20 contract address.
     ///   - currenciesService: An enabled currencies service.
-    public init?(erc20Address: String, service: EnabledCurrenciesServiceAPI) {
-        guard let match = service.erc20(contractAddress: erc20Address) else {
+    public init?(
+        erc20Address: String,
+        network: EVMNetworkConfig,
+        service: EnabledCurrenciesServiceAPI
+    ) {
+        guard let match = service.erc20(contractAddress: erc20Address, network: network) else {
             return nil
         }
         self = match
@@ -154,11 +158,15 @@ extension EnabledCurrenciesServiceAPI {
             .first(where: { $0.code == code })
     }
 
-    fileprivate func erc20(contractAddress: String) -> CryptoCurrency? {
+    fileprivate func erc20(
+        contractAddress: String,
+        network: EVMNetworkConfig
+    ) -> CryptoCurrency? {
         allEnabledCryptoCurrencies.first(where: { currency in
             switch currency.assetModel.kind {
-            case .erc20(let value, _):
-                return value.caseInsensitiveCompare(contractAddress) == .orderedSame
+            case .erc20(let value, let parentChain):
+                return parentChain == network.networkTicker
+                    && value.caseInsensitiveCompare(contractAddress) == .orderedSame
             default:
                 return false
             }

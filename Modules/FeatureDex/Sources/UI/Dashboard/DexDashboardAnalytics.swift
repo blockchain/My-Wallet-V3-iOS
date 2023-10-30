@@ -53,7 +53,7 @@ public struct DexDashboardAnalytics: Reducer {
             record(.swapApproveTokenConfirmed)
         case .destinationAction(.didSelectCurrency(let balance)):
             record(.swapOutputSelected(outputCurrency: balance.currency.code))
-        case .binding(\.$slippage):
+        case .binding(\DexMain.State.settings.$slippage):
             record(.slippageChanged)
         case .didTapSettings:
             record(.settingsOpened)
@@ -114,23 +114,20 @@ enum QuotePayloadFactory {
         guard let quote else {
             return nil
         }
-        let network = service.network(for: quote.networkFee.currency)
+        let inputNetwork = quote.sellAmount.currency.network()
+        let outputNetwork = quote.buyAmount.amount.currency.network()
+        let networkFee = quote.networkFee
         return AnalyticsEvents.New.Dex.QuotePayload(
             inputCurrency: quote.sellAmount.code,
             inputAmount: "\(quote.sellAmount.displayMajorValue)",
-            inputAmountUsd: nil,
             outputCurrency: quote.buyAmount.amount.code,
             expectedOutputAmount: "\(quote.buyAmount.amount.displayMajorValue)",
-            expectedOutputAmountUsd: nil,
             minOutputAmount: quote.buyAmount.minimum.flatMap { "\($0.displayMajorValue)" },
             slippageAllowed: quote.slippage,
-            networkFeeAmount: "\(quote.networkFee.displayMajorValue)",
-            networkFeeCurrency: quote.networkFee.currency.code,
-            blockchainFeeAmount: nil,
-            blockchainFeeAmountUsd: nil,
-            blockchainFeeCurrency: nil,
-            inputNetwork: network?.networkConfig.networkTicker,
-            outputNetwork: network?.networkConfig.networkTicker
+            networkFeeAmount: networkFee.flatMap { "\($0.displayMajorValue)" },
+            networkFeeCurrency: networkFee?.currency.code,
+            inputNetwork: inputNetwork?.networkConfig.networkTicker,
+            outputNetwork: outputNetwork?.networkConfig.networkTicker
         )
     }
 }

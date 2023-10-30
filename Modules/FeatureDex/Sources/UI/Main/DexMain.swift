@@ -56,12 +56,7 @@ public struct DexMain: Reducer {
                             .map(Action.onAvailableNetworksFetched)
                     }
                 } else if let network = getThatCurrency(app: app)?.network() {
-                    availableNetworks = Effect<DexMain.Action>.run(operation: { _ in
-                        try await app.set(
-                            blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value,
-                            to: network.networkConfig.networkTicker
-                        )
-                    })
+                    availableNetworks = Effect.send(.onNetworkSelected(network))
                 }
 
                 let refreshQuote = Effect<Action>.send(.refreshQuote)
@@ -77,15 +72,7 @@ public struct DexMain: Reducer {
 
             case .didTapSettings:
                 dismissKeyboard(&state)
-                let settings = blockchain.ux.currency.exchange.dex.settings
-                let detents = blockchain.ui.type.action.then.enter.into.detents
-                app.post(
-                    event: settings.tap,
-                    context: [
-                        settings.sheet.slippage: state.slippage,
-                        detents: [detents.automatic.dimension]
-                    ]
-                )
+                state.isSettingsShown = true
                 return .none
 
             case .didTapFlip:
@@ -123,12 +110,12 @@ public struct DexMain: Reducer {
 
             case .didTapAllowance:
                 dismissKeyboard(&state)
-                let allowance = blockchain.ux.currency.exchange.dex.allowance
                 let detents = blockchain.ui.type.action.then.enter.into.detents
                 app.post(
-                    event: allowance.tap,
+                    event: blockchain.ux.currency.exchange.dex.allowance.tap,
                     context: [
-                        allowance.sheet.currency: state.source.currency!.code,
+                        blockchain.ux.currency.exchange.dex.allowance.sheet.currency: state.source.currency!.code,
+                        blockchain.ux.currency.exchange.dex.allowance.sheet.allowance.spender: state.allowance.status.allowanceSpender!,
                         detents: [detents.automatic.dimension]
                     ]
                 )
@@ -189,7 +176,11 @@ public struct DexMain: Reducer {
                 }
                 return .publisher {
                     dexService
-                        .allowance(app: app, currency: quote.sellAmount.currency)
+                        .allowance(
+                            app: app,
+                            currency: quote.sellAmount.currency,
+                            allowanceSpender: quote.allowanceSpender
+                        )
                         .receive(on: mainQueue)
                         .map(Action.onAllowance)
                 }
@@ -302,6 +293,11 @@ public struct DexMain: Reducer {
                     .cancel(id: CancellationID.allowanceFetch),
                     .cancel(id: CancellationID.quoteFetch)
                 )
+            case .sourceAction(.networkPicker(.onNetworkSelected(let value))):
+                if state.crossChainEnabled.isNo {
+                    state.destination.parentNetwork = value
+                }
+                return .none
 
             case .sourceAction:
                 return .none
@@ -356,9 +352,6 @@ public struct DexMain: Reducer {
                     try? await app.set(blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap.then.launch.url, to: url ?? fallbackUrl)
                     app.post(event: blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap)
                 }
-            case .onNetworkPrice(let networkNativePrice):
-                state.networkNativePrice = networkNativePrice
-                return .none
 
                 // Binding
             case .binding(\.allowance.$transactionHash):
@@ -367,34 +360,22 @@ public struct DexMain: Reducer {
                 }
                 return .publisher {
                     dexService
-                        .allowancePoll(app: app, currency: quote.sellAmount.currency)
+                        .allowancePoll(
+                            app: app,
+                            currency: quote.sellAmount.currency,
+                            allowanceSpender: quote.allowanceSpender
+                        )
                         .receive(on: mainQueue)
                         .map(Action.onAllowance)
                 }
                 .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
-            case .binding(\.$currentSelectedNetworkTicker):
-                let value = state.currentSelectedNetworkTicker
-                guard let network = state.availableNetworks.first(where: { $0.networkConfig.networkTicker == value }) else {
-                    return .none
-                }
-                return Effect.send(.onNetworkSelected(network))
             case .onNetworkSelected(let network):
-                guard network != state.currentNetwork, state.availableNetworks.contains(network) else {
+                guard state.availableNetworks.contains(network) else {
                     return .none
                 }
-                state.currentNetwork = network
-                state.networkNativePrice = nil
-                return .publisher {
-                    app
-                        .publisher(
-                            for: blockchain.api.nabu.gateway.price.crypto[network.nativeAsset.code].fiat.quote.value,
-                            as: FiatValue?.self
-                        )
-                        .replaceError(with: nil)
-                        .receive(on: DispatchQueue.main)
-                        .map(Action.onNetworkPrice)
-                }
-                .cancellable(id: CancellationID.networkPrice, cancelInFlight: true)
+                state.source.parentNetwork = network
+                state.destination.parentNetwork = network
+                return .none
             case .binding:
                 return .none
             }
@@ -417,7 +398,7 @@ extension DexConfirmation.State.Quote {
             enoughBalance: true,
             from: quote.sellAmount,
             minimumReceivedAmount: quote.buyAmount.minimum ?? quote.buyAmount.amount,
-            networkFee: quote.networkFee,
+            fees: quote.fees,
             slippage: slippage,
             to: quote.buyAmount.amount
         )
@@ -449,6 +430,8 @@ extension DexMain {
                     destination: input.destination,
                     skipValidation: input.skipValidation,
                     slippage: input.slippage,
+                    expressMode: input.expressMode,
+                    gasOnDestination: input.gasOnDestination,
                     takerAddress: takerAddress
                 )
             }
@@ -471,6 +454,8 @@ extension DexMain {
         let destination: CryptoCurrency
         let skipValidation: Bool
         let slippage: Double
+        let expressMode: Bool
+        let gasOnDestination: Bool
         let isLowBalance: Bool
     }
 
@@ -490,7 +475,9 @@ extension DexMain {
             source: source,
             destination: destination,
             skipValidation: skipValidation,
-            slippage: state.slippage,
+            slippage: state.settings.slippage,
+            expressMode: state.settings.expressMode,
+            gasOnDestination: state.settings.gasOnDestination,
             isLowBalance: state.isLowBalance
         )
         return value

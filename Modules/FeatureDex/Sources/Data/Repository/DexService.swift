@@ -37,7 +37,8 @@ public struct DexService {
 
     public func allowance(
         app: AppProtocol,
-        currency: CryptoCurrency
+        currency: CryptoCurrency,
+        allowanceSpender: String
     ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
         guard !currency.isCoin else {
             return .just(.success(.ok))
@@ -49,14 +50,15 @@ public struct DexService {
                 guard let address else {
                     return .just(.failure(UX.Error(error: nil)))
                 }
-                return allowance(address: address, currency: currency)
+                return allowance(address: address, currency: currency, allowanceSpender: allowanceSpender)
             }
             .eraseToAnyPublisher()
     }
 
     public func allowancePoll(
         app: AppProtocol,
-        currency: CryptoCurrency
+        currency: CryptoCurrency,
+        allowanceSpender: String
     ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
         guard !currency.isCoin else {
             return .just(.success(.ok))
@@ -68,19 +70,20 @@ public struct DexService {
                 guard let address else {
                     return .just(.failure(UX.Error(error: nil)))
                 }
-                return allowance(address: address, currency: currency)
+                return allowance(address: address, currency: currency, allowanceSpender: allowanceSpender)
             }
             .eraseToAnyPublisher()
     }
 
     private func allowance(
         address: String,
-        currency: CryptoCurrency
+        currency: CryptoCurrency,
+        allowanceSpender: String
     ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
         dexAllowanceRepository
-            .fetch(address: address, currency: currency)
+            .fetch(address: address, currency: currency, allowanceSpender: allowanceSpender)
             .map { output -> DexAllowanceResult in
-                output.isOK ? .ok : .nok
+                output.isOK ? .ok : .nok(allowanceSpender: allowanceSpender)
             }
             .mapError(UX.Error.init(error:))
             .result()
@@ -89,12 +92,13 @@ public struct DexService {
 
     private func allowancePoll(
         address: String,
-        currency: CryptoCurrency
+        currency: CryptoCurrency,
+        allowanceSpender: String
     ) -> AnyPublisher<Result<DexAllowanceResult, UX.Error>, Never> {
         dexAllowanceRepository
-            .poll(address: address, currency: currency)
+            .poll(address: address, currency: currency, allowanceSpender: allowanceSpender)
             .map { output -> DexAllowanceResult in
-                output.isOK ? .ok : .nok
+                output.isOK ? .ok : .nok(allowanceSpender: allowanceSpender)
             }
             .mapError(UX.Error.init(error:))
             .result()

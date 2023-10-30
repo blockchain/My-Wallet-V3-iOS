@@ -14,13 +14,14 @@ final class QuotePayloadFactoryTests: XCTestCase {
     func testOutputMajor() {
         _ = App.preview
         let quote = DexQuoteOutput(
+            response: mockResponse,
+            allowanceSpender: "",
             buyAmount: DexQuoteOutput.BuyAmount(amount: ether(major: 2), minimum: ether(major: 1)),
             field: .source,
             isValidated: true,
-            networkFee: bitcoin(major: 0.01),
+            fees: [.init(type: .network, value: bitcoin(major: 0.01))],
             sellAmount: bitcoin(major: 1),
-            slippage: "0.1234",
-            response: mockResponse
+            slippage: "0.1234"
         )
         let result = QuotePayloadFactory.create(quote, service: EnabledCurrenciesService.default)!
         XCTAssertEqual(result.inputCurrency, "BTC")
@@ -38,16 +39,17 @@ final class QuotePayloadFactoryTests: XCTestCase {
     func testOutputLong() {
         _ = App.preview
         let quote = DexQuoteOutput(
+            response: mockResponse,
+            allowanceSpender: "",
             buyAmount: DexQuoteOutput.BuyAmount(
                 amount: ether("2123456789123456789"),
                 minimum: ether("1123456789123456789")
             ),
             field: .source,
             isValidated: true,
-            networkFee: bitcoin("1234567"),
+            fees: [.init(type: .network, value: bitcoin("1234567"))],
             sellAmount: bitcoin("112345678"),
-            slippage: "0.123456789",
-            response: mockResponse
+            slippage: "0.123456789"
         )
         let result = QuotePayloadFactory.create(quote, service: EnabledCurrenciesService.default)!
         XCTAssertEqual(result.inputCurrency, "BTC")
@@ -83,8 +85,12 @@ final class QuotePayloadFactoryTests: XCTestCase {
             quote: .init(
                 buyAmount: .init(amount: "0", symbol: "USDT"),
                 sellAmount: .init(amount: "0", symbol: "USDT"),
-                bcdcFee: .init(amount: "111000", symbol: "USDT"),
-                gasFee: "777000000"
+                fees: [
+                    .init(type: .express, symbol: "USDT", amount: "0"),
+                    .init(type: .network, symbol: "USDT", amount: "0"),
+                    .init(type: .total, symbol: "USDT", amount: "0")
+                ],
+                spenderAddress: ""
             ),
             tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
             legs: 1,

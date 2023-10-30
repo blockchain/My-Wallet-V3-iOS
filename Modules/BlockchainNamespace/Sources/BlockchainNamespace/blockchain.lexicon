@@ -2229,6 +2229,9 @@ blockchain:
 					allowance:
 						sheet:
 						+ blockchain.ux.type.story
+							allowance:
+								spender:
+								+ blockchain.db.type.string
 							currency:
 							+ blockchain.db.type.string
 						tap:
@@ -2236,6 +2239,32 @@ blockchain:
 						transactionId:
 						+ blockchain.db.type.string
 						+ blockchain.session.state.value
+					config:
+						cross:
+							chain:
+								is:
+									enabled:
+									+ blockchain.db.type.boolean
+									+ blockchain.session.configuration.value
+								settings:
+									destination:
+										gas:
+											is:
+												enabled:
+												+ blockchain.db.type.boolean
+												+ blockchain.session.configuration.value
+									express:
+										is:
+											enabled:
+											+ blockchain.db.type.boolean
+											+ blockchain.session.configuration.value
+						quote:
+							by:
+								output:
+									is:
+										enabled:
+										+ blockchain.db.type.boolean
+										+ blockchain.session.configuration.value
 					error:
 					+ blockchain.ux.type.task
 					intro:
@@ -2243,22 +2272,6 @@ blockchain:
 							show:
 							+ blockchain.db.type.boolean
 							+ blockchain.session.state.preference.value
-					network:
-						picker:
-							selected:
-								network:
-									ticker:
-									+ blockchain.db.type.string
-									+ blockchain.ux.type.story
-										value:
-										+ blockchain.db.type.string
-							sheet:
-							+ blockchain.ux.type.story
-								selected:
-									network:
-									+ blockchain.db.type.string
-							tap:
-							+ blockchain.ux.type.action
 					no:
 						balance:
 							sheet:
@@ -2278,18 +2291,16 @@ blockchain:
 								more:
 									tap:
 									+ blockchain.ui.type.action
-					quote:
-						by:
-							output:
-								is:
-									enabled:
-									+ blockchain.db.type.boolean
-									+ blockchain.session.configuration.value
 					settings:
-						sheet:
-						+ blockchain.ux.type.story
-							slippage:
-							+ blockchain.db.type.number
+						express:
+							mode:
+							+ blockchain.db.type.boolean
+							+ blockchain.session.state.value
+						gas:
+							on:
+								destination:
+								+ blockchain.db.type.boolean
+								+ blockchain.session.state.value
 						slippage:
 						+ blockchain.db.type.number
 						+ blockchain.session.state.value

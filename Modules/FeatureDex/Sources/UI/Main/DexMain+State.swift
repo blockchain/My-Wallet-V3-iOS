@@ -16,14 +16,6 @@ extension DexMain {
         }
 
         var availableNetworks: [EVMNetwork] = []
-        var currentNetwork: EVMNetwork? {
-            didSet {
-                currentSelectedNetworkTicker = currentNetwork?.networkConfig.networkTicker
-                source.parentNetwork = currentNetwork
-                destination.parentNetwork = currentNetwork
-            }
-        }
-
         var source: DexCell.State
         var destination: DexCell.State
 
@@ -45,30 +37,35 @@ extension DexMain {
         var allowance: Allowance
         var confirmation: DexConfirmation.State?
 
-        var networkNativePrice: FiatValue?
-        @BindingState var slippage: Double = defaultSlippage
-        @BindingState var defaultFiatCurrency: FiatCurrency?
+        struct Settings: Equatable {
+            @BindingState var expressMode: Bool = false
+            @BindingState var gasOnDestination: Bool = false
+            @BindingState var slippage: Double = defaultSlippage
+        }
+
+        var settings: Settings
         @BindingState var isConfirmationShown: Bool = false
+        @BindingState var isSettingsShown: Bool = false
         @BindingState var isEligible: Bool = true
         @BindingState var inegibilityReason: String?
-        @BindingState var currentSelectedNetworkTicker: String?
         @BindingState var quoteByOutputEnabled: Bool = false
+        @BindingState var crossChainEnabled: Bool = false
 
         init(
             availableBalances: [DexBalance]? = nil,
             source: DexCell.State = .init(style: .source),
             destination: DexCell.State = .init(style: .destination),
             quote: Result<DexQuoteOutput, UX.Error>? = nil,
-            defaultFiatCurrency: FiatCurrency? = nil,
             allowance: Allowance = .init(),
-            confirmation: DexConfirmation.State? = nil
+            confirmation: DexConfirmation.State? = nil,
+            settings: Settings = .init()
         ) {
             self.availableBalances = availableBalances
             self.source = source
             self.destination = destination
             self.quote = quote
-            self.defaultFiatCurrency = defaultFiatCurrency
             self.allowance = allowance
+            self.settings = settings
         }
 
         var isLowBalance: Bool {
@@ -96,13 +93,16 @@ extension DexMain {
             guard let output = quote?.success else {
                 return false
             }
+            guard let networkFee = output.networkFee else {
+                return false
+            }
             let sellCurrency = output.sellAmount.currency
-            let feeCurrency = output.networkFee.currency
+            let feeCurrency = networkFee.currency
             guard let feeCurrencyBalance = availableBalances?.first(where: { $0.currency == feeCurrency }) else {
                 return false
             }
-            var base = output.networkFee
-            if sellCurrency == feeCurrency, let result = try? output.networkFee + output.sellAmount {
+            var base = networkFee
+            if sellCurrency == feeCurrency, let result = try? networkFee + output.sellAmount {
                 base = result
             }
             return (try? base > feeCurrencyBalance.value) ?? false
@@ -112,7 +112,7 @@ extension DexMain {
             if isEligible.isNo {
                 return .notEligible
             }
-            if availableBalances == nil || currentNetwork == nil {
+            if availableBalances.isNil || source.currentNetwork.isNil {
                 return .loading
             }
             if availableBalances?.isEmpty == true {
@@ -135,9 +135,18 @@ extension DexMain.State {
         enum Status: Equatable {
             case unknown
             case notRequired
-            case required
+            case required(allowanceSpender: String)
             case pending
             case complete
+
+            var allowanceSpender: String? {
+                switch self {
+                case .required(let value):
+                    return value
+                default:
+                    return nil
+                }
+            }
 
             var finished: Bool {
                 switch self {
@@ -156,11 +165,10 @@ extension DexMain.State {
             switch (transactionHash != nil, result) {
             case (false, nil):
                 return .unknown
-            case (false, .nok):
-                return .required
+            case (false, .nok(let allowanceSpender)):
+                return .required(allowanceSpender: allowanceSpender)
             case (false, .ok):
                 return .notRequired
-
             case (true, .nok), (true, nil):
                 return .pending
             case (true, .ok):
@@ -206,7 +214,7 @@ enum ContinueButtonState: Hashable {
 extension DexMain.State {
 
     var continueButtonState: ContinueButtonState {
-        if let currentNetwork, availableBalances != nil, source.filteredBalances.isEmpty == true {
+        if let currentNetwork = source.currentNetwork, availableBalances != nil, source.filteredBalances.isEmpty == true {
             return .noAssetOnNetwork(currentNetwork)
         }
         guard source.currency != nil else {
@@ -228,7 +236,7 @@ extension DexMain.State {
                 return .previewSwapDisabled
             }
             if isLowBalanceForGas {
-                return .error(DexUXError.insufficientFundsForGas(output.networkFee.currency))
+                return .error(DexUXError.insufficientFundsForGas(output.networkFee?.currency))
             }
             return .previewSwap
         }
@@ -267,11 +275,12 @@ enum DexUXError {
         )
     }
 
-    static func insufficientFundsForGas(_ currency: CryptoCurrency) -> UX.Error {
-        UX.Error(
+    static func insufficientFundsForGas(_ currency: CryptoCurrency?) -> UX.Error {
+        let displayCode = currency?.displayCode ?? ""
+        return UX.Error(
             id: DexQuoteErrorId.insufficientFundsForGas,
-            title: L10n.Main.NoBalanceError.titleGas.interpolating(currency.displayCode),
-            message: L10n.Main.NoBalanceError.message.interpolating(currency.displayCode)
+            title: L10n.Main.NoBalanceError.titleGas.interpolating(displayCode),
+            message: L10n.Main.NoBalanceError.message.interpolating(displayCode)
         )
     }
 }

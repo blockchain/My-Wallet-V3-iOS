@@ -27,10 +27,10 @@ final class ERC20TokenAccountsMapper {
     /// - Parameter response: An ERC-20 token accounts as a data model.
     ///
     /// - Returns: An ERC-20 token accounts as a domain model.
-    func toDomain(response: ERC20TokenAccountsResponse) -> ERC20TokenAccounts {
+    func toDomain(response: ERC20TokenAccountsResponse, network: EVMNetworkConfig) -> ERC20TokenAccounts {
         response.tokenAccounts
             .reduce(into: [:]) { accounts, item in
-                guard let account = create(contract: item.tokenHash, balance: item.balance) else {
+                guard let account = create(contract: item.tokenHash, balance: item.balance, network: network) else {
                     return
                 }
                 accounts[account.currency] = account
@@ -42,19 +42,20 @@ final class ERC20TokenAccountsMapper {
     /// - Parameter response: An ERC-20 token accounts as a data model.
     ///
     /// - Returns: An ERC-20 token accounts as a domain model.
-    func toDomain(response: [EVMBalancesResponse.Balance]) -> ERC20TokenAccounts {
+    func toDomain(response: [EVMBalancesResponse.Balance], network: EVMNetworkConfig) -> ERC20TokenAccounts {
         response
             .reduce(into: [:]) { accounts, item in
-                guard let account = create(contract: item.identifier, balance: item.amount) else {
+                guard let account = create(contract: item.identifier, balance: item.amount, network: network) else {
                     return
                 }
                 accounts[account.currency] = account
             }
     }
 
-    private func create(contract: String, balance: String) -> ERC20TokenAccount? {
+    private func create(contract: String, balance: String, network: EVMNetworkConfig) -> ERC20TokenAccount? {
         guard let currency = CryptoCurrency(
             erc20Address: contract,
+            network: network,
             service: enabledCurrenciesService
         ) else {
             return nil

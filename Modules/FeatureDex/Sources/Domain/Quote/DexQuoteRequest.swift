@@ -19,10 +19,14 @@ public struct DexQuoteRequest: Encodable, Equatable {
     public struct Params: Encodable, Equatable {
         public var slippage: String
         public var skipValidation: Bool
+        public var enableBoost: Bool
+        public var receiveGasOnDestination: Bool
 
-        public init(slippage: String, skipValidation: Bool) {
+        public init(slippage: String, skipValidation: Bool, enableBoost: Bool, receiveGasOnDestination: Bool) {
             self.slippage = slippage
             self.skipValidation = skipValidation
+            self.enableBoost = enableBoost
+            self.receiveGasOnDestination = receiveGasOnDestination
         }
     }
 

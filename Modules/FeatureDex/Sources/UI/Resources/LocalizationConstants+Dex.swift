@@ -10,7 +10,11 @@ enum L10n {
     enum NetworkPicker {}
     enum Onboarding {}
     enum ProductRouter {}
-    enum Settings {}
+    enum Settings {
+        enum Slippage {}
+        enum Express {}
+        enum DestinationGas {}
+    }
     enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
@@ -105,15 +109,46 @@ extension L10n.NetworkPicker {
 }
 
 extension L10n.Settings {
-
     static let title = NSLocalizedString(
         "Settings",
         comment: "Dex: Settings: title"
     )
+    static let crossChainTitle = NSLocalizedString(
+        "Cross-chain only",
+        comment: "Dex: Settings: CrossChain: title"
+    )
+}
 
+extension L10n.Settings.Slippage {
+    static let title = NSLocalizedString(
+        "Allowed Slippage",
+        comment: "Dex: Settings: Slippage: title"
+    )
     static let body = NSLocalizedString(
         "Slippage is the max percentage of price you're willing to allow for your swap to go through. If price changes beyond that, the swap will revert and your assets will be returned.",
-        comment: "Dex: Settings: body"
+        comment: "Dex: Settings: Slippage: body"
+    )
+}
+
+extension L10n.Settings.Express {
+    static let title = NSLocalizedString(
+        "Express",
+        comment: "Dex: Settings: Express: title"
+    )
+    static let body = NSLocalizedString(
+        "Reduces cross-chain transaction time to 5-30s (max $20k).",
+        comment: "Dex: Settings: Express: body"
+    )
+}
+
+extension L10n.Settings.DestinationGas {
+    static let title = NSLocalizedString(
+        "Arrival gas",
+        comment: "Dex: Settings: DestinationGas: title"
+    )
+    static let body = NSLocalizedString(
+        "Swap some of your tokens for gas on destination chain.",
+        comment: "Dex: Settings: DestinationGas: body"
     )
 }
 
@@ -311,10 +346,8 @@ extension L10n.Confirmation {
         comment: "Dex: Network"
     )
 
-    static let allowedSlippage = NSLocalizedString(
-        "Allowed Slippage",
-        comment: "Dex: Main"
-    )
+    static let allowedSlippageTitle = L10n.Settings.Slippage.title
+    static let allowedSlippageTooltip = L10n.Settings.Slippage.body
 
     static let minAmount = NSLocalizedString(
         "Min. Amount",
@@ -328,6 +361,16 @@ extension L10n.Confirmation {
 
     static let networkFee = NSLocalizedString(
         "Gas fee",
+        comment: "Dex: Main"
+    )
+
+    static let expressFee = NSLocalizedString(
+        "Express fee",
+        comment: "Dex: Main"
+    )
+
+    static let totalFee = NSLocalizedString(
+        "Total",
         comment: "Dex: Main"
     )
 

@@ -27,14 +27,8 @@ public struct DexCell: Reducer {
                 }
                 return .none
             case .onTapNetworkSelector:
-                let detents = blockchain.ui.type.action.then.enter.into.detents
-                app.post(
-                    event: blockchain.ux.currency.exchange.dex.network.picker.tap,
-                    context: [
-                        blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network: state.currentNetwork?.networkConfig.networkTicker,
-                        detents: [detents.automatic.dimension]
-                    ]
-                )
+                state.networkPicker = .init(currentNetwork: state.currentNetwork?.networkConfig.networkTicker)
+                state.showNetworkPicker = true
                 return .none
             case .onTapCurrencySelector:
                 guard let currentNetwork = state.currentNetwork else {
@@ -98,11 +92,19 @@ public struct DexCell: Reducer {
             case .onPrice(let price):
                 state.price = price
                 return .none
-            case .assetPicker(.onDismiss):
-                state.showAssetPicker = false
-                state.assetPicker = nil
+
+            case .networkPicker(.onDismiss):
+                state.showNetworkPicker = false
+                return .none
+            case .networkPicker(.onNetworkSelected(let value)):
+                state.showNetworkPicker = false
+                return Effect.send(.onCurrentNetworkChanged(value))
+            case .networkPicker:
                 return .none
 
+            case .assetPicker(.onDismiss):
+                state.showAssetPicker = false
+                return .none
             case .assetPicker(.onAssetTapped(let row)):
                 state.showAssetPicker = false
 
@@ -126,6 +128,9 @@ public struct DexCell: Reducer {
         }
         .ifLet(\.assetPicker, action: /Action.assetPicker) {
             AssetPicker()
+        }
+        .ifLet(\.networkPicker, action: /Action.networkPicker) {
+            NetworkPicker()
         }
     }
 }

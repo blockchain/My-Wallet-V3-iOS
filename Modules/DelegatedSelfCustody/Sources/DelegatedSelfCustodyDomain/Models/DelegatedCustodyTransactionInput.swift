@@ -57,7 +57,7 @@ public enum DelegatedCustodyAmount: Hashable {
 public enum DelegatedCustodyTransactionType: Hashable {
     case payment
     case swap(data: String, gasLimit: String, value: String)
-    case tokenApproval(spender: String)
+    case tokenApproval(allowanceSpender: String)
 
     public var type: String {
         switch self {
@@ -70,7 +70,7 @@ public enum DelegatedCustodyTransactionType: Hashable {
         }
     }
 
-    public var spender: String? {
+    public var allowanceSpender: String? {
         switch self {
         case .payment:
             return nil

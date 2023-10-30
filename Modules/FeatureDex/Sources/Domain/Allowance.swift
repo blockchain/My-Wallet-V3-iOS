@@ -6,8 +6,16 @@ import MoneyKit
 import ToolKit
 
 public protocol DexAllowanceRepositoryAPI {
-    func fetch(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error>
-    func poll(address: String, currency: CryptoCurrency) -> AnyPublisher<DexAllowanceOutput, Error>
+    func fetch(
+        address: String,
+        currency: CryptoCurrency,
+        allowanceSpender: String
+    ) -> AnyPublisher<DexAllowanceOutput, Error>
+    func poll(
+        address: String,
+        currency: CryptoCurrency,
+        allowanceSpender: String
+    ) -> AnyPublisher<DexAllowanceOutput, Error>
 }
 
 public struct DexAllowanceOutput: Equatable {
@@ -29,5 +37,5 @@ public struct DexAllowanceOutput: Equatable {
 
 public enum DexAllowanceResult: Equatable {
     case ok
-    case nok
+    case nok(allowanceSpender: String)
 }

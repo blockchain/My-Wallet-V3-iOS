@@ -14,13 +14,13 @@ struct DexAllowanceView: View {
     @BlockchainApp var app
     @StateObject var model: Model
 
-    init(cryptoCurrency: CryptoCurrency) {
-        self.init(
-            model: Model(
-                cryptocurrency: cryptoCurrency,
-                network: EnabledCurrenciesService.default.network(for: cryptoCurrency)
-            )
+    init(cryptoCurrency: CryptoCurrency, allowanceSpender: String) {
+        let model = Model(
+            cryptocurrency: cryptoCurrency,
+            allowanceSpender: allowanceSpender,
+            network: cryptoCurrency.network()
         )
+        self.init(model: model)
     }
 
     init(model: DexAllowanceView.Model) {
@@ -217,7 +217,7 @@ struct DexAllowanceView_Previews: PreviewProvider {
                     signAndPush: state.2
                 )
             } operation: {
-                DexAllowanceView(cryptoCurrency: .ethereum)
+                DexAllowanceView(cryptoCurrency: .ethereum, allowanceSpender: "")
                     .app(app)
                     .previewDisplayName(state.0)
             }

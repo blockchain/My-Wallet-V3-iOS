@@ -4,17 +4,32 @@ import ToolKit
 
 public struct DexQuoteResponse: Decodable, Equatable {
 
+    public struct FeeType: NewTypeString, Decodable {
+        public let value: String
+        public init(_ value: String) { self.value = value }
+
+        static let network: FeeType = "GAS_FEE"
+        static let express: FeeType = "EXPRESS_FEE"
+        static let total: FeeType = "TOTAL_FEE"
+    }
+
+    public struct Fee: Decodable, Equatable {
+        let type: FeeType
+        let symbol: String
+        let amount: String
+    }
+
     public struct Quote: Decodable, Equatable {
         public var buyAmount: Amount
         public var sellAmount: Amount
-        public var bcdcFee: Amount?
-        public var gasFee: String
+        public var fees: [Fee]
+        public var spenderAddress: String
 
-        init(buyAmount: Amount, sellAmount: Amount, bcdcFee: Amount, gasFee: String) {
+        init(buyAmount: Amount, sellAmount: Amount, fees: [Fee], spenderAddress: String) {
             self.buyAmount = buyAmount
             self.sellAmount = sellAmount
-            self.bcdcFee = bcdcFee
-            self.gasFee = gasFee
+            self.fees = fees
+            self.spenderAddress = spenderAddress
         }
     }
 

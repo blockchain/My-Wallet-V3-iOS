@@ -72,7 +72,7 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
                         client.ethereumTokensBalances(for: key.address)
                     }
                     .retry(1)
-                    .map(mapper.toDomain)
+                    .map { mapper.toDomain(response: $0, network: key.network) }
                     .eraseError()
                     .eraseToAnyPublisher()
                 default:
@@ -88,7 +88,7 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
                             })
                     }
                     .map { $0?.balances ?? [] }
-                    .map(mapper.toDomain)
+                    .map { mapper.toDomain(response: $0, network: key.network) }
                     .eraseError()
                     .eraseToAnyPublisher()
                 }

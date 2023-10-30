@@ -24,22 +24,10 @@ public struct SiteMap {
         case blockchain.ux.currency.exchange.router:
             SwapProductRouterView()
 
-        case blockchain.ux.currency.exchange.dex.settings.sheet:
-            let slippage = try context[blockchain.ux.currency.exchange.dex.settings.sheet.slippage].decode(Double.self)
-            DexSettingsView(slippage: slippage)
-
-        case blockchain.ux.currency.exchange.dex.network.picker.sheet:
-            let value: String? = try? context[blockchain.ux.currency.exchange.dex.network.picker.sheet.selected.network].decode(String.self)
-            NetworkPickerView(
-                store: StoreOf<NetworkPicker>(
-                    initialState: NetworkPicker.State(currentNetwork: value),
-                    reducer: { NetworkPicker() }
-                )
-            )
-
         case blockchain.ux.currency.exchange.dex.allowance.sheet:
-            let cryptocurrency = try context[blockchain.ux.currency.exchange.dex.allowance.sheet.currency].decode(CryptoCurrency.self)
-            DexAllowanceView(cryptoCurrency: cryptocurrency)
+            let cryptoCurrency = try context[blockchain.ux.currency.exchange.dex.allowance.sheet.currency].decode(CryptoCurrency.self)
+            let allowanceSpender = try context[blockchain.ux.currency.exchange.dex.allowance.sheet.allowance.spender].decode(String.self)
+            DexAllowanceView(cryptoCurrency: cryptoCurrency, allowanceSpender: allowanceSpender)
 
         default:
             throw "Unknown View of \(ref) in \(Self.self)"

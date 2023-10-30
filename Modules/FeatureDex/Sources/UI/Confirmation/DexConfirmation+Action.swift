@@ -4,8 +4,8 @@ import ComposableArchitecture
 
 extension DexConfirmation {
     public enum Action: BindableAction, Equatable {
-        case binding(BindingAction<State>)
-        case confirm
         case acceptPrice
+        case confirm
+        case binding(BindingAction<State>)
     }
 }

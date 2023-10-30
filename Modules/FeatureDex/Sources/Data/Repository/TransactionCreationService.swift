@@ -12,7 +12,8 @@ import MoneyKit
 public protocol TransactionCreationServiceAPI {
 
     func buildAllowance(
-        token: CryptoCurrency
+        token: CryptoCurrency,
+        allowanceSpender: String
     ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never>
 
     func build(
@@ -33,7 +34,8 @@ final class TransactionCreationService: TransactionCreationServiceAPI {
     private let account: Int = 0
 
     func buildAllowance(
-        token: CryptoCurrency
+        token: CryptoCurrency,
+        allowanceSpender: String
     ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never> {
         guard let contractAddress = token.assetModel.kind.erc20ContractAddress else {
             fatalError()
@@ -50,7 +52,7 @@ final class TransactionCreationService: TransactionCreationServiceAPI {
             feeCurrency: network.nativeAsset.code,
             maxVerificationVersion: .v1,
             memo: "",
-            type: .tokenApproval(spender: Constants.spender)
+            type: .tokenApproval(allowanceSpender: allowanceSpender)
         )
         return service.buildTransaction(input)
             .mapError(UX.Error.init(error:))
@@ -143,7 +145,8 @@ public final class TransactionCreationServicePreview: TransactionCreationService
     }
 
     public func buildAllowance(
-        token: CryptoCurrency
+        token: CryptoCurrency,
+        allowanceSpender: String
     ) -> AnyPublisher<Result<DelegatedCustodyTransactionOutput, UX.Error>, Never> {
         guard let buildAllowance else {
             return .empty()

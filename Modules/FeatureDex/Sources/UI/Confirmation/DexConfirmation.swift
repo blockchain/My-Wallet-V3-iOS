@@ -17,8 +17,6 @@ public struct DexConfirmation: Reducer {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .binding:
-                return .none
             case .acceptPrice:
                 if let newQuote = state.newQuote {
                     state.quote = newQuote
@@ -27,6 +25,8 @@ public struct DexConfirmation: Reducer {
                 return .none
             case .confirm:
                 state.didConfirm = true
+                return .none
+            case .binding:
                 return .none
             }
         }

@@ -40,7 +40,7 @@ struct BuildTxRequestPayload: Encodable {
         self.extraData = ExtraData(
             memo: input.memo,
             feeCurrency: input.feeCurrency,
-            spender: input.type.spender,
+            spender: input.type.allowanceSpender,
             swapTx: input.type.swapTransaction
         )
         self.fee = input.fee.stringValue

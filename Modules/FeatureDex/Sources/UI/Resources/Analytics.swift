@@ -54,17 +54,12 @@ extension AnalyticsEvents.New.Dex {
     struct QuotePayload: Hashable {
         var inputCurrency: String
         var inputAmount: String
-        var inputAmountUsd: String?
         var outputCurrency: String
         var expectedOutputAmount: String
-        var expectedOutputAmountUsd: String?
         var minOutputAmount: String?
         var slippageAllowed: String
-        var networkFeeAmount: String
-        var networkFeeCurrency: String
-        var blockchainFeeAmount: String?
-        var blockchainFeeAmountUsd: String?
-        var blockchainFeeCurrency: String?
+        var networkFeeAmount: String?
+        var networkFeeCurrency: String?
         var inputNetwork: String?
         var outputNetwork: String?
     }

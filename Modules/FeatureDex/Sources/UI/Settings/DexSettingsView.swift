@@ -9,70 +9,122 @@ import SwiftUI
 @MainActor
 struct DexSettingsView: View {
 
-    struct Model: Identifiable, Hashable {
-        var id: String { label }
-
-        let value: Double
-        let label: String
-
-        init(value: Double) {
-            self.value = value
-            self.label = formatSlippage(value)
-        }
-    }
-
-    private let models: [Model] = allowedSlippages.map(Model.init(value:))
-    @State private var selected: Model
     @Environment(\.presentationMode) private var presentationMode
     @BlockchainApp var app
+    @State var model: Model
 
-    init(slippage: Double) {
-        self.init(selected: Model(value: slippage))
+    init(
+        slippage: Double,
+        expressMode: Bool,
+        gasOnDestination: Bool
+    ) {
+        let model = Model(
+            selected: Model.Slippage(value: slippage),
+            expressMode: expressMode,
+            gasOnDestination: gasOnDestination
+        )
+        self.init(model: model)
     }
 
-    init(selected: Model) {
-        _selected = State(initialValue: selected)
+    init(model: Model) {
+        _model = .init(initialValue: model)
     }
 
     @ViewBuilder
     var body: some View {
-        VStack(spacing: 16) {
-            header
-            slippageView
-            // Not yet enabled:
-            // extraSettings
+        VStack(spacing: 0) {
+            ScrollView {
+                LazyVStack(spacing: 16) {
+                    slippageView
+                    if model.expressModeAllowed || model.gasOnDestinationAllowed {
+                        extraSettings
+                    }
+                }
+            }
+        }
+        .bindings {
+            subscribe(
+                $model.expressModeAllowed,
+                to: blockchain.ux.currency.exchange.dex.config.cross.chain.settings.express.is.enabled
+            )
+        }
+        .bindings {
+            subscribe(
+                $model.gasOnDestinationAllowed,
+                to: blockchain.ux.currency.exchange.dex.config.cross.chain.settings.destination.gas.is.enabled
+            )
         }
         .padding(Spacing.padding2)
         .background(Color.semantic.light)
+        .superAppNavigationBar(
+            leading: { EmptyView() },
+            title: {
+                Text(L10n.Settings.title)
+                    .typography(.body2)
+                    .foregroundColor(.semantic.title)
+            },
+            trailing: {
+                IconButton(icon: .navigationCloseButton()) {
+                    presentationMode.wrappedValue.dismiss()
+                }
+                .frame(width: 20, height: 20)
+            },
+            scrollOffset: nil
+        )
     }
 
     @ViewBuilder
     private var extraSettings: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Cross-chain only")
+        VStack(alignment: .leading, spacing: Spacing.padding1) {
+            Text(L10n.Settings.crossChainTitle)
                 .typography(.body2)
                 .foregroundColor(.semantic.body)
                 .lineSpacing(4)
-
-            DividedVStack {
-                tableRow(
-                    icon: .flashOn,
-                    title: "Express",
-                    body: "Reduces cross-chain transaction time to 5-30s (max $20k).",
-                    isOn: .constant(true)
-                )
-                tableRow(
-                    icon: .flashOn,
-                    title: "Arrival gas",
-                    body: "Swap some of your tokens for gas on destination chain.",
-                    isOn: .constant(true)
-                )
+            DividedVStack(spacing: 0) {
+                expressModeRow
+                gasOnDestinationRow
             }
-            .padding(.vertical, 6.pt)
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(Color.semantic.background)
             )
+        }
+    }
+
+    @ViewBuilder
+    private var expressModeRow: some View {
+        if model.expressModeAllowed {
+            tableRow(
+                icon: .flashOn,
+                title: L10n.Settings.Express.title,
+                body: L10n.Settings.Express.body,
+                isOn: $model.expressMode
+            )
+            .onChange(of: model.expressMode) { newValue in
+                $app.post(
+                    value: newValue,
+                    of: blockchain.ux.currency.exchange.dex.settings.express.mode
+                )
+            }
+        }
+    }
+
+
+    @ViewBuilder
+    private var gasOnDestinationRow: some View {
+        if model.gasOnDestinationAllowed {
+            tableRow(
+                icon: .flashOn,
+                title: L10n.Settings.DestinationGas.title,
+                body: L10n.Settings.DestinationGas.body,
+                isOn: $model.gasOnDestination
+            )
+            .onChange(of: model.gasOnDestination) { newValue in
+                $app.post(
+                    value: newValue,
+                    of: blockchain.ux.currency.exchange.dex.settings.gas.on.destination
+                )
+            }
         }
     }
 
@@ -94,13 +146,13 @@ struct DexSettingsView: View {
     @ViewBuilder
     private var slippageView: some View {
         VStack(alignment: .leading, spacing: Spacing.padding1) {
-            Text("Allowed slippage")
+            Text(L10n.Settings.Slippage.title)
                 .typography(.body2)
                 .foregroundColor(.semantic.body)
                 .lineSpacing(4)
             VStack(alignment: .leading, spacing: Spacing.padding2) {
                 picker
-                Text(L10n.Settings.body)
+                Text(L10n.Settings.Slippage.body)
                     .typography(.paragraph1)
                     .foregroundColor(.semantic.body)
                     .lineSpacing(Spacing.textSpacing)
@@ -117,16 +169,16 @@ struct DexSettingsView: View {
     private var picker: some View {
         HStack(spacing: Spacing.padding1) {
             Spacer()
-            ForEach(models) { model in
-                if model == selected {
+            ForEach(model.slippageModels) { item in
+                if item == model.selected {
                     SmallSecondaryButton(
-                        title: model.label,
-                        action: { select(model) }
+                        title: item.label,
+                        action: { select(item) }
                     )
                 } else {
                     SmallMinimalButton(
-                        title: model.label,
-                        action: { select(model) }
+                        title: item.label,
+                        action: { select(item) }
                     )
                 }
             }
@@ -134,31 +186,10 @@ struct DexSettingsView: View {
         }
     }
 
-    private func select(_ model: Model) {
-        selected = model
-        app.post(value: model.value, of: blockchain.ux.currency.exchange.dex.settings.slippage)
+    private func select(_ item: Model.Slippage) {
+        model.selected = item
+        $app.post(value: item.value, of: blockchain.ux.currency.exchange.dex.settings.slippage)
     }
-
-    @ViewBuilder
-    private var header: some View {
-        ZStack {
-            Text(L10n.Settings.title)
-                .typography(.body2)
-                .foregroundColor(.semantic.title)
-            HStack {
-                Spacer()
-                IconButton(icon: .navigationCloseButton()) {
-                    presentationMode.wrappedValue.dismiss()
-                }
-            }
-        }
-    }
-}
-
-private let allowedSlippages: [Double] = [0.002, 0.005, 0.01, 0.03]
-let defaultSlippage: Double = 0.005
-func formatSlippage(_ value: Double) -> String {
-    value.formatted(.percent)
 }
 
 struct DexSettingsView_Previews: PreviewProvider {
@@ -168,8 +199,12 @@ struct DexSettingsView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Spacer()
-            DexSettingsView(slippage: defaultSlippage)
-                .app(app)
+            DexSettingsView(
+                slippage: defaultSlippage,
+                expressMode: true,
+                gasOnDestination: true
+            )
+            .app(app)
             Spacer()
         }
     }

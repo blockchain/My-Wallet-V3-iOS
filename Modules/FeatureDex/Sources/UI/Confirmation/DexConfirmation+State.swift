@@ -6,16 +6,15 @@ import MoneyKit
 import SwiftUI
 
 extension DexConfirmation {
-    public struct State: Hashable {
+    public struct State: Equatable {
+
         var quote: Quote
         var newQuote: Quote?
         var priceUpdated: Bool { newQuote != nil }
         var balances: [DexBalance]
+
         @BindingState var didConfirm: Bool = false
         @BindingState var pendingTransaction: PendingTransaction.State?
-        @BindingState var networkFiatExchangeRate: MoneyValue?
-        @BindingState var fromFiatExchangeRate: MoneyValue?
-        @BindingState var toFiatExchangeRate: MoneyValue?
 
         var sourceBalance: DexBalance? {
             balances.first(where: { $0.currency == quote.from.currency })
@@ -28,11 +27,11 @@ extension DexConfirmation {
 }
 
 extension DexConfirmation.State {
-    public struct Quote: Hashable {
+    public struct Quote: Equatable {
         var enoughBalance: Bool
         var from: CryptoValue
         var minimumReceivedAmount: CryptoValue
-        var networkFee: CryptoValue
+        var fees: [DexQuoteOutput.Fee]
         var slippage: Double
         var to: CryptoValue
         var exchangeRate: MoneyValuePair {
@@ -47,9 +46,13 @@ extension DexConfirmation.State.Quote {
             enoughBalance: true,
             from: CryptoValue.create(major: 0.05, currency: from),
             minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: to),
-            networkFee: CryptoValue.create(major: 0.005, currency: from),
+            fees: [
+                .init(type: .network, value: .create(major: 0.005, currency: from)),
+                .init(type: .express, value: .create(major: 0.001, currency: from)),
+                .init(type: .total, value: .create(major: 0.006, currency: from))
+            ],
             slippage: 0.0013,
-            to: CryptoValue.create(major: 399917.445189445, currency: to)
+            to: CryptoValue.create(major: 1917.445189445, currency: to)
         )
     }
 }

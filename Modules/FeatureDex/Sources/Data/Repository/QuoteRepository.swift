@@ -126,7 +126,9 @@ private func dexQuoteRequest(
     }
     let params = DexQuoteRequest.Params(
         slippage: "\(input.slippage)",
-        skipValidation: input.skipValidation
+        skipValidation: input.skipValidation,
+        enableBoost: input.expressMode,
+        receiveGasOnDestination: input.gasOnDestination
     )
     return DexQuoteRequest(
         fromCurrency: fromCurrency,

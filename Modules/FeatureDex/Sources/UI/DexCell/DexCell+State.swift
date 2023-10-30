@@ -32,9 +32,13 @@ extension DexCell {
         @BindingState var textFieldIsFocused: Bool = false
         @BindingState var isCurrentInput: Bool = false
         @BindingState var quoteByOutputEnabled: Bool = false
+        @BindingState var crossChainEnabled: Bool = false
 
         var textFieldDisabled: Bool {
             style.isDestination && quoteByOutputEnabled.isNo
+        }
+        var networkPickerDisabled: Bool {
+            style.isDestination && crossChainEnabled.isNo
         }
 
         var availableBalances: [DexBalance]
@@ -50,6 +54,8 @@ extension DexCell {
 
         var assetPicker: AssetPicker.State?
         @BindingState var showAssetPicker: Bool = false
+        var networkPicker: NetworkPicker.State?
+        @BindingState var showNetworkPicker: Bool = false
 
         public init(
             style: DexCell.State.Style,

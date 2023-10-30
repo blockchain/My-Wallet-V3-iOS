@@ -8,6 +8,8 @@ public struct DexQuoteInput {
     public let destination: CryptoCurrency
     public let skipValidation: Bool
     public let slippage: Double
+    public let expressMode: Bool
+    public let gasOnDestination: Bool
     public let takerAddress: String
 
     public init(
@@ -16,6 +18,8 @@ public struct DexQuoteInput {
         destination: CryptoCurrency,
         skipValidation: Bool,
         slippage: Double,
+        expressMode: Bool,
+        gasOnDestination: Bool,
         takerAddress: String
     ) {
         self.takerAddress = takerAddress
@@ -23,6 +27,8 @@ public struct DexQuoteInput {
         self.source = source
         self.destination = destination
         self.slippage = slippage
+        self.expressMode = expressMode
+        self.gasOnDestination = gasOnDestination
         self.skipValidation = skipValidation
     }
 }

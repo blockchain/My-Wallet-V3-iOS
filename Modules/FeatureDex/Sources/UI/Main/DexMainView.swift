@@ -41,12 +41,6 @@ public struct DexMainView: View {
         }
         .bindings {
             subscribe(
-                viewStore.$defaultFiatCurrency,
-                to: blockchain.user.currency.preferred.fiat.trading.currency
-            )
-        }
-        .bindings {
-            subscribe(
                 viewStore.$isEligible,
                 to: blockchain.api.nabu.gateway.user.products.product["DEX"].is.eligible
             )
@@ -59,29 +53,48 @@ public struct DexMainView: View {
         }
         .bindings {
             subscribe(
-                viewStore.$slippage,
+                viewStore.binding(
+                    get: \.settings.slippage,
+                    send: { .binding(.set(\.settings.$slippage, $0)) }
+                ),
                 to: blockchain.ux.currency.exchange.dex.settings.slippage
             )
         }
         .bindings {
             subscribe(
-                viewStore.$quoteByOutputEnabled,
-                to: blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled
+                viewStore.binding(
+                    get: \.settings.gasOnDestination,
+                    send: { .binding(.set(\.settings.$gasOnDestination, $0)) }
+                ),
+                to: blockchain.ux.currency.exchange.dex.settings.gas.on.destination
             )
         }
         .bindings {
             subscribe(
-                viewStore.$currentSelectedNetworkTicker,
-                to: blockchain.ux.currency.exchange.dex.network.picker.selected.network.ticker.value
+                viewStore.binding(
+                    get: \.settings.expressMode,
+                    send: { .binding(.set(\.settings.$expressMode, $0)) }
+                ),
+                to: blockchain.ux.currency.exchange.dex.settings.express.mode
+            )
+        }
+        .bindings {
+            subscribe(
+                viewStore.$quoteByOutputEnabled,
+                to: blockchain.ux.currency.exchange.dex.config.quote.by.output.is.enabled
+            )
+        }
+        .bindings {
+            subscribe(
+                viewStore.$crossChainEnabled,
+                to: blockchain.ux.currency.exchange.dex.config.cross.chain.is.enabled
             )
         }
         .bindings {
             subscribe(
                 viewStore.binding(
                     get: \.allowance.transactionHash,
-                    send: {
-                        .binding(.set(\.allowance.$transactionHash, $0))
-                    }
+                    send: { .binding(.set(\.allowance.$transactionHash, $0)) }
                 ),
                 to: blockchain.ux.currency.exchange.dex.allowance.transactionId
             )
@@ -92,18 +105,17 @@ public struct DexMainView: View {
                 to: blockchain.ux.currency.exchange.dex.no.balance.sheet
             )
             set(
-                blockchain.ux.currency.exchange.dex.settings.tap.then.enter.into,
-                to: blockchain.ux.currency.exchange.dex.settings.sheet
-            )
-            set(
-                blockchain.ux.currency.exchange.dex.network.picker.tap.then.enter.into,
-                to: blockchain.ux.currency.exchange.dex.network.picker.sheet
-            )
-            set(
                 blockchain.ux.currency.exchange.dex.allowance.tap.then.enter.into,
                 to: blockchain.ux.currency.exchange.dex.allowance.sheet
             )
         }
+        .sheet(isPresented: viewStore.$isSettingsShown, content: {
+            DexSettingsView(
+                slippage: viewStore.settings.slippage,
+                expressMode: viewStore.settings.expressMode,
+                gasOnDestination: viewStore.settings.gasOnDestination
+            )
+        })
         .sheet(isPresented: viewStore.$isConfirmationShown, content: {
             IfLetStore(
                 store.scope(state: \.confirmation, action: DexMain.Action.confirmationAction),
@@ -123,7 +135,10 @@ public struct DexMainView: View {
         VStack(spacing: Spacing.padding2) {
             inputSection
             HStack(spacing: Spacing.padding1) {
-                estimatedFee
+                DexMainEstimatedFeeView(
+                    isFetching: viewStore.quoteFetching,
+                    value: viewStore.quote?.success?.networkFee
+                )
                 settingsButton
             }
             allowanceButton
@@ -252,71 +267,6 @@ public struct DexMainView: View {
 }
 
 extension DexMainView {
-
-    private var estimatedFeeString: String {
-        guard let networkFee = viewStore.quote?.success?.networkFee else {
-            return viewStore.defaultFiatCurrency
-                .flatMap(FiatValue.zero(currency:))?
-                .displayString ?? ""
-        }
-        guard let exchangeRate = viewStore.networkNativePrice else {
-            return networkFee.displayString
-        }
-        return networkFee.convert(using: exchangeRate).displayString
-    }
-
-    @ViewBuilder
-    private var estimatedFeeIcon: some View {
-        if viewStore.quoteFetching {
-            ProgressView()
-                .progressViewStyle(.indeterminate)
-                .frame(width: 16.pt, height: 16.pt)
-        } else {
-            Icon.gas
-                .color(.semantic.title)
-                .micro()
-        }
-    }
-
-    @ViewBuilder
-    private var estimatedFeeLabel: some View {
-        if !viewStore.quoteFetching {
-            Text("~ \(estimatedFeeString)")
-                .typography(.paragraph2)
-                .foregroundColor(
-                    viewStore.source.amount?.isZero ?? true ?
-                        .semantic.body : .semantic.title
-                )
-        }
-    }
-
-    @ViewBuilder
-    private var estimatedFeeTitle: some View {
-        if viewStore.quoteFetching {
-            Text(L10n.Main.fetchingPrice)
-                .typography(.paragraph2)
-                .foregroundColor(.semantic.title)
-        } else {
-            Text(L10n.Main.estimatedFee)
-                .typography(.paragraph2)
-                .foregroundColor(.semantic.title)
-        }
-    }
-
-    @ViewBuilder
-    private var estimatedFee: some View {
-        HStack {
-            HStack {
-                estimatedFeeIcon
-                estimatedFeeTitle
-            }
-            Spacer()
-            estimatedFeeLabel
-        }
-        .padding(Spacing.padding2)
-        .background(Color.semantic.background)
-        .cornerRadius(Spacing.padding2)
-    }
 
     @ViewBuilder
     private var settingsButton: some View {

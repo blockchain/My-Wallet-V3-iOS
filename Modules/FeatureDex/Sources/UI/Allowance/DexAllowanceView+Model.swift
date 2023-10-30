@@ -13,6 +13,7 @@ extension DexAllowanceView {
         @Dependency(\.mainQueue) var mainQueue
         @Dependency(\.transactionCreationService) var service
         var cryptocurrency: CryptoCurrency
+        var allowanceSpender: String
         var network: EVMNetwork?
         var didApprove: Bool = false
         @Published var output: Result<DelegatedCustodyTransactionOutput, UX.Error>?
@@ -20,15 +21,17 @@ extension DexAllowanceView {
 
         init(
             cryptocurrency: CryptoCurrency,
+            allowanceSpender: String,
             network: EVMNetwork?
         ) {
+            self.allowanceSpender = allowanceSpender
             self.cryptocurrency = cryptocurrency
             self.network = network
         }
 
         func onAppear() {
             service
-                .buildAllowance(token: cryptocurrency)
+                .buildAllowance(token: cryptocurrency, allowanceSpender: allowanceSpender)
                 .receive(on: mainQueue)
                 .assign(to: &$output)
         }

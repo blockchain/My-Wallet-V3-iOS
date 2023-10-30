@@ -53,10 +53,17 @@ public struct DexCellView: View {
         .bindings {
             subscribe(
                 viewStore.$quoteByOutputEnabled,
-                to: blockchain.ux.currency.exchange.dex.quote.by.output.is.enabled
+                to: blockchain.ux.currency.exchange.dex.config.quote.by.output.is.enabled
+            )
+        }
+        .bindings {
+            subscribe(
+                viewStore.$crossChainEnabled,
+                to: blockchain.ux.currency.exchange.dex.config.cross.chain.is.enabled
             )
         }
         .sheet(isPresented: viewStore.$showAssetPicker, content: { assetPickerView })
+        .sheet(isPresented: viewStore.$showNetworkPicker, content: { networkPickerView })
     }
 }
 
@@ -67,6 +74,14 @@ extension DexCellView {
         IfLetStore(
             store.scope(state: \.assetPicker, action: DexCell.Action.assetPicker),
             then: { store in AssetPickerView(store: store) }
+        )
+    }
+
+    @ViewBuilder
+    private var networkPickerView: some View {
+        IfLetStore(
+            store.scope(state: \.networkPicker, action: DexCell.Action.networkPicker),
+            then: { store in NetworkPickerView(store: store) }
         )
     }
 
@@ -155,7 +170,7 @@ extension DexCellView {
                 }
             }
         )
-        .disabled(viewStore.style.isDestination)
+        .disabled(viewStore.networkPickerDisabled)
     }
 
     @ViewBuilder
