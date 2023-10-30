@@ -38,7 +38,7 @@ public struct CoinView: View {
             ScrollView {
                 header()
                 allActionsList()
-                if isRejected {
+                if isRejected, app.currentMode != .pkw {
                     rejectedView
                 }
                 migration()
