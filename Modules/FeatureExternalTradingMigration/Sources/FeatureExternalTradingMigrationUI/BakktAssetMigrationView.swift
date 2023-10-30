@@ -170,17 +170,23 @@ struct AssetMigrationRow: View {
         self.balance = balance
     }
 
+    var trailingDescription: String?  {
+        if let amount = balance.amount.cryptoValue?.toFiatAmount(with: price)?.toDisplayString(includeSymbol: true) {
+            return "~ \(amount)"
+        }
+        return ""
+    }
+
     var body: some View {
         SimpleBalanceRow(
             leadingTitle: balance.currency.name,
             leadingDescription: balance.currency.code,
             trailingTitle:
                 "~" + balance.amount.toDisplayString(includeSymbol: true),
-            trailingDescription:
-                "~" + (balance.amount.cryptoValue?.toFiatAmount(with: price)?.toDisplayString(includeSymbol: true) ?? "")
-        ) {
-            balance.currency.logo()
-        }
+            trailingDescription: trailingDescription,
+            leading: {
+                balance.currency.logo()
+            } )
         .bindings {
             subscribe($price, to: blockchain.api.nabu.gateway.price.crypto[balance.currency.code].fiat["USD"].quote.value)
         }

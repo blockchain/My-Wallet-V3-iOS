@@ -160,7 +160,6 @@ public struct DashboardExternalMigrateView: View {
                 Icon.user
             }
         )
-        .padding(.horizontal, Spacing.padding2)
     }
 }
 
