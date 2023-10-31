@@ -12,7 +12,7 @@ public struct DexQuoteOutput: Equatable {
 
     public enum FeeType: Equatable {
         case network
-        case express
+        case crossChain
         case total
     }
 
@@ -69,11 +69,6 @@ public struct DexQuoteOutput: Equatable {
         response: DexQuoteResponse,
         currenciesService: EnabledCurrenciesServiceAPI
     ) {
-        guard response.legs == 1 else {
-            // Current implementation only supports 1-leg transactions.
-            return nil
-        }
-
         let fees = response.quote.fees
             .compactMap { fee in
                 fee.outputFee(currenciesService: currenciesService)
@@ -110,8 +105,8 @@ public struct DexQuoteOutput: Equatable {
 extension DexQuoteResponse.FeeType {
     var outputFeeType: DexQuoteOutput.FeeType? {
         switch self {
-        case .express:
-            return .express
+        case .crossChain:
+            return .crossChain
         case .network:
             return .network
         case .total:
@@ -214,14 +209,13 @@ extension DexQuoteOutput {
                 buyAmount: .init(amount: "0", symbol: "USDT"),
                 sellAmount: .init(amount: "0", symbol: "USDT"),
                 fees: [
-                    .init(type: .express, symbol: "USDT", amount: "0"),
+                    .init(type: .crossChain, symbol: "USDT", amount: "0"),
                     .init(type: .network, symbol: "USDT", amount: "0"),
                     .init(type: .total, symbol: "USDT", amount: "0")
                 ],
                 spenderAddress: ""
             ),
             tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
-            legs: 1,
             quoteTtl: 15000
         )
         return DexQuoteOutput(
@@ -234,7 +228,7 @@ extension DexQuoteOutput {
             field: .source,
             isValidated: false,
             fees: [
-                .init(type: .express, value: .create(major: Double(0.111), currency: .ethereum)),
+                .init(type: .crossChain, value: .create(major: Double(0.111), currency: .ethereum)),
                 .init(type: .network, value: .create(major: Double(0.222), currency: .ethereum)),
                 .init(type: .total, value: .create(major: Double(0.333), currency: .ethereum))
             ],

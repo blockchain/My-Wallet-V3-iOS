@@ -272,7 +272,7 @@ extension DexQuoteOutput.Fee {
         switch type {
         case .network:
             return L10n.Confirmation.networkFee
-        case .express:
+        case .crossChain:
             return L10n.Confirmation.expressFee
         case .total:
             return L10n.Confirmation.totalFee
@@ -286,7 +286,7 @@ extension DexQuoteOutput.Fee {
                 L10n.Confirmation.networkFee,
                 L10n.Confirmation.networkFeeDescription.interpolating(value.displayCode)
             )
-        case .express:
+        case .crossChain:
             return nil
         case .total:
             return nil

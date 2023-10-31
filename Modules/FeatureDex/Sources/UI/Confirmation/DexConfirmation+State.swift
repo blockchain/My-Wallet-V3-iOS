@@ -48,7 +48,7 @@ extension DexConfirmation.State.Quote {
             minimumReceivedAmount: CryptoValue.create(major: 61.92, currency: to),
             fees: [
                 .init(type: .network, value: .create(major: 0.005, currency: from)),
-                .init(type: .express, value: .create(major: 0.001, currency: from)),
+                .init(type: .crossChain, value: .create(major: 0.001, currency: from)),
                 .init(type: .total, value: .create(major: 0.006, currency: from))
             ],
             slippage: 0.0013,

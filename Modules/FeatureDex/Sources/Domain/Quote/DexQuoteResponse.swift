@@ -9,7 +9,7 @@ public struct DexQuoteResponse: Decodable, Equatable {
         public init(_ value: String) { self.value = value }
 
         static let network: FeeType = "GAS_FEE"
-        static let express: FeeType = "EXPRESS_FEE"
+        static let crossChain: FeeType = "XC_SWAP_FEE"
         static let total: FeeType = "TOTAL_FEE"
     }
 
@@ -63,15 +63,13 @@ public struct DexQuoteResponse: Decodable, Equatable {
         }
     }
 
-    public var legs: Int
     public var quoteTtl: Double
     public var quote: Quote
     public var tx: Transaction
 
-    init(quote: Quote, tx: Transaction, legs: Int, quoteTtl: Double) {
+    init(quote: Quote, tx: Transaction, quoteTtl: Double) {
         self.quote = quote
         self.tx = tx
-        self.legs = legs
         self.quoteTtl = quoteTtl
     }
 }

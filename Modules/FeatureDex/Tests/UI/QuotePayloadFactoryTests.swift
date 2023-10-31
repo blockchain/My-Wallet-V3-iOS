@@ -86,14 +86,13 @@ final class QuotePayloadFactoryTests: XCTestCase {
                 buyAmount: .init(amount: "0", symbol: "USDT"),
                 sellAmount: .init(amount: "0", symbol: "USDT"),
                 fees: [
-                    .init(type: .express, symbol: "USDT", amount: "0"),
+                    .init(type: .crossChain, symbol: "USDT", amount: "0"),
                     .init(type: .network, symbol: "USDT", amount: "0"),
                     .init(type: .total, symbol: "USDT", amount: "0")
                 ],
                 spenderAddress: ""
             ),
             tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
-            legs: 1,
             quoteTtl: 15000
         )
     }
