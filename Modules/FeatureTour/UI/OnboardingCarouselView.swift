@@ -7,6 +7,8 @@ import SwiftUI
 
 public struct OnboardingCarouselView: View {
 
+    @BlockchainApp var app
+
     private let store: Store<TourState, TourAction>
 //    private let list: LivePricesList
     private var manualLoginEnabled: Bool
@@ -128,20 +130,30 @@ extension OnboardingCarouselView {
                 if manualLoginEnabled {
                     PrimaryDoubleButton(
                         leadingTitle: LocalizationConstants.Tour.createAccountButtonTitle,
-                        leadingAction: { viewStore.send(.createAccount) },
+                        leadingAction: {
+                            $app.post(event: blockchain.ux.user.authentication.sign.up.entry.paragraph.button.primary.tap)
+                            viewStore.send(.createAccount)
+                        },
                         trailingTitle: LocalizationConstants.Tour.manualLoginButtonTitle,
                         trailingAction: { viewStore.send(.manualLogin) }
                     )
                 } else {
                     PrimaryButton(title: LocalizationConstants.Tour.createAccountButtonTitle) {
+                        $app.post(event: blockchain.ux.user.authentication.sign.up.entry.paragraph.button.primary.tap)
                         viewStore.send(.createAccount)
                     }
                 }
                 MinimalDoubleButton(
                     leadingTitle: LocalizationConstants.Tour.restoreButtonTitle,
-                    leadingAction: { viewStore.send(.restore) },
+                    leadingAction: {
+                        $app.post(event: blockchain.ux.user.authentication.restore.entry.paragraph.button.minimal.tap)
+                        viewStore.send(.restore)
+                    },
                     trailingTitle: LocalizationConstants.Tour.loginButtonTitle,
-                    trailingAction: { viewStore.send(.logIn) }
+                    trailingAction: {
+                        $app.post(event: blockchain.ux.user.authentication.sign.in.entry.paragraph.button.minimal.tap)
+                        viewStore.send(.logIn)
+                    }
                 )
 
                 FinancialPromotionApprovalView()

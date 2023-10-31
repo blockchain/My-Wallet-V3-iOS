@@ -8,6 +8,7 @@ import Combine
 import ComposableArchitecture
 import DIKit
 import Errors
+import FeatureCustodialOnboarding
 import FeatureFormDomain
 import FeatureKYCDomain
 import Localization
@@ -172,13 +173,51 @@ public final class Router: Routing {
         flowCompletion: @escaping (FlowResult) -> Void
     ) {
         // NOTE: you must retain the router to get the flow completion
-        presentKYC(from: presenter, requiredTier: requiredTier)
+        presentLegacyKYC(from: presenter, requiredTier: requiredTier)
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: flowCompletion)
             .store(in: &cancellables)
     }
 
     public func presentKYC(
+        from presenter: UIViewController,
+        requiredTier: KYC.Tier
+    ) -> AnyPublisher<FlowResult, Never> {
+        app.publisher(for: blockchain.ux.kyc.prove.is.enabled, as: Bool.self)
+            .replaceError(with: false)
+            .flatMap { [self] isEnabled in
+                if isEnabled {
+                    return presentFlowsKYC(from: presenter, requiredTier: requiredTier)
+                } else {
+                    return presentLegacyKYC(from: presenter, requiredTier: requiredTier)
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+
+    @Dependency(\.KYCOnboardingService) var KYCOnboardingService
+
+    private func presentFlowsKYC(
+        from presenter: UIViewController,
+        requiredTier: KYC.Tier
+    ) -> AnyPublisher<FlowResult, Never> {
+        let subject = PassthroughSubject<FlowResult, Never>()
+        return ifEligible(
+            subject.handleEvents(
+                receiveSubscription: { [KYCOnboardingService] _ in
+                    presenter.enter(
+                        into: FlowSequenceNavigationController(KYCOnboardingService.flow()) { isFinished in
+                            subject.send(isFinished ? .completed : .abandoned)
+                        }
+                    )
+                }
+            )
+            .eraseToAnyPublisher(),
+            presenter: presenter
+        )
+    }
+
+    public func presentLegacyKYC(
         from presenter: UIViewController,
         requiredTier: KYC.Tier
     ) -> AnyPublisher<FlowResult, Never> {

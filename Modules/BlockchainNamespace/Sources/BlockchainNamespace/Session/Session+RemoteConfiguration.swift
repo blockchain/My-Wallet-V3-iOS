@@ -88,7 +88,9 @@ extension Session {
                 func activate(keys: [String]) {
                     if keys.isEmpty {
                         #if DEBUG
-                        app.post(error: "remote configuration keys is empty! ‼️‼️‼️‼️")
+                        if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" {
+                            app.post(error: "remote configuration keys is empty! ‼️‼️‼️‼️")
+                        }
                         if !isInTest { return errored() }
                         #else
                         return errored()

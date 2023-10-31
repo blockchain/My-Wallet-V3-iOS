@@ -216,6 +216,11 @@ extension Icon {
         with(length: 72.pt)
     }
 
+    /// 72.pt
+    public func extraLarge() -> Icon {
+        with(length: 88.pt)
+    }
+
     public func scaleToFit() -> Icon {
         with(size: nil)
     }

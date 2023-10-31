@@ -39,15 +39,18 @@ public class FlowSequenceHostingViewController<RootView: View>: UIHostingControl
     }
 }
 
-@MainActor public class FlowSequenceNavigationController<Of: WhichFlowSequenceViewController>: UINavigationController {
+public class FlowSequenceNavigationController<Of: WhichFlowSequenceViewController>: UINavigationController {
 
     var sequence: AsyncStream<Of>
+    var completion: ((Bool) -> Void)?
+
     var task: Task<Void, Never>? {
         didSet { oldValue?.cancel() }
     }
 
-    public init(_ sequence: AsyncStream<Of>) {
+    public init(_ sequence: AsyncStream<Of>, completion: ((Bool) -> Void)? = nil) {
         self.sequence = sequence
+        self.completion = completion
         super.init(
             rootViewController: UIHostingController(rootView: InProgressView())
         )
@@ -61,14 +64,29 @@ public class FlowSequenceHostingViewController<RootView: View>: UIHostingControl
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setNavigationBarHidden(true, animated: animated)
-        task = Task {
+        task = Task { @MainActor in
             for await which in sequence {
                 let viewController = which.viewController()
                 pushViewController(viewController, animated: true)
                 await viewController.waitForCompletion()
             }
+            guard Task.isNotCancelled else { return }
+            var completion = completion
+            self.completion = nil
+            completion?(true)
         }
     }
+
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        var completion = completion
+        self.completion = nil
+        completion?(false)
+    }
+}
+
+extension Task where Success == Never, Failure == Never {
+    public static var isNotCancelled: Bool { !isCancelled }
 }
 
 // .. Preview ..

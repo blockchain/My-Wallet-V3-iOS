@@ -1,7 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
 import AnalyticsKit
-import BlockchainNamespace
+import Blockchain
 import Combine
 import DIKit
 import Errors
@@ -977,6 +977,67 @@ extension KYCRouter {
                 .await()
                 .value
             onComplete(isNewProfileEnabled ?? false)
+        }
+    }
+}
+
+import FeatureCustodialOnboarding
+
+final class VeriffManualInputFlowSequenceViewController: UIViewController, FlowSequenceViewController {
+
+    let router: Routing = resolve()
+    let isFinished = CurrentValueSubject<_, Never>(false)
+
+    override func loadView() {
+        view = UIProgressView(progressViewStyle: .default)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        router.routeToKYC(
+            from: self,
+            requiredTier: .verified,
+            flowCompletion: { [isFinished] _ in
+                isFinished.send(true)
+            }
+        )
+    }
+
+    func waitForCompletion() async {
+        for await isFinished in isFinished.values {
+            if isFinished { return }
+        }
+    }
+}
+
+public func registerFlows() {
+
+    let app: AppProtocol = DIKit.resolve()
+    let analyticsRecorder: AnalyticsEventRecorderAPI = DIKit.resolve()
+    let accountUsageService: KYCAccountUsageServiceAPI = DIKit.resolve()
+    let window: TopMostViewControllerProviding = DIKit.resolve()
+
+    OnboardingFlow.register(.veriff) { _ in
+        VeriffManualInputFlowSequenceViewController()
+    }
+
+    OnboardingFlow.register(.questions) { metadata in
+        let context = try metadata["context"].decode(String.self)
+        return FlowSequenceHostingViewController { completion in
+            AccountUsageView(
+                store: .init(
+                    initialState: AccountUsage.State.idle,
+                    reducer: {
+                        AccountUsage.AccountUsageReducer(
+                            onComplete: completion,
+                            dismiss: { window.findTopViewController(allowBeingDismissed: false).dismiss(animated: true) },
+                            loadForm: { accountUsageService.fetchExtraKYCQuestions(context: context) },
+                            submitForm: accountUsageService.submitExtraKYCQuestions,
+                            analyticsRecorder: analyticsRecorder
+                        )
+                    }
+                )
+            )
         }
     }
 }

@@ -13,6 +13,8 @@ private typealias AccessibilityIdentifier = AccessibilityIdentifiers.CreateAccou
 
 struct CreateAccountStepOneView: View {
 
+    @BlockchainApp var app
+
     private let store: Store<CreateAccountStepOneState, CreateAccountStepOneAction>
     @ObservedObject private var viewStore: ViewStore<CreateAccountStepOneState, CreateAccountStepOneAction>
 
@@ -53,6 +55,9 @@ struct CreateAccountStepOneView: View {
             // disabling the button doesn't gray it out
             .foregroundColor(viewStore.isNextStepButtonDisabled ? .semantic.muted : .semantic.title)
             .accessibility(identifier: AccessibilityIdentifier.nextButton)
+        }
+        .onAppear {
+            $app.post(event: blockchain.ux.user.authentication.sign.up.select.country)
         }
         .onAppear(perform: {
             viewStore.send(.onAppear)

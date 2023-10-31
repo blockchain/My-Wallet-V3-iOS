@@ -54,6 +54,9 @@ struct CreateAccountViewStepTwo: View {
             // setting the frame is necessary for the Spacer inside the VStack above to work properly
         }
         .primaryNavigation(title: "")
+        .onAppear {
+            $app.post(event: blockchain.ux.user.authentication.sign.up.enter.email.and.password)
+        }
         .onAppear(perform: {
             viewStore.send(.onAppear)
         })
@@ -83,8 +86,6 @@ struct CreateAccountViewStepTwo: View {
         .background(Color.semantic.light.ignoresSafeArea())
     }
 }
-
-extension UX.Error: Identifiable {}
 
 extension CreateAccountViewStepTwo {
 

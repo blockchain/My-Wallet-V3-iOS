@@ -20,6 +20,8 @@ public class KYCOnboardingService {
             unfolding: { [flowClient] in
                 do {
                     return try await flowClient.next()
+                } catch let error as Nabu.Error where error.response?.statusCode == 204 {
+                    return nil
                 } catch {
                     return OnboardingFlow(next_action: .init(slug: .error, metadata: AnyJSON(error)))
                 }

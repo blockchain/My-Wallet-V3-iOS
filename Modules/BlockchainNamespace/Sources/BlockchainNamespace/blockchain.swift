@@ -10332,6 +10332,7 @@ public final class L_blockchain_ux_kyc_prove: L, I_blockchain_ux_kyc_prove {
 public protocol I_blockchain_ux_kyc_prove: I {}
 public extension I_blockchain_ux_kyc_prove {
 	var `challenge`: L_blockchain_ux_kyc_prove_challenge { .init("\(__).challenge") }
+	var `is`: L_blockchain_ux_kyc_prove_is { .init("\(__).is") }
 	var `personal`: L_blockchain_ux_kyc_prove_personal { .init("\(__).personal") }
 	var `phone`: L_blockchain_ux_kyc_prove_phone { .init("\(__).phone") }
 }
@@ -10382,6 +10383,17 @@ public final class L_blockchain_ux_kyc_prove_challenge_ssn_next: L, I_blockchain
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.challenge.ssn.next", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_prove_challenge_ssn_next: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_kyc_prove_is: L, I_blockchain_ux_kyc_prove_is {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.is", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_prove_is: I {}
+public extension I_blockchain_ux_kyc_prove_is {
+	var `enabled`: L_blockchain_ux_kyc_prove_is_enabled { .init("\(__).enabled") }
+}
+public final class L_blockchain_ux_kyc_prove_is_enabled: L, I_blockchain_ux_kyc_prove_is_enabled {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.is.enabled", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_prove_is_enabled: I_blockchain_db_type_boolean, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_kyc_prove_personal: L, I_blockchain_ux_kyc_prove_personal {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.personal", comment: "") }
 }
@@ -14494,8 +14506,13 @@ public final class L_blockchain_ux_user_authentication: L, I_blockchain_ux_user_
 }
 public protocol I_blockchain_ux_user_authentication: I {}
 public extension I_blockchain_ux_user_authentication {
+	var `restore`: L_blockchain_ux_user_authentication_restore { .init("\(__).restore") }
 	var `sign`: L_blockchain_ux_user_authentication_sign { .init("\(__).sign") }
 }
+public final class L_blockchain_ux_user_authentication_restore: L, I_blockchain_ux_user_authentication_restore {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.restore", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_restore: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_user_authentication_sign: L, I_blockchain_ux_user_authentication_sign {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign", comment: "") }
 }
@@ -14597,6 +14614,8 @@ public extension I_blockchain_ux_user_authentication_sign_up {
 	var `address`: L_blockchain_ux_user_authentication_sign_up_address { .init("\(__).address") }
 	var `create`: L_blockchain_ux_user_authentication_sign_up_create { .init("\(__).create") }
 	var `did`: L_blockchain_ux_user_authentication_sign_up_did { .init("\(__).did") }
+	var `enter`: L_blockchain_ux_user_authentication_sign_up_enter { .init("\(__).enter") }
+	var `select`: L_blockchain_ux_user_authentication_sign_up_select { .init("\(__).select") }
 }
 public final class L_blockchain_ux_user_authentication_sign_up_address: L, I_blockchain_ux_user_authentication_sign_up_address {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.address", comment: "") }
@@ -14653,6 +14672,42 @@ public final class L_blockchain_ux_user_authentication_sign_up_did_succeed: L, I
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.did.succeed", comment: "") }
 }
 public protocol I_blockchain_ux_user_authentication_sign_up_did_succeed: I_blockchain_ux_type_analytics_event {}
+public final class L_blockchain_ux_user_authentication_sign_up_enter: L, I_blockchain_ux_user_authentication_sign_up_enter {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.enter", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_enter: I {}
+public extension I_blockchain_ux_user_authentication_sign_up_enter {
+	var `email`: L_blockchain_ux_user_authentication_sign_up_enter_email { .init("\(__).email") }
+}
+public final class L_blockchain_ux_user_authentication_sign_up_enter_email: L, I_blockchain_ux_user_authentication_sign_up_enter_email {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.enter.email", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_enter_email: I {}
+public extension I_blockchain_ux_user_authentication_sign_up_enter_email {
+	var `and`: L_blockchain_ux_user_authentication_sign_up_enter_email_and { .init("\(__).and") }
+}
+public final class L_blockchain_ux_user_authentication_sign_up_enter_email_and: L, I_blockchain_ux_user_authentication_sign_up_enter_email_and {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.enter.email.and", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_enter_email_and: I {}
+public extension I_blockchain_ux_user_authentication_sign_up_enter_email_and {
+	var `password`: L_blockchain_ux_user_authentication_sign_up_enter_email_and_password { .init("\(__).password") }
+}
+public final class L_blockchain_ux_user_authentication_sign_up_enter_email_and_password: L, I_blockchain_ux_user_authentication_sign_up_enter_email_and_password {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.enter.email.and.password", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_enter_email_and_password: I_blockchain_ux_type_story {}
+public final class L_blockchain_ux_user_authentication_sign_up_select: L, I_blockchain_ux_user_authentication_sign_up_select {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.select", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_select: I {}
+public extension I_blockchain_ux_user_authentication_sign_up_select {
+	var `country`: L_blockchain_ux_user_authentication_sign_up_select_country { .init("\(__).country") }
+}
+public final class L_blockchain_ux_user_authentication_sign_up_select_country: L, I_blockchain_ux_user_authentication_sign_up_select_country {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.user.authentication.sign.up.select.country", comment: "") }
+}
+public protocol I_blockchain_ux_user_authentication_sign_up_select_country: I_blockchain_ux_type_story {}
 public final class L_blockchain_ux_user_custodial: L, I_blockchain_ux_user_custodial {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.user.custodial", comment: "") }
 }

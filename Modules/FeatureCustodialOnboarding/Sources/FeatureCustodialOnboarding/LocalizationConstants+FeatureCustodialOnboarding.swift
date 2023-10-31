@@ -79,4 +79,9 @@ extension LocalizationConstants.CustodialOnboarding {
     static let requireAddress = NSLocalizedString("• Home address", comment: "• Home address")
     static let requireSSN = NSLocalizedString("• Social Security Number", comment: "• Social Security Number")
 
+    static let receivedYourInformation = NSLocalizedString("We’ve successfully received your information.", comment: "We’ve successfully received your information.")
+    static let couldTake60Seconds = NSLocalizedString("This could take up to 60 seconds.\nWe’ll redirect you as soon as we finish.", comment: "This could take up to 60 seconds.\nWe’ll redirect you as soon as we finish.")
+    static let wellNotifyYou = NSLocalizedString("We’ll notify you of the status of your application via email as we’re experiencing high volumes of applications.", comment: "We’ll notify you of the status of your application via email as we’re experiencing high volumes of applications.")
+    static let goToDashboard = NSLocalizedString("Go to dashboard", comment: "Go to dashboard")
+
 }

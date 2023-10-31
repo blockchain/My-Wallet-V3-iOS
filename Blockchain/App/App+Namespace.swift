@@ -7,6 +7,7 @@ import FeatureAppUI
 import FeatureAttributionDomain
 import FeatureAuthenticationDomain
 import FeatureCoinUI
+import FeatureCustodialOnboarding
 import FeatureCustomerSupportUI
 import FeatureDashboardDomain
 import FeatureExternalTradingMigrationDomain
@@ -56,6 +57,9 @@ extension AppProtocol {
         userTagService: UserTagServiceAPI = resolve(),
         productsService: ProductsServiceAPI = resolve()
     ) {
+
+        FeatureKYCUI.registerFlows()
+
         clientObservers.insert(ApplicationStateObserver(app: self))
         clientObservers.insert(AppHapticObserver(app: self))
         clientObservers.insert(AppAnalyticsObserver(app: self))

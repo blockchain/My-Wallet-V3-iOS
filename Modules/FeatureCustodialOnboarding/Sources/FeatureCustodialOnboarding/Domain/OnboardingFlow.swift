@@ -23,8 +23,11 @@ extension OnboardingFlow.Slug {
     public static let verificationInProgress: Self = "VERIFICATION_IN_PROGRESS"
     public static let loading: Self = "LOADING"
     public static let veriff: Self = "VERIFF"
+    public static let questions: Self = "KYC_QUESTIONS"
     public static let veriffIntroduction: Self = "VERIFF_INTRODUCTION"
     public static let error: Self = "ERROR"
+    public static let none: Self = "NONE"
+    public static let pendingKYC: Self = "PENDING_KYC"
 }
 
 extension OnboardingFlow.Slug: CaseIterable {
@@ -42,7 +45,8 @@ extension OnboardingFlow: WhichFlowSequenceViewController {
         .provePhoneNumberVerification: makePhoneNumberVerificationFlowSequenceViewController,
         .verificationInProgress: makeVerificationInProgressFlowSequenceViewController,
         .loading: makeInProgressFlowSequenceViewController,
-        .veriffIntroduction: makeVeriffIntroductionFlowSequenceViewController
+        .veriffIntroduction: makeVeriffIntroductionFlowSequenceViewController,
+        .pendingKYC: makeApplicationSubmittedViewFlowSequenceViewController
     ]
 
     public static func register(_ slug: OnboardingFlow.Slug, _ builder: @escaping (AnyJSON) throws -> FlowSequenceViewController) {
@@ -57,8 +61,8 @@ extension OnboardingFlow: WhichFlowSequenceViewController {
                 throw "\(next_action.slug.value) has no associated view.".error()
             }
         } catch {
-            return FlowSequenceHostingViewController { _ in
-                ErrorView(ux: UX.Error(error: error))
+            return FlowSequenceHostingViewController { completion in
+                ErrorView(ux: UX.Error(error: error), navigationBarClose: false, dismiss: completion)
             }
         }
     }
@@ -85,6 +89,13 @@ func makeVerificationInProgressFlowSequenceViewController(_ metadata: AnyJSON) t
         VerificationInProgressView()
     }
 }
+
+func makeApplicationSubmittedViewFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
+    FlowSequenceHostingViewController { completion in
+        ApplicationSubmittedView(completion: completion)
+    }
+}
+
 
 func makeVeriffIntroductionFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
     FlowSequenceHostingViewController { completion in
@@ -124,11 +135,11 @@ func makePersonalInformationConfirmationFlowSequenceViewController(_ metadata: A
 }
 
 func makeErrorFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
-    try FlowSequenceHostingViewController { _ in
+    try FlowSequenceHostingViewController { completion in
         do {
-            return try ErrorView(ux: UX.Error(nabu: metadata.decode(Nabu.Error.self)))
+            return try ErrorView(ux: UX.Error(nabu: metadata.decode(Nabu.Error.self)), navigationBarClose: false, dismiss: completion)
         } catch {
-            return try ErrorView(ux: UX.Error(error: metadata.as(Error.self)))
+            return try ErrorView(ux: UX.Error(error: metadata.as(Error.self)), navigationBarClose: false, dismiss: completion)
         }
     }
 }

@@ -8,7 +8,7 @@ public struct NetworkAdapterDependencyKey: DependencyKey {
     )
 
     public static var previewValue: NetworkAdapterAPI = NetworkAdapter(
-        communicator: EphemeralNetworkCommunicator(session: .shared)
+        communicator: EphemeralNetworkCommunicator(session: .shared, isRecording: true)
     )
 
     public static var testValue: NetworkAdapterAPI = NetworkAdapter(
@@ -23,11 +23,21 @@ public struct RequestBuilderDependencyKey: DependencyKey {
     )
 
     public static var previewValue: RequestBuilder = RequestBuilder(
-        config: Network.Config.retailConfig
+        config: Network.Config(
+            apiScheme: "https",
+            apiHost: "blockchain.info",
+            apiCode: BlockchainAPI.Parameters.apiCode,
+            pathComponents: ["nabu-gateway"]
+        )
     )
 
     public static var testValue: RequestBuilder = RequestBuilder(
-        config: Network.Config.retailConfig
+        config: Network.Config(
+            apiScheme: "https",
+            apiHost: "blockchain.info",
+            apiCode: BlockchainAPI.Parameters.apiCode,
+            pathComponents: ["nabu-gateway"]
+        )
     )
 }
 

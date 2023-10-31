@@ -2778,6 +2778,10 @@ blockchain:
 					+ blockchain.ux.type.story
 						next:
 						+ blockchain.ux.type.task
+				is:
+					enabled:
+					+ blockchain.db.type.boolean
+					+ blockchain.session.configuration.value
 				personal:
 					information:
 						confirmation:
@@ -3849,6 +3853,8 @@ blockchain:
 					count:
 					model:
 			authentication:
+				restore:
+				+ blockchain.ux.type.story
 				sign:
 					in:
 					+ blockchain.ux.type.story
@@ -3894,6 +3900,14 @@ blockchain:
 								+ blockchain.db.type.any
 							succeed:
 							+ blockchain.ux.type.analytics.event
+						enter:
+							email:
+								and:
+									password:
+									+ blockchain.ux.type.story
+						select:
+							country:
+							+ blockchain.ux.type.story
 			custodial:
 				dashboard:
 					no:
