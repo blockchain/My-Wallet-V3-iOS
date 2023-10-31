@@ -61,7 +61,6 @@ public struct DeFiDashboard: Reducer {
 
         Scope(state: \.allAssetsState, action: /Action.allAssetsAction) { () -> AllAssetsScene in
             AllAssetsScene(
-                assetBalanceInfoRepository: assetBalanceInfoRepository,
                 app: app
             )
         }

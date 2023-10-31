@@ -8,7 +8,7 @@ extension DependencyContainer {
 
     public static var dashboardData = module {
 
-        factory { () -> AssetBalanceInfoServiceAPI in
+        single { () -> AssetBalanceInfoServiceAPI in
             AssetBalanceInfoService(
                 nonCustodialBalanceRepository: DIKit.resolve(),
                 priceService: DIKit.resolve(),

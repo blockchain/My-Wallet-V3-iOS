@@ -8910,8 +8910,13 @@ public final class L_blockchain_ux_dashboard_defi_assets: L, I_blockchain_ux_das
 }
 public protocol I_blockchain_ux_dashboard_defi_assets: I {}
 public extension I_blockchain_ux_dashboard_defi_assets {
+	var `info`: L_blockchain_ux_dashboard_defi_assets_info { .init("\(__).info") }
 	var `small`: L_blockchain_ux_dashboard_defi_assets_small { .init("\(__).small") }
 }
+public final class L_blockchain_ux_dashboard_defi_assets_info: L, I_blockchain_ux_dashboard_defi_assets_info {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.defi.assets.info", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_defi_assets_info: I_blockchain_db_type_any, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_dashboard_defi_assets_small: L, I_blockchain_ux_dashboard_defi_assets_small {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.defi.assets.small", comment: "") }
 }
@@ -9360,8 +9365,18 @@ public final class L_blockchain_ux_dashboard_trading_assets: L, I_blockchain_ux_
 }
 public protocol I_blockchain_ux_dashboard_trading_assets: I {}
 public extension I_blockchain_ux_dashboard_trading_assets {
+	var `crypto`: L_blockchain_ux_dashboard_trading_assets_crypto { .init("\(__).crypto") }
+	var `fiat`: L_blockchain_ux_dashboard_trading_assets_fiat { .init("\(__).fiat") }
 	var `small`: L_blockchain_ux_dashboard_trading_assets_small { .init("\(__).small") }
 }
+public final class L_blockchain_ux_dashboard_trading_assets_crypto: L, I_blockchain_ux_dashboard_trading_assets_crypto {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.assets.crypto", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_trading_assets_crypto: I_blockchain_db_type_any, I_blockchain_session_state_stored_value {}
+public final class L_blockchain_ux_dashboard_trading_assets_fiat: L, I_blockchain_ux_dashboard_trading_assets_fiat {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.assets.fiat", comment: "") }
+}
+public protocol I_blockchain_ux_dashboard_trading_assets_fiat: I_blockchain_db_type_any, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_dashboard_trading_assets_small: L, I_blockchain_ux_dashboard_trading_assets_small {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.dashboard.trading.assets.small", comment: "") }
 }

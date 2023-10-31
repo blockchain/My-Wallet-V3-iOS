@@ -91,6 +91,7 @@ extension AppProtocol {
         clientObservers.insert(LaunchKYCClientObserver())
         clientObservers.insert(SweepAddressesObserver(app: self))
         clientObservers.insert(ResubmitResidentialInformation())
+        clientObservers.insert(DashboardAssetsObserver(app: self))
 
         let intercom = (
             apiKey: Bundle.main.plist.intercomAPIKey[] as String?,

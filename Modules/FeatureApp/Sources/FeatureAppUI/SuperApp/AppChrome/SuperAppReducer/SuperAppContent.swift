@@ -13,7 +13,6 @@ import MoneyKit
 import SwiftUI
 
 struct SuperAppContent: Reducer {
-    @Dependency(\.totalBalanceService) var totalBalanceService
     let app: AppProtocol
 
     struct State: Equatable {
@@ -28,7 +27,7 @@ struct SuperAppContent: Reducer {
         case onAppear
         case onDisappear
         case refresh
-        case onTotalBalanceFetched(TaskResult<TotalBalanceInfo>)
+        case onTotalBalanceFetched(TaskResult<MoneyValue>)
         case onTradingModeEnabledFetched(Bool)
         case onAppModeFetched(AppMode)
         case header(SuperAppHeader.Action)
@@ -68,21 +67,22 @@ struct SuperAppContent: Reducer {
                     },
                     .run { send in
                         await send(.onAppModeFetched( await app.mode()))
-                    })
+                    }
+                )
             case .refresh,
                  .header(.refresh):
                 NotificationCenter.default.post(name: .dashboardPullToRefresh, object: nil)
                 app.post(event: blockchain.ux.home.event.did.pull.to.refresh)
                 state.headerState.isRefreshing = true
-                return .run { [totalBalanceService] send in
-                    for await total in totalBalanceService.totalBalance() {
-                        await send(.onTotalBalanceFetched(TaskResult { try total.get() }))
+                return .run { send in
+                    for await balanceValue in app.stream(blockchain.ux.dashboard.total.balance, as: MoneyValue.self) {
+                        await send(.onTotalBalanceFetched(TaskResult { try balanceValue.get() }))
                     }
                 }
                 .cancellable(id: TotalBalanceFetchId(), cancelInFlight: true)
 
             case .onTotalBalanceFetched(.success(let info)):
-                state.headerState.totalBalance = info.total
+                state.headerState.totalBalance = info
                 state.headerState.isRefreshing = false
                 state.headerState.hasError = false
                 return .none

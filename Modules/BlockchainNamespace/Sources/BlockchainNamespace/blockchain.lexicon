@@ -2352,6 +2352,9 @@ blockchain:
 			+ blockchain.ux.type.task
 			defi:
 				assets:
+					info:
+					+ blockchain.db.type.any
+					+ blockchain.session.state.stored.value
 					small:
 						balance:
 							filtering:
@@ -2472,6 +2475,12 @@ blockchain:
 						+ blockchain.session.state.stored.value
 			trading:
 				assets:
+					crypto:
+					+ blockchain.db.type.any
+					+ blockchain.session.state.stored.value
+					fiat:
+					+ blockchain.db.type.any
+					+ blockchain.session.state.stored.value
 					small:
 						balance:
 							filtering:

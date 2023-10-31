@@ -37,30 +37,26 @@ public struct BalanceInfo: Codable, Equatable {
 /// - Parameters:
 ///   - currentBalance: The current `MoneyValue`
 ///   - previousBalance: The previous `MoneyValue`
-/// - Returns: A `Result<BalanceInfo, BalanceInfoError>`
+/// - Returns: A `BalanceInfo`
 public func balanceInfoBetween(
     currentBalance: MoneyValue,
     previousBalance: MoneyValue
-) -> Result<BalanceInfo, BalanceInfoError> {
-    do {
-        let percentage: Decimal
-        let change = try currentBalance - previousBalance
-        if currentBalance.isZero {
+) throws -> BalanceInfo {
+    let percentage: Decimal
+    let change = try currentBalance - previousBalance
+    if currentBalance.isZero {
+        percentage = 0
+    } else {
+        if previousBalance.isZero || previousBalance.isNegative {
             percentage = 0
         } else {
-            if previousBalance.isZero || previousBalance.isNegative {
-                percentage = 0
-            } else {
-                percentage = try change.percentage(in: previousBalance)
-            }
+            percentage = try change.percentage(in: previousBalance)
         }
-        let info = BalanceInfo(
-            balance: currentBalance,
-            changePercentage: String(describing: percentage),
-            change: change
-        )
-        return .success(info)
-    } catch {
-        return .failure(.unableToRetrieve)
     }
+    let info = BalanceInfo(
+        balance: currentBalance,
+        changePercentage: String(describing: percentage),
+        change: change
+    )
+    return info
 }

@@ -16,6 +16,15 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     public let balanceFailingForNetwork: Bool?
 
     public var rawQuote: MoneyValue?
+    public let yesterdayRawQuote: MoneyValue?
+
+    public var yesterdayFiatBalance: MoneyValuePair? {
+        guard let balance, let quote = yesterdayRawQuote else { return nil }
+        return MoneyValuePair(
+            base: balance,
+            exchangeRate: quote
+        )
+    }
 
     public var id: String {
         currency.code
@@ -41,7 +50,8 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         fastRising: Bool? = nil,
         network: AssetBalanceInfoNetwork? = nil,
         balanceFailingForNetwork: Bool = false,
-        rawQuote: MoneyValue?
+        rawQuote: MoneyValue?,
+        yesterdayRawQuote: MoneyValue? = nil
     ) {
         self.balance = cryptoBalance
         self.fiatBalance = fiatBalance
@@ -52,6 +62,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
         self.network = network
         self.balanceFailingForNetwork = balanceFailingForNetwork
         self.rawQuote = rawQuote
+        self.yesterdayRawQuote = yesterdayRawQuote
     }
 
     public func hash(into hasher: inout Hasher) {
@@ -59,7 +70,7 @@ public struct AssetBalanceInfo: Equatable, Identifiable, Hashable, Codable {
     }
 }
 
-public struct FiatBalancesInfo: Equatable, Hashable {
+public struct FiatBalancesInfo: Codable, Equatable, Hashable {
     public let balances: [AssetBalanceInfo]
     public let tradingCurrency: FiatCurrency
 

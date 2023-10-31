@@ -12,12 +12,6 @@ import MoneyKit
 import PlatformKit
 import ToolKit
 
-protocol AssetBalanceInfoServiceAPI {
-    func getCustodialCryptoAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never>
-    func getFiatAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never>
-    func getNonCustodialCryptoAssetsInfo(fiatCurrency: FiatCurrency, at time: PriceTime) -> AnyPublisher<[AssetBalanceInfo], Never>
-}
-
 final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
     private let nonCustodialBalanceRepository: DelegatedCustodyBalanceRepositoryAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
@@ -152,7 +146,8 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                     delta: delta,
                     fastRising: isFastRising,
                     network: network,
-                    rawQuote: quote
+                    rawQuote: quote,
+                    yesterdayRawQuote: yesterday
                 )
             }
             .logErrorIfNoOutput(id: "trading.info")
@@ -180,8 +175,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             product: EarnProduct,
             assets: [CryptoCurrency]
         ) -> AnyPublisher<[AssetBalanceInfo], Never> {
-            assets.map { asset -> AnyPublisher<AssetBalanceInfo, Never> in
-
+            assets.map { asset -> AnyPublisher<AssetBalanceInfo?, Never> in
                 let today: AnyPublisher<MoneyValue, Never> = priceService.price(of: asset, in: currency, at: time)
                     .map(\.moneyValue)
                     .catch { _ in
@@ -195,26 +189,39 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                     .replaceError(with: .zero(currency: currency))
                     .eraseToAnyPublisher()
 
-                return app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
+                return app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].is.eligible, as: Bool.self)
                     .map(\.value)
-                    .replaceNil(with: MoneyValue.zero(currency: asset))
-                    .combineLatest(today, yesterday, app.computed(blockchain.ux.dashboard.test.balance.multiplier, as: Int.self).replaceError(with: 1))
-                    .map { (crypto: MoneyValue, quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
-                        AssetBalanceInfo(
-                            cryptoBalance: crypto * multiplier,
-                            fiatBalance: MoneyValuePair(base: crypto * multiplier, exchangeRate: quote),
-                            currency: asset.currencyType,
-                            delta: try? MoneyValue.delta(yesterday, quote).roundTo(places: 2),
-                            rawQuote: quote
-                        )
+                    .replaceNil(with: false)
+                    .flatMap { [app] value -> AnyPublisher<AssetBalanceInfo?, Never> in
+                        guard value else {
+                            return .just(nil)
+                        }
+                        return app.publisher(for: blockchain.user.earn.product[product.value].asset[asset.code].account.balance, as: MoneyValue.self)
+                            .map(\.value)
+                            .replaceNil(with: MoneyValue.zero(currency: asset))
+                            .combineLatest(today, yesterday, app.computed(blockchain.ux.dashboard.test.balance.multiplier, as: Int.self).replaceError(with: 1))
+                            .map { (crypto: MoneyValue, quote: MoneyValue, yesterday: MoneyValue, multiplier: Int) -> AssetBalanceInfo in
+                                AssetBalanceInfo(
+                                    cryptoBalance: crypto * multiplier,
+                                    fiatBalance: MoneyValuePair(base: crypto * multiplier, exchangeRate: quote),
+                                    currency: asset.currencyType,
+                                    delta: try? MoneyValue.delta(yesterday, quote).roundTo(places: 2),
+                                    rawQuote: quote,
+                                    yesterdayRawQuote: yesterday
+                                )
+                            }
+                            .eraseToAnyPublisher()
                     }
                     .eraseToAnyPublisher()
             }
             .combineLatest()
+            .map { info in
+                info.compactMap { $0 }
+            }
+            .eraseToAnyPublisher()
         }
 
-        return app
-            .publisher(for: blockchain.ux.earn.supported.products, as: [EarnProduct].self)
+        return app.publisher(for: blockchain.ux.earn.supported.products, as: [EarnProduct].self)
             .replaceError(with: [.staking, .savings, .active])
             .flatMap { [app] products -> AnyPublisher<[AssetBalanceInfo], Never> in
                 products.map { product -> AnyPublisher<[AssetBalanceInfo], Never> in
@@ -227,7 +234,7 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                         .eraseToAnyPublisher()
                 }
                 .combineLatest()
-                .map { models in
+                .map { models -> [AssetBalanceInfo] in
                     models.flatMap { $0 }
                 }
                 .eraseToAnyPublisher()
@@ -282,6 +289,21 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
                 .combineLatest()
             }
             .eraseToAnyPublisher()
+    }
+}
+
+extension AssetModel {
+    func supports(earnProductType: EarnProduct) -> Bool {
+        switch earnProductType {
+        case .active:
+            return supports(product: .activeRewardsBalance)
+        case .savings:
+            return supports(product: .interestBalance)
+        case .staking:
+            return supports(product: .staking)
+        default:
+            return false
+        }
     }
 }
 

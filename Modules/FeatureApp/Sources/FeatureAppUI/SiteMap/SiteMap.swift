@@ -74,7 +74,6 @@ public struct SiteMap {
         case blockchain.ux.user.assets.all:
             let initialState = try AllAssetsScene.State(with: context.decode(blockchain.ux.user.assets.all.model))
             let reducer = AllAssetsScene(
-                assetBalanceInfoRepository: resolve(),
                 app: app
             )
             AllAssetsSceneView(store: Store(

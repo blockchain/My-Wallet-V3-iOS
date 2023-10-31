@@ -16,27 +16,33 @@ final class AssetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI {
         self.service = service
     }
 
-    func cryptoCustodial(fiatCurrency: FiatCurrency, time: PriceTime) -> StreamOf<[AssetBalanceInfo], Never> {
+    func cryptoCustodial(fiatCurrency: FiatCurrency, time: PriceTime) -> StreamOf<[AssetBalanceInfo], AssetBalanceInfoError> {
         service.getCustodialCryptoAssetsInfo(
             fiatCurrency: fiatCurrency,
             at: time
         )
+        .eraseError()
+        .mapError { _ in AssetBalanceInfoError.failure }
         .result()
     }
 
-    func fiat(fiatCurrency: FiatCurrency, time: PriceTime) -> StreamOf<[AssetBalanceInfo], Never> {
+    func fiat(fiatCurrency: FiatCurrency, time: PriceTime) -> StreamOf<[AssetBalanceInfo], AssetBalanceInfoError> {
         service.getFiatAssetsInfo(
             fiatCurrency: fiatCurrency,
             at: time
         )
+        .eraseError()
+        .mapError { _ in AssetBalanceInfoError.failure }
         .result()
     }
 
-    func cryptoNonCustodial(fiatCurrency: FiatCurrency, time: PriceTime) -> StreamOf<[AssetBalanceInfo], Never> {
+    func cryptoNonCustodial(fiatCurrency: FiatCurrency, time: PriceTime) -> StreamOf<[AssetBalanceInfo], AssetBalanceInfoError> {
         service.getNonCustodialCryptoAssetsInfo(
             fiatCurrency: fiatCurrency,
             at: time
         )
+        .eraseError()
+        .mapError { _ in AssetBalanceInfoError.failure }
         .result()
     }
 }

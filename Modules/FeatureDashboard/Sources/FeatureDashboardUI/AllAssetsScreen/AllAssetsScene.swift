@@ -7,19 +7,16 @@ import SwiftExtensions
 import ToolKit
 
 public struct AllAssetsScene: Reducer {
-    public let assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI
     public let app: AppProtocol
     public init(
-        assetBalanceInfoRepository: AssetBalanceInfoRepositoryAPI,
         app: AppProtocol
     ) {
-        self.assetBalanceInfoRepository = assetBalanceInfoRepository
         self.app = app
     }
 
     public enum Action: Equatable, BindableAction {
         case onAppear
-        case onBalancesFetched(Result<[AssetBalanceInfo], Never>)
+        case onBalancesFetched(Result<[AssetBalanceInfo], AssetBalanceInfoError>)
         case binding(BindingAction<State>)
         case onFilterTapped
         case onConfirmFilterTapped
@@ -66,18 +63,18 @@ public struct AllAssetsScene: Reducer {
                     as: Bool.self,
                     or: false
                 )
-                return .publisher { [state] in
-                    app
-                        .publisher(
-                            for: blockchain.user.currency.preferred.fiat.display.currency,
-                            as: FiatCurrency.self
-                        )
+                let publisher = state.presentedAssetType.isCustodial
+                ? app.publisher(for: blockchain.ux.dashboard.trading.assets.crypto, as: AssetBalanceInfoResult.self)
+                : app.publisher(for: blockchain.ux.dashboard.defi.assets.info, as: AssetBalanceInfoResult.self)
+
+                return .publisher {
+                    publisher
                         .compactMap(\.value)
-                        .flatMap { fiatCurrency -> StreamOf<[AssetBalanceInfo], Never> in
-                            let cryptoPublisher = state.presentedAssetType.isCustodial
-                            ? assetBalanceInfoRepository.cryptoCustodial(fiatCurrency: fiatCurrency, time: .now)
-                            : assetBalanceInfoRepository.cryptoNonCustodial(fiatCurrency: fiatCurrency, time: .now)
-                            return cryptoPublisher
+                        .map { info -> Result<[AssetBalanceInfo], AssetBalanceInfoError> in
+                            if info.hasError {
+                                return .failure(.failure)
+                            }
+                            return .success(info.info)
                         }
                         .receive(on: DispatchQueue.main)
                         .map(Action.onBalancesFetched)

@@ -25,19 +25,24 @@ class TradingBalanceService: TradingBalanceServiceAPI {
 
     var balances: AnyPublisher<CustodialAccountBalanceStates, Never> {
         app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
+            .map(\.value)
+            .replaceNil(with: false)
             .replaceError(with: false)
             .logErrorIfNoOutput(id: blockchain.app.is.external.brokerage(\.id))
-            .flatMap { [streamBalances] useExternalTradingAccount -> AnyPublisher<CustodialAccountBalanceStates, Never> in
+            .flatMap { [cachedValue] useExternalTradingAccount -> AnyPublisher<CustodialAccountBalanceStates, Never> in
                 if useExternalTradingAccount {
-                    return streamBalances(.external)
+                    return Self.streamBalances(cachedValue, .external)
                 } else {
-                    return streamBalances(.custodial)
+                    return Self.streamBalances(cachedValue, .custodial)
                 }
             }
             .eraseToAnyPublisher()
     }
 
-    func streamBalances(_ key: Key) -> AnyPublisher<CustodialAccountBalanceStates, Never> {
+    static func streamBalances(
+        _ cachedValue: CachedValueNew<Key, CustodialAccountBalanceStates, Error>,
+        _ key: Key
+    ) -> AnyPublisher<CustodialAccountBalanceStates, Never> {
         cachedValue.stream(key: key)
             .logErrorIfNoOutput(id: "streamBalances(\(key))")
             .map { result -> CustodialAccountBalanceStates in

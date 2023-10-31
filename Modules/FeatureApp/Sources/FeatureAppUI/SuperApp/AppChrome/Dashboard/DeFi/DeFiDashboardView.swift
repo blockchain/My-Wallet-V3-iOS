@@ -8,6 +8,7 @@ import DIKit
 import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureCoinUI
+import FeatureDashboardDomain
 import FeatureDashboardUI
 import FeatureProductsDomain
 import FeatureQuickActions
