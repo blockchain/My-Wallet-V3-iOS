@@ -3345,11 +3345,21 @@ public final class L_blockchain_app_loader_did: L, I_blockchain_app_loader_did {
 public protocol I_blockchain_app_loader_did: I {}
 public extension I_blockchain_app_loader_did {
 	var `appear`: L_blockchain_app_loader_did_appear { .init("\(__).appear") }
+	var `fail`: L_blockchain_app_loader_did_fail { .init("\(__).fail") }
+	var `succeed`: L_blockchain_app_loader_did_succeed { .init("\(__).succeed") }
 }
 public final class L_blockchain_app_loader_did_appear: L, I_blockchain_app_loader_did_appear {
 	public override class var localized: String { NSLocalizedString("blockchain.app.loader.did.appear", comment: "") }
 }
 public protocol I_blockchain_app_loader_did_appear: I_blockchain_ux_type_analytics_state {}
+public final class L_blockchain_app_loader_did_fail: L, I_blockchain_app_loader_did_fail {
+	public override class var localized: String { NSLocalizedString("blockchain.app.loader.did.fail", comment: "") }
+}
+public protocol I_blockchain_app_loader_did_fail: I_blockchain_ux_type_analytics_state {}
+public final class L_blockchain_app_loader_did_succeed: L, I_blockchain_app_loader_did_succeed {
+	public override class var localized: String { NSLocalizedString("blockchain.app.loader.did.succeed", comment: "") }
+}
+public protocol I_blockchain_app_loader_did_succeed: I_blockchain_ux_type_analytics_state {}
 public final class L_blockchain_app_mode: L, I_blockchain_app_mode {
 	public override class var localized: String { NSLocalizedString("blockchain.app.mode", comment: "") }
 }
@@ -6414,6 +6424,7 @@ public extension I_blockchain_user {
 	var `asset`: L_blockchain_user_asset { .init("\(__).asset") }
 	var `creation`: L_blockchain_user_creation { .init("\(__).creation") }
 	var `currency`: L_blockchain_user_currency { .init("\(__).currency") }
+	var `did`: L_blockchain_user_did { .init("\(__).did") }
 	var `earn`: L_blockchain_user_earn { .init("\(__).earn") }
 	var `email`: L_blockchain_user_email { .init("\(__).email") }
 	var `event`: L_blockchain_user_event { .init("\(__).event") }
@@ -6707,6 +6718,38 @@ public final class L_blockchain_user_currency_preferred_fiat_trading_currency: L
 	public override class var localized: String { NSLocalizedString("blockchain.user.currency.preferred.fiat.trading.currency", comment: "") }
 }
 public protocol I_blockchain_user_currency_preferred_fiat_trading_currency: I_blockchain_session_state_value, I_blockchain_type_currency {}
+public final class L_blockchain_user_did: L, I_blockchain_user_did {
+	public override class var localized: String { NSLocalizedString("blockchain.user.did", comment: "") }
+}
+public protocol I_blockchain_user_did: I {}
+public extension I_blockchain_user_did {
+	var `fetch`: L_blockchain_user_did_fetch { .init("\(__).fetch") }
+}
+public final class L_blockchain_user_did_fetch: L, I_blockchain_user_did_fetch {
+	public override class var localized: String { NSLocalizedString("blockchain.user.did.fetch", comment: "") }
+}
+public protocol I_blockchain_user_did_fetch: I {}
+public extension I_blockchain_user_did_fetch {
+	var `is`: L_blockchain_user_did_fetch_is { .init("\(__).is") }
+}
+public final class L_blockchain_user_did_fetch_is: L, I_blockchain_user_did_fetch_is {
+	public override class var localized: String { NSLocalizedString("blockchain.user.did.fetch.is", comment: "") }
+}
+public protocol I_blockchain_user_did_fetch_is: I {}
+public extension I_blockchain_user_did_fetch_is {
+	var `external`: L_blockchain_user_did_fetch_is_external { .init("\(__).external") }
+}
+public final class L_blockchain_user_did_fetch_is_external: L, I_blockchain_user_did_fetch_is_external {
+	public override class var localized: String { NSLocalizedString("blockchain.user.did.fetch.is.external", comment: "") }
+}
+public protocol I_blockchain_user_did_fetch_is_external: I {}
+public extension I_blockchain_user_did_fetch_is_external {
+	var `brokerage`: L_blockchain_user_did_fetch_is_external_brokerage { .init("\(__).brokerage") }
+}
+public final class L_blockchain_user_did_fetch_is_external_brokerage: L, I_blockchain_user_did_fetch_is_external_brokerage {
+	public override class var localized: String { NSLocalizedString("blockchain.user.did.fetch.is.external.brokerage", comment: "") }
+}
+public protocol I_blockchain_user_did_fetch_is_external_brokerage: I_blockchain_ux_type_analytics_state {}
 public final class L_blockchain_user_earn: L, I_blockchain_user_earn {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn", comment: "") }
 }

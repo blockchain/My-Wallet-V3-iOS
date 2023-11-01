@@ -23,10 +23,18 @@ public final class ProductsRepository: ProductsRepositoryAPI {
         self.cachedProducts = CachedValueNew(
             cache: cache,
             fetch: { [app] _ in
-                app.publisher(for: blockchain.user.is.external.brokerage, as: Bool.self)
+                app.post(
+                    event: blockchain.app.will.fetch.products
+                )
+                return app.publisher(for: blockchain.user.is.external.brokerage, as: Bool.self)
+                    .logErrorIfNoOutput()
                     .compactMap { result in
                         switch result {
                         case .value(let value, _):
+                            app.post(
+                                event: blockchain.user.did.fetch.is.external.brokerage,
+                                context: [blockchain.user.is.external.brokerage: value]
+                            )
                             return value
                         case .error(let error, _):
                             app.post(error: error)

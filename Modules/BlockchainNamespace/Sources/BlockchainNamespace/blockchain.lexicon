@@ -837,6 +837,10 @@ blockchain:
 			did:
 				appear:
 				+ blockchain.ux.type.analytics.state
+				fail:
+				+ blockchain.ux.type.analytics.state
+				succeed:
+				+ blockchain.ux.type.analytics.state
 		mode:
 		+ blockchain.session.state.preference.value
 			defi:
@@ -1751,6 +1755,12 @@ blockchain:
 						currency:
 						+ blockchain.session.state.value
 						+ blockchain.type.currency
+		did:
+			fetch:
+				is:
+					external:
+						brokerage:
+						+ blockchain.ux.type.analytics.state
 		earn:
 			balance:
 			+ blockchain.type.money

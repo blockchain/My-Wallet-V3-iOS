@@ -21,8 +21,10 @@ struct AppLoaderView<Content: View>: View {
       } else {
         BlockchainProgressView()
           .task {
-            _ = try? await loaderService.loadAppDependencies()
-            withAnimation { didFinish = true }
+             let dependenciesLoaded = try? await loaderService.loadAppDependencies()
+             let event = dependenciesLoaded == true ? blockchain.app.loader.did.succeed : blockchain.app.loader.did.fail
+             app.post(event: event)
+             withAnimation { didFinish = true }
           }
           .onAppear {
               app.post(event: blockchain.app.loader.did.appear)
