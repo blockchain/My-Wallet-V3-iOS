@@ -9,6 +9,7 @@ public struct DexQuoteResponse: Decodable, Equatable {
         public init(_ value: String) { self.value = value }
 
         static let network: FeeType = "GAS_FEE"
+        static let express: FeeType = "EXPRESS_FEE"
         static let crossChain: FeeType = "XC_SWAP_FEE"
         static let total: FeeType = "TOTAL_FEE"
     }
@@ -20,24 +21,26 @@ public struct DexQuoteResponse: Decodable, Equatable {
     }
 
     public struct Quote: Decodable, Equatable {
-        public var buyAmount: Amount
-        public var sellAmount: Amount
-        public var fees: [Fee]
-        public var spenderAddress: String
+        public let buyAmount: Amount
+        public let sellAmount: Amount
+        public let fees: [Fee]
+        public let bcdcFeePercentage: String
+        public let spenderAddress: String
 
-        init(buyAmount: Amount, sellAmount: Amount, fees: [Fee], spenderAddress: String) {
+        init(buyAmount: Amount, sellAmount: Amount, fees: [Fee], bcdcFeePercentage: String, spenderAddress: String) {
             self.buyAmount = buyAmount
             self.sellAmount = sellAmount
             self.fees = fees
+            self.bcdcFeePercentage = bcdcFeePercentage
             self.spenderAddress = spenderAddress
         }
     }
 
     public struct Amount: Decodable, Equatable {
-        public var address: String?
-        public var amount: String
-        public var minAmount: String?
-        public var symbol: String
+        public let address: String?
+        public let amount: String
+        public let minAmount: String?
+        public let symbol: String
 
         init(address: String? = nil, amount: String, minAmount: String? = nil, symbol: String) {
             self.address = address
@@ -48,11 +51,11 @@ public struct DexQuoteResponse: Decodable, Equatable {
     }
 
     public struct Transaction: Decodable, Equatable {
-        public var data: String
-        public var gasLimit: String
-        public var gasPrice: String
-        public var value: String
-        public var to: String
+        public let data: String
+        public let gasLimit: String
+        public let gasPrice: String
+        public let value: String
+        public let to: String
 
         init(data: String, gasLimit: String, gasPrice: String, value: String, to: String) {
             self.data = data
@@ -63,11 +66,13 @@ public struct DexQuoteResponse: Decodable, Equatable {
         }
     }
 
-    public var quoteTtl: Double
-    public var quote: Quote
-    public var tx: Transaction
+    public let approxConfirmationTime: Int
+    public let quoteTtl: Double
+    public let quote: Quote
+    public let tx: Transaction
 
-    init(quote: Quote, tx: Transaction, quoteTtl: Double) {
+    init(approxConfirmationTime: Int, quote: Quote, tx: Transaction, quoteTtl: Double) {
+        self.approxConfirmationTime = approxConfirmationTime
         self.quote = quote
         self.tx = tx
         self.quoteTtl = quoteTtl

@@ -331,6 +331,12 @@ extension L10n.Allowance {
 }
 
 extension L10n.Confirmation {
+
+    static let learnMore = NSLocalizedString(
+        "Learn More",
+        comment: "Dex: Learn More"
+    )
+
     static let title = NSLocalizedString(
         "Confirm Swap",
         comment: "Dex: Confirmation title"
@@ -346,21 +352,47 @@ extension L10n.Confirmation {
         comment: "Dex: Network"
     )
 
-    static let allowedSlippageTitle = L10n.Settings.Slippage.title
-    static let allowedSlippageTooltip = L10n.Settings.Slippage.body
+    static let allowedSlippage = L10n.Settings.Slippage.title
+
+    static let estimatedConfirmationTime = NSLocalizedString(
+        "Est. txn. time",
+        comment: "Dex: Main"
+    )
 
     static let minAmount = NSLocalizedString(
         "Min. Amount",
         comment: "Dex: Main"
     )
 
-    static let minAmountDescription = NSLocalizedString(
-        "The minimum amount you are guaranteed to receive. If the price changes more than 0.5%, your transaction will revert.",
-        comment: "Dex: Main"
-    )
+    enum MinAmountTooltip {
+        static let title = L10n.Confirmation.minAmount
+        static let body = NSLocalizedString(
+            "The minimum amount you are guaranteed to receive. If the price changes more than 0.5%, your transaction will revert.",
+            comment: "Dex: Main"
+        )
+    }
+    enum SlippageTooltip {
+        static let title = L10n.Confirmation.allowedSlippage
+        static let body = L10n.Settings.Slippage.body
+    }
+    enum CrossChainRevertTooltip {
+        static let title = NSLocalizedString(
+            "What happens if my transaction is reverted?",
+            comment: "Dex: Main"
+        )
+        static let body =  NSLocalizedString(
+            "In the case of price volatility and low slippage, the transaction may revert. If this happens, you will receive the value of your original swap amount in axlUSDC on the destination chain - instead of your chosen token.\nIf you receive axlUSDC unexpectedly on the destination chain, you’re almost there! You can swap it to your desired token by visiting the DEX and swapping on the destination chain for your desired token.",
+            comment: "Dex: Main"
+        )
+    }
 
     static let networkFee = NSLocalizedString(
         "Gas fee",
+        comment: "Dex: Main"
+    )
+
+    static let crossChainNetworkFee = NSLocalizedString(
+        "Cross-chain gas fee",
         comment: "Dex: Main"
     )
 
@@ -404,8 +436,13 @@ extension L10n.Confirmation {
         comment: "Dex: Main"
     )
 
-    static let disclaimer = NSLocalizedString(
+    static let revertDisclaimer = NSLocalizedString(
         "Input is estimated. You will receive at least %@ or the transaction will revert and assets will be returned to your wallet.",
+        comment: "Dex: Main"
+    )
+
+    static let crossChainRevertDisclaimer = NSLocalizedString(
+        "If your transaction is reverted, you will receive the value of your original swap amount in %@ on the destination chain - instead of your chosen token.",
         comment: "Dex: Main"
     )
 

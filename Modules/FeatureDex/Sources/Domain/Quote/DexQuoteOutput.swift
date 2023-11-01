@@ -13,6 +13,7 @@ public struct DexQuoteOutput: Equatable {
     public enum FeeType: Equatable {
         case network
         case crossChain
+        case express
         case total
     }
 
@@ -30,6 +31,7 @@ public struct DexQuoteOutput: Equatable {
         public let minimum: CryptoValue?
     }
 
+    public let estimatedConfirmationTime: Int
     public let buyAmount: BuyAmount
     public let field: Field
     public let isValidated: Bool
@@ -37,24 +39,30 @@ public struct DexQuoteOutput: Equatable {
     public let slippage: String
     public let fees: [Fee]
     public let allowanceSpender: String
+    public let bcdcFeePercentage: String
+    public let isCrossChain: Bool
 
     public var networkFee: CryptoValue? {
         fees.first(where: { $0.type == .network })?.value
     }
 
-    public let response: DexQuoteResponse
+    public let response: DexQuoteResponse.Transaction
 
     init(
-        response: DexQuoteResponse,
+        response: DexQuoteResponse.Transaction,
         allowanceSpender: String,
+        estimatedConfirmationTime: Int,
         buyAmount: BuyAmount,
         field: Field,
         isValidated: Bool,
         fees: [Fee],
         sellAmount: CryptoValue,
-        slippage: String
+        slippage: String,
+        bcdcFeePercentage: String,
+        isCrossChain: Bool
     ) {
         self.allowanceSpender = allowanceSpender
+        self.estimatedConfirmationTime = estimatedConfirmationTime
         self.buyAmount = buyAmount
         self.field = field
         self.isValidated = isValidated
@@ -62,6 +70,8 @@ public struct DexQuoteOutput: Equatable {
         self.slippage = slippage
         self.response = response
         self.fees = fees
+        self.isCrossChain = isCrossChain
+        self.bcdcFeePercentage = bcdcFeePercentage
     }
 
     public init?(
@@ -87,16 +97,19 @@ public struct DexQuoteOutput: Equatable {
         )
 
         guard let field = FeatureDexDomain.field(from: request) else { return nil }
-
+        let isCrossChain = buyAmount.currency.network() != sellAmount.currency.network()
         self.init(
-            response: response,
+            response: response.tx,
             allowanceSpender: response.quote.spenderAddress,
+            estimatedConfirmationTime: response.approxConfirmationTime,
             buyAmount: BuyAmount(amount: buyAmount, minimum: minimumBuyAmount),
             field: field,
             isValidated: !request.params.skipValidation,
             fees: fees,
             sellAmount: sellAmount,
-            slippage: request.params.slippage
+            slippage: request.params.slippage,
+            bcdcFeePercentage: response.quote.bcdcFeePercentage,
+            isCrossChain: isCrossChain
         )
     }
 }
@@ -105,6 +118,8 @@ public struct DexQuoteOutput: Equatable {
 extension DexQuoteResponse.FeeType {
     var outputFeeType: DexQuoteOutput.FeeType? {
         switch self {
+        case .express:
+            return .express
         case .crossChain:
             return .crossChain
         case .network:
@@ -204,23 +219,10 @@ extension DexQuoteOutput {
         buy: CryptoCurrency,
         sell: CryptoValue
     ) -> DexQuoteOutput {
-        let response = DexQuoteResponse(
-            quote: .init(
-                buyAmount: .init(amount: "0", symbol: "USDT"),
-                sellAmount: .init(amount: "0", symbol: "USDT"),
-                fees: [
-                    .init(type: .crossChain, symbol: "USDT", amount: "0"),
-                    .init(type: .network, symbol: "USDT", amount: "0"),
-                    .init(type: .total, symbol: "USDT", amount: "0")
-                ],
-                spenderAddress: ""
-            ),
-            tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
-            quoteTtl: 15000
-        )
-        return DexQuoteOutput(
-            response: response,
+        DexQuoteOutput(
+            response: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
             allowanceSpender: "",
+            estimatedConfirmationTime: 52,
             buyAmount: BuyAmount(
                 amount: CryptoValue.create(major: Double(5), currency: buy),
                 minimum: nil
@@ -233,7 +235,9 @@ extension DexQuoteOutput {
                 .init(type: .total, value: .create(major: Double(0.333), currency: .ethereum))
             ],
             sellAmount: sell,
-            slippage: "0.003"
+            slippage: "0.003",
+            bcdcFeePercentage: "0.008",
+            isCrossChain: true
         )
     }
 }

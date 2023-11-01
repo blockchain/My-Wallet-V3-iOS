@@ -6,6 +6,7 @@ import SwiftUI
 
 struct DexConfirmationView: View {
 
+    static let axlUSDC = "axlUSDC"
     typealias L10n = FeatureDexUI.L10n.Confirmation
 
     let store: StoreOf<DexConfirmation>
@@ -90,11 +91,25 @@ struct DexConfirmationView: View {
     private var rows: some View {
         DividedVStack {
             tableRow(
-                title: L10n.allowedSlippageTitle,
+                title: L10n.estimatedConfirmationTime,
+                value: {
+                    tableRowTitle("\(viewStore.quote.estimatedConfirmationTime)s")
+                },
+                tooltip: nil
+            )
+            tableRow(
+                title: L10n.allowedSlippage,
                 value: {
                     tableRowTitle(formatSlippage(viewStore.quote.slippage))
                 },
-                tooltip: (L10n.allowedSlippageTitle, L10n.allowedSlippageTooltip)
+                tooltip: nil
+            )
+            tableRow(
+                title: L10n.blockchainFee,
+                value: {
+                    tableRowTitle(formatSlippage(viewStore.quote.blockchainFee))
+                },
+                tooltip: (L10n.SlippageTooltip.title, L10n.SlippageTooltip.body)
             )
             tableRow(
                 title: L10n.exchangeRate,
@@ -108,7 +123,7 @@ struct DexConfirmationView: View {
                 value: {
                     ValueWithQuoteView(value: viewStore.quote.minimumReceivedAmount, isEstimated: false)
                 },
-                tooltip: (title: L10n.minAmount, message: L10n.minAmountDescription)
+                tooltip: (title: L10n.MinAmountTooltip.title, message: L10n.MinAmountTooltip.body)
             )
         }
         .padding(.vertical, 6.pt)
@@ -116,6 +131,11 @@ struct DexConfirmationView: View {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.semantic.background)
         )
+        feeRows
+    }
+
+    @ViewBuilder
+    private var feeRows: some View {
         DividedVStack {
             ForEach(viewStore.quote.fees.indexed(), id: \.index) { _, fee in
                 tableRow(
@@ -136,7 +156,46 @@ struct DexConfirmationView: View {
 
     @ViewBuilder
     private var disclaimer: some View {
-        Text(L10n.disclaimer.interpolating(viewStore.quote.minimumReceivedAmount.displayString))
+        VStack(alignment: .center, spacing: Spacing.padding2) {
+            regularDisclaimer
+            if viewStore.quote.axelarCrossChainQuote {
+                axelarCrossChainDisclaimer
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var axelarCrossChainDisclaimer: some View {
+        Text(L10n.crossChainRevertDisclaimer.interpolating(Self.axlUSDC))
+            .typography(.caption1)
+            .foregroundColor(.semantic.body)
+            .multilineTextAlignment(.center)
+        SmallSecondaryButton(title: L10n.learnMore) {
+            $app.post(
+                event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
+                context: [
+                    blockchain.ux.tooltip.title: L10n.CrossChainRevertTooltip.title,
+                    blockchain.ux.tooltip.body: L10n.CrossChainRevertTooltip.body.interpolating(Self.axlUSDC),
+                    blockchain.ui.type.action.then.enter.into.detents: [
+                        blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                    ]
+                ]
+            )
+        }
+        Image("axelar-dex-logo", bundle: .module)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(height: 40.pt)
+            .padding(.bottom, Spacing.padding1)
+    }
+
+    private var regularDisclaimerText: String {
+        L10n.revertDisclaimer.interpolating(viewStore.quote.minimumReceivedAmount.displayString)
+    }
+
+    @ViewBuilder
+    private var regularDisclaimer: some View {
+        Text(regularDisclaimerText)
             .typography(.caption1)
             .foregroundColor(.semantic.body)
             .multilineTextAlignment(.center)
@@ -217,6 +276,7 @@ struct DexConfirmationView: View {
             },
             trailing: value
         )
+        .tableRowVerticalInset(Spacing.padding2)
         .onTapGesture {
             if let (title, body) = tooltip {
                 $app.post(
@@ -270,10 +330,12 @@ struct DexConfirmationView: View {
 extension DexQuoteOutput.Fee {
     fileprivate var title: String {
         switch type {
+        case .express:
+            return L10n.Confirmation.expressFee
         case .network:
             return L10n.Confirmation.networkFee
         case .crossChain:
-            return L10n.Confirmation.expressFee
+            return L10n.Confirmation.crossChainNetworkFee
         case .total:
             return L10n.Confirmation.totalFee
         }
@@ -287,6 +349,11 @@ extension DexQuoteOutput.Fee {
                 L10n.Confirmation.networkFeeDescription.interpolating(value.displayCode)
             )
         case .crossChain:
+            return (
+                L10n.Confirmation.crossChainNetworkFee,
+                L10n.Confirmation.networkFeeDescription.interpolating(value.displayCode)
+            )
+        case .express:
             return nil
         case .total:
             return nil

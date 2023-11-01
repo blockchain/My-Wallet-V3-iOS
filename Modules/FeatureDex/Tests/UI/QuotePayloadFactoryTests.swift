@@ -14,14 +14,17 @@ final class QuotePayloadFactoryTests: XCTestCase {
     func testOutputMajor() {
         _ = App.preview
         let quote = DexQuoteOutput(
-            response: mockResponse,
+            response: mockTxResponse,
             allowanceSpender: "",
+            estimatedConfirmationTime: 52,
             buyAmount: DexQuoteOutput.BuyAmount(amount: ether(major: 2), minimum: ether(major: 1)),
             field: .source,
             isValidated: true,
             fees: [.init(type: .network, value: bitcoin(major: 0.01))],
             sellAmount: bitcoin(major: 1),
-            slippage: "0.1234"
+            slippage: "0.1234", 
+            bcdcFeePercentage: "0.008",
+            isCrossChain: true
         )
         let result = QuotePayloadFactory.create(quote, service: EnabledCurrenciesService.default)!
         XCTAssertEqual(result.inputCurrency, "BTC")
@@ -39,8 +42,9 @@ final class QuotePayloadFactoryTests: XCTestCase {
     func testOutputLong() {
         _ = App.preview
         let quote = DexQuoteOutput(
-            response: mockResponse,
+            response: mockTxResponse,
             allowanceSpender: "",
+            estimatedConfirmationTime: 52,
             buyAmount: DexQuoteOutput.BuyAmount(
                 amount: ether("2123456789123456789"),
                 minimum: ether("1123456789123456789")
@@ -49,7 +53,9 @@ final class QuotePayloadFactoryTests: XCTestCase {
             isValidated: true,
             fees: [.init(type: .network, value: bitcoin("1234567"))],
             sellAmount: bitcoin("112345678"),
-            slippage: "0.123456789"
+            slippage: "0.123456789",
+            bcdcFeePercentage: "0.008",
+            isCrossChain: true
         )
         let result = QuotePayloadFactory.create(quote, service: EnabledCurrenciesService.default)!
         XCTAssertEqual(result.inputCurrency, "BTC")
@@ -80,20 +86,7 @@ final class QuotePayloadFactoryTests: XCTestCase {
         CryptoValue.create(minor: minor, currency: .bitcoin)!
     }
 
-    private var mockResponse: DexQuoteResponse {
-        DexQuoteResponse(
-            quote: .init(
-                buyAmount: .init(amount: "0", symbol: "USDT"),
-                sellAmount: .init(amount: "0", symbol: "USDT"),
-                fees: [
-                    .init(type: .crossChain, symbol: "USDT", amount: "0"),
-                    .init(type: .network, symbol: "USDT", amount: "0"),
-                    .init(type: .total, symbol: "USDT", amount: "0")
-                ],
-                spenderAddress: ""
-            ),
-            tx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
-            quoteTtl: 15000
-        )
+    private var mockTxResponse: DexQuoteResponse.Transaction {
+        .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: "")
     }
 }

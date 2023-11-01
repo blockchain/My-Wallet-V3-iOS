@@ -70,15 +70,15 @@ final class TransactionCreationService: TransactionCreationServiceAPI {
             account: account,
             amount: nil,
             currency: network.nativeAsset.code,
-            destination: quote.response.tx.to,
-            fee: .custom(quote.response.tx.gasPrice),
+            destination: quote.response.to,
+            fee: .custom(quote.response.gasPrice),
             feeCurrency: network.nativeAsset.code,
             maxVerificationVersion: .v1,
             memo: "",
             type: .swap(
-                data: quote.response.tx.data,
-                gasLimit: quote.response.tx.gasLimit,
-                value: quote.response.tx.value
+                data: quote.response.data,
+                gasLimit: quote.response.gasLimit,
+                value: quote.response.value
             )
         )
         return service.buildTransaction(input)

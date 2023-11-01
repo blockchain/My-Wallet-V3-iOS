@@ -19,6 +19,12 @@ public struct SmallMinimalButton<LeadingView: View>: View {
     private let leadingView: LeadingView
     private let action: () -> Void
 
+    @Environment(\.isEnabled) private var isEnabled
+
+    private var colorCombination: PillButtonStyle.ColorCombination {
+        minimalButtonColorCombination(foregroundColor: foregroundColor, isOpaque: true)
+    }
+
     public init(
         title: String,
         isLoading: Bool = false,
@@ -62,15 +68,24 @@ public struct SmallMinimalButton<LeadingView: View>: View {
     }
 
     public var body: some View {
-        MinimalButton(
-            title: $title,
-            isLoading: isLoading,
-            isOpaque: true,
-            foregroundColor: foregroundColor,
-            leadingView: { leadingView },
-            action: action
+        Button {
+            action()
+        } label: {
+            HStack(spacing: Spacing.padding1) {
+                leadingView
+                    .frame(width: 24, height: 24)
+                Text(title)
+                    .typography(.paragraph2)
+            }
+        }
+        .buttonStyle(
+            PillButtonStyle(
+                isLoading: isLoading,
+                isEnabled: isEnabled,
+                size: .small,
+                colorCombination: colorCombination
+            )
         )
-        .pillButtonSize(.small)
     }
 }
 

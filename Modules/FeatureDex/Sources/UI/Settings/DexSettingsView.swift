@@ -114,7 +114,7 @@ struct DexSettingsView: View {
     private var gasOnDestinationRow: some View {
         if model.gasOnDestinationAllowed {
             tableRow(
-                icon: .flashOn,
+                icon: .gas,
                 title: L10n.Settings.DestinationGas.title,
                 body: L10n.Settings.DestinationGas.body,
                 isOn: $model.gasOnDestination

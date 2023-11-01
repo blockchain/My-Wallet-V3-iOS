@@ -394,11 +394,17 @@ extension DexConfirmation.State.Quote {
         guard let slippage = Double(quote.slippage) else {
             return nil
         }
+        guard let bcdcFeePercentage = Double(quote.bcdcFeePercentage) else {
+            return nil
+        }
         self = DexConfirmation.State.Quote(
+            axelarCrossChainQuote: quote.isCrossChain,
+            estimatedConfirmationTime: quote.estimatedConfirmationTime,
             enoughBalance: true,
             from: quote.sellAmount,
             minimumReceivedAmount: quote.buyAmount.minimum ?? quote.buyAmount.amount,
             fees: quote.fees,
+            blockchainFee: bcdcFeePercentage,
             slippage: slippage,
             to: quote.buyAmount.amount
         )

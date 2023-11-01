@@ -27,31 +27,7 @@ public struct MinimalButton<LeadingView: View>: View {
     @Environment(\.isEnabled) private var isEnabled
 
     private var colorCombination: PillButtonStyle.ColorCombination {
-        .init(
-            enabled: PillButtonStyle.ColorSet(
-                foreground: foregroundColor,
-                background: Color(light: .palette.white, dark: .palette.dark900).opacity(isOpaque ? 1 : 0),
-                border: Color(light: .palette.grey000, dark: .palette.dark700)
-            ),
-            pressed: PillButtonStyle.ColorSet(
-                foreground: foregroundColor,
-                background: Color(light: .palette.blue000, dark: .palette.dark800),
-                border: .semantic.primaryMuted
-            ),
-            disabled: PillButtonStyle.ColorSet(
-                foreground: Color(
-                    light: foregroundColor.opacity(0.7),
-                    dark: .palette.grey600
-                ),
-                background: Color(light: .palette.white, dark: .palette.dark900),
-                border: Color(light: .palette.grey000, dark: .palette.dark800)
-            ),
-            progressViewRail: .semantic.primary,
-            progressViewTrack: Color(
-                light: .semantic.blueBG,
-                dark: .palette.white.opacity(0.25)
-            )
-        )
+        minimalButtonColorCombination(foregroundColor: foregroundColor, isOpaque: isOpaque)
     }
 
     public init(
@@ -93,7 +69,6 @@ public struct MinimalButton<LeadingView: View>: View {
             HStack(spacing: Spacing.padding1) {
                 leadingView
                     .frame(width: 24, height: 24)
-
                 Text(title)
                     .typography(.body2)
             }
@@ -167,4 +142,35 @@ struct MinimalButton_Previews: PreviewProvider {
         }
         .padding()
     }
+}
+
+func minimalButtonColorCombination(
+    foregroundColor: Color,
+    isOpaque: Bool
+) -> PillButtonStyle.ColorCombination {
+    PillButtonStyle.ColorCombination(
+        enabled: PillButtonStyle.ColorSet(
+            foreground: foregroundColor,
+            background: Color(light: .palette.white, dark: .palette.dark900).opacity(isOpaque ? 1 : 0),
+            border: Color(light: .palette.grey000, dark: .palette.dark700)
+        ),
+        pressed: PillButtonStyle.ColorSet(
+            foreground: foregroundColor,
+            background: Color(light: .palette.blue000, dark: .palette.dark800),
+            border: .semantic.primaryMuted
+        ),
+        disabled: PillButtonStyle.ColorSet(
+            foreground: Color(
+                light: foregroundColor.opacity(0.7),
+                dark: .palette.grey600
+            ),
+            background: Color(light: .palette.white, dark: .palette.dark900),
+            border: Color(light: .palette.grey000, dark: .palette.dark800)
+        ),
+        progressViewRail: .semantic.primary,
+        progressViewTrack: Color(
+            light: .semantic.blueBG,
+            dark: .palette.white.opacity(0.25)
+        )
+    )
 }
