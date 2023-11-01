@@ -39,7 +39,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/paulo-bc/MetadataHDWalletKit",
-            exact: "1.0.0"
+            exact: "1.0.1"
         ),
         .package(path: "../Network"),
         .package(path: "../Errors"),
