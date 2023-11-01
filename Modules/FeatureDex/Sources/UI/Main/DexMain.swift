@@ -352,6 +352,13 @@ public struct DexMain: Reducer {
                     try? await app.set(blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap.then.launch.url, to: url ?? fallbackUrl)
                     app.post(event: blockchain.ux.currency.exchange.dex.not.eligible.learn.more.tap)
                 }
+            case .onNetworkSelected(let network):
+                guard state.availableNetworks.contains(network) else {
+                    return .none
+                }
+                state.source.parentNetwork = network
+                state.destination.parentNetwork = network
+                return .none
 
                 // Binding
             case .binding(\.allowance.$transactionHash):
@@ -369,13 +376,12 @@ public struct DexMain: Reducer {
                         .map(Action.onAllowance)
                 }
                 .cancellable(id: CancellationID.allowanceFetch, cancelInFlight: true)
-            case .onNetworkSelected(let network):
-                guard state.availableNetworks.contains(network) else {
-                    return .none
-                }
-                state.source.parentNetwork = network
-                state.destination.parentNetwork = network
-                return .none
+            case .binding(\.settings.$slippage):
+                return settingsChanged(with: &state)
+            case .binding(\.settings.$gasOnDestination):
+                return settingsChanged(with: &state)
+            case .binding(\.settings.$expressMode):
+                return settingsChanged(with: &state)
             case .binding:
                 return .none
             }
@@ -384,6 +390,11 @@ public struct DexMain: Reducer {
             DexConfirmation(app: app)
         }
     }
+}
+
+func settingsChanged(with state: inout DexMain.State) -> Effect<DexMain.Action> {
+    clearDuringTyping(with: &state)
+    return .send(.refreshQuote)
 }
 
 extension DexConfirmation.State.Quote {

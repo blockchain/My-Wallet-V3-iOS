@@ -37,12 +37,6 @@ extension DexMain {
         var allowance: Allowance
         var confirmation: DexConfirmation.State?
 
-        struct Settings: Equatable {
-            @BindingState var expressMode: Bool = false
-            @BindingState var gasOnDestination: Bool = false
-            @BindingState var slippage: Double = defaultSlippage
-        }
-
         var settings: Settings
         @BindingState var isConfirmationShown: Bool = false
         @BindingState var isSettingsShown: Bool = false
@@ -120,13 +114,23 @@ extension DexMain {
             }
             return .ready
         }
+    }
+}
 
-        enum Status {
-            case loading
-            case notEligible
-            case noBalance
-            case ready
-        }
+extension DexMain.State {
+    enum Status {
+        case loading
+        case notEligible
+        case noBalance
+        case ready
+    }
+}
+
+extension DexMain.State {
+    struct Settings: Equatable {
+        @BindingState var expressMode: Bool = false
+        @BindingState var gasOnDestination: Bool = false
+        @BindingState var slippage: Double = defaultSlippage
     }
 }
 
