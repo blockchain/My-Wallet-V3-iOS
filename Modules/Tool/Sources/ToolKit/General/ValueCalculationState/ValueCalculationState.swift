@@ -24,9 +24,9 @@ public enum ValueCalculationState<Value> {
     public var value: Value? {
         switch self {
         case .value(let value):
-            return value
+            value
         case .calculating, .invalid:
-            return nil
+            nil
         }
     }
 
@@ -34,9 +34,9 @@ public enum ValueCalculationState<Value> {
     public var isValue: Bool {
         switch self {
         case .value:
-            return true
+            true
         case .calculating, .invalid:
-            return false
+            false
         }
     }
 
@@ -44,18 +44,18 @@ public enum ValueCalculationState<Value> {
     public var isInvalid: Bool {
         switch self {
         case .invalid:
-            return true
+            true
         case .calculating, .value:
-            return false
+            false
         }
     }
 
     public var isCalculating: Bool {
         switch self {
         case .calculating:
-            return true
+            true
         case .invalid, .value:
-            return false
+            false
         }
     }
 }
@@ -63,12 +63,12 @@ public enum ValueCalculationState<Value> {
 extension ValueCalculationState: Equatable where Value: Equatable {
     public static func == (lhs: ValueCalculationState<Value>, rhs: ValueCalculationState<Value>) -> Bool {
         switch (lhs, rhs) {
-        case (.value(let v1), .value(let v2)): return v1 == v2
-        case (.calculating, .calculating): return true
-        case (.invalid(.valueCouldNotBeCalculated), .invalid(.valueCouldNotBeCalculated)): return true
-        case (.invalid(.empty), .invalid(.empty)): return true
-        case (.invalid(.ux(let u1)), .invalid(.ux(let u2))): return u1 == u2
-        default: return false
+        case (.value(let v1), .value(let v2)): v1 == v2
+        case (.calculating, .calculating): true
+        case (.invalid(.valueCouldNotBeCalculated), .invalid(.valueCouldNotBeCalculated)): true
+        case (.invalid(.empty), .invalid(.empty)): true
+        case (.invalid(.ux(let u1)), .invalid(.ux(let u2))): u1 == u2
+        default: false
         }
     }
 }

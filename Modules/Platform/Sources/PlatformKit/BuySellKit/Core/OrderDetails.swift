@@ -25,18 +25,18 @@ public struct OrderDetails: Equatable {
         var isBuy: Bool {
             switch self {
             case .buy:
-                return true
+                true
             case .sell:
-                return false
+                false
             }
         }
 
         var paymentMethodId: String? {
             switch self {
             case .buy(let buy):
-                return buy.paymentMethodId
+                buy.paymentMethodId
             case .sell:
-                return nil
+                nil
             }
         }
 
@@ -56,9 +56,9 @@ public struct OrderDetails: Equatable {
     public var paymentProccessorErrorOccurred: Bool {
         switch _value {
         case .buy(let details):
-            return details.paymentProcessorErrorType != nil
+            details.paymentProcessorErrorType != nil
         case .sell:
-            return false
+            false
         }
     }
 
@@ -69,9 +69,9 @@ public struct OrderDetails: Equatable {
     public var recurringBuyId: String? {
         switch _value {
         case .buy(let buy):
-            return buy.recurringBuyId
+            buy.recurringBuyId
         case .sell:
-            return nil
+            nil
         }
     }
 
@@ -82,18 +82,18 @@ public struct OrderDetails: Equatable {
     public var paymentMethod: PaymentMethod.MethodType {
         switch _value {
         case .buy(let buy):
-            return buy.paymentMethod
+            buy.paymentMethod
         case .sell(let sell):
-            return sell.paymentMethod
+            sell.paymentMethod
         }
     }
 
     public var creationDate: Date? {
         switch _value {
         case .buy(let buy):
-            return buy.creationDate
+            buy.creationDate
         case .sell(let sell):
-            return sell.creationDate
+            sell.creationDate
         }
     }
 
@@ -101,9 +101,9 @@ public struct OrderDetails: Equatable {
     public var inputValue: MoneyValue {
         switch _value {
         case .buy(let buy):
-            return buy.fiatValue.moneyValue
+            buy.fiatValue.moneyValue
         case .sell(let sell):
-            return sell.cryptoValue.moneyValue
+            sell.cryptoValue.moneyValue
         }
     }
 
@@ -111,36 +111,36 @@ public struct OrderDetails: Equatable {
     public var outputValue: MoneyValue {
         switch _value {
         case .buy(let buy):
-            return buy.cryptoValue.moneyValue
+            buy.cryptoValue.moneyValue
         case .sell(let sell):
-            return sell.fiatValue.moneyValue
+            sell.fiatValue.moneyValue
         }
     }
 
     public var price: MoneyValue? {
         switch _value {
         case .buy(let buy):
-            return buy.price?.moneyValue
+            buy.price?.moneyValue
         case .sell(let sell):
-            return sell.price?.moneyValue
+            sell.price?.moneyValue
         }
     }
 
     public var fee: MoneyValue? {
         switch _value {
         case .buy(let buy):
-            return buy.fee?.moneyValue
+            buy.fee?.moneyValue
         case .sell:
-            return nil
+            nil
         }
     }
 
     public var identifier: String {
         switch _value {
         case .buy(let buy):
-            return buy.identifier
+            buy.identifier
         case .sell(let sell):
-            return sell.identifier
+            sell.identifier
         }
     }
 
@@ -156,18 +156,18 @@ public struct OrderDetails: Equatable {
     public var authorizationData: PartnerAuthorizationData? {
         switch _value {
         case .buy(let buy):
-            return buy.authorizationData
+            buy.authorizationData
         case .sell:
-            return nil
+            nil
         }
     }
 
     public var state: State {
         switch _value {
         case .buy(let buy):
-            return buy.state
+            buy.state
         case .sell(let sell):
-            return sell.state
+            sell.state
         }
     }
 
@@ -216,36 +216,36 @@ public struct OrderDetails: Equatable {
     public var isFinal: Bool {
         switch state {
         case .cancelled, .failed, .expired, .finished:
-            return true
+            true
         case .pendingDeposit, .pendingConfirmation, .depositMatched:
-            return false
+            false
         }
     }
 
     public var needCvv: Bool {
         switch _value {
         case .buy(let details):
-            return details.needCvv == true
+            details.needCvv == true
         case .sell:
-            return false
+            false
         }
     }
 
     public var error: String? {
         switch _value {
         case .buy(let details):
-            return details.error
+            details.error
         case .sell(let details):
-            return details.error
+            details.error
         }
     }
 
     public var ux: UX.Dialog? {
         switch _value {
         case .buy(let details):
-            return details.ux
+            details.ux
         case .sell(let details):
-            return details.ux
+            details.ux
         }
     }
 
@@ -280,14 +280,14 @@ extension AnalyticsEvents {
         var name: String {
             switch self {
             case .updatedAtParsingError:
-                return "updated_at_parsing_error"
+                "updated_at_parsing_error"
             }
         }
 
         var params: [String: String]? {
             switch self {
             case .updatedAtParsingError(date: let date):
-                return ["data": date]
+                ["data": date]
             }
         }
     }

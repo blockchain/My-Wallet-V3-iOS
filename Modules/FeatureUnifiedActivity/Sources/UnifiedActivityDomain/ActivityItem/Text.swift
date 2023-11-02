@@ -57,37 +57,37 @@ public enum ActivityTypography: String, Codable, Hashable {
     public func typography() -> Typography {
         switch self {
         case .display:
-            return Typography.display
+            Typography.display
         case .title1:
-            return Typography.title1
+            Typography.title1
         case .title2:
-            return Typography.title2
+            Typography.title2
         case .title3:
-            return Typography.title3
+            Typography.title3
         case .subheading:
-            return Typography.subheading
+            Typography.subheading
         case .bodyMono:
-            return Typography.bodyMono
+            Typography.bodyMono
         case .body1:
-            return Typography.body1
+            Typography.body1
         case .body2:
-            return Typography.body2
+            Typography.body2
         case .paragraphMono:
-            return Typography.paragraphMono
+            Typography.paragraphMono
         case .paragraph1:
-            return Typography.paragraph1
+            Typography.paragraph1
         case .paragraph2:
-            return Typography.paragraph2
+            Typography.paragraph2
         case .caption1:
-            return Typography.caption1
+            Typography.caption1
         case .caption2:
-            return Typography.caption2
+            Typography.caption2
         case .overline:
-            return Typography.overline
+            Typography.overline
         case .micro:
-            return Typography.micro
+            Typography.micro
         case .unknown:
-            return Typography.body1
+            Typography.body1
         }
     }
 }
@@ -118,35 +118,35 @@ public enum ActivityColor: String, Codable, Hashable {
     public func uiColor() -> Color {
         switch self {
         case .title:
-            return Color.semantic.title
+            Color.semantic.title
         case .body:
-            return Color.semantic.body
+            Color.semantic.body
         case .text:
-            return Color.semantic.text
+            Color.semantic.text
         case .overlay:
-            return Color.semantic.overlay
+            Color.semantic.overlay
         case .muted:
-            return Color.semantic.muted
+            Color.semantic.muted
         case .dark:
-            return Color.semantic.dark
+            Color.semantic.dark
         case .medium:
-            return Color.semantic.medium
+            Color.semantic.medium
         case .light:
-            return Color.semantic.light
+            Color.semantic.light
         case .background:
-            return Color.semantic.background
+            Color.semantic.background
         case .primary:
-            return Color.semantic.primary
+            Color.semantic.primary
         case .primaryMuted:
-            return Color.semantic.primaryMuted
+            Color.semantic.primaryMuted
         case .success:
-            return Color.semantic.success
+            Color.semantic.success
         case .warning:
-            return Color.semantic.warning
+            Color.semantic.warning
         case .error:
-            return Color.semantic.error
+            Color.semantic.error
         case .unknown:
-            return .WalletSemantic.body
+            .WalletSemantic.body
         }
     }
 }

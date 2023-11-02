@@ -52,9 +52,9 @@ public class AccountRenamingReplenishement: AccountNamingReplenishementAPI {
                 }
                 let updatedAccounts = hdWallet.accounts.map { account in
                     if let label = accounts.first(where: { $0.index == account.index })?.label {
-                        return updateLabel(on: account, newLabel: label)
+                        updateLabel(on: account, newLabel: label)
                     } else {
-                        return account
+                        account
                     }
                 }
                 let updatedHDWallet = updateHDWallet(current: hdWallet, accounts: updatedAccounts)

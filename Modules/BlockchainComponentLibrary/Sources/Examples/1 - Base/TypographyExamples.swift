@@ -31,9 +31,9 @@ struct TypographyExamplesView: View {
     func previewText(for typography: Typography) -> String {
         switch typography {
         case .bodyMono, .paragraphMono:
-            return "0123456789"
+            "0123456789"
         default:
-            return "The quick brown fox jumps over the lazy dog"
+            "The quick brown fox jumps over the lazy dog"
         }
     }
 }

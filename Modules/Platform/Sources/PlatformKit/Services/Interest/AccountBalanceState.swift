@@ -7,9 +7,9 @@ public enum AccountBalanceState<Value: Equatable>: Equatable {
     public var balance: Value? {
         switch self {
         case .absent:
-            return nil
+            nil
         case .present(let balance):
-            return balance
+            balance
         }
     }
 }

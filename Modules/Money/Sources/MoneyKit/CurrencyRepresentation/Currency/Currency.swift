@@ -78,12 +78,11 @@ extension Currency {
     }
 
     public func filter(by searchText: String, using algorithm: StringDistanceAlgorithm) -> Bool {
-        let values: [String]
-        switch currencyType {
+        let values: [String] = switch currencyType {
         case .crypto(let value):
-            values = value.searcheableParameters
+            value.searcheableParameters
         case .fiat(let value):
-            values = value.searcheableParameters
+            value.searcheableParameters
         }
         for value in values {
             if value.distance(between: searchText, using: algorithm) == 0 {
@@ -110,9 +109,9 @@ extension Either where A: Currency, B: Currency {
     public var currency: CurrencyType {
         switch self {
         case .left(let a):
-            return a.currencyType
+            a.currencyType
         case .right(let b):
-            return b.currencyType
+            b.currencyType
         }
     }
 }

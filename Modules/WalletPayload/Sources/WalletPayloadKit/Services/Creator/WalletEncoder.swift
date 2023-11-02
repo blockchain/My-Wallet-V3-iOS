@@ -12,9 +12,9 @@ public struct EncodedWalletPayload: Equatable {
         public var value: Data {
             switch self {
             case .encoded(let data):
-                return data
+                data
             case .encrypted(let data):
-                return data
+                data
             }
         }
     }

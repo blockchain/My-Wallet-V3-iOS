@@ -138,12 +138,12 @@ final class CustodialCryptoAsset: CryptoAsset, CustomStringConvertible {
 func externalAddressProvider(asset: CryptoCurrency) -> ExternalAssetAddressFactory {
     switch asset {
     case .bitcoin:
-        return DIKit.resolve(tag: AddressFactoryTag.bitcoin)
+        DIKit.resolve(tag: AddressFactoryTag.bitcoin)
     case .bitcoinCash:
-        return DIKit.resolve(tag: AddressFactoryTag.bitcoinCash)
+        DIKit.resolve(tag: AddressFactoryTag.bitcoinCash)
     case .stellar:
-        return DIKit.resolve(tag: AddressFactoryTag.stellar)
+        DIKit.resolve(tag: AddressFactoryTag.stellar)
     default:
-        return PlainCryptoReceiveAddressFactory(asset: asset)
+        PlainCryptoReceiveAddressFactory(asset: asset)
     }
 }

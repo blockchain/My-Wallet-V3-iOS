@@ -10,9 +10,9 @@ public enum KeychainAccessError: LocalizedError, Equatable {
     var errorDescription: String {
         switch self {
         case .writeFailure(let error):
-            return error.errorDescription
+            error.errorDescription
         case .readFailure(let error):
-            return error.errorDescription
+            error.errorDescription
         }
     }
 }
@@ -26,11 +26,11 @@ public enum KeychainReaderError: LocalizedError, Equatable {
     var errorDescription: String {
         switch self {
         case .itemNotFound(let account):
-            return "[KeychainAccess]: Item not found for: \(account)"
+            "[KeychainAccess]: Item not found for: \(account)"
         case .readFailed(let account, let status):
-            return "[KeychainAccess]: Read failure for \(account), error: \(status)"
+            "[KeychainAccess]: Read failure for \(account), error: \(status)"
         case .dataCorrupted(let account):
-            return "[KeychainAccess]: Data is corrupted for: \(account)"
+            "[KeychainAccess]: Data is corrupted for: \(account)"
         }
     }
 }
@@ -43,9 +43,9 @@ public enum KeychainWriterError: LocalizedError, Equatable {
     var errorDescription: String {
         switch self {
         case .writeFailed(let account, let status):
-            return "[KeychainAccess]: Could not write item for: \(account), error: \(status)"
+            "[KeychainAccess]: Could not write item for: \(account), error: \(status)"
         case .removalFailed(let message, let status):
-            return "[KeychainAccess]: Read failure, message \(message), error: \(status)"
+            "[KeychainAccess]: Read failure, message \(message), error: \(status)"
         }
     }
 }

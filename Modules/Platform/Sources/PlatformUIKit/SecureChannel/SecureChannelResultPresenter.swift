@@ -47,31 +47,31 @@ extension SecureChannelResultPresenter {
         var title: String {
             switch self {
             case .approved:
-                return LocalizedString.Approved.title
+                LocalizedString.Approved.title
             case .denied:
-                return LocalizedString.Denied.title
+                LocalizedString.Denied.title
             case .error:
-                return LocalizedString.Error.title
+                LocalizedString.Error.title
             }
         }
 
         var subtitle: String {
             switch self {
             case .approved:
-                return LocalizedString.Approved.subtitle
+                LocalizedString.Approved.subtitle
             case .denied:
-                return LocalizedString.Denied.subtitle
+                LocalizedString.Denied.subtitle
             case .error:
-                return LocalizedString.Error.subtitle
+                LocalizedString.Error.subtitle
             }
         }
 
         var sideImage: ImageLocation {
             switch self {
             case .approved:
-                return PendingStateViewModel.Image.success.imageResource
+                PendingStateViewModel.Image.success.imageResource
             case .denied, .error:
-                return .local(name: "Icon-Close-Circle-Red", bundle: .platformUIKit)
+                .local(name: "Icon-Close-Circle-Red", bundle: .platformUIKit)
             }
         }
 

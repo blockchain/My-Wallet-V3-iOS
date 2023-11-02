@@ -27,20 +27,20 @@ public struct AvailableBalanceDetailViewState: Equatable {
             var displayString: String {
                 switch self {
                 case .text(let value):
-                    return value
+                    value
                 case .badge(let value):
-                    return value
+                    value
                 }
             }
 
             static func == (lhs: Content, rhs: Content) -> Bool {
                 switch (lhs, rhs) {
                 case (.text(let left), .text(let right)):
-                    return left == right
+                    left == right
                 case (.badge(let left), .badge(let right)):
-                    return left == right
+                    left == right
                 default:
-                    return false
+                    false
                 }
             }
         }

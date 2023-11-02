@@ -343,10 +343,9 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
 
         stateWait.map(\.headerModel)
             .drive(weak: self) { (self, headerType) in
-                let header: HeaderStyle
-                switch headerType {
+                let header: HeaderStyle = switch headerType {
                 case .default(let model):
-                    header = .normal(
+                    .normal(
                         title: model.title,
                         subtitle: model.subtitle,
                         image: model.imageContent.imageResource,
@@ -354,14 +353,14 @@ extension FeatureAccountPickerControllableAdapter: AccountPickerViewControllable
                         searchable: model.searchable
                     )
                 case .simple(let model):
-                    header = .simple(
+                    .simple(
                         subtitle: model.subtitle,
                         searchable: model.searchable,
                         switchable: model.switchable,
                         switchTitle: model.switchTitle
                     )
                 case .none:
-                    header = .none
+                    .none
                 }
                 self.header.send(header)
             }

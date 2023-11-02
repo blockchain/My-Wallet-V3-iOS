@@ -13,9 +13,9 @@ public enum MetadataSaveError: FromEncodingError {
     public var errorDescription: String? {
         switch self {
         case .saveFailed(let saveMetadataError):
-            return saveMetadataError.errorDescription
+            saveMetadataError.errorDescription
         case .encodingError(let encodingError):
-            return encodingError.formattedDescription
+            encodingError.formattedDescription
         }
     }
 }

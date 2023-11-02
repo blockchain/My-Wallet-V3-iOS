@@ -21,7 +21,7 @@ enum SwapOrderState {
              .pendingWithdrawal,
              .pendingRefund,
              .finishDeposit:
-            return true
+            true
         case .expired,
              .finished,
              .failed,
@@ -29,7 +29,7 @@ enum SwapOrderState {
              .delayed,
              .none,
              .unknown:
-            return false
+            false
         }
     }
 

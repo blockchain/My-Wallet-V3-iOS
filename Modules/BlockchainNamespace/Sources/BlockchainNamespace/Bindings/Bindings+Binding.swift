@@ -172,27 +172,27 @@ extension Bindings.Binding.Result {
 
     public var description: String {
         switch self {
-        case .idle: return "idle"
-        case .requesting: return "requesting"
-        case .success(let any, _): return "\(any)"
-        case .failure(let error, _): return "\(error)"
+        case .idle: "idle"
+        case .requesting: "requesting"
+        case .success(let any, _): "\(any)"
+        case .failure(let error, _): "\(error)"
         }
     }
 
     var isSynchronized: Bool {
         switch self {
-        case .idle, .requesting: return false
-        case .success, .failure: return true
+        case .idle, .requesting: false
+        case .success, .failure: true
         }
     }
 
     func isDifferent(from old: Self) -> Bool {
         switch (self, old) {
-        case (.success(let new, _), .success(let old, _)): return !isEqual(new, old)
-        case (.success, _): return true
-        case (.failure, .failure): return false
-        case (.failure, _): return true
-        default: return false
+        case (.success(let new, _), .success(let old, _)): !isEqual(new, old)
+        case (.success, _): true
+        case (.failure, .failure): false
+        case (.failure, _): true
+        default: false
         }
     }
 
@@ -207,15 +207,15 @@ extension Bindings.Binding.Result {
 
     var value: (any: Any, metadata: Metadata)? {
         switch self {
-        case .success(let value, let m): return (value, m)
-        case .idle, .requesting, .failure: return nil
+        case .success(let value, let m): (value, m)
+        case .idle, .requesting, .failure: nil
         }
     }
 
     var error: (any: Swift.Error, metadata: Metadata)? {
         switch self {
-        case .failure(let err, let m): return (err, m)
-        case .idle, .requesting, .success: return nil
+        case .failure(let err, let m): (err, m)
+        case .idle, .requesting, .success: nil
         }
     }
 }

@@ -1,6 +1,7 @@
 //  Copyright © 2021 Blockchain Luxembourg S.A. All rights reserved.
 
 import BlockchainUI
+import ComposableArchitecture
 import DIKit
 import FeatureAppDomain
 import FeatureAuthenticationDomain
@@ -19,7 +20,6 @@ import StoreKit
 import SwiftUI
 import ToolKit
 import UIKit
-import ComposableArchitecture
 
 public protocol SuperAppRootControllable: UIViewController {
     func clear()
@@ -72,8 +72,10 @@ public final class SuperAppRootController: UIHostingController<SuperAppContainer
                 )
             }
         )
-        let containerChrome = SuperAppContainerChrome(store: store,
-                                                      isSmallDevice: isSmallDevice())
+        let containerChrome = SuperAppContainerChrome(
+            store: store,
+            isSmallDevice: isSmallDevice()
+        )
         super.init(rootView: containerChrome)
 
         subscribeFrequentActions(to: app)

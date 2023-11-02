@@ -41,9 +41,9 @@ extension MockRemoteNotificationAuthorizer: RemoteNotificationRegistering {
         RemoteNotificationAuthorizerError
     > {
         if expectedAuthorizationStatus == .authorized {
-            return .just(())
+            .just(())
         } else {
-            return .failure(.unauthorizedStatus)
+            .failure(.unauthorizedStatus)
         }
     }
 }

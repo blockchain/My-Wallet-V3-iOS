@@ -12,9 +12,9 @@ public enum ResetAccountFailureAction: Equatable {
         var url: URL? {
             switch self {
             case .support:
-                return URL(string: Constants.SupportURL.ResetAccount.recoveryFailureSupport)
+                URL(string: Constants.SupportURL.ResetAccount.recoveryFailureSupport)
             case .learnMore:
-                return URL(string: Constants.SupportURL.ResetAccount.learnMore)
+                URL(string: Constants.SupportURL.ResetAccount.learnMore)
             }
         }
     }

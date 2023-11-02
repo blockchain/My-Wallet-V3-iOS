@@ -240,6 +240,7 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
         }
     }
 
+    @ViewBuilder
     private func textView(
         text: TextValue,
         textTypography: Typography,
@@ -247,32 +248,26 @@ public struct PrimaryRow<Leading: View, Trailing: View>: View {
         textColorWhenHighlightighed: Color,
         textColorWhenNotHighlightighed: Color
     ) -> some View {
-        if #available(iOS 15.0, *), #available(macOS 12.0, *) {
-            return Text(text.text) { string in
-                string.font = textTypography.font
-                guard !text.highlightRanges.isEmpty else {
-                    return string.foregroundColor = textColor
-                }
+        Text(text.text) { string in
+            string.font = textTypography.font
+            guard !text.highlightRanges.isEmpty else {
+                return string.foregroundColor = textColor
+            }
 
-                string.foregroundColor = textColorWhenNotHighlightighed
-                var atLeastOneRangeIsHighlighted = false
-                text.highlightRanges.forEach { range in
-                    if let lowerBound = AttributedString.Index(range.lowerBound, within: string),
-                       let upperBound = AttributedString.Index(range.upperBound, within: string)
-                    {
-                        let rangeString = Range<AttributedString.Index>.init(uncheckedBounds: (lower: lowerBound, upper: upperBound))
-                        string[rangeString].foregroundColor = textColorWhenHighlightighed
-                        atLeastOneRangeIsHighlighted = true
-                    }
-                }
-                if !atLeastOneRangeIsHighlighted {
-                    string.foregroundColor = textColor
+            string.foregroundColor = textColorWhenNotHighlightighed
+            var atLeastOneRangeIsHighlighted = false
+            text.highlightRanges.forEach { range in
+                if let lowerBound = AttributedString.Index(range.lowerBound, within: string),
+                   let upperBound = AttributedString.Index(range.upperBound, within: string)
+                {
+                    let rangeString = Range<AttributedString.Index>.init(uncheckedBounds: (lower: lowerBound, upper: upperBound))
+                    string[rangeString].foregroundColor = textColorWhenHighlightighed
+                    atLeastOneRangeIsHighlighted = true
                 }
             }
-        } else {
-            return Text(text.text)
-                .typography(textTypography)
-                .foregroundColor(textColor)
+            if !atLeastOneRangeIsHighlighted {
+                string.foregroundColor = textColor
+            }
         }
     }
 }

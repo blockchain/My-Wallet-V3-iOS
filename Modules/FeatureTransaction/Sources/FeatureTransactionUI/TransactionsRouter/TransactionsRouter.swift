@@ -195,9 +195,9 @@ final class TransactionsRouter: TransactionsRouterAPI {
             .map { result in
                 switch result {
                 case .abandoned:
-                    return .abandoned
+                    .abandoned
                 case .completed, .skipped:
-                    return .completed
+                    .completed
                 }
             }
             .eraseToAnyPublisher()
@@ -609,23 +609,23 @@ extension TransactionFlowAction {
     fileprivate var toProductIdentifier: ProductIdentifier? {
         switch self {
         case .buy:
-            return .buy
+            .buy
         case .sell:
-            return .sell
+            .sell
         case .swap:
-            return .swap
+            .swap
         case .deposit:
-            return .depositFiat
+            .depositFiat
         case .withdraw:
-            return .withdrawFiat
+            .withdrawFiat
         case .send:
-            return .withdrawCrypto
+            .withdrawCrypto
         case .interestTransfer:
-            return .depositInterest
+            .depositInterest
         case .interestWithdraw:
-            return .withdrawCrypto
+            .withdrawCrypto
         default:
-            return nil
+            nil
         }
     }
 }

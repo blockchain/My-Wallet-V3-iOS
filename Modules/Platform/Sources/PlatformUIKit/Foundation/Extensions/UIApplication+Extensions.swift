@@ -18,17 +18,17 @@ public enum MailApps: String, CaseIterable {
     var url: URL? {
         switch self {
         case .mail:
-            return URL(string: "message:")
+            URL(string: "message:")
         case .gmail:
-            return URL(string: "googlegmail://")
+            URL(string: "googlegmail://")
         case .inbox:
-            return URL(string: "inbox-gmail://")
+            URL(string: "inbox-gmail://")
         case .outlook:
-            return URL(string: "ms-outlook://")
+            URL(string: "ms-outlook://")
         case .dispatch:
-            return URL(string: "x-dispatch://")
+            URL(string: "x-dispatch://")
         case .protonmail:
-            return URL(string: "protonmail://")
+            URL(string: "protonmail://")
         }
     }
 

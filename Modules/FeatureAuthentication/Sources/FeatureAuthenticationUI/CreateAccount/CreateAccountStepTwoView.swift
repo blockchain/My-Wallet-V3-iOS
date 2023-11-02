@@ -261,30 +261,30 @@ extension PasswordValidationRule {
     public var displayString: String {
         switch self {
         case .lowercaseLetter:
-            return LocalizedString.Password.Rules.Lowercase.display
+            LocalizedString.Password.Rules.Lowercase.display
         case .uppercaseLetter:
-            return LocalizedString.Password.Rules.Uppercase.display
+            LocalizedString.Password.Rules.Uppercase.display
         case .number:
-            return LocalizedString.Password.Rules.Number.display
+            LocalizedString.Password.Rules.Number.display
         case .specialCharacter:
-            return LocalizedString.Password.Rules.SpecialCharacter.display
+            LocalizedString.Password.Rules.SpecialCharacter.display
         case .length:
-            return LocalizedString.Password.Rules.Length.display
+            LocalizedString.Password.Rules.Length.display
         }
     }
 
     public var accent: String {
         switch self {
         case .lowercaseLetter:
-            return LocalizedString.Password.Rules.Lowercase.display
+            LocalizedString.Password.Rules.Lowercase.display
         case .uppercaseLetter:
-            return LocalizedString.Password.Rules.Uppercase.display
+            LocalizedString.Password.Rules.Uppercase.display
         case .number:
-            return LocalizedString.Password.Rules.Number.display
+            LocalizedString.Password.Rules.Number.display
         case .specialCharacter:
-            return LocalizedString.Password.Rules.SpecialCharacter.display
+            LocalizedString.Password.Rules.SpecialCharacter.display
         case .length:
-            return LocalizedString.Password.Rules.Length.accent
+            LocalizedString.Password.Rules.Length.accent
         }
     }
 

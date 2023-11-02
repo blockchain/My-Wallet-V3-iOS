@@ -353,13 +353,13 @@ public final class DeepLinkCoordinator: Client.Observer {
             .flatMap { target -> AnyPublisher<CryptoReceiveAddress, Error> in
                 switch target {
                 case .bitpay(let address):
-                    return BitPayInvoiceTarget
+                    BitPayInvoiceTarget
                         .make(from: address, asset: cryptoCurrency)
                         .map { $0 as CryptoReceiveAddress }
                         .eraseError()
                         .eraseToAnyPublisher()
                 case .address(let cryptoReceiveAddress):
-                    return .just(cryptoReceiveAddress)
+                    .just(cryptoReceiveAddress)
                 }
             }
             .eraseToAnyPublisher()

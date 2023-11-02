@@ -30,9 +30,9 @@ extension DerivationType {
     fileprivate var activeParameter: String {
         switch self {
         case .legacy:
-            return "active"
+            "active"
         case .bech32:
-            return "activeBech32"
+            "activeBech32"
         }
     }
 }

@@ -25,26 +25,26 @@ struct KYCUserTiersBadgeModel {
     private static func badgeColor(for tier: KYC.UserTier) -> UIColor {
         switch tier.state {
         case .none:
-            return .unverified
+            .unverified
         case .rejected:
-            return .unverified
+            .unverified
         case .pending, .under_review:
-            return .pending
+            .pending
         case .verified:
-            return .verified
+            .verified
         }
     }
 
     private static func badgeText(for tier: KYC.UserTier) -> String {
         switch tier.state {
         case .none:
-            return badgeString(tier: tier, description: LocalizationConstants.KYC.accountUnverifiedBadge)
+            badgeString(tier: tier, description: LocalizationConstants.KYC.accountUnverifiedBadge)
         case .rejected:
-            return LocalizationConstants.KYC.verificationFailedBadge
+            LocalizationConstants.KYC.verificationFailedBadge
         case .pending, .under_review:
-            return badgeString(tier: tier, description: LocalizationConstants.KYC.accountInReviewBadge)
+            badgeString(tier: tier, description: LocalizationConstants.KYC.accountInReviewBadge)
         case .verified:
-            return badgeString(tier: tier, description: LocalizationConstants.KYC.accountApprovedBadge)
+            badgeString(tier: tier, description: LocalizationConstants.KYC.accountApprovedBadge)
         }
     }
 
@@ -55,9 +55,9 @@ struct KYCUserTiersBadgeModel {
     private static func localisedName(for tier: KYC.UserTier) -> String {
         switch tier.tier {
         case .unverified:
-            return LocalizationConstants.KYC.unverified
+            LocalizationConstants.KYC.unverified
         case .verified:
-            return LocalizationConstants.KYC.verified
+            LocalizationConstants.KYC.verified
         }
     }
 }

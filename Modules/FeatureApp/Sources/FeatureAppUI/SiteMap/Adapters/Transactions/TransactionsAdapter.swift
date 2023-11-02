@@ -28,22 +28,22 @@ enum TransactionType: Equatable {
     static func == (lhs: TransactionType, rhs: TransactionType) -> Bool {
         switch (lhs, rhs) {
         case (.buy(let lhsAccount), .buy(let rhsAccount)):
-            return lhsAccount?.identifier == rhsAccount?.identifier
+            lhsAccount?.identifier == rhsAccount?.identifier
         case (.sell(let lhsAccount), .sell(let rhsAccount)):
-            return lhsAccount?.identifier == rhsAccount?.identifier
+            lhsAccount?.identifier == rhsAccount?.identifier
         case (.swap(let lhsSourceAccount, let lhsTargetAccount), .swap(let rhsSourceAccount, let rhsTargetAccount)):
-            return (lhsSourceAccount?.identifier == rhsSourceAccount?.identifier) && (lhsTargetAccount?.identifier == rhsTargetAccount?.identifier)
+            (lhsSourceAccount?.identifier == rhsSourceAccount?.identifier) && (lhsTargetAccount?.identifier == rhsTargetAccount?.identifier)
         case (.receive(let lhsAccount), .receive(let rhsAccount)):
-            return lhsAccount?.identifier == rhsAccount?.identifier
+            lhsAccount?.identifier == rhsAccount?.identifier
         case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)):
-            return lhsAccount.identifier == rhsAccount.identifier
+            lhsAccount.identifier == rhsAccount.identifier
         case (.interestWithdraw(let lhsFromAccount, let lhsToAccount), .interestWithdraw(let rhsFromAccount, let rhsToAccount)):
-            return lhsFromAccount.identifier == rhsFromAccount.identifier && lhsToAccount.identifier == rhsToAccount.identifier
+            lhsFromAccount.identifier == rhsFromAccount.identifier && lhsToAccount.identifier == rhsToAccount.identifier
         case (.sign(let lhsSourceAccount, let lhsDestination), .sign(let rhsSourceAccount, let rhsDestination)):
-            return lhsSourceAccount.identifier == rhsSourceAccount.identifier
+            lhsSourceAccount.identifier == rhsSourceAccount.identifier
             && lhsDestination.label == rhsDestination.label
         default:
-            return false
+            false
         }
     }
 }
@@ -87,19 +87,19 @@ extension TransactionType {
     fileprivate var transactionFlowActionValue: TransactionFlowAction {
         switch self {
         case .buy(let cryptoAccount):
-            return .buy(cryptoAccount)
+            .buy(cryptoAccount)
         case .sell(let cryptoAccount):
-            return .sell(cryptoAccount)
+            .sell(cryptoAccount)
         case .swap(let sourceCryptoAccount, let targetCryptoAccount):
-            return .swap(source: sourceCryptoAccount, target: targetCryptoAccount)
+            .swap(source: sourceCryptoAccount, target: targetCryptoAccount)
         case .receive(let cryptoAccount):
-            return .receive(cryptoAccount)
+            .receive(cryptoAccount)
         case .interestTransfer(let cryptoInterestAccount):
-            return .interestTransfer(cryptoInterestAccount)
+            .interestTransfer(cryptoInterestAccount)
         case .interestWithdraw(let cryptoInterestAccount, let target):
-            return .interestWithdraw(cryptoInterestAccount, target)
+            .interestWithdraw(cryptoInterestAccount, target)
         case .sign(let sourceAccount, let destination):
-            return .sign(sourceAccount: sourceAccount, destination: destination)
+            .sign(sourceAccount: sourceAccount, destination: destination)
         }
     }
 }

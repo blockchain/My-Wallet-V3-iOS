@@ -50,16 +50,15 @@ enum VGS {
         @Binding var isValid: Bool
 
         func makeUIView(context: Context) -> VGSTextField {
-            let textfield: VGSTextField
-            switch field.type {
+            let textfield: VGSTextField = switch field.type {
             case .cardNumber:
-                textfield = VGSCardTextField()
+                VGSCardTextField()
             case .expDate:
-                textfield = VGSExpDateTextField()
+                VGSExpDateTextField()
             case .cvc:
-                textfield = VGSCVCTextField()
+                VGSCVCTextField()
             default:
-                textfield = VGSTextField()
+                VGSTextField()
             }
             attachToolbar(on: textfield)
             return textfield

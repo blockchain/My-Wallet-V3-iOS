@@ -12,9 +12,9 @@ public enum DomainType: Equatable, Hashable {
     public var statusLabel: String {
         switch self {
         case .free:
-            return LocalizedString.ListView.freeDomain
+            LocalizedString.ListView.freeDomain
         case .premium:
-            return LocalizedString.ListView.premiumDomain
+            LocalizedString.ListView.premiumDomain
         }
     }
 }
@@ -27,11 +27,11 @@ public enum DomainAvailability: Equatable, Hashable {
     public var availabilityLabel: String {
         switch self {
         case .availableForFree:
-            return LocalizedString.ListView.free
+            LocalizedString.ListView.free
         case .availableForPremiumSale(let price):
-            return "$\(price)"
+            "$\(price)"
         case .unavailable:
-            return LocalizedString.ListView.unavailable
+            LocalizedString.ListView.unavailable
         }
     }
 }

@@ -95,9 +95,9 @@ public struct EVMTransactionFee {
     public func gasPrice(feeLevel: FeeLevel) -> BigUInt {
         switch feeLevel {
         case .regular:
-            return BigUInt(regular.minorAmount)
+            BigUInt(regular.minorAmount)
         case .priority:
-            return BigUInt(priority.minorAmount)
+            BigUInt(priority.minorAmount)
         }
     }
 

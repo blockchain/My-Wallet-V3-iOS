@@ -51,7 +51,7 @@ extension UIViewController {
         var errorDescription: String? {
             switch self {
             case .unableToFindTopViewController:
-                return "Unable to find top view controller, hit max depth limit"
+                "Unable to find top view controller, hit max depth limit"
             }
         }
     }

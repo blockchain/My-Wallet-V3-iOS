@@ -114,20 +114,19 @@ public struct DexQuoteOutput: Equatable {
     }
 }
 
-
 extension DexQuoteResponse.FeeType {
     var outputFeeType: DexQuoteOutput.FeeType? {
         switch self {
         case .express:
-            return .express
+            .express
         case .crossChain:
-            return .crossChain
+            .crossChain
         case .network:
-            return .network
+            .network
         case .total:
-            return .total
+            .total
         default:
-            return nil
+            nil
         }
     }
 }

@@ -63,12 +63,11 @@ public final class AccountPickerBuilder: RIBs.Buildable {
         showWithdrawalLocks: Bool = false,
         initialAccountTypeFilter: AccountType? = nil
     ) -> AccountPickerRouting {
-        let shouldOverrideNavigationEffects: Bool
-        switch listener {
+        let shouldOverrideNavigationEffects: Bool = switch listener {
         case .listener:
-            shouldOverrideNavigationEffects = true
+            true
         case .simple:
-            shouldOverrideNavigationEffects = false
+            false
         }
 
         viewController.shouldOverrideNavigationEffects = shouldOverrideNavigationEffects

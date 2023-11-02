@@ -20,9 +20,9 @@ extension AssetAction {
              .stakingDeposit,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
-            return true
+            true
         case .sign:
-            return false
+            false
         }
     }
 }

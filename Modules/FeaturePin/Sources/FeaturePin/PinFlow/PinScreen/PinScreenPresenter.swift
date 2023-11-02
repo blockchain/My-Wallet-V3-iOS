@@ -45,34 +45,34 @@ final class PinScreenPresenter {
         case .authenticate(from: let origin, logoutRouting: _):
             switch origin {
             case .background, .attachedOn:
-                return .text(value: LocalizationConstants.Pin.logoutButton)
+                .text(value: LocalizationConstants.Pin.logoutButton)
             case .foreground:
-                return .none
+                .none
             }
         case .change, .enableBiometrics:
-            return .back
+            .back
         case .create:
-            return .none
+            .none
         case .createPin:
-            return .none
+            .none
         }
     }
 
     var titleView: Screen.Style.TitleView {
         switch flow {
         case .change:
-            return .text(value: LocalizationConstants.Pin.changePinTitle)
+            .text(value: LocalizationConstants.Pin.changePinTitle)
         default:
-            return .image(name: "logo_large", width: 40)
+            .image(name: "logo_large", width: 40)
         }
     }
 
     var barStyle: Screen.Style.Bar {
         switch flow {
         case .change:
-            return .darkContent(background: .primary)
+            .darkContent(background: .primary)
         default:
-            return .mutedContent(ignoresStatusBar: true, background: .clear)
+            .mutedContent(ignoresStatusBar: true, background: .clear)
         }
     }
 
@@ -211,14 +211,13 @@ final class PinScreenPresenter {
         }
 
         // Setup the subject
-        let securePinTitle: String
-        switch useCase {
+        let securePinTitle: String = switch useCase {
         case .authenticateBeforeChanging, .authenticateBeforeEnablingBiometrics, .authenticateOnLogin:
-            securePinTitle = LocalizationConstants.Pin.enterYourPinLabel
+            LocalizationConstants.Pin.enterYourPinLabel
         case .select:
-            securePinTitle = LocalizationConstants.Pin.createYourPinLabel
+            LocalizationConstants.Pin.createYourPinLabel
         case .create:
-            securePinTitle = LocalizationConstants.Pin.confirmYourPinLabel
+            LocalizationConstants.Pin.confirmYourPinLabel
         }
 
         self.digitPadViewModel = DigitPadViewModel(
@@ -522,10 +521,10 @@ extension PinScreenPresenter {
     private func backupOrRestoreCredentials(pinDecryptionKey: String) -> Completable {
         if shouldBackupCredentials {
             // Wallet is paired, back up credentials.
-            return credentialsStore.backup(pinDecryptionKey: pinDecryptionKey)
+            credentialsStore.backup(pinDecryptionKey: pinDecryptionKey)
         } else {
             // Wallet is not paired, attempt to retrieve wallet details from iCloud
-            return credentialsStore
+            credentialsStore
                 .walletData(pinDecryptionKey: pinDecryptionKey)
                 .do(
                     onSuccess: { [weak self] data in
@@ -552,9 +551,9 @@ extension PinScreenPresenter {
     /// Backup credentials to iCloud if `isPairedWithWallet.
     private func backupCredentials(pinDecryptionKey: String) -> Completable {
         if shouldBackupCredentials {
-            return credentialsStore.backup(pinDecryptionKey: pinDecryptionKey)
+            credentialsStore.backup(pinDecryptionKey: pinDecryptionKey)
         } else {
-            return .empty()
+            .empty()
         }
     }
 }

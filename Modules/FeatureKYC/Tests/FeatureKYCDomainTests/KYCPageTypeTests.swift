@@ -307,9 +307,8 @@ class KYCPageTypeTests: XCTestCase {
         hasAddress: Bool = false
     ) -> NabuUser {
         let mobile = Mobile(phone: "1234567890", verified: isMobileVerified)
-        let address: UserAddress?
-        if hasAddress {
-            address = UserAddress(
+        let address: UserAddress? = if hasAddress {
+            UserAddress(
                 lineOne: "Address",
                 lineTwo: "Address 2",
                 postalCode: "123",
@@ -318,7 +317,7 @@ class KYCPageTypeTests: XCTestCase {
                 countryCode: "US"
             )
         } else if hasCountry {
-            address = UserAddress(
+            UserAddress(
                 lineOne: nil,
                 lineTwo: nil,
                 postalCode: nil,
@@ -327,18 +326,17 @@ class KYCPageTypeTests: XCTestCase {
                 countryCode: requireState ? "US" : "GB"
             )
         } else {
-            address = nil
+            nil
         }
-        let personalDetails: PersonalDetails
-        if hasPersonalDetails {
-            personalDetails = PersonalDetails(
+        let personalDetails: PersonalDetails = if hasPersonalDetails {
+            PersonalDetails(
                 id: "1234",
                 first: "Johnny",
                 last: "Appleseed",
                 birthday: Date(timeIntervalSince1970: 0)
             )
         } else {
-            personalDetails = PersonalDetails(id: nil, first: nil, last: nil, birthday: nil)
+            PersonalDetails(id: nil, first: nil, last: nil, birthday: nil)
         }
 
         return NabuUser(

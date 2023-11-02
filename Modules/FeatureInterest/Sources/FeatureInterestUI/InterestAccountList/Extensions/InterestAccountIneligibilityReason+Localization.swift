@@ -10,14 +10,14 @@ extension InterestAccountIneligibilityReason {
     var displayString: String {
         switch self {
         case .eligible:
-            return LocalizationId.view
+            LocalizationId.view
         case .tierTooLow:
-            return LocalizationId.tierTooLow
+            LocalizationId.tierTooLow
         case .unsupportedRegion:
-            return LocalizationId.notAvailable
+            LocalizationId.notAvailable
         case .invalidAddress,
              .other:
-            return LocalizationId.unavailable
+            LocalizationId.unavailable
         }
     }
 }

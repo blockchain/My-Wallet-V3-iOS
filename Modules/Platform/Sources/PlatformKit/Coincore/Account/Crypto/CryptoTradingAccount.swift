@@ -18,7 +18,7 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
         var errorDescription: String? {
             switch self {
             case .loadingFailed(let asset, let label, let action, let error):
-                return "Failed to load: 'CryptoTradingAccount' asset '\(asset)' label '\(label)' action '\(action)' error '\(error)' ."
+                "Failed to load: 'CryptoTradingAccount' asset '\(asset)' label '\(label)' action '\(action)' error '\(error)' ."
             }
         }
     }
@@ -240,38 +240,38 @@ public class CryptoTradingAccount: Identifiable, CryptoAccount, TradingAccount {
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .viewActivity, .receive:
-            return .just(true)
+            .just(true)
         case .deposit,
              .interestWithdraw,
              .stakingWithdraw,
              .sign,
              .withdraw,
              .activeRewardsWithdraw:
-            return .just(false)
+            .just(false)
         case .send:
-            return isFunded
+            isFunded
         case .buy:
-            return isPairToFiatAvailable
+            isPairToFiatAvailable
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .sell:
-            return canPerformSell
+            canPerformSell
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .swap:
-            return canPerformSwap
+            canPerformSwap
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .interestTransfer:
-            return canPerformInterestTransfer
+            canPerformInterestTransfer
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .stakingDeposit:
-            return canPerformStakingDeposit
+            canPerformStakingDeposit
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .activeRewardsDeposit:
-            return canPerformActiveRewardsDeposit
+            canPerformActiveRewardsDeposit
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         }

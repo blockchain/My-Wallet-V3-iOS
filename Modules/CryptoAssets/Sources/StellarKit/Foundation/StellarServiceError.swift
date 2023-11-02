@@ -18,11 +18,11 @@ extension HorizonRequestError {
     var stellarNetworkError: StellarNetworkError {
         switch self {
         case .notFound:
-            return .notFound
+            .notFound
         case .parsingResponseFailed:
-            return .parsingFailed
+            .parsingFailed
         default:
-            return .horizonRequestError(self)
+            .horizonRequestError(self)
         }
     }
 }

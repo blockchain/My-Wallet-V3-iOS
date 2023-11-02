@@ -39,9 +39,9 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
 
     var balance: AnyPublisher<MoneyValue, Error> {
         if isImported {
-            return importedAddressBalance()
+            importedAddressBalance()
         } else {
-            return balanceRepository
+            balanceRepository
                 .balances
                 .map { [asset, hdAccountIndex] balances in
                     balances.balance(
@@ -55,7 +55,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
 
     var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
         if !isImported {
-            return receiveAddressProvider.receiveAddressProvider(UInt32(hdAccountIndex))
+            receiveAddressProvider.receiveAddressProvider(UInt32(hdAccountIndex))
                 .map { [label, onTxCompleted] receiveAddress -> ReceiveAddress in
                     BitcoinChainReceiveAddress<BitcoinToken>(
                         address: receiveAddress,
@@ -65,7 +65,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
                 }
                 .eraseToAnyPublisher()
         } else {
-            return .just(
+            .just(
                 BitcoinChainReceiveAddress<BitcoinToken>(
                     address: xPub.address,
                     label: label,
@@ -77,7 +77,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
 
     var firstReceiveAddress: AnyPublisher<ReceiveAddress, Error> {
         if !isImported {
-            return receiveAddressProvider.firstReceiveAddressProvider(UInt32(hdAccountIndex))
+            receiveAddressProvider.firstReceiveAddressProvider(UInt32(hdAccountIndex))
                 .map { [label, onTxCompleted] receiveAddress -> ReceiveAddress in
                     BitcoinChainReceiveAddress<BitcoinToken>(
                         address: receiveAddress,
@@ -87,7 +87,7 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
                 }
                 .eraseToAnyPublisher()
         } else {
-            return receiveAddress
+            receiveAddress
         }
     }
 
@@ -136,9 +136,9 @@ final class BitcoinCryptoAccount: BitcoinChainCryptoAccount {
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         if isImported {
-            return .just(false)
+            .just(false)
         } else {
-            return accountCan(perform: action)
+            accountCan(perform: action)
         }
     }
 

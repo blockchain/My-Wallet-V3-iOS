@@ -2,7 +2,6 @@
 --disable blankLinesAtStartOfScope
 --disable indent
 --disable redundanttype
---disable redundanttype
 --disable redundantvoidreturntype
 --disable redundantvoidreturntype
 --disable spaceAroundParens

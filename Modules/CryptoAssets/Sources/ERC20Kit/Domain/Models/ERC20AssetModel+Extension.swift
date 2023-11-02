@@ -13,9 +13,9 @@ extension AssetModelType {
     fileprivate func contractAddress(network: EVMNetwork) -> EthereumAddress? {
         switch self {
         case .erc20(let contractAddress, _):
-            return EthereumAddress(address: contractAddress, network: network)
+            EthereumAddress(address: contractAddress, network: network)
         case .coin, .fiat, .celoToken:
-            return nil
+            nil
         }
     }
 }

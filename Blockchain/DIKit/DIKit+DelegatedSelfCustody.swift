@@ -113,7 +113,7 @@ final class DelegatedCustodySigningService: DelegatedCustodySigningServiceAPI {
     ) -> Result<Data, DelegatedCustodySigningError> {
         switch algorithm {
         case .secp256k1:
-            return signSecp256k1(data: data, privateKey: privateKey)
+            signSecp256k1(data: data, privateKey: privateKey)
         }
     }
 

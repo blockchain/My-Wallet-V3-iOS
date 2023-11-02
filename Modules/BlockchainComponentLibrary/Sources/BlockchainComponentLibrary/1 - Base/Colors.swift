@@ -167,9 +167,9 @@ extension Color {
             NSColor(name: nil) { appearance in
                 switch appearance.bestMatch(from: [.aqua, .darkAqua]) {
                 case .some(.darkAqua):
-                    return NSColor(dark)
+                    NSColor(dark)
                 default:
-                    return NSColor(light)
+                    NSColor(light)
                 }
             }
         )

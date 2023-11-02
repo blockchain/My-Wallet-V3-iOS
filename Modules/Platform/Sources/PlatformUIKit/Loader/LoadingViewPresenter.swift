@@ -34,9 +34,9 @@ import UIKit
         var isAnimating: Bool {
             switch self {
             case .animating:
-                return true
+                true
             case .hidden:
-                return false
+                false
             }
         }
     }

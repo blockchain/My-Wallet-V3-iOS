@@ -12,9 +12,9 @@ public enum WalletFetcherServiceError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .walletError(let error):
-            return error.errorDescription
+            error.errorDescription
         case .unknown:
-            return LocalizationConstants.Errors.genericError
+            LocalizationConstants.Errors.genericError
         }
     }
 }

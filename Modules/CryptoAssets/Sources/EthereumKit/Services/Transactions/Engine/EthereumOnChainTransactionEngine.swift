@@ -101,13 +101,12 @@ final class EthereumOnChainTransactionEngine: OnChainTransactionEngine {
             absoluteFee(with: .regular)
         )
         .map { [network, predefinedAmount] fiatCurrency, availableBalance, feeAmount -> PendingTransaction in
-            let amount: MoneyValue
-            if let predefinedAmount,
+            let amount: MoneyValue = if let predefinedAmount,
                predefinedAmount.currency == network.nativeAsset
             {
-                amount = predefinedAmount
+                predefinedAmount
             } else {
-                amount = .zero(currency: network.nativeAsset)
+                .zero(currency: network.nativeAsset)
             }
             return PendingTransaction(
                 amount: amount,
@@ -215,13 +214,13 @@ final class EthereumOnChainTransactionEngine: OnChainTransactionEngine {
         newConfirmation: TransactionConfirmation
     ) -> Single<PendingTransaction> {
         if let feeSelection = newConfirmation as? TransactionConfirmations.FeeSelection {
-            return updateFeeSelection(
+            updateFeeSelection(
                 pendingTransaction: pendingTransaction,
                 newFeeLevel: feeSelection.selectedLevel,
                 customFeeAmount: nil
             )
         } else {
-            return defaultDoOptionUpdateRequest(
+            defaultDoOptionUpdateRequest(
                 pendingTransaction: pendingTransaction,
                 newConfirmation: newConfirmation
             )

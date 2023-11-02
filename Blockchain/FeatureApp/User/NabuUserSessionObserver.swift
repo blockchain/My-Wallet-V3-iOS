@@ -166,9 +166,9 @@ extension KYC.Tier {
     var tag: Tag {
         switch self {
         case .unverified:
-            return blockchain.user.account.tier.none[]
+            blockchain.user.account.tier.none[]
         case .verified:
-            return blockchain.user.account.tier.gold[]
+            blockchain.user.account.tier.gold[]
         }
     }
 }
@@ -178,9 +178,9 @@ extension KYC.Tier? {
     var tag: Tag {
         switch self {
         case .some(let tier):
-            return tier.tag
+            tier.tag
         case .none:
-            return blockchain.user.account.tier.none[]
+            blockchain.user.account.tier.none[]
         }
     }
 }

@@ -15,27 +15,27 @@ final class LoginContainerViewController: UIViewController {
         var view: UIView {
             switch self {
             case .view(let view):
-                return view
+                view
             case .viewController(let viewController):
-                return viewController.view
+                viewController.view
             }
         }
 
         var viewController: UIViewController? {
             switch self {
             case .viewController(let vc):
-                return vc
+                vc
             case .view:
-                return nil
+                nil
             }
         }
 
         var navigationItem: UINavigationItem? {
             switch self {
             case .viewController(let vc):
-                return vc.navigationItem
+                vc.navigationItem
             case .view:
-                return nil
+                nil
             }
         }
     }

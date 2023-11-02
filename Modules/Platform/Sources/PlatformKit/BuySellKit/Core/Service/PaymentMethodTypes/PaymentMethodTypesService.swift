@@ -36,9 +36,9 @@ public enum PaymentMethodType: Equatable, Identifiable {
         switch self {
         case .card(let data),
              .applePay(let data):
-            return data.ux
+            data.ux
         default:
-             return nil
+             nil
         }
     }
 
@@ -47,24 +47,24 @@ public enum PaymentMethodType: Equatable, Identifiable {
         switch self {
         case .card(let data),
              .applePay(let data):
-            return data.block
+            data.block
         default:
-             return false
+             false
         }
     }
 
     public var method: PaymentMethod.MethodType {
         switch self {
         case .card(let data):
-            return .card([data.type])
+            .card([data.type])
         case .applePay(let data):
-            return .applePay([data.type])
+            .applePay([data.type])
         case .account(let data):
-            return .funds(data.topLimit.currencyType)
+            .funds(data.topLimit.currencyType)
         case .suggested(let method):
-            return method.type
+            method.type
         case .linkedBank(let data):
-            return .bankTransfer(data.currency.currencyType)
+            .bankTransfer(data.currency.currencyType)
         }
     }
 
@@ -74,15 +74,15 @@ public enum PaymentMethodType: Equatable, Identifiable {
         // This fixes IOS-5671.
         switch self {
         case .card(let data):
-            return .fiat(data.topLimit.currency)
+            .fiat(data.topLimit.currency)
         case .applePay(let data):
-            return .fiat(data.topLimit.currency)
+            .fiat(data.topLimit.currency)
         case .account(let data):
-            return data.topLimit.currencyType
+            data.topLimit.currencyType
         case .suggested(let method):
-            return method.max.currencyType
+            method.max.currencyType
         case .linkedBank(let bank):
-            return bank.topLimit.currencyType
+            bank.topLimit.currencyType
         }
     }
 
@@ -92,84 +92,84 @@ public enum PaymentMethodType: Equatable, Identifiable {
              .account,
              .linkedBank,
              .applePay:
-            return false
+            false
         case .suggested:
-            return true
+            true
         }
     }
 
     public var label: String {
         switch self {
         case .account(let fundData):
-            return fundData.label
+            fundData.label
         case .card(let card):
-            return card.displayLabel
+            card.displayLabel
         case .applePay:
-            return LocalizationConstants.LineItem.Transactional.applePay
+            LocalizationConstants.LineItem.Transactional.applePay
         case .linkedBank(let data):
-            return data.label
+            data.label
         case .suggested(let paymentMethod):
-            return paymentMethod.label
+            paymentMethod.label
         }
     }
 
     public var id: String {
         switch self {
         case .account(let fundData):
-            return fundData.topLimit.currency.code
+            fundData.topLimit.currency.code
         case .card(let card):
-            return card.identifier
+            card.identifier
         case .applePay:
-            return ""
+            ""
         case .linkedBank(let data):
-            return data.identifier
+            data.identifier
         case .suggested:
-            return method.rawType.rawValue
+            method.rawType.rawValue
         }
     }
 
     public var methodId: String? {
         switch self {
         case .card(let card):
-            return card.identifier
+            card.identifier
         case .suggested:
-            return nil
+            nil
         case .applePay:
-            return nil
+            nil
         case .linkedBank(let data):
-            return data.identifier
+            data.identifier
         case .account:
-            return nil
+            nil
         }
     }
 
     public var balance: MoneyValue {
         switch self {
         case .account(let funds):
-            return funds.balance.moneyValue
+            funds.balance.moneyValue
         case .card(let cardData):
-            return cardData.topLimit.moneyValue
+            cardData.topLimit.moneyValue
         case .applePay(let cardData):
-            return cardData.topLimit.moneyValue
+            cardData.topLimit.moneyValue
         case .linkedBank(let bankData):
-            return bankData.topLimit.moneyValue
+            bankData.topLimit.moneyValue
         case .suggested(let paymentMethod):
-            return paymentMethod.max.moneyValue
+            paymentMethod.max.moneyValue
         }
     }
 
     public var topLimit: MoneyValue {
         switch self {
         case .account(let funds):
-            return funds.topLimit.moneyValue
+            funds.topLimit.moneyValue
         case .card(let cardData):
-            return cardData.topLimit.moneyValue
+            cardData.topLimit.moneyValue
         case .applePay(let cardData):
-            return cardData.topLimit.moneyValue
+            cardData.topLimit.moneyValue
         case .linkedBank(let bankData):
-            return bankData.topLimit.moneyValue
+            bankData.topLimit.moneyValue
         case .suggested(let paymentMethod):
-            return paymentMethod.max.moneyValue
+            paymentMethod.max.moneyValue
         }
     }
 }
@@ -445,9 +445,9 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                         switch type {
                         case .card(let cardData),
                              .applePay(let cardData):
-                            return cardData
+                            cardData
                         case .suggested, .account, .linkedBank:
-                            return nil
+                            nil
                         }
                     }
                     .first
@@ -495,9 +495,9 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                     .compactMap { type -> LinkedBankData? in
                         switch type {
                         case .linkedBank(let bankData):
-                            return bankData
+                            bankData
                         case .suggested, .account, .card, .applePay:
-                            return nil
+                            nil
                         }
                     }
                     .first(where: { $0.identifier == bankId })
@@ -557,15 +557,15 @@ final class PaymentMethodTypesService: PaymentMethodTypesServiceAPI {
                 case .bankAccount,
                      .card,
                      .applePay:
-                    return true
+                    true
                 case .bankTransfer:
-                    return true
+                    true
                 case .funds(let currency):
                     switch currency {
                     case .crypto:
-                        return true
+                        true
                     case .fiat(let fiatCurrency):
-                        return FiatCurrency.allEnabledFiatCurrencies.contains(fiatCurrency)
+                        FiatCurrency.allEnabledFiatCurrencies.contains(fiatCurrency)
                     }
                 }
             }
@@ -651,9 +651,9 @@ extension [PaymentMethodType] {
         compactMap { paymentMethod in
             switch paymentMethod {
             case .card(let data), .applePay(let data):
-                return data
+                data
             case .suggested, .account, .linkedBank:
-                return nil
+                nil
             }
         }
     }
@@ -662,9 +662,9 @@ extension [PaymentMethodType] {
         compactMap { paymentMethod in
             switch paymentMethod {
             case .linkedBank(let data):
-                return data
+                data
             case .suggested, .account, .card, .applePay:
-                return nil
+                nil
             }
         }
     }
@@ -673,9 +673,9 @@ extension [PaymentMethodType] {
         compactMap { paymentMethod in
             switch paymentMethod {
             case .account(let data):
-                return data
+                data
             case .suggested, .card, .linkedBank, .applePay:
-                return nil
+                nil
             }
         }
     }

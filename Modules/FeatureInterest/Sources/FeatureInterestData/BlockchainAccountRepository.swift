@@ -59,17 +59,15 @@ final class BlockchainAccountRepository: BlockchainAccountRepositoryAPI {
                 return .just([])
             }
 
-            let filter: AssetFilter
-
-            switch accountType {
+            let filter: AssetFilter = switch accountType {
             case .nonCustodial:
-                filter = .nonCustodial
+                .nonCustodial
             case .custodial(let type):
                 switch type {
                 case .savings:
-                    filter = .interest
+                    .interest
                 case .trading:
-                    filter = .custodial
+                    .custodial
                 }
             }
 

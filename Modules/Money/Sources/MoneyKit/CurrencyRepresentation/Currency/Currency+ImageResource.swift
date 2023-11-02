@@ -11,9 +11,9 @@ extension CurrencyType {
     public var logoResource: ImageLocation {
         switch self {
         case .crypto(let currency):
-            return currency.logoResource
+            currency.logoResource
         case .fiat(let currency):
-            return currency.logoResource
+            currency.logoResource
         }
     }
 }
@@ -22,13 +22,13 @@ extension FiatCurrency {
     public var logoResource: ImageLocation {
         switch self {
         case .GBP:
-            return .local(name: "fiat-gbp", bundle: .module)
+            .local(name: "fiat-gbp", bundle: .module)
         case .EUR:
-            return .local(name: "fiat-eur", bundle: .module)
+            .local(name: "fiat-eur", bundle: .module)
         case .USD:
-            return .local(name: "fiat-usd", bundle: .module)
+            .local(name: "fiat-usd", bundle: .module)
         default:
-            return .local(name: "fiat-usd", bundle: .module)
+            .local(name: "fiat-usd", bundle: .module)
         }
     }
 }
@@ -52,9 +52,9 @@ extension CryptoCurrency {
 
 func placeholderImageLocation(_ value: String) -> ImageLocation {
     if let first = value.first?.lowercased(), first.isAlphanumeric {
-        return .systemName("\(first).circle.fill")
+        .systemName("\(first).circle.fill")
     } else {
-        return .systemName("circle.dashed")
+        .systemName("circle.dashed")
     }
 }
 

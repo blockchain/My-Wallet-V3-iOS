@@ -15,6 +15,7 @@ enum L10n {
         enum Express {}
         enum DestinationGas {}
     }
+
     enum TransactionInProgress {}
     enum Main {
         enum NoBalance {}
@@ -371,16 +372,18 @@ extension L10n.Confirmation {
             comment: "Dex: Main"
         )
     }
+
     enum SlippageTooltip {
         static let title = L10n.Confirmation.allowedSlippage
         static let body = L10n.Settings.Slippage.body
     }
+
     enum CrossChainRevertTooltip {
         static let title = NSLocalizedString(
             "What happens if my transaction is reverted?",
             comment: "Dex: Main"
         )
-        static let body =  NSLocalizedString(
+        static let body = NSLocalizedString(
             "In the case of price volatility and low slippage, the transaction may revert. If this happens, you will receive the value of your original swap amount in axlUSDC on the destination chain - instead of your chosen token.\nIf you receive axlUSDC unexpectedly on the destination chain, you’re almost there! You can swap it to your desired token by visiting the DEX and swapping on the destination chain for your desired token.",
             comment: "Dex: Main"
         )

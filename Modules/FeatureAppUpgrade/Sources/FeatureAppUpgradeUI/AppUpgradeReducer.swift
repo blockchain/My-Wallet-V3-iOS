@@ -17,7 +17,7 @@ public struct AppUpgradeReducer: Reducer {
         Reduce { _, action in
             switch action {
             case .skip:
-                return .none
+                .none
             }
         }
     }

@@ -331,32 +331,32 @@ extension DexQuoteOutput.Fee {
     fileprivate var title: String {
         switch type {
         case .express:
-            return L10n.Confirmation.expressFee
+            L10n.Confirmation.expressFee
         case .network:
-            return L10n.Confirmation.networkFee
+            L10n.Confirmation.networkFee
         case .crossChain:
-            return L10n.Confirmation.crossChainNetworkFee
+            L10n.Confirmation.crossChainNetworkFee
         case .total:
-            return L10n.Confirmation.totalFee
+            L10n.Confirmation.totalFee
         }
     }
 
     fileprivate var tooltip: (title: String, message: String)? {
         switch type {
         case .network:
-            return (
+            (
                 L10n.Confirmation.networkFee,
                 L10n.Confirmation.networkFeeDescription.interpolating(value.displayCode)
             )
         case .crossChain:
-            return (
+            (
                 L10n.Confirmation.crossChainNetworkFee,
                 L10n.Confirmation.networkFeeDescription.interpolating(value.displayCode)
             )
         case .express:
-            return nil
+            nil
         case .total:
-            return nil
+            nil
         }
     }
 }

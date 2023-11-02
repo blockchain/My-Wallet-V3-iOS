@@ -100,7 +100,6 @@ struct AppModeDecision {
         return isTradingAccountDisabled && isExternalTradingAccountDisabled
     }
 
-
     func shouldDefaultToTrading() -> Bool {
         guard !hasBeenDefaultedToTradingAlready else { return false }
 

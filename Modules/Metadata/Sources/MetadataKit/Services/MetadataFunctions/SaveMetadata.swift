@@ -21,23 +21,23 @@ public enum SaveMetadataError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .unableToParseRemotePayload:
-            return "Parsing Remote payload failed"
+            "Parsing Remote payload failed"
         case .failedToDeriveNode(let metadataNodeError):
-            return metadataNodeError.errorDescription
+            metadataNodeError.errorDescription
         case .failedToCreateMessage(let error):
-            return error.localizedDescription
+            error.localizedDescription
         case .failedToSignMessage(let error):
-            return error.localizedDescription
+            error.localizedDescription
         case .failedToPutMetadata(let networkError):
-            return networkError.description
+            networkError.description
         case .failedToValidateJSON:
-            return "Invalid JSON found"
+            "Invalid JSON found"
         case .failedToEncryptPayload(let error):
-            return error.localizedDescription
+            error.localizedDescription
         case .failedToCreateMagicHash(let error):
-            return error.localizedDescription
+            error.localizedDescription
         case .network(let networkError):
-            return networkError.description
+            networkError.description
         }
     }
 }

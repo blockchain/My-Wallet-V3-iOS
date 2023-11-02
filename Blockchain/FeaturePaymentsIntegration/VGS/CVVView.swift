@@ -230,9 +230,9 @@ extension CVVView {
                 .receive(on: DispatchQueue.main)
                 .map { cardData -> State in
                     if let cardData {
-                        return .loaded(CardDetails(data: cardData))
+                        .loaded(CardDetails(data: cardData))
                     } else {
-                        return .error(
+                        .error(
                             UX.Error(
                                 title: L10n.Error.unknownErrorTitle,
                                 message: L10n.Error.errorMessage

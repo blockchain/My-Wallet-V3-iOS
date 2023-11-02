@@ -12,11 +12,11 @@ public enum GoogleRecaptchaError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .missingRecaptchaTokenError:
-            return LocalizationConstants.Authentication.recaptchaVerificationFailure
+            LocalizationConstants.Authentication.recaptchaVerificationFailure
         case .rcaRecaptchaError(let errorMessage):
-            return errorMessage
+            errorMessage
         case .unknownError:
-            return LocalizationConstants.Authentication.recaptchaVerificationFailure
+            LocalizationConstants.Authentication.recaptchaVerificationFailure
         }
     }
 }

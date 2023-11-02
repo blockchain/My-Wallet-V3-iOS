@@ -36,17 +36,17 @@ public enum BadgeStyle: String, Codable, Hashable {
     public func variant() -> TagView.Variant {
         switch self {
         case .default:
-            return TagView.Variant.default
+            TagView.Variant.default
         case .infoAlt:
-            return TagView.Variant.infoAlt
+            TagView.Variant.infoAlt
         case .success:
-            return TagView.Variant.success
+            TagView.Variant.success
         case .warning:
-            return TagView.Variant.warning
+            TagView.Variant.warning
         case .error:
-            return TagView.Variant.error
+            TagView.Variant.error
         case .unknown:
-            return TagView.Variant.default
+            TagView.Variant.default
         }
     }
 }

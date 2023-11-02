@@ -15,17 +15,16 @@ public enum SingleAccountBadgeImageViewModel {
     public static func badgeModel(
         account: SingleAccount
     ) -> BadgeImageViewModel {
-        let model: BadgeImageViewModel
-        switch account.currencyType {
+        let model: BadgeImageViewModel = switch account.currencyType {
         case .fiat(let fiatCurrency):
-            model = .primary(
+            .primary(
                 image: fiatCurrency.logoResource,
                 contentColor: .semantic.background,
                 backgroundColor: fiatCurrency.brandColor,
                 accessibilityIdSuffix: AccessibilityId.badgeImageView
             )
         case .crypto(let cryptoCurrency):
-            model = .default(
+            .default(
                 image: cryptoCurrency.logoResource,
                 cornerRadius: .round,
                 accessibilityIdSuffix: AccessibilityId.badgeImageView

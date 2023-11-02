@@ -161,14 +161,14 @@ private struct MinimalDoubleButtonStyle<LeadingLeadingView: View, TrailingLeadin
 
     private func borderColor(for configuration: Configuration) -> Color {
         if configuration.isPressed {
-            return Color.semantic.primary
+            Color.semantic.primary
         } else if isEnabled {
-            return Color(
+            Color(
                 light: .semantic.medium,
                 dark: .palette.dark300
             )
         } else {
-            return Color(
+            Color(
                 light: .semantic.light,
                 dark: .palette.grey700
             )

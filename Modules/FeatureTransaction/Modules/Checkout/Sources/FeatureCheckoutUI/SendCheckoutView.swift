@@ -265,12 +265,12 @@ struct RoundedTextFieldStyle: TextFieldStyle {
 extension SendCheckout {
     var amountDisplayTitles: (title: String?, subtitle: String?) {
         if isSourcePrivateKey {
-            return (
+            (
                 amount.value.toDisplayString(includeSymbol: true),
                 amount.fiatValue?.toDisplayString(includeSymbol: true)
             )
         } else {
-            return (
+            (
                 amount.fiatValue?.toDisplayString(includeSymbol: true),
                 amount.value.toDisplayString(includeSymbol: true)
             )
@@ -279,12 +279,12 @@ extension SendCheckout {
 
     var totalDisplayTitles: (title: String, subtitle: String) {
         if isSourcePrivateKey {
-            return (
+            (
                 total.value.toDisplayString(includeSymbol: true),
                 total.fiatValue?.toDisplayString(includeSymbol: true) ?? ""
             )
         } else {
-            return (
+            (
                 total.fiatValue?.toDisplayString(includeSymbol: true) ?? "",
                 total.value.toDisplayString(includeSymbol: true)
             )

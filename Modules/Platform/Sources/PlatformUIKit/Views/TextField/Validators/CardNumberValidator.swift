@@ -59,9 +59,9 @@ public final class CardNumberValidator: TextValidating, CardTypeSource {
             switch self {
             case .unblocked(let ux),
                     .blocked(let ux):
-                return ux
+                ux
             case .best:
-                return nil
+                nil
             }
         }
     }

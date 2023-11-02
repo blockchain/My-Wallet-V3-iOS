@@ -101,13 +101,13 @@ extension KYCDocumentType {
     fileprivate var order: Int {
         switch self {
         case .passport:
-            return 0
+            0
         case .nationalIdentityCard:
-            return 1
+            1
         case .residencePermit:
-            return 2
+            2
         case .driversLicense:
-            return 3
+            3
         }
     }
 }

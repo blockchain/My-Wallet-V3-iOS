@@ -91,11 +91,11 @@ public final class CryptoActiveRewardsAccount: CryptoAccount, ActiveRewardsAccou
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .activeRewardsWithdraw:
-            return actionableBalance.map(\.isPositive).eraseToAnyPublisher()
+            actionableBalance.map(\.isPositive).eraseToAnyPublisher()
         case .viewActivity:
-            return .just(true)
+            .just(true)
         case _:
-            return .just(false)
+            .just(false)
         }
     }
 

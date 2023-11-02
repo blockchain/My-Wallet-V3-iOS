@@ -140,11 +140,11 @@ final class PinInteractor: PinInteracting {
     private func getPinAlertIfNeeded(_ remaining: Int) -> PinError.PinAlert? {
         switch remaining {
         case Constant.IncorrectPinAlertLockTimeTrigger.tooManyAttempts:
-            return .tooManyAttempts
+            .tooManyAttempts
         case let time where time >= Constant.IncorrectPinAlertLockTimeTrigger.cannotLogin:
-            return .cannotLogin
+            .cannotLogin
         default:
-            return nil
+            nil
         }
     }
 

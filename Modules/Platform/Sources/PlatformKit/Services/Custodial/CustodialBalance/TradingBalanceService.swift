@@ -31,9 +31,9 @@ class TradingBalanceService: TradingBalanceServiceAPI {
             .logErrorIfNoOutput(id: blockchain.app.is.external.brokerage(\.id))
             .flatMap { [cachedValue] useExternalTradingAccount -> AnyPublisher<CustodialAccountBalanceStates, Never> in
                 if useExternalTradingAccount {
-                    return Self.streamBalances(cachedValue, .external)
+                    Self.streamBalances(cachedValue, .external)
                 } else {
-                    return Self.streamBalances(cachedValue, .custodial)
+                    Self.streamBalances(cachedValue, .custodial)
                 }
             }
             .eraseToAnyPublisher()
@@ -83,10 +83,9 @@ class TradingBalanceService: TradingBalanceServiceAPI {
         self.cachedValue = CachedValueNew(
             cache: cache,
             fetch: { [client] key in
-                let publisher: AnyPublisher<CustodialBalanceResponse?, NabuNetworkError>
-                switch key {
-                case .custodial: publisher = client.balance
-                case .external: publisher = client.externalBrokerageBalance
+                let publisher: AnyPublisher<CustodialBalanceResponse?, NabuNetworkError> = switch key {
+                case .custodial: client.balance
+                case .external: client.externalBrokerageBalance
                 }
                 return publisher.map { response in
                     guard let response else { return .absent }

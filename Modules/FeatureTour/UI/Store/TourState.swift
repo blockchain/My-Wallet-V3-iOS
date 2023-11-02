@@ -31,22 +31,22 @@ public struct TourState: Equatable {
     var gradientBackgroundOpacity: Double {
         switch scrollOffset {
         case _ where scrollOffset >= 0:
-            return 1
+            1
         case _ where scrollOffset <= -scrollEffectTransitionDistance:
-            return 0
+            0
         default:
-            return 1 - Double(scrollOffset / -scrollEffectTransitionDistance)
+            1 - Double(scrollOffset / -scrollEffectTransitionDistance)
         }
     }
 
     var priceListMaskStartYPoint: CGFloat {
         switch scrollOffset {
         case _ where scrollOffset >= 0:
-            return 0
+            0
         case _ where scrollOffset <= -scrollEffectTransitionDistance:
-            return 0.99
+            0.99
         default:
-            return scrollOffset / -scrollEffectTransitionDistance
+            scrollOffset / -scrollEffectTransitionDistance
         }
     }
 }

@@ -22,18 +22,18 @@ public enum PresentedAssetType: Decodable {
     var rowType: PresentedAssetRowType {
         switch self {
         case .custodial:
-            return .custodial
+            .custodial
         case .nonCustodial:
-            return .nonCustodial
+            .nonCustodial
         }
     }
 
     var smallBalanceFilterTag: Tag.Event {
         switch self {
         case .custodial:
-            return blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on
+            blockchain.ux.dashboard.trading.assets.small.balance.filtering.is.on
         case .nonCustodial:
-            return blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
+            blockchain.ux.dashboard.defi.assets.small.balance.filtering.is.on
         }
     }
 }

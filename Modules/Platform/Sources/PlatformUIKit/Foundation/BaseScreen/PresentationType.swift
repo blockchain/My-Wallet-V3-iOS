@@ -24,9 +24,9 @@ public enum PresentationType {
     public var isModal: Bool {
         switch self {
         case .modal, .modalOverTopMost:
-            return true
+            true
         case .navigation, .navigationFromCurrent:
-            return false
+            false
         }
     }
 }

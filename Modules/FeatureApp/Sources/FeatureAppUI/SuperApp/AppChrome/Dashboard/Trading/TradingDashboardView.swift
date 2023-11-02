@@ -11,8 +11,8 @@ import FeatureAnnouncementsUI
 import FeatureAppDomain
 import FeatureCoinUI
 import FeatureCustodialOnboarding
-import FeatureDashboardUI
 import FeatureDashboardDomain
+import FeatureDashboardUI
 import FeatureExternalTradingMigrationDomain
 import FeatureExternalTradingMigrationUI
 import FeatureQuickActions

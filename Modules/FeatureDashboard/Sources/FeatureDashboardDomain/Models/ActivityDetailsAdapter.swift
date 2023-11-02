@@ -175,7 +175,7 @@ public enum ActivityDetailsAdapter {
         ])
 
         var group4: ActivityDetail.GroupedItems.Item?
-        if  let hashRow = activity.transactionHashRow() {
+        if let hashRow = activity.transactionHashRow() {
             let copyHashAction = ItemType.leaf(.button(.init(
                 text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionHashButtonLabel,
                 style: .secondary,
@@ -200,11 +200,10 @@ public enum ActivityDetailsAdapter {
             )
         ]
 
-        let itemGroups: [ActivityDetail.GroupedItems.Item]
-        if let group4 {
-            itemGroups = [group1, group2, group3, group4]
+        let itemGroups: [ActivityDetail.GroupedItems.Item] = if let group4 {
+            [group1, group2, group3, group4]
         } else {
-            itemGroups = [group1, group2, group3]
+            [group1, group2, group3]
         }
         return ActivityDetail.GroupedItems(
             title: activity.title(),
@@ -221,11 +220,11 @@ extension CustodialActivityEvent.State {
     fileprivate func toBadge() -> LeafItemType {
         switch self {
         case .completed:
-            return LeafItemType.badge(.init(value: rawValue.capitalized, style: .success))
+            LeafItemType.badge(.init(value: rawValue.capitalized, style: .success))
         case .failed:
-            return LeafItemType.badge(.init(value: rawValue.capitalized, style: .error))
+            LeafItemType.badge(.init(value: rawValue.capitalized, style: .error))
         case .pending:
-            return LeafItemType.badge(.init(value: rawValue.capitalized, style: .default))
+            LeafItemType.badge(.init(value: rawValue.capitalized, style: .default))
         }
     }
 }
@@ -235,15 +234,15 @@ extension CustodialActivityEvent.Crypto {
         switch type {
         case .withdrawal:
             if let networkIcon = amount.currency.logoURL?.absoluteString {
-                return ImageType.smallTag(.init(main: networkIcon, tag: ActivityRemoteIcons.send.url(mode: .dark)))
+                ImageType.smallTag(.init(main: networkIcon, tag: ActivityRemoteIcons.send.url(mode: .dark)))
             } else {
-                return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
+                ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
             }
         case .deposit:
             if let networkIcon = amount.currency.logoURL?.absoluteString {
-                return ImageType.smallTag(.init(main: networkIcon, tag: ActivityRemoteIcons.receive.url(mode: .dark)))
+                ImageType.smallTag(.init(main: networkIcon, tag: ActivityRemoteIcons.receive.url(mode: .dark)))
             } else {
-                return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
+                ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
             }
         }
     }
@@ -251,9 +250,9 @@ extension CustodialActivityEvent.Crypto {
     fileprivate func title() -> String {
         switch type {
         case .withdrawal:
-            return "\(LocalizationConstants.Activity.MainScreen.Item.withdrew) \(amount.displayCode)"
+            "\(LocalizationConstants.Activity.MainScreen.Item.withdrew) \(amount.displayCode)"
         case .deposit:
-            return "\(LocalizationConstants.Activity.MainScreen.Item.receive) \(amount.displayCode)"
+            "\(LocalizationConstants.Activity.MainScreen.Item.receive) \(amount.displayCode)"
         }
     }
 
@@ -453,12 +452,11 @@ extension CustodialActivityEvent.Crypto {
             color: .title
         )
 
-        let source: String
-        switch type {
+        let source: String = switch type {
         case .deposit:
-            source = "\(amount.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.wallet)"
+            "\(amount.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.wallet)"
         case .withdrawal:
-            source = LocalizationConstants.SuperApp.ActivityDetails.blockchainAccount
+            LocalizationConstants.SuperApp.ActivityDetails.blockchainAccount
         }
 
         return ItemType.compositionView(
@@ -494,12 +492,11 @@ extension CustodialActivityEvent.Crypto {
             color: .title
         )
 
-        let destination: String
-        switch type {
+        let destination: String = switch type {
         case .deposit:
-            destination = LocalizationConstants.SuperApp.ActivityDetails.blockchainAccount
+            LocalizationConstants.SuperApp.ActivityDetails.blockchainAccount
         case .withdrawal:
-            destination = receivingAddress ?? "\(amount.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.wallet)"
+            receivingAddress ?? "\(amount.displayCode) \(LocalizationConstants.SuperApp.ActivityDetails.wallet)"
         }
         return ItemType.compositionView(
             .init(
@@ -621,18 +618,18 @@ extension CustodialActivityEvent.Fiat {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
         case .deposit:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
         }
     }
 
     fileprivate func title() -> String {
         switch type {
         case .withdrawal:
-            return "\(LocalizationConstants.SuperApp.ActivityDetails.cashedOut) \(amount.displayCode)"
+            "\(LocalizationConstants.SuperApp.ActivityDetails.cashedOut) \(amount.displayCode)"
         case .deposit:
-            return "\(LocalizationConstants.SuperApp.ActivityDetails.added) \(amount.displayCode)"
+            "\(LocalizationConstants.SuperApp.ActivityDetails.added) \(amount.displayCode)"
         }
     }
 
@@ -792,31 +789,31 @@ extension BuySellActivityItemEvent.EventStatus {
     fileprivate func toBadge() -> LeafItemType {
         switch self {
         case .pending:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
                     style: .default
                 ))
         case .failed:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.failedStatus,
                     style: .error
                 ))
         case .finished:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.completeStatus,
                     style: .success
                 ))
         case .pendingConfirmation:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
                     style: .default
                 ))
         default:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
                     style: .default
@@ -829,15 +826,15 @@ extension BuySellActivityItemEvent.PaymentMethod {
     fileprivate func toString() -> String {
         switch self {
         case .applePay:
-            return LocalizationConstants.SuperApp.ActivityDetails.paymentMethodApplePay
+            LocalizationConstants.SuperApp.ActivityDetails.paymentMethodApplePay
         case .bankAccount:
-            return LocalizationConstants.SuperApp.ActivityDetails.paymentMethodBankAccount
+            LocalizationConstants.SuperApp.ActivityDetails.paymentMethodBankAccount
         case .funds:
-            return LocalizationConstants.SuperApp.ActivityDetails.paymentMethodFunds
+            LocalizationConstants.SuperApp.ActivityDetails.paymentMethodFunds
         case .card:
-            return LocalizationConstants.SuperApp.ActivityDetails.paymentMethodCard
+            LocalizationConstants.SuperApp.ActivityDetails.paymentMethodCard
         case .bankTransfer:
-            return LocalizationConstants.SuperApp.ActivityDetails.paymentMethodBankTransfer
+            LocalizationConstants.SuperApp.ActivityDetails.paymentMethodBankTransfer
         }
     }
 }
@@ -846,15 +843,15 @@ extension BuySellActivityItemEvent {
     fileprivate func leadingImage() -> ImageType {
         if isBuy {
             if let logoURL = outputValue.currency.cryptoCurrency?.logoURL?.absoluteString {
-                return ImageType.smallTag(.init(main: logoURL, tag: ActivityRemoteIcons.buy.url(mode: .dark)))
+                ImageType.smallTag(.init(main: logoURL, tag: ActivityRemoteIcons.buy.url(mode: .dark)))
             } else {
-                return ImageType.smallTag(.init(main: ActivityRemoteIcons.buy.url(mode: .dark)))
+                ImageType.smallTag(.init(main: ActivityRemoteIcons.buy.url(mode: .dark)))
             }
         } else {
             if let logoURL = inputValue.currency.cryptoCurrency?.logoURL?.absoluteString {
-                return ImageType.smallTag(.init(main: logoURL, tag: ActivityRemoteIcons.sell.url(mode: .dark)))
+                ImageType.smallTag(.init(main: logoURL, tag: ActivityRemoteIcons.sell.url(mode: .dark)))
             } else {
-                return ImageType.smallTag(.init(main: ActivityRemoteIcons.sell.url(mode: .dark)))
+                ImageType.smallTag(.init(main: ActivityRemoteIcons.sell.url(mode: .dark)))
             }
         }
     }
@@ -1130,31 +1127,31 @@ extension SwapActivityItemEvent.EventStatus {
     fileprivate func toBadge() -> LeafItemType {
         switch self {
         case .inProgress:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
                     style: .default
                 ))
         case .failed:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.failedStatus,
                     style: .error
                 ))
         case .complete:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.completeStatus,
                     style: .success
                 ))
         case .pendingRefund:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
                     style: .default
                 ))
         default:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
                     style: .default
@@ -1168,11 +1165,11 @@ extension SwapActivityItemEvent {
         if let inputLogoUrl = pair.inputCurrencyType.cryptoCurrency?.logoURL?.absoluteString,
             let outputLogoUrl = pair.outputCurrencyType.cryptoCurrency?.logoURL?.absoluteString
         {
-            return ImageType.overlappingPair(
+            ImageType.overlappingPair(
                 .init(back: outputLogoUrl, front: inputLogoUrl)
             )
         } else {
-            return ImageType.smallTag(
+            ImageType.smallTag(
                 .init(
                     main: ActivityRemoteIcons.swap.url(mode: .dark),
                     tag: nil

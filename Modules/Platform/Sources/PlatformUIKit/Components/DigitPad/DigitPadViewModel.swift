@@ -117,12 +117,11 @@ public final class DigitPadViewModel {
             .disposed(by: disposeBag)
 
         // Merge all digit observables into one stream of digits
-        let buttons: [DigitPadButtonViewModel]
-        switch padType {
+        let buttons: [DigitPadButtonViewModel] = switch padType {
         case .number:
-            buttons = digitButtonViewModelArray + [customButtonViewModel]
+            digitButtonViewModelArray + [customButtonViewModel]
         case .pin:
-            buttons = digitButtonViewModelArray
+            digitButtonViewModelArray
         }
         let tapObservable = Observable.merge(buttons.map(\.tapObservable))
 

@@ -12,9 +12,9 @@ enum SettingsSectionViewState {
     var viewModel: SettingsSectionViewModel? {
         switch self {
         case .empty:
-            return nil
+            nil
         case .some(let viewModel):
-            return viewModel
+            viewModel
         }
     }
 }

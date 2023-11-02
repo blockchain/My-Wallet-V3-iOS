@@ -41,9 +41,9 @@ public struct InteractableTextViewModel {
         var stringValue: String {
             switch self {
             case .url(string: let value, url: _):
-                return value
+                value
             case .text(string: let value):
-                return value
+                value
             }
         }
     }

@@ -35,9 +35,9 @@ public enum BadgeAsset {
                              (.verified, .verified),
                              (.destructive, .destructive),
                              (.warning, .warning):
-                            return true
+                            true
                         default:
-                            return false
+                            false
                         }
                     }
                 }

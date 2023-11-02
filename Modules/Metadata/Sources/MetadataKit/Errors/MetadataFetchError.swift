@@ -14,24 +14,24 @@ public enum MetadataFetchError: FromDecodingError, Equatable {
     public static func == (lhs: MetadataFetchError, rhs: MetadataFetchError) -> Bool {
         switch (lhs, rhs) {
         case (.loadMetadataError(let leftError), .loadMetadataError(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         case (.failedToDeriveMetadataNode(let leftError), .failedToDeriveMetadataNode(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         case (.decodingError(let leftError), .decodingError(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         default:
-            return false
+            false
         }
     }
 
     public var errorDescription: String? {
         switch self {
         case .loadMetadataError(let loadRemoteMetadataError):
-            return loadRemoteMetadataError.errorDescription
+            loadRemoteMetadataError.errorDescription
         case .failedToDeriveMetadataNode(let metadataNodeError):
-            return metadataNodeError.localizedDescription
+            metadataNodeError.localizedDescription
         case .decodingError(let decodingError):
-            return decodingError.formattedDescription
+            decodingError.formattedDescription
         }
     }
 }

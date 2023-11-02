@@ -229,9 +229,9 @@ struct InterestReducerCore: Reducer {
         Reduce { _, action in
             switch action {
             case .interestAccountDetails(.dismissInterestDetailsScreen):
-                return .dismiss()
+                .dismiss()
             case .interestAccountDetails(.loadCryptoInterestAccount(isTransfer: let isTransfer, let currency)):
-                return .run { send in
+                .run { send in
                     let transactionState = try await Publishers.CombineLatest(
                         environment
                             .blockchainAccountRepository
@@ -259,7 +259,7 @@ struct InterestReducerCore: Reducer {
                     await send(.interestTransactionStateFetched(transactionState))
                 }
             default:
-                return .none
+                .none
             }
         }
     }
@@ -278,44 +278,44 @@ struct InterestAnalytics: Reducer {
         Reduce { state, action in
             switch action {
             case .didReceiveInterestAccountResponse(.success):
-                return .run { _ in
+                .run { _ in
                     analyticsRecorder.record(
                         event: .interestViewed
                     )
                 }
             case .interestAccountButtonTapped(_, .viewInterestButtonTapped(let details)):
-                return .run { _ in
+                .run { _ in
                     analyticsRecorder.record(
                         event: .walletRewardsDetailClicked(currency: details.currency.code)
                     )
                 }
             case .interestAccountDetails(.interestAccountActionsFetched):
-                return .run { [state] _ in
+                .run { [state] _ in
                     let currencyCode = state.interestAccountDetailsState?.interestAccountOverview.currency.code
                     analyticsRecorder.record(
                         event: .walletRewardsDetailViewed(currency: currencyCode ?? "")
                     )
                 }
             case .interestAccountButtonTapped(_, .earnInterestButtonTapped(let details)):
-                return .run { _ in
+                .run { _ in
                     analyticsRecorder.record(
                         event: .interestDepositClicked(currency: details.currency.code)
                     )
                 }
             case .interestAccountDetails(.interestWithdrawTapped(let currency)):
-                return .run { _ in
+                .run { _ in
                     analyticsRecorder.record(
                         event: .interestWithdrawalClicked(currency: currency.code)
                     )
                 }
             case .interestAccountDetails(.interestTransferTapped(let currency)):
-                return .run { _ in
+                .run { _ in
                     analyticsRecorder.record(
                         event: .walletRewardsDetailDepositClicked(currency: currency.code)
                     )
                 }
             default:
-                return .none
+                .none
             }
         }
     }

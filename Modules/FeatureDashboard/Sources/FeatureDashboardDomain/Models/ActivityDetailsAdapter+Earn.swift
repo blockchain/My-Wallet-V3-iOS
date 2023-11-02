@@ -46,14 +46,14 @@ extension ActivityDetailsAdapter {
 extension EarnActivity {
     fileprivate func leadingImage() -> ImageType {
         if let logoURL = currency.cryptoCurrency?.logoURL?.absoluteString {
-            return ImageType.smallTag(
+            ImageType.smallTag(
                 .init(
                     main: logoURL,
                     tag: ActivityRemoteIcons.earn.url(mode: .dark)
                 )
             )
         } else {
-            return ImageType.smallTag(
+            ImageType.smallTag(
                 .init(
                     main: ActivityRemoteIcons.earn.url(mode: .dark),
                     tag: nil
@@ -65,9 +65,9 @@ extension EarnActivity {
     fileprivate func title(product: ActivityProductType) -> String {
         switch type {
         case .interestEarned:
-            return activityTitle(product: product).interpolating(currency.code)
+            activityTitle(product: product).interpolating(currency.code)
         default:
-            return "\(currency.code) \(activityTitle(product: product))"
+            "\(currency.code) \(activityTitle(product: product))"
         }
     }
 
@@ -252,25 +252,25 @@ extension EarnActivity.State {
     fileprivate func toBadge() -> LeafItemType {
         switch self {
         case .pending:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
                     style: .default
                 ))
         case .failed:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.failedStatus,
                     style: .error
                 ))
         case .complete:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.completeStatus,
                     style: .success
                 ))
         default:
-            return LeafItemType.badge(
+            LeafItemType.badge(
                 .init(
                     value: LocalizationConstants.SuperApp.ActivityDetails.pendingStatus,
                     style: .default

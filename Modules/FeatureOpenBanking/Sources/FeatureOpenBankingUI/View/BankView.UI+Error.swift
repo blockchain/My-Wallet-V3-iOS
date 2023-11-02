@@ -8,11 +8,11 @@ extension ImageLocation {
     var media: UIComponentsKit.Media {
         switch self {
         case .local(name: let name, bundle: let bundle):
-            return .image(named: name, in: bundle)
+            .image(named: name, in: bundle)
         case .systemName(let name):
-            return .image(systemName: name)
+            .image(systemName: name)
         case .remote(url: let url, fallback: _):
-            return .image(at: url, placeholder: nil)
+            .image(at: url, placeholder: nil)
         }
     }
 }

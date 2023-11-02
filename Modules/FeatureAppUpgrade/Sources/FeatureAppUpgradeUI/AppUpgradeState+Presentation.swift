@@ -16,26 +16,26 @@ extension AppUpgradeState {
         var id: String {
             switch self {
             case .skip:
-                return "skip"
+                "skip"
             case .update:
-                return "update"
+                "update"
             case .status:
-                return "status"
+                "status"
             case .goToWeb:
-                return "goToWeb"
+                "goToWeb"
             }
         }
 
         var title: String {
             switch self {
             case .skip:
-                return LocalizedString.Button.skip
+                LocalizedString.Button.skip
             case .update:
-                return LocalizedString.Button.update
+                LocalizedString.Button.update
             case .status:
-                return LocalizedString.Button.status
+                LocalizedString.Button.status
             case .goToWeb:
-                return LocalizedString.Button.goToWeb
+                LocalizedString.Button.goToWeb
             }
         }
 
@@ -44,9 +44,9 @@ extension AppUpgradeState {
             case .goToWeb(url: let url),
                  .status(url: let url),
                  .update(url: let url):
-                return URL(string: url)
+                URL(string: url)
             case .skip:
-                return nil
+                nil
             }
         }
 
@@ -55,9 +55,9 @@ extension AppUpgradeState {
             case .goToWeb,
                  .skip,
                  .update:
-                return false
+                false
             case .status:
-                return true
+                true
             }
         }
     }
@@ -69,46 +69,46 @@ extension AppUpgradeState {
     var badge: String {
         switch style {
         case .hardUpgrade, .softUpgrade:
-            return "outdated-badge"
+            "outdated-badge"
         case .appMaintenance, .maintenance, .unsupportedOS:
-            return "maintenance-badge"
+            "maintenance-badge"
         }
     }
 
     var title: String {
         switch style {
         case .hardUpgrade, .softUpgrade:
-            return LocalizedString.Title.update
+            LocalizedString.Title.update
         case .appMaintenance, .maintenance:
-            return LocalizedString.Title.maintenance
+            LocalizedString.Title.maintenance
         case .unsupportedOS:
-            return LocalizedString.Title.unsupportedOS
+            LocalizedString.Title.unsupportedOS
         }
     }
 
     var subtitle: String {
         switch style {
         case .hardUpgrade, .softUpgrade:
-            return LocalizedString.Subtitle.update
+            LocalizedString.Subtitle.update
         case .appMaintenance:
-            return LocalizedString.Subtitle.appMaintenance
+            LocalizedString.Subtitle.appMaintenance
         case .maintenance:
-            return LocalizedString.Subtitle.maintenance
+            LocalizedString.Subtitle.maintenance
         case .unsupportedOS:
-            return LocalizedString.Subtitle.unsupportedOS
+            LocalizedString.Subtitle.unsupportedOS
         }
     }
 
     var cta: Button {
         switch style {
         case .softUpgrade:
-            return .update(url: url)
+            .update(url: url)
         case .hardUpgrade:
-            return .update(url: url)
+            .update(url: url)
         case .appMaintenance, .unsupportedOS:
-            return .goToWeb(url: url)
+            .goToWeb(url: url)
         case .maintenance:
-            return .status(url: url)
+            .status(url: url)
         }
     }
 }

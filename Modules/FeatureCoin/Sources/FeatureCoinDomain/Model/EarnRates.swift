@@ -24,13 +24,13 @@ public struct EarnRates: Equatable {
         case .privateKey,
              .trading,
              .exchange:
-            return nil
+            nil
         case .interest:
-            return interestRate
+            interestRate
         case .staking:
-            return stakingRate
+            stakingRate
         case .activeRewards:
-            return activeRewardsRate
+            activeRewardsRate
         }
     }
 }

@@ -16,7 +16,7 @@ extension NabuUserServiceError {
     public var nabu: Nabu.Error {
         switch self {
         case .failedToFetchUser(let error), .failedToSetAddress(let error):
-            return error
+            error
         }
     }
 }

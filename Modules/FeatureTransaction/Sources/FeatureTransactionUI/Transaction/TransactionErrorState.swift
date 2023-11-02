@@ -53,9 +53,9 @@ extension TransactionErrorState {
     var isUX: Bool {
         switch self {
         case .ux:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 
@@ -70,9 +70,9 @@ extension TransactionErrorState {
     var fatalError: FatalTransactionError? {
         switch self {
         case .fatalError(let error):
-            return error
+            error
         default:
-            return nil
+            nil
         }
     }
 }

@@ -9,35 +9,35 @@ extension AssetAction {
     var accessibilityPrefix: String {
         switch self {
         case .activeRewardsDeposit:
-            return "ActiveRewards.Deposit."
+            "ActiveRewards.Deposit."
         case .activeRewardsWithdraw:
-            return "ActiveRewards.Withdraw."
+            "ActiveRewards.Withdraw."
         case .stakingDeposit:
-            return "Staking.Deposit."
+            "Staking.Deposit."
         case .stakingWithdraw:
-            return "Staking.Deposit."
+            "Staking.Deposit."
         case .interestTransfer:
-            return "Interest.Deposit."
+            "Interest.Deposit."
         case .interestWithdraw:
-            return "Interest.Withdraw."
+            "Interest.Withdraw."
         case .deposit:
-            return "Deposit."
+            "Deposit."
         case .receive:
-            return "Receive."
+            "Receive."
         case .buy:
-            return "Buy."
+            "Buy."
         case .sell:
-            return "Sell."
+            "Sell."
         case .sign:
-            return "Sign."
+            "Sign."
         case .send:
-            return "Send."
+            "Send."
         case .swap:
-            return "Swap."
+            "Swap."
         case .viewActivity:
-            return "ViewActivity."
+            "ViewActivity."
         case .withdraw:
-            return "Withdraw."
+            "Withdraw."
         }
     }
 }

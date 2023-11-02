@@ -40,9 +40,9 @@ public final class ExchangeAccountStatusService: ExchangeAccountStatusServiceAPI
             // not enabled.
             .catch { error -> AnyPublisher<Bool, NabuNetworkError> in
                 if error.code == .bad2fa {
-                    return .just(false)
+                    .just(false)
                 } else {
-                    return .failure(error)
+                    .failure(error)
                 }
             }
             .eraseToAnyPublisher()

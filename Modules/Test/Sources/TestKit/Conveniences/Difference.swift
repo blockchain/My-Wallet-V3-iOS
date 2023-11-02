@@ -365,17 +365,17 @@ extension String {
 // pull the case name from the mirror
 private func enumLabelFromFirstChild(_ mirror: Mirror) -> String? {
     switch mirror.displayStyle {
-    case .enum: return mirror.children.first?.label
-    default: return nil
+    case .enum: mirror.children.first?.label
+    default: nil
     }
 }
 
 extension Mirror {
     fileprivate func displayStyleDescriptor(index: Int) -> String {
         switch displayStyle {
-        case .enum: return "Enum "
-        case .collection: return "Collection[\(index)]"
-        default: return ""
+        case .enum: "Enum "
+        case .collection: "Collection[\(index)]"
+        default: ""
         }
     }
 
@@ -386,9 +386,9 @@ extension Mirror {
         case .collection,
                 .dictionary,
                 .set:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 

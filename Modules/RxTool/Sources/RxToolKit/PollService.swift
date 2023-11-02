@@ -128,17 +128,17 @@ public class PollService<Value> {
     private func catchError(error: Error) -> Single<PollResult<Value>> {
         switch error {
         case ServiceError.timeout(let lastValue):
-            return cancel.andThen(Single.just(.timeout(lastValue)))
+            cancel.andThen(Single.just(.timeout(lastValue)))
         case ServiceError.pollCancelled:
-            return cancel.andThen(Single.just(.cancel))
+            cancel.andThen(Single.just(.cancel))
         case ServiceError.conditionNotMet:
-            return retryScheduler
+            retryScheduler
                 .flatMap(weak: self) { (self, _) -> Single<PollResult<Value>> in
                     self.waitForMatch()
                 }
         default:
             /// Other network errors
-            return cancel.andThen(Single.error(error))
+            cancel.andThen(Single.error(error))
         }
     }
 

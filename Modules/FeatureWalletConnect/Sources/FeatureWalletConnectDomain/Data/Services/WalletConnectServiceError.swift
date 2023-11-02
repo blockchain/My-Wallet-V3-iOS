@@ -14,17 +14,17 @@ enum WalletConnectServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingSession:
-            return LocalizationConstants.WalletConnect.ServiceError.missingSession
+            LocalizationConstants.WalletConnect.ServiceError.missingSession
         case .unknownNetwork:
-            return LocalizationConstants.WalletConnect.ServiceError.unknownNetwork
+            LocalizationConstants.WalletConnect.ServiceError.unknownNetwork
         case .invalidTxCompletion:
-            return nil
+            nil
         case .invalidTxTarget:
-            return LocalizationConstants.WalletConnect.ServiceError.invalidTxTarget
+            LocalizationConstants.WalletConnect.ServiceError.invalidTxTarget
         case .unsupportedMethod:
-            return LocalizationConstants.WalletConnect.ServiceError.unsupportedMethod
+            LocalizationConstants.WalletConnect.ServiceError.unsupportedMethod
         case .unknown:
-            return LocalizationConstants.WalletConnect.ServiceError.unknown
+            LocalizationConstants.WalletConnect.ServiceError.unknown
         }
     }
 }

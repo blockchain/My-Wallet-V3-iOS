@@ -27,27 +27,27 @@ enum ActivityRemoteIcons {
     var title: String {
         switch self {
         case .buy:
-            return "buy"
+            "buy"
         case .deposit:
-            return "deposit"
+            "deposit"
         case .earn:
-            return "earn"
+            "earn"
         case .pending:
-            return "pending"
+            "pending"
         case .receive:
-            return "receive"
+            "receive"
         case .recurringBuy:
-            return "recurring_buy"
+            "recurring_buy"
         case .sell:
-            return "sell"
+            "sell"
         case .send:
-            return "send"
+            "send"
         case .signature:
-            return "signature"
+            "signature"
         case .swap:
-            return "swap"
+            "swap"
         case .withdraw:
-            return "withdraw"
+            "withdraw"
         }
     }
 

@@ -68,13 +68,13 @@ extension AssetModelType {
     fileprivate var baseSortIndex: Int {
         switch self {
         case .fiat:
-            return 0
+            0
         case .coin:
-            return 10000
+            10000
         case .celoToken:
-            return 20000
+            20000
         case .erc20:
-            return 30000
+            30000
         }
     }
 }

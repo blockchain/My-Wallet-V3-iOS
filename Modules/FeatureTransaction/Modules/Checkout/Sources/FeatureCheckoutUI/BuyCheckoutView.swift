@@ -653,14 +653,10 @@ extension BuyCheckout {
     }
 
     fileprivate var achTermsInfoDescriptionText: String {
-        let description: String = {
-            switch buyType {
-            case .simpleBuy:
-                return L10n.ACHTermsInfo.simpleBuyDescription
-            case .recurringBuy:
-                return L10n.ACHTermsInfo.recurringBuyDescription
-            }
-        }()
+        let description: String = switch buyType {
+        case .simpleBuy: L10n.ACHTermsInfo.simpleBuyDescription
+        case .recurringBuy: L10n.ACHTermsInfo.recurringBuyDescription
+        }
         return String(
             format: description,
             paymentMethodLabel,
@@ -672,14 +668,14 @@ extension BuyCheckout {
     fileprivate var achTransferDisclaimerText: String {
         switch buyType {
         case .simpleBuy:
-            return String(
+            String(
                 format: L10n.AchTransferDisclaimer.simpleBuyDescription,
                 total.displayString,
                 crypto.code,
                 exchangeRate.displayString
             )
         case .recurringBuy:
-            return String(
+            String(
                 format: L10n.AchTransferDisclaimer.recurringBuyDescription,
                 paymentMethodLabel,
                 total.displayString

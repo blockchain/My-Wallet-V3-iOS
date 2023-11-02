@@ -205,13 +205,13 @@ extension PrimaryPicker {
         private var corners: UIRectCorner {
             switch position {
             case .single:
-                return .allCorners
+                .allCorners
             case .top:
-                return [.topLeft, .topRight]
+                [.topLeft, .topRight]
             case .bottom:
-                return [.bottomLeft, .bottomRight]
+                [.bottomLeft, .bottomRight]
             case .middle:
-                return []
+                []
             }
         }
 

@@ -45,9 +45,9 @@ public struct SeedPhraseView: View {
     private var textEditorBorderColor: Color {
         switch viewStore.seedPhraseScore {
         case .valid, .incomplete, .none:
-            return .semantic.medium
+            .semantic.medium
         case .invalid, .excess:
-            return .semantic.error
+            .semantic.error
         }
     }
 

@@ -165,10 +165,10 @@ extension EnabledCurrenciesServiceAPI {
         allEnabledCryptoCurrencies.first(where: { currency in
             switch currency.assetModel.kind {
             case .erc20(let value, let parentChain):
-                return parentChain == network.networkTicker
+                parentChain == network.networkTicker
                     && value.caseInsensitiveCompare(contractAddress) == .orderedSame
             default:
-                return false
+                false
             }
         })
     }

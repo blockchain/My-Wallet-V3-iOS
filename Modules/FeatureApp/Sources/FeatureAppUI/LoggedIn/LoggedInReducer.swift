@@ -179,14 +179,14 @@ private func handleStartup(
 ) -> Effect<LoggedIn.Action> {
     switch context {
     case .wallet(let walletContext) where walletContext.isNew:
-        return Effect.send(.handleNewWalletCreation)
+        Effect.send(.handleNewWalletCreation)
     case .wallet:
         // ignore existing/recovery wallet context
-        return .none
+        .none
     case .deeplink(let deeplinkContent):
-        return Effect.send(.deeplink(deeplinkContent))
+        Effect.send(.deeplink(deeplinkContent))
     case .none:
-        return Effect.send(.handleExistingWalletSignIn)
+        Effect.send(.handleExistingWalletSignIn)
     }
 }
 

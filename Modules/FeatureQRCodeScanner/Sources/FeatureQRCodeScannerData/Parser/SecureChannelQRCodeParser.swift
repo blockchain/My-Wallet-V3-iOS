@@ -15,7 +15,7 @@ public final class SecureChannelQRCodeParser: QRCodeScannerParsing {
         var errorDescription: String? {
             switch self {
             case .qrCodeIsNotSecureChannel:
-                return "Invalid QR Code."
+                "Invalid QR Code."
             }
         }
     }
@@ -37,10 +37,10 @@ public final class SecureChannelQRCodeParser: QRCodeScannerParsing {
             .flatMap { [secureChannelService] message -> Result<QRCodeScannerResultType, QRScannerError> in
                 if secureChannelService.isPairingQRCode(msg: message) {
                     // Scanned QR Code
-                    return .success(.secureChannel(message))
+                    .success(.secureChannel(message))
                 } else {
                     // Scanned incorrect QR code.
-                    return .failure(.parserError(ScannerError.qrCodeIsNotSecureChannel))
+                    .failure(.parserError(ScannerError.qrCodeIsNotSecureChannel))
                 }
             }
             .publisher

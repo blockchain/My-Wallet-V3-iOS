@@ -83,9 +83,9 @@ final class ConfirmationPageDetailsPresenter: DetailsScreenPresenterAPI, Confirm
             .flatMap { action -> Driver<TransactionState> in
                 switch action {
                 case .empty:
-                    return .empty()
+                    .empty()
                 case .load(let data):
-                    return .just(data)
+                    .just(data)
                 }
             }
 

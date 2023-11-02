@@ -23,14 +23,14 @@ final class KYCOnboardingNavigationController: UINavigationController {
         guard let CTA = onboardingDelegate?.navControllerCTAType() else { return }
         var button: UIBarButtonItem {
             if let image = CTA.image {
-                return .init(
+                .init(
                     image: image,
                     style: .plain,
                     target: self,
                     action: #selector(rightBarButtonTapped)
                 )
             } else {
-                return .init(
+                .init(
                     title: CTA.title,
                     style: .plain,
                     target: self,

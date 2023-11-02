@@ -8,7 +8,7 @@ public enum KeychainItemClass: Equatable {
     public var queryValue: String {
         switch self {
         case .genericPassword:
-            return String(kSecClassGenericPassword)
+            String(kSecClassGenericPassword)
         }
     }
 }

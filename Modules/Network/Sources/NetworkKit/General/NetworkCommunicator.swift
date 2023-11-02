@@ -266,9 +266,11 @@ extension AnyPublisher where Output == ServerResponse,
         handleEvents(
             receiveOutput: { response in
                 if let httpResponse = response.response {
-                    let event = ClientNetworkResponseEvent(http_method: request.urlRequest.httpMethod,
-                                                           path: request.urlRequest.url?.path,
-                                                           response: "\(httpResponse.statusCode)")
+                    let event = ClientNetworkResponseEvent(
+                        http_method: request.urlRequest.httpMethod,
+                        path: request.urlRequest.url?.path,
+                        response: "\(httpResponse.statusCode)"
+                    )
                     recorder?.record(event: event)
                 }
             }

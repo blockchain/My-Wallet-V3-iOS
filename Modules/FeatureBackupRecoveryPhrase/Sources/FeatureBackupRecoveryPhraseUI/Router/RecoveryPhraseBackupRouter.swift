@@ -85,7 +85,7 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
             )
     }
 
-   @objc func onBack() {
+    @objc func onBack() {
         step.previous()
         topViewController
             .topMostViewController?
@@ -105,27 +105,27 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
             }
         )).app(app)
 
-       topViewController
-           .topMostViewController?
-           .present(UIHostingController(rootView: failedView), animated: true)
+        topViewController
+            .topMostViewController?
+            .present(UIHostingController(rootView: failedView), animated: true)
     }
 
     @objc func onSkip() {
-          let confirmView = BackupSkipConfirmView(store: Store(
-              initialState: .init(),
-              reducer: {
-                  BackupSkipConfirm(
+        let confirmView = BackupSkipConfirmView(store: Store(
+            initialState: .init(),
+            reducer: {
+                BackupSkipConfirm(
                     onConfirm: { [weak self] in
                         self?.skipFlow()
                     }
-                  )
-              }
-          )).app(app)
+                )
+            }
+        )).app(app)
 
-         topViewController
-             .topMostViewController?
-             .present(UIHostingController(rootView: confirmView), animated: true)
-     }
+        topViewController
+            .topMostViewController?
+            .present(UIHostingController(rootView: confirmView), animated: true)
+    }
 
     @objc
     func onDone() {
@@ -139,12 +139,12 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
             .topMostViewController?
             .dismiss(animated: true, completion: { [weak self] in
                 self?
-                .topViewController
-                .topMostViewController?
-                .dismiss(animated: true, completion: {
-                    self?.skipSubject.send(())
-                })
-        })
+                    .topViewController
+                    .topMostViewController?
+                    .dismiss(animated: true, completion: {
+                        self?.skipSubject.send(())
+                    })
+            })
     }
 
     private func endFlow() {
@@ -173,23 +173,22 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
         view.navigationItem.rightBarButtonItem = skipButton
     }
 
-     func view() -> UIViewController
-    {
+    func view() -> UIViewController {
         switch step {
         case .backupIntro:
-           let view = ViewIntroBackupView(store: Store(
-               initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
-               reducer: {
-                   ViewIntroBackup(
-                       onSkip: { [weak self] in
-                        self?.onSkip()
-                    },
-                       onNext: { [weak self] in
-                        self?.onNext()
-                    }
-                   )
-               }
-           )).app(app)
+            let view = ViewIntroBackupView(store: Store(
+                initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
+                reducer: {
+                    ViewIntroBackup(
+                        onSkip: { [weak self] in
+                            self?.onSkip()
+                        },
+                        onNext: { [weak self] in
+                            self?.onNext()
+                        }
+                    )
+                }
+            )).app(app)
 
             let viewController = UIHostingController(rootView: view)
             let skipButton = UIBarButtonItem(
@@ -203,29 +202,29 @@ public class RecoveryPhraseBackupRouter: RecoveryPhraseBackupRouterAPI {
             return viewController
 
         case .viewRecoveryPhrase:
-           let view = ViewRecoveryPhraseView(store: Store(
-               initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
-               reducer: {
-                   ViewRecoveryPhrase(
-                       recoveryPhraseRepository: resolve(),
-                       recoveryPhraseService: resolve(),
-                       cloudBackupService: resolve(),
-                       onNext: { [weak self] in
-                        self?.onNext()
-                    },
-                       onDone: { [weak self] in
-                        self?.onDone()
-                    },
-                       onFailed: { [weak self] in
-                        self?.onFailed()
-                    },
-                       onIcloudBackedUp: { [weak self] in
-                        self?.step = .backupPhraseSuccess
-                        self?.onNext()
-                    }
-                   )
-               }
-           )).app(app)
+            let view = ViewRecoveryPhraseView(store: Store(
+                initialState: .init(recoveryPhraseBackedUp: isRecoveryPhraseVerified),
+                reducer: {
+                    ViewRecoveryPhrase(
+                        recoveryPhraseRepository: resolve(),
+                        recoveryPhraseService: resolve(),
+                        cloudBackupService: resolve(),
+                        onNext: { [weak self] in
+                            self?.onNext()
+                        },
+                        onDone: { [weak self] in
+                            self?.onDone()
+                        },
+                        onFailed: { [weak self] in
+                            self?.onFailed()
+                        },
+                        onIcloudBackedUp: { [weak self] in
+                            self?.step = .backupPhraseSuccess
+                            self?.onNext()
+                        }
+                    )
+                }
+            )).app(app)
 
             let viewController = UIHostingController(rootView: view)
             if isRecoveryPhraseVerified == false {

@@ -257,7 +257,7 @@ extension TransactionAction {
                 )
                 .withUpdatedBackstack(oldState: oldState)
             }
-            
+
             // The select source is already done outside the transaction flow via SendEntryView
             if action == .send {
                 return TransactionState(
@@ -333,14 +333,13 @@ extension TransactionAction {
             return newState.withUpdatedBackstack(oldState: oldState)
 
         case .availableDestinationAccountsListUpdated(let targets):
-            let newStep: TransactionFlowStep
-            if oldState.source != nil, oldState.destination != nil {
+            let newStep: TransactionFlowStep = if oldState.source != nil, oldState.destination != nil {
                 // This operation could be done just to refresh the list of possible targets. E.g. for buy.
                 // If we have both source and destination, the next step should be to enter an amount.
-                newStep = .enterAmount
+                .enterAmount
             } else {
                 // If there's not target account when this list is updated, we should have the user select one.
-                newStep = .selectTarget
+                .selectTarget
             }
             return oldState
                 .update(keyPath: \.availableTargets, value: targets.filter(TransactionTarget.self))
@@ -546,7 +545,7 @@ extension TransactionAction {
     func isValid(for oldState: TransactionState) -> Bool {
         switch self {
         default:
-            return true
+            true
         }
     }
 }
@@ -569,55 +568,55 @@ enum FatalTransactionError: Error, Equatable, CustomStringConvertible {
     var error: Error {
         switch self {
         case .generic(let error):
-            return error
+            error
         case .rxError(let error):
-            return error
+            error
         default:
-            return self
+            self
         }
     }
 
     var rxError: RxError? {
         switch self {
         case .rxError(let error):
-            return error
+            error
         default:
-            return nil
+            nil
         }
     }
 
     var description: String {
         switch self {
         case .rxError(let error):
-            return error.debugDescription
+            error.debugDescription
         case .generic(let error):
-            return String(describing: error)
+            String(describing: error)
         case .message(let message):
-            return message
+            message
         }
     }
 
     var localizedDescription: String {
         switch self {
         case .rxError(let error):
-            return "\(LocalizationConstants.Errors.genericError) \n\(error.debugDescription)"
+            "\(LocalizationConstants.Errors.genericError) \n\(error.debugDescription)"
         case .generic(let error):
-            return String(describing: error)
+            String(describing: error)
         case .message(let message):
-            return message
+            message
         }
     }
 
     static func == (lhs: FatalTransactionError, rhs: FatalTransactionError) -> Bool {
         switch (lhs, rhs) {
         case (.rxError(let left), .rxError(let right)):
-            return left.debugDescription == right.localizedDescription
+            left.debugDescription == right.localizedDescription
         case (.generic(let left), .generic(let right)):
-            return left.localizedDescription == right.localizedDescription
+            left.localizedDescription == right.localizedDescription
         case (.message(let lhs), .message(let rhs)):
-            return lhs == rhs
+            lhs == rhs
         default:
-            return false
+            false
         }
     }
 }
@@ -662,46 +661,46 @@ extension TransactionValidationState {
     var mapToTransactionErrorState: TransactionErrorState {
         switch self {
         case .ux(let error):
-            return .ux(error)
+            .ux(error)
         case .uninitialized, .canExecute:
-            return .none
+            .none
         case .unknownError:
-            return .unknownError
+            .unknownError
         case .nabuError(let error):
-            return .nabuError(error)
+            .nabuError(error)
         case .insufficientFunds(let balance, let desired, let sourceCurrency, let targetCurrency):
-            return .insufficientFunds(balance, desired, sourceCurrency, targetCurrency)
+            .insufficientFunds(balance, desired, sourceCurrency, targetCurrency)
         case .sourceAccountUsageIsBlocked(let ux):
-            return .ux(.init(nabu: ux))
+            .ux(.init(nabu: ux))
         case .belowFees(let fees, let balance):
-            return .belowFees(fees, balance)
+            .belowFees(fees, balance)
         case .belowMinimumLimit(let minimumLimit):
-            return .belowMinimumLimit(minimumLimit)
+            .belowMinimumLimit(minimumLimit)
         case .overMaximumSourceLimit(let maxLimit, let label, let desiredAmount):
-            return .overMaximumSourceLimit(maxLimit, label, desiredAmount)
+            .overMaximumSourceLimit(maxLimit, label, desiredAmount)
         case .overMaximumPersonalLimit(let effectiveLimit, let available, let suggestedUpgrade):
-            return .overMaximumPersonalLimit(effectiveLimit, available, suggestedUpgrade)
+            .overMaximumPersonalLimit(effectiveLimit, available, suggestedUpgrade)
 
         // MARK: Unchecked
 
         case .addressIsContract:
-            return .addressIsContract
+            .addressIsContract
         case .invalidAddress:
-            return .invalidAddress
+            .invalidAddress
         case .invoiceExpired:
-            return .unknownError
+            .unknownError
         case .optionInvalid:
-            return .optionInvalid
+            .optionInvalid
         case .transactionInFlight:
-            return .transactionInFlight
+            .transactionInFlight
         case .pendingOrdersLimitReached:
-            return .pendingOrdersLimitReached
+            .pendingOrdersLimitReached
         case .accountIneligible,
              .noSourcesAvailable,
              .incorrectSourceCurrency,
              .incorrectDestinationCurrency,
              .insufficientInterestWithdrawalBalance:
-            return .unknownError
+            .unknownError
         }
     }
 }

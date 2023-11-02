@@ -48,24 +48,24 @@ extension OrdersActivityResponse.Item {
     var custodialActivityState: CustodialActivityEvent.State? {
         switch state {
         case "COMPLETE":
-            return .completed
+            .completed
         case "FAILED":
-            return .failed
+            .failed
         case "PENDING", "CLEARED", "FRAUD_REVIEW", "MANUAL_REVIEW":
-            return .pending
+            .pending
         default:
-            return nil
+            nil
         }
     }
 
     var custodialActivityEventType: CustodialActivityEvent.EventType? {
         switch type {
         case "DEPOSIT", "CHARGE":
-            return .deposit
+            .deposit
         case "WITHDRAWAL":
-            return .withdrawal
+            .withdrawal
         default:
-            return nil
+            nil
         }
     }
 }

@@ -150,9 +150,9 @@ final class BeneficiariesService: BeneficiariesServiceAPI {
     private func deleteBank(by id: String, for accountType: Beneficiary.AccountType) -> Completable {
         switch accountType {
         case .funds:
-            return client.deleteBank(by: id).asObservable().ignoreElements().asCompletable()
+            client.deleteBank(by: id).asObservable().ignoreElements().asCompletable()
         case .linkedBank:
-            return linkedBankService.deleteBank(by: id)
+            linkedBankService.deleteBank(by: id)
         }
     }
 

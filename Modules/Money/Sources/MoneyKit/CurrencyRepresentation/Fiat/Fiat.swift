@@ -37,18 +37,17 @@ extension Fiat {
         let valueLessThanOneMinor = displayMajorValue > 0 && (displayMajorValue < oneMinor)
         let exponentLessThanOne = displayMajorValue.exponent < 0
 
-        let maxFractionDigits: Int
-        switch (format, valueLessThanOneMinor, exponentLessThanOne) {
+        let maxFractionDigits: Int = switch (format, valueLessThanOneMinor, exponentLessThanOne) {
         case (.fullLength, false, _):
-            maxFractionDigits = currencyPrecision
+            currencyPrecision
         case (.fullLength, true, _):
-            maxFractionDigits = min(Int(displayMajorValue.exponent.magnitude), currency.storePrecision)
+            min(Int(displayMajorValue.exponent.magnitude), currency.storePrecision)
         case (.shortened, _, true):
-            maxFractionDigits = currencyPrecision
+            currencyPrecision
         case (.shortened, _, false):
-            maxFractionDigits = 0
+            0
         case (.forceShortened, _, _):
-            maxFractionDigits = 0
+            0
         }
 
         let result = Self._toDisplayString(

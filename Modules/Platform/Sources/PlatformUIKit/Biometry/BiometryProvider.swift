@@ -18,21 +18,21 @@ public final class BiometryProvider: BiometryProviding {
         case .success(let biometryType):
             // Biometrics id is already configured - therefore, return it
             if settings.biometryEnabled {
-                return .configured(biometryType)
+                .configured(biometryType)
             } else { // Biometrics has not yet been configured within the app
-                return .configurable(biometryType)
+                .configurable(biometryType)
             }
         case .failure(let error):
-            return .unconfigurable(error)
+            .unconfigurable(error)
         }
     }
 
     /// Returns the configured biometrics, if any
     public var configuredType: Biometry.BiometryType {
         if configurationStatus.isConfigured {
-            return configurationStatus.biometricsType
+            configurationStatus.biometricsType
         } else {
-            return .none
+            .none
         }
     }
 
@@ -77,9 +77,9 @@ public final class BiometryProvider: BiometryProviding {
     public func authenticate(reason: Biometry.Reason) -> Single<Void> {
         switch canAuthenticate {
         case .success:
-            return performAuthentication(with: reason)
+            performAuthentication(with: reason)
         case .failure(error: let error):
-            return .error(error)
+            .error(error)
         }
     }
 

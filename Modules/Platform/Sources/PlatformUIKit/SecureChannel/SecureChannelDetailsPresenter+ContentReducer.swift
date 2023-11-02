@@ -92,11 +92,10 @@ extension SecureChannelDetailsPresenter {
                 ),
                 accessibilityIdPrefix: ""
             )
-            let lastSeen: String
-            if let lastUsed = candidate.lastUsed {
-                lastSeen = "\(lastUsed)"
+            let lastSeen: String = if let lastUsed = candidate.lastUsed {
+                "\(lastUsed)"
             } else {
-                lastSeen = LocalizedString.Fields.never
+                LocalizedString.Fields.never
             }
             let lastSeenPresenter = DefaultLineItemCellPresenter(
                 interactor: DefaultLineItemCellInteractor(

@@ -24,18 +24,18 @@ enum Mode: Equatable {
     var backgroundGradient: [Color] {
         switch self {
         case .trading:
-            return [Color(hex: "#FF0297"), Color(hex: "#AE22AD")]
+            [Color(hex: "#FF0297"), Color(hex: "#AE22AD")]
         case .defi:
-            return [Color(hex: "#6B39BD"), Color(hex: "#2878D4")]
+            [Color(hex: "#6B39BD"), Color(hex: "#2878D4")]
         }
     }
 
     var title: String {
         switch self {
         case .trading:
-            return "Trading"
+            "Trading"
         case .defi:
-            return "DeFi"
+            "DeFi"
         }
     }
 }

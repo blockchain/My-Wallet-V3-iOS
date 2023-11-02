@@ -80,17 +80,17 @@ extension FormDateDropdownAnswersView {
 
     private var backgroundColor: Color {
         if !isEnabled {
-            return .semantic.medium
+            .semantic.medium
         } else {
-            return .semantic.background
+            .semantic.background
         }
     }
 
     private var textColor: Color {
         if dateString.isNil || !isEnabled {
-            return .semantic.muted
+            .semantic.muted
         } else {
-            return .semantic.title
+            .semantic.title
         }
     }
 }

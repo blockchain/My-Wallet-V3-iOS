@@ -31,13 +31,11 @@ final class PulseBlockchainNamespaceEventLogger: Client.Observer {
 
     func start() {
         subscription = app.on(blockchain.ux.type.analytics.event) { @MainActor [pulse] event async in
-            let level: Pulse.LoggerStore.Level = {
-                switch event.tag {
-                case blockchain.ux.type.analytics.error: return .error
-                case blockchain.ux.type.analytics.state: return .notice
-                default: return .info
-                }
-            }()
+            let level: Pulse.LoggerStore.Level = switch event.tag {
+            case blockchain.ux.type.analytics.error: .error
+            case blockchain.ux.type.analytics.state: .notice
+            default: .info
+            }
             pulse.storeMessage(
                 label: "namespace",
                 level: level,

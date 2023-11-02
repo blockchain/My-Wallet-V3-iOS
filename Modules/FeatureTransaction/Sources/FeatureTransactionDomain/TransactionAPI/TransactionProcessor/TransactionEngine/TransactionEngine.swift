@@ -218,9 +218,9 @@ extension TransactionEngine {
     public var predefinedAmount: MoneyValue? {
         switch transactionTarget {
         case let target as ReceiveAddress:
-            return target.predefinedAmount
+            target.predefinedAmount
         default:
-            return nil
+            nil
         }
     }
 

@@ -148,7 +148,7 @@ extension KYCPageType {
     ) -> KYCPageType? {
         switch tier {
         case .unverified:
-            return nextPageUnverified(
+            nextPageUnverified(
                 user: user,
                 country: country,
                 requiredTier: .verified,
@@ -157,7 +157,7 @@ extension KYCPageType {
                 isSSNRequired: isSSNRequired
             )
         case .verified:
-            return nextPageVerified(
+            nextPageVerified(
                 user: user,
                 country: country,
                 tiersResponse: tiersResponse,
@@ -238,20 +238,20 @@ extension KYCPageType {
     ) -> KYCPageType? {
         switch self {
         case .enterPhone:
-            return .confirmPhone
+            .confirmPhone
         case .confirmPhone:
-            return .accountUsageForm
+            .accountUsageForm
         case .accountUsageForm:
-            return user?.needsDocumentResubmission == nil ? .verifyIdentity : .resubmitIdentity
+            user?.needsDocumentResubmission == nil ? .verifyIdentity : .resubmitIdentity
         case .verifyIdentity, .resubmitIdentity:
-            return isSSNRequired ? .ssn : .accountStatus
+            isSSNRequired ? .ssn : .accountStatus
         case .ssn:
-            return .accountStatus
+            .accountStatus
         case .applicationComplete:
             // Not used
-            return nil
+            nil
         case .accountStatus, .finish:
-            return nil
+            nil
         case .welcome,
              .enterEmail,
              .confirmEmail,
@@ -260,7 +260,7 @@ extension KYCPageType {
              .address,
              .profile,
              .profileNew:
-            return nextPageUnverified(
+            nextPageUnverified(
                 user: user,
                 country: country,
                 requiredTier: .verified,

@@ -115,20 +115,20 @@ extension Heading {
 
     var typography: Typography {
         switch level {
-        case 0: return .display
-        case 1: return .title1
-        case 2: return .title2
-        case 3: return .title3
-        case 4: return .subheading
-        case 5: return .body1
-        case 6: return .body2
-        case 7: return .paragraph1
-        case 8: return .paragraph2
-        case 9: return .caption1
-        case 10: return .caption2
-        case 11: return .overline
-        case 12: return .micro
-        case _: return .body1
+        case 0: .display
+        case 1: .title1
+        case 2: .title2
+        case 3: .title3
+        case 4: .subheading
+        case 5: .body1
+        case 6: .body2
+        case 7: .paragraph1
+        case 8: .paragraph2
+        case 9: .caption1
+        case 10: .caption2
+        case 11: .overline
+        case 12: .micro
+        case _: .body1
         }
     }
 }

@@ -49,9 +49,9 @@ extension TransactionConfirmations {
 
         private var amountString: String {
             if amount.currency == fee.currency {
-                return amountStringSameCurrency
+                amountStringSameCurrency
             } else {
-                return amountStringDifferentCurrencies
+                amountStringDifferentCurrencies
             }
         }
 
@@ -100,11 +100,10 @@ extension TransactionConfirmations {
         public let type: TransactionConfirmationKind = .readOnly
 
         public var formatted: (title: String, subtitle: String)? {
-            let subtitle: String
-            if let secondaryCurrencyFeeString = secondaryCurrencyFee?.displayString {
-                subtitle = "\(primaryCurrencyFee.displayString) (\(secondaryCurrencyFeeString))"
+            let subtitle: String = if let secondaryCurrencyFeeString = secondaryCurrencyFee?.displayString {
+                "\(primaryCurrencyFee.displayString) (\(secondaryCurrencyFeeString))"
             } else {
-                subtitle = primaryCurrencyFee.displayString
+                primaryCurrencyFee.displayString
             }
             return (
                 LocalizedString.total,
@@ -316,14 +315,13 @@ extension TransactionConfirmations {
             case .canExecute, .uninitialized:
                 return nil
             case .belowMinimumLimit:
-                let message: String
-                if let value = moneyValue {
-                    message = String(
+                let message: String = if let value = moneyValue {
+                    String(
                         format: LocalizedString.Error.underMinLimit,
                         value.displayString
                     )
                 } else {
-                    message = LocalizedString.Error.underMinBitcoinFee
+                    LocalizedString.Error.underMinBitcoinFee
                 }
                 return (LocalizedString.Error.title, message)
             case .insufficientFunds:
@@ -596,11 +594,10 @@ extension TransactionConfirmations {
         }
 
         public var formatted: (title: String, subtitle: String)? {
-            let subtitle: String
-            if let secondaryCurrencyFeeString = secondaryCurrencyFee?.displayString {
-                subtitle = "\(primaryCurrencyFee.displayString) (\(secondaryCurrencyFeeString))"
+            let subtitle: String = if let secondaryCurrencyFeeString = secondaryCurrencyFee?.displayString {
+                "\(primaryCurrencyFee.displayString) (\(secondaryCurrencyFeeString))"
             } else {
-                subtitle = primaryCurrencyFee.displayString
+                primaryCurrencyFee.displayString
             }
             return (
                 String(format: LocalizedString.networkFee, primaryCurrencyFee.displayCode),

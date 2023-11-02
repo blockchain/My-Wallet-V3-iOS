@@ -19,9 +19,9 @@ extension Publisher where Output: ResultProtocol {
         map { it -> T in
             switch it.result {
             case .success(let value):
-                return action(value)
+                action(value)
             case .failure(let error):
-                return T.failure(error)
+                T.failure(error)
             }
         }
     }
@@ -32,9 +32,9 @@ extension Publisher where Output: ResultProtocol {
         map { it -> T in
             switch it.result {
             case .success(let value):
-                return action.embed(value)
+                action.embed(value)
             case .failure(let error):
-                return T.failure(error)
+                T.failure(error)
             }
         }
     }

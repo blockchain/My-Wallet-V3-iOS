@@ -48,9 +48,9 @@ final class KYCAccountUsageController: KYCBaseViewController {
                     return app.publisher(for: blockchain.ux.kyc.extra.questions.form[My.defaultContext].data)
                         .flatMap { data -> AnyPublisher<FeatureFormDomain.Form, Nabu.Error> in
                             if let result = data.value as? Result<FeatureFormDomain.Form, Nabu.Error> {
-                                return result.publisher.eraseToAnyPublisher()
+                                result.publisher.eraseToAnyPublisher()
                             } else {
-                                return Fail(
+                                Fail(
                                     outputType: FeatureFormDomain.Form.self,
                                     failure: Nabu.Error(
                                         id: UUID().uuidString,
@@ -118,9 +118,9 @@ final class KYCAccountUsageController: KYCBaseViewController {
 
     override func navControllerCTAType() -> NavigationCTA {
         if isBlocking {
-            return .dismiss
+            .dismiss
         } else {
-            return .skip
+            .skip
         }
     }
 }

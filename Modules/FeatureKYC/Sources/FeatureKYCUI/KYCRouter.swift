@@ -183,9 +183,9 @@ final class KYCRouter: KYCRouterAPI {
                 blockchain.ux.kyc.tier: {
                     switch tier {
                     case .unverified:
-                        return blockchain.ux.kyc.tier.none[]
+                        blockchain.ux.kyc.tier.none[]
                     case .verified:
-                        return blockchain.ux.kyc.tier.gold[]
+                        blockchain.ux.kyc.tier.gold[]
                     }
                 }()
             ]

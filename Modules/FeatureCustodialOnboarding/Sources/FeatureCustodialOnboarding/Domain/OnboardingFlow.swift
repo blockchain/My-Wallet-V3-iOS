@@ -96,7 +96,6 @@ func makeApplicationSubmittedViewFlowSequenceViewController(_ metadata: AnyJSON)
     }
 }
 
-
 func makeVeriffIntroductionFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
     FlowSequenceHostingViewController { completion in
         VeriffManualInputIntroductionView(completion: completion)

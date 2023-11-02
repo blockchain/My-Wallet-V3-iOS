@@ -23,9 +23,9 @@ class CardListRepository: CardListRepositoryAPI {
             .map {
                 switch $0 {
                 case .success(let value):
-                    return value
+                    value
                 case .failure:
-                    return []
+                    []
                 }
             }
             .eraseToAnyPublisher()

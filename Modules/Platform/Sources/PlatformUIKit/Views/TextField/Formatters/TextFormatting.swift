@@ -16,9 +16,9 @@ public enum TextFormattingSource {
     var isCorrected: Bool {
         switch self {
         case .formatted:
-            return true
+            true
         case .original:
-            return false
+            false
         }
     }
 }

@@ -64,17 +64,17 @@ extension Account.AccountType {
     var explainer: Explainer {
         switch self {
         case .trading:
-            return .trading
+            .trading
         case .interest:
-            return .rewards
+            .rewards
         case .privateKey:
-            return .privateKey
+            .privateKey
         case .exchange:
-            return .exchange
+            .exchange
         case .staking:
-            return .staking
+            .staking
         case .activeRewards:
-            return .active
+            .active
         }
     }
 }

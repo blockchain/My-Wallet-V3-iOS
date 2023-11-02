@@ -19,14 +19,13 @@ public final class WebSocketConnection {
 
     private lazy var session: URLSession = URLSessionFactory
         .urlSession { [weak self] delegateEvent in
-            let event: WebSocketEvent
-            switch delegateEvent {
+            let event: WebSocketEvent = switch delegateEvent {
             case .didOpen:
-                event = .connected
+                .connected
             case .didClose(let closeCode):
-                event = .disconnected(closeCode)
+                .disconnected(closeCode)
             case .connnectionError(let error):
-                event = .connnectionError(.failed(error))
+                .connnectionError(.failed(error))
             }
             self?.handleEvent(event)
         }
@@ -198,18 +197,18 @@ extension WebSocketConnection {
         public var isConnected: Bool {
             switch self {
             case .connected:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
         public var isDisconnected: Bool {
             switch self {
             case .disconnected:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
     }
@@ -221,11 +220,11 @@ extension WebSocketConnection {
         public static func == (lhs: WebSocketConnection.WebSocketError, rhs: WebSocketConnection.WebSocketError) -> Bool {
             switch (lhs, rhs) {
             case (.failed, .failed):
-                return false
+                false
             case (.unknown, _):
-                return false
+                false
             case (_, .unknown):
-                return false
+                false
             }
         }
     }
@@ -244,9 +243,9 @@ extension WebSocketConnection {
         var sessionMessage: URLSessionWebSocketTask.Message {
             switch self {
             case .data(let data):
-                return .data(data)
+                .data(data)
             case .string(let string):
-                return .string(string)
+                .string(string)
             }
         }
     }

@@ -13,7 +13,7 @@ struct ActivityEntityRequest: Queryable {
         var ordering: SQLOrdering {
             switch self {
             case .timestampDescending:
-                return Column(DatabaseColumn.timestamp.rawValue).desc
+                Column(DatabaseColumn.timestamp.rawValue).desc
             }
         }
     }
@@ -25,9 +25,9 @@ struct ActivityEntityRequest: Queryable {
         var filtering: SQLSpecificExpressible? {
             switch self {
             case .all:
-                return nil
+                nil
             case .pendingAndConfirming:
-                return Column(DatabaseColumn.state.rawValue) == ActivityState.pending.rawValue
+                Column(DatabaseColumn.state.rawValue) == ActivityState.pending.rawValue
                     || Column(DatabaseColumn.state.rawValue) == ActivityState.confirming.rawValue
             }
         }

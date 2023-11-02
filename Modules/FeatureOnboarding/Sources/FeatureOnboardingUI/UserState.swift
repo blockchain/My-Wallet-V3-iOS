@@ -29,9 +29,9 @@ extension UserState.KYCStatus {
     var canBuyCrypto: Bool {
         switch self {
         case .notVerified, .verificationPending:
-            return false
+            false
         case .verified:
-            return true
+            true
         }
     }
 }

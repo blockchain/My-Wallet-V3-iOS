@@ -124,9 +124,9 @@ public struct PrimarySegmentedControl<Selection: Hashable>: View {
     private func xOffset(for rect: CGRect, in proxy: GeometryProxy) -> CGFloat {
         switch layoutDirection {
         case .rightToLeft:
-            return proxy.size.width - rect.minX - rect.width
+            proxy.size.width - rect.minX - rect.width
         default:
-            return rect.minX
+            rect.minX
         }
     }
 }

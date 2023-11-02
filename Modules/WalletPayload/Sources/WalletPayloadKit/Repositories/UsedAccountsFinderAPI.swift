@@ -12,7 +12,7 @@ public enum UsedAccountsFinderError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .networkError(let error):
-            return error.description
+            error.description
         }
     }
 }

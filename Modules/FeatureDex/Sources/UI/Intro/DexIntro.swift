@@ -55,33 +55,33 @@ extension DexIntro.State.Step {
     var title: String {
         switch self {
         case .welcome:
-            return L10n.Onboarding.Welcome.title
+            L10n.Onboarding.Welcome.title
         case .swapTokens:
-            return L10n.Onboarding.SwapTokens.title
+            L10n.Onboarding.SwapTokens.title
         case .keepControl:
-            return L10n.Onboarding.SwapTokens.title
+            L10n.Onboarding.SwapTokens.title
         }
     }
 
     var text: String {
         switch self {
         case .welcome:
-            return L10n.Onboarding.Welcome.description
+            L10n.Onboarding.Welcome.description
         case .swapTokens:
-            return L10n.Onboarding.SwapTokens.description
+            L10n.Onboarding.SwapTokens.description
         case .keepControl:
-            return L10n.Onboarding.SwapTokens.description
+            L10n.Onboarding.SwapTokens.description
         }
     }
 
     var image: Image {
         switch self {
         case .welcome:
-            return Image("onboarding/welcome", bundle: .module)
+            Image("onboarding/welcome", bundle: .module)
         case .swapTokens:
-            return Image("onboarding/swap-tokens", bundle: .module)
+            Image("onboarding/swap-tokens", bundle: .module)
         case .keepControl:
-            return Image("onboarding/keep-control", bundle: .module)
+            Image("onboarding/keep-control", bundle: .module)
         }
     }
 }

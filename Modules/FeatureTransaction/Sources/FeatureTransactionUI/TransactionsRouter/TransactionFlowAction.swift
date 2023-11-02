@@ -43,34 +43,34 @@ extension TransactionFlowAction: Equatable {
     public static func == (lhs: TransactionFlowAction, rhs: TransactionFlowAction) -> Bool {
         switch (lhs, rhs) {
         case (.swap(let lhsSourceAccount, let lhsTargetAccount), .swap(let rhsSourceAccount, let rhsTargetAccount)):
-            return lhsSourceAccount?.identifier == rhsSourceAccount?.identifier && lhsTargetAccount?.identifier == rhsTargetAccount?.identifier
+            lhsSourceAccount?.identifier == rhsSourceAccount?.identifier && lhsTargetAccount?.identifier == rhsTargetAccount?.identifier
         case (.buy(let lhsAccount), .buy(let rhsAccount)),
             (.sell(let lhsAccount), .sell(let rhsAccount)):
-            return lhsAccount?.identifier == rhsAccount?.identifier
+            lhsAccount?.identifier == rhsAccount?.identifier
         case (.interestTransfer(let lhsAccount), .interestTransfer(let rhsAccount)):
-            return lhsAccount.identifier == rhsAccount.identifier
+            lhsAccount.identifier == rhsAccount.identifier
         case (.interestWithdraw(let lhsFromAccount, let lhsToAccount), .interestWithdraw(let rhsFromAccount, let rhsToAccount)):
-            return lhsFromAccount.identifier == rhsFromAccount.identifier && lhsToAccount.identifier == rhsToAccount.identifier
+            lhsFromAccount.identifier == rhsFromAccount.identifier && lhsToAccount.identifier == rhsToAccount.identifier
         case (.stakingDeposit(let lhsAccount), .stakingDeposit(let rhsAccount)):
-            return lhsAccount.identifier == rhsAccount.identifier
+            lhsAccount.identifier == rhsAccount.identifier
         case (.activeRewardsDeposit(let lhsAccount), .activeRewardsDeposit(let rhsAccount)):
-            return lhsAccount.identifier == rhsAccount.identifier
+            lhsAccount.identifier == rhsAccount.identifier
         case (.activeRewardsWithdraw(let lhsAccount, let lhsTarget), .activeRewardsWithdraw(let rhsAccount, let rhsTarget)):
-            return lhsAccount.identifier == rhsAccount.identifier
+            lhsAccount.identifier == rhsAccount.identifier
                 && lhsTarget.label == rhsTarget.label
         case (.withdraw(let lhsAccount), .withdraw(let rhsAccount)),
              (.deposit(let lhsAccount), .deposit(let rhsAccount)):
-            return lhsAccount.identifier == rhsAccount.identifier
+            lhsAccount.identifier == rhsAccount.identifier
         case (.order(let lhsOrder), .order(let rhsOrder)):
-            return lhsOrder.identifier == rhsOrder.identifier
+            lhsOrder.identifier == rhsOrder.identifier
         case (.sign(let lhsAccount, let lhsDestination), .sign(let rhsAccount, let rhsDestination)):
-            return lhsAccount.identifier == rhsAccount.identifier
+            lhsAccount.identifier == rhsAccount.identifier
                 && lhsDestination.label == rhsDestination.label
         case (.send(let lhsFromAccount, let lhsDestination), .send(let rhsFromAccount, let rhsDestination)):
-            return lhsFromAccount?.identifier == rhsFromAccount?.identifier
+            lhsFromAccount?.identifier == rhsFromAccount?.identifier
                 && lhsDestination?.label == rhsDestination?.label
         default:
-            return false
+            false
         }
     }
 }
@@ -82,11 +82,11 @@ extension TransactionFlowAction {
         case .buy,
              .sell,
              .swap:
-            return true
+            true
         case .send(let account, _),
              .sign(let account as BlockchainAccount?, _),
              .receive(let account as BlockchainAccount?):
-            return account?.accountType.isCustodial ?? false
+            account?.accountType.isCustodial ?? false
         case .order,
              .interestTransfer,
              .interestWithdraw,
@@ -96,7 +96,7 @@ extension TransactionFlowAction {
              .deposit,
              .activeRewardsWithdraw,
              .activeRewardsDeposit:
-            return true
+            true
         }
     }
 }
@@ -106,35 +106,35 @@ extension TransactionFlowAction {
     var asset: AssetAction {
         switch self {
         case .buy:
-            return .buy
+            .buy
         case .sell:
-            return .sell
+            .sell
         case .swap:
-            return .swap
+            .swap
         case .send:
-            return .send
+            .send
         case .receive:
-            return .receive
+            .receive
         case .order:
-            return .buy
+            .buy
         case .deposit:
-            return .deposit
+            .deposit
         case .withdraw:
-            return .withdraw
+            .withdraw
         case .interestTransfer:
-            return .interestTransfer
+            .interestTransfer
         case .interestWithdraw:
-            return .interestWithdraw
+            .interestWithdraw
         case .stakingDeposit:
-            return .stakingDeposit
+            .stakingDeposit
         case .sign:
-            return .sign
+            .sign
         case .activeRewardsDeposit:
-            return .activeRewardsDeposit
+            .activeRewardsDeposit
         case .activeRewardsWithdraw:
-            return .activeRewardsWithdraw
+            .activeRewardsWithdraw
         case .stakingWithdraw:
-            return .stakingWithdraw
+            .stakingWithdraw
         }
     }
 }
@@ -143,32 +143,32 @@ extension TransactionFlowAction {
     var currencyCode: String? {
         switch self {
         case .swap(let sourceAccount, _):
-            return sourceAccount?.currencyType.code
+            sourceAccount?.currencyType.code
         case .buy(let account),
              .sell(let account),
              .receive(let account):
-            return account?.currencyType.code
+            account?.currencyType.code
         case .interestTransfer(let account):
-            return account.currencyType.code
+            account.currencyType.code
         case .interestWithdraw(_, let account):
-            return account.currencyType.code
+            account.currencyType.code
         case .stakingWithdraw(_, let account):
-            return account.currencyType.code
+            account.currencyType.code
         case .stakingDeposit(let account):
-            return account.currencyType.code
+            account.currencyType.code
         case .activeRewardsDeposit(let account):
-            return account.currencyType.code
+            account.currencyType.code
         case .activeRewardsWithdraw(let account, _):
-            return account.currencyType.code
+            account.currencyType.code
         case .withdraw(let account),
              .deposit(let account):
-            return account.currencyType.code
+            account.currencyType.code
         case .order(let account):
-            return account.price?.code
+            account.price?.code
         case .sign(_, let account):
-            return account.currencyType.code
+            account.currencyType.code
         case .send(_, let account):
-            return account?.currencyType.code
+            account?.currencyType.code
         }
     }
 }

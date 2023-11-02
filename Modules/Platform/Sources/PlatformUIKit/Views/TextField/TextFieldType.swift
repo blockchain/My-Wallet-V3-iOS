@@ -71,43 +71,43 @@ extension TextFieldType: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case .memo:
-            return "memo"
+            "memo"
         case .description:
-            return "description"
+            "description"
         case .email:
-            return "email"
+            "email"
         case .newPassword:
-            return "new-password"
+            "new-password"
         case .confirmNewPassword:
-            return "confirm-new-password"
+            "confirm-new-password"
         case .password:
-            return "password"
+            "password"
         case .currentPassword:
-            return "current-password"
+            "current-password"
         case .mobile:
-            return "mobile-number"
+            "mobile-number"
         case .oneTimeCode:
-            return "one-time-code"
+            "one-time-code"
         case .cardholderName:
-            return "cardholder-name"
+            "cardholder-name"
         case .expirationDate:
-            return "expiry-date"
+            "expiry-date"
         case .cardCVV:
-            return "card-cvv"
+            "card-cvv"
         case .cardNumber:
-            return "card-number"
+            "card-number"
         case .addressLine:
-            return "address-line"
+            "address-line"
         case .city:
-            return "city"
+            "city"
         case .state:
-            return "state"
+            "state"
         case .postcode:
-            return "post-code"
+            "post-code"
         case .personFullName:
-            return "person-full-name"
+            "person-full-name"
         case .cryptoAddress:
-            return "crypto-address"
+            "crypto-address"
         }
     }
 }
@@ -126,7 +126,7 @@ extension TextFieldType {
              .oneTimeCode,
              .cardNumber,
              .cardCVV:
-            return true
+            true
         case .email,
              .mobile,
              .personFullName,
@@ -139,7 +139,7 @@ extension TextFieldType {
              .expirationDate,
              .cryptoAddress,
              .memo:
-            return false
+            false
         }
     }
 }
@@ -208,14 +208,14 @@ extension TextFieldType {
              .description,
              .cardNumber,
              .memo:
-            return false
+            false
         case .password,
              .currentPassword,
              .newPassword,
              .confirmNewPassword,
              .oneTimeCode,
              .cryptoAddress:
-            return true
+            true
         }
     }
 
@@ -301,7 +301,7 @@ extension TextFieldType {
     var keyboardType: UIKeyboardType {
         switch self {
         case .email:
-            return .emailAddress
+            .emailAddress
         case .newPassword,
              .confirmNewPassword,
              .password,
@@ -310,31 +310,31 @@ extension TextFieldType {
              .description,
              .cryptoAddress,
              .memo:
-            return .default
+            .default
         case .mobile:
-            return .phonePad
+            .phonePad
         case .expirationDate, .cardCVV, .cardNumber:
-            return .numberPad
+            .numberPad
         case .addressLine,
              .cardholderName,
              .personFullName,
              .city,
              .state,
              .postcode:
-            return .asciiCapable
+            .asciiCapable
         }
     }
 
     var autocapitalizationType: UITextAutocapitalizationType {
         switch self {
         case .oneTimeCode:
-            return .allCharacters
+            .allCharacters
         case .cardholderName,
              .city,
              .state,
              .personFullName,
              .addressLine:
-            return .words
+            .words
         case .password,
              .currentPassword,
              .newPassword,
@@ -348,7 +348,7 @@ extension TextFieldType {
              .description,
              .cryptoAddress,
              .memo:
-            return .none
+            .none
         }
     }
 
@@ -370,9 +370,9 @@ extension TextFieldType {
              .description,
              .cryptoAddress,
              .memo:
-            return false
+            false
         case .newPassword, .confirmNewPassword, .password, .currentPassword:
-            return true
+            true
         }
     }
 
@@ -384,41 +384,41 @@ extension TextFieldType {
     var contentType: UITextContentType? {
         switch self {
         case .mobile:
-            return .telephoneNumber
+            .telephoneNumber
         case .cardNumber:
-            return .creditCardNumber
+            .creditCardNumber
         case .cardholderName:
-            return .name
+            .name
         case .expirationDate,
              .cardCVV,
              .description,
              .cryptoAddress,
              .memo:
-            return nil
+            nil
         case .email:
-            return .emailAddress
+            .emailAddress
         case .oneTimeCode:
-            return .oneTimeCode
+            .oneTimeCode
         case .newPassword, .confirmNewPassword:
-            return .newPassword
+            .newPassword
         case .password, .currentPassword:
             /// Disable password suggestions (avoid setting `.password` as value)
-            return UITextContentType(rawValue: "")
+            UITextContentType(rawValue: "")
         case .addressLine(let line):
             switch line {
             case 1: // Line 1
-                return .streetAddressLine1
+                .streetAddressLine1
             default: // 2
-                return .streetAddressLine2
+                .streetAddressLine2
             }
         case .city:
-            return .addressCity
+            .addressCity
         case .state:
-            return .addressState
+            .addressState
         case .postcode:
-            return .postalCode
+            .postalCode
         case .personFullName:
-            return .name
+            .name
         }
     }
 }

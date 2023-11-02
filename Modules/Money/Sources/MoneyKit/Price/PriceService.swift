@@ -223,9 +223,9 @@ final class PriceService: PriceServiceAPI {
         .map { prices -> Result<PriceQuoteAtTime, PriceServiceError> in
             prices.mapError(PriceServiceError.networkError).flatMap { result in
                 if let price = result[key] {
-                    return .success(price)
+                    .success(price)
                 } else {
-                    return .failure(PriceServiceError.missingPrice(key))
+                    .failure(PriceServiceError.missingPrice(key))
                 }
             }
         }

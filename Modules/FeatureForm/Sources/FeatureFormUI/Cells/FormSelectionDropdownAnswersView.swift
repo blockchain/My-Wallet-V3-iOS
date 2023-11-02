@@ -104,9 +104,9 @@ struct FormSelectionDropdownAnswersListView: View {
 
     var searchResults: [FormAnswer] {
         if searchText.isEmpty {
-             return answers
+             answers
          } else {
-             return answers.filter { $0.text?.lowercased().contains(searchText.lowercased()) ?? false }
+             answers.filter { $0.text?.lowercased().contains(searchText.lowercased()) ?? false }
          }
      }
 
@@ -189,14 +189,14 @@ extension View {
         shouldShow: Bool
     ) -> some View {
         if shouldShow {
-            return AnyView(
+            AnyView(
                 searchable(
                     text: text,
                     placement: .navigationBarDrawer(displayMode: .always)
                 )
             )
         } else {
-            return AnyView(self)
+            AnyView(self)
         }
     }
 }

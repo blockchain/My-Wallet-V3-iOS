@@ -152,9 +152,9 @@ final class StellarWalletAccountRepository: StellarWalletAccountRepositoryAPI {
                 // though accounts are defined as an array we never have more that one
                 let updatedAccounts = stellarEntryPayload.accounts.map { account in
                     if let label = accounts.first(where: { $0.publicKey == account.publicKey })?.newForcedUpdateLabel {
-                        return account.updateLabel(label)
+                        account.updateLabel(label)
                     } else {
-                        return account
+                        account
                     }
                 }
                 let updatedEntry = StellarEntryPayload(

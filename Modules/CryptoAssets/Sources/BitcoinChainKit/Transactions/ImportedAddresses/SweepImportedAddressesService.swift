@@ -63,7 +63,7 @@ final class SweepImportedAddressesService: SweepImportedAddressesServiceAPI {
 
     func prepare(force: Bool) -> AnyPublisher<[BitcoinChainCryptoAccount], Error> {
         if importedAddressSubject.value.isEmpty || force {
-            return sweptBalancesRepository.prepare()
+            sweptBalancesRepository.prepare()
                 .flatMap { [importedAddressesProvider] balances -> AnyPublisher<[BitcoinChainCryptoAccount], Error> in
                     importedAddressesProvider(balances)
                 }
@@ -74,7 +74,7 @@ final class SweepImportedAddressesService: SweepImportedAddressesServiceAPI {
                 )
                 .eraseToAnyPublisher()
         } else {
-            return importedAddressSubject
+            importedAddressSubject
                 .eraseToAnyPublisher()
         }
     }
@@ -412,11 +412,11 @@ public struct TxPairResult: Equatable {
     public static func == (lhs: TxPairResult, rhs: TxPairResult) -> Bool {
         switch (lhs.result, rhs.result) {
         case(.success(.noValue), .success(.noValue)):
-            return lhs.accountIdentifier == rhs.accountIdentifier
+            lhs.accountIdentifier == rhs.accountIdentifier
         case (.failure, .failure):
-            return lhs.accountIdentifier == rhs.accountIdentifier
+            lhs.accountIdentifier == rhs.accountIdentifier
         default:
-            return false
+            false
         }
     }
 }

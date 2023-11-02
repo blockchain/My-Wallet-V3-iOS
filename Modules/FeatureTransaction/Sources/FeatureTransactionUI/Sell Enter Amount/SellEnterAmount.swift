@@ -66,18 +66,18 @@ public struct SellEnterAmount: Reducer {
 
         var mainFieldText: String {
             if isEnteringFiat {
-                return [defaultFiatCurrency?.displaySymbol, rawInput.suggestion].compacted().joined(separator: " ")
+                [defaultFiatCurrency?.displaySymbol, rawInput.suggestion].compacted().joined(separator: " ")
             } else {
-                return [rawInput.suggestion, source?.displayCode].compacted().joined(separator: " ")
+                [rawInput.suggestion, source?.displayCode].compacted().joined(separator: " ")
             }
         }
 
         var secondaryFieldText: String {
             if isEnteringFiat {
-                return amountCryptoEntered?
+                amountCryptoEntered?
                     .toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
             } else {
-                return projectedFiatValue?
+                projectedFiatValue?
                     .displayString
                 ?? defaultZeroFiat
             }

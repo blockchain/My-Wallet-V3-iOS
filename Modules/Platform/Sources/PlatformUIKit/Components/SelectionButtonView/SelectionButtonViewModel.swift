@@ -48,18 +48,18 @@ public final class SelectionButtonViewModel: IdentifiableType {
         var transaction: TransactionDescriptorViewModel? {
             switch self {
             case .transaction(let value):
-                return value
+                value
             case .image, .empty:
-                return nil
+                nil
             }
         }
 
         var image: ImageViewContent? {
             switch self {
             case .image(let value):
-                return value
+                value
             case .transaction, .empty:
-                return nil
+                nil
             }
         }
     }
@@ -132,9 +132,9 @@ public final class SelectionButtonViewModel: IdentifiableType {
             .map { type in
                 switch type {
                 case .image(let image):
-                    return image.size
+                    image.size
                 case .text, .none:
-                    return CGSize(edge: 1)
+                    CGSize(edge: 1)
                 }
             }
     }

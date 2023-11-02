@@ -12,9 +12,9 @@ struct AESOptions {
         fileprivate func cryptoSwiftBlockMode(iv: [UInt8]) -> CryptoSwift.BlockMode {
             switch self {
             case .CBC:
-                return CryptoSwift.CBC(iv: iv)
+                CryptoSwift.CBC(iv: iv)
             case .OFB:
-                return CryptoSwift.OFB(iv: iv)
+                CryptoSwift.OFB(iv: iv)
             }
         }
     }
@@ -27,11 +27,11 @@ struct AESOptions {
         fileprivate var cryptoSwiftPadding: CryptoSwift.Padding {
             switch self {
             case .iso10126:
-                return .iso10126
+                .iso10126
             case .iso78164:
-                return .iso78164
+                .iso78164
             case .noPadding:
-                return .noPadding
+                .noPadding
             }
         }
     }

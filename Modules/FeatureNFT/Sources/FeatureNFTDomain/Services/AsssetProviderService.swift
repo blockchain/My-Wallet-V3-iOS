@@ -30,12 +30,12 @@ public struct NFTAssets: Equatable {
 
         public var creatorDisplayValue: String? {
             if let creator = value.creator, creator.contains("0x") {
-                return value.creator?
+                value.creator?
                     .dropFirst(2)
                     .prefix(6)
                     .uppercased()
             } else {
-                return value.creator
+                value.creator
             }
         }
     }

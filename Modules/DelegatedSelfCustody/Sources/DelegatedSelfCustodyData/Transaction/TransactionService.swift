@@ -135,7 +135,7 @@ extension DelegatedCustodySignatureAlgorithm {
     var signatureAlgorithmResponse: SignatureAlgorithmResponse {
         switch self {
         case .secp256k1:
-            return .secp256k1
+            .secp256k1
         }
     }
 }
@@ -144,7 +144,7 @@ extension SignatureAlgorithmResponse {
     var delegatedCustodySignatureAlgorithm: DelegatedCustodySignatureAlgorithm {
         switch self {
         case .secp256k1:
-            return .secp256k1
+            .secp256k1
         }
     }
 }

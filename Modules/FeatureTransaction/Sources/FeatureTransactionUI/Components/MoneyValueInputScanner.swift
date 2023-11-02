@@ -208,9 +208,9 @@ public final class MoneyValueInputScanner {
     private func scan(action: Action) -> Input {
         switch action {
         case .insert(let character):
-            return insert(character: character)
+            insert(character: character)
         case .remove:
-            return removeIndexed()
+            removeIndexed()
         }
     }
 

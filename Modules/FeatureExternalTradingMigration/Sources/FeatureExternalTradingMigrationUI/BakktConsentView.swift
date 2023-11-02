@@ -68,9 +68,9 @@ struct BakktConsentView: View {
         .superAppNavigationBar(
             leading: {},
             trailing: {
-            IconButton(icon: .navigationCloseButton()) {
-                app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
-            }
+                IconButton(icon: .navigationCloseButton()) {
+                    app.post(event: blockchain.ux.dashboard.external.trading.migration.article.plain.navigation.bar.button.close.tap)
+                }
             },
             scrollOffset: nil
         )
@@ -88,8 +88,8 @@ struct BakktConsentView: View {
                 PrimaryButton(
                     title: NonLocalizedConstants.ExternalTradingMigration.continueButton,
                     action: {
-                    onContinue?()
-                }
+                        onContinue?()
+                    }
                 )
                 .disabled(!continueButtonEnabled)
             } else {
@@ -175,30 +175,30 @@ struct MigrationConsentElement: Identifiable {
     var title: String {
         switch type {
         case .supportedAssets:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.title
         case .transactions:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
         case .migrationPeriod:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
         case .historicalData:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.title
         case .defiWallet:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.title
         }
     }
 
     var message: String {
         switch type {
         case .supportedAssets:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.message
         case .transactions:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
         case .migrationPeriod:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
         case .historicalData:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.message
         case .defiWallet:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.message
         }
     }
 }
@@ -213,31 +213,31 @@ enum MigrationConsentItem: String, CaseIterable {
     var title: String {
         switch self {
         case .supportedAssets:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.title
         case .transactions:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.title
         case .migrationPeriod:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.title
         case .historicalData:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.title
         case .defiWallet:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.title
+            NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.title
         }
     }
 
     var description: String {
         switch self {
         case .supportedAssets:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.SupportedAssets.message
         case .transactions:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.EnchancedTransactions.message
 
         case .migrationPeriod:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.MigrationPeriod.message
         case .historicalData:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.HistoricalData.message
         case .defiWallet:
-            return NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.message
+            NonLocalizedConstants.ExternalTradingMigration.Consent.DefiWallet.message
         }
     }
 }
@@ -252,7 +252,7 @@ struct ExpandingTableRow: View {
             leading: {
                 Checkbox(isOn: $item.isApproved)
             },
-            title: { 
+            title: {
                 Text(item.title)
                     .typography(.paragraph2)
                     .foregroundColor(.semantic.title)

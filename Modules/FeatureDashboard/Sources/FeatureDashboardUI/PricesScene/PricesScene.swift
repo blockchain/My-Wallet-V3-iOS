@@ -165,9 +165,9 @@ extension AppMode {
     fileprivate var defaultFilter: PricesScene.Filter {
         switch self {
         case .trading:
-            return .tradable
+            .tradable
         case .pkw:
-            return .all
+            .all
         }
     }
 }
@@ -179,11 +179,11 @@ extension [PricesRowData] {
     ) -> [PricesRowData] {
         switch filter {
         case .all:
-            return self
+            self
         case .favorites:
-            return self.filter { price in favourites.contains(price.currency.code) }
+            self.filter { price in favourites.contains(price.currency.code) }
         case .tradable:
-            return self.filter(\.isTradable)
+            self.filter(\.isTradable)
         }
     }
 
@@ -204,13 +204,13 @@ extension [PricesRowData] {
     ) -> [PricesRowData] {
         switch filter {
         case .all:
-            return filtered(by: searchText)
+            filtered(by: searchText)
         case .favorites:
-            return self.filter {
+            self.filter {
                 favourites.contains($0.currency.code) && $0.currency.filter(by: searchText, using: algorithm)
             }
         case .tradable:
-            return self.filter {
+            self.filter {
                 $0.isTradable && $0.currency.filter(by: searchText, using: algorithm)
             }
         }

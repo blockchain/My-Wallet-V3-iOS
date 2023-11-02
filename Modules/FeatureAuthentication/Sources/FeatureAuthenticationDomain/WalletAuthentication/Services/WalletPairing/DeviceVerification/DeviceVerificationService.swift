@@ -147,10 +147,10 @@ final class DeviceVerificationService: DeviceVerificationServiceAPI {
                 // if polled walletinfo, or request denied, stop the retry
                 case .success,
                      .failure(.requestDenied):
-                    return .just(result)
+                    .just(result)
                 // otherwise continue the retry
                 case .failure(.continuePolling):
-                    return .failure(.missingWalletInfo)
+                    .failure(.missingWalletInfo)
                 }
             }
             .retry(max: 100, delay: .seconds(2), scheduler: pollingQueue)

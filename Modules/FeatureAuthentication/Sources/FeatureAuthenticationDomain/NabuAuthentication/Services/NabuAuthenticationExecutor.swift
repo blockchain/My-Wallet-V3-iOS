@@ -259,9 +259,9 @@ struct NabuAuthenticationExecutor: NabuAuthenticationExecutorAPI {
         return Publishers.Zip(email, guid)
             .flatMap { email, guid -> AnyPublisher<NabuSessionToken, NabuAuthenticationExecutorError> in
                 if app.state.yes(if: blockchain.user.is.blocked) {
-                    return .failure(.failedToGetSessionToken(.unknown))
+                    .failure(.failedToGetSessionToken(.unknown))
                 } else {
-                    return nabuRepository
+                    nabuRepository
                         .sessionToken(
                             for: guid,
                             userToken: offlineTokenResponse.token,

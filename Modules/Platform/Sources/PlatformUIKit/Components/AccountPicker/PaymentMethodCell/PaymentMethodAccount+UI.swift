@@ -10,16 +10,16 @@ extension PaymentMethod {
     public var logoResource: ImageLocation {
         switch type {
         case .card:
-            return .local(name: "icon-card", bundle: .platformUIKit)
+            .local(name: "icon-card", bundle: .platformUIKit)
 
         case .applePay:
-            return .local(name: "icon-applepay", bundle: .platformUIKit)
+            .local(name: "icon-applepay", bundle: .platformUIKit)
 
         case .bankAccount, .bankTransfer:
-            return .local(name: "icon-bank", bundle: .platformUIKit)
+            .local(name: "icon-bank", bundle: .platformUIKit)
 
         case .funds(let currency):
-            return currency.logoResource
+            currency.logoResource
         }
     }
 }

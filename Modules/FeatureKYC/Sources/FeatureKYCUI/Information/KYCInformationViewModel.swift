@@ -64,7 +64,7 @@ extension KYCInformationViewModel {
     ) -> KYCInformationViewModel {
         switch accountStatus {
         case .approved:
-            return KYCInformationViewModel(
+            KYCInformationViewModel(
                 image: UIImage(named: "AccountApproved", in: .featureKYCUI, compatibleWith: nil),
                 title: LocalizationConstants.KYC.accountApproved,
                 subtitle: nil,
@@ -72,7 +72,7 @@ extension KYCInformationViewModel {
                 buttonTitle: LocalizationConstants.KYC.getStarted
             )
         case .expired, .failed:
-            return KYCInformationViewModel(
+            KYCInformationViewModel(
                 image: UIImage(named: "AccountFailed", in: .featureKYCUI, compatibleWith: nil),
                 title: LocalizationConstants.KYC.verificationFailed,
                 subtitle: nil,
@@ -80,9 +80,9 @@ extension KYCInformationViewModel {
                 buttonTitle: nil
             )
         case .pending:
-            return createViewModelForPendingStatus(isReceivingAirdrop: isReceivingAirdrop)
+            createViewModelForPendingStatus(isReceivingAirdrop: isReceivingAirdrop)
         case .underReview:
-            return KYCInformationViewModel(
+            KYCInformationViewModel(
                 image: UIImage(named: "AccountInReview", in: .featureKYCUI, compatibleWith: nil),
                 title: LocalizationConstants.KYC.verificationSubmitted,
                 subtitle: nil,
@@ -92,7 +92,7 @@ extension KYCInformationViewModel {
                 buttonTitle: nil
             )
         case .none:
-            return KYCInformationViewModel(
+            KYCInformationViewModel(
                 image: nil,
                 title: nil,
                 subtitle: nil,
@@ -106,7 +106,7 @@ extension KYCInformationViewModel {
 
     private static func createViewModelForPendingStatus(isReceivingAirdrop: Bool) -> KYCInformationViewModel {
         if isReceivingAirdrop {
-            return KYCInformationViewModel(
+            KYCInformationViewModel(
                 image: UIImage(named: "Icon-Verified-Large", in: .featureKYCUI, compatibleWith: nil),
                 title: LocalizationConstants.KYC.verificationInProgress,
                 subtitle: nil,
@@ -114,7 +114,7 @@ extension KYCInformationViewModel {
                 buttonTitle: LocalizationConstants.KYC.notifyMe
             )
         } else {
-            return KYCInformationViewModel(
+            KYCInformationViewModel(
                 image: UIImage(named: "AccountInReview", in: .featureKYCUI, compatibleWith: nil),
                 title: LocalizationConstants.KYC.verificationSubmitted,
                 subtitle: nil,
@@ -133,17 +133,15 @@ extension KYCInformationViewConfig {
     )
 
     static func create(for accountStatus: KYC.AccountStatus, isReceivingAirdrop: Bool = false) -> KYCInformationViewConfig {
-        let isPrimaryButtonEnabled: Bool
-
-        switch accountStatus {
+        let isPrimaryButtonEnabled: Bool = switch accountStatus {
         case .approved:
-            isPrimaryButtonEnabled = true
+            true
         case .failed, .expired, .none:
-            isPrimaryButtonEnabled = false
+            false
         case .pending:
-            isPrimaryButtonEnabled = true
+            true
         case .underReview:
-            isPrimaryButtonEnabled = true
+            true
         }
         return KYCInformationViewConfig(
             isPrimaryButtonEnabled: isPrimaryButtonEnabled

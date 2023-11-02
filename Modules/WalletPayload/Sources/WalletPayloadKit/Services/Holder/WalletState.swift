@@ -33,11 +33,11 @@ public enum WalletState: Equatable {
     public var wrapper: Wrapper? {
         switch self {
         case .partially(loaded: .justWrapper(let wrapper)):
-            return wrapper
+            wrapper
         case .partially(loaded: .justMetadata):
-            return nil
+            nil
         case .loaded(wrapper: let wrapper, _):
-            return wrapper
+            wrapper
         }
     }
 
@@ -48,11 +48,11 @@ public enum WalletState: Equatable {
     public var metadata: MetadataState? {
         switch self {
         case .partially(loaded: .justWrapper):
-            return nil
+            nil
         case .partially(loaded: .justMetadata(let metadata)):
-            return metadata
+            metadata
         case .loaded(_, metadata: let metadata):
-            return metadata
+            metadata
         }
     }
 

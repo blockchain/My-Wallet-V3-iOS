@@ -306,11 +306,10 @@ final class BuyTransactionEngine: TransactionEngine {
                 guard let fiatValue = amount.fiatValue else {
                     throw TransactionValidationFailure(state: .incorrectSourceCurrency)
                 }
-                let paymentMethodId: String?
-                if sourceAccount.paymentMethod.type.isFunds || sourceAccount.paymentMethod.type.isApplePay {
-                    paymentMethodId = nil
+                let paymentMethodId: String? = if sourceAccount.paymentMethod.type.isFunds || sourceAccount.paymentMethod.type.isApplePay {
+                    nil
                 } else {
-                    paymentMethodId = sourceAccount.paymentMethodType.id
+                    sourceAccount.paymentMethodType.id
                 }
                 return CandidateOrderDetails.buy(
                     quoteId: quoteId,

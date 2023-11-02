@@ -16,17 +16,17 @@ public struct PendingStateViewModel {
         public var imageResource: ImageLocation {
             switch self {
             case .circleError:
-                return .local(name: "circular-error-icon", bundle: .platformUIKit)
+                .local(name: "circular-error-icon", bundle: .platformUIKit)
             case .region:
-                return .local(name: "region-error-icon", bundle: .platformUIKit)
+                .local(name: "region-error-icon", bundle: .platformUIKit)
             case .triangleError:
-                return .local(name: "triangle-error-icon", bundle: .platformUIKit)
+                .local(name: "triangle-error-icon", bundle: .platformUIKit)
             case .clock:
-                return .local(name: "clock-error-icon", bundle: .platformUIKit)
+                .local(name: "clock-error-icon", bundle: .platformUIKit)
             case .success:
-                return .local(name: "v-success-icon", bundle: .platformUIKit)
+                .local(name: "v-success-icon", bundle: .platformUIKit)
             case .custom(let imageResource):
-                return imageResource
+                imageResource
             }
         }
     }

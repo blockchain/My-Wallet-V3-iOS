@@ -39,14 +39,14 @@ final class EthereumExternalAssetAddressFactory: ExternalAssetAddressFactory {
             .flatMapError { error in
                 switch error {
                 case .invalidAddress:
-                    return self.ethereumReceiveAddress(
+                    self.ethereumReceiveAddress(
                         address: address,
                         label: label,
                         onTxCompleted: onTxCompleted
                     )
                     .replaceError(with: .invalidAddress)
                 case .wrongAsset:
-                    return .failure(.invalidAddress)
+                    .failure(.invalidAddress)
                 }
             }
     }

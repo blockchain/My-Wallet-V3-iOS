@@ -86,13 +86,13 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
                         case .card,
                              .bankTransfer,
                              .applePay:
-                            return true
+                            true
                         case .funds(let currencyType):
-                            return currencyType.code == fiatCurrency.code
+                            currencyType.code == fiatCurrency.code
                         case .bankAccount:
                             // Filter out bank transfer details from currencies we do not
                             //  have local support/UI.
-                            return enabledFiatCurrencies.contains(paymentMethod.min.currency)
+                            enabledFiatCurrencies.contains(paymentMethod.min.currency)
                         }
                     }
                 }
@@ -163,13 +163,13 @@ final class EligiblePaymentMethodsService: PaymentMethodsServiceAPI {
                 case .card,
                         .bankTransfer,
                         .applePay:
-                    return true
+                    true
                 case .funds(let currencyType):
-                    return currencyType.code == currency.code
+                    currencyType.code == currency.code
                 case .bankAccount:
                     // Filter out bank transfer details from currencies we do not
                     //  have local support/UI.
-                    return enabledFiatCurrencies.contains(paymentMethod.min.currency)
+                    enabledFiatCurrencies.contains(paymentMethod.min.currency)
                 }
             }
         }

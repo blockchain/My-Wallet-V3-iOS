@@ -34,9 +34,9 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
 
     var balance: AnyPublisher<MoneyValue, Error> {
         if isImported {
-            return importedAddressBalance()
+            importedAddressBalance()
         } else {
-            return balanceRepository
+            balanceRepository
                 .balances
                 .map { [asset, hdAccountIndex] balances in
                     balances.balance(
@@ -54,7 +54,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
 
     var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
         if isImported {
-            return .just(
+            .just(
                 BitcoinChainReceiveAddress<BitcoinCashToken>(
                     address: xPub.address,
                     label: label,
@@ -62,7 +62,7 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
                 )
             )
         } else {
-            return receiveAddressProvider
+            receiveAddressProvider
                 .receiveAddressProvider(UInt32(hdAccountIndex))
                 .map { $0.replacingOccurrences(of: "bitcoincash:", with: "") }
                 .eraseError()
@@ -79,9 +79,9 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
 
     var firstReceiveAddress: AnyPublisher<ReceiveAddress, Error> {
         if isImported {
-            return receiveAddress
+            receiveAddress
         } else {
-            return receiveAddressProvider
+            receiveAddressProvider
                 .firstReceiveAddressProvider(UInt32(hdAccountIndex))
                 .map { $0.replacingOccurrences(of: "bitcoincash:", with: "") }
                 .eraseError()
@@ -145,9 +145,9 @@ final class BitcoinCashCryptoAccount: BitcoinChainCryptoAccount {
 
     func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         if isImported {
-            return .just(false)
+            .just(false)
         } else {
-            return accountCan(perform: action)
+            accountCan(perform: action)
         }
     }
 

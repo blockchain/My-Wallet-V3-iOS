@@ -100,9 +100,9 @@ public struct SwapActivityItemEvent: Decodable {
         public var isFinal: Bool {
             switch self {
             case .refunded, .failed, .expired, .complete:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
@@ -116,16 +116,16 @@ public struct SwapActivityItemEvent: Decodable {
         public var localizedDescription: String {
             switch self {
             case .complete:
-                return LocalizationConstants.Swap.completed
+                LocalizationConstants.Swap.completed
             case .delayed,
                  .inProgress,
                  .none,
                  .pendingRefund:
-                return LocalizationConstants.Swap.pending
+                LocalizationConstants.Swap.pending
             case .expired,
                  .failed,
                  .refunded:
-                return LocalizationConstants.Swap.failed
+                LocalizationConstants.Swap.failed
             }
         }
 
@@ -276,7 +276,7 @@ extension SwapActivityItemEvent.EventStatus: Equatable {
     ) -> Bool {
         switch (lhs, rhs) {
         case (.inProgress(let left), .inProgress(let right)):
-            return left == right
+            left == right
         case (.pendingRefund, .pendingRefund),
              (.refunded, .refunded),
              (.failed, .failed),
@@ -284,9 +284,9 @@ extension SwapActivityItemEvent.EventStatus: Equatable {
              (.delayed, .delayed),
              (.complete, .complete),
              (.none, .none):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

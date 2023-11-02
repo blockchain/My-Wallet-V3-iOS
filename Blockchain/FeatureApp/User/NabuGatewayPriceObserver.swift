@@ -151,8 +151,8 @@ extension MoneyValue {
 extension Either<CryptoCurrency, FiatCurrency> {
     var currencyType: CurrencyType {
         switch self {
-        case .left(let a): return a.currencyType
-        case .right(let b): return b.currencyType
+        case .left(let a): a.currencyType
+        case .right(let b): b.currencyType
         }
     }
 }

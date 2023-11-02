@@ -12,20 +12,20 @@ public enum WalletRepoStateCodingError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .decodingFailed(let error):
-            return "Wallet Repo Decoding Failure: \(error.localizedDescription)"
+            "Wallet Repo Decoding Failure: \(error.localizedDescription)"
         case .encodingFailed(let error):
-            return "Wallet Repo Encoding Failure: \(error.localizedDescription)"
+            "Wallet Repo Encoding Failure: \(error.localizedDescription)"
         }
     }
 
     public static func == (lhs: WalletRepoStateCodingError, rhs: WalletRepoStateCodingError) -> Bool {
         switch (lhs, rhs) {
         case (.encodingFailed(let lhsError), .encodingFailed(let rhsError)):
-            return lhsError.localizedDescription == rhsError.localizedDescription
+            lhsError.localizedDescription == rhsError.localizedDescription
         case (.decodingFailed(let lhsError), .decodingFailed(let rhsError)):
-            return lhsError.localizedDescription == rhsError.localizedDescription
+            lhsError.localizedDescription == rhsError.localizedDescription
         default:
-            return false
+            false
         }
     }
 }

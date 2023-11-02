@@ -15,7 +15,7 @@ public final class WalletConnectQRCodeParser: QRCodeScannerParsing {
         var errorDescription: String? {
             switch self {
             case .qrCodeIsNotWalletConnect:
-                return "Invalid QR Code."
+                "Invalid QR Code."
             }
         }
     }
@@ -32,9 +32,9 @@ public final class WalletConnectQRCodeParser: QRCodeScannerParsing {
         scanResult
             .flatMap { link in
                 if link.hasPrefix("wc:") {
-                    return .success(.walletConnect(link))
+                    .success(.walletConnect(link))
                 } else {
-                    return .failure(.parserError(ScannerError.qrCodeIsNotWalletConnect))
+                    .failure(.parserError(ScannerError.qrCodeIsNotWalletConnect))
                 }
             }
             .publisher

@@ -50,13 +50,13 @@ extension PaymentMethod.MethodType {
     public var analyticsParameter: AnalyticsEvents.SimpleBuy.PaymentMethod {
         switch self {
         case .card:
-            return .card
+            .card
         case .bankAccount, .bankTransfer:
-            return .bank
+            .bank
         case .funds:
-            return .funds
+            .funds
         case .applePay:
-            return .applePay
+            .applePay
         }
     }
 }
@@ -123,9 +123,9 @@ extension [PaymentMethod] {
         compactMap { method in
             switch method.type {
             case .funds(let currency):
-                return currency
+                currency
             default:
-                return nil
+                nil
             }
         }
     }

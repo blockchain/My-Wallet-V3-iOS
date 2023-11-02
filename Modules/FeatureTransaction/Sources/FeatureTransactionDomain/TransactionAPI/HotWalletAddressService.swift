@@ -54,12 +54,12 @@ final class HotWalletAddressService: HotWalletAddressServiceAPI {
             .zip(app.publisher(for: blockchain.app.configuration.hot.wallet.address.is.dynamic, as: Bool.self).replaceError(with: false))
             .flatMap { [accountRepository, walletOptions] isWalletOptions, isDynamic -> AnyPublisher<String?, Never> in
                 if isDynamic {
-                    return accountRepository.account(product: product, currency: networkNativeAsset(for: cryptoCurrency) ?? cryptoCurrency)
+                    accountRepository.account(product: product, currency: networkNativeAsset(for: cryptoCurrency) ?? cryptoCurrency)
                         .map { account in account.agent?.address }
                         .replaceError(with: nil)
                         .eraseToAnyPublisher()
                 } else if isWalletOptions {
-                    return walletOptions.walletOptions
+                    walletOptions.walletOptions
                         .asPublisher()
                         .map(\.hotWalletAddresses?[product.rawValue])
                         .map { addresses -> String? in
@@ -69,7 +69,7 @@ final class HotWalletAddressService: HotWalletAddressServiceAPI {
                         .replaceError(with: nil)
                         .eraseToAnyPublisher()
                 } else {
-                    return .just(nil)
+                    .just(nil)
                 }
             }
             .eraseToAnyPublisher()
@@ -92,11 +92,11 @@ private func networkNativeAsset(for cryptoCurrency: CryptoCurrency, enabledCurre
 private func mainChainCode(for cryptoCurrency: CryptoCurrency) -> String? {
     switch cryptoCurrency {
     case .ethereum:
-        return Constants.ethKey
+        Constants.ethKey
     case let model where model.assetModel.kind.erc20ParentChain == Constants.ethParentChain:
-        return Constants.ethKey
+        Constants.ethKey
     default:
-        return nil
+        nil
     }
 }
 

@@ -29,9 +29,9 @@ public struct UserState: Equatable {
         public var canPurchaseCrypto: Bool {
             switch self {
             case .unverified:
-                return false
+                false
             case .gold, .inReview:
-                return true
+                true
             }
         }
     }

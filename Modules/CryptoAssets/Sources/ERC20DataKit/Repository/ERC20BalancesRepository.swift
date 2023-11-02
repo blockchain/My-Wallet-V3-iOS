@@ -68,7 +68,7 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
             fetch: { key -> AnyPublisher<ERC20TokenAccounts, Error> in
                 switch key.network {
                 case .ethereum:
-                    return Deferred {
+                    Deferred {
                         client.ethereumTokensBalances(for: key.address)
                     }
                     .retry(1)
@@ -76,7 +76,7 @@ final class ERC20BalancesRepository: ERC20BalancesRepositoryAPI {
                     .eraseError()
                     .eraseToAnyPublisher()
                 default:
-                    return Deferred {
+                    Deferred {
                         client.evmTokensBalances(for: key.address, network: key.network)
                     }
                     .retry(1)

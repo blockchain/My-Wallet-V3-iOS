@@ -27,7 +27,7 @@ public enum SeedPhraseAction: Equatable {
         var url: URL? {
             switch self {
             case .contactSupport:
-                return URL(string: Constants.SupportURL.ResetAccount.contactSupport)
+                URL(string: Constants.SupportURL.ResetAccount.contactSupport)
             }
         }
     }

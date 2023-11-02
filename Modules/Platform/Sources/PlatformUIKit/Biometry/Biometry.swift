@@ -25,29 +25,29 @@ public struct Biometry {
         public var errorDescription: String? {
             switch self {
             case .authenticationFailed:
-                return LocalizedString.authenticationFailed
+                LocalizedString.authenticationFailed
             case .passcodeNotSet:
-                return LocalizedString.passcodeNotSet
+                LocalizedString.passcodeNotSet
             case .biometryLockout:
-                return LocalizedString.biometricsLockout
+                LocalizedString.biometricsLockout
             case .biometryNotAvailable:
-                return LocalizedString.biometricsNotSupported
+                LocalizedString.biometricsNotSupported
             case .biometryNotEnrolled(let type):
                 switch type {
                 case .faceID:
-                    return LocalizedString.faceIDEnableInstructions
+                    LocalizedString.faceIDEnableInstructions
                 case .touchID:
-                    return LocalizedString.touchIDEnableInstructions
+                    LocalizedString.touchIDEnableInstructions
                 case .none:
-                    return LocalizedString.genericError
+                    LocalizedString.genericError
                 }
             case .general:
-                return LocalizedString.genericError
+                LocalizedString.genericError
             case .appCancel,
                  .systemCancel,
                  .userCancel,
                  .userFallback:
-                return ""
+                ""
             }
         }
 
@@ -105,7 +105,7 @@ public struct Biometry {
         var localized: String {
             switch self {
             case .enterWallet:
-                return LocalizationConstants.Biometry.authenticationReason
+                LocalizationConstants.Biometry.authenticationReason
             }
         }
     }
@@ -127,9 +127,9 @@ public struct Biometry {
         public var isConfigurable: Bool {
             switch self {
             case .configurable:
-                return true
+                true
             case .configured, .unconfigurable:
-                return false
+                false
             }
         }
 
@@ -137,9 +137,9 @@ public struct Biometry {
         public var isConfigured: Bool {
             switch self {
             case .configured:
-                return true
+                true
             case .configurable, .unconfigurable:
-                return false
+                false
             }
         }
 
@@ -147,11 +147,11 @@ public struct Biometry {
         public var biometricsType: BiometryType {
             switch self {
             case .configurable(let type):
-                return type
+                type
             case .configured(let type):
-                return type
+                type
             case .unconfigurable:
-                return .none
+                .none
             }
         }
     }
@@ -184,11 +184,11 @@ public struct Biometry {
         public var localizedName: String? {
             switch self {
             case .faceID:
-                return LocalizationConstants.faceId
+                LocalizationConstants.faceId
             case .touchID:
-                return LocalizationConstants.touchId
+                LocalizationConstants.touchId
             case .none:
-                return nil
+                nil
             }
         }
 
@@ -207,9 +207,9 @@ public struct Biometry {
         public var errorDescription: String? {
             switch self {
             case .system(let error):
-                return String(describing: error)
+                String(describing: error)
             case .notAllowed:
-                return LocalizationConstants.Biometry.notConfigured
+                LocalizationConstants.Biometry.notConfigured
             }
         }
     }

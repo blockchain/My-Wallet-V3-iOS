@@ -57,7 +57,7 @@ public enum NotificationsSettingsRoute: NavigationRoute {
         switch self {
 
         case .showDetails:
-            return IfLetStore(
+            IfLetStore(
                 store.scope(
                     state: \.notificationDetailsState,
                     action: NotificationPreferencesAction.notificationDetailsChanged

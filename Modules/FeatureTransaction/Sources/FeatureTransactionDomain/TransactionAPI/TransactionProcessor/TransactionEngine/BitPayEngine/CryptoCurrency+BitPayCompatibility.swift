@@ -8,9 +8,9 @@ extension CryptoCurrency {
         switch self {
         case .bitcoin,
              .bitcoinCash:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

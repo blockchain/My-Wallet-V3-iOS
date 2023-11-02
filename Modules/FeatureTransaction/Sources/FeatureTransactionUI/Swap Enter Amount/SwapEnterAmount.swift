@@ -115,9 +115,9 @@ public struct SwapEnterAmount: Reducer {
 
         var mainFieldText: String {
             if isEnteringFiat {
-                return [defaultFiatCurrency?.displaySymbol, input.suggestion].compacted().joined(separator: " ")
+                [defaultFiatCurrency?.displaySymbol, input.suggestion].compacted().joined(separator: " ")
             } else {
-                return [input.suggestion, sourceInformation?.currency.displayCode].compacted().joined(separator: " ")
+                [input.suggestion, sourceInformation?.currency.displayCode].compacted().joined(separator: " ")
             }
         }
 
@@ -130,10 +130,10 @@ public struct SwapEnterAmount: Reducer {
 
         var secondaryFieldText: String {
             if isEnteringFiat {
-                return amountCryptoEntered?
+                amountCryptoEntered?
                     .toDisplayString(includeSymbol: true) ?? defaultZeroCryptoCurrency
             } else {
-                return projectedFiatValue?
+                projectedFiatValue?
                     .displayString
                 ?? defaultZeroFiat
             }
@@ -168,9 +168,9 @@ public struct SwapEnterAmount: Reducer {
 
         var currentEnteredMoneyValue: MoneyValue? {
             if isEnteringFiat {
-                return projectedFiatValue
+                projectedFiatValue
             } else {
-                return amountCryptoEntered
+                amountCryptoEntered
             }
         }
 

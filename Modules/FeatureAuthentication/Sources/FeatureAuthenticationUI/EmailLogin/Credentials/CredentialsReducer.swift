@@ -509,13 +509,13 @@ extension CredentialsReducer {
         case .twoFAWalletServiceError(let error):
             switch error {
             case .wrongCode(let attemptsLeft):
-                return Effect.send(.twoFA(.didChangeTwoFACodeAttemptsLeft(attemptsLeft)))
+                Effect.send(.twoFA(.didChangeTwoFACodeAttemptsLeft(attemptsLeft)))
             case .accountLocked:
-                return Effect.send(.showAccountLockedError(true))
+                Effect.send(.showAccountLockedError(true))
             case .missingCode:
-                return Effect.send(.twoFA(.showIncorrectTwoFACodeError(.missingCode)))
+                Effect.send(.twoFA(.showIncorrectTwoFACodeError(.missingCode)))
             case .missingPayload, .missingCredentials, .networkError:
-                return Effect.send(
+                Effect.send(
                     .alert(
                         .presented(
                             .show(

@@ -75,11 +75,11 @@ final class EmailAuthorizationService: EmailAuthorizationServiceAPI {
             .catch { error -> AnyPublisher<Void, EmailAuthorizationServiceError> in
                 switch error {
                 case .missingGuid:
-                    return .failure(.missingGuid)
+                    .failure(.missingGuid)
                 case .missingSessionToken:
-                    return .failure(.missingSessionToken)
+                    .failure(.missingSessionToken)
                 case .networkError(let networkError):
-                    return .failure(.guidService(.networkError(networkError)))
+                    .failure(.guidService(.networkError(networkError)))
                 }
             }
             .eraseToAnyPublisher()

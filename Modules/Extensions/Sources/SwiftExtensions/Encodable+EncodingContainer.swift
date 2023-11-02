@@ -19,11 +19,11 @@ extension ContainerType {
     var type: EncodingContainer {
         switch self {
         case .keyed:
-            return .keyed
+            .keyed
         case .unkeyed:
-            return .unkeyed
+            .unkeyed
         case .singleValue:
-            return .singleValue
+            .singleValue
         }
     }
 }

@@ -11,9 +11,9 @@ public enum InterestAccountOverviewError: Error, Equatable {
     var description: String {
         switch self {
         case .networkError(let error):
-            return String(describing: error)
+            String(describing: error)
         case .accountRepositoryError(let error):
-            return String(describing: error)
+            String(describing: error)
         }
     }
 }

@@ -34,9 +34,9 @@ public final class EmailVerificationAdapter {
             .mapError { error in
                 switch error {
                 case .timedOut:
-                    return .unknown(error)
+                    .unknown(error)
                 case .fetchFailed(let error):
-                    return .unknown(error)
+                    .unknown(error)
                 }
             }
             .eraseToAnyPublisher()
@@ -48,11 +48,11 @@ public final class EmailVerificationAdapter {
             .mapError { error in
                 switch error {
                 case .credentialsError:
-                    return .unauthenticated
+                    .unauthenticated
                 case .networkError(let error):
-                    return .networkError(error)
+                    .networkError(error)
                 case .unknown(let error):
-                    return .unknown(error)
+                    .unknown(error)
                 }
             }
             .eraseToAnyPublisher()

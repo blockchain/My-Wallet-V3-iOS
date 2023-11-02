@@ -31,12 +31,12 @@ final class EthereumTransactionPushService: EthereumTransactionPushServiceAPI {
     ) -> AnyPublisher<String, EthereumTransactionPushError> {
         switch network {
         case .ethereum:
-            return client.push(transaction: transaction)
+            client.push(transaction: transaction)
                 .map(\.txHash)
                 .mapError(EthereumTransactionPushError.networkError)
                 .eraseToAnyPublisher()
         default:
-            return client.evmPush(
+            client.evmPush(
                 transaction: transaction,
                 network: network
             )

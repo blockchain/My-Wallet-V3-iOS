@@ -50,9 +50,9 @@ public enum PinRouting {
         public var isCreate: Bool {
             switch self {
             case .create:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
@@ -60,9 +60,9 @@ public enum PinRouting {
         public var isChange: Bool {
             switch self {
             case .change:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
@@ -72,14 +72,14 @@ public enum PinRouting {
             case .authenticate(from: let origin, logoutRouting: _):
                 switch origin {
                 case .background:
-                    return true
+                    true
                 case .attachedOn:
-                    return false
+                    false
                 case .foreground:
-                    return false
+                    false
                 }
             default:
-                return false
+                false
             }
         }
 
@@ -87,15 +87,15 @@ public enum PinRouting {
         public var origin: Origin {
             switch self {
             case .authenticate(from: let origin, logoutRouting: _):
-                return origin
+                origin
             case .change(parent: let boxedParent, logoutRouting: _):
-                return .foreground(parent: boxedParent)
+                .foreground(parent: boxedParent)
             case .create(parent: let boxedParent):
-                return .foreground(parent: boxedParent)
+                .foreground(parent: boxedParent)
             case .createPin(from: let origin):
-                return origin
+                origin
             case .enableBiometrics(parent: let boxedParent, logoutRouting: _):
-                return .foreground(parent: boxedParent)
+                .foreground(parent: boxedParent)
             }
         }
 
@@ -103,15 +103,15 @@ public enum PinRouting {
         public var logoutRouting: RoutingType.Logout? {
             switch self {
             case .authenticate(from: _, logoutRouting: let routing):
-                return routing
+                routing
             case .change(parent: _, logoutRouting: let routing):
-                return routing
+                routing
             case .enableBiometrics(parent: _, logoutRouting: let routing):
-                return routing
+                routing
             case .create:
-                return nil
+                nil
             case .createPin:
-                return nil
+                nil
             }
         }
 
@@ -123,26 +123,26 @@ public enum PinRouting {
             case .authenticate(from: let origin, logoutRouting: _):
                 switch origin {
                 case .foreground(parent: let parent):
-                    return parent.value
+                    parent.value
                 case .background: // Only case when there is no parent as the login is the root
-                    return nil
+                    nil
                 case .attachedOn(controller: let controller):
-                    return controller.value
+                    controller.value
                 }
             case .change(parent: let parent, logoutRouting: _):
-                return parent.value
+                parent.value
             case .enableBiometrics(parent: let parent, logoutRouting: _):
-                return parent.value
+                parent.value
             case .create(parent: let parent):
-                return parent.value
+                parent.value
             case .createPin(from: let origin):
                 switch origin {
                 case .foreground(parent: let parent):
-                    return parent.value
+                    parent.value
                 case .background: // Only case when there is no parent as the login is the root
-                    return nil
+                    nil
                 case .attachedOn(controller: let controller):
-                    return controller.value
+                    controller.value
                 }
             }
         }
@@ -162,9 +162,9 @@ public enum PinRouting {
             public var pin: Pin? {
                 switch self {
                 case .pin(value: let pin):
-                    return pin
+                    pin
                 default:
-                    return nil
+                    nil
                 }
             }
 
@@ -172,9 +172,9 @@ public enum PinRouting {
             public var password: String? {
                 switch self {
                 case .authentication(password: let password):
-                    return password
+                    password
                 default:
-                    return nil
+                    nil
                 }
             }
         }
@@ -193,19 +193,19 @@ extension PinRouting.Flow: CustomDebugStringConvertible {
         case .authenticate(from: let origin, logoutRouting: _):
             switch origin {
             case .foreground:
-                return "authentication from foreground"
+                "authentication from foreground"
             case .background:
-                return "authentication from background"
+                "authentication from background"
             case .attachedOn:
-                return "authentication attached to pin hosting controller"
+                "authentication attached to pin hosting controller"
             }
         case .change:
-            return "change pin"
+            "change pin"
         case .enableBiometrics:
-            return "enable biometrics"
+            "enable biometrics"
         case .create,
              .createPin:
-            return "create a new pin"
+            "create a new pin"
         }
     }
 }

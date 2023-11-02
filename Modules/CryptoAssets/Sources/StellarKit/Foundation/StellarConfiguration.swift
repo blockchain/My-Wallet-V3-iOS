@@ -62,11 +62,11 @@ extension stellarsdk.Network: Equatable {
         switch (lhs, rhs) {
         case (.public, .public),
              (.testnet, .testnet):
-            return true
+            true
         case (.custom(let lhs), .custom(let rhs)) where lhs == rhs:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

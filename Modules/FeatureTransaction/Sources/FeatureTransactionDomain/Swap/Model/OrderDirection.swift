@@ -7,10 +7,10 @@ extension OrderDirection {
         switch self {
         case .onChain,
              .toUserKey:
-            return true
+            true
         case .fromUserKey,
              .internal:
-            return false
+            false
         }
     }
 
@@ -18,10 +18,10 @@ extension OrderDirection {
         switch self {
         case .onChain,
              .fromUserKey:
-            return true
+            true
         case .toUserKey,
              .internal:
-            return false
+            false
         }
     }
 }

@@ -48,9 +48,9 @@ final class LoginService: LoginServiceAPI {
             .flatMap { type -> AnyPublisher<Void, LoginServiceError> in
                 switch type {
                 case .standard:
-                    return .just(())
+                    .just(())
                 case .google, .yubiKey, .email, .yubikeyMtGox, .sms:
-                    return .failure(.twoFactorOTPRequired(type))
+                    .failure(.twoFactorOTPRequired(type))
                 }
             }
             .eraseToAnyPublisher()

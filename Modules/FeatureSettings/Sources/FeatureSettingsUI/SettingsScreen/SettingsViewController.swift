@@ -103,36 +103,35 @@ final class SettingsViewController: BaseScreenViewController {
 
         let dataSource = RxDataSource(configureCell: { [weak self] _, _, indexPath, item in
             guard let self else { return UITableViewCell() }
-            let cell: UITableViewCell
-            switch item.cellType {
+            let cell: UITableViewCell = switch item.cellType {
             case .badge(_, let presenter):
-                cell = badgeCell(for: indexPath, presenter: presenter)
+                badgeCell(for: indexPath, presenter: presenter)
             case .clipboard(let type):
-                cell = clipboardCell(for: indexPath, viewModel: type.viewModel)
+                clipboardCell(for: indexPath, viewModel: type.viewModel)
             case .common(let type, let presenter):
-                cell = commonCell(for: indexPath, viewModel: type.viewModel(presenter: presenter))
+                commonCell(for: indexPath, viewModel: type.viewModel(presenter: presenter))
             case .cards(let type):
                 switch type {
                 case .skeleton:
-                    cell = skeletonCell(for: indexPath)
+                    skeletonCell(for: indexPath)
                 case .add(let presenter):
-                    cell = addPaymentMethodCell(for: indexPath, presenter: presenter)
+                    addPaymentMethodCell(for: indexPath, presenter: presenter)
                 case .linked(let presenter):
-                    cell = linkedCardCell(for: indexPath, presenter: presenter)
+                    linkedCardCell(for: indexPath, presenter: presenter)
                 }
             case .banks(let type):
                 switch type {
                 case .skeleton:
-                    cell = skeletonCell(for: indexPath)
+                    skeletonCell(for: indexPath)
                 case .add(let presenter):
-                    cell = addPaymentMethodCell(for: indexPath, presenter: presenter)
+                    addPaymentMethodCell(for: indexPath, presenter: presenter)
                 case .linked(let viewModel):
-                    cell = linkedBankCell(for: indexPath, viewModel: viewModel)
+                    linkedBankCell(for: indexPath, viewModel: viewModel)
                 }
             case .switch(_, let presenter):
-                cell = switchCell(for: indexPath, presenter: presenter)
+                switchCell(for: indexPath, presenter: presenter)
             case .refferal(_, let viewModel):
-                cell = referralCell(for: indexPath, viewModel: viewModel)
+                referralCell(for: indexPath, viewModel: viewModel)
             }
             cell.selectionStyle = .none
             return cell

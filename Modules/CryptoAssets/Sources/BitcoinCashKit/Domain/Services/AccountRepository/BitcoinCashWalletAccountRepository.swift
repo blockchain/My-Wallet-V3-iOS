@@ -149,9 +149,9 @@ final class BitcoinCashWalletAccountRepository {
                 }
                 let updatedAccounts = entry.accounts.map { entry in
                     if let label = accounts.first(where: { $0.hdAccountIndex == entry.index })?.newForcedUpdateLabel {
-                        return entry.updateLabel(label)
+                        entry.updateLabel(label)
                     } else {
-                        return entry
+                        entry
                     }
                 }
                 // we don't store importedAddress back to metadata ¯\_(ツ)_/¯

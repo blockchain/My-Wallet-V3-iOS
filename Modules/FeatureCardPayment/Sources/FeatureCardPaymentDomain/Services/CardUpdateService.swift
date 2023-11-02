@@ -25,20 +25,20 @@ final class CardUpdateService: CardUpdateServiceAPI {
         var name: String {
             switch self {
             case .sbAddCardFailure:
-                return "sb_add_card_failure"
+                "sb_add_card_failure"
             case .sbCardActivationFailure:
-                return "sb_card_activation_failure"
+                "sb_card_activation_failure"
             case .sbCardEverypayFailure:
-                return "sb_card_everypay_failure"
+                "sb_card_everypay_failure"
             }
         }
 
         var params: [String: String]? {
             switch self {
             case .sbCardEverypayFailure(data: let data):
-                return ["data": data]
+                ["data": data]
             default:
-                return nil
+                nil
             }
         }
     }
@@ -145,11 +145,11 @@ final class CardUpdateService: CardUpdateServiceAPI {
     ) -> AnyPublisher<PartnerAuthorizationData.State, Error> {
         switch partner {
         case .everypay(let data):
-            return add(card: card, with: data).mapError { $0 as Error }.eraseToAnyPublisher()
+            add(card: card, with: data).mapError { $0 as Error }.eraseToAnyPublisher()
         case .cardAcquirer(let acquirer):
-            return add(card: card, via: acquirer)
+            add(card: card, via: acquirer)
         case .unknown:
-            return .failure(ServiceError.unknownPartner)
+            .failure(ServiceError.unknownPartner)
         }
     }
 

@@ -29,35 +29,35 @@ extension AssetAction: CustomStringConvertible, CustomDebugStringConvertible {
     public var description: String {
         switch self {
         case .buy:
-            return "buy"
+            "buy"
         case .deposit:
-            return "deposit"
+            "deposit"
         case .interestTransfer:
-            return "interestTransfer"
+            "interestTransfer"
         case .interestWithdraw:
-            return "interestWithdraw"
+            "interestWithdraw"
         case .stakingDeposit:
-            return "stakingDeposit"
+            "stakingDeposit"
         case .stakingWithdraw:
-            return "stakingWithdraw"
+            "stakingWithdraw"
         case .activeRewardsDeposit:
-            return "activeRewardsDeposit"
+            "activeRewardsDeposit"
         case .activeRewardsWithdraw:
-            return "activeRewardsWithdraw"
+            "activeRewardsWithdraw"
         case .receive:
-            return "receive"
+            "receive"
         case .sell:
-            return "sell"
+            "sell"
         case .send:
-            return "send"
+            "send"
         case .sign:
-            return "sign"
+            "sign"
         case .swap:
-            return "swap"
+            "swap"
         case .viewActivity:
-            return "viewActivity"
+            "viewActivity"
         case .withdraw:
-            return "withdraw"
+            "withdraw"
         }
     }
 

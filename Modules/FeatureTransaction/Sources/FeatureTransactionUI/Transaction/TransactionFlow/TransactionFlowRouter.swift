@@ -392,14 +392,13 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
         action: AssetAction,
         state: TransactionState
     ) {
-        let navigationModel: ScreenNavigationModel
-        switch transitionType {
+        let navigationModel: ScreenNavigationModel = switch transitionType {
         case .push:
-            navigationModel = ScreenNavigationModel.AccountPicker.navigationClose(
+            ScreenNavigationModel.AccountPicker.navigationClose(
                 title: TransactionFlowDescriptor.AccountPicker.destinationTitle(action: action)
             )
         case .modal, .replaceRoot:
-            navigationModel = ScreenNavigationModel.AccountPicker.modal(
+            ScreenNavigationModel.AccountPicker.modal(
                 title: TransactionFlowDescriptor.AccountPicker.destinationTitle(action: action)
             )
         }
@@ -754,16 +753,15 @@ final class TransactionFlowRouter: TransactionViewableRouter, TransactionFlowRou
             currency: action.currency
         )
 
-        let viewController: OpenBankingViewController
-        switch action {
+        let viewController: OpenBankingViewController = switch action {
         case .buy(let order):
-            viewController = OpenBankingViewController(
+            OpenBankingViewController(
                 order: .init(order),
                 from: .init(account),
                 environment: environment
             )
         case .deposit(let transaction):
-            viewController = OpenBankingViewController(
+            OpenBankingViewController(
                 deposit: transaction.amount.minorString,
                 product: "SIMPLEBUY",
                 from: .init(account),
@@ -1022,7 +1020,7 @@ extension AssetAction {
         switch self {
         case .buy,
              .deposit:
-            return true
+            true
 
         case .sell,
              .withdraw,
@@ -1037,7 +1035,7 @@ extension AssetAction {
              .stakingWithdraw,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
-            return false
+            false
         }
     }
 }

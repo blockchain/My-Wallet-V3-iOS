@@ -69,13 +69,12 @@ extension Session {
                     key.idToFirebaseConfigurationKeyDefault()
                 }
 
-                let expiration: TimeInterval
-                if isStale {
-                    expiration = 0 // Instant
+                let expiration: TimeInterval = if isStale {
+                    0 // Instant
                 } else if isDebug {
-                    expiration = 30 // 30 seconds
+                    30 // 30 seconds
                 } else {
-                    expiration = 3600 // 1 hour
+                    3600 // 1 hour
                 }
 
                 func errored() {

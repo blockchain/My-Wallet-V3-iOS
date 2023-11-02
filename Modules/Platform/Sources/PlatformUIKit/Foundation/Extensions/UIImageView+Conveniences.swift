@@ -16,9 +16,9 @@ public struct ImageViewContent: Equatable {
         var templateColor: UIColor? {
             switch self {
             case .template(let color):
-                return color
+                color
             case .normal:
-                return nil
+                nil
             }
         }
     }

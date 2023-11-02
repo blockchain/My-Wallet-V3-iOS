@@ -120,13 +120,13 @@ public final class CryptoDelegatedCustodyAccount: CryptoNonCustodialAccount {
              .withdraw,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
-            return .just(false)
+            .just(false)
         case .send, .swap, .sell:
-            return balance
+            balance
                 .map(\.isPositive)
                 .eraseToAnyPublisher()
         case .receive, .viewActivity:
-            return .just(true)
+            .just(true)
         }
     }
 

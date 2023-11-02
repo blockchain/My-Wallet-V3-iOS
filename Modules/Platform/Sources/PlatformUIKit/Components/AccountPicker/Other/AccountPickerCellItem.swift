@@ -34,42 +34,42 @@ public struct AccountPickerCellItem: IdentifiableType {
     public var identity: AnyHashable {
         switch presenter {
         case .emptyState:
-            return "emptyState"
+            "emptyState"
         case .button:
-            return "button"
+            "button"
         case .withdrawalLocks:
-            return "withdrawalLocks"
+            "withdrawalLocks"
         case .accountGroup(let account):
-            return account.identifier
+            account.identifier
         case .linkedBankAccount(let account, _):
-            return account.identifier
+            account.identifier
         case .paymentMethodAccount(let account):
-            return account.identifier
+            account.identifier
         case .singleAccount(let account, _, _):
-            return account.identifier
+            account.identifier
         }
     }
 
     public var account: BlockchainAccount? {
         switch presenter {
         case .accountGroup(let account):
-            return account
+            account
         case .linkedBankAccount(let account, _):
-            return account
+            account
         case .paymentMethodAccount(let account):
-            return account
+            account
         case .singleAccount(let account, _, _):
-            return account
+            account
         case .emptyState, .button, .withdrawalLocks:
-            return nil
+            nil
         }
     }
 
     public var isButton: Bool {
         if case .button = presenter {
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 

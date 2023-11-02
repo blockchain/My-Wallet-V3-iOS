@@ -156,14 +156,14 @@ extension Store where State == PersonalInfo.State, Action == PersonalInfo.Action
             onClose: {},
             onComplete: {},
             loadForm: {
-               .just(
-                   FormQuestion.personalInfoQuestions(
-                       firstName: nil,
-                       lastName: nil,
-                       dateOfBirth: nil
-                   )
-               )
-           },
+                .just(
+                    FormQuestion.personalInfoQuestions(
+                        firstName: nil,
+                        lastName: nil,
+                        dateOfBirth: nil
+                    )
+                )
+            },
             submitForm: { _ in .empty() },
             analyticsRecorder: NoOpAnalyticsRecorder(),
             mainQueue: .main

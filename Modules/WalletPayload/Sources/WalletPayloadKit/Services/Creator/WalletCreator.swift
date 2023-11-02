@@ -24,25 +24,25 @@ public enum WalletCreateError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .genericFailure:
-            return LocalizationConstants.WalletPayloadKit.Error.unknown
+            LocalizationConstants.WalletPayloadKit.Error.unknown
         case .expectedEncodedPayload:
-            return String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2001)
+            String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2001)
         case .encryptionFailure:
-            return String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2002)
+            String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2002)
         case .uuidFailure:
-            return String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2003)
+            String(format: LocalizationConstants.WalletPayloadKit.Error.internalPayloadError, 2003)
         case .verificationFailure(let error):
-            return error.errorDescription
+            error.errorDescription
         case .mnemonicFailure(let error):
-            return error.localizedDescription
+            error.localizedDescription
         case .encodingError(let error):
-            return error.errorDescription
+            error.errorDescription
         case .networkError(let error):
-            return error.description
+            error.description
         case .usedAccountsFinderError(let error):
-            return error.errorDescription
+            error.errorDescription
         case .accountCreationFailure:
-            return LocalizationConstants.WalletPayloadKit.Error.accountCreationFailed
+            LocalizationConstants.WalletPayloadKit.Error.accountCreationFailed
         }
     }
 }
@@ -349,9 +349,9 @@ func generateXpub(
     { type, index -> String in
         switch type {
         case .legacy:
-            return legacyKey.derive(at: .hardened(UInt32(index))).xpub
+            legacyKey.derive(at: .hardened(UInt32(index))).xpub
         case .segwit:
-            return bech32Key.derive(at: .hardened(UInt32(index))).xpub
+            bech32Key.derive(at: .hardened(UInt32(index))).xpub
         }
     }
 }

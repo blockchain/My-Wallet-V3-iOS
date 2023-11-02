@@ -7,12 +7,11 @@ enum LoadingState<Content, Failure> {
     case failure(Failure)
 
     var isLoading: Bool {
-        let isLoading: Bool
-        switch self {
+        let isLoading: Bool = switch self {
         case .loading:
-            isLoading = true
+            true
         default:
-            isLoading = false
+            false
         }
         return isLoading
     }

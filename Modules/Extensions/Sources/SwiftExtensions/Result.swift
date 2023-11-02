@@ -37,18 +37,18 @@ extension Result: ResultProtocol {
     @inlinable public var success: Success? {
         switch result {
         case .success(let success):
-            return success
+            success
         case .failure:
-            return nil
+            nil
         }
     }
 
     @inlinable public var failure: Failure? {
         switch result {
         case .failure(let failure):
-            return failure
+            failure
         case .success:
-            return nil
+            nil
         }
     }
 }
@@ -61,18 +61,18 @@ extension ResultProtocol {
     @inlinable public var success: Success? {
         switch result {
         case .success(let success):
-            return success
+            success
         case .failure:
-            return nil
+            nil
         }
     }
 
     @inlinable public var failure: Failure? {
         switch result {
         case .success:
-            return nil
+            nil
         case .failure(let failure):
-            return failure
+            failure
         }
     }
 }
@@ -82,24 +82,24 @@ extension RandomAccessCollection where Element: ResultProtocol {
     public func zip() -> Result<[Element.Success], Element.Failure> {
         switch count {
         case 0:
-            return .success([])
+            .success([])
         case 1:
-            return self[_0]
+            self[_0]
                 .map { [$0] }
         case 2:
-            return self[_0].result
+            self[_0].result
                 .zip(self[_1].result)
                 .map { [$0, $1] }
         case 3:
-            return self[_0].result
+            self[_0].result
                 .zip(self[_1].result, self[_2].result)
                 .map { [$0, $1, $2] }
         case 4:
-            return self[_0].result
+            self[_0].result
                 .zip(self[_1].result, self[_2].result, self[_3].result)
                 .map { [$0, $1, $2, $3] }
         default:
-            return prefix(4).zip()
+            prefix(4).zip()
                 .zip(dropFirst(4).zip())
                 .map { $0 + $1 }
         }
@@ -119,9 +119,9 @@ extension Result {
         flatMap { success in
             switch a {
             case .success(let a):
-                return .success((success, a))
+                .success((success, a))
             case .failure(let error):
-                return .failure(error)
+                .failure(error)
             }
         }
     }
@@ -178,7 +178,7 @@ extension Result where Failure == Never {
     public func mapError<E: Error>() -> Result<Success, E> {
         switch self {
         case .success(let value):
-            return .success(value)
+            .success(value)
         }
     }
 }
@@ -192,7 +192,7 @@ extension Result where Success == Never {
     public func map<T>() -> Result<T, Failure> {
         switch self {
         case .failure(let error):
-            return .failure(error)
+            .failure(error)
         }
     }
 }

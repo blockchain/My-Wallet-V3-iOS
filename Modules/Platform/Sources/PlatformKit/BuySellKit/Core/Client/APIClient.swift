@@ -150,12 +150,11 @@ final class APIClient: SimpleBuyClientAPI {
     func supportedPairs(
         with option: SupportedPairsFilterOption
     ) -> AnyPublisher<SupportedPairsResponse, NabuNetworkError> {
-        let queryParameters: [URLQueryItem]
-        switch option {
+        let queryParameters: [URLQueryItem] = switch option {
         case .all:
-            queryParameters = []
+            []
         case .only(fiatCurrency: let currency):
-            queryParameters = [
+            [
                 URLQueryItem(
                     name: Parameter.fiatCurrency,
                     value: currency.rawValue

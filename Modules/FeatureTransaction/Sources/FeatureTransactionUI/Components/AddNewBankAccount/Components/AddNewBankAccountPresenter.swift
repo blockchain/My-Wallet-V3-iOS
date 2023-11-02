@@ -75,7 +75,7 @@ final class AddNewBankAccountPagePresenter: DetailsScreenPresenterAPI, AddNewBan
             .flatMap { action -> Driver<AddNewBankAccountDetailsInteractionState> in
                 switch action {
                 case .details(let state):
-                    return .just(state)
+                    .just(state)
                 }
             }
 
@@ -286,33 +286,33 @@ extension [PaymentAccountProperty.Field] {
                  .paymentAccountField(.iban),
                  .paymentAccountField(.bankCode),
                  .paymentAccountField(.sortCode):
-                return true
+                true
             case .paymentAccountField(.field(name: _, value: _, help: _, copy: let copy)):
-                return copy
+                copy
             default:
-                return false
+                false
             }
         }
 
         func analyticsEvent(field: TransactionalLineItem) -> AnalyticsEvents.SimpleBuy? {
             switch field {
             case .paymentAccountField:
-                return .sbLinkBankDetailsCopied
+                .sbLinkBankDetailsCopied
             default:
-                return nil
+                nil
             }
         }
 
         return map { TransactionalLineItem.paymentAccountField($0) }
             .map { field in
                 if isCopyable(field: field) {
-                    return field.defaultCopyablePresenter(
+                    field.defaultCopyablePresenter(
                         analyticsEvent: analyticsEvent(field: field),
                         analyticsRecorder: analyticsRecorder,
                         accessibilityIdPrefix: AccessibilityId.lineItemPrefix
                     )
                 } else {
-                    return field.defaultPresenter(accessibilityIdPrefix: AccessibilityId.lineItemPrefix)
+                    field.defaultPresenter(accessibilityIdPrefix: AccessibilityId.lineItemPrefix)
                 }
             }
     }

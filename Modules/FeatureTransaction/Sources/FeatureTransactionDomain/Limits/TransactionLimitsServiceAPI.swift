@@ -235,9 +235,9 @@ extension Publisher where Output == TransactionLimits, Failure == TransactionLim
         self.catch { error -> AnyPublisher<Output, Failure> in
             switch error {
             case .network(let error) where error.code == .userNotActive:
-                return .just(.zero(for: limitsCurrency))
+                .just(.zero(for: limitsCurrency))
             default:
-                return .failure(error)
+                .failure(error)
             }
         }
         .eraseToAnyPublisher()
@@ -292,11 +292,10 @@ extension TransactionLimits {
     }
 
     fileprivate init(_ crossBorderLimits: CrossBorderLimits) {
-        let effectiveLimit: EffectiveLimit?
-        if let maxCurrentLimit = crossBorderLimits.currentLimits?.available {
-            effectiveLimit = .init(crossBorderLimits: crossBorderLimits, maxLimitFallbak: maxCurrentLimit)
+        let effectiveLimit: EffectiveLimit? = if let maxCurrentLimit = crossBorderLimits.currentLimits?.available {
+            .init(crossBorderLimits: crossBorderLimits, maxLimitFallbak: maxCurrentLimit)
         } else {
-            effectiveLimit = nil
+            nil
         }
         self.init(
             currencyType: crossBorderLimits.currency,
@@ -316,11 +315,10 @@ extension TransactionLimits {
         }
 
         let effectiveLimit: EffectiveLimit? = try? .min(effectiveLimit, limits.effectiveLimit)
-        let suggestedUpgrade: SuggestedLimitsUpgrade?
-        if let lhs = effectiveLimit, let rhs = limits.effectiveLimit {
-            suggestedUpgrade = try? lhs.value > rhs.value ? self.suggestedUpgrade : limits.suggestedUpgrade
+        let suggestedUpgrade: SuggestedLimitsUpgrade? = if let lhs = effectiveLimit, let rhs = limits.effectiveLimit {
+            try? lhs.value > rhs.value ? self.suggestedUpgrade : limits.suggestedUpgrade
         } else {
-            suggestedUpgrade = self.suggestedUpgrade ?? limits.suggestedUpgrade
+            self.suggestedUpgrade ?? limits.suggestedUpgrade
         }
 
         let defaultMin = limits.minimum ?? minimum
@@ -347,11 +345,10 @@ extension TransactionLimits {
         usePaymentMethodMax: Bool
     ) -> TransactionLimits {
         let maxCrossBorderCurrentLimit = crossBorderLimits.maximum ?? paymentMethod.max.moneyValue
-        let maxLimit: MoneyValue
-        if usePaymentMethodMax, let m = try? MoneyValue.min(paymentMethod.max.moneyValue, maxCrossBorderCurrentLimit) {
-            maxLimit = m
+        let maxLimit: MoneyValue = if usePaymentMethodMax, let m = try? MoneyValue.min(paymentMethod.max.moneyValue, maxCrossBorderCurrentLimit) {
+            m
         } else {
-            maxLimit = maxCrossBorderCurrentLimit
+            maxCrossBorderCurrentLimit
         }
         let maxCrossBorderDailyLimit = crossBorderLimits.maximumDaily ?? maxLimit
         let maxCrossBorderAnnualLimit = crossBorderLimits.maximumAnnual ?? maxCrossBorderDailyLimit

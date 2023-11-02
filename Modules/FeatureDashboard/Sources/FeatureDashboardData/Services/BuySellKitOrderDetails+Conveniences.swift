@@ -5,18 +5,17 @@ import PlatformKit
 extension BuySellActivityItemEvent {
     init(with orderDetails: OrderDetails) {
 
-        let paymentMethod: PaymentMethod
-        switch orderDetails.paymentMethod {
+        let paymentMethod: PaymentMethod = switch orderDetails.paymentMethod {
         case .bankAccount:
-            paymentMethod = .bankAccount
+            .bankAccount
         case .bankTransfer:
-            paymentMethod = .bankTransfer
+            .bankTransfer
         case .card:
-            paymentMethod = .card(paymentMethodId: orderDetails.paymentMethodId)
+            .card(paymentMethodId: orderDetails.paymentMethodId)
         case .applePay:
-            paymentMethod = .applePay
+            .applePay
         case .funds:
-            paymentMethod = .funds
+            .funds
         }
 
         self.init(
@@ -41,17 +40,17 @@ extension OrderDetails {
         switch state {
         case .pendingDeposit,
              .depositMatched:
-            return .pending
+            .pending
         case .pendingConfirmation:
-            return .pendingConfirmation
+            .pendingConfirmation
         case .cancelled:
-            return .cancelled
+            .cancelled
         case .expired:
-            return .expired
+            .expired
         case .failed:
-            return .failed
+            .failed
         case .finished:
-            return .finished
+            .finished
         }
     }
 }

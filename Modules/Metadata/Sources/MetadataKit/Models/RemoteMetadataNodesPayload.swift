@@ -8,7 +8,7 @@ public enum RemoteMetadataNodesDecodingError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidPayload:
-            return "Invalid JSON payload from remote node"
+            "Invalid JSON payload from remote node"
         }
     }
 }

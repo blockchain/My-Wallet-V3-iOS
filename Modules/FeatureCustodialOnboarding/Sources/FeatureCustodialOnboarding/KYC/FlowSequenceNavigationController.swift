@@ -77,7 +77,7 @@ public class FlowSequenceNavigationController<Of: WhichFlowSequenceViewControlle
         }
     }
 
-    public override func viewDidDisappear(_ animated: Bool) {
+    override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         var completion = completion
         self.completion = nil

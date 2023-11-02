@@ -51,11 +51,11 @@ final class EthereumTransactionDispatcher: EthereumTransactionDispatcherAPI {
             .flatMap { [recordLastTransaction] transaction
                 -> AnyPublisher<EthereumTransactionPublished, Error> in
                 if network == .ethereum {
-                    return recordLastTransaction(transaction)
+                    recordLastTransaction(transaction)
                         .setFailureType(to: Error.self)
                         .eraseToAnyPublisher()
                 } else {
-                    return .just(transaction)
+                    .just(transaction)
                 }
             }
             .eraseToAnyPublisher()

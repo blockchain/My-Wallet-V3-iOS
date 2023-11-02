@@ -342,14 +342,14 @@ final class WalletConnectServiceV2: WalletConnectServiceV2API {
     ) -> WalletConnectUserEvent {
         switch method {
         case .ethSendTransaction:
-            return .sendTransaction(account, txTarget)
+            .sendTransaction(account, txTarget)
         case .ethSignTransaction:
-            return .signTransaction(account, txTarget)
+            .signTransaction(account, txTarget)
         case .ethSign,
                 .ethSignTypedData,
                 .ethSignTypedDatav4,
                 .personalSign:
-            return .signMessage(account, txTarget)
+            .signMessage(account, txTarget)
         }
     }
 

@@ -168,9 +168,9 @@ extension CardPayload {
         public var isKnown: Bool {
             switch self {
             case .unknown:
-                return false
+                false
             default:
-                return true
+                true
             }
         }
 
@@ -210,9 +210,9 @@ extension CardPayload {
         var isActive: Bool {
             switch self {
             case .active:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
@@ -221,9 +221,9 @@ extension CardPayload {
         public var isUsable: Bool {
             switch self {
             case .active, .blocked, .expired, .fraudReview, .manualReview:
-                return true
+                true
             case .created, .none, .pending:
-                return false
+                false
             }
         }
     }

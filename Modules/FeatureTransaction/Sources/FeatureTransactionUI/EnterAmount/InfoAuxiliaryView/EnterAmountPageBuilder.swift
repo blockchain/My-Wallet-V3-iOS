@@ -67,14 +67,14 @@ final class EnterAmountPageBuilder {
         let publisher = transactionModel.state.publisher
             .compactMap { state -> TransactionMinMaxValues? in
                 if state.source != nil {
-                    return TransactionMinMaxValues(
+                    TransactionMinMaxValues(
                         maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
                         maxSpendableCryptoValue: state.maxSpendableWithActiveAmountInputType(.crypto),
                         minSpendableFiatValue: state.minSpendableWithActiveAmountInputType(.fiat),
                         minSpendableCryptoValue: state.minSpendableWithActiveAmountInputType(.crypto)
                     )
                 } else {
-                    return nil
+                    nil
                 }
             }
             .ignoreFailure(setFailureType: Never.self)
@@ -172,14 +172,14 @@ final class EnterAmountPageBuilder {
         let minMaxPublisher = transactionModel.state.publisher
             .compactMap { state -> TransactionMinMaxValues? in
                 if state.source != nil {
-                    return TransactionMinMaxValues(
+                    TransactionMinMaxValues(
                         maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
                         maxSpendableCryptoValue: state.maxSpendableWithActiveAmountInputType(.crypto),
                         minSpendableFiatValue: state.minSpendableWithActiveAmountInputType(.fiat),
                         minSpendableCryptoValue: state.minSpendableWithActiveAmountInputType(.crypto)
                     )
                 } else {
-                    return nil
+                    nil
                 }
             }
             .ignoreFailure(setFailureType: Never.self)

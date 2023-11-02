@@ -201,20 +201,20 @@ extension BrokerageQuote.Profile {
     fileprivate var legacyDirection: String {
         switch self {
         case .swapPKWToPKW:
-            return "ON_CHAIN"
+            "ON_CHAIN"
         case .swapPKWToTrading:
-            return "FROM_USERKEY"
+            "FROM_USERKEY"
         case _:
-            return "INTERNAL"
+            "INTERNAL"
         }
     }
 
     fileprivate var legacyProduct: String {
         switch self {
         case .buy:
-            return "SIMPLEBUY"
+            "SIMPLEBUY"
         case _:
-            return "BROKERAGE"
+            "BROKERAGE"
         }
     }
 }

@@ -41,9 +41,9 @@ final class YodleeMessageService {
         var successData: YodleeSuccessData? {
             switch self {
             case .success(let data):
-                return data
+                data
             default:
-                return nil
+                nil
             }
         }
     }

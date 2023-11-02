@@ -25,9 +25,9 @@ public enum FormPresentationState {
     public var isValid: Bool {
         switch self {
         case .valid:
-            return true
+            true
         case .invalid:
-            return false
+            false
         }
     }
 
@@ -35,9 +35,9 @@ public enum FormPresentationState {
     public var invalidReason: InvalidReason? {
         switch self {
         case .invalid(let reason):
-            return reason
+            reason
         default:
-            return nil
+            nil
         }
     }
 }

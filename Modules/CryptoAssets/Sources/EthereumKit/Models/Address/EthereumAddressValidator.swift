@@ -15,11 +15,11 @@ enum EthereumAddressValidator {
             .map { a, h -> String in
                 switch (a, h) {
                 case (let x, _) where "0123456789".contains(x):
-                    return String(a)
+                    String(a)
                 case (_, let x) where "89abcdef".contains(x):
-                    return String(a).uppercased()
+                    String(a).uppercased()
                 default:
-                    return String(a).lowercased()
+                    String(a).lowercased()
                 }
             }
             .joined()

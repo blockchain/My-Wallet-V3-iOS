@@ -21,17 +21,17 @@ public class PrimaryButtonContainer: NibBasedView {
         var font: UIFont {
             switch self {
             case .kyc:
-                return UIFont(
+                UIFont(
                     name: FontNames.montserratMedium,
                     size: 20.0
                 ) ?? UIFont.systemFont(ofSize: 20, weight: .medium)
             case .send:
-                return UIFont(
+                UIFont(
                     name: FontNames.montserratRegular,
                     size: 17.0
                 ) ?? UIFont.systemFont(ofSize: 17.0, weight: .regular)
             case .small:
-                return UIFont(
+                UIFont(
                     name: FontNames.montserratRegular,
                     size: 14.0
                 ) ?? UIFont.systemFont(ofSize: 14.0, weight: .regular)

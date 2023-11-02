@@ -10,9 +10,9 @@ public enum CardActivationState {
     public var isPending: Bool {
         switch self {
         case .pending:
-            return true
+            true
         case .active, .inactive:
-            return false
+            false
         }
     }
 
@@ -38,21 +38,21 @@ extension CardPayload.State {
     public var platform: CardPayload.State {
         switch self {
         case .active:
-            return .active
+            .active
         case .blocked:
-            return .blocked
+            .blocked
         case .created:
-            return .created
+            .created
         case .expired:
-            return .expired
+            .expired
         case .fraudReview:
-            return .fraudReview
+            .fraudReview
         case .manualReview:
-            return .manualReview
+            .manualReview
         case .none:
-            return .none
+            .none
         case .pending:
-            return .pending
+            .pending
         }
     }
 }
@@ -61,13 +61,13 @@ extension CardPayload.Partner {
     public var platform: CardPayload.Partner {
         switch self {
         case .cardProvider:
-            return .cardProvider
+            .cardProvider
         case .everypay:
-            return .everypay
+            .everypay
         case .cassy:
-            return .cassy
+            .cassy
         case .unknown:
-            return .unknown
+            .unknown
         }
     }
 }

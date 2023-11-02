@@ -360,9 +360,9 @@ private class DetentPresentingViewController: UIHostingController<EmptyDetentVie
 
     var animatedDismissal: Bool {
         if #available(iOS 16.0, *) {
-            return false
+            false
         } else {
-            return true
+            true
         }
     }
 

@@ -66,33 +66,33 @@ extension NetworkError: CustomStringConvertible {
     public var payload: Data? {
         switch type {
         case .authentication, .payloadError, .serverError, .urlError:
-            return nil
+            nil
         case .rawServerError(let error):
-            return error.payload
+            error.payload
         }
     }
 
     public var response: HTTPURLResponse? {
         switch type {
         case .authentication, .serverError, .urlError:
-            return nil
+            nil
         case .payloadError(_, let o):
-            return o
+            o
         case .rawServerError(let error):
-            return error.response
+            error.response
         }
     }
 
     public var code: Int? {
         switch type {
         case .authentication, .serverError:
-            return nil
+            nil
         case .payloadError(_, let response):
-            return response?.statusCode
+            response?.statusCode
         case .urlError(let error):
-            return error.errorCode
+            error.errorCode
         case .rawServerError(let error):
-            return error.response.statusCode
+            error.response.statusCode
         }
     }
 

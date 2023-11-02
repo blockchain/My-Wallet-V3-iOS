@@ -63,9 +63,9 @@ public final class SelfSizingTableView: UITableView {
     private var desiredHeight: CGFloat {
         switch selfSizingBehaviour {
         case .compact:
-            return compactDesiredHeight
+            compactDesiredHeight
         case .fill:
-            return fillDesiredHeight
+            fillDesiredHeight
         }
     }
 

@@ -55,11 +55,11 @@ extension EarnProductCompare {
         var gradientBackgroundOpacity: Double {
             switch scrollOffset {
             case _ where scrollOffset >= 0:
-                return 1
+                1
             case _ where scrollOffset <= -scrollEffectTransitionDistance:
-                return 0
+                0
             default:
-                return 1 - Double(scrollOffset / -scrollEffectTransitionDistance)
+                1 - Double(scrollOffset / -scrollEffectTransitionDistance)
             }
         }
     }
@@ -76,13 +76,13 @@ extension EarnProduct {
     var step: EarnProductCompare.State.Step? {
         switch self {
         case .active:
-            return .active
+            .active
         case .staking:
-            return .staking
+            .staking
         case .savings:
-            return .passive
+            .passive
         default:
-            return nil
+            nil
         }
     }
 }

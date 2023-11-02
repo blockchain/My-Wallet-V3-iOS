@@ -13,10 +13,10 @@ extension RandomAccessCollection where Element: Publisher, Element.Output == Boo
                     switch result {
                     case true:
                         // If the stream result was true, return.
-                        return .just(true)
+                        .just(true)
                     case false:
                         // Else, concatenate stream on the array.
-                        return thisPublisher
+                        thisPublisher
                             .eraseToAnyPublisher()
                     }
                 }

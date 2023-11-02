@@ -17,15 +17,15 @@ final class SellPendingTransactionStateProvider: PendingTransactionStateProvidin
         state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return Self.pending(state: state)
+                Self.pending(state: state)
             case .completed:
                 if state.source is NonCustodialAccount {
-                    return Self.successNonCustodial(state: state)
+                    Self.successNonCustodial(state: state)
                 } else {
-                    return Self.success(state: state)
+                    Self.success(state: state)
                 }
             case .error:
-                return nil
+                nil
             }
         }
     }
@@ -100,17 +100,16 @@ final class SellPendingTransactionStateProvider: PendingTransactionStateProvidin
                 fatalError("Unsupported state.destination: \(String(reflecting: state.destination))")
             }
         }
-        let title: String
-        if !received.isZero, !amount.isZero {
+        let title: String = if !received.isZero, !amount.isZero {
             // If we have both sent and receive values:
-            title = String(
+            String(
                 format: LocalizationIds.Pending.title,
                 amount.displayString,
                 received.displayString
             )
         } else {
             // If we have invalid inputs but we should continue.
-            title = String(
+            String(
                 format: LocalizationIds.Pending.title,
                 amount.displayCode,
                 received.displayCode

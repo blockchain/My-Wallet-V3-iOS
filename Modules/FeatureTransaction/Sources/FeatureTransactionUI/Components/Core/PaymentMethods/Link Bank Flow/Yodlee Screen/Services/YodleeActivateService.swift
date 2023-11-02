@@ -15,18 +15,18 @@ final class YodleeActivateService {
         var isActive: Bool {
             switch self {
             case .active:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
         var data: LinkedBankData? {
             switch self {
             case .active(let data):
-                return data
+                data
             default:
-                return nil
+                nil
             }
         }
     }

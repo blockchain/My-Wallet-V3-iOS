@@ -44,9 +44,9 @@ public enum DeeplinkContext {
     var url: URL? {
         switch self {
         case .url(let url):
-            return url
+            url
         case .userActivity(let activity):
-            return activity.appOpenableUrl
+            activity.appOpenableUrl
         }
     }
 }
@@ -74,11 +74,11 @@ public struct URIContent: Equatable {
         var usableOnlyDuringAuthentication: Bool {
             switch self {
             case .blockchainLinks(let route):
-                return route.usableOnlyDuringAuthentication
+                route.usableOnlyDuringAuthentication
             case .dynamicLinks,
                  .executeDeeplinkRouting,
                  .sendCrypto:
-                return false
+                false
             }
         }
     }
@@ -93,10 +93,10 @@ public struct URIContent: Equatable {
         switch context {
         case .executeDeeplinkRouting,
              .sendCrypto:
-            return true
+            true
         case .blockchainLinks,
              .dynamicLinks:
-            return false
+            false
         }
     }
 
@@ -115,12 +115,12 @@ public enum AppDeeplinkError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .unknown:
-            return LocalizationConstants.Errors.genericError
+            LocalizationConstants.Errors.genericError
         case .urlMissing:
             // TODO: Add correct error message
-            return LocalizationConstants.Errors.genericError
+            LocalizationConstants.Errors.genericError
         case .dynamicLink(let error):
-            return error.localizedDescription
+            error.localizedDescription
         }
     }
 }
@@ -133,7 +133,7 @@ public enum BlockchainLinks: Equatable {
         var usableOnlyDuringAuthentication: Bool {
             switch self {
             case .login:
-                return true
+                true
             }
         }
     }

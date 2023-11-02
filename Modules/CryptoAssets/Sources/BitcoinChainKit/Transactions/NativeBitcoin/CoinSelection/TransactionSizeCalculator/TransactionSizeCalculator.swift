@@ -77,13 +77,13 @@ struct TransactionSizeCalculator: TransactionSizeCalculating {
     private func varIntLength(_ number: UInt) -> Decimal {
         switch number {
         case let x where x < 0xfd:
-            return 1
+            1
         case let x where x <= 0xffff:
-            return 3
+            3
         case let x where x <= 0xffffffff:
-            return 5
+            5
         default:
-            return 9
+            9
         }
     }
 

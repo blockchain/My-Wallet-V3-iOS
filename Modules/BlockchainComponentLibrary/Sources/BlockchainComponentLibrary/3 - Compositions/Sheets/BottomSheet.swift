@@ -99,9 +99,9 @@ struct BottomSheetModifier<SheetContent: View>: ViewModifier {
 
     private func yTranslation(in proxy: GeometryProxy) -> CGFloat {
         if isPresented {
-            return inserted ? proxy.size.height : max(translation.height, -Spacing.baseline)
+            inserted ? proxy.size.height : max(translation.height, -Spacing.baseline)
         } else {
-            return proxy.size.height
+            proxy.size.height
         }
     }
 

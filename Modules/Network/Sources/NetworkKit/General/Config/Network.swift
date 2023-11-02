@@ -185,15 +185,15 @@ extension HTTPMethod {
     var networkRequestMethod: NetworkRequest.NetworkMethod {
         switch self {
         case .get:
-            return NetworkRequest.NetworkMethod.get
+            NetworkRequest.NetworkMethod.get
         case .post:
-            return NetworkRequest.NetworkMethod.post
+            NetworkRequest.NetworkMethod.post
         case .put:
-            return NetworkRequest.NetworkMethod.put
+            NetworkRequest.NetworkMethod.put
         case .patch:
-            return NetworkRequest.NetworkMethod.patch
+            NetworkRequest.NetworkMethod.patch
         case .delete:
-            return NetworkRequest.NetworkMethod.delete
+            NetworkRequest.NetworkMethod.delete
         }
     }
 }

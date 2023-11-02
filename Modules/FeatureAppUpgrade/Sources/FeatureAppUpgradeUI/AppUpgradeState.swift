@@ -14,11 +14,11 @@ public struct AppUpgradeState: Equatable {
             switch self {
             case .softUpgrade,
                  .unsupportedOS:
-                return true
+                true
             case .appMaintenance,
                  .maintenance,
                  .hardUpgrade:
-                return false
+                false
             }
         }
     }

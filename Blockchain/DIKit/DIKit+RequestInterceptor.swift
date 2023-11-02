@@ -61,11 +61,10 @@ private func interceptor(app: AppProtocol = resolve()) -> RequestInterceptor {
                             return intercept.pattern.method.lowercased() == request.method.string.lowercased() && regex.matches(request.endpoint.absoluteString)
                         }
                     ) {
-                        let publisher: AnyPublisher<NetworkRequest, Never>
-                        if let wait = intercept.wait {
-                            publisher = app.on(wait.until).replaceOutput(with: request).first().eraseToAnyPublisher()
+                        let publisher: AnyPublisher<NetworkRequest, Never> = if let wait = intercept.wait {
+                            app.on(wait.until).replaceOutput(with: request).first().eraseToAnyPublisher()
                         } else {
-                            publisher = .just(request)
+                            .just(request)
                         }
                         return publisher
                             .handleEvents(receiveSubscription: { [app] _ in app.post(event: intercept.emit) })

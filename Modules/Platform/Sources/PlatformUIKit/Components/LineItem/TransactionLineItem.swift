@@ -36,51 +36,51 @@ public enum TransactionalLineItem: Hashable {
     public var accessibilityID: String {
         switch self {
         case .amount:
-            return AccessibilityID.amount
+            AccessibilityID.amount
         case .for:
-            return AccessibilityID.for
+            AccessibilityID.for
         case .value:
-            return AccessibilityID.value
+            AccessibilityID.value
         case .fee:
-            return AccessibilityID.fee
+            AccessibilityID.fee
         case .buyingFee:
-            return AccessibilityID.buyingFee
+            AccessibilityID.buyingFee
         case .networkFee:
-            return AccessibilityID.networkFee
+            AccessibilityID.networkFee
         case .date:
-            return AccessibilityID.date
+            AccessibilityID.date
         case .estimatedAmount:
-            return AccessibilityID.estimatedAmount
+            AccessibilityID.estimatedAmount
         case .exchangeRate:
-            return AccessibilityID.exchangeRate
+            AccessibilityID.exchangeRate
         case .orderId:
-            return AccessibilityID.orderId
+            AccessibilityID.orderId
         case .paymentAccountField(let field):
-            return field.accessibilityID
+            field.accessibilityID
         case .paymentMethod:
-            return AccessibilityID.paymentMethod
+            AccessibilityID.paymentMethod
         case .recurringBuyFrequency:
-            return AccessibilityID.recurringBuyFrequency
+            AccessibilityID.recurringBuyFrequency
         case .sendingTo:
-            return AccessibilityID.sendingTo
+            AccessibilityID.sendingTo
         case .status:
-            return AccessibilityID.status
+            AccessibilityID.status
         case .totalCost:
-            return AccessibilityID.totalCost
+            AccessibilityID.totalCost
         case .total:
-            return AccessibilityID.total
+            AccessibilityID.total
         case .from:
-            return AccessibilityID.from
+            AccessibilityID.from
         case .to:
-            return AccessibilityID.to
+            AccessibilityID.to
         case .gasFor:
-            return AccessibilityID.gasFor
+            AccessibilityID.gasFor
         case .memo:
-            return AccessibilityID.memo
+            AccessibilityID.memo
         case .availableToTrade:
-            return AccessibilityID.memo
+            AccessibilityID.memo
         case .cryptoPrice:
-            return AccessibilityID.cryptoPrice
+            AccessibilityID.cryptoPrice
         }
     }
 
@@ -108,60 +108,60 @@ public enum TransactionalLineItem: Hashable {
              .availableToTrade(let content),
              .cryptoPrice(let content),
              .recurringBuyFrequency(let content):
-            return content
+            content
         case .paymentAccountField(let field):
-            return field.content
+            field.content
         }
     }
 
     public var title: String {
         switch self {
         case .amount:
-            return LocalizedString.amount
+            LocalizedString.amount
         case .value:
-            return LocalizedString.value
+            LocalizedString.value
         case .fee:
-            return LocalizedString.fee
+            LocalizedString.fee
         case .for:
-            return LocalizedString.for
+            LocalizedString.for
         case .recurringBuyFrequency:
-            return LocalizedString.frequency
+            LocalizedString.frequency
         case .buyingFee:
-            return LocalizedString.buyingFee
+            LocalizedString.buyingFee
         case .networkFee:
-            return LocalizedString.processingFee
+            LocalizedString.processingFee
         case .date:
-            return LocalizedString.date
+            LocalizedString.date
         case .estimatedAmount:
-            return LocalizedString.estimatedAmount
+            LocalizedString.estimatedAmount
         case .exchangeRate:
-            return LocalizedString.exchangeRate
+            LocalizedString.exchangeRate
         case .orderId:
-            return LocalizedString.orderId
+            LocalizedString.orderId
         case .paymentAccountField(let field):
-            return field.title
+            field.title
         case .paymentMethod:
-            return LocalizedString.paymentMethod
+            LocalizedString.paymentMethod
         case .sendingTo:
-            return LocalizedString.sendingTo
+            LocalizedString.sendingTo
         case .status:
-            return LocalizedString.status
+            LocalizedString.status
         case .total:
-            return LocalizedString.total
+            LocalizedString.total
         case .totalCost:
-            return LocalizedString.totalCost
+            LocalizedString.totalCost
         case .to:
-            return LocalizedString.to
+            LocalizedString.to
         case .from:
-            return LocalizedString.from
+            LocalizedString.from
         case .gasFor:
-            return LocalizedString.gasFor
+            LocalizedString.gasFor
         case .memo:
-            return LocalizedString.memo
+            LocalizedString.memo
         case .availableToTrade:
-            return LocalizedString.availableToTrade
+            LocalizedString.availableToTrade
         case .cryptoPrice(let content):
-            return String(format: LocalizedString.cryptoPrice, content ?? "")
+            String(format: LocalizedString.cryptoPrice, content ?? "")
         }
     }
 

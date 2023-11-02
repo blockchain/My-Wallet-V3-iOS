@@ -14,9 +14,9 @@ extension AsyncSequenceNextError {
     public var errorDescription: String? {
         switch self {
         case .terminated(let file, let line):
-            return "Terminated without returning an value. \(file):\(line)"
+            "Terminated without returning an value. \(file):\(line)"
         case .timeout(let file, let line):
-            return "Times out waiting for a value. \(file):\(line)"
+            "Times out waiting for a value. \(file):\(line)"
         }
     }
 }

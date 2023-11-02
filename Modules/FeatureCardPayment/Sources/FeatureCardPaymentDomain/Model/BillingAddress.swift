@@ -79,9 +79,9 @@ extension Country {
     fileprivate var hasStatesSubdomain: Bool {
         switch self {
         case .US:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

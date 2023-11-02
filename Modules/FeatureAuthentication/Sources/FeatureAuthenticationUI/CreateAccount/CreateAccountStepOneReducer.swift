@@ -78,9 +78,9 @@ public struct CreateAccountStepOneState: Equatable, NavigationState {
         var isInvalid: Bool {
             switch self {
             case .invalid:
-                return true
+                true
             case .valid, .unknown:
-                return false
+                false
             }
         }
     }

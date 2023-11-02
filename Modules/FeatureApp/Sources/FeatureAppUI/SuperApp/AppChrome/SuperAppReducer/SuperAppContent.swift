@@ -66,7 +66,7 @@ struct SuperAppContent: Reducer {
                         }
                     },
                     .run { send in
-                        await send(.onAppModeFetched( await app.mode()))
+                        await send(.onAppModeFetched(app.mode()))
                     }
                 )
             case .refresh,

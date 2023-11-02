@@ -99,11 +99,11 @@ public final class RemotePeriodicCacheRefreshControl: CacheRefreshControl {
 
     public func shouldRefresh(lastRefresh: Date) -> Bool {
         if config.disable {
-            return true
+            true
         } else if let invalidatedAt, lastRefresh < invalidatedAt {
-            return true
+            true
         } else {
-            return lastRefresh < Date(timeIntervalSinceNow: -Double(config.interval))
+            lastRefresh < Date(timeIntervalSinceNow: -Double(config.interval))
         }
     }
 

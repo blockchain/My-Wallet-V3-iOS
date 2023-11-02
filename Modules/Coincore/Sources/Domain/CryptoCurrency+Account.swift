@@ -43,9 +43,9 @@ extension CurrencyType {
     public var defaultWalletName: String {
         switch self {
         case .fiat(let fiatCurrency):
-            return fiatCurrency.defaultWalletName
+            fiatCurrency.defaultWalletName
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency.defaultWalletName
+            cryptoCurrency.defaultWalletName
         }
     }
 }

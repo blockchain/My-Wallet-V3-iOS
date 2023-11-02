@@ -51,9 +51,9 @@ extension QRCodeScannerAccountPickerBridge: AccountPickerListener {
         let target = targets.firstNonNil { target -> CryptoReceiveAddress? in
             switch target {
             case .bitpay:
-                return nil
+                nil
             case .address(let account, let target):
-                return account.identifier == cryptoAccount.identifier
+                account.identifier == cryptoAccount.identifier
                     ? target
                     : nil
             }

@@ -178,17 +178,17 @@ extension Account.Snapshot {
     var subtitle: String? {
         switch accountType {
         case .exchange:
-            return LocalizationConstants.Coin.Account.exchange.subtitle
+            LocalizationConstants.Coin.Account.exchange.subtitle
         case .interest:
-            return LocalizationConstants.Coin.Account.interest.subtitle
+            LocalizationConstants.Coin.Account.interest.subtitle
         case .privateKey:
-            return receiveAddress?.obfuscate(keeping: 4)
+            receiveAddress?.obfuscate(keeping: 4)
         case .trading:
-            return nil
+            nil
         case .staking:
-            return LocalizationConstants.Coin.Account.interest.subtitle
+            LocalizationConstants.Coin.Account.interest.subtitle
         case .activeRewards:
-            return LocalizationConstants.Coin.Account.active.subtitle
+            LocalizationConstants.Coin.Account.active.subtitle
         }
     }
 }

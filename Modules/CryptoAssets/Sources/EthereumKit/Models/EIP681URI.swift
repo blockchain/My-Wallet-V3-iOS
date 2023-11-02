@@ -18,18 +18,18 @@ public struct EIP681URI {
         public var amount: CryptoValue? {
             switch self {
             case .send(let amount, _, _):
-                return amount
+                amount
             case .transfer(_, let amount):
-                return amount
+                amount
             }
         }
 
         public var destination: String? {
             switch self {
             case .send:
-                return nil
+                nil
             case .transfer(let destination, _):
-                return destination
+                destination
             }
         }
     }
@@ -116,9 +116,9 @@ public struct EIP681URI {
     static func validate(method: Method) -> Bool {
         switch method {
         case .send:
-            return true
+            true
         case .transfer(let address, _):
-            return validate(address: address)
+            validate(address: address)
         }
     }
 
@@ -137,11 +137,11 @@ extension EIP681URIParser {
         switch method {
         case .send:
             // If this is a 'send', then we are sending the networks native token.
-            return network.nativeAsset
+            network.nativeAsset
         case .transfer:
             // If this is a 'transfer', then we need to find which token we are sending.
             // We do this by matching 'address' with one of the coins contract address.
-            return enabledCurrenciesService.allEnabledCryptoCurrencies
+            enabledCurrenciesService.allEnabledCryptoCurrencies
                 .first { cryptoCurrency in
                     cryptoCurrency.assetModel.kind.erc20ContractAddress?
                         .caseInsensitiveCompare(address) == .orderedSame

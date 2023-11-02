@@ -16,7 +16,7 @@ extension FetchResult {
 
         public var errorDescription: String? {
             switch self {
-            case .keyDoesNotExist(let reference): return "\(reference) does not exist"
+            case .keyDoesNotExist(let reference): "\(reference) does not exist"
             }
         }
     }
@@ -46,7 +46,7 @@ extension FetchResult {
     public var metadata: Metadata {
         switch self {
         case .value(_, let metadata), .error(_, let metadata):
-            return metadata
+            metadata
         }
     }
 
@@ -56,18 +56,18 @@ extension FetchResult {
     public var value: Any? {
         switch self {
         case .value(let any, _):
-            return any
+            any
         case .error:
-            return nil
+            nil
         }
     }
 
     public var error: Swift.Error? {
         switch self {
         case .error(let error, _):
-            return error
+            error
         case .value:
-            return nil
+            nil
         }
     }
 
@@ -107,9 +107,9 @@ extension FetchResult {
     ) -> FetchResult {
         { result in
             if let any = result {
-                return .value(any, metadata)
+                .value(any, metadata)
             } else {
-                return .error(FetchResult.Error.keyDoesNotExist(metadata.ref), metadata)
+                .error(FetchResult.Error.keyDoesNotExist(metadata.ref), metadata)
             }
         }
     }
@@ -176,9 +176,9 @@ extension FetchResult {
     public var result: Result<Any, Swift.Error> {
         switch self {
         case .value(let value, _):
-            return .success(value)
+            .success(value)
         case .error(let error, _):
-            return .failure(error)
+            .failure(error)
         }
     }
 
@@ -196,34 +196,34 @@ extension DecodedFetchResult {
     public var metadata: Metadata {
         switch identity {
         case .value(_, let metadata), .error(_, let metadata):
-            return metadata
+            metadata
         }
     }
 
     public var value: Value? {
         switch identity {
         case .value(let value, _):
-            return value
+            value
         case .error:
-            return nil
+            nil
         }
     }
 
     public var error: Swift.Error? {
         switch identity {
         case .error(let error, _):
-            return error
+            error
         case .value:
-            return nil
+            nil
         }
     }
 
     public var result: Result<Value, Swift.Error> {
         switch identity {
         case .value(let value, _):
-            return .success(value)
+            .success(value)
         case .error(let error, _):
-            return .failure(error)
+            .failure(error)
         }
     }
 
@@ -234,27 +234,27 @@ extension DecodedFetchResult {
     func any() -> FetchResult {
         switch identity {
         case .value(let value, let metadata):
-            return .value(value, metadata)
+            .value(value, metadata)
         case .error(let error, let metadata):
-            return .error(error, metadata)
+            .error(error, metadata)
         }
     }
 
     public func map<T>(_ transform: (Value) -> (T)) -> FetchResult.Value<T> {
         switch identity {
         case .error(let error, let metadata):
-            return .error(error, metadata)
+            .error(error, metadata)
         case .value(let value, let metadata):
-            return .value(transform(value), metadata)
+            .value(transform(value), metadata)
         }
     }
 
     public func flatMap<T>(_ transform: (Value, Metadata) -> (FetchResult.Value<T>)) -> FetchResult.Value<T> {
         switch identity {
         case .error(let error, let metadata):
-            return .error(error, metadata)
+            .error(error, metadata)
         case .value(let value, let metadata):
-            return transform(value, metadata)
+            transform(value, metadata)
         }
     }
 }
@@ -300,9 +300,9 @@ extension Publisher where Output: DecodedFetchResult {
         flatMap { output -> Just<Output.Value> in
             switch output.result {
             case .failure:
-                return Just(value)
+                Just(value)
             case .success(let value):
-                return Just(value)
+                Just(value)
             }
         }
         .eraseToAnyPublisher()

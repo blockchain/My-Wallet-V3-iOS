@@ -29,9 +29,9 @@ public final class DeepLinkQRCodeRouter {
     public func routeIfNeeded(using scanResult: Result<String, QRScannerError>) -> Bool {
         switch scanResult {
         case .success(let link): // Act immediately on the received link
-            return routeIfNeeded(using: link)
+            routeIfNeeded(using: link)
         case .failure:
-            return false
+            false
         }
     }
 

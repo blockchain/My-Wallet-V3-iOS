@@ -15,54 +15,54 @@ extension CoincoreAPI {
     ) -> AnyPublisher<TransactionProcessor, Error> {
         switch account {
         case let account as CryptoDelegatedCustodyAccount:
-            return createDelegatedCustodyProcessor(
+            createDelegatedCustodyProcessor(
                 with: account,
                 target: target,
                 action: action
             )
         case let account as CryptoNonCustodialAccount:
-            return createOnChainProcessor(
+            createOnChainProcessor(
                 with: account,
                 target: target,
                 action: action
             )
         case let account as CryptoInterestAccount:
-            return createInterestWithdrawTradingProcessor(
+            createInterestWithdrawTradingProcessor(
                 with: account,
                 target: target,
                 action: action
             )
         case let account as CryptoActiveRewardsAccount where action == .activeRewardsWithdraw:
-            return createActiveRewardsWithdrawTradingProcessor(with: account, target: target)
+            createActiveRewardsWithdrawTradingProcessor(with: account, target: target)
         case let account as CryptoTradingAccount where account.isExternalTradingAccount:
-            return createExternalTradingProcessor(
+            createExternalTradingProcessor(
                 with: account,
                 target: target,
                 action: action
             )
         case let account as CryptoTradingAccount:
-            return createTradingProcessor(
+            createTradingProcessor(
                 with: account,
                 target: target,
                 action: action
             )
         case let account as LinkedBankAccount where action == .deposit:
-            return createFiatDepositProcessor(
+            createFiatDepositProcessor(
                 with: account,
                 target: target
             )
         case is FiatAccount where action == .buy:
-            return createBuyProcessor(
+            createBuyProcessor(
                 with: account,
                 destination: target
             )
         case let account as FiatAccount where action == .withdraw:
-            return createFiatWithdrawalProcessor(
+            createFiatWithdrawalProcessor(
                 with: account,
                 target: target
             )
         case let account as CryptoStakingAccount:
-            return createStakingWithdrawTradingProcessor(
+            createStakingWithdrawTradingProcessor(
                 with: account,
                 target: target,
                 action: action
@@ -243,7 +243,7 @@ extension CoincoreAPI {
     ) -> AnyPublisher<TransactionProcessor, Error> {
         switch action {
         case .sell:
-            return createTradingProcessorSell(with: account, target: target)
+            createTradingProcessorSell(with: account, target: target)
         default:
             unimplemented("\(action) is not supported by ExternalBrokerageCryptoAccount")
         }
@@ -256,19 +256,19 @@ extension CoincoreAPI {
     ) -> AnyPublisher<TransactionProcessor, Error> {
         switch action {
         case .swap:
-            return createTradingProcessorSwap(with: account, target: target)
+            createTradingProcessorSwap(with: account, target: target)
         case .send:
-            return createTradingProcessorSend(with: account, target: target)
+            createTradingProcessorSend(with: account, target: target)
         case .buy:
             unimplemented("This should not be needed as the Buy engine should process the transaction")
         case .sell:
-            return createTradingProcessorSell(with: account, target: target)
+            createTradingProcessorSell(with: account, target: target)
         case .interestTransfer:
-            return createInterestTransferTradingProcessor(with: account, target: target)
+            createInterestTransferTradingProcessor(with: account, target: target)
         case .stakingDeposit:
-            return createStakingDepositTradingProcessor(with: account, target: target)
+            createStakingDepositTradingProcessor(with: account, target: target)
         case .activeRewardsDeposit:
-            return createActiveRewardsDepositTradingProcessor(with: account, target: target)
+            createActiveRewardsDepositTradingProcessor(with: account, target: target)
         case .activeRewardsWithdraw,
              .deposit,
              .receive,
@@ -511,9 +511,9 @@ extension CoincoreAPI {
     ) -> AnyPublisher<ReceiveAddress, Error> {
         switch target {
         case let target as ReceiveAddress:
-            return .just(target)
+            .just(target)
         case let target as BlockchainAccount:
-            return target.receiveAddress
+            target.receiveAddress
         default:
             impossible()
         }

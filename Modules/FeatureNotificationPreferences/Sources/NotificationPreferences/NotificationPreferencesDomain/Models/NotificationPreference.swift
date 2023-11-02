@@ -77,13 +77,13 @@ public enum PreferenceType: String, Decodable {
     public var analyticsValue: String {
         switch self {
         case .transactional:
-            return "WALLET_ACTIVITY"
+            "WALLET_ACTIVITY"
         case .priceAlert:
-            return "PRICE_ALERTS"
+            "PRICE_ALERTS"
         case .marketing:
-            return "NEWS"
+            "NEWS"
         case .security:
-            return "SECURITY_ALERTS"
+            "SECURITY_ALERTS"
         }
     }
 }

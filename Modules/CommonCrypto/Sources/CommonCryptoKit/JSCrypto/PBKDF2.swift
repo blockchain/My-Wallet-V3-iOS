@@ -16,9 +16,9 @@ public class PBKDF2 {
         fileprivate var commonCryptoAlgorithm: CCPBKDFAlgorithm {
             switch self {
             case .sha1:
-                return CCPBKDFAlgorithm(kCCPRFHmacAlgSHA1)
+                CCPBKDFAlgorithm(kCCPRFHmacAlgSHA1)
             case .sha512:
-                return CCPBKDFAlgorithm(kCCPRFHmacAlgSHA512)
+                CCPBKDFAlgorithm(kCCPRFHmacAlgSHA512)
             }
         }
     }

@@ -30,19 +30,19 @@ public enum OrderDetailsState: String, CaseIterable {
     public var localizedDescription: String {
         switch self {
         case .pendingDeposit:
-            return LocalizedString.waitingOnFunds
+            LocalizedString.waitingOnFunds
         case .cancelled:
-            return LocalizedString.cancelled
+            LocalizedString.cancelled
         case .depositMatched:
-            return LocalizedString.pending
+            LocalizedString.pending
         case .expired:
-            return LocalizedString.expired
+            LocalizedString.expired
         case .failed:
-            return LocalizedString.failed
+            LocalizedString.failed
         case .finished:
-            return LocalizedString.completed
+            LocalizedString.completed
         case .pendingConfirmation:
-            return LocalizedString.pending
+            LocalizedString.pending
         }
     }
 }

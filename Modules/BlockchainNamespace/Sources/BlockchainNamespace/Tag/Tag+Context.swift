@@ -248,13 +248,13 @@ extension Tag.Event {
     public static func + (event: Tag.Event, context: Tag.Context) -> Tag.Reference {
         switch event {
         case let tag as L:
-            return Tag.Reference(tag[], to: context, in: nil)
+            Tag.Reference(tag[], to: context, in: nil)
         case let tag as Tag:
-            return Tag.Reference(tag, to: context, in: nil)
+            Tag.Reference(tag, to: context, in: nil)
         case let reference as Tag.Reference:
-            return reference.ref(to: context)
+            reference.ref(to: context)
         default:
-            return event.key(to: context)
+            event.key(to: context)
         }
     }
 }

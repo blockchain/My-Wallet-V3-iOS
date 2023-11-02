@@ -134,9 +134,9 @@ final class DeviceVerificationClient: DeviceVerificationClientAPI {
                 .flatMap { result -> AnyPublisher<WalletInfoPollResponse.ResponseType, NetworkError> in
                     switch result {
                     case .success(let type):
-                        return .just(type)
+                        .just(type)
                     case .failure(let error):
-                        return .failure(
+                        .failure(
                             NetworkError(
                                 request: request.urlRequest,
                                 type: .payloadError(.badData(rawPayload: error.localizedDescription))
@@ -153,14 +153,14 @@ final class DeviceVerificationClient: DeviceVerificationClientAPI {
         ) -> AnyPublisher<WalletInfoPollResultResponse, NetworkError> {
             switch responseType {
             case .walletInfo:
-                return Just(Result { try Data(response.data.utf8).decode(to: WalletInfo.self) })
+                Just(Result { try Data(response.data.utf8).decode(to: WalletInfo.self) })
                     .setFailureType(to: NetworkError.self)
                     .flatMap { result -> AnyPublisher<WalletInfoPollResultResponse, NetworkError> in
                         switch result {
                         case .success(let walletInfo):
-                            return .just(.walletInfo(walletInfo))
+                            .just(.walletInfo(walletInfo))
                         case .failure(let error):
-                            return .failure(
+                            .failure(
                                 NetworkError(
                                     request: request.urlRequest,
                                     type: .payloadError(.badData(rawPayload: error.localizedDescription))
@@ -170,9 +170,9 @@ final class DeviceVerificationClient: DeviceVerificationClientAPI {
                     }
                     .eraseToAnyPublisher()
             case .continuePolling:
-                return .just(.continuePolling)
+                .just(.continuePolling)
             case .requestDenied:
-                return .just(.requestDenied)
+                .just(.requestDenied)
             }
         }
 

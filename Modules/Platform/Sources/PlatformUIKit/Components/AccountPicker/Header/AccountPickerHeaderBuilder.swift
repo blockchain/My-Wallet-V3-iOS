@@ -17,22 +17,22 @@ public struct AccountPickerHeaderBuilder {
     var isAlwaysVisible: Bool {
         switch headerType {
         case .none:
-            return false
+            false
         case .simple(let model):
-            return model.searchable || model.switchable
+            model.searchable || model.switchable
         case .default(let model):
-            return model.searchable || model.switchable
+            model.searchable || model.switchable
         }
     }
 
     public var defaultHeight: CGFloat {
         switch headerType {
         case .none:
-            return 0
+            0
         case .default(let model):
-            return model.height
+            model.height
         case .simple(let model):
-            return model.height
+            model.height
         }
     }
 

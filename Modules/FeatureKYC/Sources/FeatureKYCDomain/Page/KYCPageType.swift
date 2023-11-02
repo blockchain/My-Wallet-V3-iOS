@@ -38,37 +38,37 @@ extension KYCPageType {
     public var tag: Tag.Event {
         switch self {
         case .welcome:
-            return blockchain.ux.kyc.type.state.welcome
+            blockchain.ux.kyc.type.state.welcome
         case .enterEmail:
-            return blockchain.ux.kyc.type.state.enter.email
+            blockchain.ux.kyc.type.state.enter.email
         case .confirmEmail:
-            return blockchain.ux.kyc.type.state.confirm.email
+            blockchain.ux.kyc.type.state.confirm.email
         case .country:
-            return blockchain.ux.kyc.type.state.country
+            blockchain.ux.kyc.type.state.country
         case .states:
-            return blockchain.ux.kyc.type.state.states
+            blockchain.ux.kyc.type.state.states
         case .profile, .profileNew:
-            return blockchain.ux.kyc.type.state.profile
+            blockchain.ux.kyc.type.state.profile
         case .address:
-            return blockchain.ux.kyc.type.state.address
+            blockchain.ux.kyc.type.state.address
         case .enterPhone:
-            return blockchain.ux.kyc.type.state.enter.phone
+            blockchain.ux.kyc.type.state.enter.phone
         case .confirmPhone:
-            return blockchain.ux.kyc.type.state.confirm.phone
+            blockchain.ux.kyc.type.state.confirm.phone
         case .verifyIdentity:
-            return blockchain.ux.kyc.type.state.verify.identity
+            blockchain.ux.kyc.type.state.verify.identity
         case .resubmitIdentity:
-            return blockchain.ux.kyc.type.state.resubmit.identity
+            blockchain.ux.kyc.type.state.resubmit.identity
         case .applicationComplete:
-            return blockchain.ux.kyc.type.state.application.complete
+            blockchain.ux.kyc.type.state.application.complete
         case .accountStatus:
-            return blockchain.ux.kyc.type.state.account.status
+            blockchain.ux.kyc.type.state.account.status
         case .accountUsageForm:
-            return blockchain.ux.kyc.type.state.account.form
+            blockchain.ux.kyc.type.state.account.form
         case .ssn:
-            return blockchain.ux.kyc.type.state.ssn
+            blockchain.ux.kyc.type.state.ssn
         case .finish:
-            return blockchain.ux.kyc.type.state.finish
+            blockchain.ux.kyc.type.state.finish
         }
     }
 }

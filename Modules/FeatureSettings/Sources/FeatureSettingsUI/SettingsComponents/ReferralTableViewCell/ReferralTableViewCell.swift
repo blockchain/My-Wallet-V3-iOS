@@ -95,11 +95,11 @@ extension UIView {
 
     fileprivate func findViewController() -> UIViewController? {
         if let nextResponder = next as? UIViewController {
-            return nextResponder
+            nextResponder
         } else if let nextResponder = next as? UIView {
-            return nextResponder.findViewController()
+            nextResponder.findViewController()
         } else {
-            return nil
+            nil
         }
     }
 }

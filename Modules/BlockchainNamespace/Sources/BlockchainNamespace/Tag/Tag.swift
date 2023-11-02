@@ -571,26 +571,26 @@ extension Tag {
 
     public var storedClientType: AnyType? {
         switch storedType {
-        case blockchain.db.type.any?: return .init(AnyJSON.self)
-        case blockchain.db.type.tag?: return .init(Tag.self)
-        case blockchain.db.type.boolean?: return .init(Bool.self)
-        case blockchain.db.type.integer?: return .init(Int.self)
-        case blockchain.db.type.number?: return .init(Double.self)
-        case blockchain.db.type.string?: return .init(String.self)
-        case blockchain.db.type.url?: return .init(URL.self)
-        case blockchain.db.type.date?: return .init(Date.self)
-        case blockchain.db.type.data?: return .init(Data.self)
-        case blockchain.db.type.enum?: return .init(Tag.self)
-        case blockchain.db.type.map?: return .init([String: AnyJSON].self)
-        case blockchain.db.type.array.of.tags?: return .init([Tag].self)
-        case blockchain.db.type.array.of.booleans?: return .init([Bool].self)
-        case blockchain.db.type.array.of.integers?: return .init([Int].self)
-        case blockchain.db.type.array.of.numbers?: return .init([Double].self)
-        case blockchain.db.type.array.of.strings?: return .init([String].self)
-        case blockchain.db.type.array.of.urls?: return .init([URL].self)
-        case blockchain.db.type.array.of.dates?: return .init([Date].self)
-        case blockchain.db.type.array.of.maps?: return .init([[String: AnyJSON]].self)
-        default: return nil
+        case blockchain.db.type.any?: .init(AnyJSON.self)
+        case blockchain.db.type.tag?: .init(Tag.self)
+        case blockchain.db.type.boolean?: .init(Bool.self)
+        case blockchain.db.type.integer?: .init(Int.self)
+        case blockchain.db.type.number?: .init(Double.self)
+        case blockchain.db.type.string?: .init(String.self)
+        case blockchain.db.type.url?: .init(URL.self)
+        case blockchain.db.type.date?: .init(Date.self)
+        case blockchain.db.type.data?: .init(Data.self)
+        case blockchain.db.type.enum?: .init(Tag.self)
+        case blockchain.db.type.map?: .init([String: AnyJSON].self)
+        case blockchain.db.type.array.of.tags?: .init([Tag].self)
+        case blockchain.db.type.array.of.booleans?: .init([Bool].self)
+        case blockchain.db.type.array.of.integers?: .init([Int].self)
+        case blockchain.db.type.array.of.numbers?: .init([Double].self)
+        case blockchain.db.type.array.of.strings?: .init([String].self)
+        case blockchain.db.type.array.of.urls?: .init([URL].self)
+        case blockchain.db.type.array.of.dates?: .init([Date].self)
+        case blockchain.db.type.array.of.maps?: .init([[String: AnyJSON]].self)
+        default: nil
         }
     }
 

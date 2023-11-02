@@ -19,9 +19,9 @@ public class ScreenTransitioningAnimator: NSObject {
         public var duration: TimeInterval {
             switch self {
             case .pushIn(let duration):
-                return duration
+                duration
             case .pushOut(let duration):
-                return duration
+                duration
             }
         }
 
@@ -31,9 +31,9 @@ public class ScreenTransitioningAnimator: NSObject {
         ) -> TransitionType {
             switch navigationOperation {
             case .push:
-                return .pushIn(duration)
+                .pushIn(duration)
             default:
-                return .pushOut(duration)
+                .pushOut(duration)
             }
         }
     }

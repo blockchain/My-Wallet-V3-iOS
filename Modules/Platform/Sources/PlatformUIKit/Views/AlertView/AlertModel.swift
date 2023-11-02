@@ -53,11 +53,11 @@ extension AlertAction {
     public var title: String? {
         switch style {
         case .confirm(let title):
-            return title
+            title
         case .default(let title):
-            return title
+            title
         case .dismiss:
-            return nil
+            nil
         }
     }
 }
@@ -78,13 +78,13 @@ extension AlertActionStyle {
     public static func == (lhs: AlertActionStyle, rhs: AlertActionStyle) -> Bool {
         switch (lhs, rhs) {
         case (.confirm(let left), .confirm(let right)):
-            return left == right
+            left == right
         case (.default(let left), .default(let right)):
-            return left == right
+            left == right
         case (.dismiss, .dismiss):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

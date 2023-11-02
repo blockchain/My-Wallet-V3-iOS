@@ -48,9 +48,9 @@ extension DSCNetworkConfig {
     static func validType(_ value: NetworkConfigResponse.NetworkType) -> Bool {
         switch value {
         case .bch, .btc, .evm, .xlm:
-            return false
+            false
         default:
-            return true
+            true
         }
     }
 

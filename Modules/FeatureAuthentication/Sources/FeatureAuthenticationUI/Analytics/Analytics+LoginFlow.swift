@@ -35,26 +35,26 @@ extension AnalyticsEvents.New {
                  .loginTwoStepVerificationEntered,
                  .loginViewed,
                  .loginTwoStepVerificationDenied:
-                return [:]
+                [:]
 
             case .loginRequestApproved(let source),
                  .loginRequestDenied(let source):
-                return [
+                [
                     "login_source": String(describing: source)
                 ]
 
             case .loginClicked(let origin):
-                return [
+                [
                     "origin": origin.rawValue
                 ]
 
             case .loginIdentifierEntered(let identifierType):
-                return [
+                [
                     "identifier_type": identifierType.rawValue
                 ]
 
             case .loginIdentifierFailed(let errorMessage):
-                return [
+                [
                     "error_message": errorMessage,
                     "device": Device.iOS.rawValue,
                     "platform": Platform.wallet.rawValue

@@ -51,11 +51,11 @@ extension KYCLimitsOverviewResponse.Feature.TimePeriod {
     func mapToTimePeriod() -> LimitedTradeFeature.TimePeriod {
         switch self {
         case .day:
-            return .day
+            .day
         case .month:
-            return .month
+            .month
         case .year:
-            return .year
+            .year
         }
     }
 }

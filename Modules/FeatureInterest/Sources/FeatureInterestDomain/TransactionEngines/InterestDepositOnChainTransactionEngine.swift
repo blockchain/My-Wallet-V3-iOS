@@ -61,7 +61,7 @@ public final class InterestDepositOnChainTransactionEngine: InterestTransactionE
     private var receiveAddress: Single<ReceiveAddress> {
         switch transactionTarget {
         case is CryptoAccount:
-            return (transactionTarget as! BlockchainAccount).receiveAddress.asSingle()
+            (transactionTarget as! BlockchainAccount).receiveAddress.asSingle()
         default:
             fatalError(
                 "Impossible State for InterestDepositOnChainTransactionEngine: transactionTarget is \(type(of: transactionTarget))"
@@ -319,7 +319,7 @@ public final class EarnDepositOnChainTransactionEngine: InterestTransactionEngin
     private var receiveAddress: Single<ReceiveAddress> {
         switch transactionTarget {
         case is CryptoAccount:
-            return (transactionTarget as! BlockchainAccount).receiveAddress.asSingle()
+            (transactionTarget as! BlockchainAccount).receiveAddress.asSingle()
         default:
             fatalError(
                 "Impossible State for InterestDepositOnChainTransactionEngine: transactionTarget is \(type(of: transactionTarget))"

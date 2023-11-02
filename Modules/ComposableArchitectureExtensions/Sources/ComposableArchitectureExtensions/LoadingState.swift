@@ -16,9 +16,9 @@ public enum LoadingState<Content> {
     public var value: Content? {
         switch self {
         case .loaded(next: let content):
-            return content
+            content
         case .loading:
-            return nil
+            nil
         }
     }
 
@@ -26,9 +26,9 @@ public enum LoadingState<Content> {
     public var isLoading: Bool {
         switch self {
         case .loading:
-            return true
+            true
         case .loaded:
-            return false
+            false
         }
     }
 }

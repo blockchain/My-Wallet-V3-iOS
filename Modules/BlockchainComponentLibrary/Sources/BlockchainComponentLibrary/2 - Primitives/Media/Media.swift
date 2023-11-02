@@ -211,10 +211,10 @@ extension MediaResizingMode {
 
     @usableFromInline var imageResizingMode: ImageResizingMode {
         switch self {
-        case .fill: return .fill
-        case .aspectFit: return .aspectFit
-        case .aspectFill: return .aspectFill
-        case .center: return .center
+        case .fill: .fill
+        case .aspectFit: .aspectFit
+        case .aspectFill: .aspectFill
+        case .center: .center
         }
     }
 }

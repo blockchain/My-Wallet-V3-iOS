@@ -35,11 +35,10 @@ public final class CoincoreNAPI {
         ) -> AnyPublisher<AnyJSON, Never> {
             coincore.allAccounts(filter: filter)
                 .map { group in
-                    let accountGroup: [SingleAccount]
-                    if let predicate {
-                        accountGroup = group.accounts.filter(predicate)
+                    let accountGroup: [SingleAccount] = if let predicate {
+                        group.accounts.filter(predicate)
                     } else {
-                        accountGroup = group.accounts
+                        group.accounts
                     }
                     return AnyJSON(accountGroup.map(\.identifier))
                 }
@@ -530,11 +529,10 @@ public enum CoincoreHelper {
         if let currency = CryptoCurrency(code: identifier, service: service) {
             return currency
         }
-        let code: String?
-        if #available(iOS 16.0, *) {
-            code = extractCode(from: identifier)
+        let code: String? = if #available(iOS 16.0, *) {
+            extractCode(from: identifier)
         } else {
-            code = fallBackExtractCode(from: identifier)
+            fallBackExtractCode(from: identifier)
         }
         guard let code else {
             return nil

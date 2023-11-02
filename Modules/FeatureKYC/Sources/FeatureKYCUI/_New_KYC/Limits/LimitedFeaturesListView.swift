@@ -95,18 +95,18 @@ extension KYC.Tier {
     fileprivate var limitsOverviewTitle: String? {
         switch self {
         case .unverified:
-            return LocalizedStrings.headerTitle_unverified
+            LocalizedStrings.headerTitle_unverified
         default:
-            return nil
+            nil
         }
     }
 
     fileprivate var limitsOverviewMessage: String {
         switch self {
         case .unverified:
-            return LocalizedStrings.headerMessage_unverified
+            LocalizedStrings.headerMessage_unverified
         default:
-            return LocalizedStrings.headerMessage_verified
+            LocalizedStrings.headerMessage_verified
         }
     }
 }

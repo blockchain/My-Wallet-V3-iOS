@@ -10,11 +10,11 @@ struct WalletConnectEngineFactory: WalletConnectEngineFactoryAPI {
     ) -> TransactionEngine {
         switch target {
         case let target as EthereumSignMessageTarget:
-            return WalletConnectSignMessageEngine(
+            WalletConnectSignMessageEngine(
                 network: target.network
             )
         case let target as EthereumSendTransactionTarget:
-            return WalletConnectTransactionEngine(
+            WalletConnectTransactionEngine(
                 network: target.network
             )
         default:

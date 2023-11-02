@@ -19,13 +19,13 @@ extension ValidationResult {
     static func == (lhs: ValidationResult, rhs: ValidationResult) -> Bool {
         switch (lhs, rhs) {
         case (.valid, .valid):
-            return true
+            true
         case (.valid, .invalid):
-            return false
+            false
         case (.invalid, .valid):
-            return false
+            false
         case (.invalid, .invalid):
-            return true
+            true
         }
     }
 }

@@ -37,11 +37,11 @@ final class TargetSelectionPageModel {
     func perform(previousState: TargetSelectionPageState, action: TargetSelectionAction) -> Disposable? {
         switch action {
         case .sourceAccountSelected(let account, let action):
-            return processTargetListUpdate(sourceAccount: account, action: action)
+            processTargetListUpdate(sourceAccount: account, action: action)
         case .validate(let address, let memo, let sourceAccount):
-            return validate(address: address, memo: memo, sourceAccount: sourceAccount)
+            validate(address: address, memo: memo, sourceAccount: sourceAccount)
         case .validateBitPayPayload(let value, let currency):
-            return processBitPayValue(payload: value, currency: currency)
+            processBitPayValue(payload: value, currency: currency)
         case .destinationSelected,
              .availableTargets,
              .destinationConfirmed,
@@ -52,7 +52,7 @@ final class TargetSelectionPageModel {
              .qrScannerButtonTapped,
              .validateQRScanner,
              .validBitPayInvoiceTarget:
-            return nil
+            nil
         }
     }
 
@@ -83,9 +83,9 @@ final class TargetSelectionPageModel {
             .map { result -> TargetSelectionInputValidation in
                 switch result {
                 case .success(let receiveAddress):
-                    return .text(.valid(address), .valid(memo ?? ""), receiveAddress)
+                    .text(.valid(address), .valid(memo ?? ""), receiveAddress)
                 case .failure:
-                    return .text(.invalid(address), .valid(memo ?? ""), nil)
+                    .text(.invalid(address), .valid(memo ?? ""), nil)
                 }
             }
             .map(TargetSelectionAction.addressValidated)

@@ -127,11 +127,11 @@ extension Screen.Style.Bar {
     public var titleColor: UIColor {
         switch self {
         case .lightContent:
-            return UIColor.NavigationBar.LightContent.title
+            UIColor.NavigationBar.LightContent.title
         case .darkContent:
-            return UIColor.NavigationBar.DarkContent.title
+            UIColor.NavigationBar.DarkContent.title
         case .mutedContent:
-            return UIColor.NavigationBar.MutedContent.title
+            UIColor.NavigationBar.MutedContent.title
         }
     }
 
@@ -139,11 +139,11 @@ extension Screen.Style.Bar {
     public var tintColor: UIColor {
         switch self {
         case .lightContent:
-            return UIColor.NavigationBar.LightContent.tintColor
+            UIColor.NavigationBar.LightContent.tintColor
         case .darkContent:
-            return UIColor.NavigationBar.DarkContent.tintColor
+            UIColor.NavigationBar.DarkContent.tintColor
         case .mutedContent:
-            return UIColor.NavigationBar.MutedContent.tintColor
+            UIColor.NavigationBar.MutedContent.tintColor
         }
     }
 
@@ -151,11 +151,11 @@ extension Screen.Style.Bar {
     public var leadingTintColor: UIColor {
         switch self {
         case .lightContent:
-            return UIColor.NavigationBar.LightContent.tintColor
+            UIColor.NavigationBar.LightContent.tintColor
         case .darkContent:
-            return UIColor.NavigationBar.DarkContent.tintColor
+            UIColor.NavigationBar.DarkContent.tintColor
         case .mutedContent:
-            return UIColor.NavigationBar.MutedContent.tintColor
+            UIColor.NavigationBar.MutedContent.tintColor
         }
     }
 
@@ -163,11 +163,11 @@ extension Screen.Style.Bar {
     public var trailingTintColor: UIColor {
         switch self {
         case .lightContent:
-            return UIColor.NavigationBar.LightContent.tintColor
+            UIColor.NavigationBar.LightContent.tintColor
         case .darkContent:
-            return UIColor.NavigationBar.DarkContent.tintColor
+            UIColor.NavigationBar.DarkContent.tintColor
         case .mutedContent:
-            return UIColor.NavigationBar.MutedContent.trailingColor
+            UIColor.NavigationBar.MutedContent.trailingColor
         }
     }
 
@@ -188,7 +188,7 @@ extension Screen.Style.Bar {
         case .darkContent(ignoresStatusBar: _, background: let color),
             .lightContent(ignoresStatusBar: _, background: let color),
             .mutedContent(ignoresStatusBar: _, background: let color):
-            return color
+            color
         }
     }
 
@@ -202,7 +202,7 @@ extension Screen.Style.Bar {
         case .darkContent(ignoresStatusBar: let value, background: _),
              .lightContent(ignoresStatusBar: let value, background: _),
              .mutedContent(ignoresStatusBar: let value, background: _):
-            return value
+            value
         }
     }
 }
@@ -213,32 +213,32 @@ extension Screen.Style.TrailingButton {
     public var content: Screen.NavigationBarContent? {
         switch self {
         case .content(let content):
-            return content
+            content
         case .qrCode:
-            return Screen.NavigationBarContent(
+            Screen.NavigationBarContent(
                 image: UIImage(named: "qr-code-icon"),
                 accessibility: .id(Accessibility.Identifier.NavigationBar.qrCodeButton)
             )
         case .close:
-            return Screen.NavigationBarContent(
+            Screen.NavigationBarContent(
                 image: UIImage(named: "Icon-Close-Circle"),
                 accessibility: .id(Accessibility.Identifier.NavigationBar.dismissButton)
             )
         case .questionMark:
-            return Screen.NavigationBarContent(
+            Screen.NavigationBarContent(
                 image: UIImage(named: "Question Circle", in: .componentLibrary, with: nil),
                 accessibility: .id(Accessibility.Identifier.NavigationBar.supportButton)
             )
 
         case .skip:
-            return Screen.NavigationBarContent(
+            Screen.NavigationBarContent(
                 title: "Skip",
                 image: nil,
                 accessibility: .id(Accessibility.Identifier.NavigationBar.skipButton)
             )
 
         default:
-            return nil
+            nil
         }
     }
 }
@@ -250,19 +250,19 @@ extension Screen.Style.LeadingButton {
     public var content: Screen.NavigationBarContent? {
         switch self {
         case .text(value: let text):
-            return Screen.NavigationBarContent(title: text)
+            Screen.NavigationBarContent(title: text)
         case .close:
-            return Screen.NavigationBarContent(
+            Screen.NavigationBarContent(
                 image: UIImage(named: "navigation-close-icon"),
                 accessibility: .id(Accessibility.Identifier.NavigationBar.dismissButton)
             )
         case .back:
-            return Screen.NavigationBarContent(
+            Screen.NavigationBarContent(
                 image: Icon.chevronLeft.uiImage,
                 accessibility: .id(Accessibility.Identifier.NavigationBar.backButton)
             )
         case .none:
-            return nil
+            nil
         }
     }
 }

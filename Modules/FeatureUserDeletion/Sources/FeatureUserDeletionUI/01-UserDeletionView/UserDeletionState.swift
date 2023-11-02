@@ -38,7 +38,7 @@ public enum UserDeletionRoute: NavigationRoute, Hashable {
     public func destination(in store: Store<UserDeletionState, UserDeletionAction>) -> some View {
         switch self {
         case .showConfirmationView:
-            return IfLetStore(
+            IfLetStore(
                 store.scope(
                     state: \.confirmViewState,
                     action: UserDeletionAction.onConfirmViewChanged

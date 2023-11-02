@@ -181,9 +181,9 @@ extension SettingsService {
             .mapError { error -> SettingsServiceError in
                 switch error {
                 case ToolKitError.timedOut:
-                    return .timedOut
+                    .timedOut
                 default:
-                    return .fetchFailed(error)
+                    .fetchFailed(error)
                 }
             }
             .eraseToAnyPublisher()
@@ -195,9 +195,9 @@ extension SettingsService {
             .mapError { error -> SettingsServiceError in
                 switch error {
                 case ToolKitError.timedOut:
-                    return .timedOut
+                    .timedOut
                 default:
-                    return .fetchFailed(error)
+                    .fetchFailed(error)
                 }
             }
             .eraseToAnyPublisher()
@@ -210,9 +210,9 @@ extension SettingsService {
             .mapError { error -> SettingsServiceError in
                 switch error {
                 case ToolKitError.timedOut:
-                    return .timedOut
+                    .timedOut
                 default:
-                    return .fetchFailed(error)
+                    .fetchFailed(error)
                 }
             }
             .eraseToAnyPublisher()

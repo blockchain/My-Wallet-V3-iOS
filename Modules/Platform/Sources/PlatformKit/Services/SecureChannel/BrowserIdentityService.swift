@@ -11,11 +11,11 @@ public enum IdentityError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .identitySaveFailed:
-            return "BrowserIdentityService: Unable to save browser identity."
+            "BrowserIdentityService: Unable to save browser identity."
         case .identityEncodingFailed:
-            return "BrowserIdentityService: Unable encode identity."
+            "BrowserIdentityService: Unable encode identity."
         case .unknownPubKeyHash:
-            return "BrowserIdentityService: Browser not recognized."
+            "BrowserIdentityService: Browser not recognized."
         }
     }
 }

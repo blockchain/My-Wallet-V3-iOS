@@ -27,21 +27,21 @@ extension AnalyticsEvents.New {
         var params: [String: Any]? {
             switch self {
             case .linkBankConditionsApproved(let account, let institution, let origin):
-                return [
+                [
                     "origin": origin.rawValue,
                     "bank_name": institution,
                     "partner": account.partner,
                     "provider": {
                         switch account.attributes.entity.lowercased() {
                         case "fintecture":
-                            return "FINTECTURE"
+                            "FINTECTURE"
                         case "safeconnect(uk)", _:
-                            return "SAFE_CONNECT"
+                            "SAFE_CONNECT"
                         }
                     }()
                 ]
             case .linkBankSelected(let institution, let account):
-                return [
+                [
                     "bank_name": institution,
                     "partner": account.partner
                 ]

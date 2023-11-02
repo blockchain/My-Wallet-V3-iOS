@@ -324,11 +324,10 @@ struct LineShape: Shape {
         let x = Array(stride(from: 0.d, through: 1, by: 1 / (y.count - 1).d))
         let scale = Scale<Double>(domain: x, range: y)
         let x2 = stride(from: 0.d, through: 1, by: 1 / (density - 1).d)
-        let y2: [Double]
-        if tolerance > 1 {
-            y2 = x2.map(scale.linear).slidingAverages(radius: tolerance, prefixAndSuffix: .reverseToFit)
+        let y2: [Double] = if tolerance > 1 {
+            x2.map(scale.linear).slidingAverages(radius: tolerance, prefixAndSuffix: .reverseToFit)
         } else {
-            y2 = x2.map(scale.linear)
+            x2.map(scale.linear)
         }
         return zip(x2, y2).map { CGPoint(x: $0, y: $1) }
     }

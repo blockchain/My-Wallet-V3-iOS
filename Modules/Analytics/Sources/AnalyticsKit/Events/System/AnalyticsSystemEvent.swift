@@ -163,7 +163,7 @@ public final class SystemEventAnalytics {
         if
             let payload = notification.userInfo as? [String: Any]
         {
-            return .init(
+            .init(
                 campaign_content: payload["body"] as? String,
                 campaign_medium: payload["medium"] as? String,
                 campaign_name: payload["title"] as? String,
@@ -171,7 +171,7 @@ public final class SystemEventAnalytics {
                 campaign_template: payload["template"] as? String
             )
         } else {
-            return .init()
+            .init()
         }
     }
 

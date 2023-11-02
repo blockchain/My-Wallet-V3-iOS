@@ -40,9 +40,9 @@ final class MobileCodeEntryInteractor {
         var isComplete: Bool {
             switch self {
             case .verified:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
@@ -52,9 +52,9 @@ final class MobileCodeEntryInteractor {
                  .verified,
                  .error,
                  .unknown:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
@@ -62,9 +62,9 @@ final class MobileCodeEntryInteractor {
             switch self {
             case .resending,
                  .submitting:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
     }

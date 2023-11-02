@@ -18,11 +18,11 @@ final class SendPendingTransactionStateProvider: PendingTransactionStateProvidin
         state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return Self.pending(state: state)
+                Self.pending(state: state)
             case .completed:
-                return Self.success(state: state)
+                Self.success(state: state)
             case .error:
-                return nil
+                nil
             }
         }
     }

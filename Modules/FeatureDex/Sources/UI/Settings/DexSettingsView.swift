@@ -109,7 +109,6 @@ struct DexSettingsView: View {
         }
     }
 
-
     @ViewBuilder
     private var gasOnDestinationRow: some View {
         if model.gasOnDestinationAllowed {

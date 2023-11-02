@@ -305,13 +305,13 @@ extension BitcoinOnChainTransactionEngine {
     ) -> AnyPublisher<MoneyValue, Never> {
         switch pendingTransaction.feeLevel {
         case .priority:
-            return priorityFees
+            priorityFees
         case .regular:
-            return regularFees
+            regularFees
         case .custom:
-            return regularFees
+            regularFees
         case .none:
-            return regularFees
+            regularFees
         }
     }
 
@@ -566,9 +566,9 @@ extension TransactionOutcome {
     var transactionResult: TransactionResult {
         switch self {
         case .signed(rawTx: let rawTx):
-            return .signed(rawTx: rawTx)
+            .signed(rawTx: rawTx)
         case .hashed(txHash: let txHash, amount: let amount):
-            return .hashed(txHash: txHash, amount: amount?.moneyValue)
+            .hashed(txHash: txHash, amount: amount?.moneyValue)
         }
     }
 }
@@ -582,11 +582,11 @@ func fetchFee(
         .map { fees -> CryptoValue in
             switch feeLevel {
             case .regular:
-                return fees.regular
+                fees.regular
             case .priority:
-                return fees.priority
+                fees.priority
             case .custom(let value):
-                return value
+                value
             }
         }
         .map(\.moneyValue)
@@ -598,13 +598,13 @@ extension FeatureTransactionDomain.FeeLevel {
     var bitcoinChainFeeLevel: BitcoinChainPendingTransaction.FeeLevel {
         switch self {
         case .regular:
-            return .regular
+            .regular
         case .priority:
-            return .priority
+            .priority
         case .none:
-            return .regular
+            .regular
         case .custom:
-            return .regular
+            .regular
         }
     }
 }

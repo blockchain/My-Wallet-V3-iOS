@@ -58,18 +58,18 @@ public enum TransactionValidationState: Equatable {
     var isUninitialized: Bool {
         switch self {
         case .uninitialized:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 
     var isCanExecute: Bool {
         switch self {
         case .canExecute:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

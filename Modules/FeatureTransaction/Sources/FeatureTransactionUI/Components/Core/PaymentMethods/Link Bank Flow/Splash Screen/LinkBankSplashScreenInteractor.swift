@@ -116,7 +116,7 @@ final class LinkBankSplashScreenContentReducer {
     func reduce(for partner: BankLinkageData.Partner) -> State {
         switch partner {
         case .yodlee:
-            return contentForYodlee(with: partner.title)
+            contentForYodlee(with: partner.title)
         case .yapily:
             fatalError("yapily is not yet supported")
         }

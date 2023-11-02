@@ -67,9 +67,9 @@ public final class SingleAmountPresenter: AmountViewPresenting {
     private func setupButton(by state: AmountInteractorState) -> AmountPresenterState {
         switch state {
         case .validInput(let messageState):
-            return .validInput(buttonViewModel(state: messageState))
+            .validInput(buttonViewModel(state: messageState))
         case .invalidInput(let messageState):
-            return .invalidInput(buttonViewModel(state: messageState))
+            .invalidInput(buttonViewModel(state: messageState))
         }
     }
 
@@ -105,9 +105,9 @@ extension AmountPresenterInput {
     var isEmpty: Bool {
         switch self {
         case .input(let value):
-            return "\(value)".isEmpty
+            "\(value)".isEmpty
         case .delete:
-            return false
+            false
         }
     }
 }

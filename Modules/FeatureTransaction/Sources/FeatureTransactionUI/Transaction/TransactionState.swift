@@ -62,13 +62,13 @@ struct TransactionState: StateType {
     var isStreamingQuotes: Bool {
         switch action {
         case .buy:
-            return step == .confirmDetail
+            step == .confirmDetail
         case .sell, .swap:
-            return step == .confirmDetail
+            step == .confirmDetail
                 || (step == .enterAmount && amount.isPositive)
                 || (step == .selectSourceTargetAmount && amount.isPositive)
         case _:
-            return false
+            false
         }
     }
 
@@ -514,7 +514,7 @@ extension TransactionFlowStep {
              .errorRecoveryInfo,
              .inProgress,
              .linkBankViaWire:
-            return true
+            true
         case .closed,
              .initial,
              .kycChecks,
@@ -529,7 +529,7 @@ extension TransactionFlowStep {
              .securityConfirmation,
              .confirmDetail,
              .authorizeOpenBanking:
-            return false
+            false
         }
     }
 
@@ -543,7 +543,7 @@ extension TransactionFlowStep {
              .linkBankViaWire,
              .securityConfirmation,
              .authorizeOpenBanking:
-            return true
+            true
         case .closed,
              .confirmDetail,
              .enterAddress,
@@ -559,7 +559,7 @@ extension TransactionFlowStep {
              .uxFromErrorState,
              .uxFromUserInteraction,
              .validateSource:
-            return false
+            false
         }
     }
 }

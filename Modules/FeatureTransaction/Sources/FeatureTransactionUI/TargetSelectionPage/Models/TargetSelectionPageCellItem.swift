@@ -27,22 +27,22 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
         var account: SingleAccount {
             switch self {
             case .singleAccountAvailableTarget(let interactor):
-                return interactor.account
+                interactor.account
             case .singleAccount(let account, _):
-                return account
+                account
             case .memo(let account, _):
-                return account
+                account
             case .walletInputField(let account, _):
-                return account
+                account
             }
         }
 
         var isInputField: Bool {
             switch self {
             case .walletInputField, .memo:
-                return true
+                true
             case .singleAccount, .singleAccountAvailableTarget:
-                return false
+                false
             }
         }
 
@@ -54,12 +54,12 @@ struct TargetSelectionPageCellItem: Equatable, IdentifiableType {
     var isSelectable: Bool {
         switch presenter {
         case .radioSelection:
-            return true
+            true
         case .singleAccount,
              .walletInputField,
              .cardView,
              .memo:
-            return false
+            false
         }
     }
 

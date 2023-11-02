@@ -16,17 +16,17 @@ public enum WalletSyncError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .unknown:
-            return LocalizationConstants.WalletPayloadKit.Error.unknown
+            LocalizationConstants.WalletPayloadKit.Error.unknown
         case .encodingError(let walletEncodingError):
-            return walletEncodingError.errorDescription
+            walletEncodingError.errorDescription
         case .verificationFailure(let encryptAndVerifyError):
-            return encryptAndVerifyError.errorDescription
+            encryptAndVerifyError.errorDescription
         case .networkFailure(let networkError):
-            return networkError.description
+            networkError.description
         case .syncPubKeysFailure(let error):
-            return error.localizedDescription
+            error.localizedDescription
         case .mnemonicFailure:
-            return WalletError.initialization(.missingSeedHex).localizedDescription
+            WalletError.initialization(.missingSeedHex).localizedDescription
         }
     }
 }

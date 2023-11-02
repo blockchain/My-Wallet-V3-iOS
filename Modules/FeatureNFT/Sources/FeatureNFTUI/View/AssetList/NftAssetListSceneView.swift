@@ -155,12 +155,12 @@ public struct NftAssetListSceneView: View {
             var columns: [GridItem] {
                 switch self {
                 case .collection:
-                    return [
+                    [
                         GridItem(.flexible(minimum: 100.0, maximum: 300)),
                         GridItem(.flexible(minimum: 100.0, maximum: 500))
                     ]
                 case .row:
-                    return [
+                    [
                         GridItem(.flexible(minimum: 100.0, maximum: .infinity))
                     ]
                 }

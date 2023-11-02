@@ -14,27 +14,27 @@ public enum Network: Codable, Equatable, Hashable, Identifiable {
     public var id: String {
         switch self {
         case .all:
-            return "all"
+            "all"
         case .specific(let network):
-            return network.networkConfig.networkTicker
+            network.networkConfig.networkTicker
         }
     }
 
     public var title: String {
         switch self {
         case .all:
-            return L10n.NetworkPicker.allNetworks
+            L10n.NetworkPicker.allNetworks
         case .specific(let network):
-            return network.networkConfig.shortName
+            network.networkConfig.shortName
         }
     }
 
     public var evmNetwork: EVMNetwork? {
         switch self {
         case .all:
-            return nil
+            nil
         case .specific(let network):
-            return network
+            network
         }
     }
 }

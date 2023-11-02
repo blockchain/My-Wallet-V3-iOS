@@ -31,23 +31,23 @@ public enum PaymentAccountProperty {
         public var content: String {
             switch self {
             case .accountNumber(let value):
-                return value
+                value
             case .sortCode(let value):
-                return value
+                value
             case .recipientName(let value):
-                return value
+                value
             case .routingNumber(let value):
-                return value
+                value
             case .bankName(let value):
-                return value
+                value
             case .bankCountry(let value):
-                return value
+                value
             case .iban(let value):
-                return value
+                value
             case .bankCode(let value):
-                return value
+                value
             case .field(_, let value, _, _):
-                return value
+                value
             }
         }
 

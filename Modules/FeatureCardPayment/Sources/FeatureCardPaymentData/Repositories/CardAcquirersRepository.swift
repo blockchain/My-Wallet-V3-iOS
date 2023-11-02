@@ -44,13 +44,13 @@ final class CardAcquirersRepository: CardAcquirersRepositoryAPI {
                     .compactMap { acquirer -> AnyPublisher<CardTokenizationResponse, CardAcquirerError>? in
                         switch acquirer.cardAcquirerName {
                         case .checkout:
-                            return CheckoutClient(acquirer.apiKey)
+                            CheckoutClient(acquirer.apiKey)
                                 .tokenize(card, accounts: acquirer.cardAcquirerAccountCodes)
                         case .stripe:
-                            return StripeClient(acquirer.apiKey)
+                            StripeClient(acquirer.apiKey)
                                 .tokenize(card, accounts: acquirer.cardAcquirerAccountCodes)
                         case .unknown, .everyPay, .fake:
-                            return nil
+                            nil
                         }
                     }
                     .map { token -> AnyPublisher<Result<CardTokenizationResponse, CardAcquirerError>, Never> in
@@ -66,9 +66,9 @@ final class CardAcquirersRepository: CardAcquirersRepositoryAPI {
                     .compactMap { result -> [String: String]? in
                         switch result {
                         case .success(let tokenResponse):
-                            return tokenResponse.params
+                            tokenResponse.params
                         case .failure:
-                            return nil
+                            nil
                         }
                     }
                     .reduce(into: [String: String]()) {
@@ -84,11 +84,11 @@ final class CardAcquirersRepository: CardAcquirersRepositoryAPI {
     ) -> AnyPublisher<PartnerAuthorizationData.State, Error> {
         switch acquirer.cardAcquirerName {
         case .checkout, .fake:
-            return .just(CheckoutClient.authorizationState(acquirer))
+            .just(CheckoutClient.authorizationState(acquirer))
         case .stripe:
-            return .just(StripeClient.authorizationState(acquirer))
+            .just(StripeClient.authorizationState(acquirer))
         case .unknown, .everyPay:
-            return .failure(CardAcquirerError.unknownAcquirer)
+            .failure(CardAcquirerError.unknownAcquirer)
         }
     }
 }

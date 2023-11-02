@@ -9,8 +9,8 @@ extension Either where A == B {
 
     @inlinable public subscript<V>(dynamicMember keyPath: KeyPath<A, V>) -> V {
             switch self {
-            case .left(let a): return a[keyPath: keyPath]
-            case .right(let b): return b[keyPath: keyPath]
+            case .left(let a): a[keyPath: keyPath]
+            case .right(let b): b[keyPath: keyPath]
             }
         }
 }
@@ -24,17 +24,17 @@ extension Either {
 
     @inlinable public var left: A? {
         if case .left(let a) = self {
-            return a
+            a
         } else {
-            return nil
+            nil
         }
     }
 
     @inlinable public var right: B? {
         if case .right(let b) = self {
-            return b
+            b
         } else {
-            return nil
+            nil
         }
     }
 
@@ -44,9 +44,9 @@ extension Either {
     @inlinable public var inverted: Either<B, A> {
         switch self {
         case .left(let a):
-            return .right(a)
+            .right(a)
         case .right(let b):
-            return .left(b)
+            .left(b)
         }
     }
 }
@@ -73,11 +73,11 @@ extension Either: Equatable where A: Equatable, B: Equatable {
     @inlinable public static func == (lhs: Either, rhs: Either<B, A>) -> Bool {
         switch (lhs, rhs) {
         case (.left(let l), .right(let r)):
-            return l == r
+            l == r
         case (.right(let l), .left(let r)):
-            return l == r
+            l == r
         default:
-            return false
+            false
         }
     }
 }
@@ -88,13 +88,13 @@ extension Either: Comparable where A: Comparable, B: Comparable {
     public static func < (lhs: Either<A, B>, rhs: Either<A, B>) -> Bool {
         switch (lhs, rhs) {
         case (.left, .right):
-            return true
+            true
         case (.right, .left):
-            return false
+            false
         case (.left(let lhs), .left(let rhs)):
-            return lhs < rhs
+            lhs < rhs
         case (.right(let lhs), .right(let rhs)):
-            return lhs < rhs
+            lhs < rhs
         }
     }
 }
@@ -104,9 +104,9 @@ extension Either: CustomStringConvertible {
     public var description: String {
         switch self {
         case .left(let a):
-            return String(describing: a)
+            String(describing: a)
         case .right(let b):
-            return String(describing: b)
+            String(describing: b)
         }
     }
 }
@@ -184,9 +184,9 @@ extension Either where A: Error {
     @inlinable public var result: Result<B, A> {
         switch self {
         case .left(let a):
-            return .failure(a)
+            .failure(a)
         case .right(let b):
-            return .success(b)
+            .success(b)
         }
     }
 }
@@ -196,9 +196,9 @@ extension Either where B: Error {
     @inlinable public var result: Result<A, B> {
         switch self {
         case .left(let a):
-            return .success(a)
+            .success(a)
         case .right(let b):
-            return .failure(b)
+            .failure(b)
         }
     }
 }
@@ -208,9 +208,9 @@ extension Result {
     @inlinable public var either: Either<Success, Failure> {
         switch self {
         case .success(let a):
-            return .left(a)
+            .left(a)
         case .failure(let b):
-            return .right(b)
+            .right(b)
         }
     }
 }
@@ -234,45 +234,45 @@ extension Either {
     @inlinable public func fold<T>(left: (A) -> T, right: (B) -> T) -> T {
         switch self {
         case .left(let a):
-            return left(a)
+            left(a)
         case .right(let b):
-            return right(b)
+            right(b)
         }
     }
 
     @inlinable public func mapLeft<T>(_ transform: (A) -> T) -> Either<T, B> {
         switch self {
         case .left(let a):
-            return .left(transform(a))
+            .left(transform(a))
         case .right(let b):
-            return .right(b)
+            .right(b)
         }
     }
 
     @inlinable public func flatMapLeft<T>(_ transform: (A) -> Either<T, B>) -> Either<T, B> {
         switch self {
         case .left(let a):
-            return transform(a)
+            transform(a)
         case .right(let b):
-            return .right(b)
+            .right(b)
         }
     }
 
     @inlinable public func mapRight<T>(_ transform: (B) -> T) -> Either<A, T> {
         switch self {
         case .left(let a):
-            return .left(a)
+            .left(a)
         case .right(let b):
-            return .right(transform(b))
+            .right(transform(b))
         }
     }
 
     @inlinable public func flatMapLeft<T>(_ transform: (B) -> Either<A, T>) -> Either<A, T> {
         switch self {
         case .left(let a):
-            return .left(a)
+            .left(a)
         case .right(let b):
-            return transform(b)
+            transform(b)
         }
     }
 }
