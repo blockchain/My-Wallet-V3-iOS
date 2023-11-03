@@ -55,6 +55,10 @@ extension SuperAppRootController {
         guard let presentedViewController else {
             return
         }
+        guard presentedViewController.presentedViewController != nil else {
+            // Only AppChrome is being shown, skip.
+            return
+        }
         if presentedViewController.isBeingDismissed {
             app.post(error: NavigationError.isBeingDismissedError(presentedViewController))
         }
