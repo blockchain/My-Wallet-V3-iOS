@@ -118,6 +118,7 @@ extension CustomSheetPresentation {
             self.largestUndimmedDetent = largestUndimmedDetent
             self.limitDetents = limitDetents
             parent?.isModalInPresentation = true
+            parent?.view.accessibilityIdentifier = "app.chrome"
             if let controller = parent?.sheetPresentationController, let presentationController = parent?.presentationController {
                 let isLimited = limitDetents.wrappedValue
                 if limitDetents.wrappedValue {
