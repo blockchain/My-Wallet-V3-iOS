@@ -25,6 +25,12 @@ public func alterDismissOnViewControllers() {
 extension UIViewController {
     @objc
     func swizzled_dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if let id = self.presentedViewController?.view.accessibilityIdentifier, id == "app.chrome" {
+            return
+        }
+        if self.view.accessibilityIdentifier == "app.chrome" {
+            return
+        }
         swizzled_dismiss(animated: flag) {
             NotificationCenter.default.post(.init(name: UIViewController.controllerDidDismiss))
             completion?()
