@@ -9,8 +9,14 @@ import PlatformKit
 import ToolKit
 import UnifiedActivityDomain
 
-private func explorerUrl(coin: String) -> String {
-    "https://www.blockchain.com/\(coin.lowercased())/tx"
+private func explorerUrl(currency: CurrencyType) -> String? {
+    guard currency.isCryptoCurrency else {
+        return nil
+    }
+    guard currency == .crypto(.bitcoin) || currency == .crypto(.bitcoinCash) || currency == .crypto(.ethereum) else {
+        return nil
+    }
+    return "https://www.blockchain.com/\(currency.code.lowercased())/tx"
 }
 
 public enum ActivityDetailsAdapter {
@@ -60,15 +66,19 @@ public enum ActivityDetailsAdapter {
 
         let normalizedTxHash = activity.txHash.splitIfNotEmpty(separator: ":").first.map(String.init)
         let txHash = normalizedTxHash ?? activity.txHash
-        let url = activity.amount.currency.network()?.networkConfig.explorerUrl ?? explorerUrl(coin: activity.amount.code)
-        let floatingActions = [
-            ActivityItem.Button(
-                text: LocalizationConstants.SuperApp.ActivityDetails.viewOnExplorer,
-                style: .secondary,
-                actionType: .opneURl,
-                actionData: "\(url)/\(txHash)"
-            )
-        ]
+        let floatingActions: [ActivityItem.Button]
+        if let url = activity.amount.currency.network()?.networkConfig.explorerUrl ?? explorerUrl(currency: activity.amount.currencyType), txHash.isNotEmpty {
+            floatingActions = [
+                ActivityItem.Button(
+                    text: LocalizationConstants.SuperApp.ActivityDetails.viewOnExplorer,
+                    style: .secondary,
+                    actionType: .opneURl,
+                    actionData: "\(url)/\(txHash)"
+                )
+            ]
+        } else {
+            floatingActions = []
+        }
 
         return ActivityDetail.GroupedItems(
             title: activity.title(),
@@ -190,15 +200,20 @@ public enum ActivityDetailsAdapter {
 
         let normalizedTxHash = activity.withdrawalTxHash?.splitIfNotEmpty(separator: ":").first.map(String.init)
         let txHash = normalizedTxHash ?? activity.withdrawalTxHash ?? ""
-        let url = activity.amounts.withdrawal.currency.cryptoCurrency?.network()?.networkConfig.explorerUrl ?? explorerUrl(coin: activity.amounts.withdrawal.code)
-        let floatingActions = [
-            ActivityItem.Button(
-                text: LocalizationConstants.SuperApp.ActivityDetails.viewOnExplorer,
-                style: .secondary,
-                actionType: .opneURl,
-                actionData: "\(url)/\(txHash)"
-            )
-        ]
+        let floatingActions: [ActivityItem.Button]
+        let explorerFromNetwork = activity.amounts.withdrawal.currency.cryptoCurrency?.network()?.networkConfig.explorerUrl
+        if let url = explorerFromNetwork ?? explorerUrl(currency: activity.amounts.withdrawal.currency), txHash.isNotEmpty {
+            floatingActions = [
+                ActivityItem.Button(
+                    text: LocalizationConstants.SuperApp.ActivityDetails.viewOnExplorer,
+                    style: .secondary,
+                    actionType: .opneURl,
+                    actionData: "\(url)/\(txHash)"
+                )
+            ]
+        } else {
+            floatingActions = []
+        }
 
         let itemGroups: [ActivityDetail.GroupedItems.Item] = if let group4 {
             [group1, group2, group3, group4]
