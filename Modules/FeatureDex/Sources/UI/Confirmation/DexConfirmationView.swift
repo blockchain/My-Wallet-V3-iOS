@@ -90,13 +90,15 @@ struct DexConfirmationView: View {
     @ViewBuilder
     private var rows: some View {
         DividedVStack {
-            tableRow(
-                title: L10n.estimatedConfirmationTime,
-                value: {
-                    tableRowTitle("\(viewStore.quote.estimatedConfirmationTime)s")
-                },
-                tooltip: nil
-            )
+            if let value = viewStore.quote.estimatedConfirmationTime {
+                tableRow(
+                    title: L10n.estimatedConfirmationTime,
+                    value: {
+                        tableRowTitle("\(value)s")
+                    },
+                    tooltip: nil
+                )
+            }
             tableRow(
                 title: L10n.allowedSlippage,
                 value: {

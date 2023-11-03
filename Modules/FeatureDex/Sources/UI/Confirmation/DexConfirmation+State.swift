@@ -29,7 +29,7 @@ extension DexConfirmation {
 extension DexConfirmation.State {
     public struct Quote: Equatable {
         let axelarCrossChainQuote: Bool
-        let estimatedConfirmationTime: Int
+        let estimatedConfirmationTime: Int?
         var enoughBalance: Bool
         let from: CryptoValue
         let minimumReceivedAmount: CryptoValue

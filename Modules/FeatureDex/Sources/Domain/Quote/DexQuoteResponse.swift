@@ -66,12 +66,12 @@ public struct DexQuoteResponse: Decodable, Equatable {
         }
     }
 
-    public let approxConfirmationTime: Int
+    public let approxConfirmationTime: Int?
     public let quoteTtl: Double
     public let quote: Quote
     public let tx: Transaction
 
-    init(approxConfirmationTime: Int, quote: Quote, tx: Transaction, quoteTtl: Double) {
+    init(approxConfirmationTime: Int?, quote: Quote, tx: Transaction, quoteTtl: Double) {
         self.approxConfirmationTime = approxConfirmationTime
         self.quote = quote
         self.tx = tx

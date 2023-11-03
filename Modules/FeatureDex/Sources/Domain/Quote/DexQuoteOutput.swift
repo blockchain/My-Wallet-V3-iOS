@@ -31,7 +31,7 @@ public struct DexQuoteOutput: Equatable {
         public let minimum: CryptoValue?
     }
 
-    public let estimatedConfirmationTime: Int
+    public let estimatedConfirmationTime: Int?
     public let buyAmount: BuyAmount
     public let field: Field
     public let isValidated: Bool
@@ -51,7 +51,7 @@ public struct DexQuoteOutput: Equatable {
     init(
         response: DexQuoteResponse.Transaction,
         allowanceSpender: String,
-        estimatedConfirmationTime: Int,
+        estimatedConfirmationTime: Int?,
         buyAmount: BuyAmount,
         field: Field,
         isValidated: Bool,
