@@ -66,7 +66,7 @@ struct TradingDashboardView: View {
                     loadingView
                 }
             }
-            .padding(.top, displayDisclaimer ? 68.pt : 0.pt)
+            .padding(.top, displayDisclaimer ? max(disclaimerHeight + Spacing.padding1, 68).pt : 0.pt)
             if onboarding.isFinished {
                 GeometryReader { proxy in
                     FinancialPromotionDisclaimerView(display: $displayDisclaimer)
@@ -142,7 +142,7 @@ struct TradingDashboardView: View {
                     info: .constant(viewStore.balance),
                     isPercentageHidden: viewStore.isZeroBalance
                 )
-                .padding([.top], max(Spacing.padding3, disclaimerHeight + Spacing.padding1))
+                .padding([.top], Spacing.padding3)
 
                 QuickActionsView(
                     tag: blockchain.ux.user.custodial.dashboard.quick.action
