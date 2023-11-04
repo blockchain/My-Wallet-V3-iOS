@@ -34,6 +34,7 @@ struct TradingDashboardView: View {
 
     @StateObject private var onboarding = CustodialOnboardingService()
     @State private var displayDisclaimer: Bool = false
+    @State private var disclaimerHeight: CGFloat = 0
 
     struct ViewState: Equatable {
         let balance: BalanceInfo?
@@ -67,15 +68,20 @@ struct TradingDashboardView: View {
             }
             .padding(.top, displayDisclaimer ? 68.pt : 0.pt)
             if onboarding.isFinished {
-                FinancialPromotionDisclaimerView(display: $displayDisclaimer)
-                    .padding()
-                    .roundedBackgroundWithShadow(
-                        edges: .bottom,
-                        fill: Color.semantic.light,
-                        radius: shadowRadius(forScrollOffset: scrollOffset.y),
-                        padding: .init(top: 0, leading: 16, bottom: 0, trailing: 16)
-                    )
-                    .padding([.top, .bottom], 8.pt)
+                GeometryReader { proxy in
+                    FinancialPromotionDisclaimerView(display: $displayDisclaimer)
+                        .padding()
+                        .roundedBackgroundWithShadow(
+                            edges: .bottom,
+                            fill: Color.semantic.light,
+                            radius: shadowRadius(forScrollOffset: scrollOffset.y),
+                            padding: .init(top: 0, leading: 16, bottom: 0, trailing: 16)
+                        )
+                        .padding([.top, .bottom], 8.pt)
+                        .onChange(of: proxy.size) { _ in
+                            disclaimerHeight = proxy.size.height
+                        }
+                }
             }
         }
         .superAppNavigationBar(
@@ -136,7 +142,7 @@ struct TradingDashboardView: View {
                     info: .constant(viewStore.balance),
                     isPercentageHidden: viewStore.isZeroBalance
                 )
-                .padding([.top], Spacing.padding3)
+                .padding([.top], max(Spacing.padding3, disclaimerHeight + Spacing.padding1))
 
                 QuickActionsView(
                     tag: blockchain.ux.user.custodial.dashboard.quick.action
