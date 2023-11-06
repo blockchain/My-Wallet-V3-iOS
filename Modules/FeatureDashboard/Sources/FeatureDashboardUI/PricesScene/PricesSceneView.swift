@@ -14,7 +14,6 @@ public struct PricesSceneView: View {
     let store: StoreOf<PricesScene>
     @BlockchainApp var app
     @State var isDeFiOnly = true
-
     var isTradingEnabled: Bool { !isDeFiOnly }
 
     public init(store: StoreOf<PricesScene>) {
@@ -27,15 +26,22 @@ public struct PricesSceneView: View {
             VStack(spacing: 0) {
                 searchBarSection
                 segmentedControl
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        if viewStore.filter == .tradable, !viewStore.isSearching {
+                ScrollViewReader { scrollViewProxy in
+                    ScrollView {
+                        if viewStore.searchFilter == .tradable, !viewStore.isSearching {
                             topMoversSection
                                 .padding(.bottom, Spacing.padding2)
                         }
                         pricesSection
                             .padding(.horizontal, Spacing.padding2)
+                            .onChange(of: viewStore.searchFilter, perform: { _ in
+                                scrollViewProxy.scrollTo(0, anchor: .bottom)
+                            })
+                            .onChange(of: viewStore.searchText) { _ in
+                                scrollViewProxy.scrollTo(0, anchor: .bottom)
+                            }
                     }
+
                 }
             }
             .background(Color.semantic.light.ignoresSafeArea())
@@ -69,6 +75,7 @@ public struct PricesSceneView: View {
         SearchBar(
             text: viewStore.$searchText,
             isFirstResponder: viewStore.$isSearching,
+            hasAutocorrection: false,
             cancelButtonText: LocalizationConstants.SuperApp.Prices.Search.cancelButton,
             placeholder: LocalizationConstants.SuperApp.Prices.Search.searchPlaceholder
         )
@@ -90,7 +97,7 @@ public struct PricesSceneView: View {
         ]
         return PrimarySegmentedControl(
             items: items,
-            selection: viewStore.$filter,
+            selection: viewStore.$searchFilter,
             backgroundColor: Color.semantic.light
         )
     }
@@ -124,7 +131,8 @@ public struct PricesSceneView: View {
                     noResultsView
                 } else {
                     LazyVStack(spacing: 0) {
-                        ForEach(Array(searchResults.enumerated()), id: \.element) { _, info in
+                        ForEach(Array(searchResults.enumerated()),
+                                id: \.element) { _, info in
                             Row(info: info)
                                 .onTapGesture {
                                     viewStore.send(.set(\.$isSearching, false))

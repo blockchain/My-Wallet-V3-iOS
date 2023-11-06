@@ -35,7 +35,7 @@ public struct PricesScene: Reducer {
         case failed
     }
 
-    public enum Filter: Hashable {
+    public enum Filter: Hashable, Equatable {
         case all, favorites, tradable
     }
 
@@ -59,16 +59,16 @@ public struct PricesScene: Reducer {
         @BindingState var sortOrder: [String] = []
         var favourites: Set<String> = ["BTC", "ETH", "USDC"]
 
-        @BindingState var filter: Filter
+        @BindingState var searchFilter: Filter
         @BindingState var searchText: String
         @BindingState var isSearching: Bool
 
         var searchResults: [PricesRowData]? {
             guard let data else { return nil }
             guard searchText.isNotEmpty else {
-                return data.filtered(by: filter, favourites: favourites)
+                return data.filtered(by: searchFilter, favourites: favourites)
             }
-            return data.filtered(by: searchText, filter: filter, favourites: favourites)
+            return data.filtered(by: searchText, filter: searchFilter, favourites: favourites)
         }
 
         public var topMoversState: TopMoversSection.State?
@@ -82,7 +82,7 @@ public struct PricesScene: Reducer {
             isSearching: Bool = false,
             topMoversState: TopMoversSection.State? = nil
         ) {
-            self.filter = filterOverride ?? appMode.defaultFilter
+            self.searchFilter = filterOverride ?? appMode.defaultFilter
             self.unsortedData = data
             self.searchText = searchText
             self.isSearching = isSearching
