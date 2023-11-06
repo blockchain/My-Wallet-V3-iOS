@@ -67,23 +67,23 @@ struct TradingDashboardView: View {
                     loadingView
                 }
             }
-            .padding(.top, displayDisclaimer ? max(disclaimerHeight + Spacing.padding1, 68).pt : 0.pt)
+            .padding(.top, displayDisclaimer ? max(disclaimerHeight, 68).pt : 0.pt)
             if onboarding.isFinished {
-                    FinancialPromotionDisclaimerView(display: $displayDisclaimer)
-                        .padding()
-                        .background(
-                            GeometryReader { proxy in
-                                RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y))
-                                    .fill(Color.semantic.light)
-                                    .shadow(color: .semantic.dark.opacity(0.5), radius: shadowRadius(forScrollOffset: scrollOffset.y))
-                                    .padding(.init(top: 0, leading: 16, bottom: 0, trailing: 16))
-                                    .onChange(of: proxy.size) { _ in
-                                        disclaimerHeight = proxy.size.height
-                                    }
-                            }
-                        )
-                        .mask(RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y)).padding(.bottom, -20))
-                        .padding([.top, .bottom], 8.pt)
+                FinancialPromotionDisclaimerView(display: $displayDisclaimer)
+                    .padding()
+                    .background(
+                        GeometryReader { proxy in
+                            RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y))
+                                .fill(Color.semantic.light)
+                                .shadow(color: .semantic.dark.opacity(0.5), radius: shadowRadius(forScrollOffset: scrollOffset.y))
+                                .padding(.init(top: 0, leading: 16, bottom: 0, trailing: 16))
+                                .onChange(of: proxy.size) { _ in
+                                    disclaimerHeight = proxy.size.height
+                                }
+                        }
+                    )
+                    .mask(RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y)).padding(.bottom, -20))
+                    .padding([.top, .bottom], 8.pt)
             }
         }
         .superAppNavigationBar(
