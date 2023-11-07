@@ -68,17 +68,17 @@ extension RecurringBuy.Frequency {
     public var description: String {
         switch self {
         case .unknown:
-            return LocalizationConstants.unknown
+            LocalizationConstants.unknown
         case .once:
-            return LocalizationId.oneTimeBuy
+            LocalizationId.oneTimeBuy
         case .daily:
-            return LocalizationId.daily
+            LocalizationId.daily
         case .weekly:
-            return LocalizationId.weekly
+            LocalizationId.weekly
         case .biweekly:
-            return LocalizationId.twiceAMonth
+            LocalizationId.twiceAMonth
         case .monthly:
-            return LocalizationId.monthly
+            LocalizationId.monthly
         }
     }
 }

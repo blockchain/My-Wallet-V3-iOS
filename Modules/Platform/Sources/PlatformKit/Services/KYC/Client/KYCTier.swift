@@ -7,45 +7,45 @@ extension KYC.Tier {
     public var headline: String? {
         switch self {
         case .verified:
-            return LocalizationConstants.KYC.freeCrypto
+            LocalizationConstants.KYC.freeCrypto
         case .unverified:
-            return nil
+            nil
         }
     }
 
     public var tierDescription: String {
         switch self {
         case .unverified:
-            return LocalizationConstants.KYC.unverified
+            LocalizationConstants.KYC.unverified
         case .verified:
-            return LocalizationConstants.KYC.verified
+            LocalizationConstants.KYC.verified
         }
     }
 
     public var requirementsDescription: String {
         switch self {
         case .verified:
-            return LocalizationConstants.KYC.verificationRequirements
+            LocalizationConstants.KYC.verificationRequirements
         case .unverified:
-            return ""
+            ""
         }
     }
 
     public var limitTimeframe: String {
         switch self {
         case .unverified:
-            return "locked"
+            "locked"
         case .verified:
-            return LocalizationConstants.KYC.dailySwapLimit
+            LocalizationConstants.KYC.dailySwapLimit
         }
     }
 
     public var duration: String {
         switch self {
         case .unverified:
-            return "0 minutes"
+            "0 minutes"
         case .verified:
-            return LocalizationConstants.KYC.takesTenMinutes
+            LocalizationConstants.KYC.takesTenMinutes
         }
     }
 }

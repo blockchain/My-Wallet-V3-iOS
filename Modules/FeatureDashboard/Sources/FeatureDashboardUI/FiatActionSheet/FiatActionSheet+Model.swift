@@ -65,11 +65,11 @@ extension AssetAction {
     fileprivate var fiatAction: FiatActionSheet.FiatAction? {
         switch self {
         case .deposit:
-            return .deposit
+            .deposit
         case .withdraw:
-            return .withdraw
+            .withdraw
         default:
-            return nil
+            nil
         }
     }
 }

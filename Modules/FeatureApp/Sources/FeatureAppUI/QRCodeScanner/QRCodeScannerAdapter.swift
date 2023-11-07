@@ -143,7 +143,7 @@ extension QRCodeScannerAdapter: CryptoTargetQRCodeParserAdapter {
             .flatMap { target -> AnyPublisher<QRCodeParserTarget, QRScannerError> in
                 switch target {
                 case .bitpay(let address):
-                    return BitPayInvoiceTarget
+                    BitPayInvoiceTarget
                         .make(from: address, asset: account.asset)
                         .map { target in
                             FeatureQRCodeScannerDomain
@@ -153,7 +153,7 @@ extension QRCodeScannerAdapter: CryptoTargetQRCodeParserAdapter {
                         .mapError(QRScannerError.parserError)
                         .eraseToAnyPublisher()
                 case .address:
-                    return .just(target)
+                    .just(target)
                 }
             }
             .eraseToAnyPublisher()
@@ -212,9 +212,9 @@ extension QRCodeParserTarget {
     var account: CryptoAccount? {
         switch self {
         case .bitpay:
-            return nil
+            nil
         case .address(let account, _):
-            return account
+            account
         }
     }
 }

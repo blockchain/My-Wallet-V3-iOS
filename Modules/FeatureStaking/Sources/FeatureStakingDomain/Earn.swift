@@ -304,8 +304,6 @@ extension EarnAccount {
     }
 }
 
-// payments/transactions
-
 public struct EarnActivityList: Hashable, Decodable {
     public let items: [EarnActivity]
 }

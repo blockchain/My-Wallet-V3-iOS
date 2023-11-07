@@ -269,7 +269,6 @@ final class TagBlockchainSchemaTests: XCTestCase {
         preview.limit.days.unbonding = 0
         preview.limit.withdraw.is.disabled = true
         preview.limit.reward.frequency = blockchain.user.earn.product.asset.limit.reward.frequency.daily[]
-        preview.activity = []
     }
 
     func test_tag_last_declared_descendant() throws {

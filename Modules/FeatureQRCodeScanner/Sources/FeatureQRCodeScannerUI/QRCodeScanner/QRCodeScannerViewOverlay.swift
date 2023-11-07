@@ -17,15 +17,15 @@ final class QRCodeScannerViewOverlay: UIView {
         private var name: String {
             switch self {
             case .cameraRoll:
-                return "camera-roll-button"
+                "camera-roll-button"
             case .connectedDapps:
-                return "connectedDappsIcon"
+                "connectedDappsIcon"
             case .flashDisabled:
-                return "flashDisabled"
+                "flashDisabled"
             case .flashEnabled:
-                return "flashEnabled"
+                "flashEnabled"
             case .target:
-                return "target"
+                "target"
             }
         }
 

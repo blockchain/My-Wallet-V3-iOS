@@ -15,9 +15,9 @@ public enum ExchangeAccountState: String {
     public var isActive: Bool {
         switch self {
         case .active:
-            return true
+            true
         case .pending, .blocked:
-            return false
+            false
         }
     }
 

@@ -237,39 +237,39 @@ final class TransactionFlowInteractor: PresentableInteractor<TransactionFlowPres
             .map { [sourceAccount, target, action] _ -> TransactionAction in
                 switch action {
                 case .deposit:
-                    return self.handleFiatDeposit(
+                    self.handleFiatDeposit(
                         sourceAccount: sourceAccount,
                         target: target
                     )
 
                 case .swap where sourceAccount != nil && target != nil:
-                    return .initialiseWithSourceAndPreferredTarget(
+                    .initialiseWithSourceAndPreferredTarget(
                         action: action,
                         sourceAccount: sourceAccount!,
                         target: target!
                     )
 
                 case _ where sourceAccount != nil && target != nil:
-                    return .initialiseWithSourceAndTargetAccount(
+                    .initialiseWithSourceAndTargetAccount(
                         action: action,
                         sourceAccount: sourceAccount!,
                         target: target!
                     )
 
                 case _ where sourceAccount != nil:
-                    return .initialiseWithSourceAccount(
+                    .initialiseWithSourceAccount(
                         action: action,
                         sourceAccount: sourceAccount!
                     )
 
                 case _ where target != nil:
-                    return .initialiseWithTargetAndNoSource(
+                    .initialiseWithTargetAndNoSource(
                         action: action,
                         target: target!
                     )
 
                 default:
-                    return .initialiseWithNoSourceOrTargetAccount(
+                    .initialiseWithNoSourceOrTargetAccount(
                         action: action
                     )
                 }
@@ -756,9 +756,9 @@ extension OpenBankingAction {
     var currency: String {
         switch self {
         case .buy(let order):
-            return order.inputValue.code
+            order.inputValue.code
         case .deposit(let order):
-            return order.amount.code
+            order.amount.code
         }
     }
 }
@@ -836,12 +836,11 @@ extension TransactionState {
 extension AssetAction {
 
     var canPresentKYCUpgradeFlowAfterClosingTxFlow: Bool {
-        let canPresentKYCUpgradeFlow: Bool
-        switch self {
+        let canPresentKYCUpgradeFlow: Bool = switch self {
         case .buy, .swap:
-            canPresentKYCUpgradeFlow = true
+            true
         default:
-            canPresentKYCUpgradeFlow = false
+            false
         }
         return canPresentKYCUpgradeFlow
     }
@@ -1288,26 +1287,26 @@ extension AssetAction {
     public var earnProduct: String? {
         switch self {
         case .stakingDeposit:
-            return "staking"
+            "staking"
         case .interestTransfer, .interestWithdraw:
-            return "savings"
+            "savings"
         case .activeRewardsDeposit, .activeRewardsWithdraw:
-            return "earn_cc1w"
+            "earn_cc1w"
         case _:
-            return nil
+            nil
         }
     }
 
     public var earnProductTitle: String? {
         switch self {
         case .stakingDeposit:
-            return LocalizationConstants.MajorProductBlocked.Earn.Product.staking
+            LocalizationConstants.MajorProductBlocked.Earn.Product.staking
         case .interestTransfer, .interestWithdraw:
-            return LocalizationConstants.MajorProductBlocked.Earn.Product.passive
+            LocalizationConstants.MajorProductBlocked.Earn.Product.passive
         case .activeRewardsDeposit, .activeRewardsWithdraw:
-            return LocalizationConstants.MajorProductBlocked.Earn.Product.active
+            LocalizationConstants.MajorProductBlocked.Earn.Product.active
         case _:
-            return nil
+            nil
         }
     }
 }

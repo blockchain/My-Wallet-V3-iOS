@@ -64,22 +64,22 @@ public enum CompositeStatusViewType: Equatable {
     var cornerRadiusRatio: CGFloat {
         switch self {
         case .composite(let composite):
-            return composite.cornerRadiusRatio
+            composite.cornerRadiusRatio
         case .loader,
              .image,
              .none:
-            return 0
+            0
         }
     }
 
     var backgroundColor: UIColor {
         switch self {
         case .composite(let composite):
-            return composite.backgroundColor
+            composite.backgroundColor
         case .loader,
              .image,
              .none:
-            return .clear
+            .clear
         }
     }
 }

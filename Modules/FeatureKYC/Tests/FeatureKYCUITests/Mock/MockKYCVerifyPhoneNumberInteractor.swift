@@ -10,17 +10,17 @@ class MockKYCVerifyPhoneNumberInteractor: KYCVerifyPhoneNumberInteractor {
 
     override func startVerification(number: String) -> Completable {
         if shouldSucceed {
-            return Completable.empty()
+            Completable.empty()
         } else {
-            return Completable.error(HTTPRequestServerError.badResponse)
+            Completable.error(HTTPRequestServerError.badResponse)
         }
     }
 
     override func verifyNumber(with code: String) -> Completable {
         if shouldSucceed {
-            return Completable.empty()
+            Completable.empty()
         } else {
-            return Completable.error(HTTPRequestServerError.badResponse)
+            Completable.error(HTTPRequestServerError.badResponse)
         }
     }
 }

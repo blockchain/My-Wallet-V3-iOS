@@ -16,13 +16,13 @@ public enum FeeLevel: Equatable {
     public var title: String {
         switch self {
         case .none:
-            return ""
+            ""
         case .regular:
-            return LocalizationConstants.Transaction.Send.regular
+            LocalizationConstants.Transaction.Send.regular
         case .priority:
-            return LocalizationConstants.Transaction.Send.priority
+            LocalizationConstants.Transaction.Send.priority
         case .custom:
-            return LocalizationConstants.Transaction.Send.custom
+            LocalizationConstants.Transaction.Send.custom
         }
     }
 }

@@ -120,9 +120,9 @@ extension Publisher where Output == [SingleAccount], Failure == Error {
                     // If account can perform, return itself, else return nil
                     .map { canPerform in
                         if canPerform {
-                            return account
+                            account
                         } else {
-                            return nil
+                            nil
                         }
                     }
                     .tryCatch { error -> AnyPublisher<SingleAccount?, Failure> in
@@ -233,22 +233,21 @@ public enum AssetType {
 extension CoincoreAPI {
 
     public func hasFundedAccounts(for assetType: AssetType) -> AnyPublisher<Bool, Error> {
-        let accountsPublisher: AnyPublisher<[SingleAccount], Error>
-        switch assetType {
+        let accountsPublisher: AnyPublisher<[SingleAccount], Error> = switch assetType {
         case .all:
-            accountsPublisher = allAccounts(filter: .allExcludingExchange)
+            allAccounts(filter: .allExcludingExchange)
                 .map(\.accounts)
                 .eraseError()
                 .eraseToAnyPublisher()
         case .fiat:
-            accountsPublisher = fiatAsset
+            fiatAsset
                 .accountGroup(filter: .allExcludingExchange)
                 .compactMap { $0 }
                 .map(\.accounts)
                 .eraseError()
                 .eraseToAnyPublisher()
         case .crypto:
-            accountsPublisher = cryptoAccounts()
+            cryptoAccounts()
                 .map { accounts in
                     accounts.map { $0 as SingleAccount }
                 }
@@ -258,22 +257,21 @@ extension CoincoreAPI {
     }
 
     public func hasPositiveDisplayableBalanceAccounts(for assetType: AssetType) -> AnyPublisher<Bool, Error> {
-        let accountsPublisher: AnyPublisher<[SingleAccount], Error>
-        switch assetType {
+        let accountsPublisher: AnyPublisher<[SingleAccount], Error> = switch assetType {
         case .all:
-            accountsPublisher = allAccounts(filter: .allExcludingExchange)
+            allAccounts(filter: .allExcludingExchange)
                 .map(\.accounts)
                 .eraseError()
                 .eraseToAnyPublisher()
         case .fiat:
-            accountsPublisher = fiatAsset
+            fiatAsset
                 .accountGroup(filter: .allExcludingExchange)
                 .compactMap { $0 }
                 .map(\.accounts)
                 .eraseError()
                 .eraseToAnyPublisher()
         case .crypto:
-            accountsPublisher = cryptoAccounts()
+            cryptoAccounts()
                 .map { accounts in
                     accounts.map { $0 as SingleAccount }
                 }

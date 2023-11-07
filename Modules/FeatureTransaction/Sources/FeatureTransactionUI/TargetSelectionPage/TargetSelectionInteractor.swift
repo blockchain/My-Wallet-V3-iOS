@@ -50,7 +50,7 @@ final class TargetSelectionInteractor {
              .stakingDeposit,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
-            return Single.just(sourceAccount)
+            Single.just(sourceAccount)
                 .flatMap(weak: self) { (self, account) -> Single<[SingleAccount]> in
                     self.coincore
                         .getTransactionTargets(
@@ -60,9 +60,9 @@ final class TargetSelectionInteractor {
                         .asSingle()
                 }
         case .deposit:
-            return linkedBanksFactory.nonWireTransferBanks.map { $0.map { $0 as SingleAccount } }
+            linkedBanksFactory.nonWireTransferBanks.map { $0.map { $0 as SingleAccount } }
         case .withdraw:
-            return linkedBanksFactory.linkedBanks.map { $0.map { $0 as SingleAccount } }
+            linkedBanksFactory.linkedBanks.map { $0.map { $0 as SingleAccount } }
         case .sign,
              .receive,
              .buy,
@@ -111,9 +111,9 @@ private func validateDomain(
         .map { receiveAddress -> Result<ReceiveAddress, Error> in
             switch receiveAddress {
             case .some(let receiveAddress):
-                return .success(receiveAddress)
+                .success(receiveAddress)
             case .none:
-                return .failure(CryptoAssetError.addressParseFailure)
+                .failure(CryptoAssetError.addressParseFailure)
             }
         }
         .handleEvents(receiveOutput: { [analyticsRecorder] _ in

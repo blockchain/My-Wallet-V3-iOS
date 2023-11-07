@@ -102,9 +102,9 @@ extension DexCellView {
 
     private var amountViewText: Binding<String> {
         if viewStore.isCurrentInput {
-            return viewStore.$inputText.removeDuplicates()
+            viewStore.$inputText.removeDuplicates()
         } else {
-            return .constant(viewStore.amount?.toDisplayString(includeSymbol: false) ?? "")
+            .constant(viewStore.amount?.toDisplayString(includeSymbol: false) ?? "")
         }
     }
 

@@ -10,9 +10,9 @@ public enum DerivationType: String, Equatable, CaseIterable {
     var purpose: Int {
         switch self {
         case .legacy:
-            return 44
+            44
         case .segwit:
-            return 84
+            84
         }
     }
 

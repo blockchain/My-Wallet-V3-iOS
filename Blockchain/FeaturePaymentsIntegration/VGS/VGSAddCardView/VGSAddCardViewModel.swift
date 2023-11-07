@@ -259,42 +259,42 @@ extension VGSAddCardViewModel {
         var message: String? {
             switch self {
             case .best:
-                return nil
+                nil
             case .unblocked(let ux):
-                return ux?.title ?? L10n.thisCardOftenDeclines
+                ux?.title ?? L10n.thisCardOftenDeclines
             case .blocked(let ux):
-                return ux?.title ?? L10n.buyingCryptoNotSupported
+                ux?.title ?? L10n.buyingCryptoNotSupported
             }
         }
 
         var errorTextColor: Color? {
             switch self {
             case .best:
-                return nil
+                nil
             case .unblocked:
-                return .semantic.warning
+                .semantic.warning
             case .blocked:
-                return .semantic.error
+                .semantic.error
             }
         }
 
         var borderColor: Color? {
             switch self {
             case .best:
-                return .semantic.border
+                .semantic.border
             case .unblocked:
-                return .semantic.warning
+                .semantic.warning
             case .blocked:
-                return .semantic.error
+                .semantic.error
             }
         }
 
         var canAddCard: Bool {
             switch self {
             case .blocked:
-                return false
+                false
             default:
-                return true
+                true
             }
         }
     }

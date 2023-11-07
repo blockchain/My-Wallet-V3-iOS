@@ -45,18 +45,18 @@ public struct PartnerAuthorizationData: Equatable {
         public var isRequired: Bool {
             switch self {
             case .required:
-                return true
+                true
             case .confirmed, .none:
-                return false
+                false
             }
         }
 
         public var isConfirmed: Bool {
             switch self {
             case .confirmed:
-                return true
+                true
             case .required, .none:
-                return false
+                false
             }
         }
     }

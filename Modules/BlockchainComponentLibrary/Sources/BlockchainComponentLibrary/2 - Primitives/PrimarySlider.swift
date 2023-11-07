@@ -102,36 +102,36 @@ private struct SliderRepresentable<Value: BinaryFloatingPoint>: UIViewRepresenta
     private func thumbBackgroundColor(for colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .dark:
-            return .palette.dark500
+            .palette.dark500
         default:
-            return .palette.white
+            .palette.white
         }
     }
 
     private func thumbBorderColor(for colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .dark:
-            return .palette.dark900
+            .palette.dark900
         default:
-            return .palette.grey000
+            .palette.grey000
         }
     }
 
     private func firstShadow(for colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .dark:
-            return .black.opacity(0.12)
+            .black.opacity(0.12)
         default:
-            return .black.opacity(0.06)
+            .black.opacity(0.06)
         }
     }
 
     private func secondShadow(for colorScheme: ColorScheme) -> Color {
         switch colorScheme {
         case .dark:
-            return .black.opacity(0.12)
+            .black.opacity(0.12)
         default:
-            return .black.opacity(0.15)
+            .black.opacity(0.15)
         }
     }
 

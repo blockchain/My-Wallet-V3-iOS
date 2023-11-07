@@ -19,11 +19,11 @@ enum RecurringBuyOnboardingScreens: Hashable, Identifiable, CaseIterable {
 
     var pageIndex: Int {
         switch self {
-        case .intro: return 0
-        case .strategy: return 1
-        case .marketUp: return 2
-        case .marketDown: return 3
-        case .final: return 4
+        case .intro: 0
+        case .strategy: 1
+        case .marketUp: 2
+        case .marketDown: 3
+        case .final: 4
         }
     }
 
@@ -41,15 +41,15 @@ enum RecurringBuyOnboardingScreens: Hashable, Identifiable, CaseIterable {
     var titles: (main: String, highlighted: String) {
         switch self {
         case .intro:
-            return (L10n.Onboarding.Pages.first, L10n.Onboarding.Pages.firstHighlight)
+            (L10n.Onboarding.Pages.first, L10n.Onboarding.Pages.firstHighlight)
         case .strategy:
-            return (L10n.Onboarding.Pages.second, L10n.Onboarding.Pages.secondHighlight)
+            (L10n.Onboarding.Pages.second, L10n.Onboarding.Pages.secondHighlight)
         case .marketUp:
-            return (L10n.Onboarding.Pages.third, L10n.Onboarding.Pages.thirdHighlight)
+            (L10n.Onboarding.Pages.third, L10n.Onboarding.Pages.thirdHighlight)
         case .marketDown:
-            return (L10n.Onboarding.Pages.fourth, L10n.Onboarding.Pages.fourthHighlight)
+            (L10n.Onboarding.Pages.fourth, L10n.Onboarding.Pages.fourthHighlight)
         case .final:
-            return (L10n.Onboarding.Pages.fifth, L10n.Onboarding.Pages.fifthHighlight)
+            (L10n.Onboarding.Pages.fifth, L10n.Onboarding.Pages.fifthHighlight)
         }
     }
 

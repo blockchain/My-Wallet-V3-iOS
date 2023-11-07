@@ -113,11 +113,11 @@ extension EarnProductCompare.State.Step {
     private var title: String {
         switch self {
         case .staking:
-            return L10n.staking
+            L10n.staking
         case .passive:
-            return L10n.passive
+            L10n.passive
         case .active:
-            return L10n.active
+            L10n.active
         }
     }
 
@@ -204,11 +204,11 @@ extension EarnProductCompare.State.Step {
     private var subtitle: String {
         switch self {
         case .passive:
-            return Localization.Earn.Compare.Passive.description
+            Localization.Earn.Compare.Passive.description
         case .staking:
-            return Localization.Earn.Compare.Staking.description
+            Localization.Earn.Compare.Staking.description
         case .active:
-            return Localization.Earn.Compare.Active.description
+            Localization.Earn.Compare.Active.description
         }
     }
 
@@ -245,17 +245,17 @@ extension EarnProductCompareView.EarnProductItem {
     private var icon: Image {
         switch self {
         case .userLevel:
-            return Image("Users", bundle: .featureStaking)
+            Image("Users", bundle: .featureStaking)
         case .assets:
-            return Image("Coins", bundle: .featureStaking)
+            Image("Coins", bundle: .featureStaking)
         case .rate:
-            return Image("Rewards", bundle: .featureStaking)
+            Image("Rewards", bundle: .featureStaking)
         case .periodicity:
-            return Image("USD", bundle: .featureStaking)
+            Image("USD", bundle: .featureStaking)
         case .payment:
-            return Image("Wallet", bundle: .featureStaking)
+            Image("Wallet", bundle: .featureStaking)
         case .withdrawal:
-            return Image("Send", bundle: .featureStaking)
+            Image("Send", bundle: .featureStaking)
         }
     }
 

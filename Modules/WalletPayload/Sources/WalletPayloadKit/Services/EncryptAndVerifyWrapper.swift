@@ -14,13 +14,13 @@ public enum EncryptAndVerifyError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .expectedEncodedPayload:
-            return LocalizationConstants.WalletPayloadKit.EncryptAndVerifyErrorConstants.expectedEncryptedPayload
+            LocalizationConstants.WalletPayloadKit.EncryptAndVerifyErrorConstants.expectedEncryptedPayload
         case .genericFailure:
-            return LocalizationConstants.WalletPayloadKit.Error.unknown
+            LocalizationConstants.WalletPayloadKit.Error.unknown
         case .encryptionFailure:
-            return LocalizationConstants.WalletPayloadKit.EncryptAndVerifyErrorConstants.encryptionFailure
+            LocalizationConstants.WalletPayloadKit.EncryptAndVerifyErrorConstants.encryptionFailure
         case .encodingError(let walletEncodingError):
-            return walletEncodingError.errorDescription
+            walletEncodingError.errorDescription
         }
     }
 }

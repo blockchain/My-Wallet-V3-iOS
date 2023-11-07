@@ -33,17 +33,17 @@ final class CardDetailsScreenPresenter: RibBridgePresenter {
         var row: Int {
             switch self {
             case .textField(.cardholderName):
-                return 0
+                0
             case .textField(.cardNumber):
-                return 1
+                1
             case .doubleTextField(.expirationDate, .cardCVV):
-                return 2
+                2
             case .button:
-                return 3
+                3
             case .creditCardLearnMore:
-                return 4
+                4
             case .privacyNotice:
-                return 5
+                5
             default:
                 fatalError("No such cell type for cell type \(self)")
             }

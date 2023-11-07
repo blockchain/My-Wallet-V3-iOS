@@ -38,11 +38,11 @@ extension DarkModeSetting {
     var userInterfaceStyle: UIUserInterfaceStyle {
             switch self {
             case .automatic:
-                return .unspecified
+                .unspecified
             case .light:
-                return .light
+                .light
             case .dark:
-                return .dark
+                .dark
             }
         }
 }

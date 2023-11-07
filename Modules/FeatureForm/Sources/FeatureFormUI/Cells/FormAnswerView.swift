@@ -374,18 +374,18 @@ extension FormAnswer {
     var answerBackgroundStrokeColor: Color {
         switch isValid {
         case true:
-            return .semantic.medium
+            .semantic.medium
         case false:
-            return .semantic.error
+            .semantic.error
         }
     }
 
     fileprivate var inputState: InputState {
         switch isValid {
         case true:
-            return .default
+            .default
         case false:
-            return .error
+            .error
         }
     }
 }

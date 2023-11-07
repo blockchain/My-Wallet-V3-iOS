@@ -27,9 +27,9 @@ extension Dictionary where Value == Any {
     ) -> Self {
         merging(other) { old, new in
             if let old = old as? Self, let new = new as? Self {
-                return old.deepMerging(new, uniquingKeysWith: policy)
+                old.deepMerging(new, uniquingKeysWith: policy)
             } else {
-                return policy(old, new)
+                policy(old, new)
             }
         }
     }

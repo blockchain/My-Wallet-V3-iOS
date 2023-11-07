@@ -16,11 +16,11 @@ public struct NotificationPreferencesDetailsReducer: Reducer {
         Reduce { _, action in
             switch action {
             case .onAppear:
-                return .none
+                .none
             case .save:
-                return .none
+                .none
             case .binding:
-                return .none
+                .none
             }
         }
     }

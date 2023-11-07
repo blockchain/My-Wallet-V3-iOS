@@ -47,9 +47,9 @@ enum NetworkErrorEvent: AnalyticsEvent {
     var params: [String: String]? {
         switch self {
         case .unknown:
-            return [:]
+            [:]
         case .clientError(let details):
-            return details?.params ?? [:]
+            details?.params ?? [:]
         }
     }
 }

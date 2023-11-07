@@ -30,11 +30,11 @@ public class ReferralService: ReferralServiceAPI {
     }
 
     public func createReferral(with code: String) -> AnyPublisher<Void, NetworkError> {
-        isEnabled().flatMap { [repository] isEnabled in
+        isEnabled().flatMap { [repository] isEnabled -> AnyPublisher<Void, NetworkError> in
             if isEnabled {
-                return repository.createReferral(with: code).eraseToAnyPublisher()
+                repository.createReferral(with: code).eraseToAnyPublisher()
             } else {
-                return .just(())
+                .just(())
             }
         }
         .eraseToAnyPublisher()
@@ -46,9 +46,9 @@ public class ReferralService: ReferralServiceAPI {
             .combineLatest(isEnabled())
             .flatMap { [repository] currency, isEnabled -> AnyPublisher<Referral?, NetworkError> in
                 if isEnabled {
-                    return repository.fetchReferralCampaign(for: currency.code).optional()
+                    repository.fetchReferralCampaign(for: currency.code).optional()
                 } else {
-                    return .just(nil)
+                    .just(nil)
                 }
             }
             .replaceError(with: nil)

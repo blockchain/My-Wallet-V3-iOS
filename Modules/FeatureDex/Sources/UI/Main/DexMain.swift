@@ -457,9 +457,9 @@ extension DexMain {
             .flatMap { input -> AnyPublisher<Result<DexQuoteOutput, UX.Error>, Never> in
                 switch input {
                 case .success(let input):
-                    return dexService.quote(input)
+                    dexService.quote(input)
                 case .failure(let error):
-                    return .just(.failure(error))
+                    .just(.failure(error))
                 }
             }
             .eraseToAnyPublisher()

@@ -82,16 +82,15 @@ public final class AuthorizeDeviceViewController: UINavigationController {
 
     private func showAuthorizationResult(_ result: AuthorizationResult) {
         var viewController: UIHostingController<AuthorizationResultView>
-        var view: AuthorizationResultView
-        switch result {
+        var view: AuthorizationResultView = switch result {
         case .success:
-            view = .success
+            .success
         case .linkExpired:
-            view = .linkExpired
+            .linkExpired
         case .requestDenied:
-            view = .rejected
+            .rejected
         case .unknown:
-            view = .unknown
+            .unknown
         }
         view.okButtonPressed = {
             self.dismiss(animated: true, completion: nil)

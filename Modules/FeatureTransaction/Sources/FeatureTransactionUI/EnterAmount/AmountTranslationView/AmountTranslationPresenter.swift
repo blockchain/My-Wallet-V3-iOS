@@ -194,9 +194,9 @@ public final class AmountTranslationPresenter: AmountViewPresenting {
     private func setupButton(by state: AmountInteractorState) -> AmountPresenterState {
         switch state {
         case .validInput(let messageState):
-            return .validInput(buttonViewModel(state: messageState))
+            .validInput(buttonViewModel(state: messageState))
         case .invalidInput(let messageState):
-            return .invalidInput(buttonViewModel(state: messageState))
+            .invalidInput(buttonViewModel(state: messageState))
         }
     }
 
@@ -231,9 +231,9 @@ extension AmountPresenterInput {
     var toInteractorInput: AmountInteractorInput {
         switch self {
         case .input(let value):
-            return .insert(value)
+            .insert(value)
         case .delete:
-            return .remove
+            .remove
         }
     }
 }

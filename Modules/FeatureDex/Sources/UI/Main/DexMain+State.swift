@@ -146,18 +146,18 @@ extension DexMain.State {
             var allowanceSpender: String? {
                 switch self {
                 case .required(let value):
-                    return value
+                    value
                 default:
-                    return nil
+                    nil
                 }
             }
 
             var finished: Bool {
                 switch self {
                 case .notRequired, .complete:
-                    return true
+                    true
                 case .pending, .required, .unknown:
-                    return false
+                    false
                 }
             }
         }
@@ -168,15 +168,15 @@ extension DexMain.State {
         var status: Status {
             switch (transactionHash != nil, result) {
             case (false, nil):
-                return .unknown
+                .unknown
             case (false, .nok(let allowanceSpender)):
-                return .required(allowanceSpender: allowanceSpender)
+                .required(allowanceSpender: allowanceSpender)
             case (false, .ok):
-                return .notRequired
+                .notRequired
             case (true, .nok), (true, nil):
-                return .pending
+                .pending
             case (true, .ok):
-                return .complete
+                .complete
             }
         }
     }
@@ -202,15 +202,15 @@ enum ContinueButtonState: Hashable {
     var title: String {
         switch self {
         case .noAssetOnNetwork(let network):
-            return L10n.Main.noAssetsOnNetwork.interpolating(network.networkConfig.shortName)
+            L10n.Main.noAssetsOnNetwork.interpolating(network.networkConfig.shortName)
         case .selectToken:
-            return L10n.Main.selectAToken
+            L10n.Main.selectAToken
         case .enterAmount:
-            return L10n.Main.enterAnAmount
+            L10n.Main.enterAnAmount
         case .previewSwapDisabled, .previewSwap:
-            return L10n.Main.previewSwap
+            L10n.Main.previewSwap
         case .error(let error):
-            return error.title
+            error.title
         }
     }
 }

@@ -84,9 +84,9 @@ public final class CardRouterInteractor: Interactor {
             .compactMap { action in
                 switch action {
                 case .next(to: .completed(let data)):
-                    return data
+                    data
                 default:
-                    return nil
+                    nil
                 }
             }
             .take(1)
@@ -97,9 +97,9 @@ public final class CardRouterInteractor: Interactor {
             .compactMap { action in
                 switch action {
                 case .next(to: .pendingCardState(let cardId)):
-                    return cardId
+                    cardId
                 default:
-                    return nil
+                    nil
                 }
             }
             .take(1)

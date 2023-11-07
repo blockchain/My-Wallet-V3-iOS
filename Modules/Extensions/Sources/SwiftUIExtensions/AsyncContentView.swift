@@ -8,19 +8,19 @@ public enum AsyncState<Value, Failure: Error> {
     case failure(Failure)
 
     @inlinable public var isIdle: Bool {
-        if case .idle = self { return true } else { return false }
+        if case .idle = self { true } else { false }
     }
 
     @inlinable public var isLoading: Bool {
-        if case .loading = self { return true } else { return false }
+        if case .loading = self { true } else { false }
     }
 
     @inlinable public var isSuccess: Bool {
-        if case .success = self { return true } else { return false }
+        if case .success = self { true } else { false }
     }
 
     @inlinable public var isFailure: Bool {
-        if case .failure = self { return true } else { return false }
+        if case .failure = self { true } else { false }
     }
 }
 
@@ -32,11 +32,11 @@ extension AsyncState: Equatable {
 
     public static func == (lhs: AsyncState<Value, Failure>, rhs: AsyncState<Value, Failure>) -> Bool {
         switch (lhs, rhs) {
-        case (.idle, .idle): return true
-        case (.loading, .loading): return true
-        case (.success(let s1), .success(let s2)): return isEqual(s1, s2)
-        case (.failure(let e1), .failure(let e2)): return String(describing: e1) == String(describing: e2)
-        default: return false
+        case (.idle, .idle): true
+        case (.loading, .loading): true
+        case (.success(let s1), .success(let s2)): isEqual(s1, s2)
+        case (.failure(let e1), .failure(let e2)): String(describing: e1) == String(describing: e2)
+        default: false
         }
     }
 }

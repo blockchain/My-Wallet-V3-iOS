@@ -225,12 +225,12 @@ private func limitedDetents(presentationController: UIPresentationController) ->
 let maxHeightResolution: (UIPresentationController, NSObjectProtocol) -> CGFloat = { presentationController, context in
     if #available(iOS 16, *) {
         if let skata = context as? UISheetPresentationControllerDetentResolutionContext {
-            return skata.maximumDetentValue
+            skata.maximumDetentValue
         } else {
-            return fallbackResolution(presentationController)
+            fallbackResolution(presentationController)
         }
     } else {
-        return fallbackResolution(presentationController)
+        fallbackResolution(presentationController)
     }
 }
 
@@ -239,11 +239,10 @@ let fallbackResolution: (UIPresentationController) -> CGFloat = { presentationCo
     guard let containerView = presentationController.containerView else {
         return presentationController.presentedViewController.view.intrinsicContentSize.height.rounded(.up)
     }
-    let safeAreaValueToAccountFor: CGFloat
-    if containerView.safeAreaInsets.bottom > 0 {
-        safeAreaValueToAccountFor = containerView.safeAreaInsets.top + containerView.safeAreaInsets.bottom
+    let safeAreaValueToAccountFor: CGFloat = if containerView.safeAreaInsets.bottom > 0 {
+        containerView.safeAreaInsets.top + containerView.safeAreaInsets.bottom
     } else {
-        safeAreaValueToAccountFor = 0
+        0
     }
     let maxValue = containerView.frame.height - safeAreaValueToAccountFor
     return maxValue

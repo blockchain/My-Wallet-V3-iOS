@@ -119,10 +119,10 @@ extension NSNumber {
 
 func bridgeFromObjCType(_ value: Any) -> Any? {
     switch value {
-    case let string as NSString: return string as String
-    case let number as NSNumber where number.isInt: return number.intValue
-    case let number as NSNumber where number.isBoolean: return number.boolValue
-    case let number as NSNumber where number.isDouble: return number.doubleValue
-    default: return nil
+    case let string as NSString: string as String
+    case let number as NSNumber where number.isInt: number.intValue
+    case let number as NSNumber where number.isBoolean: number.boolValue
+    case let number as NSNumber where number.isDouble: number.doubleValue
+    default: nil
     }
 }

@@ -31,12 +31,12 @@ public final class CollectionTextMatchValidator: TextMatchValidatorAPI {
             .combineLatest(collection.map(\.valueRelay))
             .map { array -> Bool in
                 if array.areAllElementsEqual {
-                    return true
+                    true
                     // If there is an empty string in the array and it should be validated
                 } else if array.containsEmpty {
-                    return !options.contains(.validateEmpty)
+                    !options.contains(.validateEmpty)
                 } else {
-                    return false
+                    false
                 }
             }
             .map { $0 ? .valid : .invalid(reason: invalidReason) }

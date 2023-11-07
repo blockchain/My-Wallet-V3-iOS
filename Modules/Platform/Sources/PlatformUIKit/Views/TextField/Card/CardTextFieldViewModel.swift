@@ -84,9 +84,9 @@ public final class CardTextFieldViewModel: TextFieldViewModel {
         cardThumbnailBadgeImageViewModel
             .map { viewModel in
                 if let viewModel {
-                    return .badgeImageView(viewModel)
+                    .badgeImageView(viewModel)
                 } else {
-                    return .empty
+                    .empty
                 }
             }
             .bindAndCatch(to: accessoryContentTypeRelay)

@@ -11,7 +11,7 @@ public enum MockError: Error {
     var description: String {
         switch self {
         case .unknown:
-            return "unknown"
+            "unknown"
         }
     }
 }

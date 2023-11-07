@@ -183,19 +183,17 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
         // see if this is `nil` prior to initializing it.
         if transferCheckboxViewModel == nil {
 
-            let message: String
-
-            switch (state.action, state.pendingTransaction?.limits?.earn?.bondingDays) {
+            let message: String = switch (state.action, state.pendingTransaction?.limits?.earn?.bondingDays) {
             case (.stakingDeposit, 0):
-                message = LocalizedString.Staking.transferAgreementNoBonding
+                LocalizedString.Staking.transferAgreementNoBonding
             case (.stakingDeposit, 1):
-                message = LocalizedString.Staking.transferAgreementDayBonding
+                LocalizedString.Staking.transferAgreementDayBonding
             case (.stakingDeposit, _):
-                message = LocalizedString.Staking.transferAgreementDaysBonding
+                LocalizedString.Staking.transferAgreementDaysBonding
             case (.activeRewardsDeposit, _):
-                message = LocalizedString.Transfer.transferAgreementAR
+                LocalizedString.Transfer.transferAgreementAR
             case _:
-                message = LocalizedString.Transfer.transferAgreement
+                LocalizedString.Transfer.transferAgreement
             }
 
             transferCheckboxViewModel = .init(
@@ -452,11 +450,11 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
     private static func screenTitle(state: TransactionState) -> String {
         switch state.action {
         case .sign:
-            return LocalizedString.Confirmation.signatureRequest
+            LocalizedString.Confirmation.signatureRequest
         case .send:
-            return LocalizedString.Confirmation.sendRequest
+            LocalizedString.Confirmation.sendRequest
         default:
-            return LocalizedString.Confirmation.confirm
+            LocalizedString.Confirmation.confirm
         }
     }
 
@@ -494,9 +492,9 @@ final class ConfirmationPageContentReducer: ConfirmationPageContentReducing {
     private static func confirmCtaBackgroundColor(state: TransactionState) -> UIColor {
         switch state.action {
         case .buy:
-            return sourceIsApplePay(state: state) ? .semantic.title : .primary
+            sourceIsApplePay(state: state) ? .semantic.title : .primary
         default:
-            return .primary
+            .primary
         }
     }
 

@@ -37,6 +37,7 @@ extension DexCell {
         var textFieldDisabled: Bool {
             style.isDestination && quoteByOutputEnabled.isNo
         }
+
         var networkPickerDisabled: Bool {
             style.isDestination && crossChainEnabled.isNo
         }

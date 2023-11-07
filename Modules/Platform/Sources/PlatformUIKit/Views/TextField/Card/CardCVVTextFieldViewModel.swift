@@ -32,9 +32,9 @@ public final class CardCVVTextFieldViewModel: TextFieldViewModel {
             .map { type in
                 switch type {
                 case .mastercard:
-                    return LocalizationConstants.TextField.Title.Card.cvc
+                    LocalizationConstants.TextField.Title.Card.cvc
                 case .amex, .diners, .discover, .jcb, .unknown, .visa:
-                    return LocalizationConstants.TextField.Title.Card.cvv
+                    LocalizationConstants.TextField.Title.Card.cvv
                 }
             }
             .bindAndCatch(to: titleRelay)

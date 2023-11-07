@@ -18,18 +18,27 @@ extension AssetPicker {
             public var currency: CryptoCurrency {
                 switch self {
                 case .balance(let balance):
-                    return balance.currency
+                    balance.currency
                 case .token(let currency):
-                    return currency
+                    currency
+                }
+            }
+
+            public var balance: DexBalance {
+                switch self {
+                case .balance(let balance):
+                    balance
+                case .token(let token):
+                    .zero(token)
                 }
             }
 
             public var id: String {
                 switch self {
                 case .balance(let balance):
-                    return "balance-\(balance.currency.code)"
+                    "balance-\(balance.currency.code)"
                 case .token(let currency):
-                    return "token-\(currency.code)"
+                    "token-\(currency.code)"
                 }
             }
         }

@@ -18,9 +18,9 @@ public final class KeyboardInteractionController {
         var value: UIView? {
             switch self {
             case .view(let value):
-                return value.value
+                value.value
             case .viewController(let value):
-                return value.value?.view
+                value.value?.view
             }
         }
     }

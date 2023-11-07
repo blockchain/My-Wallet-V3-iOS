@@ -18,7 +18,7 @@ public struct ChallengeView: View {
     @StateObject var object = ChallengeStateObject()
 
     var isValid: Bool {
-        !object.state.isFailure 
+        !object.state.isFailure
         && NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: phoneNumber)
         && (challenge == .dob && date.isNotNil || challenge == .ssn && ssnLast4.count == 4)
     }

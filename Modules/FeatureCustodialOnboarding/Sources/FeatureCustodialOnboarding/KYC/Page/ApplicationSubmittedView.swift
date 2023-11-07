@@ -18,7 +18,7 @@ public struct ApplicationSubmittedView: View {
                     .padding(8.pt)
                     .overlay(
                         alignment: .bottomTrailing,
-                        content: { 
+                        content: {
                             Group {
                                 if object.state.isLoading {
                                     ProgressView()

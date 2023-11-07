@@ -68,9 +68,9 @@ public struct CurrencyPairAndTime: Codable, Hashable, CustomStringConvertible {
 
     public var description: String {
         if let time {
-            return "\(base.code)-\(quote.code)@\(time.timeIntervalSince1970.i)"
+            "\(base.code)-\(quote.code)@\(time.timeIntervalSince1970.i)"
         } else {
-            return "\(base.code)-\(quote.code)"
+            "\(base.code)-\(quote.code)"
         }
     }
 }

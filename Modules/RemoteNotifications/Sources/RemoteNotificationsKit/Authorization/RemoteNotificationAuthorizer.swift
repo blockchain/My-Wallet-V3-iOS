@@ -214,13 +214,13 @@ extension AnalyticsEvents {
             switch self {
             // Permission - remote notification system request
             case .permissionSysNotifRequest:
-                return "permission_sys_notif_request"
+                "permission_sys_notif_request"
             // Permission - remote notification system approve
             case .permissionSysNotifApprove:
-                return "permission_sys_notif_approve"
+                "permission_sys_notif_approve"
             // Permission - remote notification system decline
             case .permissionSysNotifDecline:
-                return "permission_sys_notif_decline"
+                "permission_sys_notif_decline"
             }
         }
     }

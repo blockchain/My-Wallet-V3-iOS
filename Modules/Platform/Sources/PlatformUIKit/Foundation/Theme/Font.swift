@@ -27,9 +27,9 @@ public struct Font {
         var value: Double {
             switch self {
             case .standard(let size):
-                return size.value
+                size.value
             case .custom(let value):
-                return value
+                value
             }
         }
     }

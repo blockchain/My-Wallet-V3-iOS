@@ -19,34 +19,32 @@ public struct DigitPadButtonViewModel {
 
             /// The computed image value corresponding to `self`.
             var image: UIImage {
-                let name: String
-                switch self {
+                let name: String = switch self {
                 case .backspace:
-                    name = "backspace-icon"
+                    "backspace-icon"
                 case .faceId:
-                    name = "face_id_icon"
+                    "face_id_icon"
                 case .touchId:
-                    name = "touch_id_icon"
+                    "touch_id_icon"
                 }
                 return UIImage(named: name)!.withRenderingMode(.alwaysTemplate)
             }
 
             /// Accessibility id for image
             var accessibility: Accessibility {
-                let accessibility: Accessibility
-                switch self {
+                let accessibility: Accessibility = switch self {
                 case .backspace:
-                    accessibility = Accessibility(
+                    Accessibility(
                         id: AccessibilityId.backspaceButton,
                         label: LocalizedString.backspace
                     )
                 case .faceId:
-                    accessibility = Accessibility(
+                    Accessibility(
                         id: AccessibilityId.faceIdButton,
                         label: LocalizedString.faceId
                     )
                 case .touchId:
-                    accessibility = Accessibility(
+                    Accessibility(
                         id: AccessibilityId.touchIdButton,
                         label: LocalizedString.touchId
                     )
@@ -68,11 +66,11 @@ public struct DigitPadButtonViewModel {
         var tint: UIColor {
             switch self {
             case .image(type: _, tint: let color):
-                return color
+                color
             case .label(text: _, tint: let color):
-                return color
+                color
             case .none:
-                return .clear
+                .clear
             }
         }
 
@@ -80,11 +78,11 @@ public struct DigitPadButtonViewModel {
         var accessibility: Accessibility {
             switch self {
             case .image(type: let image, tint: _):
-                return image.accessibility
+                image.accessibility
             case .label(text: let value, tint: _):
-                return .id("\(AccessibilityId.digitButtonFormat)\(value)")
+                .id("\(AccessibilityId.digitButtonFormat)\(value)")
             case .none:
-                return .none
+                .none
             }
         }
     }

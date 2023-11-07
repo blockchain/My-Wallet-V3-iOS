@@ -249,13 +249,13 @@ public struct EarnIntro: Reducer {
             self.steps = [.intro] + products.compactMap { product in
                 switch product {
                 case .active:
-                    return .active
+                    .active
                 case .staking:
-                    return .staking
+                    .staking
                 case .savings:
-                    return .passive
+                    .passive
                 default:
-                    return nil
+                    nil
                 }
             }
             self.currentStep = steps.first ?? .intro
@@ -279,11 +279,11 @@ public struct EarnIntro: Reducer {
         var gradientBackgroundOpacity: Double {
             switch scrollOffset {
             case _ where scrollOffset >= 0:
-                return 1
+                1
             case _ where scrollOffset <= -scrollEffectTransitionDistance:
-                return 0
+                0
             default:
-                return 1 - Double(scrollOffset / -scrollEffectTransitionDistance)
+                1 - Double(scrollOffset / -scrollEffectTransitionDistance)
             }
         }
     }

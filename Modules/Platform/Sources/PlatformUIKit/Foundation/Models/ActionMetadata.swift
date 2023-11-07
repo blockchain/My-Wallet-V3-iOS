@@ -16,9 +16,9 @@ public enum ActionMetadata {
     public var block: (() -> Void)? {
         switch self {
         case .block(let block):
-            return block
+            block
         default:
-            return nil
+            nil
         }
     }
 }

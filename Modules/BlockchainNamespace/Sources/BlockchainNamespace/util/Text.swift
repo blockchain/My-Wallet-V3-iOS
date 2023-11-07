@@ -107,9 +107,9 @@ extension InterpolatedText {
             tokens.map { token -> AnyPublisher<Result<String, Swift.Error>, Never> in
                 switch token {
                 case .literal(let string):
-                    return .just(.success(string))
+                    .just(.success(string))
                 case .reference(let reference):
-                    return app.publisher(for: reference.key(to: context).in(app), as: String.self)
+                    app.publisher(for: reference.key(to: context).in(app), as: String.self)
                         .map(\.result)
                         .eraseToAnyPublisher()
                 }

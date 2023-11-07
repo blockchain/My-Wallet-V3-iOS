@@ -26,9 +26,9 @@ final class MockBiometryProvider: BiometryProviding {
     func authenticate(reason: Biometry.Reason) -> Single<Void> {
         switch canAuthenticate {
         case .success:
-            return .just(())
+            .just(())
         case .failure(let error):
-            return .error(error)
+            .error(error)
         }
     }
 }

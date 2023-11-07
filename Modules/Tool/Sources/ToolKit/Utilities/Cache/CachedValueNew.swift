@@ -69,7 +69,7 @@ public final class CachedValueNew<Key: Hashable, Value: Equatable, CacheError: E
             .flatMap { [inFlightRequests, cache, queue, fetch] value -> AnyPublisher<Value, CacheError> in
                 switch value {
                 case .absent, .stale:
-                    return fetchAndStore(
+                    fetchAndStore(
                         for: key,
                         fetch: fetch,
                         inFlightRequests: inFlightRequests,
@@ -77,7 +77,7 @@ public final class CachedValueNew<Key: Hashable, Value: Equatable, CacheError: E
                         queue: queue
                     )
                 case .present(let value):
-                    return .just(value)
+                    .just(value)
                 }
             }
             .eraseToAnyPublisher()
@@ -113,7 +113,7 @@ public final class CachedValueNew<Key: Hashable, Value: Equatable, CacheError: E
             .flatMap { [inFlightRequests, cache, queue, fetch] value -> StreamOf<CacheValue<Value>, CacheError> in
                 switch value {
                 case .absent, .stale:
-                    return fetchAndStore(
+                    fetchAndStore(
                         for: key,
                         fetch: fetch,
                         inFlightRequests: inFlightRequests,
@@ -128,19 +128,19 @@ public final class CachedValueNew<Key: Hashable, Value: Equatable, CacheError: E
                     .merge(with: Just(.success(value)))
                     .eraseToAnyPublisher()
                 case .present:
-                    return .just(.success(value))
+                    .just(.success(value))
                 }
             }
             .compactMap { result in
                 switch result {
                 case .failure(let error):
-                    return .failure(error)
+                    .failure(error)
                 case .success(.absent):
-                    return nil
+                    nil
                 case .success(.stale(let value)):
-                    return skipStale ? nil : .success(value)
+                    skipStale ? nil : .success(value)
                 case .success(.present(let value)):
-                    return .success(value)
+                    .success(value)
                 }
             }
             .eraseToAnyPublisher()

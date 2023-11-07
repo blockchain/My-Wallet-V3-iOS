@@ -105,5 +105,4 @@ struct SuperAppContentViewSmallDevice: View {
             state.set(interface.is.light, to: colorScheme == .light)
         }
     }
-
 }

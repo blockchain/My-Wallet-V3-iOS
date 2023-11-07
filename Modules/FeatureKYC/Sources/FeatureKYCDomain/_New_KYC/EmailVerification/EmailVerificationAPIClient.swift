@@ -33,16 +33,15 @@ public enum EmailVerificationError: Error, Equatable {
     case unknown(Error)
 
     public static func == (lhs: EmailVerificationError, rhs: EmailVerificationError) -> Bool {
-        let isEqual: Bool
-        switch (lhs, rhs) {
+        let isEqual: Bool = switch (lhs, rhs) {
         case (.unknown(let lhsError), .unknown(let rhsError)):
-            isEqual = String(describing: lhsError) == String(describing: rhsError)
+            String(describing: lhsError) == String(describing: rhsError)
         case (.networkError(let lhsError), .networkError(let rhsError)):
-            isEqual = lhsError == rhsError
+            lhsError == rhsError
         case (.unauthenticated, .unauthenticated):
-            isEqual = true
+            true
         default:
-            isEqual = false
+            false
         }
         return isEqual
     }

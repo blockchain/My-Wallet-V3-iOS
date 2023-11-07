@@ -126,9 +126,9 @@ struct AccountKeyContext: AccountKeyContextProtocol {
     func defaultDerivation(coin: BitcoinChainCoin) -> AccountKeyContextDerivationProtocol {
         switch coin {
         case .bitcoin:
-            return derivations.segWit
+            derivations.segWit
         case .bitcoinCash:
-            return derivations.legacy
+            derivations.legacy
         }
     }
 
@@ -393,9 +393,9 @@ extension DerivationType {
     var walletCorePurpose: WalletCore.Purpose {
         switch self {
         case .legacy:
-            return .bip44
+            .bip44
         case .bech32:
-            return .bip84
+            .bip84
         }
     }
 }

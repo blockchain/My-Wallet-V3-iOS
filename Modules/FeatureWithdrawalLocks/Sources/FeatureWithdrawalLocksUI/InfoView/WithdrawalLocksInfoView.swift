@@ -32,7 +32,7 @@ public enum WithdrawalLocksInfoRoute: NavigationRoute {
     public func destination(in store: Store<WithdrawalLocksInfoState, WithdrawalLocksInfoAction>) -> some View {
         switch self {
         case .details(let withdrawalLocks):
-            return WithdrawalLocksDetailsView(withdrawalLocks: withdrawalLocks)
+            WithdrawalLocksDetailsView(withdrawalLocks: withdrawalLocks)
         }
     }
 }

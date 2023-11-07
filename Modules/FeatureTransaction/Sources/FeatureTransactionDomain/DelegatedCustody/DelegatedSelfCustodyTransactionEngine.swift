@@ -24,11 +24,11 @@ final class DelegatedSelfCustodyTransactionEngine: OnChainTransactionEngine {
     private var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
         switch transactionTarget {
         case let target as BlockchainAccount:
-            return target.receiveAddress
+            target.receiveAddress
         case let target as ReceiveAddress:
-            return .just(target)
+            .just(target)
         default:
-            return .failure(ReceiveAddressError.notSupported)
+            .failure(ReceiveAddressError.notSupported)
         }
     }
 
@@ -299,9 +299,9 @@ public enum TransactionMemoSupport {
     ) -> Bool {
         switch currency.cryptoCurrency?.code {
         case "XLM", "STX":
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

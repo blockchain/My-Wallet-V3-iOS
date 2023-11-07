@@ -435,11 +435,11 @@ final class TransactionInteractor {
             .mapError { error in
                 switch error {
                 case let error as OrdersServiceError:
-                    return error
+                    error
                 case let error as Nabu.Error:
-                    return OrdersServiceError.network(error)
+                    OrdersServiceError.network(error)
                 case PublisherTimeoutError.timeout:
-                    return OrdersServiceError.network(
+                    OrdersServiceError.network(
                         Nabu.Error(
                             id: UUID().uuidString,
                             code: .unknown,
@@ -457,7 +457,7 @@ final class TransactionInteractor {
                         )
                     )
                 default:
-                    return OrdersServiceError.mappingError
+                    OrdersServiceError.mappingError
                 }
             }
             .eraseToAnyPublisher()
@@ -592,9 +592,9 @@ extension AppMode {
     fileprivate var sourceAccountFilter: AssetFilter {
         switch self {
         case .trading:
-            return .custodial
+            .custodial
         case .pkw:
-            return .nonCustodial
+            .nonCustodial
         }
     }
 }

@@ -12,11 +12,11 @@ extension LinkedBankAccountType {
     public var title: String {
         switch self {
         case .checking:
-            return LocalizationConstants.Transaction.checking
+            LocalizationConstants.Transaction.checking
         case .savings:
-            return LocalizationConstants.Transaction.savings
+            LocalizationConstants.Transaction.savings
         case .unknown:
-            return ""
+            ""
         }
     }
 }

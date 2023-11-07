@@ -112,9 +112,9 @@ extension Binding where Value: Equatable, Value: OptionalProtocol {
         Binding<Value>(
             get: {
                 if let wrapped = wrappedValue.wrapped, condition(wrapped) {
-                    return wrappedValue
+                    wrappedValue
                 } else {
-                    return nil
+                    nil
                 }
             },
             set: { newValue in

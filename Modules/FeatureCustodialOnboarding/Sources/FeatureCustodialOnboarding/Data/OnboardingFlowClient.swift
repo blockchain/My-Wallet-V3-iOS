@@ -22,7 +22,6 @@ public class OnboardingFlowClient {
     }
 }
 
-
 extension OnboardingFlowClient {
 
     class Stub: OnboardingFlowClient {
@@ -30,6 +29,7 @@ extension OnboardingFlowClient {
         init(value: @escaping () throws -> OnboardingFlow) {
             self.value = value
         }
+
         override func next() async throws -> OnboardingFlow {
             try value()
         }

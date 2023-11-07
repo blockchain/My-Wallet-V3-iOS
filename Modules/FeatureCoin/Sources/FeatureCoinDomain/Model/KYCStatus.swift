@@ -10,9 +10,9 @@ public enum KYCStatus: Equatable {
     public var canSellCrypto: Bool {
         switch self {
         case .unverified, .inReview:
-            return false
+            false
         case .gold:
-            return true
+            true
         }
     }
 }

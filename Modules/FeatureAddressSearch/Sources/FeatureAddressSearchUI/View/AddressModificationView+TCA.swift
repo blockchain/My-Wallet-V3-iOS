@@ -322,7 +322,7 @@ extension AddressServiceError {
     var nabuError: Nabu.Error {
         switch self {
         case .network(let error):
-            return error
+            error
         }
     }
 }

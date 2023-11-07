@@ -10,7 +10,7 @@ public enum SyncPubKeysAddressesProviderError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .failureProvidingAddresses(let error):
-            return error.localizedDescription
+            error.localizedDescription
         }
     }
 

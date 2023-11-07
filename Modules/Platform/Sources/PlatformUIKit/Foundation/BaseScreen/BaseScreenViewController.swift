@@ -177,11 +177,10 @@ open class BaseScreenViewController: UIViewController {
             // Do not trigger if view is not loaded.
             return
         }
-        let navigationBarHeight: CGFloat
-        if extendSafeAreaUnderNavigationBar {
-            navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
+        let navigationBarHeight: CGFloat = if extendSafeAreaUnderNavigationBar {
+            navigationController?.navigationBar.frame.height ?? 0
         } else {
-            navigationBarHeight = 0
+            0
         }
         additionalSafeAreaInsets.top = -navigationBarHeight
     }

@@ -164,7 +164,7 @@ extension AppProtocol {
     ) -> BlockchainEventSubscription {
         switch tempo {
         case .sync:
-            return BlockchainEventSubscription(
+            BlockchainEventSubscription(
                 app: self,
                 events: Array(events),
                 file: file,
@@ -172,7 +172,7 @@ extension AppProtocol {
                 action: .sync(action)
             )
         case .async(let queue):
-            return BlockchainEventSubscription(
+            BlockchainEventSubscription(
                 app: self,
                 events: Array(events),
                 file: file,

@@ -13,7 +13,7 @@ public enum ResetPasswordAction: Equatable {
         var url: URL? {
             switch self {
             case .identifyVerificationOverview:
-                return URL(string: Constants.SupportURL.ResetPassword.identityVerificationOverview)
+                URL(string: Constants.SupportURL.ResetPassword.identityVerificationOverview)
             }
         }
     }

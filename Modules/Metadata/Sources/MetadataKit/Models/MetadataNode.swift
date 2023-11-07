@@ -8,7 +8,7 @@ public enum MetadataNodeError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .typeIndexMustBePositive:
-            return "Metadata Node failure,:type index must be a positive number"
+            "Metadata Node failure,:type index must be a positive number"
         }
     }
 }

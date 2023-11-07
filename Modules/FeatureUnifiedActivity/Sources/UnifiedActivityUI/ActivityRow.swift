@@ -165,11 +165,11 @@ extension LeafItemType: Identifiable {
     public var id: String {
         switch self {
         case .badge(let item):
-            return item.id
+            item.id
         case .text(let item):
-            return item.id
+            item.id
         case .button(let item):
-            return item.id
+            item.id
         }
     }
 }

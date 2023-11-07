@@ -55,9 +55,9 @@ struct EarnListView<Header: View, Content: View>: View {
         state.value.filter { item in
             switch filter {
             case .all:
-                return true
+                true
             case .only(let product):
-                return item.product == product
+                item.product == product
             }
         }
         .filter { item in

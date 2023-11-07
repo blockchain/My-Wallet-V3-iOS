@@ -11,9 +11,9 @@ struct DerivationResponse: Equatable, Codable {
         var purpose: Int {
             switch self {
             case .legacy:
-                return 44
+                44
             case .segwit:
-                return 84
+                84
             }
         }
     }
@@ -66,9 +66,9 @@ extension DerivationResponse.Format {
     var toType: DerivationType {
         switch self {
         case .legacy:
-            return .legacy
+            .legacy
         case .segwit:
-            return .segwit
+            .segwit
         }
     }
 
@@ -97,9 +97,9 @@ extension DerivationType {
     var toDerivationFormat: DerivationResponse.Format {
         switch self {
         case .legacy:
-            return .legacy
+            .legacy
         case .segwit:
-            return .segwit
+            .segwit
         }
     }
 }

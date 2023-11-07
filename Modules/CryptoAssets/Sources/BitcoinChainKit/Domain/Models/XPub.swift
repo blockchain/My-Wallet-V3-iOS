@@ -43,18 +43,18 @@ public enum DerivationType: String, Decodable, CaseIterable {
     public var isSegwit: Bool {
         switch self {
         case .bech32:
-            return true
+            true
         case .legacy:
-            return false
+            false
         }
     }
 
     var purpose: UInt32 {
         switch self {
         case .bech32:
-            return 84
+            84
         case .legacy:
-            return 44
+            44
         }
     }
 }
@@ -62,8 +62,8 @@ public enum DerivationType: String, Decodable, CaseIterable {
 public func derivationType(from type: WalletPayloadKit.DerivationType) -> BitcoinChainKit.DerivationType {
     switch type {
     case .legacy:
-        return .legacy
+        .legacy
     case .segwit:
-        return .bech32
+        .bech32
     }
 }

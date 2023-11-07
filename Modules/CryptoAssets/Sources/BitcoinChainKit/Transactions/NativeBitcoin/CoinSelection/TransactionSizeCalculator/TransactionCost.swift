@@ -17,13 +17,13 @@ enum TransactionCost {
         static func `for`(_ type: BitcoinScriptType) -> Decimal {
             switch type {
             case .P2PKH:
-                return p2pkh
+                p2pkh
             case .P2SH:
-                return p2sh
+                p2sh
             case .P2WPKH:
-                return p2wpkh
+                p2wpkh
             case .P2WSH:
-                return p2wsh
+                p2wsh
             }
         }
     }
@@ -37,13 +37,13 @@ enum TransactionCost {
         static func `for`(_ type: BitcoinScriptType) -> Decimal {
             switch type {
             case .P2PKH:
-                return p2pkh
+                p2pkh
             case .P2SH:
-                return p2sh
+                p2sh
             case .P2WPKH:
-                return p2wpkh
+                p2wpkh
             case .P2WSH:
-                return p2wsh
+                p2wsh
             }
         }
     }

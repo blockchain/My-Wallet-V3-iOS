@@ -12,7 +12,7 @@ public enum MetadataDerivationError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .derivationFailed:
-            return "Could not derive from given purpose"
+            "Could not derive from given purpose"
         }
     }
 }

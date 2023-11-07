@@ -76,12 +76,6 @@ let package = Package(
                 .product(name: "DIKit", package: "DIKit"),
                 .product(name: "ToolKit", package: "Tool")
             ]
-        ),
-        .testTarget(
-            name: "FeatureDashboardUITests",
-            dependencies: [
-                .target(name: "FeatureDashboardUI")
-            ]
         )
     ]
 )

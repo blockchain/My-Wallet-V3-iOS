@@ -21,27 +21,27 @@ public enum TextValidationState {
     var isValid: Bool {
         switch self {
         case .valid, .conceivable:
-            return true
+            true
         case .invalid, .blocked:
-            return false
+            false
         }
     }
 
     var isBlocked: Bool {
         switch self {
         case .blocked:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 
     var isConceivable: Bool {
         switch self {
         case .conceivable:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

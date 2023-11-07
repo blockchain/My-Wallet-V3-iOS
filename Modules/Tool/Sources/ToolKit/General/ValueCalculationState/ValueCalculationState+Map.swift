@@ -6,15 +6,15 @@ extension ValueCalculationState {
     public func mapValue<TargetValue>(_ map: (Value) -> TargetValue) -> ValueCalculationState<TargetValue> {
         switch self {
         case .calculating:
-            return .calculating
+            .calculating
         case .invalid(.empty):
-            return .invalid(.empty)
+            .invalid(.empty)
         case .invalid(.valueCouldNotBeCalculated):
-            return .invalid(.valueCouldNotBeCalculated)
+            .invalid(.valueCouldNotBeCalculated)
         case .invalid(.ux(let ux)):
-            return .invalid(.ux(ux))
+            .invalid(.ux(ux))
         case .value(let value):
-            return .value(map(value))
+            .value(map(value))
         }
     }
 }

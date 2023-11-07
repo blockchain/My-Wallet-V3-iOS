@@ -11,62 +11,62 @@ extension SettingsSectionType.CellType.CommonCellType {
     var title: String {
         switch self {
         case .rateUs:
-            return LocalizationConstants.Settings.rateUs
+            LocalizationConstants.Settings.rateUs
         case .webLogin:
-            return LocalizationConstants.Settings.webLogin
+            LocalizationConstants.Settings.webLogin
         case .changePassword:
-            return LocalizationConstants.Settings.changePassword
+            LocalizationConstants.Settings.changePassword
         case .changePIN:
-            return LocalizationConstants.Settings.changePIN
+            LocalizationConstants.Settings.changePIN
         case .termsOfService:
-            return LocalizationConstants.Settings.termsOfService
+            LocalizationConstants.Settings.termsOfService
         case .privacyPolicy:
-            return LocalizationConstants.Settings.privacyPolicy
+            LocalizationConstants.Settings.privacyPolicy
         case .cookiesPolicy:
-            return LocalizationConstants.Settings.cookiesPolicy
+            LocalizationConstants.Settings.cookiesPolicy
         case .logout:
-            return LocalizationConstants.Settings.logout
+            LocalizationConstants.Settings.logout
         case .contactSupport:
-            return LocalizationConstants.Settings.contactSupport
+            LocalizationConstants.Settings.contactSupport
         case .notifications:
-            return LocalizationConstants.Settings.Badge.notifications
+            LocalizationConstants.Settings.Badge.notifications
         case .userDeletion:
-            return LocalizationConstants.Settings.deleteAccount
+            LocalizationConstants.Settings.deleteAccount
         case .blockchainDomains:
-            return LocalizationConstants.Settings.cryptoDomainsTitle
+            LocalizationConstants.Settings.cryptoDomainsTitle
         case .theme:
-            return LocalizationConstants.Settings.theme
+            LocalizationConstants.Settings.theme
         }
     }
 
     var icon: UIImage? {
         switch self {
         case .webLogin:
-            return Icon.computer.uiImage
+            Icon.computer.uiImage
         case .contactSupport:
-            return Icon.chat.uiImage
+            Icon.chat.uiImage
         case .logout:
-            return Icon.logout.uiImage
+            Icon.logout.uiImage
         default:
-            return nil
+            nil
         }
     }
 
     var showsIndicator: Bool {
         switch self {
         case .logout:
-            return false
+            false
         default:
-            return true
+            true
         }
     }
 
     var overrideTintColor: UIColor? {
         switch self {
         case .logout:
-            return UIColor.semantic.error
+            UIColor.semantic.error
         default:
-            return nil
+            nil
         }
     }
 
@@ -95,7 +95,7 @@ extension SettingsSectionType.CellType.ClipboardCellType {
     var title: String {
         switch self {
         case .walletID:
-            return LocalizationConstants.Settings.walletID
+            LocalizationConstants.Settings.walletID
         }
     }
 

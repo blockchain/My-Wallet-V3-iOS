@@ -394,7 +394,7 @@ final class NabuAuthenticationExecutorTests: XCTestCase {
         subject
             .authenticate { token -> AnyPublisher<ServerResponse, NetworkError> in
                 if token == newSessionToken.token {
-                    return AnyPublisher.just(
+                    AnyPublisher.just(
                         ServerResponse(
                             payload: token.data(using: .utf8),
                             response: HTTPURLResponse(
@@ -406,7 +406,7 @@ final class NabuAuthenticationExecutorTests: XCTestCase {
                         )
                     )
                 } else {
-                    return AnyPublisher.failure(
+                    AnyPublisher.failure(
                         .unknown
                     )
                 }

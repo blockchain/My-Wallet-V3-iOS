@@ -43,9 +43,9 @@ struct DashboardContent: Reducer {
         var selectedTab: Tag.Reference {
             switch appMode {
             case .pkw:
-                return defiState.selectedTab
+                defiState.selectedTab
             case .trading:
-                return tradingState.selectedTab
+                tradingState.selectedTab
             }
         }
 
@@ -136,9 +136,9 @@ struct DashboardContent: Reducer {
                     case .trading:
                         let stream = app.stream(blockchain.app.is.external.brokerage, as: Bool.self).flatMap { externalTradingEnabled in
                             if externalTradingEnabled.value == true {
-                                return app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self)
+                                app.stream(blockchain.app.configuration.superapp.external.brokerage.tabs, as: TabConfig.self)
                             } else {
-                                return app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self)
+                                app.stream(blockchain.app.configuration.superapp.brokerage.tabs, as: TabConfig.self)
                             }
                         }
 

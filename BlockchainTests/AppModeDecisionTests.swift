@@ -70,11 +70,10 @@ class AppModeDecisionTests: XCTestCase {
         XCTAssertTrue(decision.shouldDefaultToTrading())
     }
 
-
     func testTradingDisabledExternalDisabledShouldNotDefaultToTrading() {
         let decision = AppModeDecision(
             useTradingAccount: ProductValue(id: .useTradingAccount, enabled: false, defaultProduct: false),
-            useExternalTradingAccount: ProductValue(id: .useExternalTradingAccount, enabled: false, defaultProduct: false), 
+            useExternalTradingAccount: ProductValue(id: .useExternalTradingAccount, enabled: false, defaultProduct: false),
             isDefaultingEnabled: true,
             hasBeenDefaultedToDefiAlready: false,
             hasBeenDefaultedToTradingAlready: false

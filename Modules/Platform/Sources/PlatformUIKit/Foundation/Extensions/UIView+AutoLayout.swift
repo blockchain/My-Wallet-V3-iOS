@@ -108,9 +108,9 @@ extension UIView {
         fileprivate var attribute: Attribute {
             switch self {
             case .width:
-                return .width
+                .width
             case .height:
-                return .height
+                .height
             }
         }
     }
@@ -264,11 +264,10 @@ extension UIView {
             return constraints
         }
         let uniqueEdges = Set(edges)
-        let secondItem: Any
-        if usesSafeAreaLayoutGuide {
-            secondItem = view.safeAreaLayoutGuide
+        let secondItem: Any = if usesSafeAreaLayoutGuide {
+            view.safeAreaLayoutGuide
         } else {
-            secondItem = view
+            view
         }
 
         for edge in uniqueEdges {
@@ -303,11 +302,10 @@ extension UIView {
         }
         let superview = superview!
 
-        let secondItem: Any
-        if usesSafeAreaLayoutGuide {
-            secondItem = superview.safeAreaLayoutGuide
+        let secondItem: Any = if usesSafeAreaLayoutGuide {
+            superview.safeAreaLayoutGuide
         } else {
-            secondItem = superview
+            superview
         }
 
         let constraint = NSLayoutConstraint(
@@ -339,11 +337,10 @@ extension UIView {
         }
         let superview = superview!
 
-        let secondItem: Any
-        if usesSafeAreaLayoutGuide {
-            secondItem = superview.safeAreaLayoutGuide
+        let secondItem: Any = if usesSafeAreaLayoutGuide {
+            superview.safeAreaLayoutGuide
         } else {
-            secondItem = superview
+            superview
         }
 
         let uniqueEdges = Set(edges)

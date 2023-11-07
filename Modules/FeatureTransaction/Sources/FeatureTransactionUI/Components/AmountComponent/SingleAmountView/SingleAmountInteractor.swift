@@ -110,9 +110,9 @@ extension AmountInteractorInput {
     var toInputScannerAction: MoneyValueInputScanner.Action {
         switch self {
         case .insert(let value):
-            return .insert(value)
+            .insert(value)
         case .remove:
-            return .remove
+            .remove
         }
     }
 }

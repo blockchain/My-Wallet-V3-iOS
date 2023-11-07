@@ -80,7 +80,7 @@ extension AssetAction {
     fileprivate var allFilterType: AssetFilter {
         switch self {
         case .send:
-            return .all
+            .all
         case .buy,
                 .deposit,
                 .interestTransfer,
@@ -95,7 +95,7 @@ extension AssetAction {
                 .withdraw,
                 .activeRewardsDeposit,
                 .activeRewardsWithdraw:
-            return .allExcludingExchange
+            .allExcludingExchange
         }
     }
 }
@@ -145,10 +145,10 @@ extension CryptoCurrency {
             .bitcoinCash,
             .ethereum,
             .stellar:
-            return L10n.legacyPrivateKeyWallet
+            L10n.legacyPrivateKeyWallet
         default:
             // Any other existing or future asset does not need forced wallet name upgrade.
-            return nil
+            nil
         }
     }
 
@@ -157,19 +157,19 @@ extension CryptoCurrency {
     fileprivate var legacyLabel: String? {
         switch self {
         case .bitcoin:
-            return L10n.legacyMyBitcoinWallet
+            L10n.legacyMyBitcoinWallet
         case .bitcoinCash:
             // Legacy BCH label is not localized.
-            return "My Bitcoin Cash Wallet"
+            "My Bitcoin Cash Wallet"
         case .ethereum:
             // Legacy ETH label is not localized.
-            return "My Ether Wallet"
+            "My Ether Wallet"
         case .stellar:
             // Legacy XLM label is not localized.
-            return "My Stellar Wallet"
+            "My Stellar Wallet"
         default:
             // Any other existing or future asset does not need forced wallet name upgrade.
-            return nil
+            nil
         }
     }
 }

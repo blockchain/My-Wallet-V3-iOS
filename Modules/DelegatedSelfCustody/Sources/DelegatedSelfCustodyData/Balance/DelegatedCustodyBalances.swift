@@ -48,13 +48,13 @@ extension DelegatedCustodyBalances {
         let sorted = balances.sorted(by: { lhs, rhs in
             switch (lhs.fiatBalance, rhs.fiatBalance) {
             case (.none, .none):
-                return false
+                false
             case (.none, .some):
-                return false
+                false
             case (.some, .none):
-                return true
+                true
             case (.some(let lhs), .some(let rhs)):
-                return (try? lhs > rhs) ?? false
+                (try? lhs > rhs) ?? false
             }
         })
         self.init(

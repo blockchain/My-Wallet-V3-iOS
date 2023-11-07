@@ -20,9 +20,9 @@ enum YodleeScreen {
         var request: URLRequest? {
             switch self {
             case .load(let request):
-                return request
+                request
             default:
-                return nil
+                nil
             }
         }
 
@@ -31,9 +31,9 @@ enum YodleeScreen {
             case .pending(let content),
                  .failure(let content),
                  .success(let content):
-                return content
+                content
             default:
-                return nil
+                nil
             }
         }
     }

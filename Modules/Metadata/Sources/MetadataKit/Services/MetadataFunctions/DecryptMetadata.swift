@@ -10,11 +10,11 @@ public enum DecryptMetadataError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidPayload:
-            return "Invalid Payload"
+            "Invalid Payload"
         case .failedToDecryptWithRegularKey:
-            return "Invalid JSON found after decryption"
+            "Invalid JSON found after decryption"
         case .failedToDecrypt(let error):
-            return error.localizedDescription
+            error.localizedDescription
         }
     }
 }

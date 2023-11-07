@@ -186,11 +186,10 @@ extension Carousel {
             let pBoth = padding.along(axis)
             let pLeading = axis == .vertical ? padding.top : padding.leading
             guard n > 0, c > 0 else { return 0 }
-            let x: CGFloat
-            if c > n {
-                x = (w - pLeading - spacing * (ceil(n) - 1)) / n
+            let x: CGFloat = if c > n {
+                (w - pLeading - spacing * (ceil(n) - 1)) / n
             } else {
-                x = (w - pBoth - spacing * (c - 1)) / c
+                (w - pBoth - spacing * (c - 1)) / c
             }
             return max(0, x)
         }
@@ -201,8 +200,8 @@ extension CGSize {
 
     func along(_ axis: Axis) -> CGFloat {
         switch axis {
-        case .vertical: return height
-        case .horizontal: return width
+        case .vertical: height
+        case .horizontal: width
         }
     }
 }
@@ -211,8 +210,8 @@ extension EdgeInsets {
 
     func along(_ axis: Axis) -> CGFloat {
         switch axis {
-        case .vertical: return vertical
-        case .horizontal: return horizontal
+        case .vertical: vertical
+        case .horizontal: horizontal
         }
     }
 }

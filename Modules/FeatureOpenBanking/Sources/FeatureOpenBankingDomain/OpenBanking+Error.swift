@@ -32,11 +32,11 @@ extension OpenBanking.Error: ExpressibleByError, CustomStringConvertible {
     public var any: Error {
         switch self {
         case .message, .code, .timeout, .ux:
-            return self
+            self
         case .namespace(let error):
-            return error
+            error
         case .other(let error):
-            return error
+            error
         }
     }
 
@@ -51,31 +51,31 @@ extension OpenBanking.Error: ExpressibleByError, CustomStringConvertible {
     public var code: String? {
         switch self {
         case .timeout, .message, .namespace, .other, .ux:
-            return nil
+            nil
         case .code(let code):
-            return code
+            code
         }
     }
 
     public var description: String {
         switch self {
         case .timeout:
-            return "timeout"
+            "timeout"
         case .ux(let error):
-            return """
+            """
             \(error.title)
             \(error.message)
             """
         case .message(let description), .code(let description):
-            return description
+            description
         case .namespace(let error):
-            return String(describing: error)
+            String(describing: error)
         case .other(let error):
             switch error {
             case let error as CustomStringConvertible:
-                return error.description
+                error.description
             default:
-                return "\(error)"
+                "\(error)"
             }
         }
     }

@@ -955,17 +955,17 @@ extension FiatCurrency {
     public var name: String {
         switch self {
         case .USD:
-            return L10n.Fiat.usd
+            L10n.Fiat.usd
         case .GBP:
-            return L10n.Fiat.gbp
+            L10n.Fiat.gbp
         case .EUR:
-            return L10n.Fiat.eur
+            L10n.Fiat.eur
         case .ARS:
-            return L10n.Fiat.ars
+            L10n.Fiat.ars
         case .BRL:
-            return L10n.Fiat.brl
+            L10n.Fiat.brl
         default:
-            return currentLocale.localizedString(forCurrencyCode: code) ?? ""
+            currentLocale.localizedString(forCurrencyCode: code) ?? ""
         }
     }
 
@@ -1012,7 +1012,7 @@ extension FiatCurrency {
              .XEU,
              .XOF,
              .XPF:
-            return 0
+            0
         case .BHD,
              .IQD,
              .JOD,
@@ -1020,11 +1020,11 @@ extension FiatCurrency {
              .LYD,
              .OMR,
              .TND:
-            return 3
+            3
         case .CLF:
-            return 4
+            4
         default:
-            return 2
+            2
         }
     }
 

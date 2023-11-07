@@ -60,11 +60,10 @@ extension TransactionLimits {
         if let value, value.currencyType != currencyType {
             fatalError("The currency type must match the money value's currency type, when present")
         }
-        let effectiveLimit: EffectiveLimit?
-        if let value {
-            effectiveLimit = .init(timeframe: .single, value: value)
+        let effectiveLimit: EffectiveLimit? = if let value {
+            .init(timeframe: .single, value: value)
         } else {
-            effectiveLimit = nil
+            nil
         }
         return TransactionLimits(
             currencyType: currencyType,

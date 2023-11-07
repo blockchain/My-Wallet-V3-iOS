@@ -278,51 +278,51 @@ final class Coincore: CoincoreAPI {
         case .buy:
             unimplemented("WIP")
         case .stakingDeposit:
-            return stakingDepositFilter(
+            stakingDepositFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
             )
         case .stakingWithdraw:
-            return stakingWithdrawFilter(
+            stakingWithdrawFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
             )
         case .activeRewardsDeposit:
-            return activeRewardsDepositFilter(
+            activeRewardsDepositFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
             )
         case .activeRewardsWithdraw:
-            return activeRewardsWithdrawFilter(
+            activeRewardsWithdrawFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
             )
         case .interestTransfer:
-            return interestTransferFilter(
+            interestTransferFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
             )
         case .interestWithdraw:
-            return interestWithdrawFilter(
+            interestWithdrawFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
             )
         case .sell:
-            return destinationAccount is FiatAccount
+            destinationAccount is FiatAccount
         case .swap:
-            return swapActionFilter(
+            swapActionFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
             )
         case .send:
-            return sendActionFilter(
+            sendActionFilter(
                 sourceAccount: sourceAccount,
                 destinationAccount: destinationAccount,
                 action: action
@@ -332,7 +332,7 @@ final class Coincore: CoincoreAPI {
                 .sign,
                 .viewActivity,
                 .withdraw:
-            return false
+            false
         }
     }
 

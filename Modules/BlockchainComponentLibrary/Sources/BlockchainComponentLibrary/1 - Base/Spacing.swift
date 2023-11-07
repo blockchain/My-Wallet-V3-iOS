@@ -25,9 +25,9 @@ public enum Spacing {
     /// - Returns: An appropriate multiple of `baseline` given the current device and number of columns.
     public static func gutter(forColumns columns: Int) -> CGFloat {
         if columns >= 6 {
-            return baseline
+            baseline
         } else {
-            return baseline * 2
+            baseline * 2
         }
     }
 
@@ -39,9 +39,9 @@ public enum Spacing {
     public static func padding(forContainerWidth width: CGFloat = CGRect.screen.size.width) -> CGFloat {
         switch Breakpoint(containerWidth: width) {
         case .smallPhone:
-            return padding2
+            padding2
         case .largePhone:
-            return padding3
+            padding3
         }
     }
 

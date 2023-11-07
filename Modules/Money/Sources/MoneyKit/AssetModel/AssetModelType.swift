@@ -22,45 +22,45 @@ public enum AssetModelType: Hashable {
     public var erc20ContractAddress: String? {
         switch self {
         case .erc20(let contractAddress, _):
-            return contractAddress
+            contractAddress
         case .coin, .fiat, .celoToken:
-            return nil
+            nil
         }
     }
 
     public var erc20ParentChain: String? {
         switch self {
         case .erc20(_, let parentChain):
-            return parentChain
+            parentChain
         case .coin, .fiat, .celoToken:
-            return nil
+            nil
         }
     }
 
     public var isERC20: Bool {
         switch self {
         case .erc20:
-            return true
+            true
         case .coin, .fiat, .celoToken:
-            return false
+            false
         }
     }
 
     public var isCoin: Bool {
         switch self {
         case .coin:
-            return true
+            true
         case .erc20, .fiat, .celoToken:
-            return false
+            false
         }
     }
 
     public var isCeloToken: Bool {
         switch self {
         case .celoToken:
-            return true
+            true
         case .coin, .erc20, .fiat:
-            return false
+            false
         }
     }
 }

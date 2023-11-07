@@ -226,9 +226,9 @@ extension Publisher where Output: ResultProtocol {
         compactMap { output in
             switch output.result {
             case .success(let o):
-                return o
+                o
             case .failure:
-                return nil
+                nil
             }
         }
     }
@@ -238,9 +238,9 @@ extension Publisher where Output: ResultProtocol {
         compactMap { output in
             switch output.result {
             case .success(let o):
-                return o
+                o
             case .failure:
-                return value
+                value
             }
         }
     }
@@ -253,9 +253,9 @@ extension Publisher where Output: ResultProtocol, Failure == Never {
         flatMap { output -> AnyPublisher<Output.Success, Output.Failure> in
             switch output.result {
             case .failure(let error):
-                return Fail(error: error).eraseToAnyPublisher()
+                Fail(error: error).eraseToAnyPublisher()
             case .success(let success):
-                return Just(success).setFailureType(to: Output.Failure.self).eraseToAnyPublisher()
+                Just(success).setFailureType(to: Output.Failure.self).eraseToAnyPublisher()
             }
         }
         .eraseToAnyPublisher()
@@ -336,9 +336,9 @@ extension Publisher where Output: ResultProtocol {
         filter { output in
             switch output.result {
             case .failure:
-                return true
+                true
             case .success(let success):
-                return casePath.extract(from: success) != nil
+                casePath.extract(from: success) != nil
             }
         }
         .eraseToAnyPublisher()
@@ -349,9 +349,9 @@ extension Publisher where Output: ResultProtocol {
         filter { output in
             switch output.result {
             case .failure(let error):
-                return casePath.extract(from: error) != nil
+                casePath.extract(from: error) != nil
             case .success:
-                return true
+                true
             }
         }
         .eraseToAnyPublisher()

@@ -861,9 +861,9 @@ extension AssetAction {
         case .buy,
              .deposit,
              .withdraw:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

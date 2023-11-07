@@ -35,9 +35,9 @@ final class DictionaryTests: XCTestCase {
 
         let actual = input.deepMap(.mappingOverArrays) { key, value in
             if let i = value as? Int {
-                return (key, i + 1)
+                (key, i + 1)
             } else {
-                return (key, value)
+                (key, value)
             }
         }
 

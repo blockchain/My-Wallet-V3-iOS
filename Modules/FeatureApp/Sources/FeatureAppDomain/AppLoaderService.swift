@@ -25,13 +25,11 @@ public class AppLoaderService: ObservableObject {
         self.externalTradingMigrationService = externalTradingMigrationService
     }
 
-
     public func loadAppDependencies() async throws -> Bool {
         do {
             try await load()
             return true
-        }
-        catch {
+        } catch {
             app.post(error: error)
             return false
         }
@@ -53,7 +51,7 @@ public class AppLoaderService: ObservableObject {
                 async let fetchMigrationInfo = self.externalTradingMigrationService.fetchMigrationInfo()
                 let _: [Any?] = try await [fetchProducts, fetchMigrationInfo]
             }
-            
+
             try await group.waitForAll()
         }
     }

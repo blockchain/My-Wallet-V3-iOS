@@ -17,11 +17,11 @@ public final class SingleAccountBadgeFactory {
     public func badge(account: SingleAccount, action: AssetAction) -> Single<[BadgeAssetPresenting]> {
         switch action {
         case .swap:
-            return swapBadges(account: account)
+            swapBadges(account: account)
         case .withdraw:
-            return withdrawBadges(account: account)
+            withdrawBadges(account: account)
         default:
-            return .just([])
+            .just([])
         }
     }
 
@@ -50,18 +50,16 @@ public final class SingleAccountBadgeFactory {
                 let fee = feeAndLimit.fee
                 let limit = feeAndLimit.minLimit
 
-                let feeBadge: DefaultBadgeAssetPresenter
-                if fee.isZero {
-                    feeBadge = DefaultBadgeAssetPresenter.makeNoFeesBadge()
+                let feeBadge: DefaultBadgeAssetPresenter = if fee.isZero {
+                    DefaultBadgeAssetPresenter.makeNoFeesBadge()
                 } else {
-                    feeBadge = DefaultBadgeAssetPresenter.makeWireFeeBadge()
+                    DefaultBadgeAssetPresenter.makeWireFeeBadge()
                 }
 
-                let minLimitBadge: DefaultBadgeAssetPresenter?
-                if limit.isZero {
-                    minLimitBadge = nil
+                let minLimitBadge: DefaultBadgeAssetPresenter? = if limit.isZero {
+                    nil
                 } else {
-                    minLimitBadge = DefaultBadgeAssetPresenter.makeMinWithdrawFeeBadge(amount: limit.displayString)
+                    DefaultBadgeAssetPresenter.makeMinWithdrawFeeBadge(amount: limit.displayString)
                 }
 
                 guard let min = minLimitBadge else {

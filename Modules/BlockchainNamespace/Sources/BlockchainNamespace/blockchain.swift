@@ -6801,7 +6801,6 @@ public final class L_blockchain_user_earn_product_asset: L, I_blockchain_user_ea
 public protocol I_blockchain_user_earn_product_asset: I_blockchain_db_collection {}
 public extension I_blockchain_user_earn_product_asset {
 	var `account`: L_blockchain_user_earn_product_asset_account { .init("\(__).account") }
-	var `activity`: L_blockchain_user_earn_product_asset_activity { .init("\(__).activity") }
 	var `address`: L_blockchain_user_earn_product_asset_address { .init("\(__).address") }
 	var `is`: L_blockchain_user_earn_product_asset_is { .init("\(__).is") }
 	var `limit`: L_blockchain_user_earn_product_asset_limit { .init("\(__).limit") }
@@ -6886,10 +6885,6 @@ public final class L_blockchain_user_earn_product_asset_account_unbonding_withdr
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.account.unbonding.withdrawals", comment: "") }
 }
 public protocol I_blockchain_user_earn_product_asset_account_unbonding_withdrawals: I_blockchain_type_money {}
-public final class L_blockchain_user_earn_product_asset_activity: L, I_blockchain_user_earn_product_asset_activity {
-	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.activity", comment: "") }
-}
-public protocol I_blockchain_user_earn_product_asset_activity: I_blockchain_db_type_array_of_maps {}
 public final class L_blockchain_user_earn_product_asset_address: L, I_blockchain_user_earn_product_asset_address {
 	public override class var localized: String { NSLocalizedString("blockchain.user.earn.product.asset.address", comment: "") }
 }

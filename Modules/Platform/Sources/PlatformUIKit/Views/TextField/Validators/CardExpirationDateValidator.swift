@@ -20,9 +20,9 @@ public final class CardExpirationDateValidator: TextValidating {
             .flatMap(weak: self) { (self, state) in
                 switch state {
                 case .valid:
-                    return self.dateValidationState.asObservable()
+                    self.dateValidationState.asObservable()
                 case .invalid:
-                    return .just(state)
+                    .just(state)
                 case .conceivable, .blocked:
                     unimplemented("Conceivable is not accounted for with card expiration")
                 }

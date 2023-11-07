@@ -24,18 +24,18 @@ public enum WalletConnectSignMethod: String {
     private var dataIndex: Int {
         switch self {
         case .personalSign:
-            return 0
+            0
         case .ethSign, .ethSignTypedData, .ethSignTypedDatav4:
-            return 1
+            1
         }
     }
 
     private var addressIndex: Int {
         switch self {
         case .personalSign:
-            return 1
+            1
         case .ethSign, .ethSignTypedData, .ethSignTypedDatav4:
-            return 0
+            0
         }
     }
 

@@ -7,31 +7,31 @@ enum PendingTransctionStateProviderFactory {
     static func pendingTransactionStateProvider(action: AssetAction) -> PendingTransactionStateProviding {
         switch action {
         case .withdraw:
-            return WithdrawPendingTransactionStateProvider()
+            WithdrawPendingTransactionStateProvider()
         case .deposit:
-            return DepositPendingTransactionStateProvider()
+            DepositPendingTransactionStateProvider()
         case .send:
-            return SendPendingTransactionStateProvider()
+            SendPendingTransactionStateProvider()
         case .sign:
-            return SignPendingTransactionStateProvider()
+            SignPendingTransactionStateProvider()
         case .swap:
-            return SwapPendingTransactionStateProvider()
+            SwapPendingTransactionStateProvider()
         case .buy:
-            return BuyPendingTransactionStateProvider()
+            BuyPendingTransactionStateProvider()
         case .sell:
-            return SellPendingTransactionStateProvider()
+            SellPendingTransactionStateProvider()
         case .interestTransfer:
-            return InterestTransferTransactionStateProvider()
+            InterestTransferTransactionStateProvider()
         case .stakingDeposit:
-            return StakingDepositTransactionStateProvider()
+            StakingDepositTransactionStateProvider()
         case .stakingWithdraw:
-            return StakingWithdrawTransactionStateProvider()
+            StakingWithdrawTransactionStateProvider()
         case .activeRewardsDeposit:
-            return ActiveRewardsDepositTransactionStateProvider()
+            ActiveRewardsDepositTransactionStateProvider()
         case .activeRewardsWithdraw:
-            return ActiveRewardsWithdrawTransactionStateProvider()
+            ActiveRewardsWithdrawTransactionStateProvider()
         case .interestWithdraw:
-            return InterestWithdrawTransactionStateProvider()
+            InterestWithdrawTransactionStateProvider()
         case .viewActivity,
              .receive:
             unimplemented()

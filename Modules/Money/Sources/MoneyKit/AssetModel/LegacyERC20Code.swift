@@ -39,41 +39,41 @@ public enum ERC20Code: String, CaseIterable {
     var spotColor: String {
         switch self {
         case .aave:
-            return "2EBAC6"
+            "2EBAC6"
         case .bat:
-            return "FF4724"
+            "FF4724"
         case .comp:
-            return "00D395"
+            "00D395"
         case .dai:
-            return "F5AC37"
+            "F5AC37"
         case .enj:
-            return "624DBF"
+            "624DBF"
         case .link:
-            return "2A5ADA"
+            "2A5ADA"
         case .ogn:
-            return "1A82FF"
+            "1A82FF"
         case .pax:
-            return "00522C"
+            "00522C"
         case .snx:
-            return "00D1FF"
+            "00D1FF"
         case .sushi:
-            return "FA52A0"
+            "FA52A0"
         case .tbtc:
-            return "000000"
+            "000000"
         case .tether:
-            return "26A17B"
+            "26A17B"
         case .uni:
-            return "FF007A"
+            "FF007A"
         case .usdc:
-            return "2775CA"
+            "2775CA"
         case .wbtc:
-            return "FF9B22"
+            "FF9B22"
         case .wdgld:
-            return "FFE738"
+            "FFE738"
         case .yearnFinance:
-            return "0074FA"
+            "0074FA"
         case .zrx:
-            return "000000"
+            "000000"
         }
     }
 }
@@ -97,29 +97,29 @@ public enum CustodialCoinCode: String, CaseIterable {
     public var spotColor: String {
         switch self {
         case .algorand:
-            return "000000"
+            "000000"
         case .bitClout:
-            return "000000"
+            "000000"
         case .blockstack:
-            return "211F6D"
+            "211F6D"
         case .dogecoin:
-            return "C2A633"
+            "C2A633"
         case .eos:
-            return "000000"
+            "000000"
         case .ethereumClassic:
-            return "33FF99"
+            "33FF99"
         case .litecoin:
-            return "BFBBBB"
+            "BFBBBB"
         case .mobileCoin:
-            return "243855"
+            "243855"
         case .near:
-            return "000000"
+            "000000"
         case .polkadot:
-            return "E6007A"
+            "E6007A"
         case .tezos:
-            return "2C7DF7"
+            "2C7DF7"
         case .theta:
-            return "2AB8E6"
+            "2AB8E6"
         }
     }
 }

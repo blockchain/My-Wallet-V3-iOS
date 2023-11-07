@@ -292,11 +292,10 @@ public final class TransactionModel {
                 // This makes sense for transaction types like Swap (and currently Sell) where changing the source would invalidate the amount entirely.
                 // For Buy, though we can simply use the amount we have in `previousState`, so the transaction ca be re-validated.
                 // This also fixes an issue where the enter amount screen has the "next" button disabled after user switches source account in Buy.
-                let newAmount: MoneyValue?
-                if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap, previousState.action != .sell {
-                    newAmount = amount
+                let newAmount: MoneyValue? = if let amount = previousState.pendingTransaction?.amount, previousState.action != .swap, previousState.action != .sell {
+                    amount
                 } else {
-                    newAmount = nil
+                    nil
                 }
                 // The user has already selected a destination such as through `Deposit`. In this case we want to
                 // go straight to the Enter Amount screen, since we have both target and source.
@@ -655,7 +654,7 @@ public final class TransactionModel {
 
     private func processPollOrderStatus(orderId: String, state: TransactionState) -> Disposable? {
         if state.action == .buy {
-            return interactor
+            interactor
                 .pollBuyOrderStatusUntilDoneOrTimeout(orderId: orderId)
                 .handleEvents(receiveSubscription: { [app] _ in
                     let eventCVVPayment = blockchain.ux.payment.method.vgs.cvv.sent.payment.ids
@@ -729,7 +728,7 @@ public final class TransactionModel {
                     self?.process(action: .fatalTransactionError(error))
                 })
         } else {
-            return interactor
+            interactor
                 .pollSwapOrderStatusUntilDoneOrTimeout(orderId: orderId)
                 .asObservable()
                 .subscribe(onNext: { [weak self] finalOrderStatus in
@@ -873,11 +872,10 @@ public final class TransactionModel {
     }
 
     private func processTransactionInvalidation(state: TransactionState) -> Disposable {
-        let cancelOrder: Single<Void>
-        if let order = state.order {
-            cancelOrder = interactor.cancelOrder(with: order.identifier)
+        let cancelOrder: Single<Void> = if let order = state.order {
+            interactor.cancelOrder(with: order.identifier)
         } else {
-            cancelOrder = .just(())
+            .just(())
         }
         return cancelOrder.subscribe(onSuccess: { [weak self] _ in
             self?.process(action: .invalidateTransaction)
@@ -885,11 +883,10 @@ public final class TransactionModel {
     }
 
     private func processCancelOrder(state: TransactionState) -> Disposable {
-        let cancelOrder: Single<Void>
-        if let order = state.order {
-            cancelOrder = interactor.cancelOrder(with: order.identifier)
+        let cancelOrder: Single<Void> = if let order = state.order {
+            interactor.cancelOrder(with: order.identifier)
         } else {
-            cancelOrder = .just(())
+            .just(())
         }
         return cancelOrder.subscribe(onSuccess: { [weak self] _ in
             self?.process(action: .orderCancelled)
@@ -946,34 +943,34 @@ extension TransactionState {
         case .buy:
             switch destination {
             case let tradingAccount as CryptoTradingAccount where tradingAccount.isExternalTradingAccount:
-                return .externalBuy
+                .externalBuy
             default:
-                return .buy
+                .buy
             }
         case .sell:
             switch source {
             case is NonCustodialAccount:
-                return .swapPKWToTrading
+                .swapPKWToTrading
             case let tradingAccount as CryptoTradingAccount where tradingAccount.isExternalTradingAccount:
-                return .externalTradingToTrading
+                .externalTradingToTrading
             case is TradingAccount:
-                return .swapTradingToTrading
+                .swapTradingToTrading
             default:
-                return nil
+                nil
             }
         case .swap:
             switch (source, destination) {
             case (is NonCustodialAccount, is NonCustodialAccount):
-                return .swapPKWToPKW
+                .swapPKWToPKW
             case (is NonCustodialAccount, is TradingAccount):
-                return .swapPKWToTrading
+                .swapPKWToTrading
             case (is TradingAccount, is TradingAccount):
-                return .swapTradingToTrading
+                .swapTradingToTrading
             default:
-                return nil
+                nil
             }
         default:
-            return nil
+            nil
         }
     }
 
@@ -1035,29 +1032,29 @@ extension PaymentMethodAccount {
     var isYapily: Bool {
         switch paymentMethodType {
         case .linkedBank(let linkedBank):
-            return linkedBank.isYapily
+            linkedBank.isYapily
         case .account,
              .applePay,
              .card,
              .suggested:
-            return false
+            false
         }
     }
 
     var quote: BrokerageQuote.PaymentMethod {
         switch paymentMethodType {
         case .linkedBank:
-            return .transfer
+            .transfer
         case .applePay, .card:
-            return .card
+            .card
         case .account:
-            return .funds
+            .funds
         case .suggested(let suggestion):
             switch suggestion.type {
             case .card, .applePay:
-                return .card
+                .card
             case .funds, .bankAccount, .bankTransfer:
-                return .funds
+                .funds
             }
         }
     }
@@ -1080,11 +1077,11 @@ extension BlockchainAccount {
     var isYapily: Bool {
         switch self {
         case let linkedBank as LinkedBankAccount where linkedBank.isYapily:
-            return true
+            true
         case let paymentMethod as PaymentMethodAccount where paymentMethod.isYapily:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

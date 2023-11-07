@@ -17,27 +17,27 @@ public enum DerivationComponent {
     public var description: String {
         switch self {
         case .normal(let index):
-            return "\(index)"
+            "\(index)"
         case .hardened(let index):
-            return "\(index)'"
+            "\(index)'"
         }
     }
 
     public var isHardened: Bool {
         switch self {
         case .normal:
-            return false
+            false
         case .hardened:
-            return true
+            true
         }
     }
 
     var derivationNode: DerivationNode {
         switch self {
         case .normal(let value):
-            return .notHardened(value)
+            .notHardened(value)
         case .hardened(let value):
-            return .hardened(value)
+            .hardened(value)
         }
     }
 
@@ -57,9 +57,9 @@ public enum DerivationComponent {
     func from(_ component: MetadataHDWalletKit.DerivationNode) -> Self {
         switch component {
         case .hardened(let index):
-            return .hardened(index)
+            .hardened(index)
         case .notHardened(let index):
-            return .normal(index)
+            .normal(index)
         }
     }
 }

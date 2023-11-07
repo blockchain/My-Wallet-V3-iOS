@@ -17,9 +17,9 @@ public enum EntropyBytes: Equatable {
     public var value: Int {
         switch self {
         case .default:
-            return 32
+            32
         case .custom(let value):
-            return value
+            value
         }
     }
 }

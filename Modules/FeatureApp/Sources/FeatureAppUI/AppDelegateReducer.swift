@@ -48,9 +48,9 @@ extension AppDelegateAction {
         case (.didReceiveRemoteNotification, .didReceiveRemoteNotification):
             // since we can't compare the userInfo
             // we'll always assume the notifications are different
-            return false
+            false
         default:
-            return lhs == rhs
+            lhs == rhs
         }
     }
 }
@@ -125,8 +125,11 @@ struct AppDelegateReducer: Reducer {
                     ),
 
                     enableSift(using: environment.siftService),
-                    registerCrashlyticsUserId(app: environment.app, 
-                                              crashlyticsRecorder: environment.crashlyticsRecorder)
+                    registerCrashlyticsUserId(
+                        app: environment.app,
+
+                                              crashlyticsRecorder: environment.crashlyticsRecorder
+                    )
                 )
             case .willResignActive:
                 return applyBlurFilter(
@@ -227,8 +230,10 @@ private func enableSift(
     }
 }
 
-private func registerCrashlyticsUserId(app: AppProtocol,
-                                       crashlyticsRecorder: Recording) -> AppDelegateEffect {
+private func registerCrashlyticsUserId(
+    app: AppProtocol,
+    crashlyticsRecorder: Recording
+) -> AppDelegateEffect {
     .run { _ in
         for await userId in app.stream(blockchain.user.id, as: String.self) {
             if let userIdValue = userId.value {

@@ -232,8 +232,8 @@ public struct PersonalInformationConfirmationView: View {
 
     var isLoading: Bool {
         switch state {
-        case .idle, .failure: return false
-        case .loading, .success: return true
+        case .idle, .failure: false
+        case .loading, .success: true
         }
     }
 

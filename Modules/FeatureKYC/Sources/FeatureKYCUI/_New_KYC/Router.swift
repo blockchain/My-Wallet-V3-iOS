@@ -187,9 +187,9 @@ public final class Router: Routing {
             .replaceError(with: false)
             .flatMap { [self] isEnabled in
                 if isEnabled {
-                    return presentFlowsKYC(from: presenter, requiredTier: requiredTier)
+                    presentFlowsKYC(from: presenter, requiredTier: requiredTier)
                 } else {
-                    return presentLegacyKYC(from: presenter, requiredTier: requiredTier)
+                    presentLegacyKYC(from: presenter, requiredTier: requiredTier)
                 }
             }
             .eraseToAnyPublisher()

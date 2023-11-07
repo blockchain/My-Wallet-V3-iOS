@@ -108,17 +108,10 @@ public struct DexCell: Reducer {
             case .assetPicker(.onAssetTapped(let row)):
                 state.showAssetPicker = false
 
-                let dexBalance: DexBalance = {
-                    switch row.content {
-                    case .balance(let dexBalance):
-                        return dexBalance
-                    case .token(let cryptoCurrency):
-                        return .zero(cryptoCurrency)
-                    }
-                }()
+                let balance: DexBalance = row.content.balance
                 return .merge(
                     .cancel(id: CancellationID.price),
-                    Effect.send(.didSelectCurrency(dexBalance))
+                    Effect.send(.didSelectCurrency(balance))
                 )
             case .assetPicker:
                 return .none

@@ -106,36 +106,36 @@ public final class AnnouncementCardViewModel {
         var verticalPadding: CGFloat {
             switch self {
             case .hidden:
-                return 0.0
+                0.0
             case .visible:
-                return 16.0
+                16.0
             }
         }
 
         var size: CGSize {
             switch self {
             case .hidden:
-                return .zero
+                .zero
             case .visible(_, let value):
-                return value
+                value
             }
         }
 
         var viewModel: BadgeImageViewModel? {
             switch self {
             case .hidden:
-                return nil
+                nil
             case .visible(let value, _):
-                return value
+                value
             }
         }
 
         var isVisible: Bool {
             switch self {
             case .hidden:
-                return false
+                false
             case .visible:
-                return true
+                true
             }
         }
     }
@@ -165,9 +165,9 @@ public final class AnnouncementCardViewModel {
         var isTappable: Bool {
             switch self {
             case .tappable:
-                return true
+                true
             case .none:
-                return false
+                false
             }
         }
     }
@@ -188,9 +188,9 @@ public final class AnnouncementCardViewModel {
     var isDismissButtonHidden: Bool {
         switch dismissState {
         case .undismissible:
-            return true
+            true
         case .dismissible:
-            return false
+            false
         }
     }
 
@@ -198,9 +198,9 @@ public final class AnnouncementCardViewModel {
     var dismissAction: DismissState.Action? {
         switch dismissState {
         case .dismissible(let action):
-            return action
+            action
         case .undismissible:
-            return nil
+            nil
         }
     }
 

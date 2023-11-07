@@ -222,15 +222,15 @@ final class YodleeScreenContentReducer {
     ) -> YodleeButtonsContent {
         switch linkageError {
         case .alreadyLinked:
-            return okButtonContent()
+            okButtonContent()
         case .infoNotFound:
-            return tryDifferentBankAndCancelButtonContent()
+            tryDifferentBankAndCancelButtonContent()
         case .nameMismatch:
-            return tryDifferentBankAndCancelButtonContent()
+            tryDifferentBankAndCancelButtonContent()
         case .failed:
-            return tryAgainAndCanceButtonContent()
+            tryAgainAndCanceButtonContent()
         default:
-            return tryAgainAndCanceButtonContent()
+            tryAgainAndCanceButtonContent()
         }
     }
 

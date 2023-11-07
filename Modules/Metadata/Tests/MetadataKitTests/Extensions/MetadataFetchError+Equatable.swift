@@ -11,13 +11,13 @@ extension LoadRemoteMetadataError: Equatable {
     ) -> Bool {
         switch (lhs, rhs) {
         case (.notYetCreated, .notYetCreated):
-            return true
+            true
         case (.networkError(let lhsError), .networkError(let rhsError)):
-            return lhsError == rhsError
+            lhsError == rhsError
         case (.decryptionFailed(let lhsError), .decryptionFailed(let rhsError)):
-            return lhsError == rhsError
+            lhsError == rhsError
         default:
-            return false
+            false
         }
     }
 }
@@ -30,7 +30,7 @@ extension DecryptMetadataError: Equatable {
     ) -> Bool {
         switch (lhs, rhs) {
         case (.invalidPayload, .invalidPayload):
-            return true
+            true
         case (
             .failedToDecryptWithRegularKey(
                 let lhsPayload, let lhsValidationError
@@ -39,11 +39,11 @@ extension DecryptMetadataError: Equatable {
                 let rhsPayload, let rhsValidationError
             )
         ):
-            return lhsPayload == rhsPayload && lhsValidationError == rhsValidationError
+            lhsPayload == rhsPayload && lhsValidationError == rhsValidationError
         case (.failedToDecrypt(let lhsError), .failedToDecrypt(let rhsError)):
-            return lhsError.localizedDescription == rhsError.localizedDescription
+            lhsError.localizedDescription == rhsError.localizedDescription
         default:
-            return false
+            false
         }
     }
 }

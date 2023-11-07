@@ -9,7 +9,7 @@ public enum WalletRecoveryError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .restoreFailure(let walletError):
-            return walletError.errorDescription
+            walletError.errorDescription
         }
     }
 }

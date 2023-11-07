@@ -87,7 +87,7 @@ final class OrdersService: OrdersServiceAPI {
 
         let cacheOrders: AnyCache<CacheKey, [OrderDetails]> = InMemoryCache(
             configuration: .onLoginLogoutTransactionAndDashboardRefresh(),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 60)
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 30)
         )
         .eraseToAnyCache()
         self.cachedOrders = CachedValueNew(
@@ -118,9 +118,9 @@ final class OrdersService: OrdersServiceAPI {
                     as: Bool.self
                 )
                 .replaceError(with: false)
-                .flatMap { isEligible in
+                .flatMap { isExternalBrokerage in
                     client
-                        .fetchAccumulatedTradeAmounts(products: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
+                        .fetchAccumulatedTradeAmounts(products: isExternalBrokerage ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
                         .mapError(OrdersServiceError.network)
                         .eraseToAnyPublisher()
                 }

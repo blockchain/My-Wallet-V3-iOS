@@ -222,9 +222,9 @@ extension Either<Bool, Condition> {
     func check(in app: AppProtocol) -> Bool {
         switch self {
         case .left(let bool):
-            return bool
+            bool
         case .right(let condition):
-            return (condition.if ?? []).allSatisfy(isYes(app)) && (condition.unless ?? []).none(isYes(app))
+            (condition.if ?? []).allSatisfy(isYes(app)) && (condition.unless ?? []).none(isYes(app))
         }
     }
 }
@@ -236,10 +236,10 @@ private func isYes(_ app: AppProtocol) -> (_ ref: Tag.Reference) -> Bool {
 private func result(_ app: AppProtocol, _ ref: Tag.Reference) -> FetchResult {
     switch ref.tag {
     case blockchain.session.state.value:
-        return app.state.result(for: ref)
+        app.state.result(for: ref)
     case blockchain.session.configuration.value:
-        return app.remoteConfiguration.result(for: ref)
+        app.remoteConfiguration.result(for: ref)
     default:
-        return .error(FetchResult.Error.keyDoesNotExist(ref), ref.metadata(.app))
+        .error(FetchResult.Error.keyDoesNotExist(ref), ref.metadata(.app))
     }
 }

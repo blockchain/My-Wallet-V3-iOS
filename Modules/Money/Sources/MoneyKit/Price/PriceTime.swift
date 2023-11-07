@@ -11,37 +11,37 @@ public enum PriceTime {
 
     var isNow: Bool {
         switch self {
-        case .now: return true
-        default: return false
+        case .now: true
+        default: false
         }
     }
 
     public var date: Date {
         switch self {
         case .now:
-            return Date()
+            Date()
         case .oneDay:
-            return yesterday
+            yesterday
         case .time(let date):
-            return date
+            date
         }
     }
 
     public var timestamp: String? {
         switch self {
         case .now:
-            return nil
+            nil
         case .oneDay, .time:
-            return date.timeIntervalSince1970.string(with: 0)
+            date.timeIntervalSince1970.string(with: 0)
         }
     }
 
     public var isSpecificDate: Bool {
         switch self {
         case .now, .oneDay:
-            return false
+            false
         case .time:
-            return true
+            true
         }
     }
 }
@@ -54,11 +54,11 @@ extension PriceTime: Identifiable {
     public var id: String {
         switch self {
         case .now:
-            return "now"
+            "now"
         case .oneDay:
-            return "yesterday"
+            "yesterday"
         case .time(let date):
-            return date.timeIntervalSince1970.description
+            date.timeIntervalSince1970.description
         }
     }
 }

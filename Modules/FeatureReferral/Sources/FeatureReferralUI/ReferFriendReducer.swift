@@ -62,16 +62,16 @@ extension ReferFriendState {
     func analyticsEvent(for action: ReferFriendAction) -> AnalyticsEvent? {
         switch action {
         case .onAppear:
-            return AnalyticsEvents.New.Referral.viewReferralsPage(campaign_id: referralInfo.code)
+            AnalyticsEvents.New.Referral.viewReferralsPage(campaign_id: referralInfo.code)
 
         case .onCopyTapped:
-            return AnalyticsEvents.New.Referral.referralCodeCopied(campaign_id: referralInfo.code)
+            AnalyticsEvents.New.Referral.referralCodeCopied(campaign_id: referralInfo.code)
 
         case .onShareTapped:
-            return AnalyticsEvents.New.Referral.shareReferralsCode(campaign_id: referralInfo.code)
+            AnalyticsEvents.New.Referral.shareReferralsCode(campaign_id: referralInfo.code)
 
         default:
-            return nil
+            nil
         }
     }
 }

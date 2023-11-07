@@ -9,9 +9,9 @@ public enum ActiveAmountInput {
     var inverted: ActiveAmountInput {
         switch self {
         case .fiat:
-            return .crypto
+            .crypto
         case .crypto:
-            return .fiat
+            .fiat
         }
     }
 }

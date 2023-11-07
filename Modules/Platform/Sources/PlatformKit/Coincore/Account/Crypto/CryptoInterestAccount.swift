@@ -15,7 +15,7 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount {
         var errorDescription: String? {
             switch self {
             case .loadingFailed(let asset, let label, let action, let error):
-                return "Failed to load: 'CryptoInterestAccount' asset '\(asset)' label '\(label)' action '\(action)' error '\(error)' ."
+                "Failed to load: 'CryptoInterestAccount' asset '\(asset)' label '\(label)' action '\(action)' error '\(error)' ."
             }
         }
     }
@@ -122,11 +122,11 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount {
     public func can(perform action: AssetAction) -> AnyPublisher<Bool, Error> {
         switch action {
         case .interestWithdraw:
-            return canPerformInterestWithdraw()
+            canPerformInterestWithdraw()
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         case .viewActivity:
-            return .just(true)
+            .just(true)
         case .buy,
              .deposit,
              .interestTransfer,
@@ -140,7 +140,7 @@ public final class CryptoInterestAccount: CryptoAccount, InterestAccount {
              .withdraw,
              .activeRewardsDeposit,
              .activeRewardsWithdraw:
-            return .just(false)
+            .just(false)
         }
     }
 

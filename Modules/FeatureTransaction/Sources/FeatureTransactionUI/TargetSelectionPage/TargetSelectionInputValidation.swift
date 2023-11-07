@@ -12,58 +12,58 @@ enum TargetSelectionInputValidation: Equatable {
     var textInput: TextInput? {
         switch self {
         case .text(let value, _, _):
-            return value
+            value
         case .empty,
              .QR,
              .account:
-            return nil
+            nil
         }
     }
 
     var isAccountSelection: Bool {
         switch self {
         case .account:
-            return true
+            true
         case .empty,
              .QR,
              .text:
-            return false
+            false
         }
     }
 
     var isValid: Bool {
         switch self {
         case .QR(let input):
-            return input.isValid
+            input.isValid
         case .account(let account):
-            return account.isValid
+            account.isValid
         case .text(let input, _, _):
-            return input.isValid
+            input.isValid
         case .empty:
-            return false
+            false
         }
     }
 
     var text: String {
         switch self {
         case .text(let input, _, _):
-            return input.text
+            input.text
         case .QR(let qrInput):
-            return qrInput.text
+            qrInput.text
         case .account,
              .empty:
-            return ""
+            ""
         }
     }
 
     var memoText: String {
         switch self {
         case .text(_, let memo, _):
-            return memo.text
+            memo.text
         case .QR(let qrInput):
-            return qrInput.memoText
+            qrInput.memoText
         case .account, .empty:
-            return ""
+            ""
         }
     }
 
@@ -74,9 +74,9 @@ enum TargetSelectionInputValidation: Equatable {
         var isValid: Bool {
             switch self {
             case .account:
-                return true
+                true
             case .none:
-                return false
+                false
             }
         }
     }
@@ -89,18 +89,18 @@ enum TargetSelectionInputValidation: Equatable {
         var text: String {
             switch self {
             case .inactive:
-                return ""
+                ""
             case .invalid(let value), .valid(let value):
-                return value
+                value
             }
         }
 
         var isValid: Bool {
             switch self {
             case .inactive, .valid:
-                return true
+                true
             case .invalid:
-                return false
+                false
             }
         }
     }
@@ -113,20 +113,20 @@ enum TargetSelectionInputValidation: Equatable {
         var text: String {
             switch self {
             case .inactive:
-                return ""
+                ""
             case .invalid(let value):
-                return value
+                value
             case .valid(let input):
-                return input
+                input
             }
         }
 
         var isValid: Bool {
             switch self {
             case .valid:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
     }
@@ -141,27 +141,27 @@ enum TargetSelectionInputValidation: Equatable {
         var text: String {
             switch self {
             case .empty:
-                return ""
+                ""
             case .valid(let value):
-                return value.address
+                value.address
             }
         }
 
         var memoText: String {
             switch self {
             case .empty:
-                return ""
+                ""
             case .valid(let value):
-                return value.memo ?? ""
+                value.memo ?? ""
             }
         }
 
         var isValid: Bool {
             switch self {
             case .valid:
-                return true
+                true
             case .empty:
-                return false
+                false
             }
         }
     }
@@ -171,18 +171,18 @@ extension TargetSelectionInputValidation {
     static func == (lhs: TargetSelectionInputValidation, rhs: TargetSelectionInputValidation) -> Bool {
         switch (lhs, rhs) {
         case (.empty, .empty):
-            return true
+            true
         case (.account(let lhs), .account(let rhs)):
-            return lhs == rhs
+            lhs == rhs
         case (.QR(let lhs), .QR(let rhs)):
-            return lhs == rhs
+            lhs == rhs
         case (.text(let lhsInput, let lhsMemo, let lhsAddress), .text(let rhsInput, let rhsMemo, let rhsAddress)):
-            return lhsInput == rhsInput
+            lhsInput == rhsInput
                 && lhsMemo == rhsMemo
                 && lhsAddress?.address == rhsAddress?.address
                 && lhsAddress?.memo == rhsAddress?.memo
         default:
-            return false
+            false
         }
     }
 }
@@ -191,12 +191,12 @@ extension TargetSelectionInputValidation.QRInput {
     static func == (lhs: TargetSelectionInputValidation.QRInput, rhs: TargetSelectionInputValidation.QRInput) -> Bool {
         switch (lhs, rhs) {
         case (.valid(let leftAddress), .valid(let rightAddress)):
-            return leftAddress.address == rightAddress.address
+            leftAddress.address == rightAddress.address
                 && leftAddress.memo == rightAddress.memo
         case (.empty, .empty):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }
@@ -205,12 +205,12 @@ extension TargetSelectionInputValidation.Account {
     static func == (lhs: TargetSelectionInputValidation.Account, rhs: TargetSelectionInputValidation.Account) -> Bool {
         switch (lhs, rhs) {
         case (.account(let left), .account(let right)):
-            return left.label == right.label
+            left.label == right.label
                 && left.identifier == right.identifier
         case (.none, .none):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

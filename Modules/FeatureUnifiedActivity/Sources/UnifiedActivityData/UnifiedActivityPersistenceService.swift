@@ -170,11 +170,11 @@ extension WebSocketEvent {
     var activityUpdate: ActivityUpdate? {
         switch self {
         case .heartbeat:
-            return nil
+            nil
         case .update(let payload):
-            return payload.activityUpdate(with: .update)
+            payload.activityUpdate(with: .update)
         case .snapshot(let payload):
-            return payload.activityUpdate(with: .snapshot)
+            payload.activityUpdate(with: .snapshot)
         }
     }
 }

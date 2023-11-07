@@ -14,9 +14,9 @@ public enum SupportedPairsFilterOption: Hashable {
     var fiatCurrency: FiatCurrency? {
         switch self {
         case .only(fiatCurrency: let currency):
-            return currency
+            currency
         case .all:
-            return nil
+            nil
         }
     }
 }

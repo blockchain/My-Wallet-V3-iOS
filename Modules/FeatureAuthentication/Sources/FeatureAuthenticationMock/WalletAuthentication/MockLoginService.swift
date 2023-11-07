@@ -15,17 +15,17 @@ final class MockLoginService: LoginServiceAPI {
     func login(walletIdentifier: String) -> AnyPublisher<Void, LoginServiceError> {
         switch twoFAType {
         case .standard:
-            return .just(())
+            .just(())
         case .yubiKey:
-            return .failure(.twoFactorOTPRequired(.yubiKey))
+            .failure(.twoFactorOTPRequired(.yubiKey))
         case .email:
-            return .failure(.twoFactorOTPRequired(.email))
+            .failure(.twoFactorOTPRequired(.email))
         case .yubikeyMtGox:
-            return .failure(.twoFactorOTPRequired(.yubikeyMtGox))
+            .failure(.twoFactorOTPRequired(.yubikeyMtGox))
         case .google:
-            return .failure(.twoFactorOTPRequired(.google))
+            .failure(.twoFactorOTPRequired(.google))
         case .sms:
-            return .failure(.twoFactorOTPRequired(.sms))
+            .failure(.twoFactorOTPRequired(.sms))
         }
     }
 

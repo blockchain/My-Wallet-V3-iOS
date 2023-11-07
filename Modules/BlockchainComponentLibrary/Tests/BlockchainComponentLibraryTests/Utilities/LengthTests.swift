@@ -82,9 +82,9 @@ extension Data? {
     func json() throws -> Any {
         switch self {
         case nil:
-            return NSNull()
+            NSNull()
         case let wrapped?:
-            return try wrapped.json()
+            try wrapped.json()
         }
     }
 }

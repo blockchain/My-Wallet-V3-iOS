@@ -51,9 +51,9 @@ extension BankLinkageData.Partner {
     public var title: String {
         switch self {
         case .yodlee:
-            return "Yodlee"
+            "Yodlee"
         case .yapily:
-            return "Yapily"
+            "Yapily"
         }
     }
 }

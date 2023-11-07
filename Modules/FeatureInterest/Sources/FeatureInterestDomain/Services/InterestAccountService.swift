@@ -67,9 +67,9 @@ final class InterestAccountService: InterestAccountServiceAPI {
             .map { balances in
                 switch balances[currency] {
                 case .none:
-                    return .invalid(.empty)
+                    .invalid(.empty)
                 case .some(let details):
-                    return .value(details)
+                    .value(details)
                 }
             }
             .asSingle()

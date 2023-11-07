@@ -24,9 +24,9 @@ public struct ActivateCardResponse: Decodable {
         public var isKnown: Bool {
             switch self {
             case .unknown:
-                return false
+                false
             default:
-                return true
+                true
             }
         }
     }

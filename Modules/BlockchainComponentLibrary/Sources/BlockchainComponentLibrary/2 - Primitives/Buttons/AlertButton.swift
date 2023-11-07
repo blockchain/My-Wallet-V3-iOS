@@ -111,9 +111,9 @@ struct AlertButtonStyle: ButtonStyle {
 
     private func colorSet(for configuration: Configuration) -> ColorSet {
         if configuration.isPressed {
-            return colorCombination.pressed
+            colorCombination.pressed
         } else {
-            return colorCombination.enabled
+            colorCombination.enabled
         }
     }
 }

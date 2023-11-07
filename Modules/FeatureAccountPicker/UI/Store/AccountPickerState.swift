@@ -8,13 +8,13 @@ public enum AccountPickerSection: Equatable, Identifiable {
     public var id: String {
         switch self {
         case .warning:
-            return "warning"
+            "warning"
         case .mostPopular(let rows):
-            return rows.map { "\($0.id)" }.joined()
+            rows.map { "\($0.id)" }.joined()
         case .otherAccounts(let rows):
-            return rows.map { "\($0.id)" }.joined()
+            rows.map { "\($0.id)" }.joined()
         case .accounts(let rows):
-            return rows.map { "\($0.id)" }.joined()
+            rows.map { "\($0.id)" }.joined()
         }
     }
 

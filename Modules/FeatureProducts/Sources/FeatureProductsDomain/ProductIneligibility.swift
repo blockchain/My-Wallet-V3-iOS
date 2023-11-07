@@ -45,13 +45,13 @@ public struct ProductIneligibility: Codable, Hashable {
     public var learnMoreUrl: URL? {
         switch reason {
         case .eu5Sanction:
-            return URL(string: "https://ec.europa.eu/commission/presscorner/detail/en/ip_22_2332")
+            URL(string: "https://ec.europa.eu/commission/presscorner/detail/en/ip_22_2332")
         case .eu8Sanction:
-            return URL(
+            URL(
                 string: "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L:2022:259I:FULL&from=EN"
             )
         default:
-            return nil
+            nil
         }
     }
 

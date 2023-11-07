@@ -13,13 +13,13 @@ extension KYCDocumentType {
     var description: String {
         switch self {
         case .passport:
-            return LocalizationConstants.KYC.passport
+            LocalizationConstants.KYC.passport
         case .driversLicense:
-            return LocalizationConstants.KYC.driversLicense
+            LocalizationConstants.KYC.driversLicense
         case .nationalIdentityCard:
-            return LocalizationConstants.KYC.nationalIdentityCard
+            LocalizationConstants.KYC.nationalIdentityCard
         case .residencePermit:
-            return LocalizationConstants.KYC.residencePermit
+            LocalizationConstants.KYC.residencePermit
         }
     }
 }

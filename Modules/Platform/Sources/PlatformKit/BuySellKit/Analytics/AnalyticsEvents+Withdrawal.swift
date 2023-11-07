@@ -18,11 +18,11 @@ extension AnalyticsEvents {
             var name: String {
                 switch self {
                 case .shown:
-                    return "cash_withdraw_checkout_shown"
+                    "cash_withdraw_checkout_shown"
                 case .confirm:
-                    return "cash_withdraw_checkout_confirm"
+                    "cash_withdraw_checkout_confirm"
                 case .cancel:
-                    return "cash_withdraw_checkout_cancel"
+                    "cash_withdraw_checkout_cancel"
                 }
             }
         }
@@ -30,34 +30,34 @@ extension AnalyticsEvents {
         public var name: String {
             switch self {
             case .formShown:
-                return "cash_withdraw_form_shown"
+                "cash_withdraw_form_shown"
             case .confirm:
-                return "cash_witdraw_form_confirm_click"
+                "cash_witdraw_form_confirm_click"
             case .checkout(let value):
-                return value.name
+                value.name
             case .withdrawSuccess:
-                return "cash_withdraw_success"
+                "cash_withdraw_success"
             case .withdrawFailure:
-                return "cash_withdraw_error"
+                "cash_withdraw_error"
             }
         }
 
         public var params: [String: String]? {
             switch self {
             case .formShown:
-                return nil
+                nil
             case .confirm(let currencyCode, let amount):
-                return ["currency": currencyCode, "amount": amount]
+                ["currency": currencyCode, "amount": amount]
             case .checkout(let value):
                 switch value {
                 case .shown(let currencyCode),
                      .cancel(let currencyCode),
                      .confirm(let currencyCode):
-                    return ["currency": currencyCode]
+                    ["currency": currencyCode]
                 }
             case .withdrawFailure(let currencyCode),
                  .withdrawSuccess(let currencyCode):
-                return ["currency": currencyCode]
+                ["currency": currencyCode]
             }
         }
     }

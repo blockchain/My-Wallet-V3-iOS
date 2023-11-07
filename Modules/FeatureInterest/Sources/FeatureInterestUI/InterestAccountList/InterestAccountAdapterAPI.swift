@@ -19,11 +19,11 @@ extension InterestAccountOverviewAction {
     ) -> Bool {
         switch (lhs, rhs) {
         case (.closed, .closed):
-            return true
+            true
         case (.selected(let left), .selected(let right)):
-            return left.identifier == right.identifier
+            left.identifier == right.identifier
         default:
-            return false
+            false
         }
     }
 }

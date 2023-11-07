@@ -14,24 +14,24 @@ enum AppChromeDetents {
         if #available(iOS 16, *) {
             switch self {
             case .collapsed:
-                return .init("Custom:\(CollapsedDetent.self)")
+                .init("Custom:\(CollapsedDetent.self)")
             case .semiCollapsed:
-                return .init("Custom:\(SemiCollapsedDetent.self)")
+                .init("Custom:\(SemiCollapsedDetent.self)")
             case .expanded:
-                return .init("Custom:\(ExpandedDetent.self)")
+                .init("Custom:\(ExpandedDetent.self)")
             case .limited:
-                return .init("Custom:\(LimitedDetent.self)")
+                .init("Custom:\(LimitedDetent.self)")
             }
         } else {
             switch self {
             case .collapsed:
-                return .init("Custom:CollapsedDetent")
+                .init("Custom:CollapsedDetent")
             case .semiCollapsed:
-                return .init("Custom:SemiCollapsedDetent")
+                .init("Custom:SemiCollapsedDetent")
             case .expanded:
-                return .init("Custom:ExpandedDetent")
+                .init("Custom:ExpandedDetent")
             case .limited:
-                return .init("Custom:LimitedDetent")
+                .init("Custom:LimitedDetent")
             }
         }
     }
@@ -39,17 +39,17 @@ enum AppChromeDetents {
     var fraction: CGFloat {
         switch self {
         case .collapsed:
-            return 0.9
+            0.9
         case .semiCollapsed:
-            return 0.95
+            0.95
         case .expanded:
             if #available(iOS 16, *) {
-                return 0.998
+                0.998
             } else {
-                return 0.985
+                0.985
             }
         case .limited:
-            return 0.97
+            0.97
         }
     }
 
@@ -57,13 +57,13 @@ enum AppChromeDetents {
     var detent: PresentationDetent {
         switch self {
         case .collapsed:
-            return .collapsed
+            .collapsed
         case .semiCollapsed:
-            return .semiCollapsed
+            .semiCollapsed
         case .expanded:
-            return .expanded
+            .expanded
         case .limited:
-            return .limited
+            .limited
         }
     }
 

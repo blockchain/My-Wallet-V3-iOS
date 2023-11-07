@@ -80,26 +80,26 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
                 let fundsPaymentMethod = suggestedMethods
                     .first(where: { paymentMethodType in
                         if case .suggested(let method) = paymentMethodType {
-                            return method.type.isFunds
+                            method.type.isFunds
                         } else {
-                            return false
+                            false
                         }
                     })
                 let paymentMethods = suggestedMethods
                     .filter { paymentMethodType in
                         if case .suggested(let method) = paymentMethodType {
-                            return !method.type.isFunds
+                            !method.type.isFunds
                         } else {
-                            return true
+                            true
                         }
                     }
 
                 // Card should be at the top of the list.
                 let sorted = paymentMethods.sorted { lhs, _ in
                     if case .suggested(let method) = lhs {
-                        return method.type.isCard
+                        method.type.isCard
                     } else {
-                        return false
+                        false
                     }
                 }
 
@@ -111,9 +111,9 @@ final class AddNewPaymentMethodInteractor: PresentableInteractor<AddNewPaymentMe
                 guard let self else { return [] }
                 return methods.compactMap { type in
                     if self.filter(type) {
-                        return self.generateCellType(by: type) ?? nil
+                        self.generateCellType(by: type) ?? nil
                     } else {
-                        return nil
+                        nil
                     }
                 }
             }

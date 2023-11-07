@@ -19,40 +19,40 @@ enum SettingsSectionType: Int, Equatable {
         var identity: AnyHashable {
             switch self {
             case .badge(let type, _):
-                return type.rawValue
+                type.rawValue
             case .banks(let type):
-                return type.identity
+                type.identity
             case .cards(let type):
-                return type.identity
+                type.identity
             case .clipboard(let type):
-                return type.rawValue
+                type.rawValue
             case .common(let type, _):
-                return type.rawValue
+                type.rawValue
             case .switch(let type, _):
-                return type.rawValue
+                type.rawValue
             case .refferal(let type, _):
-                return type.rawValue
+                type.rawValue
             }
         }
 
         static func == (lhs: SettingsSectionType.CellType, rhs: SettingsSectionType.CellType) -> Bool {
             switch (lhs, rhs) {
             case (.badge(let left, _), .badge(let right, _)):
-                return left == right
+                left == right
             case (.switch(let left, _), .switch(let right, _)):
-                return left == right
+                left == right
             case (.clipboard(let left), .clipboard(let right)):
-                return left == right
+                left == right
             case (.cards(let left), .cards(let right)):
-                return left == right
+                left == right
             case (.common(let left, _), .common(let right, _)):
-                return left == right
+                left == right
             case (.banks(let left), .banks(let right)):
-                return left == right
+                left == right
             case (.refferal(let left, _), .refferal(let right, _)):
-                return left == right
+                left == right
             default:
-                return false
+                false
             }
         }
 
@@ -99,11 +99,11 @@ enum SettingsSectionType: Int, Equatable {
             var identity: AnyHashable {
                 switch self {
                 case .skeleton(let index):
-                    return "skeleton.\(index)"
+                    "skeleton.\(index)"
                 case .add(let presenter):
-                    return presenter.identity
+                    presenter.identity
                 case .linked(let presenter):
-                    return presenter.identity
+                    presenter.identity
                 }
             }
 
@@ -117,13 +117,13 @@ enum SettingsSectionType: Int, Equatable {
             ) -> Bool {
                 switch (lhs, rhs) {
                 case (.skeleton(let left), .skeleton(let right)):
-                    return left == right
+                    left == right
                 case (.linked(let left), .linked(let right)):
-                    return left == right
+                    left == right
                 case (.add(let lhsPresenter), .add(let rhsPresenter)):
-                    return lhsPresenter.identity == rhsPresenter.identity
+                    lhsPresenter.identity == rhsPresenter.identity
                 default:
-                    return false
+                    false
                 }
             }
         }

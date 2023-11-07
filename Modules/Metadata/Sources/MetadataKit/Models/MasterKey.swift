@@ -9,14 +9,14 @@ public enum MasterKeyError: LocalizedError, Equatable {
     public static func == (lhs: MasterKeyError, rhs: MasterKeyError) -> Bool {
         switch (lhs, rhs) {
         case (.failedToInstantiate(let leftError), .failedToInstantiate(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         }
     }
 
     public var errorDescription: String? {
         switch self {
         case .failedToInstantiate(let error):
-            return error.localizedDescription
+            error.localizedDescription
         }
     }
 }

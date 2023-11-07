@@ -141,9 +141,9 @@ struct ExampleReducer: Reducer {
         Reduce { _, action in
             switch action {
             case .route:
-                return .none
+                .none
             case .end:
-                return .run { _ in print("✅") }
+                .run { _ in print("✅") }
             }
         }
         .routing()

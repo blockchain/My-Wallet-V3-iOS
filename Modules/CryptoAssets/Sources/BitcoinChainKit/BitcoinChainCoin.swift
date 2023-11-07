@@ -16,9 +16,9 @@ public enum BitcoinChainCoin: String {
     public var cryptoCurrency: CryptoCurrency {
         switch self {
         case .bitcoin:
-            return .bitcoin
+            .bitcoin
         case .bitcoinCash:
-            return .bitcoinCash
+            .bitcoinCash
         }
     }
 
@@ -26,16 +26,16 @@ public enum BitcoinChainCoin: String {
         switch self {
         case .bitcoin,
              .bitcoinCash:
-            return 546
+            546
         }
     }
 
     public var uriScheme: String {
         switch self {
         case .bitcoin:
-            return "bitcoin"
+            "bitcoin"
         case .bitcoinCash:
-            return "bitcoincash"
+            "bitcoincash"
         }
     }
 
@@ -43,9 +43,9 @@ public enum BitcoinChainCoin: String {
     public var derivationCoinType: UInt32 {
         switch self {
         case .bitcoin:
-            return 0
+            0
         case .bitcoinCash:
-            return 0
+            0
         }
     }
 }
@@ -67,9 +67,9 @@ extension BitcoinChainCoin {
     var walletCoreCoinType: WalletCore.CoinType {
         switch self {
         case .bitcoin:
-            return .bitcoin
+            .bitcoin
         case .bitcoinCash:
-            return .bitcoinCash
+            .bitcoinCash
         }
     }
 }

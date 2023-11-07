@@ -21,11 +21,11 @@ public enum CacheValue<Value>: CustomStringConvertible {
     public var description: String {
         switch self {
         case .absent:
-            return "absent"
+            "absent"
         case .stale(let value):
-            return "stale(\(value))"
+            "stale(\(value))"
         case .present(let value):
-            return "present(\(value))"
+            "present(\(value))"
         }
     }
 }

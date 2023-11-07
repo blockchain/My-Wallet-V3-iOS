@@ -87,9 +87,9 @@ extension Optional {
     public var printable: Any {
         switch self {
         case .none:
-            return ""
+            ""
         case .some(let value):
-            return value
+            value
         }
     }
 }

@@ -558,13 +558,13 @@ extension FeatureTransactionDomain.RecurringBuy {
         switch paymentMethodType {
         case .bankTransfer,
                 .bankAccount:
-            return L01n.bankTransfer
+            L01n.bankTransfer
         case .card:
-            return L01n.creditOrDebitCard
+            L01n.creditOrDebitCard
         case .applePay:
-            return L01n.applePay
+            L01n.applePay
         case .funds:
-            return amount.currency.name + " \(L01n.account)"
+            amount.currency.name + " \(L01n.account)"
         }
     }
 }

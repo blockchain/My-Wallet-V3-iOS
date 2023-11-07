@@ -16,9 +16,9 @@ enum FileName: String {
     var origin: FileOrigin {
         switch self {
         case .localCoin, .localCustodial, .localEthereumERC20, .localOtherERC20, .localNetworkConfig:
-            return .bundle
+            .bundle
         case .remoteCoin, .remoteCustodial, .remoteEthereumERC20, .remoteOtherERC20, .remoteNetworkConfig:
-            return .documentsDirectory
+            .documentsDirectory
         }
     }
 }

@@ -12,15 +12,15 @@ public enum MetadataInitialisationAndRecoveryError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .failedToDeriveSecondPasswordNode(let deriveSecondPasswordNodeError):
-            return deriveSecondPasswordNodeError.errorDescription
+            deriveSecondPasswordNodeError.errorDescription
         case .failedToDeriveRemoteMetadataNode(let metadataDerivationError):
-            return metadataDerivationError.errorDescription
+            metadataDerivationError.errorDescription
         case .failedToDeriveMasterKey(let masterKeyError):
-            return masterKeyError.errorDescription
+            masterKeyError.errorDescription
         case .invalidMnemonic(let mnemonicError):
-            return mnemonicError.errorDescription
+            mnemonicError.errorDescription
         case .failedToFetchCredentials(let metadataFetchError):
-            return metadataFetchError.errorDescription
+            metadataFetchError.errorDescription
         }
     }
 }

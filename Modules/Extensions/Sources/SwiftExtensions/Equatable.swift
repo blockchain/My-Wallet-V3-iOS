@@ -2,11 +2,11 @@
 
 public func isEqual(_ x: Any, _ y: Any) -> Bool {
     if let isEqual = (x as? any Equatable)?.isEqual(to: y) {
-        return isEqual
+        isEqual
     } else if let equatable = x as? AnyEquatable {
-        return equatable.isEqual(to: y)
+        equatable.isEqual(to: y)
     } else {
-        return (x as? any OptionalProtocol).isNil && (y as? any OptionalProtocol).isNil
+        (x as? any OptionalProtocol).isNil && (y as? any OptionalProtocol).isNil
     }
 }
 

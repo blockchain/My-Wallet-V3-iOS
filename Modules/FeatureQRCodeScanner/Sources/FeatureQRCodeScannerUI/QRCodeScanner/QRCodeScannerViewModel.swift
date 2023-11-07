@@ -110,12 +110,11 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
         urlOpener: URLOpener = resolve(),
         app: AppProtocol = resolve()
     ) {
-        let additionalLinkRoutes: [DeepLinkRoute]
-        switch additionalParsingOptions {
+        let additionalLinkRoutes: [DeepLinkRoute] = switch additionalParsingOptions {
         case .lax(routes: let routes):
-            additionalLinkRoutes = routes
+            routes
         case .strict:
-            additionalLinkRoutes = []
+            []
         }
         let deepLinkQRCodeRouter = DeepLinkQRCodeRouter(
             supportedRoutes: additionalLinkRoutes,
@@ -126,9 +125,9 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
             .firstNonNil { type in
                 switch type {
                 case .cryptoTarget(let sourceAccount):
-                    return sourceAccount
+                    sourceAccount
                 case .deepLink, .walletConnect:
-                    return nil
+                    nil
                 }
             }
 
@@ -189,19 +188,19 @@ final class QRCodeScannerViewModel: QRCodeScannerViewModelProtocol {
             .flatMap { result -> AnyPublisher<QRCodeScannerResultType?, Never> in
                 switch result {
                 case .cryptoTargets(let targets):
-                    return adapter
+                    adapter
                         .presentAccountPicker(accounts: targets)
                         .map(QRCodeScannerResultType.cryptoTarget)
                         .replaceError(with: nil)
                         .eraseToAnyPublisher()
                 case .walletConnect:
-                    return app.remoteConfiguration.publisher(for: "ios_ff_wallet_connect").map(\.isYes)
+                    app.remoteConfiguration.publisher(for: "ios_ff_wallet_connect").map(\.isYes)
                         .flatMap { isEnabled -> AnyPublisher<QRCodeScannerResultType?, Never> in
                             isEnabled ? .just(result) : .just(nil)
                         }
                         .eraseToAnyPublisher()
                 default:
-                    return .just(result)
+                    .just(result)
                 }
             }
             .receive(on: DispatchQueue.main)

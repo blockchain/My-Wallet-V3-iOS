@@ -38,9 +38,9 @@ extension SellTransactionEngine {
             .prefix(1)
             .map { exchangeRate -> MoneyValue in
                 if amount.isFiat {
-                    return amount.convert(using: exchangeRate.inverseQuote.quote)
+                    amount.convert(using: exchangeRate.inverseQuote.quote)
                 } else {
-                    return amount
+                    amount
                 }
             }
             .eraseToAnyPublisher()

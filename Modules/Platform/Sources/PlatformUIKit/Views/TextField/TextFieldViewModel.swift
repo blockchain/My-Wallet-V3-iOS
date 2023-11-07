@@ -39,9 +39,9 @@ public class TextFieldViewModel {
         public var isOn: Bool {
             switch self {
             case .on:
-                return true
+                true
             case .off:
-                return false
+                false
             }
         }
     }
@@ -303,11 +303,10 @@ public class TextFieldViewModel {
             })
             .disposed(by: disposeBag)
 
-        let matchState: Observable<TextValidationState>
-        if let textMatcher {
-            matchState = textMatcher.validationState
+        let matchState: Observable<TextValidationState> = if let textMatcher {
+            textMatcher.validationState
         } else {
-            matchState = .just(.valid)
+            .just(.valid)
         }
 
         Observable
@@ -414,45 +413,45 @@ extension TextFieldViewModel {
             case .invalid(reason: let reason),
                  .mismatch(reason: let reason),
                  .caution(value: _, reason: let reason):
-                return reason
+                reason
             default:
-                return nil
+                nil
             }
         }
 
         public var isCautioning: Bool {
             switch self {
             case .caution:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
         public var isEmpty: Bool {
             switch self {
             case .empty:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
         public var isInvalid: Bool {
             switch self {
             case .invalid:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
         var isMismatch: Bool {
             switch self {
             case .mismatch:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
@@ -461,9 +460,9 @@ extension TextFieldViewModel {
             switch self {
             case .valid(value: let value),
                  .caution(value: let value, reason: _):
-                return value
+                value
             default:
-                return nil
+                nil
             }
         }
 
@@ -471,9 +470,9 @@ extension TextFieldViewModel {
         public var isValid: Bool {
             switch self {
             case .valid:
-                return true
+                true
             default:
-                return false
+                false
             }
         }
 
@@ -518,9 +517,9 @@ extension TextFieldViewModel.State: Equatable {
              (.mismatch, .mismatch),
              (.invalid, .invalid),
              (.empty, .empty):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

@@ -289,29 +289,29 @@ extension Input {
 
     private var backgroundColor: Color {
         if !isEnabled {
-            return Color(light: .semantic.medium, dark: .palette.dark800)
+            Color(light: .semantic.medium, dark: .palette.dark800)
         } else {
-            return .semantic.background
+            .semantic.background
         }
     }
 
     private var borderColor: Color {
         if let color = state.borderColor {
-            return color
+            color
         } else if !isEnabled {
-            return .semantic.medium
+            .semantic.medium
         } else if isFirstResponder {
-            return .semantic.primary
+            .semantic.primary
         } else {
-            return defaultBorderColor
+            defaultBorderColor
         }
     }
 
     private var textColor: Color {
         if !isEnabled {
-            return placeholderColor
+            placeholderColor
         } else {
-            return .semantic.title
+            .semantic.title
         }
     }
 

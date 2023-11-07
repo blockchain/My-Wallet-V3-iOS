@@ -98,7 +98,7 @@ final class AssetView: UIView {
 }
 
 extension UIView {
-    
+
     @discardableResult
     fileprivate func constraint(edgesTo other: UIView) -> [NSLayoutConstraint] {
         let constraints = [

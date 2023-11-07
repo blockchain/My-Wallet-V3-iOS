@@ -159,7 +159,8 @@ struct WalletPairingReducer: Reducer {
         _ password: String,
         _ state: WalletPairingState,
         isAutoTrigger: Bool
-    ) -> Effect<WalletPairingAction> {
+    ) -> Effect<WalletPairingAction>
+   {
         guard !state.walletGuid.isEmpty else {
             fatalError("GUID should not be empty")
         }

@@ -9,9 +9,9 @@ public enum Visibility: Int {
     public var defaultAlpha: CGFloat {
         switch self {
         case .hidden:
-            return 0
+            0
         case .visible:
-            return 1
+            1
         }
     }
 

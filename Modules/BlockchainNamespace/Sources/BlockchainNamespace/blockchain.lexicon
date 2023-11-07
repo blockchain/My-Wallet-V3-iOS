@@ -1797,8 +1797,6 @@ blockchain:
 						unbonding:
 							withdrawals:
 							+ blockchain.type.money
-					activity:
-					+ blockchain.db.type.array.of.maps
 					address:
 					+ blockchain.db.type.string
 					is:

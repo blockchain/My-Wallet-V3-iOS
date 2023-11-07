@@ -123,31 +123,31 @@ extension Bindings.Update: CustomStringConvertible {
 
     public var isSynchronized: Bool {
         switch self {
-        case .request: return false
-        case .updateError: return false
-        case .update: return false
-        case .didSynchronize: return true
+        case .request: false
+        case .updateError: false
+        case .update: false
+        case .didSynchronize: true
         }
     }
 
     public var description: String {
         switch self {
         case .request(let set):
-            return "request(\(set))"
+            "request(\(set))"
         case .updateError(let binding, let error):
-            return "updateError(\(binding.reference), \(error))"
+            "updateError(\(binding.reference), \(error))"
         case .update(let binding):
-            return "update(\(binding.reference)"
+            "update(\(binding.reference)"
         case .didSynchronize(let set):
-            return "didSynchronize(\(set))"
+            "didSynchronize(\(set))"
         }
     }
 
     var depth: Int? {
         switch self {
-        case .request: return nil
-        case .updateError(let binding, _), .update(let binding): return binding.depth
-        case .didSynchronize(let bindings): return bindings.first?.depth
+        case .request: nil
+        case .updateError(let binding, _), .update(let binding): binding.depth
+        case .didSynchronize(let bindings): bindings.first?.depth
         }
     }
 }

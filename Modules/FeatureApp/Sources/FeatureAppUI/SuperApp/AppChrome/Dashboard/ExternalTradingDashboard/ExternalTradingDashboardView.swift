@@ -141,6 +141,7 @@ struct ExternalTradingDashboardView: View {
             }
 
             DashboardExternalMigrateView()
+                .padding(.horizontal, Spacing.padding1)
 
             if !viewStore.isZeroBalance {
                 if isRejected {

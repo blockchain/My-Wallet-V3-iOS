@@ -152,17 +152,17 @@ public class GradientView: UIView {
     private func pointsForGradient() -> (startPoint: CGPoint, endPoint: CGPoint) {
         switch _direction {
         case .up:
-            return (CGPoint(x: 0.5, y: 1.0), CGPoint(x: 0.5, y: 0.0))
+            (CGPoint(x: 0.5, y: 1.0), CGPoint(x: 0.5, y: 0.0))
         case .down:
-            return (CGPoint(x: 0.5, y: 0.0), CGPoint(x: 0.5, y: 1.0))
+            (CGPoint(x: 0.5, y: 0.0), CGPoint(x: 0.5, y: 1.0))
         case .left:
-            return (CGPoint(x: 1.0, y: 0.5), CGPoint(x: 0.0, y: 0.5))
+            (CGPoint(x: 1.0, y: 0.5), CGPoint(x: 0.0, y: 0.5))
         case .right:
-            return (CGPoint(x: 0.0, y: 0.5), CGPoint(x: 1.0, y: 0.5))
+            (CGPoint(x: 0.0, y: 0.5), CGPoint(x: 1.0, y: 0.5))
         case .bottomRight:
-            return (CGPoint(x: 1.0, y: 1.0), CGPoint(x: 0.5, y: 0.0))
+            (CGPoint(x: 1.0, y: 1.0), CGPoint(x: 0.5, y: 0.0))
         case .bottomLeft:
-            return (CGPoint(x: 0.0, y: 1.0), CGPoint(x: 0.5, y: 0.0))
+            (CGPoint(x: 0.0, y: 1.0), CGPoint(x: 0.5, y: 0.0))
         }
     }
 }

@@ -90,9 +90,9 @@ final class WalletPayloadService: WalletPayloadServiceAPI {
             .catch { error -> AnyPublisher<WalletAuthenticatorType, WalletPayloadServiceError> in
                 switch error {
                 case .emailAuthorizationRequired:
-                    return .just(.email)
+                    .just(.email)
                 default:
-                    return .failure(error)
+                    .failure(error)
                 }
             }
             .eraseToAnyPublisher()

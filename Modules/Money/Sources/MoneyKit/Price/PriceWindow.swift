@@ -46,7 +46,7 @@ public enum PriceWindow: Hashable {
              .month(let interval),
              .year(let interval),
              .all(let interval):
-            return interval
+            interval
         }
     }
 

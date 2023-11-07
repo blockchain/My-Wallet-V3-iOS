@@ -42,22 +42,22 @@ public enum SecureChannelError: LocalizedError, Equatable {
              .missingSharedKey,
              .missingPassword,
              .malformedPayload:
-            return LocalizedString.network
+            LocalizedString.network
         case .ipMismatch(let originIP, let deviceIP):
             // only show IPs in internal build
             if BuildFlag.isInternal {
-                return "\(LocalizedString.ipMismatch)\n\n" +
+                "\(LocalizedString.ipMismatch)\n\n" +
                     "\(LocalizedString.originIP): \(originIP)\n" +
                     "\(LocalizedString.deviceIP): \(deviceIP)"
             } else {
-                return LocalizedString.ipMismatch
+                LocalizedString.ipMismatch
             }
         case .connectionExpired:
-            return LocalizedString.connectionExpired
+            LocalizedString.connectionExpired
         case .cantValidateIP,
              .identityError,
              .messageError:
-            return LocalizedString.generic
+            LocalizedString.generic
         }
     }
 }

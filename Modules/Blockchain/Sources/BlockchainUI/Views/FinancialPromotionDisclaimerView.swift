@@ -30,6 +30,7 @@ public struct FinancialPromotionDisclaimerView: View {
                                 $app.post(value: true, of: blockchain.ux.finproms.disclaimer.is.dismissed)
                             }
                         )
+                        .frame(alignment: .trailing)
                     }
                     Text(rich: text)
                         .padding(.horizontal)

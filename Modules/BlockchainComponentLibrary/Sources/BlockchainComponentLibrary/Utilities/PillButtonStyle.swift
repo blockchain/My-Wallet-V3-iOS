@@ -100,11 +100,11 @@ public struct PillButtonStyle: ButtonStyle {
 
     private func colorSet(for configuration: Configuration) -> ColorSet {
         if configuration.isPressed {
-            return colorCombination.pressed
+            colorCombination.pressed
         } else if isEnabled {
-            return colorCombination.enabled
+            colorCombination.enabled
         } else {
-            return colorCombination.disabled
+            colorCombination.disabled
         }
     }
 }

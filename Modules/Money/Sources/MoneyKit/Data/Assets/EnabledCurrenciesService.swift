@@ -173,9 +173,9 @@ extension AssetModelProduct {
     fileprivate var enablesCurrency: Bool {
         switch self {
         case .custodialWalletBalance:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

@@ -62,22 +62,22 @@ public enum DelegatedCustodyTransactionType: Hashable {
     public var type: String {
         switch self {
         case .payment:
-            return "PAYMENT"
+            "PAYMENT"
         case .swap:
-            return "SWAP"
+            "SWAP"
         case .tokenApproval:
-            return "TOKEN_APPROVAL"
+            "TOKEN_APPROVAL"
         }
     }
 
     public var allowanceSpender: String? {
         switch self {
         case .payment:
-            return nil
+            nil
         case .swap:
-            return nil
+            nil
         case .tokenApproval(let value):
-            return value
+            value
         }
     }
 }

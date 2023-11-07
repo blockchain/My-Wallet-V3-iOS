@@ -26,9 +26,9 @@ final class StellarOnChainTransactionEngine: OnChainTransactionEngine {
     private var receiveAddress: AnyPublisher<ReceiveAddress, Error> {
         switch transactionTarget {
         case let target as ReceiveAddress:
-            return .just(target)
+            .just(target)
         case let target as CryptoAccount:
-            return target.receiveAddress
+            target.receiveAddress
         default:
             fatalError("Engine requires transactionTarget to be a ReceiveAddress or CryptoAccount.")
         }

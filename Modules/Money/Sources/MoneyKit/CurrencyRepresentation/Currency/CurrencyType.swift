@@ -34,18 +34,18 @@ public enum CurrencyType: Hashable, Codable {
     public static func == (lhs: CurrencyType, rhs: FiatCurrency) -> Bool {
         switch lhs {
         case crypto:
-            return false
+            false
         case fiat(let lhs):
-            return lhs == rhs
+            lhs == rhs
         }
     }
 
     public static func == (lhs: CurrencyType, rhs: CryptoCurrency) -> Bool {
         switch lhs {
         case crypto(let lhs):
-            return lhs == rhs
+            lhs == rhs
         case fiat:
-            return false
+            false
         }
     }
 
@@ -74,81 +74,81 @@ extension CurrencyType: Currency {
     public var name: String {
         switch self {
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency.name
+            cryptoCurrency.name
         case .fiat(let fiatCurrency):
-            return fiatCurrency.name
+            fiatCurrency.name
         }
     }
 
     public var code: String {
         switch self {
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency.code
+            cryptoCurrency.code
         case .fiat(let fiatCurrency):
-            return fiatCurrency.code
+            fiatCurrency.code
         }
     }
 
     public var displayCode: String {
         switch self {
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency.displayCode
+            cryptoCurrency.displayCode
         case .fiat(let fiatCurrency):
-            return fiatCurrency.displayCode
+            fiatCurrency.displayCode
         }
     }
 
     public var displaySymbol: String {
         switch self {
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency.displaySymbol
+            cryptoCurrency.displaySymbol
         case .fiat(let fiatCurrency):
-            return fiatCurrency.displaySymbol
+            fiatCurrency.displaySymbol
         }
     }
 
     public var precision: Int {
         switch self {
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency.precision
+            cryptoCurrency.precision
         case .fiat(let fiatCurrency):
-            return fiatCurrency.precision
+            fiatCurrency.precision
         }
     }
 
     public var storeExtraPrecision: Int {
         switch self {
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency.storeExtraPrecision
+            cryptoCurrency.storeExtraPrecision
         case .fiat(let fiatCurrency):
-            return fiatCurrency.storeExtraPrecision
+            fiatCurrency.storeExtraPrecision
         }
     }
 
     public var displayPrecision: Int {
         switch self {
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency.displayPrecision
+            cryptoCurrency.displayPrecision
         case .fiat(let fiatCurrency):
-            return fiatCurrency.displayPrecision
+            fiatCurrency.displayPrecision
         }
     }
 
     public var isFiatCurrency: Bool {
         switch self {
         case .crypto:
-            return false
+            false
         case .fiat:
-            return true
+            true
         }
     }
 
     public var isCryptoCurrency: Bool {
         switch self {
         case .crypto:
-            return true
+            true
         case .fiat:
-            return false
+            false
         }
     }
 
@@ -158,9 +158,9 @@ extension CurrencyType: Currency {
     public var cryptoCurrency: CryptoCurrency? {
         switch self {
         case .crypto(let cryptoCurrency):
-            return cryptoCurrency
+            cryptoCurrency
         case .fiat:
-            return nil
+            nil
         }
     }
 
@@ -168,9 +168,9 @@ extension CurrencyType: Currency {
     public var fiatCurrency: FiatCurrency? {
         switch self {
         case .crypto:
-            return nil
+            nil
         case .fiat(let fiatCurrency):
-            return fiatCurrency
+            fiatCurrency
         }
     }
 }

@@ -51,7 +51,6 @@ final class ComputeThisTests: ComputeTestCase {
         try await assert(json, equals: "b")
     }
 
-
     func test_maintenace_os_check() async throws {
         try await app.set(blockchain.ui.device.os.version, to: "17.1")
 

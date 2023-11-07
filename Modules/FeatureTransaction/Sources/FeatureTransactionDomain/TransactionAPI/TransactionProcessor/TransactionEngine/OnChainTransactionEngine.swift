@@ -45,13 +45,13 @@ extension OnChainTransactionEngine {
         customFeeAmount: MoneyValue
     ) -> Single<PendingTransaction> {
         if pendingTransaction.hasFeeLevelChanged(newLevel: level, newAmount: customFeeAmount) {
-            return updateFeeSelection(
+            updateFeeSelection(
                 pendingTransaction: pendingTransaction,
                 newFeeLevel: level,
                 customFeeAmount: customFeeAmount
             )
         } else {
-            return .just(pendingTransaction)
+            .just(pendingTransaction)
         }
     }
 

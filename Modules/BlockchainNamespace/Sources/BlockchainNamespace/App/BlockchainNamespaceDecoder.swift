@@ -12,29 +12,29 @@ open class BlockchainNamespaceDecoder: AnyDecoder {
     override public func convert<T>(_ any: Any, to type: T.Type) throws -> Any? {
         switch (any, type) {
         case (let tag as Tag, is Tag.Reference.Type):
-            return tag.ref(to: context)
+            tag.ref(to: context)
         case (let ref as Tag.Reference, is Tag.Type):
-            return ref.tag
+            ref.tag
         case (let id as L, is Tag.Type):
-            return id[]
+            id[]
         case (let id as L, is Tag.Reference.Type):
-            return id[].ref(to: context)
+            id[].ref(to: context)
         case (let string as String, is Tag.Type):
-            return try Tag(id: string, in: language)
+            try Tag(id: string, in: language)
         case (let string as String, is Tag.Reference.Type):
-            return try Tag.Reference(id: string, in: language)
+            try Tag.Reference(id: string, in: language)
         case (let event as Tag.Event, is Tag.Reference.Type):
-            return event.key(to: context)
+            event.key(to: context)
         case (let event as Tag.Event, is String.Type):
-            return event.description
+            event.description
         default:
             switch (any, Wrapper<T>.self) {
             case (let string as String, let enumRepresentable as EnumRepresentable.Type):
-                return try enumRepresentable.value(from: string, using: self)
+                try enumRepresentable.value(from: string, using: self)
             case (let tag as Tag.Event, let enumRepresentable as EnumRepresentable.Type):
-                return try enumRepresentable.value(from: tag.description, using: self)
+                try enumRepresentable.value(from: tag.description, using: self)
             default:
-                return try super.convert(any, to: type)
+                try super.convert(any, to: type)
             }
         }
     }

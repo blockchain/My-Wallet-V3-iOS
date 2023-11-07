@@ -10,11 +10,11 @@ public enum MessageError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .decryptionFailed:
-            return "Message Error: Decryption failed."
+            "Message Error: Decryption failed."
         case .encryptionFailed:
-            return "Message Error: Encryption failed."
+            "Message Error: Encryption failed."
         case .jsonEncodingError:
-            return "Message Error: Error encoding JSON data."
+            "Message Error: Error encoding JSON data."
         }
     }
 }

@@ -128,19 +128,19 @@ extension FeatureCoinDomain.Series {
     var analytics: String {
         switch self {
         case .now:
-            return "LIVE"
+            "LIVE"
         case .day:
-            return "1D"
+            "1D"
         case .week:
-            return "1W"
+            "1W"
         case .month:
-            return "1M"
+            "1M"
         case .year:
-            return "1Y"
+            "1Y"
         case .all:
-            return "ALL"
+            "ALL"
         default:
-            return "NONE"
+            "NONE"
         }
     }
 }

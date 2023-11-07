@@ -24,9 +24,9 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             .map(weak: self) { (self, activeInput) in
                 switch activeInput {
                 case .fiat:
-                    return self.fiatInteractor
+                    self.fiatInteractor
                 case .crypto:
-                    return self.cryptoInteractor
+                    self.cryptoInteractor
                 }
             }
             .take(1)
@@ -89,9 +89,9 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             .map { (crypto: MoneyValue, fiat: MoneyValue, input: ActiveAmountInput) -> MoneyValue in
                 switch input {
                 case .crypto:
-                    return crypto
+                    crypto
                 case .fiat:
-                    return fiat
+                    fiat
                 }
             }
     }
@@ -117,9 +117,9 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             .map { (crypto: MoneyValue, fiat: MoneyValue, input: ActiveAmountInput) -> MoneyValue in
                 switch input {
                 case .crypto:
-                    return crypto
+                    crypto
                 case .fiat:
-                    return fiat
+                    fiat
                 }
             }
             .share(replay: 1, scope: .whileConnected)
@@ -172,10 +172,10 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
         return amount.combineLatest(currency, tradingCurrency)
             .map { amount, currency, tradingCurrency in
                 if let amount, let currency {
-                    return FiatValue.create(minor: amount, currency: currency)
+                    FiatValue.create(minor: amount, currency: currency)
                 } else {
                     // If there's no previous purchase default to 50.00 of trading currency
-                    return FiatValue.create(majorBigInt: 50, currency: tradingCurrency)
+                    FiatValue.create(majorBigInt: 50, currency: tradingCurrency)
                 }
             }
             .eraseToAnyPublisher()
@@ -582,9 +582,9 @@ public final class AmountTranslationInteractor: AmountViewInteracting {
             .flatMapCompletable(weak: self) { (self, activeInput) -> Completable in
                 switch (activeInput, amount.isFiat) {
                 case (.fiat, true), (.crypto, false):
-                    return .empty()
+                    .empty()
                 case (.fiat, false), (.crypto, true):
-                    return self.invertInput(from: activeInput)
+                    self.invertInput(from: activeInput)
                 }
             }
     }
@@ -637,9 +637,9 @@ extension AmountInteractorState {
     var toValidationState: ValidationState {
         switch self {
         case .validInput:
-            return .valid
+            .valid
         case .invalidInput:
-            return .invalid
+            .invalid
         }
     }
 }
@@ -648,11 +648,11 @@ extension AmountInteractorEffect: Equatable {
     public static func == (lhs: AmountInteractorEffect, rhs: AmountInteractorEffect) -> Bool {
         switch (lhs, rhs) {
         case (.failure, .failure):
-            return true
+            true
         case (.none, .none):
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

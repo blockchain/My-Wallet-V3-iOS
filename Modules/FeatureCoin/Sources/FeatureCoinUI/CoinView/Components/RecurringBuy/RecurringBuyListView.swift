@@ -14,18 +14,18 @@ public struct RecurringBuyListView: View {
         var asset: String {
             switch self {
             case .coin(let asset):
-                return asset
+                asset
             case .dashboard(let asset):
-                return asset
+                asset
             }
         }
 
         var isDashboard: Bool {
             switch self {
             case .coin:
-                return false
+                false
             case .dashboard:
-                return true
+                true
             }
         }
     }

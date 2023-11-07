@@ -110,9 +110,9 @@ public final class SweepAddressesObserver: Client.Observer {
                             .prefix(1)
                             .map { accounts -> SweepAddressesState in
                                 if accounts.isNotEmpty {
-                                    return .shouldSweep
+                                    .shouldSweep
                                 } else {
-                                    return .allGood
+                                    .allGood
                                 }
                             }
                             .eraseToAnyPublisher()

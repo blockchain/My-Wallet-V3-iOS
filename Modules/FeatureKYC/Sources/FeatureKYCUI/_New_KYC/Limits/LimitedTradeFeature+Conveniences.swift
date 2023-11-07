@@ -11,54 +11,53 @@ extension LimitedTradeFeature {
     var icon: Icon {
         switch id {
         case .send:
-            return Icon.send
+            Icon.send
         case .receive:
-            return Icon.qrCode
+            Icon.qrCode
         case .swap:
-            return Icon.swap
+            Icon.swap
         case .sell:
-            return Icon.sell
+            Icon.sell
         case .buyWithCard:
-            return Icon.creditcard
+            Icon.creditcard
         case .buyWithBankAccount:
-            return Icon.bank
+            Icon.bank
         case .withdraw:
-            return Icon.bank
+            Icon.bank
         case .rewards:
-            return Icon.interest
+            Icon.interest
         }
     }
 
     var title: String {
         switch id {
         case .send:
-            return LocalizedStrings.featureName_send
+            LocalizedStrings.featureName_send
         case .receive:
-            return LocalizedStrings.featureName_receive
+            LocalizedStrings.featureName_receive
         case .swap:
-            return LocalizedStrings.featureName_swap
+            LocalizedStrings.featureName_swap
         case .sell:
-            return LocalizedStrings.featureName_sell
+            LocalizedStrings.featureName_sell
         case .buyWithCard:
-            return LocalizedStrings.featureName_buyWithCard
+            LocalizedStrings.featureName_buyWithCard
         case .buyWithBankAccount:
-            return LocalizedStrings.featureName_buyWithBankAccount
+            LocalizedStrings.featureName_buyWithBankAccount
         case .withdraw:
-            return LocalizedStrings.featureName_withdraw
+            LocalizedStrings.featureName_withdraw
         case .rewards:
-            return LocalizedStrings.featureName_rewards
+            LocalizedStrings.featureName_rewards
         }
     }
 
     var message: String? {
-        let text: String?
-        switch id {
+        let text: String? = switch id {
         case .send:
-            text = LocalizedStrings.toTradingAccountsOnlyNote
+            LocalizedStrings.toTradingAccountsOnlyNote
         case .receive:
-            text = LocalizedStrings.fromTradingAccountsOnlyNote
+            LocalizedStrings.fromTradingAccountsOnlyNote
         default:
-            text = nil
+            nil
         }
         return text
     }
@@ -91,14 +90,13 @@ extension LimitedTradeFeature.PeriodicLimit {
     }
 
     var timeframeDisplayString: String {
-        let format: String
-        switch period {
+        let format: String = switch period {
         case .day:
-            format = LocalizedStrings.limitedPerDay
+            LocalizedStrings.limitedPerDay
         case .month:
-            format = LocalizedStrings.limitedPerMonth
+            LocalizedStrings.limitedPerMonth
         case .year:
-            format = LocalizedStrings.limitedPerYear
+            LocalizedStrings.limitedPerYear
         }
         return format
     }

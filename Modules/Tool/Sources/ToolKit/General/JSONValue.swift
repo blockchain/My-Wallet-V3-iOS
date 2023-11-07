@@ -31,17 +31,17 @@ public indirect enum JSONValue: Codable, Hashable, CustomStringConvertible {
     public var description: String {
         switch self {
         case .array(let value):
-            return value.description
+            value.description
         case .bool(let value):
-            return value.description
+            value.description
         case .dictionary(let value):
-            return value.description
+            value.description
         case .null:
-            return "null"
+            "null"
         case .number(let value):
-            return value.description
+            value.description
         case .string(let value):
-            return "\"\(value)\""
+            "\"\(value)\""
         }
     }
 

@@ -6,9 +6,9 @@ import FeatureStakingDomain
 import NetworkKit
 import ToolKit
 
-public final class EarnRepository: EarnRepositoryAPI {
+final class EarnRepository: EarnRepositoryAPI {
 
-    public var product: String { client.product }
+    var product: String { client.product }
 
     private let client: EarnClient
 
@@ -30,53 +30,53 @@ public final class EarnRepository: EarnRepositoryAPI {
         activity: cache(client.activity(currency:), reset: .onLoginLogoutTransaction())
     )
 
-    public init(client: EarnClient) {
+    init(client: EarnClient) {
         self.client = client
     }
 
-    public func balances() -> AnyPublisher<EarnAccounts, Nabu.Error> {
+    func balances() -> AnyPublisher<EarnAccounts, Nabu.Error> {
         cache.balances.get(key: #line)
     }
 
-    public func invalidateBalances() {
+    func invalidateBalances() {
         cache.balances.invalidateCache()
     }
 
-    public func eligibility() -> AnyPublisher<EarnEligibility, Nabu.Error> {
+    func eligibility() -> AnyPublisher<EarnEligibility, Nabu.Error> {
         cache.eligibility.get(key: #line)
     }
 
-    public func userRates() -> AnyPublisher<EarnUserRates, Nabu.Error> {
+    func userRates() -> AnyPublisher<EarnUserRates, Nabu.Error> {
         cache.userRates.get(key: #line)
     }
 
-    public func limits(currency: FiatCurrency) -> AnyPublisher<EarnLimits, Nabu.Error> {
+    func limits(currency: FiatCurrency) -> AnyPublisher<EarnLimits, Nabu.Error> {
         cache.limits.get(key: currency)
     }
 
-    public func address(currency: CryptoCurrency) -> AnyPublisher<EarnAddress, Nabu.Error> {
+    func address(currency: CryptoCurrency) -> AnyPublisher<EarnAddress, Nabu.Error> {
         cache.address.get(key: currency)
     }
 
-    public func activity(currency: CryptoCurrency) -> AnyPublisher<[EarnActivity], Nabu.Error> {
+    func activity(currency: CryptoCurrency?) -> AnyPublisher<[EarnActivity], Nabu.Error> {
         cache.activity.get(key: currency)
     }
 
-    public func deposit(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error> {
+    func deposit(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error> {
         client.deposit(amount: amount)
     }
 
-    public func withdraw(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error> {
+    func withdraw(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error> {
         client.withdraw(amount: amount)
     }
 
-    public func pendingWithdrawalRequests(
+    func pendingWithdrawalRequests(
         currencyCode: String
     ) -> AnyPublisher<[EarnWithdrawalPendingRequest], Nabu.Error> {
         client.pendingWithdrawalRequests(currencyCode: currencyCode)
     }
 
-    public func bondingStakingTxs(
+    func bondingStakingTxs(
         currencyCode: String
     ) -> AnyPublisher<EarnBondingTxsRequest, Nabu.Error> {
         client.bondingStakingTxs(currencyCode: currencyCode)

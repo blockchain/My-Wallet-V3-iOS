@@ -10,28 +10,28 @@ extension AssetAction {
     public var name: String {
         switch self {
         case .buy:
-            return LocalizationIds.buy
+            LocalizationIds.buy
         case .viewActivity:
-            return LocalizationIds.viewActivity
+            LocalizationIds.viewActivity
         case .interestTransfer:
-            return LocalizationIds.transfer
+            LocalizationIds.transfer
         case .deposit, .stakingDeposit, .activeRewardsDeposit:
-            return LocalizationIds.deposit
+            LocalizationIds.deposit
         case .sell:
-            return LocalizationIds.sell
+            LocalizationIds.sell
         case .send:
-            return LocalizationIds.send
+            LocalizationIds.send
         case .sign:
             fatalError("Impossible.")
         case .receive:
-            return LocalizationIds.receive
+            LocalizationIds.receive
         case .swap:
-            return LocalizationIds.swap
+            LocalizationIds.swap
         case .withdraw,
              .interestWithdraw,
              .stakingWithdraw,
              .activeRewardsWithdraw:
-            return LocalizationIds.withdraw
+            LocalizationIds.withdraw
         }
     }
 }

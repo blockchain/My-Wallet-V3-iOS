@@ -102,9 +102,9 @@ extension FeeLevel {
     public var ethereumFeeLevel: EVMTransactionFee.FeeLevel {
         switch self {
         case .custom, .none, .regular:
-            return .regular
+            .regular
         case .priority:
-            return .priority
+            .priority
         }
     }
 }

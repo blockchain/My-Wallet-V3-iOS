@@ -22,7 +22,7 @@ final class QuotePayloadFactoryTests: XCTestCase {
             isValidated: true,
             fees: [.init(type: .network, value: bitcoin(major: 0.01))],
             sellAmount: bitcoin(major: 1),
-            slippage: "0.1234", 
+            slippage: "0.1234",
             bcdcFeePercentage: "0.008",
             isCrossChain: true
         )

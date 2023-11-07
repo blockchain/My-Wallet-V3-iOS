@@ -18,9 +18,9 @@ public enum PaymentMethodsLinkingFlowResult: Equatable {
     public var isCompleted: Bool {
         switch self {
         case .completed:
-            return true
+            true
         case .abandoned:
-            return false
+            false
         }
     }
 }

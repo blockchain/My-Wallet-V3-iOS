@@ -27,56 +27,56 @@ extension AnalyticsEvents {
             switch self {
             // Settings - email clicked
             case .settingsEmailClicked:
-                return "settings_email_clicked"
+                "settings_email_clicked"
             // Settings - phone clicked
             case .settingsPhoneClicked:
-                return "settings_phone_clicked"
+                "settings_phone_clicked"
             // Settings - login to web wallet clicked
             case .settingsWebWalletLoginClick:
-                return "settings_web_wallet_login_click"
+                "settings_web_wallet_login_click"
             // Settings - swap limit clicked
             case .settingsSwapLimitClicked:
-                return "settings_swap_limit_clicked"
+                "settings_swap_limit_clicked"
             case .settingsCloudBackupSwitch:
-                return "settings_cloud_backup_switch"
+                "settings_cloud_backup_switch"
             // Settings - wallet id copy clicked
             case .settingsWalletIdCopyClick:
-                return "settings_wallet_id_copy_click"
+                "settings_wallet_id_copy_click"
             // Settings - wallet id copied
             case .settingsWalletIdCopied:
-                return "settings_wallet_id_copied"
+                "settings_wallet_id_copied"
             // Settings - email notifications switch clicked
             case .settingsEmailNotifSwitch:
-                return "settings_email_notif_switch"
+                "settings_email_notif_switch"
             // Settings - change password clicked
             case .settingsPasswordClick:
-                return "settings_password_click"
+                "settings_password_click"
             // Settings - two factor auth clicked
             case .settingsTwoFaClick:
-                return "settings_two_fa_click"
+                "settings_two_fa_click"
             // Settings - recovery phrase clicked
             case .settingsRecoveryPhraseClick:
-                return "settings_recovery_phrase_click"
+                "settings_recovery_phrase_click"
             // Settings - change PIN clicked
             case .settingsChangePinClick:
-                return "settings_change_pin_click"
+                "settings_change_pin_click"
             // Settings - biometry auth switch
             case .settingsBiometryAuthSwitch:
-                return "settings_biometry_auth_switch"
+                "settings_biometry_auth_switch"
             // Settings - change language
             case .settingsLanguageSelected:
-                return "settings_language_selected"
+                "settings_language_selected"
             // Settings - PIN changed
             case .settingsPinSelected:
-                return "settings_pin_selected"
+                "settings_pin_selected"
             // Settings - change password
             case .settingsPasswordSelected:
-                return "settings_password_selected"
+                "settings_password_selected"
             // Settings - change currency
             case .settingsCurrencySelected:
-                return "settings_currency_selected"
+                "settings_currency_selected"
             case .settingsTradingCurrencySelected:
-                return "settings_trading_currency_selected"
+                "settings_trading_currency_selected"
             }
         }
 

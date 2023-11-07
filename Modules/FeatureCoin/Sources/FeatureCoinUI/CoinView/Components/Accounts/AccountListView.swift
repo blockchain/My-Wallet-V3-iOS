@@ -26,9 +26,9 @@ public struct AccountListView: View {
     var __accounts: [Account.Snapshot] {
         switch kycStatus {
         case .none, .unverified, .inReview:
-            return accounts.filter(\.isPrivateKey)
+            accounts.filter(\.isPrivateKey)
         case .gold:
-            return accounts
+            accounts
         }
     }
 

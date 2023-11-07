@@ -16,8 +16,10 @@ public struct SuperAppContainerChrome: View {
     private let store: StoreOf<SuperAppContent>
     @ObservedObject var viewStore: ViewStoreOf<SuperAppContent>
 
-    init(store: StoreOf<SuperAppContent>,
-         isSmallDevice: Bool) {
+    init(
+        store: StoreOf<SuperAppContent>,
+        isSmallDevice: Bool
+    ) {
         self.isSmallDevice = isSmallDevice
         self.store = store
         self.viewStore = ViewStore(store, observe: { $0 })

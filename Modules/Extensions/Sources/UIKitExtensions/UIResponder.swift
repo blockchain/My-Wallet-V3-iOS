@@ -5,11 +5,11 @@ extension UIResponder {
 
     public var responderViewController: UIViewController? {
         if let vc = self as? UIViewController {
-            return vc
+            vc
         } else if let nextResponder = next {
-            return nextResponder.responderViewController
+            nextResponder.responderViewController
         } else {
-            return nil
+            nil
         }
     }
 }

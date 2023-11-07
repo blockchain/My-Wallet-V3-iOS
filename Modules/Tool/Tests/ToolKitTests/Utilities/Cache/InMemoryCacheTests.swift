@@ -10,13 +10,13 @@ extension Optional: Comparable where Wrapped: Comparable {
     public static func < (lhs: Optional, rhs: Optional) -> Bool {
         switch (lhs, rhs) {
         case (.none, .none):
-            return false
+            false
         case (.none, .some):
-            return true
+            true
         case (.some, .none):
-            return false
+            false
         case (.some(let lhs), .some(let rhs)):
-            return lhs < rhs
+            lhs < rhs
         }
     }
 }

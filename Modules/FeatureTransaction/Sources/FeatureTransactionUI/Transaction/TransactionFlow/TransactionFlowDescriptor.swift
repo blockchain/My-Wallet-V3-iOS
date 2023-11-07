@@ -114,32 +114,32 @@ enum TransactionFlowDescriptor {
         static func sourceTitle(action: AssetAction) -> String {
             switch action {
             case .swap:
-                return LocalizedString.Swap.swapFrom
+                LocalizedString.Swap.swapFrom
             case .deposit:
-                return LocalizedString.Deposit.linkedBanks
+                LocalizedString.Deposit.linkedBanks
             case .buy:
-                return LocalizedString.Buy.selectSourceTitle
+                LocalizedString.Buy.selectSourceTitle
             case .sell:
-                return LocalizedString.Sell.selectSourceTitle
+                LocalizedString.Sell.selectSourceTitle
             case .interestWithdraw, .activeRewardsWithdraw, .stakingWithdraw:
-                return LocalizedString.Withdraw.withdrawTo
+                LocalizedString.Withdraw.withdrawTo
             case .interestTransfer, .stakingDeposit, .activeRewardsDeposit:
-                return LocalizedString.Transfer.addFrom
+                LocalizedString.Transfer.addFrom
             case .sign,
                  .receive,
                  .send,
                  .viewActivity,
                  .withdraw:
-                return ""
+                ""
             }
         }
 
         static func sourceSubtitle(action: AssetAction) -> String {
             switch action {
             case .swap:
-                return LocalizedString.Swap.sourceAccountPicketSubtitle
+                LocalizedString.Swap.sourceAccountPicketSubtitle
             case .sell:
-                return LocalizedString.Sell.selectSourceSubtitle
+                LocalizedString.Sell.selectSourceSubtitle
             case .sign,
                  .withdraw,
                  .deposit,
@@ -153,40 +153,40 @@ enum TransactionFlowDescriptor {
                  .stakingWithdraw,
                  .activeRewardsDeposit,
                  .activeRewardsWithdraw:
-                return ""
+                ""
             }
         }
 
         static func destinationTitle(action: AssetAction) -> String {
             switch action {
             case .swap:
-                return LocalizedString.Swap.swapTo
+                LocalizedString.Swap.swapTo
             case .withdraw,
                  .interestWithdraw,
                  .stakingWithdraw,
                  .activeRewardsWithdraw:
-                return LocalizedString.Withdraw.withdrawTo
+                LocalizedString.Withdraw.withdrawTo
             case .buy:
-                return LocalizedString.Buy.selectDestinationTitle
+                LocalizedString.Buy.selectDestinationTitle
             case .sell:
-                return LocalizedString.Sell.title
+                LocalizedString.Sell.title
             case .interestTransfer, .stakingDeposit, .activeRewardsDeposit:
-                return LocalizedString.Transfer.addFrom
+                LocalizedString.Transfer.addFrom
             case .sign,
                  .deposit,
                  .receive,
                  .send,
                  .viewActivity:
-                return ""
+                ""
             }
         }
 
         static func destinationSubtitle(action: AssetAction) -> String {
             switch action {
             case .swap:
-                return LocalizedString.Swap.destinationAccountPicketSubtitle
+                LocalizedString.Swap.destinationAccountPicketSubtitle
             case .sell:
-                return LocalizedString.Sell.selectDestinationTitle
+                LocalizedString.Sell.selectDestinationTitle
             case .sign,
                  .deposit,
                  .receive,
@@ -200,7 +200,7 @@ enum TransactionFlowDescriptor {
                  .stakingDeposit,
                  .activeRewardsDeposit,
                  .activeRewardsWithdraw:
-                return ""
+                ""
             }
         }
     }
@@ -237,7 +237,7 @@ enum TransactionFlowDescriptor {
              .buy,
              .sell,
              .activeRewardsWithdraw:
-            return true
+            true
         case .sign,
              .receive,
              .send,
@@ -245,7 +245,7 @@ enum TransactionFlowDescriptor {
              .interestTransfer,
              .stakingDeposit,
              .activeRewardsDeposit:
-            return false
+            false
         }
     }
 
@@ -257,14 +257,14 @@ enum TransactionFlowDescriptor {
     ) -> NSAttributedString {
         switch action {
         case .swap:
-            return addRefundPolicyLink(LocalizedString.Swap.confirmationDisclaimer)
+            addRefundPolicyLink(LocalizedString.Swap.confirmationDisclaimer)
         case .sell:
-            return addRefundPolicyLink(LocalizedString.Sell.confirmationDisclaimer)
+            addRefundPolicyLink(LocalizedString.Sell.confirmationDisclaimer)
         case .withdraw:
-            return LocalizedString.Withdraw.confirmationDisclaimer.attributed
+            LocalizedString.Withdraw.confirmationDisclaimer.attributed
         case .buy:
             if isSafeConnect == true {
-                return addSafeConnectTermsAndPolicyLink(
+                addSafeConnectTermsAndPolicyLink(
                     String(
                         format: LocalizedString.Buy.safeConnectConfirmationDisclaimer,
                         currencyCode,
@@ -273,21 +273,21 @@ enum TransactionFlowDescriptor {
                     )
                 )
             } else {
-                return "".attributed
+                "".attributed
             }
         case .interestWithdraw:
-            return String(
+            String(
                 format: LocalizedString.InterestWithdraw.confirmationDisclaimer,
                 currencyCode,
                 accountLabel
             ).attributed
         case .activeRewardsWithdraw:
-            return LocalizedString.ActiveRewardsWithdraw.confirmationDisclaimer.attributed
+            LocalizedString.ActiveRewardsWithdraw.confirmationDisclaimer.attributed
         case .stakingWithdraw:
-            return LocalizedString.StakingWithdraw.confirmationDisclaimer.attributed
+            LocalizedString.StakingWithdraw.confirmationDisclaimer.attributed
         case .deposit:
             if isSafeConnect == true {
-                return addSafeConnectTermsAndPolicyLink(
+                addSafeConnectTermsAndPolicyLink(
                     String(
                         format: LocalizedString.Deposit.safeConnectConfirmationDisclaimer,
                         LocalizedString.termsOfService,
@@ -295,7 +295,7 @@ enum TransactionFlowDescriptor {
                     )
                 )
             } else {
-                return "".attributed
+                "".attributed
             }
         case .sign,
              .receive,
@@ -304,7 +304,7 @@ enum TransactionFlowDescriptor {
              .interestTransfer,
              .stakingDeposit,
              .activeRewardsDeposit:
-            return "".attributed
+            "".attributed
         }
     }
 

@@ -187,9 +187,9 @@ extension AppMode {
     var isRecurringBuyViewSupported: Bool {
         switch self {
         case .trading:
-            return true
+            true
         case .pkw:
-            return false
+            false
         }
     }
 }

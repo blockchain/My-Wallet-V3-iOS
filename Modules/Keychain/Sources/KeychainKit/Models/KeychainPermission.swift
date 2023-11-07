@@ -22,15 +22,15 @@ public enum KeychainPermission: String, Equatable {
     public var queryValue: CFString {
         switch self {
         case .whenUnlocked:
-            return kSecAttrAccessibleWhenUnlocked
+            kSecAttrAccessibleWhenUnlocked
         case .whenUnlockedThisDeviceOnly:
-            return kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+            kSecAttrAccessibleWhenUnlockedThisDeviceOnly
         case .afterFirstUnlock:
-            return kSecAttrAccessibleAfterFirstUnlock
+            kSecAttrAccessibleAfterFirstUnlock
         case .afterFirstUnlockThisDeviceOnly:
-            return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+            kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         case .whenPasscodeSetThisDeviceOnly:
-            return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
+            kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
         }
     }
 }

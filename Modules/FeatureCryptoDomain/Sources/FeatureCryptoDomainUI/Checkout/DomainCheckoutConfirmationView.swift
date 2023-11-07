@@ -70,27 +70,27 @@ struct DomainCheckoutConfirmationView: View {
     private var title: String {
         switch status {
         case .success:
-            return LocalizedString.Success.title
+            LocalizedString.Success.title
         case .error:
-            return LocalizedString.Error.title
+            LocalizedString.Error.title
         }
     }
 
     private var description: String {
         switch status {
         case .success:
-            return LocalizedString.Success.description
+            LocalizedString.Success.description
         case .error:
-            return LocalizedString.Error.description
+            LocalizedString.Error.description
         }
     }
 
     private var buttonLabel: String {
         switch status {
         case .success:
-            return LocalizedString.Success.okayButton
+            LocalizedString.Success.okayButton
         case .error:
-            return LocalizedString.Error.tryAgainButton
+            LocalizedString.Error.tryAgainButton
         }
     }
 }

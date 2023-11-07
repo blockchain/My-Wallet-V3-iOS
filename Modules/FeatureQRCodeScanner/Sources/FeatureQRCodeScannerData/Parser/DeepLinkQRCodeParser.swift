@@ -15,7 +15,7 @@ public final class DeepLinkQRCodeParser: QRCodeScannerParsing {
         var errorDescription: String? {
             switch self {
             case .qrCodeIsNotDeepLink:
-                return "Invalid QR Code."
+                "Invalid QR Code."
             }
         }
     }
@@ -36,9 +36,9 @@ public final class DeepLinkQRCodeParser: QRCodeScannerParsing {
         scanResult
             .flatMap { [deepLinkQRCodeRouter] link -> Result<QRCodeScannerResultType, QRScannerError> in
                 if deepLinkQRCodeRouter.routeIfNeeded(using: link) {
-                    return .success(.deepLink(link))
+                    .success(.deepLink(link))
                 } else {
-                    return .failure(.parserError(ScannerError.qrCodeIsNotDeepLink))
+                    .failure(.parserError(ScannerError.qrCodeIsNotDeepLink))
                 }
             }
             .publisher

@@ -53,15 +53,15 @@ extension DelegatedCustodyTransactionType {
     var swapTransaction: BuildTxRequestPayload.SwapTx? {
         switch self {
         case .payment:
-            return nil
+            nil
         case .swap(let data, let gasLimit, let value):
-            return BuildTxRequestPayload.SwapTx(
+            BuildTxRequestPayload.SwapTx(
                 data: data,
                 gasLimit: gasLimit,
                 value: value
             )
         case .tokenApproval:
-            return nil
+            nil
         }
     }
 }
@@ -70,13 +70,13 @@ extension DelegatedCustodyFee {
     var stringValue: String {
         switch self {
         case .low:
-            return "LOW"
+            "LOW"
         case .normal:
-            return "NORMAL"
+            "NORMAL"
         case .high:
-            return "HIGH"
+            "HIGH"
         case .custom(let value):
-            return value
+            value
         }
     }
 }
@@ -85,9 +85,9 @@ extension DelegatedCustodyAmount {
     var stringValue: String {
         switch self {
         case .max:
-            return "MAX"
+            "MAX"
         case .custom(let value):
-            return value
+            value
         }
     }
 }

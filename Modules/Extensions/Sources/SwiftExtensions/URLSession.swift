@@ -90,11 +90,11 @@ public class ImmediateURLSession: URLSessionProtocol {
 
     public func dataTaskPublisher(for request: URLRequest) -> AnyPublisher<(data: Data, response: URLResponse), URLError> {
         if let error {
-            return Fail(error: error).eraseToAnyPublisher()
+            Fail(error: error).eraseToAnyPublisher()
         } else if let data {
-            return Just((data, request.ok)).setFailureType(to: URLError.self).eraseToAnyPublisher()
+            Just((data, request.ok)).setFailureType(to: URLError.self).eraseToAnyPublisher()
         } else {
-            return Empty().eraseToAnyPublisher()
+            Empty().eraseToAnyPublisher()
         }
     }
 

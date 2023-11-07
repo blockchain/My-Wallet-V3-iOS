@@ -111,11 +111,11 @@ final class NetworkFeeSelectionViewController: UIViewController, NetworkFeeSelec
                 /// the effect based on the row selected.
                 switch row {
                 case 2:
-                    return .selectedFee(.regular)
+                    .selectedFee(.regular)
                 case 4:
-                    return .selectedFee(.priority)
+                    .selectedFee(.priority)
                 default:
-                    return .none
+                    .none
                 }
             }
             .asDriverCatchError()

@@ -16,9 +16,9 @@ public enum WalletCreationContext: Equatable {
     public var isNew: Bool {
         switch self {
         case .new:
-            return true
+            true
         case .recovery, .existing:
-            return false
+            false
         }
     }
 }

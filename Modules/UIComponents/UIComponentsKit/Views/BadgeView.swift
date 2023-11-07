@@ -46,31 +46,29 @@ public struct BadgeView: View {
 extension BadgeView.Style {
 
     var backgroundColor: Color {
-        let color: Color
-        switch self {
+        let color: Color = switch self {
         case .info:
-            color = .badgeBackgroundInfo
+            .badgeBackgroundInfo
         case .error:
-            color = .badgeBackgroundError
+            .badgeBackgroundError
         case .warning:
-            color = .badgeBackgroundWarning
+            .badgeBackgroundWarning
         case .success:
-            color = .badgeBackgroundSuccess
+            .badgeBackgroundSuccess
         }
         return color
     }
 
     var textColor: Color {
-        let color: Color
-        switch self {
+        let color: Color = switch self {
         case .info:
-            color = .badgeTextInfo
+            .badgeTextInfo
         case .error:
-            color = .badgeTextError
+            .badgeTextError
         case .warning:
-            color = .badgeTextWarning
+            .badgeTextWarning
         case .success:
-            color = .badgeTextSuccess
+            .badgeTextSuccess
         }
         return color
     }

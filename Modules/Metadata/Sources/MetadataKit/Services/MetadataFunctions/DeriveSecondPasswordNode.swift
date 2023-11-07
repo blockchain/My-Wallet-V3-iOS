@@ -13,7 +13,7 @@ public enum DeriveSecondPasswordNodeError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .privateKeyInstantiationFailed:
-            return "Private Key couldn't not be retrieved"
+            "Private Key couldn't not be retrieved"
         }
     }
 }

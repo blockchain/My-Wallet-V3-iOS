@@ -201,31 +201,31 @@ public struct IntroView: View {
     private var title: String {
         switch appMode {
         case .pkw:
-            return L10n.DeFi.title
+            L10n.DeFi.title
         case .trading where isExternalTradingEnabled:
-            return L10n.External.title
+            L10n.External.title
         default:
-            return L10n.Trading.title
+            L10n.Trading.title
         }
     }
 
     private var byline: String? {
         switch appMode {
         case .trading where !isExternalTradingEnabled:
-            return L10n.Trading.byline
+            L10n.Trading.byline
         default:
-            return nil
+            nil
         }
     }
 
     private var footer: String {
         switch appMode {
         case .pkw where isExternalTradingEnabled:
-            return L10n.DeFi.externalFooter
+            L10n.DeFi.externalFooter
         case .pkw:
-            return L10n.DeFi.footer
+            L10n.DeFi.footer
         default:
-            return L10n.Trading.footer
+            L10n.Trading.footer
         }
     }
 }
@@ -265,39 +265,39 @@ extension AppMode {
     fileprivate var tag: String {
         switch self {
         case .pkw:
-            return L10n.DeFi.tag
+            L10n.DeFi.tag
         default:
-            return L10n.Trading.tag
+            L10n.Trading.tag
         }
     }
 
     fileprivate var button: String {
         switch self {
         case .pkw:
-            return L10n.DeFi.button
+            L10n.DeFi.button
         default:
-            return L10n.Trading.button
+            L10n.Trading.button
         }
     }
 
     fileprivate var tagColor: Color {
         switch self {
         case .pkw:
-            return Color(red: 0.42, green: 0.22, blue: 0.74)
+            Color(red: 0.42, green: 0.22, blue: 0.74)
         default:
-            return Color.semantic.pink
+            Color.semantic.pink
         }
     }
 
     fileprivate var gradient: [Color] {
         switch self {
         case .pkw:
-            return [
+            [
                 Color(red: 0.42, green: 0.22, blue: 0.74),
                 Color(red: 0.16, green: 0.47, blue: 0.83)
             ]
         default:
-            return [
+            [
                 Color(red: 1.0, green: 0, blue: 0.59),
                 Color(red: 0.49, green: 0.20, blue: 0.73)
             ]

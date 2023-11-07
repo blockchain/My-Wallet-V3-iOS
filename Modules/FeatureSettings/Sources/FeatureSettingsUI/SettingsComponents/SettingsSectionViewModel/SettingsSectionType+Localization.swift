@@ -6,21 +6,21 @@ extension SettingsSectionType {
     var sectionTitle: String {
         switch self {
         case .profile:
-            return LocalizationConstants.Settings.Section.profile
+            LocalizationConstants.Settings.Section.profile
         case .preferences:
-            return LocalizationConstants.Settings.Section.preferences
+            LocalizationConstants.Settings.Section.preferences
         case .connect:
-            return LocalizationConstants.Settings.Section.exchangeLink
+            LocalizationConstants.Settings.Section.exchangeLink
         case .security:
-            return LocalizationConstants.Settings.Section.security
+            LocalizationConstants.Settings.Section.security
         case .cards:
-            return LocalizationConstants.Settings.Section.linkedCards
+            LocalizationConstants.Settings.Section.linkedCards
         case .banks:
-            return LocalizationConstants.Settings.Section.linkedBanks
+            LocalizationConstants.Settings.Section.linkedBanks
         case .help:
-            return LocalizationConstants.Settings.Section.help
+            LocalizationConstants.Settings.Section.help
         case .referral:
-            return ""
+            ""
         }
     }
 }

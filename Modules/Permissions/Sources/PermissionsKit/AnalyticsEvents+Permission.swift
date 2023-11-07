@@ -17,28 +17,28 @@ extension AnalyticsEvents {
             switch self {
             // Permission - camera preliminary approve
             case .permissionPreCameraApprove:
-                return "permission_pre_camera_approve"
+                "permission_pre_camera_approve"
             // Permission - camera preliminary decline
             case .permissionPreCameraDecline:
-                return "permission_pre_camera_decline"
+                "permission_pre_camera_decline"
             // Permission - camera system approve
             case .permissionSysCameraApprove:
-                return "permission_sys_camera_approve"
+                "permission_sys_camera_approve"
             // Permission - camera system decline
             case .permissionSysCameraDecline:
-                return "permission_sys_camera_decline"
+                "permission_sys_camera_decline"
             // Permission - mic preliminary approve
             case .permissionPreMicApprove:
-                return "permission_pre_mic_approve"
+                "permission_pre_mic_approve"
             // Permission - mic preliminary decline
             case .permissionPreMicDecline:
-                return "permission_pre_mic_decline"
+                "permission_pre_mic_decline"
             // Permission - mic system approve
             case .permissionSysMicApprove:
-                return "permission_sys_mic_approve"
+                "permission_sys_mic_approve"
             // Permission - mic system decline
             case .permissionSysMicDecline:
-                return "permission_sys_mic_decline"
+                "permission_sys_mic_decline"
             }
         }
     }

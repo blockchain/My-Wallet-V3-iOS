@@ -12,28 +12,28 @@ enum NetworkFeeSelectionSectionItem: Equatable, IdentifiableType {
     var identity: AnyHashable {
         switch self {
         case .label(let content):
-            return content.text
+            content.text
         case .radio(let presenter):
-            return presenter.identity
+            presenter.identity
         case .button(let viewModel):
-            return viewModel.textRelay.value + viewModel.isEnabledRelay.value.description
+            viewModel.textRelay.value + viewModel.isEnabledRelay.value.description
         case .separator(let index):
-            return "\(index)"
+            "\(index)"
         }
     }
 
     static func == (lhs: NetworkFeeSelectionSectionItem, rhs: NetworkFeeSelectionSectionItem) -> Bool {
         switch (lhs, rhs) {
         case (.radio(let left), .radio(let right)):
-            return left == right
+            left == right
         case (.button(let left), .button(let right)):
-            return left.isEnabledRelay.value == right.isEnabledRelay.value
+            left.isEnabledRelay.value == right.isEnabledRelay.value
         case (.separator(let left), .separator(let right)):
-            return left == right
+            left == right
         case (.label(let left), .label(let right)):
-            return left == right
+            left == right
         default:
-            return false
+            false
         }
     }
 }

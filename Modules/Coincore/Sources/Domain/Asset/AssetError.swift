@@ -8,7 +8,7 @@ public enum AssetError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .initialisationFailed:
-            return "Asset initialisation failed."
+            "Asset initialisation failed."
         }
     }
 }

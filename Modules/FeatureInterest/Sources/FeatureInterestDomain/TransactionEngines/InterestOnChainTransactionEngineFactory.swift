@@ -12,15 +12,15 @@ final class InterestOnChainTransactionEngineFactory: InterestOnChainTransactionE
     ) -> InterestTransactionEngine {
         switch action {
         case .interestTransfer:
-            return InterestDepositOnChainTransactionEngine(
+            InterestDepositOnChainTransactionEngine(
                 onChainEngine: onChainEngine
             )
         case .interestWithdraw:
-            return InterestWithdrawOnChainTransactionEngine()
+            InterestWithdrawOnChainTransactionEngine()
         case .stakingDeposit:
-            return EarnDepositOnChainTransactionEngine(product: .staking, onChainEngine: onChainEngine)
+            EarnDepositOnChainTransactionEngine(product: .staking, onChainEngine: onChainEngine)
         case .activeRewardsDeposit:
-            return EarnDepositOnChainTransactionEngine(product: .active, onChainEngine: onChainEngine)
+            EarnDepositOnChainTransactionEngine(product: .active, onChainEngine: onChainEngine)
         default:
             unimplemented()
         }

@@ -70,13 +70,13 @@ public struct PrefillButtons: Reducer {
                         assetActionPublisher
                             .flatMap { action -> AnyPublisher<[QuickfillConfiguration], Never> in
                                 if action == .buy {
-                                    return app
+                                    app
                                         .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BaseValueQuickfillConfiguration].self)
                                         .compactMap(\.value)
                                         .map { $0.map(QuickfillConfiguration.baseValue) }
                                         .eraseToAnyPublisher()
                                 } else {
-                                    return app
+                                    app
                                         .publisher(for: blockchain.app.configuration.transaction.quickfill.configuration, as: [BalanceQuickfillConfiguration].self)
                                         .compactMap(\.value)
                                         .map { $0.map(QuickfillConfiguration.balance) }
@@ -201,13 +201,13 @@ public enum QuickfillConfiguration: Decodable, Equatable {
         public var analyticsDescription: String {
             switch self {
             case .small:
-                return "SMALL"
+                "SMALL"
             case .medium:
-                return "MEDIUM"
+                "MEDIUM"
             case .large:
-                return "LARGE"
+                "LARGE"
             case .max:
-                return "MAX"
+                "MAX"
             }
         }
 
@@ -224,9 +224,9 @@ public enum QuickfillConfiguration: Decodable, Equatable {
     var baseValueConfiguration: BaseValueQuickfillConfiguration? {
         switch self {
         case .baseValue(let value):
-            return value
+            value
         case .balance:
-            return nil
+            nil
         }
     }
 
@@ -237,13 +237,13 @@ public enum QuickfillConfiguration: Decodable, Equatable {
     ) -> QuickfillSuggestion? {
         switch self {
         case .baseValue(let config):
-            return config.suggestedFiatAmountWithBaseValue(
+            config.suggestedFiatAmountWithBaseValue(
                 baseValue,
                 maxLimit: maxLimit,
                 index: index
             )
         case .balance(let config):
-            return config.suggestedMajorValueWithBaseFiatValue(
+            config.suggestedMajorValueWithBaseFiatValue(
                 baseValue,
                 maxLimit: maxLimit,
                 index: index
@@ -259,11 +259,11 @@ extension QuickfillConfiguration {
     ) -> Bool {
         switch (lhs, rhs) {
         case (.baseValue(let left), .baseValue(let right)):
-            return left == right
+            left == right
         case (.balance(let left), .balance(let right)):
-            return left == right
+            left == right
         default:
-            return false
+            false
         }
     }
 }

@@ -68,11 +68,11 @@ final class DeviceVerificationRepository: DeviceVerificationRepositoryAPI {
                 -> AnyPublisher<Result<WalletInfo, WalletInfoPollingError>, DeviceVerificationServiceError> in
                 switch response {
                 case .walletInfo(let walletInfo):
-                    return .just(.success(walletInfo))
+                    .just(.success(walletInfo))
                 case .continuePolling:
-                    return .just(.failure(.continuePolling))
+                    .just(.failure(.continuePolling))
                 case .requestDenied:
-                    return .just(.failure(.requestDenied))
+                    .just(.failure(.requestDenied))
                 }
             }
             .eraseToAnyPublisher()

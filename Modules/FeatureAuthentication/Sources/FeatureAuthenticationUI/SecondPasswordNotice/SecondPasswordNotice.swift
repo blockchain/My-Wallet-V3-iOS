@@ -16,9 +16,9 @@ public struct SecondPasswordNoticeReducer: Reducer {
         var url: URL? {
             switch self {
             case .loginOnWeb:
-                return URL(string: Constants.HostURL.loginOnWeb)
+                URL(string: Constants.HostURL.loginOnWeb)
             case .twoFASupport:
-                return URL(string: Constants.SupportURL.SecondPassword.twoFASupport)
+                URL(string: Constants.SupportURL.SecondPassword.twoFASupport)
             }
         }
     }

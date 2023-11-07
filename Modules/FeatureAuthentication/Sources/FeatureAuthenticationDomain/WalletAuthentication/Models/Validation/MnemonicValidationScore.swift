@@ -26,18 +26,18 @@ public enum MnemonicValidationScore: Equatable {
     public var isValid: Bool {
         switch self {
         case .valid:
-            return true
+            true
         case .incomplete, .invalid, .excess, .none:
-            return false
+            false
         }
     }
 
     public var isInvalid: Bool {
         switch self {
         case .invalid, .excess:
-            return true
+            true
         case .valid, .incomplete, .none:
-            return false
+            false
         }
     }
 }
@@ -49,11 +49,11 @@ extension MnemonicValidationScore {
              (.incomplete, .incomplete),
              (.valid, .valid),
              (.excess, .excess):
-            return true
+            true
         case (.invalid(let left), .invalid(let right)):
-            return left == right
+            left == right
         default:
-            return false
+            false
         }
     }
 }

@@ -91,24 +91,23 @@ extension TransactionUserActionService: TransactionRestrictionsProviderAPI {
 extension AssetAction {
 
     var productId: ProductIdentifier? {
-        let productId: ProductIdentifier?
-        switch self {
+        let productId: ProductIdentifier? = switch self {
         case .buy:
-            productId = .buy
+            .buy
         case .sell:
-            productId = .sell
+            .sell
         case .swap:
-            productId = .swap
+            .swap
         case .deposit:
-            productId = .depositFiat
+            .depositFiat
         case .withdraw:
-            productId = .withdrawFiat
+            .withdrawFiat
         case .receive:
-            productId = .depositCrypto
+            .depositCrypto
         case .send:
-            productId = .withdrawCrypto
+            .withdrawCrypto
         default:
-            productId = nil
+            nil
         }
         return productId
     }
@@ -117,24 +116,23 @@ extension AssetAction {
 extension TransactionFlowAction {
 
     var productId: ProductIdentifier? {
-        let productId: ProductIdentifier?
-        switch self {
+        let productId: ProductIdentifier? = switch self {
         case .buy:
-            productId = .buy
+            .buy
         case .sell:
-            productId = .sell
+            .sell
         case .swap:
-            productId = .swap
+            .swap
         case .deposit:
-            productId = .depositFiat
+            .depositFiat
         case .withdraw:
-            productId = .withdrawFiat
+            .withdrawFiat
         case .receive:
-            productId = .depositCrypto
+            .depositCrypto
         case .send:
-            productId = .withdrawCrypto
+            .withdrawCrypto
         default:
-            productId = nil
+            nil
         }
         return productId
     }

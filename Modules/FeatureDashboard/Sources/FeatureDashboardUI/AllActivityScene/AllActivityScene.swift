@@ -49,9 +49,9 @@ public struct AllActivityScene: Reducer {
 
         var searchResults: [ActivityEntry]? {
             if searchText.isEmpty {
-                return activityResults
+                activityResults
             } else {
-                return activityResults?
+                activityResults?
                     .filtered(by: searchText)
             }
         }
@@ -128,11 +128,11 @@ extension LeafItemType {
     var text: String {
         switch self {
         case .text(let text):
-            return text.value
+            text.value
         case .button(let button):
-            return button.text
+            button.text
         case .badge(let badge):
-            return badge.value
+            badge.value
         }
     }
 }

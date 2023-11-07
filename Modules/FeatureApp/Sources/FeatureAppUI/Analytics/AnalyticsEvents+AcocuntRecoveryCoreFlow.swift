@@ -15,11 +15,11 @@ extension AnalyticsEvents.New {
         var params: [String: Any]? {
             switch self {
             case .accountPasswordReset(let hasRecoveryPhrase):
-                return [
+                [
                     "has_recovery_phrase": hasRecoveryPhrase
                 ]
             case .accountRecoveryFailed:
-                return [:]
+                [:]
             }
         }
     }

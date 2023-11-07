@@ -61,16 +61,15 @@ final class SendRootRouter: ViewableRouter<SendRootInteractable, SendRootViewCon
             subtitle: nil,
             title: LocalizedSend.Header.send
         )
-        let navigationModel: ScreenNavigationModel?
-        if !navigationBarHidden {
-            navigationModel = ScreenNavigationModel(
+        let navigationModel: ScreenNavigationModel? = if !navigationBarHidden {
+            ScreenNavigationModel(
                 leadingButton: .none,
                 trailingButton: .qrCode,
                 titleViewStyle: .text(value: LocalizedSend.Text.send),
                 barStyle: .lightContent()
             )
         } else {
-            navigationModel = nil
+            nil
         }
         let builder = AccountPickerBuilder(
             action: .send

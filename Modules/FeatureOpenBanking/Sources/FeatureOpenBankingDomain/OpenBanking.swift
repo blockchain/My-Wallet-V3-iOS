@@ -87,9 +87,9 @@ public final class OpenBanking {
                 .flatMap { [waitForAccountLinking] action -> AnyPublisher<Action, Never> in
                     switch action {
                     case .waitingForConsent:
-                        return waitForAccountLinking(data.account, institution, action)
+                        waitForAccountLinking(data.account, institution, action)
                     default:
-                        return Just(action).eraseToAnyPublisher()
+                        Just(action).eraseToAnyPublisher()
                     }
                 }
                 .eraseToAnyPublisher()
@@ -98,9 +98,9 @@ public final class OpenBanking {
                 .flatMap { [waitForConsent] action -> AnyPublisher<Action, Never> in
                     switch action {
                     case .waitingForConsent(let consent):
-                        return waitForConsent(consent, action)
+                        waitForConsent(consent, action)
                     default:
-                        return Just(action).eraseToAnyPublisher()
+                        Just(action).eraseToAnyPublisher()
                     }
                 }
                 .eraseToAnyPublisher()
@@ -110,11 +110,11 @@ public final class OpenBanking {
     private func actionPublisher(_ data: Data) -> AnyPublisher<Action, Never> {
         switch data.action {
         case .link(let institution):
-            return link(institution, data: data)
+            link(institution, data: data)
         case .deposit(let amountMinor, let product):
-            return deposit(amountMinor: amountMinor, product: product, data: data)
+            deposit(amountMinor: amountMinor, product: product, data: data)
         case .confirm(let order):
-            return confirm(order: order, data: data)
+            confirm(order: order, data: data)
         }
     }
 
@@ -127,11 +127,11 @@ public final class OpenBanking {
                 banking.poll(account: output, until: \.hasAuthorizationURL)
                     .flatMap { account -> AnyPublisher<OpenBanking.BankAccount, OpenBanking.Error> in
                         if account.error.isNotNil, let error = account.ux {
-                            return Fail(error: .ux(error)).eraseToAnyPublisher()
+                            Fail(error: .ux(error)).eraseToAnyPublisher()
                         } else if let error = account.error {
-                            return Fail(error: error).eraseToAnyPublisher()
+                            Fail(error: error).eraseToAnyPublisher()
                         } else {
-                            return Just(account).setFailureType(to: OpenBanking.Error.self).eraseToAnyPublisher()
+                            Just(account).setFailureType(to: OpenBanking.Error.self).eraseToAnyPublisher()
                         }
                     }
                     .map(Action.waitingForConsent(.linked(output, institution: institution)))
@@ -148,11 +148,11 @@ public final class OpenBanking {
                 banking.poll(payment: payment)
                     .flatMap { payment -> AnyPublisher<OpenBanking.Payment.Details, OpenBanking.Error> in
                         if payment.error.isNotNil, let error = payment.ux {
-                            return Fail(error: .ux(error)).eraseToAnyPublisher()
+                            Fail(error: .ux(error)).eraseToAnyPublisher()
                         } else if let error = payment.error {
-                            return Fail(error: error).eraseToAnyPublisher()
+                            Fail(error: error).eraseToAnyPublisher()
                         } else {
-                            return Just(payment).setFailureType(to: OpenBanking.Error.self).eraseToAnyPublisher()
+                            Just(payment).setFailureType(to: OpenBanking.Error.self).eraseToAnyPublisher()
                         }
                     }
                     .map { paymentDetails in
@@ -178,19 +178,19 @@ public final class OpenBanking {
             )
             .flatMap { order -> AnyPublisher<OpenBanking.Order, OpenBanking.Error> in
                 if order.paymentError.isNotNil, let error = order.ux {
-                    return .failure(.ux(error))
+                    .failure(.ux(error))
                 } else if let error = order.paymentError {
-                    return .failure(error)
+                    .failure(error)
                 } else {
-                    return Just(order).setFailureType(to: OpenBanking.Error.self).eraseToAnyPublisher()
+                    Just(order).setFailureType(to: OpenBanking.Error.self).eraseToAnyPublisher()
                 }
             }
             .catch { error -> AnyPublisher<OpenBanking.Order, OpenBanking.Error> in
                 switch error {
                 case .timeout:
-                    return .just(order)
+                    .just(order)
                 default:
-                    return .failure(error)
+                    .failure(error)
                 }
             }
             .map(Action.waitingForConsent(.confirmed(order)))
@@ -201,14 +201,14 @@ public final class OpenBanking {
         return banking.get(order: order)
             .flatMap { [banking] order -> AnyPublisher<Action, Never> in
                 if let error = order.paymentError {
-                    return .just(Action.failure(error))
+                    .just(Action.failure(error))
                 } else if order.state == .pendingConfirmation {
-                    return banking.confirm(order: order.id, using: order.paymentMethodId)
+                    banking.confirm(order: order.id, using: order.paymentMethodId)
                         .flatMap(poll)
                         .catch(Action.failure)
                         .eraseToAnyPublisher()
                 } else {
-                    return poll(order)
+                    poll(order)
                 }
             }
             .catch(Action.failure)
@@ -239,14 +239,14 @@ public final class OpenBanking {
             .flatMap { [consentErrorPublisher] authorised, account -> AnyPublisher<Action, Never> in
                 if authorised {
                     if let error = account.error {
-                        return Just(Action.failure(error))
+                        Just(Action.failure(error))
                             .eraseToAnyPublisher()
                     } else {
-                        return Just(Action.success(.linked(account, institution: institution)))
+                        Just(Action.success(.linked(account, institution: institution)))
                             .eraseToAnyPublisher()
                     }
                 } else {
-                    return consentErrorPublisher.first().eraseToAnyPublisher()
+                    consentErrorPublisher.first().eraseToAnyPublisher()
                 }
             }
             .catch(Action.failure)
@@ -260,10 +260,10 @@ public final class OpenBanking {
             .ignoreResultFailure()
             .flatMap { [consentErrorPublisher] authorised -> AnyPublisher<Action, Never> in
                 if authorised {
-                    return Just(Action.success(consent))
+                    Just(Action.success(consent))
                         .eraseToAnyPublisher()
                 } else {
-                    return consentErrorPublisher
+                    consentErrorPublisher
                 }
             }
             .catch(Action.failure)

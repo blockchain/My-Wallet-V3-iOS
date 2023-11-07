@@ -62,10 +62,10 @@ extension SecureChannelClient: SecureChannelClientAPI {
             .mapError { _ in SendSecureChannelError.networkFailure }
             .flatMap { (response: SendMessageResponse) -> AnyPublisher<Void, SendSecureChannelError> in
                 if !response.success {
-                    return Fail(error: SendSecureChannelError.networkFailure)
+                    Fail(error: SendSecureChannelError.networkFailure)
                         .eraseToAnyPublisher()
                 } else {
-                    return Just(())
+                    Just(())
                         .setFailureType(to: SendSecureChannelError.self)
                         .eraseToAnyPublisher()
                 }

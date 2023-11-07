@@ -34,11 +34,10 @@ public struct HistoricalPriceSeries: Equatable {
         if let first = prices.first, let last = prices.last {
             let firstMinorAmount = first.moneyValue.minorAmount
             let fiatChange = last.moneyValue.minorAmount - firstMinorAmount
-            let delta: Decimal
-            if firstMinorAmount.isZero {
-                delta = .zero
+            let delta: Decimal = if firstMinorAmount.isZero {
+                .zero
             } else {
-                delta = fiatChange.decimalDivision(by: firstMinorAmount)
+                fiatChange.decimalDivision(by: firstMinorAmount)
             }
             self.init(
                 currency: currency,

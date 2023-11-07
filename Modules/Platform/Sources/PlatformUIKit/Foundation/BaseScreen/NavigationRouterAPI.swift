@@ -44,9 +44,9 @@ public class NavigationRouter: NavigationRouterAPI {
 
     public var defaultPresentationType: PresentationType {
         if navigationControllerAPI != nil {
-            return .navigationFromCurrent
+            .navigationFromCurrent
         } else {
-            return .modalOverTopMost
+            .modalOverTopMost
         }
     }
 
@@ -70,11 +70,10 @@ public class NavigationRouter: NavigationRouterAPI {
     }
 
     private func presentModal(viewController: UIViewController, in parent: ViewControllerAPI) {
-        let navigationController: UINavigationController
-        if let navController = viewController as? UINavigationController {
-            navigationController = navController
+        let navigationController: UINavigationController = if let navController = viewController as? UINavigationController {
+            navController
         } else {
-            navigationController = UINavigationController(rootViewController: viewController)
+            UINavigationController(rootViewController: viewController)
         }
         DispatchQueue.main.async { [weak self] in
             parent.present(navigationController, animated: true, completion: nil)

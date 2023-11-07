@@ -286,13 +286,13 @@ extension Account.Snapshot {
     func action(with context: Tag.Context) -> Tag.Event {
         switch accountType {
         case .staking:
-            return blockchain.ux.asset.account.staking.summary[].ref(to: context)
+            blockchain.ux.asset.account.staking.summary[].ref(to: context)
         case .activeRewards:
-            return blockchain.ux.asset.account.active.rewards.summary[].ref(to: context)
+            blockchain.ux.asset.account.active.rewards.summary[].ref(to: context)
         case .interest:
-            return blockchain.ux.asset.account.rewards.summary[].ref(to: context)
+            blockchain.ux.asset.account.rewards.summary[].ref(to: context)
         default:
-            return blockchain.ux.asset.account.sheet[].ref(to: context)
+            blockchain.ux.asset.account.sheet[].ref(to: context)
         }
     }
 }

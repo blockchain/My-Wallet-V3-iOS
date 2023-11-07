@@ -13,9 +13,9 @@ public enum SingleAccountType: Hashable {
         switch self {
         case .nonCustodial,
              .custodial(.savings):
-            return false
+            false
         case .custodial(.trading):
-            return true
+            true
         }
     }
 
@@ -23,18 +23,18 @@ public enum SingleAccountType: Hashable {
         switch self {
         case .nonCustodial,
              .custodial(.trading):
-            return false
+            false
         case .custodial(.savings):
-            return true
+            true
         }
     }
 
     public var description: String {
         switch self {
         case .custodial(let type):
-            return "SingleAccountType.custodial.\(type.rawValue)"
+            "SingleAccountType.custodial.\(type.rawValue)"
         case .nonCustodial:
-            return "SingleAccountType.nonCustodial"
+            "SingleAccountType.nonCustodial"
         }
     }
 }

@@ -49,11 +49,11 @@ open class AnyEncoder: AnyEncoderProtocol, TopLevelEncoder {
     open func convert(_ value: some Any) throws -> Any? {
         switch value {
         case let url as URL:
-            return url.absoluteString
+            url.absoluteString
         case let date as Date:
-            return date.timeIntervalSince1970
+            date.timeIntervalSince1970
         default:
-            return nil
+            nil
         }
     }
 }
@@ -173,11 +173,11 @@ extension AnyEncoder {
     func get() -> Any {
         switch `super`?._value ?? _value {
         case let array as [Any]:
-            return array[codingPath] as Any
+            array[codingPath] as Any
         case let dictionary as [String: Any]:
-            return dictionary[codingPath] as Any
+            dictionary[codingPath] as Any
         case let fragment:
-            return fragment as Any
+            fragment as Any
         }
     }
 
@@ -269,9 +269,9 @@ extension Optional: OptionalEncodableProtocol where Wrapped: Encodable {
     func encodeUnwrapped(to encoder: AnyEncoder) -> Any {
         switch self {
         case .some(let value):
-            return (try? encoder.encode(value)) as Any
+            (try? encoder.encode(value)) as Any
         case .none:
-            return NSNull()
+            NSNull()
         }
     }
 }

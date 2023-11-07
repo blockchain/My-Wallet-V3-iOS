@@ -9,14 +9,14 @@ public enum WalletCreationServiceError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .creationFailure(let error):
-            return error.errorDescription
+            error.errorDescription
         }
     }
 
     public var walletCreateError: WalletCreateError {
         switch self {
         case .creationFailure(let error):
-            return error
+            error
         }
     }
 }

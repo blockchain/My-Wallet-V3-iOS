@@ -14,11 +14,11 @@ public enum ERC20CryptoAssetServiceError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .failedToLoadDefaultAccount:
-            return "Failed to load default account."
+            "Failed to load default account."
         case .failedToLoadReceiveAddress:
-            return "Failed to load receive address."
+            "Failed to load receive address."
         case .failedToFetchTokens:
-            return "Failed to load ERC20 Assets."
+            "Failed to load ERC20 Assets."
         }
     }
 }

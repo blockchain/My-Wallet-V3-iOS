@@ -69,13 +69,13 @@ extension DeepLinkRoute {
         switch self {
         case .kycVerifyEmail,
              .kycDocumentResubmission:
-            return "login"
+            "login"
         case .kyc:
-            return "kyc"
+            "kyc"
         case .openBankingLink:
-            return "ob-bank-link"
+            "ob-bank-link"
         case .openBankingApprove:
-            return "ob-bank-approval"
+            "ob-bank-approval"
         }
     }
 
@@ -84,34 +84,34 @@ extension DeepLinkRoute {
         case .kyc,
              .kycVerifyEmail,
              .kycDocumentResubmission:
-            return "deep_link_path"
+            "deep_link_path"
         case .openBankingLink, .openBankingApprove:
-            return nil
+            nil
         }
     }
 
     private var requiredValueParam: String? {
         switch self {
         case .kycVerifyEmail:
-            return "email_verified"
+            "email_verified"
         case .kycDocumentResubmission:
-            return "verification"
+            "verification"
         case .kyc:
-            return "kyc"
+            "kyc"
         case .openBankingLink, .openBankingApprove:
-            return nil
+            nil
         }
     }
 
     private var optionalKeyParameter: String? {
         switch self {
         case .kycVerifyEmail:
-            return "context"
+            "context"
         case .kyc,
              .kycDocumentResubmission,
              .openBankingLink,
              .openBankingApprove:
-            return nil
+            nil
         }
     }
 }

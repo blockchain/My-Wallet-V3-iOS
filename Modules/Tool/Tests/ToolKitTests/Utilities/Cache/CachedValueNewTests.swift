@@ -53,9 +53,9 @@ class CachedValueNewTests: XCTestCase {
         subject = CachedValueNew(cache: cache) { [fetchErrorKey, fetchValue] key in
             switch key {
             case fetchErrorKey:
-                return .failure(.unknown)
+                .failure(.unknown)
             default:
-                return .just(fetchValue)
+                .just(fetchValue)
             }
         }
 

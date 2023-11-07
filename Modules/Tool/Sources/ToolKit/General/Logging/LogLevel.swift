@@ -12,13 +12,13 @@ extension LogLevel {
     public var emoji: String {
         switch self {
         case .debug:
-            return "🏗"
+            "🏗"
         case .info:
-            return "ℹ️"
+            "ℹ️"
         case .warning:
-            return "⚠️"
+            "⚠️"
         case .error:
-            return "🛑"
+            "🛑"
         }
     }
 }

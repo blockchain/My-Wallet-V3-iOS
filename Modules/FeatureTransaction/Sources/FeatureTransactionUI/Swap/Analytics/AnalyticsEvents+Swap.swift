@@ -25,35 +25,35 @@ extension AnalyticsEvents {
         public var name: String {
             switch self {
             case .verifyNowClicked:
-                return "swap_kyc_verify_clicked"
+                "swap_kyc_verify_clicked"
             case .trendingPairClicked:
-                return "swap_suggested_pair_clicked"
+                "swap_suggested_pair_clicked"
             case .newSwapClicked:
-                return "swap_new_clicked"
+                "swap_new_clicked"
             case .fromPickerSeen:
-                return "swap_from_picker_seen"
+                "swap_from_picker_seen"
             case .fromAccountSelected:
-                return "swap_from_account_clicked"
+                "swap_from_account_clicked"
             case .toPickerSeen:
-                return "swap_to_picker_seen"
+                "swap_to_picker_seen"
             case .swapTargetAddressSheet:
-                return "swap_pair_locked_seen"
+                "swap_pair_locked_seen"
             case .swapEnterAmount:
-                return "swap_amount_screen_seen"
+                "swap_amount_screen_seen"
             case .swapConfirmSeen:
-                return "swap_checkout_shown"
+                "swap_checkout_shown"
             case .cancelTransaction:
-                return "swap_checkout_cancel"
+                "swap_checkout_cancel"
             case .swapConfirmPair:
-                return "swap_pair_locked_confirm"
+                "swap_pair_locked_confirm"
             case .enterAmountCtaClick:
-                return "swap_amount_screen_confirm"
+                "swap_amount_screen_confirm"
             case .swapConfirmCta:
-                return "swap_checkout_confirm"
+                "swap_checkout_confirm"
             case .transactionSuccess:
-                return "swap_checkout_success"
+                "swap_checkout_success"
             case .transactionFailed:
-                return "swap_checkout_error"
+                "swap_checkout_error"
             }
         }
 

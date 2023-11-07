@@ -24,11 +24,11 @@ enum PinScreenUseCase {
     var pin: Pin? {
         switch self {
         case .create(firstPin: let pin):
-            return pin
+            pin
         case .select(previousPin: let pin) where pin != nil:
-            return pin
+            pin
         default:
-            return nil
+            nil
         }
     }
 
@@ -36,9 +36,9 @@ enum PinScreenUseCase {
     var isAuthenticateBeforeEnablingBiometrics: Bool {
         switch self {
         case .authenticateBeforeEnablingBiometrics:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 
@@ -46,9 +46,9 @@ enum PinScreenUseCase {
     var isAuthenticateOnLogin: Bool {
         switch self {
         case .authenticateOnLogin:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 
@@ -56,9 +56,9 @@ enum PinScreenUseCase {
     var isAuthenticate: Bool {
         switch self {
         case .authenticateOnLogin, .authenticateBeforeChanging, .authenticateBeforeEnablingBiometrics:
-            return true
+            true
         case .create, .select:
-            return false
+            false
         }
     }
 }

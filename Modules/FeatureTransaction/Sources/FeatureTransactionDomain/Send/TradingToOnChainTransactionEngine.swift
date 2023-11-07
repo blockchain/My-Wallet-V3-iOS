@@ -85,13 +85,12 @@ final class TradingToOnChainTransactionEngine: TransactionEngine {
             )
             .tryMap { [sourceAsset, predefinedAmount] transactionLimits, walletCurrency, maxFees, withdrawableBalance
                 -> PendingTransaction in
-                let amount: MoneyValue
-                if let predefinedAmount,
+                let amount: MoneyValue = if let predefinedAmount,
                    predefinedAmount.currencyType == sourceAsset
                 {
-                    amount = predefinedAmount
+                    predefinedAmount
                 } else {
-                    amount = .zero(currency: sourceAsset)
+                    .zero(currency: sourceAsset)
                 }
                 let maxFee = maxFees.totalFees.amount.value
                 let available = try withdrawableBalance - maxFee

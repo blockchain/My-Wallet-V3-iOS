@@ -18,33 +18,33 @@ extension NavigationCTA {
     var image: UIImage? {
         switch self {
         case .dismiss:
-            return UIImage(
+            UIImage(
                 named: "Close Circle v2",
                 in: .componentLibrary,
                 compatibleWith: nil
             )?.withRenderingMode(.alwaysOriginal)
         case .help:
-            return UIImage(named: "ios_icon_more", in: .featureKYCUI, compatibleWith: nil)
+            UIImage(named: "ios_icon_more", in: .featureKYCUI, compatibleWith: nil)
         case .none, .skip:
-            return nil
+            nil
         }
     }
 
     var title: String {
         switch self {
         case .dismiss, .help, .none:
-            return ""
+            ""
         case .skip:
-            return L10n.skipButtonTitle
+            L10n.skipButtonTitle
         }
     }
 
     var visibility: PlatformUIKit.Visibility {
         switch self {
         case .dismiss, .help, .skip:
-            return .visible
+            .visible
         case .none:
-            return .hidden
+            .hidden
         }
     }
 }

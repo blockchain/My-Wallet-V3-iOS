@@ -28,23 +28,23 @@ extension Length: CustomStringConvertible {
     public var description: String {
         switch self {
         case .pt(let o):
-            return "\(o)pt"
+            "\(o)pt"
         case .vw(let o):
-            return "\(o)vw"
+            "\(o)vw"
         case .vh(let o):
-            return "\(o)vh"
+            "\(o)vh"
         case .vmin(let o):
-            return "\(o)vmin"
+            "\(o)vmin"
         case .vmax(let o):
-            return "\(o)vmax"
+            "\(o)vmax"
         case .pw(let o):
-            return "\(o)pw"
+            "\(o)pw"
         case .ph(let o):
-            return "\(o)ph"
+            "\(o)ph"
         case .pmin(let o):
-            return "\(o)pmin"
+            "\(o)pmin"
         case .pmax(let o):
-            return "\(o)pmax"
+            "\(o)pmax"
         }
     }
 }
@@ -120,25 +120,25 @@ extension Length {
     @inlinable public func `in`(parent: CGRect, screen: CGRect) -> CGFloat {
         switch self {
         case .pt(let o):
-            return o
+            o
 
         case .vw(let o):
-            return screen.width * o / 100
+            screen.width * o / 100
         case .vh(let o):
-            return screen.height * o / 100
+            screen.height * o / 100
         case .vmin(let o):
-            return screen.size.min * o / 100
+            screen.size.min * o / 100
         case .vmax(let o):
-            return screen.size.max * o / 100
+            screen.size.max * o / 100
 
         case .pw(let o):
-            return parent.width * o / 100
+            parent.width * o / 100
         case .ph(let o):
-            return parent.height * o / 100
+            parent.height * o / 100
         case .pmin(let o):
-            return parent.size.min * o / 100
+            parent.size.min * o / 100
         case .pmax(let o):
-            return parent.size.max * o / 100
+            parent.size.max * o / 100
         }
     }
 }
@@ -159,23 +159,23 @@ extension Size {
 public prefix func - (length: Length) -> Length {
     switch length {
     case .pt(let o):
-        return .pt(-o)
+        .pt(-o)
     case .vw(let o):
-        return .vw(-o)
+        .vw(-o)
     case .vh(let o):
-        return .vh(-o)
+        .vh(-o)
     case .vmin(let o):
-        return .vmin(-o)
+        .vmin(-o)
     case .vmax(let o):
-        return .vmax(-o)
+        .vmax(-o)
     case .pw(let o):
-        return .pw(-o)
+        .pw(-o)
     case .ph(let o):
-        return .ph(-o)
+        .ph(-o)
     case .pmin(let o):
-        return .pmin(-o)
+        .pmin(-o)
     case .pmax(let o):
-        return .pmax(-o)
+        .pmax(-o)
     }
 }
 
@@ -422,15 +422,15 @@ extension Length {
 
     private func map(_ transform: (CGFloat) -> CGFloat) -> Self {
         switch self {
-        case .pt(let f): return .pt(transform(f))
-        case .vw(let f): return .vw(transform(f))
-        case .vh(let f): return .vh(transform(f))
-        case .vmin(let f): return .vmin(transform(f))
-        case .vmax(let f): return .vmax(transform(f))
-        case .pw(let f): return .pw(transform(f))
-        case .ph(let f): return .ph(transform(f))
-        case .pmin(let f): return .pmin(transform(f))
-        case .pmax(let f): return .pmax(transform(f))
+        case .pt(let f): .pt(transform(f))
+        case .vw(let f): .vw(transform(f))
+        case .vh(let f): .vh(transform(f))
+        case .vmin(let f): .vmin(transform(f))
+        case .vmax(let f): .vmax(transform(f))
+        case .pw(let f): .pw(transform(f))
+        case .ph(let f): .ph(transform(f))
+        case .pmin(let f): .pmin(transform(f))
+        case .pmax(let f): .pmax(transform(f))
         }
     }
 

@@ -45,22 +45,22 @@ class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI {
     func getActivityDetails(for activityEntry: ActivityEntry) async throws -> ActivityDetail.GroupedItems? {
         switch activityEntry.type {
         case .buy, .sell:
-            return await buySellActivityDetails(entry: activityEntry)
+            await buySellActivityDetails(entry: activityEntry)
         case .fiatOrder:
-            return await fetchFiatActivityDetails(entry: activityEntry)
+            await fetchFiatActivityDetails(entry: activityEntry)
         case .cryptoOrder:
-            return await ordersActivityDetails(entry: activityEntry)
+            await ordersActivityDetails(entry: activityEntry)
         case .swap:
-            return await swapActivityDetails(entry: activityEntry)
+            await swapActivityDetails(entry: activityEntry)
         case .saving:
-            return await savingActivityDetails(entry: activityEntry)
+            await savingActivityDetails(entry: activityEntry)
         case .staking:
-            return await stakingActivityDetails(entry: activityEntry)
+            await stakingActivityDetails(entry: activityEntry)
         case .activeRewards:
-            return await activeRewardsActivityDetails(entry: activityEntry)
+            await activeRewardsActivityDetails(entry: activityEntry)
         case .defi:
             // defi fetches activity details via a different api
-            return nil
+            nil
         }
     }
 
@@ -78,10 +78,7 @@ class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI {
     }
 
     private func buySellActivityDetails(entry: ActivityEntry) async -> ActivityDetail.GroupedItems? {
-        guard let currency = entry.asset?.cryptoCurrency else {
-            return nil
-        }
-        let buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: currency)
+        let buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: nil)
             .await()
             .filter { $0.identifier == entry.id && $0.creationDate == entry.date }
             .first

@@ -11,9 +11,9 @@ public enum MnemonicError: LocalizedError, Equatable {
     public var errorDescription: String? {
         switch self {
         case .invalidLength:
-            return "Mnemonic Failure: invalid length"
+            "Mnemonic Failure: invalid length"
         case .invalidWords:
-            return "Mnemonic Failure: invalid words"
+            "Mnemonic Failure: invalid words"
         }
     }
 }

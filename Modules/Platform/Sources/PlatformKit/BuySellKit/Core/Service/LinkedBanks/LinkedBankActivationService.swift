@@ -13,9 +13,9 @@ public enum BankActivationState {
     var isPending: Bool {
         switch self {
         case .pending:
-            return true
+            true
         case .active, .inactive:
-            return false
+            false
         }
     }
 

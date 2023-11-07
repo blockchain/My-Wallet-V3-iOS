@@ -11,11 +11,11 @@ public enum DarkModeSetting: String, Codable, Equatable, Hashable, CaseIterable 
     public var title: String {
         switch self {
         case .dark:
-            return LocalizationConstants.Settings.Theme.dark
+            LocalizationConstants.Settings.Theme.dark
         case .light:
-            return LocalizationConstants.Settings.Theme.light
+            LocalizationConstants.Settings.Theme.light
         case .automatic:
-            return LocalizationConstants.Settings.Theme.settings
+            LocalizationConstants.Settings.Theme.settings
         }
     }
 }

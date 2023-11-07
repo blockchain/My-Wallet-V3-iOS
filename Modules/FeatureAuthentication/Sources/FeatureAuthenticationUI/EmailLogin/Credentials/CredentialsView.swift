@@ -61,13 +61,13 @@ public struct CredentialsView: View {
     private var twoFATitle: String {
         switch viewStore.twoFAState?.twoFAType {
         case nil, .standard, .email:
-            return ""
+            ""
         case .sms:
-            return LocalizedString.TextFieldTitle.smsCode
+            LocalizedString.TextFieldTitle.smsCode
         case .google:
-            return LocalizedString.TextFieldTitle.authenticatorCode
+            LocalizedString.TextFieldTitle.authenticatorCode
         case .yubiKey, .yubikeyMtGox:
-            return LocalizedString.TextFieldTitle.hardwareKeyCode
+            LocalizedString.TextFieldTitle.hardwareKeyCode
         }
     }
 

@@ -16,11 +16,11 @@ final class InterestTransferTransactionStateProvider: PendingTransactionStatePro
         state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return Self.pending(state: state)
+                Self.pending(state: state)
             case .completed:
-                return Self.success(state: state)
+                Self.success(state: state)
             case .error:
-                return nil
+                nil
             }
         }
     }
@@ -79,11 +79,11 @@ final class StakingDepositTransactionStateProvider: PendingTransactionStateProvi
         state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return Self.pending(state: state)
+                Self.pending(state: state)
             case .completed:
-                return Self.success(state: state)
+                Self.success(state: state)
             case .error:
-                return nil
+                nil
             }
         }
     }
@@ -144,11 +144,11 @@ final class ActiveRewardsDepositTransactionStateProvider: PendingTransactionStat
         state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return Self.pending(state: state)
+                Self.pending(state: state)
             case .completed:
-                return Self.success(state: state)
+                Self.success(state: state)
             case .error:
-                return nil
+                nil
             }
         }
     }
@@ -209,11 +209,11 @@ final class ActiveRewardsWithdrawTransactionStateProvider: PendingTransactionSta
         state.compactMap { state -> PendingTransactionPageState? in
             switch state.executionStatus {
             case .inProgress, .pending, .notStarted:
-                return Self.pending(state: state)
+                Self.pending(state: state)
             case .completed:
-                return Self.success(state: state)
+                Self.success(state: state)
             case .error:
-                return nil
+                nil
             }
         }
     }

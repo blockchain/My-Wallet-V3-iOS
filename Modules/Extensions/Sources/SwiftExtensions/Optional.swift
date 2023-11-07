@@ -32,9 +32,9 @@ extension Optional: AnyOptionalProtocol {
     @inlinable public var flattened: Any? {
         switch self {
         case nil:
-            return nil
+            nil
         case let wrapped?:
-            return (wrapped as? AnyOptionalProtocol)?.flattened ?? wrapped
+            (wrapped as? AnyOptionalProtocol)?.flattened ?? wrapped
         }
     }
 }
@@ -100,9 +100,9 @@ extension Optional where Wrapped: Collection {
     @inlinable public var isNilOrEmpty: Bool {
         switch self {
         case .none:
-            return true
+            true
         case .some(let wrapped):
-            return wrapped.isEmpty
+            wrapped.isEmpty
         }
     }
 
@@ -120,18 +120,18 @@ extension Optional where Wrapped: Collection & ExpressibleByArrayLiteral {
     @inlinable public var emptyIfNil: Wrapped {
         switch self {
         case .none:
-            return []
+            []
         case .some(let wrapped):
-            return wrapped
+            wrapped
         }
     }
 
     @inlinable public var emptyIfNilOrNotEmpty: Self {
         switch self {
         case .none:
-            return .some([])
+            .some([])
         case .some(let wrapped):
-            return wrapped.isEmpty ? .none : .some(wrapped)
+            wrapped.isEmpty ? .none : .some(wrapped)
         }
     }
 }
@@ -141,9 +141,9 @@ extension Optional where Wrapped: Collection & ExpressibleByStringLiteral {
     @inlinable public var emptyIfNil: Wrapped {
         switch self {
         case .none:
-            return ""
+            ""
         case .some(let wrapped):
-            return wrapped
+            wrapped
         }
     }
 }
@@ -153,9 +153,9 @@ extension Optional: CustomStringConvertible {
     public var description: String {
         switch self {
         case .none:
-            return "nil"
+            "nil"
         case .some(let wrapped):
-            return "\(wrapped)"
+            "\(wrapped)"
         }
     }
 }

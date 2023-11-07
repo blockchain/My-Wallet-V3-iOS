@@ -16,12 +16,10 @@ extension DeepLinkPayload {
 
         let fragment = url.fragment.flatMap(URL.init(string:))
 
-        let parameters: [String: String]
-
-        if let fragment {
-            parameters = url.queryArgs.merging(fragment.queryArgs, uniquingKeysWith: { $1 })
+        let parameters: [String: String] = if let fragment {
+            url.queryArgs.merging(fragment.queryArgs, uniquingKeysWith: { $1 })
         } else {
-            parameters = url.queryArgs
+            url.queryArgs
         }
 
         return parameters

@@ -85,11 +85,11 @@ public class EmailVerificationService: EmailVerificationServiceAPI {
             .mapError { error in
                 switch error {
                 case .networkError(let error):
-                    return .networkError(error)
+                    .networkError(error)
                 case .unauthenticated:
-                    return .missingCredentials
+                    .missingCredentials
                 case .unknown(let error):
-                    return .unknown(error)
+                    .unknown(error)
                 }
             }
             .eraseToAnyPublisher()

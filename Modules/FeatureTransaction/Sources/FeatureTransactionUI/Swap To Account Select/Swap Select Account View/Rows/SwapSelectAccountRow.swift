@@ -50,9 +50,9 @@ public struct SwapSelectAccountRow: Reducer {
         Reduce { _, action in
             switch action {
             case .binding:
-                return .none
+                .none
             case .onAccountTapped:
-                return .none
+                .none
             }
         }
     }

@@ -623,28 +623,28 @@ extension BlockchainAccount {
     func checkoutPaymentMethod() -> BuyCheckout.PaymentMethod {
         switch (self as? PaymentMethodAccount)?.paymentMethodType {
         case .card(let card):
-            return BuyCheckout.PaymentMethod(
+            BuyCheckout.PaymentMethod(
                 name: card.type.name,
                 detail: card.displaySuffix,
                 isApplePay: false,
                 isACH: isACH
             )
         case .applePay(let apple):
-            return BuyCheckout.PaymentMethod(
+            BuyCheckout.PaymentMethod(
                 name: LocalizationConstants.Checkout.applePay,
                 detail: apple.displaySuffix,
                 isApplePay: true,
                 isACH: isACH
             )
         case .account:
-            return BuyCheckout.PaymentMethod(
+            BuyCheckout.PaymentMethod(
                 name: LocalizationConstants.Checkout.funds,
                 detail: nil,
                 isApplePay: false,
                 isACH: isACH
             )
         case .linkedBank(let bank):
-            return BuyCheckout.PaymentMethod(
+            BuyCheckout.PaymentMethod(
                 name: bank.account?.bankName ?? LocalizationConstants.Checkout.bank,
                 detail: bank.account?.number,
                 isApplePay: false,
@@ -653,14 +653,14 @@ extension BlockchainAccount {
         case .suggested(let suggestion):
             switch suggestion.type {
             case .applePay:
-                return BuyCheckout.PaymentMethod(
+                BuyCheckout.PaymentMethod(
                     name: LocalizationConstants.Checkout.applePay,
                     detail: "••••",
                     isApplePay: true,
                     isACH: false
                 )
             default:
-                return BuyCheckout.PaymentMethod(
+                BuyCheckout.PaymentMethod(
                     name: label,
                     detail: nil,
                     isApplePay: false,
@@ -668,7 +668,7 @@ extension BlockchainAccount {
                 )
             }
         default:
-            return BuyCheckout.PaymentMethod(
+            BuyCheckout.PaymentMethod(
                 name: label,
                 detail: nil,
                 isApplePay: false,

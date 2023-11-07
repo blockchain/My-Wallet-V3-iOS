@@ -145,22 +145,22 @@ extension AsyncPhase {
     @inlinable public func map<T>(_ transform: (Success) -> T) -> AsyncPhase<T> {
         switch self {
         case .empty:
-            return .empty
+            .empty
         case .success(let success):
-            return .success(transform(success))
+            .success(transform(success))
         case .failure(let error):
-            return .failure(error)
+            .failure(error)
         }
     }
 
     @inlinable public func flatMap<T>(_ transform: (Success) -> AsyncPhase<T>) -> AsyncPhase<T> {
         switch self {
         case .empty:
-            return .empty
+            .empty
         case .success(let success):
-            return transform(success)
+            transform(success)
         case .failure(let error):
-            return .failure(error)
+            .failure(error)
         }
     }
 }

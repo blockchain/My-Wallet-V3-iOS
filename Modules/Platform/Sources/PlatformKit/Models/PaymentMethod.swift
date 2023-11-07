@@ -40,99 +40,99 @@ public struct PaymentMethod: Equatable, Comparable {
         public var isCard: Bool {
             switch self {
             case .card:
-                return true
+                true
             case .bankAccount, .bankTransfer, .funds, .applePay:
-                return false
+                false
             }
         }
 
         public var isFunds: Bool {
             switch self {
             case .funds:
-                return true
+                true
             case .bankAccount, .bankTransfer, .card, .applePay:
-                return false
+                false
             }
         }
 
         public var isBankAccount: Bool {
             switch self {
             case .bankAccount:
-                return true
+                true
             case .funds, .card, .bankTransfer, .applePay:
-                return false
+                false
             }
         }
 
         public var isBankTransfer: Bool {
             switch self {
             case .bankTransfer:
-                return true
+                true
             case .funds, .card, .bankAccount, .applePay:
-                return false
+                false
             }
         }
 
         public var isApplePay: Bool {
             switch self {
             case .applePay:
-                return true
+                true
             case .funds, .card, .bankAccount, .bankTransfer:
-                return false
+                false
             }
         }
 
         public var isACH: Bool {
             switch self {
             case .bankTransfer(let currency):
-                return currency == .USD
+                currency == .USD
             case _:
-                return false
+                false
             }
         }
 
         public var rawType: PaymentMethodPayloadType {
             switch self {
             case .card:
-                return .card
+                .card
             case .applePay:
-                return .applePay
+                .applePay
             case .bankAccount:
-                return .bankAccount
+                .bankAccount
             case .funds:
-                return .funds
+                .funds
             case .bankTransfer:
-                return .bankTransfer
+                .bankTransfer
             }
         }
 
         public var requestType: PaymentMethodPayloadType {
             switch self {
             case .card:
-                return .card
+                .card
             case .applePay:
-                return .card
+                .card
             case .bankAccount:
-                return .bankAccount
+                .bankAccount
             case .funds:
-                return .funds
+                .funds
             case .bankTransfer:
-                return .bankTransfer
+                .bankTransfer
             }
         }
 
         var sortIndex: Int {
             switch self {
             case .bankTransfer:
-                return 0
+                0
             case .card:
-                return 1
+                1
             case .funds:
-                return 2
+                2
             case .bankAccount:
-                return 3
+                3
             case .applePay:
-                return 4
+                4
             }
         }
 
@@ -202,17 +202,17 @@ public struct PaymentMethod: Equatable, Comparable {
         public func isSame(as otherType: MethodType) -> Bool {
             switch (self, otherType) {
             case (.card(let lhs), .card(let rhs)):
-                return lhs == rhs
+                lhs == rhs
             case (.applePay(let lhs), .applePay(let rhs)):
-                return lhs == rhs
+                lhs == rhs
             case (.bankAccount(let currencyLhs), .bankAccount(let currencyRhs)):
-                return currencyLhs == currencyRhs
+                currencyLhs == currencyRhs
             case (.bankTransfer(let currencyLhs), .bankTransfer(let currencyRhs)):
-                return currencyLhs == currencyRhs
+                currencyLhs == currencyRhs
             case (.funds(let currencyLhs), .funds(let currencyRhs)):
-                return currencyLhs == currencyRhs
+                currencyLhs == currencyRhs
             default:
-                return false
+                false
             }
         }
     }
@@ -292,9 +292,9 @@ public struct PaymentMethod: Equatable, Comparable {
     var isCustodial: Bool {
         switch type {
         case .applePay, .bankAccount, .bankTransfer, .card:
-            return false
+            false
         case .funds:
-            return true
+            true
         }
     }
 

@@ -63,10 +63,9 @@ public struct TransactionDescriptorViewModel {
             // This should not happen.
             .asDriver(onErrorJustReturn: .empty)
             .map { attributes -> BadgeImageViewModel in
-                var model: BadgeImageViewModel
-                switch attributes.isFiat {
+                var model: BadgeImageViewModel = switch attributes.isFiat {
                 case true:
-                    model = BadgeImageViewModel.primary(
+                    BadgeImageViewModel.primary(
                         image: attributes.imageResource,
                         contentColor: .white,
                         backgroundColor: attributes.brandColor,
@@ -74,7 +73,7 @@ public struct TransactionDescriptorViewModel {
                         accessibilityIdSuffix: ""
                     )
                 case false:
-                    model = BadgeImageViewModel.default(
+                    BadgeImageViewModel.default(
                         image: attributes.imageResource,
                         cornerRadius: attributes.isFiat ? .roundedHigh : .round,
                         accessibilityIdSuffix: ""
@@ -124,18 +123,18 @@ public struct TransactionDescriptorViewModel {
         var account: SingleAccount? {
             switch self {
             case .value(let account):
-                return account
+                account
             case .empty:
-                return nil
+                nil
             }
         }
 
         var isEmpty: Bool {
             switch self {
             case .value:
-                return false
+                false
             case .empty:
-                return true
+                true
             }
         }
     }
@@ -182,26 +181,26 @@ extension AssetAction {
              .interestTransfer,
              .stakingDeposit,
              .activeRewardsDeposit:
-            return "deposit-icon"
+            "deposit-icon"
         case .receive:
-            return "receive-icon"
+            "receive-icon"
         case .viewActivity:
-            return "clock-icon"
+            "clock-icon"
         case .buy:
-            return "plus-icon"
+            "plus-icon"
         case .sell:
-            return "minus-icon"
+            "minus-icon"
         case .send:
-            return "send-icon"
+            "send-icon"
         case .sign:
             fatalError("Impossible.")
         case .swap:
-            return "swap-icon"
+            "swap-icon"
         case .withdraw,
              .interestWithdraw,
              .stakingWithdraw,
              .activeRewardsWithdraw:
-            return "withdraw-icon"
+            "withdraw-icon"
         }
     }
 }

@@ -10,9 +10,8 @@ extension AppDelegate {
         continue userActivity: NSUserActivity,
         restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
     ) -> Bool {
-        let handled: Bool
-        if let webpageURL = userActivity.webpageURL {
-            handled = DynamicLinks.dynamicLinks()
+        let handled: Bool = if let webpageURL = userActivity.webpageURL {
+            DynamicLinks.dynamicLinks()
                 .handleUniversalLink(webpageURL) { dynamiclink, _ in
                     guard let url = dynamiclink?.url else {
                         return
@@ -29,7 +28,7 @@ extension AppDelegate {
                     )
                 }
         } else {
-            handled = false
+            false
         }
 
         viewStore.send(.appDelegate(.userActivity(userActivity)))

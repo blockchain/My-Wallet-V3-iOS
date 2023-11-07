@@ -59,7 +59,6 @@ struct ClientNetworkResponseEvent: AnalyticsEvent {
     }
 }
 
-
 struct ClientNetworkErrorEvent: AnalyticsEvent {
 
     var type: AnalyticsEventType { .nabu }

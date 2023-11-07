@@ -33,18 +33,18 @@ public struct BankState: Equatable {
     var name: String {
         switch data.action {
         case .link(let institution):
-            return institution.fullName
+            institution.fullName
         case .deposit, .confirm:
-            return account.details?.bankName ?? Localization.Bank.yourBank
+            account.details?.bankName ?? Localization.Bank.yourBank
         }
     }
 
     var currency: String? {
         switch data.action {
         case .link, .deposit:
-            return account.currency
+            account.currency
         case .confirm(order: let order):
-            return order.outputCurrency
+            order.outputCurrency
         }
     }
 }
@@ -104,11 +104,11 @@ public struct BankReducer: Reducer {
                             .compactMap { state -> BankAction in
                                 switch state {
                                 case .waitingForConsent:
-                                    return .waitingForConsent
+                                    .waitingForConsent
                                 case .success(let output):
-                                    return .finalise(output)
+                                    .finalise(output)
                                 case .fail(let error):
-                                    return BankAction.failure(error)
+                                    BankAction.failure(error)
                                 }
                             }
                             .receive(on: environment.scheduler)
@@ -196,7 +196,7 @@ struct BankAnalyticsReducer: Reducer {
         Reduce { _, action in
             switch action {
             case .failure(let error):
-                return .run { _ in
+                .run { _ in
                     analytics.record(
                         event: ClientEvent.clientError(
                             id: error.code,
@@ -214,7 +214,7 @@ struct BankAnalyticsReducer: Reducer {
                     )
                 }
             default:
-                return .none
+                .none
             }
         }
     }

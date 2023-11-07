@@ -10,6 +10,17 @@ import UnifiedActivityDomain
 
 public enum ActivityEntryAdapter {
 
+    public static func createEntry(
+        with activity: Either<CustodialActivityEvent.Fiat, CustodialActivityEvent.Crypto>
+    ) -> ActivityEntry {
+        switch activity {
+        case .left(let value):
+             createEntry(with: value)
+        case .right(let value):
+             createEntry(with: value)
+        }
+    }
+
     public static func createEntry(with activity: CustodialActivityEvent.Fiat) -> ActivityEntry {
         let compositionView = ActivityItem.CompositionView(
             leadingImage: activity.leadingImage(),
@@ -170,11 +181,11 @@ extension CustodialActivityEvent.State {
     fileprivate func toActivityState() -> ActivityState {
         switch self {
         case .completed:
-            return .completed
+            .completed
         case .failed:
-            return .failed
+            .failed
         case .pending:
-            return .pending
+            .pending
         }
     }
 }
@@ -183,18 +194,18 @@ extension CustodialActivityEvent.Crypto {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .light)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .light)))
         case .deposit:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .light)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .light)))
         }
     }
 
     fileprivate func leadingImageDark() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
         case .deposit:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
         }
     }
 
@@ -234,12 +245,13 @@ extension CustodialActivityEvent.Crypto {
     }
 
     fileprivate func trailingLabel1() -> LeafItemType {
-        var string = ""
-        switch type {
+        let valueToDisplay = valuePair?.quote ?? amount.moneyValue
+        let displayString = valueToDisplay.toDisplayString(includeSymbol: true)
+        let string: String = switch type {
         case .withdrawal:
-            string = "- \(valuePair.quote.toDisplayString(includeSymbol: true))"
+            "- \(displayString)"
         case .deposit:
-            string = "\(valuePair.quote.toDisplayString(includeSymbol: true))"
+            displayString
         }
         let trailingItem1Style = ActivityItem.Text.Style(
             typography: ActivityTypography.paragraph2,
@@ -268,18 +280,18 @@ extension CustodialActivityEvent.Fiat {
     fileprivate func leadingImage() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .light)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .light)))
         case .deposit:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .light)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .light)))
         }
     }
 
     fileprivate func leadingImageDark() -> ImageType {
         switch type {
         case .withdrawal:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.send.url(mode: .dark)))
         case .deposit:
-            return ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
+            ImageType.smallTag(.init(main: ActivityRemoteIcons.receive.url(mode: .dark)))
         }
     }
 
@@ -344,15 +356,15 @@ extension BuySellActivityItemEvent.EventStatus {
     fileprivate func toActivityState() -> ActivityState? {
         switch self {
         case .pending:
-            return .pending
+            .pending
         case .failed:
-            return .failed
+            .failed
         case .finished:
-            return .completed
+            .completed
         case .pendingConfirmation:
-            return .confirming
+            .confirming
         default:
-            return nil
+            nil
         }
     }
 }
@@ -441,13 +453,13 @@ extension SwapActivityItemEvent.EventStatus {
     fileprivate func toActivityState() -> ActivityState {
         switch self {
         case .inProgress:
-            return .pending
+            .pending
         case .failed:
-            return .failed
+            .failed
         case .complete:
-            return .completed
+            .completed
         default:
-            return .unknown
+            .unknown
         }
     }
 }
@@ -557,13 +569,11 @@ extension EarnActivity {
 
     fileprivate func leadingLabel1(product: ActivityProductType) -> LeafItemType {
         let transactionTypeTitle: String = activityTitle(product: product)
-        let string: String
-
-        switch type {
+        let string: String = switch type {
         case .interestEarned:
-            string = activityTitle(product: product).interpolating(currency.code)
+            activityTitle(product: product).interpolating(currency.code)
         default:
-            string = "\(currency.code) \(transactionTypeTitle)"
+            "\(currency.code) \(transactionTypeTitle)"
         }
 
         let leadingItem1Style = ActivityItem.Text.Style(
@@ -605,13 +615,13 @@ extension EarnActivity.State {
     fileprivate func toActivityState() -> ActivityState {
         switch self {
         case .pending:
-            return .pending
+            .pending
         case .failed:
-            return .failed
+            .failed
         case .complete:
-            return .completed
+            .completed
         default:
-            return .unknown
+            .unknown
         }
     }
 }

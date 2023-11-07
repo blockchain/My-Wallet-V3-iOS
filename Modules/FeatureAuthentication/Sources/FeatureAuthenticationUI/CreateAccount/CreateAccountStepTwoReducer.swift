@@ -39,9 +39,9 @@ public enum CreateAccountContextStepTwo: Equatable {
     var mnemonic: String? {
         switch self {
         case .importWallet(let mnemonic):
-            return mnemonic
+            mnemonic
         case .createWallet:
-            return nil
+            nil
         }
     }
 }
@@ -63,9 +63,9 @@ public struct CreateAccountStepTwoState: Equatable, NavigationState {
         var isInvalid: Bool {
             switch self {
             case .invalid:
-                return true
+                true
             case .valid, .unknown:
-                return false
+                false
             }
         }
     }

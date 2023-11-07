@@ -13,9 +13,9 @@ public enum AmountInteractorInput {
     public var character: Character? {
         switch self {
         case .insert(let value):
-            return value
+            value
         case .remove:
-            return nil
+            nil
         }
     }
 }

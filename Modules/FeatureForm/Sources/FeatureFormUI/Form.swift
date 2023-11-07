@@ -122,15 +122,14 @@ public struct PrimaryFormPage<Header: View>: View {
         self.headerIcon = headerIcon
     }
 
+    private var isSubmitButtonDisabled: Bool {
+        switch submitButtonMode {
+        case .onlyEnabledWhenAllAnswersValid: !form.nodes.isValidForm
+        case .submitButtonAlwaysEnabled: false
+        }
+    }
+
     public var body: some View {
-        let isSubmitButtonDisabled: Bool = {
-            switch submitButtonMode {
-            case .onlyEnabledWhenAllAnswersValid:
-                return !form.nodes.isValidForm
-            case .submitButtonAlwaysEnabled:
-                return false
-            }
-        }()
         ScrollView {
             VStack(spacing: Spacing.padding4) {
                 if let header = form.header {

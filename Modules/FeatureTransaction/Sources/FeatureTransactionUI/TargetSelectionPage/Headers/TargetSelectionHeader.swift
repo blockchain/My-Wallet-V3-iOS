@@ -9,9 +9,9 @@ enum TargetSelectionHeader: Equatable {
     var defaultHeight: CGFloat {
         switch self {
         case .none:
-            return 0
+            0
         case .section:
-            return 32
+            32
         }
     }
 

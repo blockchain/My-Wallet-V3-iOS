@@ -9,9 +9,9 @@ public enum NavigationButton {
     private var iconName: String {
         switch self {
         case .back:
-            return "back_chevron_icon"
+            "back_chevron_icon"
         case .close:
-            return "cancel_icon"
+            "cancel_icon"
         }
     }
 }

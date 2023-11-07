@@ -15,46 +15,46 @@ public enum AccountPickerRow: Equatable, Identifiable {
     public var id: AnyHashable {
         switch self {
         case .label(let model):
-            return model.id
+            model.id
         case .button(let model):
-            return model.id
+            model.id
         case .linkedBankAccount(let model):
-            return model.id
+            model.id
         case .paymentMethodAccount(let model):
-            return model.id
+            model.id
         case .accountGroup(let model):
-            return model.id
+            model.id
         case .singleAccount(let model):
-            return model.id
+            model.id
         case .withdrawalLocks:
-            return "withdrawal-locks-id"
+            "withdrawal-locks-id"
         }
     }
 
     public var currency: String? {
         switch self {
         case .singleAccount(let model):
-            return model.currency
+            model.currency
         default:
-            return nil
+            nil
         }
     }
 
     var isAccountGroup: Bool {
         switch self {
         case .accountGroup:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 
     var isSingleAccount: Bool {
         switch self {
         case .singleAccount:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
 }

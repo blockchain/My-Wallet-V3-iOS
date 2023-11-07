@@ -102,15 +102,15 @@ extension KYC.Tier.State {
     fileprivate var accountStatus: KYC.AccountStatus {
         switch self {
         case .none:
-            return .none
+            .none
         case .rejected:
-            return .failed
+            .failed
         case .pending:
-            return .pending
+            .pending
         case .verified:
-            return .approved
+            .approved
         case .under_review:
-            return .underReview
+            .underReview
         }
     }
 }

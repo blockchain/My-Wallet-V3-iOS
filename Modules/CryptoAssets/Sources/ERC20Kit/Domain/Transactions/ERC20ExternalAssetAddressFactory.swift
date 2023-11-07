@@ -43,7 +43,7 @@ final class ERC20ExternalAssetAddressFactory: ExternalAssetAddressFactory {
                 case .invalidAddress:
                     // Failed because input ('address') is NOT a EIP681URI.
                     // Retry by assuming the input is a plain address.
-                    return self.erc20ReceiveAddress(
+                    self.erc20ReceiveAddress(
                         address: address,
                         label: label,
                         onTxCompleted: onTxCompleted
@@ -52,7 +52,7 @@ final class ERC20ExternalAssetAddressFactory: ExternalAssetAddressFactory {
                 case .wrongAsset:
                     // Failed because input ('address') is a EIP681URI but
                     // not for this factory's 'asset', fail straight away.
-                    return .failure(.invalidAddress)
+                    .failure(.invalidAddress)
                 }
             }
     }

@@ -35,7 +35,7 @@ public struct PricesScene: Reducer {
         case failed
     }
 
-    public enum Filter: Hashable {
+    public enum Filter: Hashable, Equatable {
         case all, favorites, tradable
     }
 
@@ -59,16 +59,16 @@ public struct PricesScene: Reducer {
         @BindingState var sortOrder: [String] = []
         var favourites: Set<String> = ["BTC", "ETH", "USDC"]
 
-        @BindingState var filter: Filter
+        @BindingState var searchFilter: Filter
         @BindingState var searchText: String
         @BindingState var isSearching: Bool
 
         var searchResults: [PricesRowData]? {
             guard let data else { return nil }
             guard searchText.isNotEmpty else {
-                return data.filtered(by: filter, favourites: favourites)
+                return data.filtered(by: searchFilter, favourites: favourites)
             }
-            return data.filtered(by: searchText, filter: filter, favourites: favourites)
+            return data.filtered(by: searchText, filter: searchFilter, favourites: favourites)
         }
 
         public var topMoversState: TopMoversSection.State?
@@ -82,7 +82,7 @@ public struct PricesScene: Reducer {
             isSearching: Bool = false,
             topMoversState: TopMoversSection.State? = nil
         ) {
-            self.filter = filterOverride ?? appMode.defaultFilter
+            self.searchFilter = filterOverride ?? appMode.defaultFilter
             self.unsortedData = data
             self.searchText = searchText
             self.isSearching = isSearching
@@ -165,9 +165,9 @@ extension AppMode {
     fileprivate var defaultFilter: PricesScene.Filter {
         switch self {
         case .trading:
-            return .tradable
+            .tradable
         case .pkw:
-            return .all
+            .all
         }
     }
 }
@@ -179,20 +179,20 @@ extension [PricesRowData] {
     ) -> [PricesRowData] {
         switch filter {
         case .all:
-            return self
+            self
         case .favorites:
-            return self.filter { price in favourites.contains(price.currency.code) }
+            self.filter { price in favourites.contains(price.currency.code) }
         case .tradable:
-            return self.filter(\.isTradable)
+            self.filter(\.isTradable)
         }
     }
 
     func filtered(
         by searchText: String,
-        using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
+        using algorithm: StringDistanceAlgorithm = StringContainsAlgorithm(caseInsensitive: true)
     ) -> [PricesRowData] {
         filter {
-            $0.currency.filter(by: searchText, using: algorithm)
+            $0.currency.matchSearch(searchText)
         }
     }
 
@@ -200,18 +200,18 @@ extension [PricesRowData] {
         by searchText: String,
         filter: PricesScene.Filter,
         favourites: Set<String>,
-        using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
+        using algorithm: StringDistanceAlgorithm = StringContainsAlgorithm(caseInsensitive: true)
     ) -> [PricesRowData] {
         switch filter {
         case .all:
-            return filtered(by: searchText)
+            filtered(by: searchText)
         case .favorites:
-            return self.filter {
-                favourites.contains($0.currency.code) && $0.currency.filter(by: searchText, using: algorithm)
+            self.filter {
+                favourites.contains($0.currency.code) && $0.currency.matchSearch(searchText)
             }
         case .tradable:
-            return self.filter {
-                $0.isTradable && $0.currency.filter(by: searchText, using: algorithm)
+            self.filter {
+                $0.isTradable && $0.currency.matchSearch(searchText)
             }
         }
     }

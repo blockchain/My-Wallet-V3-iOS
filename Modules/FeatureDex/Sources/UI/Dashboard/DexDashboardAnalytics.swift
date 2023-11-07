@@ -22,15 +22,15 @@ public struct DexDashboardAnalytics: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .none
+                .none
             case .setIntro:
-                return .none
+                .none
             case .introAction(let introAction):
-                return reduce(&state.intro, introAction)
+                reduce(&state.intro, introAction)
             case .mainAction(let mainAction):
-                return reduce(&state.main, mainAction)
+                reduce(&state.main, mainAction)
             case .binding:
-                return .none
+                .none
             }
         }
     }

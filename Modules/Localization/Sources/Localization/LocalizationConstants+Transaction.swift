@@ -1191,12 +1191,12 @@ extension LocalizationConstants.Transaction.Buy.Completion.Success {
 
     public static func description(externalTradingAccount: Bool) -> String {
         if externalTradingAccount {
-            return NSLocalizedString(
+            NSLocalizedString(
                 "Your %@ is now available in your account.",
                 comment: "Your %@ is now available in your account."
             )
         } else {
-            return NSLocalizedString(
+            NSLocalizedString(
                 "Your %@ is now available in your Blockchain.com Account.",
                 comment: "Your %@ is now available in your Blockchain.com Account."
             )

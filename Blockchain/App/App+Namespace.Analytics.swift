@@ -49,12 +49,12 @@ final class AppAnalyticsTraitRepository: Client.Observer, TraitRepositoryAPI {
                 config.map { name, property -> AnyPublisher<(String, String), Never> in
                     switch property.value {
                     case .left(let ref):
-                        return app.publisher(for: ref, as: String.self)
+                        app.publisher(for: ref, as: String.self)
                             .compactMap(\.value)
                             .map { (name, $0) }
                             .eraseToAnyPublisher()
                     case .right(let json):
-                        return .just((name, String(describing: json.wrapped)))
+                        .just((name, String(describing: json.wrapped)))
                     }
                 }
                 .merge()
@@ -278,9 +278,9 @@ extension Either<Bool, Condition> {
     func check() -> Bool {
         switch self {
         case .left(let bool):
-            return bool
+            bool
         case .right(let condition):
-            return (condition.if ?? []).allSatisfy(isYes) && (condition.unless ?? []).none(isYes)
+            (condition.if ?? []).allSatisfy(isYes) && (condition.unless ?? []).none(isYes)
         }
     }
 }
@@ -288,11 +288,11 @@ extension Either<Bool, Condition> {
 func isYes(_ ref: Tag.Reference) -> Bool {
     switch ref.tag {
     case blockchain.session.state.value:
-        return app.state.result(for: ref).isYes
+        app.state.result(for: ref).isYes
     case blockchain.session.configuration.value:
-        return app.remoteConfiguration.result(for: ref).isYes
+        app.remoteConfiguration.result(for: ref).isYes
     default:
-        return false
+        false
     }
 }
 

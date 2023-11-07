@@ -11,29 +11,28 @@ extension UIView {
 
     @discardableResult
     public func constraint(axis: UIAxis, to other: UIView, insets: UIEdgeInsets = .zero) -> [NSLayoutConstraint] {
-        let constraints: [NSLayoutConstraint]
-        switch axis {
+        let constraints: [NSLayoutConstraint] = switch axis {
         case .vertical:
-            constraints = [
+            [
                 topAnchor.constraint(equalTo: other.topAnchor, constant: insets.top),
                 bottomAnchor.constraint(equalTo: other.bottomAnchor, constant: -insets.bottom)
             ]
 
         case .horizontal:
-            constraints = [
+            [
                 leftAnchor.constraint(equalTo: other.leftAnchor, constant: insets.left),
                 rightAnchor.constraint(equalTo: other.rightAnchor, constant: -insets.right)
             ]
 
         case .both:
-            constraints = [
+            [
                 topAnchor.constraint(equalTo: other.topAnchor, constant: insets.top),
                 leftAnchor.constraint(equalTo: other.leftAnchor, constant: insets.left),
                 rightAnchor.constraint(equalTo: other.rightAnchor, constant: -insets.right),
                 bottomAnchor.constraint(equalTo: other.bottomAnchor, constant: -insets.bottom)
             ]
         default:
-            constraints = []
+            []
         }
         activate(constraints)
         return constraints

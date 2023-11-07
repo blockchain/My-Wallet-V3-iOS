@@ -78,11 +78,10 @@ final class TransactionFlowViewController: UINavigationController,
             return
         }
 
-        let navigationController: UINavigationController
-        if let navController = viewController as? UINavigationController {
-            navigationController = navController
+        let navigationController: UINavigationController = if let navController = viewController as? UINavigationController {
+            navController
         } else {
-            navigationController = UINavigationController(rootViewController: viewController.uiviewController)
+            UINavigationController(rootViewController: viewController.uiviewController)
         }
         present(navigationController, animated: animated, completion: completion)
     }

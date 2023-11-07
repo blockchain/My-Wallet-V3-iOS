@@ -8,13 +8,13 @@ extension UIFont {
     private static func fontName(for weight: Typography.Weight) -> String {
         switch weight {
         case .regular:
-            return Typography.FontResource.interRegular.rawValue
+            Typography.FontResource.interRegular.rawValue
         case .medium:
-            return Typography.FontResource.interMedium.rawValue
+            Typography.FontResource.interMedium.rawValue
         case .semibold:
-            return Typography.FontResource.interSemibold.rawValue
+            Typography.FontResource.interSemibold.rawValue
         case .bold:
-            return Typography.FontResource.interBold.rawValue
+            Typography.FontResource.interBold.rawValue
         }
     }
 

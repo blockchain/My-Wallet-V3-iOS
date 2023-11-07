@@ -523,15 +523,15 @@ extension AppProtocol {
         func makePublisher(_ ref: Tag.Reference) -> AnyPublisher<FetchResult, Never> {
             switch ref.tag {
             case blockchain.session.state.value, blockchain.db.collection.id:
-                return state.publisher(for: ref)
+                state.publisher(for: ref)
             case blockchain.session.configuration.value where computeConfiguration:
-                return remoteConfiguration.publisher(for: ref).computed(in: self)
+                remoteConfiguration.publisher(for: ref).computed(in: self)
             case blockchain.session.configuration.value:
-                return remoteConfiguration.publisher(for: ref)
+                remoteConfiguration.publisher(for: ref)
             case _ where ref.tag.isNAPI:
-                return napis.publisher(for: ref)
+                napis.publisher(for: ref)
             default:
-                return local.nonisolated_publisher(for: ref, app: self).eraseToAnyPublisher()
+                local.nonisolated_publisher(for: ref, app: self).eraseToAnyPublisher()
             }
         }
 
@@ -764,11 +764,11 @@ extension Optional<Any> {
     func contains(_ location: Location) -> Bool {
         switch (location, self) {
         case (.key(let key), let dictionary as [String: Any]):
-            return dictionary.keys.contains(key)
+            dictionary.keys.contains(key)
         case (.index(let index), let array as [Any]):
-            return index >= 0 && index < array.count
+            index >= 0 && index < array.count
         case _:
-            return false
+            false
         }
     }
 

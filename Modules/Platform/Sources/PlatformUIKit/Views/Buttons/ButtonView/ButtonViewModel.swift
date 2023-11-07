@@ -102,11 +102,11 @@ public struct ButtonViewModel {
             .map { isEnabled, isHidden in
                 switch (isEnabled, isHidden) {
                 case (_, true):
-                    return 0
+                    0
                 case (true, false):
-                    return 1
+                    1
                 case (false, false):
-                    return 0.65
+                    0.65
                 }
             }
     }

@@ -33,9 +33,9 @@ public enum LinkBankFlowEffect: Equatable {
     public var shouldSkipEffect: Bool {
         switch self {
         case .closeFlow:
-            return false
+            false
         case .bankLinked:
-            return true
+            true
         }
     }
 }

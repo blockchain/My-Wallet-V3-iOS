@@ -31,9 +31,9 @@ final class AddPaymenMethodBadgePresenter: BadgeImageAssetPresenting {
             .map { isEnabledForUser in
                 switch paymentMethod {
                 case .bank:
-                    return isEnabledForUser ? .bank : .info
+                    isEnabledForUser ? .bank : .info
                 case .card:
-                    return isEnabledForUser ? .card : .info
+                    isEnabledForUser ? .card : .info
                 }
             }
             .map { .loaded(next: $0) }

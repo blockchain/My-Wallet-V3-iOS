@@ -37,7 +37,7 @@ struct InterestAccountDetailsView: View {
                             .map { action in
                                 switch action {
                                 case .interestTransfer:
-                                    return .init(
+                                    .init(
                                         title: LocalizationIds.add + " \(viewStore.currency.displayCode)",
                                         action: {
                                             viewStore.send(
@@ -47,7 +47,7 @@ struct InterestAccountDetailsView: View {
                                         style: .primary
                                     )
                                 case .interestWithdraw:
-                                    return .init(
+                                    .init(
                                         title: LocalizationIds.withdraw + " \(viewStore.currency.displayCode)",
                                         action: {
                                             viewStore.send(

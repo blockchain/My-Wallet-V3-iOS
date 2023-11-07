@@ -127,13 +127,13 @@ extension KYCDocumentType {
     fileprivate var description: String {
         switch self {
         case .passport:
-            return LocalizedStrings.DocumentTypes.passport
+            LocalizedStrings.DocumentTypes.passport
         case .nationalIdentityCard:
-            return LocalizedStrings.DocumentTypes.nationalIdentityCard
+            LocalizedStrings.DocumentTypes.nationalIdentityCard
         case .residencePermit:
-            return LocalizedStrings.DocumentTypes.residencePermit
+            LocalizedStrings.DocumentTypes.residencePermit
         case .driversLicense:
-            return LocalizedStrings.DocumentTypes.driversLicense
+            LocalizedStrings.DocumentTypes.driversLicense
         }
     }
 }
@@ -152,13 +152,13 @@ extension KYCDocumentType {
     fileprivate var accessibilityIdentifier: String {
         switch self {
         case .passport:
-            return AccessibilityIdentifier.passportText
+            AccessibilityIdentifier.passportText
         case .nationalIdentityCard:
-            return AccessibilityIdentifier.nationalIDCardText
+            AccessibilityIdentifier.nationalIDCardText
         case .residencePermit:
-            return AccessibilityIdentifier.residenceCardText
+            AccessibilityIdentifier.residenceCardText
         case .driversLicense:
-            return AccessibilityIdentifier.driversLicenseText
+            AccessibilityIdentifier.driversLicenseText
         }
     }
 }

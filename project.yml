@@ -190,7 +190,7 @@ packages:
     version: 6.6.0
   Pulse:
     url: https://github.com/kean/Pulse.git
-    version: 4.0.3
+    version: 4.0.4
   Sardine:
     url: https://github.com/oliveratkinson-bc/swift-sardine.git
     version: 1.0.25

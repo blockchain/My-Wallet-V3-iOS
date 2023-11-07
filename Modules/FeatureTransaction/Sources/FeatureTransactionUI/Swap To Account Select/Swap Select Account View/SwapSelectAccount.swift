@@ -45,7 +45,7 @@ public struct SwapSelectAccount: Reducer {
         Reduce { _, action in
             switch action {
             default:
-                return .none
+                .none
             }
         }
         .forEach(\.accountRows, action: /Action.accountRow(id:action:)) {

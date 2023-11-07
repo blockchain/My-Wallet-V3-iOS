@@ -78,7 +78,7 @@ final class AutoWalletPairingService: AutoWalletPairingServiceAPI {
                 -> AnyPublisher<String, AutoWalletPairingServiceError> in
                 switch pairResult {
                 case .success(let pair):
-                    return walletPayloadService.request(
+                    walletPayloadService.request(
                         guid: pairingData.guid,
                         sharedKey: pair.data
                     )
@@ -86,7 +86,7 @@ final class AutoWalletPairingService: AutoWalletPairingServiceAPI {
                     .mapError(AutoWalletPairingServiceError.walletCryptoServiceError)
                     .eraseToAnyPublisher()
                 case .failure(let error):
-                    return .failure(error)
+                    .failure(error)
                 }
             }
             .eraseToAnyPublisher()

@@ -107,17 +107,16 @@ final class EthereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI {
         cryptoCurrency: CryptoCurrency,
         receiveAddressFactory: ExternalAssetAddressServiceAPI
     ) -> Single<(destination: EthereumAddress, referenceAddress: EthereumAddress?)> {
-        let receiveAddresses: Single<(destination: ReceiveAddress, referenceAddress: ReceiveAddress?)>
-        switch transactionTarget {
+        let receiveAddresses: Single<(destination: ReceiveAddress, referenceAddress: ReceiveAddress?)> = switch transactionTarget {
         case let blockchainAccount as BlockchainAccount:
-            receiveAddresses = createDestinationAddress(
+            createDestinationAddress(
                 blockchainAccount: blockchainAccount,
                 transactionTarget: transactionTarget,
                 cryptoCurrency: cryptoCurrency,
                 receiveAddressFactory: receiveAddressFactory
             )
         default:
-            receiveAddresses = Single
+            Single
                 .zip(
                     receiveAddress(transactionTarget: transactionTarget),
                     addressReference(transactionTarget: transactionTarget)
@@ -141,11 +140,11 @@ final class EthereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI {
     ) -> Single<ReceiveAddress> {
         switch transactionTarget {
         case let target as ReceiveAddress:
-            return .just(target)
+            .just(target)
         case let target as CryptoAccount:
-            return target.receiveAddress.asSingle()
+            target.receiveAddress.asSingle()
         case let target as HotWalletTransactionTarget:
-            return .just(target.hotWalletAddress)
+            .just(target.hotWalletAddress)
         default:
             fatalError(
                 "Impossible State \(type(of: self)): transactionTarget is \(type(of: transactionTarget))"
@@ -160,9 +159,9 @@ final class EthereumOnChainEngineCompanion: EthereumOnChainEngineCompanionAPI {
     ) -> Single<ReceiveAddress?> {
         switch transactionTarget {
         case let target as HotWalletTransactionTarget:
-            return .just(target.realAddress)
+            .just(target.realAddress)
         default:
-            return .just(nil)
+            .just(nil)
         }
     }
 

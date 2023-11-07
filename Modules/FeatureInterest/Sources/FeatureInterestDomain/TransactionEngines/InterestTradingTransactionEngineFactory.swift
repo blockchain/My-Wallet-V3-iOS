@@ -11,17 +11,17 @@ final class InterestTradingTransactionEngineFactory: InterestTradingTransactionE
     ) -> InterestTransactionEngine {
         switch action {
         case .interestTransfer:
-            return InterestDepositTradingTransactionEngine()
+            InterestDepositTradingTransactionEngine()
         case .interestWithdraw:
-            return InterestWithdrawTradingTransactionEngine()
+            InterestWithdrawTradingTransactionEngine()
         case .stakingDeposit:
-            return EarnDepositTradingTransactionEngine(product: .staking)
+            EarnDepositTradingTransactionEngine(product: .staking)
         case .activeRewardsDeposit:
-            return EarnDepositTradingTransactionEngine(product: .active)
+            EarnDepositTradingTransactionEngine(product: .active)
         case .activeRewardsWithdraw:
-            return EarnWithdrawTradingTransactionEngine(product: .active)
+            EarnWithdrawTradingTransactionEngine(product: .active)
         case .stakingWithdraw:
-            return EarnWithdrawTradingTransactionEngine(product: .staking)
+            EarnWithdrawTradingTransactionEngine(product: .staking)
         default:
             unimplemented()
         }

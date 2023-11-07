@@ -59,17 +59,17 @@ extension Series {
     var cycles: Double {
         switch self {
         case .day:
-            return 2
+            2
         case .week:
-            return 3
+            3
         case .month:
-            return 4
+            4
         case .year:
-            return 5
+            5
         case .all:
-            return 6
+            6
         default:
-            return 1
+            1
         }
     }
 }

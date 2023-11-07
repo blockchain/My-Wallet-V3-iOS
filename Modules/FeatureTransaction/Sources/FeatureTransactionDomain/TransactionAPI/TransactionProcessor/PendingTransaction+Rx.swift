@@ -23,9 +23,9 @@ extension PrimitiveSequence where Trait == SingleTrait, Element == PendingTransa
         }
         .map { pendingTransaction -> PendingTransaction in
             if pendingTransaction.confirmations.isEmpty {
-                return pendingTransaction
+                pendingTransaction
             } else {
-                return updateOptionsWithValidityWarning(pendingTransaction: pendingTransaction)
+                updateOptionsWithValidityWarning(pendingTransaction: pendingTransaction)
             }
         }
     }
@@ -36,11 +36,10 @@ extension PrimitiveSequence where Trait == SingleTrait, Element == PendingTransa
              .uninitialized:
             return pendingTransaction.remove(optionType: .errorNotice)
         default:
-            let isBelowMinimumState: Bool
-            if case .belowMinimumLimit = pendingTransaction.validationState {
-                isBelowMinimumState = true
+            let isBelowMinimumState: Bool = if case .belowMinimumLimit = pendingTransaction.validationState {
+                true
             } else {
-                isBelowMinimumState = false
+                false
             }
             let error = TransactionConfirmations.ErrorNotice(
                 validationState: pendingTransaction.validationState,

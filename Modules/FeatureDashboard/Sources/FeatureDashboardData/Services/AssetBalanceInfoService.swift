@@ -274,9 +274,9 @@ final class AssetBalanceInfoService: AssetBalanceInfoServiceAPI {
             .combineLatest(app.publisher(for: blockchain.user.currency.currencies, as: [FiatCurrency].self))
             .map { accounts, currencies -> [FiatAccount] in
                 if let currencies = currencies.value {
-                    return accounts.filter { account in currencies.contains(account.fiatCurrency) }
+                    accounts.filter { account in currencies.contains(account.fiatCurrency) }
                 } else {
-                    return accounts
+                    accounts
                 }
             }
             .map { accounts in
@@ -296,13 +296,13 @@ extension AssetModel {
     func supports(earnProductType: EarnProduct) -> Bool {
         switch earnProductType {
         case .active:
-            return supports(product: .activeRewardsBalance)
+            supports(product: .activeRewardsBalance)
         case .savings:
-            return supports(product: .interestBalance)
+            supports(product: .interestBalance)
         case .staking:
-            return supports(product: .staking)
+            supports(product: .staking)
         default:
-            return false
+            false
         }
     }
 }
@@ -340,11 +340,11 @@ extension AssetBalanceInfo {
     /// otherwise it defaults to zero
     func exchangeRate(other: AssetBalanceInfo, fiatCurrency: FiatCurrency) -> MoneyValue {
         if let myQuote = rawQuote, let balance, balance.isPositive, !myQuote.isZero {
-            return myQuote
+            myQuote
         } else if let otherQuote = other.rawQuote, let otherBalance = other.balance, otherBalance.isPositive, !otherQuote.isZero {
-            return otherQuote
+            otherQuote
         } else {
-            return .zero(currency: fiatCurrency)
+            .zero(currency: fiatCurrency)
         }
     }
 }
@@ -452,13 +452,13 @@ extension [AssetBalanceInfo] {
         sorted(by: { lhs, rhs in
             switch (lhs.fiatBalance, rhs.fiatBalance) {
             case (.none, .none):
-                return false
+                false
             case (.none, .some):
-                return false
+                false
             case (.some, .none):
-                return true
+                true
             case (.some(let lhs), .some(let rhs)):
-                return (try? lhs.quote > rhs.quote) ?? false
+                (try? lhs.quote > rhs.quote) ?? false
             }
         })
     }

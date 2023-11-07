@@ -168,11 +168,11 @@ extension EarnProduct {
     public var considerations: [EarnConsiderationsView.Page] {
         switch self {
         case .active:
-            return activeRewardsConsiderations
+            activeRewardsConsiderations
         case .staking:
-            return stakingConsiderations
+            stakingConsiderations
         default:
-            return []
+            []
         }
     }
 }

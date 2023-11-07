@@ -157,11 +157,11 @@ final class WalletConnectSignMessageEngine: TransactionEngine {
             .flatMap { [ethereumSigner, walletConnectTarget] ethereumKeyPair -> Single<Data> in
                 switch walletConnectTarget.message {
                 case .data(let data):
-                    return ethereumSigner
+                    ethereumSigner
                         .sign(messageData: data, keyPair: ethereumKeyPair)
                         .single
                 case .typedData(let typedData):
-                    return ethereumSigner
+                    ethereumSigner
                         .signTypedData(messageJson: typedData, keyPair: ethereumKeyPair)
                         .single
                 }

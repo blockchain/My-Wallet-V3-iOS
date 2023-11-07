@@ -266,13 +266,13 @@ extension URLSessionWebSocketTask.Message {
         switch self {
 
         case .data(let data):
-            return data
+            data
 
         case .string(let string):
-            return Data(string.utf8)
+            Data(string.utf8)
 
         default:
-            return nil
+            nil
         }
     }
 }

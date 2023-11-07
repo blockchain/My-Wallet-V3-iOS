@@ -30,11 +30,11 @@ final class KYCAccountUsageService: KYCAccountUsageServiceAPI {
                 apiClient.fetchExtraKYCQuestions(context: context, version: version)
                     .catch { error -> AnyPublisher<Form, Nabu.Error> in
                         if error.code.rawValue == 204 {
-                            return Just(Form())
+                            Just(Form())
                                 .setFailureType(to: Nabu.Error.self)
                                 .eraseToAnyPublisher()
                         } else {
-                            return Fail(outputType: Form.self, failure: error)
+                            Fail(outputType: Form.self, failure: error)
                                 .eraseToAnyPublisher()
                         }
                     }

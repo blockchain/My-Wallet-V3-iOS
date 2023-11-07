@@ -83,5 +83,4 @@ extension LocalizationConstants.CustodialOnboarding {
     static let couldTake60Seconds = NSLocalizedString("This could take up to 60 seconds.\nWe’ll redirect you as soon as we finish.", comment: "This could take up to 60 seconds.\nWe’ll redirect you as soon as we finish.")
     static let wellNotifyYou = NSLocalizedString("We’ll notify you of the status of your application via email as we’re experiencing high volumes of applications.", comment: "We’ll notify you of the status of your application via email as we’re experiencing high volumes of applications.")
     static let goToDashboard = NSLocalizedString("Go to dashboard", comment: "Go to dashboard")
-
 }

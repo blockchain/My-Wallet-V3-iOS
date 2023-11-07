@@ -43,7 +43,7 @@ final class PaymentMethodViewController: BaseScreenViewController,
             .flatMap { action in
                 switch action {
                 case .items(let viewModels):
-                    return .just(viewModels)
+                    .just(viewModels)
                 }
             }
 

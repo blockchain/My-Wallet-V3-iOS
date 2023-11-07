@@ -14,11 +14,11 @@ public enum CurrencyUpdateError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .credentialsError(let error):
-            return error.localizedDescription
+            error.localizedDescription
         case .clientError(let error):
-            return error.localizedDescription
+            error.localizedDescription
         case .fetchError(let error):
-            return error.localizedDescription
+            error.localizedDescription
         }
     }
 }

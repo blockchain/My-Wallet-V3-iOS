@@ -22,18 +22,18 @@ public struct MoneyValue: Money, Hashable {
     public var currency: CurrencyType {
         switch _value {
         case .crypto(let cryptoValue):
-            return cryptoValue.currencyType
+            cryptoValue.currencyType
         case .fiat(let fiatValue):
-            return fiatValue.currencyType
+            fiatValue.currencyType
         }
     }
 
     public var storeAmount: BigInt {
         switch _value {
         case .crypto(let cryptoValue):
-            return cryptoValue.storeAmount
+            cryptoValue.storeAmount
         case .fiat(let fiatValue):
-            return fiatValue.storeAmount
+            fiatValue.storeAmount
         }
     }
 
@@ -41,9 +41,9 @@ public struct MoneyValue: Money, Hashable {
     public var isCrypto: Bool {
         switch _value {
         case .crypto:
-            return true
+            true
         case .fiat:
-            return false
+            false
         }
     }
 
@@ -51,9 +51,9 @@ public struct MoneyValue: Money, Hashable {
     public var isFiat: Bool {
         switch _value {
         case .crypto:
-            return false
+            false
         case .fiat:
-            return true
+            true
         }
     }
 
@@ -61,9 +61,9 @@ public struct MoneyValue: Money, Hashable {
     public var fiatValue: FiatValue? {
         switch _value {
         case .crypto:
-            return nil
+            nil
         case .fiat(let fiatValue):
-            return fiatValue
+            fiatValue
         }
     }
 
@@ -71,9 +71,9 @@ public struct MoneyValue: Money, Hashable {
     public var cryptoValue: CryptoValue? {
         switch _value {
         case .crypto(let cryptoValue):
-            return cryptoValue
+            cryptoValue
         case .fiat:
-            return nil
+            nil
         }
     }
 
@@ -121,9 +121,9 @@ public struct MoneyValue: Money, Hashable {
     public func toDisplayString(includeSymbol: Bool, locale: Locale) -> String {
         switch _value {
         case .crypto(let cryptoValue):
-            return cryptoValue.toDisplayString(includeSymbol: includeSymbol, locale: locale)
+            cryptoValue.toDisplayString(includeSymbol: includeSymbol, locale: locale)
         case .fiat(let fiatValue):
-            return fiatValue.toDisplayString(includeSymbol: includeSymbol, locale: locale)
+            fiatValue.toDisplayString(includeSymbol: includeSymbol, locale: locale)
         }
     }
 
@@ -156,9 +156,9 @@ public struct MoneyValue: Money, Hashable {
     public func value(before percentageChange: Double) -> MoneyValue {
         switch _value {
         case .crypto(let cryptoValue):
-            return MoneyValue(cryptoValue: cryptoValue.value(before: percentageChange))
+            MoneyValue(cryptoValue: cryptoValue.value(before: percentageChange))
         case .fiat(let fiatValue):
-            return MoneyValue(fiatValue: fiatValue.value(before: percentageChange))
+            MoneyValue(fiatValue: fiatValue.value(before: percentageChange))
         }
     }
 
@@ -216,20 +216,19 @@ extension MoneyValue {
     public var isDust: Bool {
         switch _value {
         case .crypto(let c):
-            return c.isDust
+            c.isDust
         case .fiat(let f):
-            return f.isDust
+            f.isDust
         }
     }
 
     public var isNotDust: Bool { !isDust }
 
     public var shortDisplayString: String {
-        let formattedMinimum: String
-        if let fiatValue = fiatValue?.displayableRounding(decimalPlaces: 0, roundingMode: .up) {
-            formattedMinimum = fiatValue.toDisplayString(includeSymbol: true, format: .shortened, locale: .current)
+        let formattedMinimum: String = if let fiatValue = fiatValue?.displayableRounding(decimalPlaces: 0, roundingMode: .up) {
+            fiatValue.toDisplayString(includeSymbol: true, format: .shortened, locale: .current)
         } else {
-            formattedMinimum = displayString
+            displayString
         }
         return formattedMinimum
     }

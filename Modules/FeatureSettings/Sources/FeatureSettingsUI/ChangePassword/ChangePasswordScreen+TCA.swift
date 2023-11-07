@@ -94,9 +94,9 @@ struct ChangePasswordReducer: Reducer {
                     test
                         .flatMap { [passwordRepository] passwordOk -> AnyPublisher<Void, PasswordRepositoryError> in
                             if passwordOk {
-                                return passwordRepository.changePassword(password: new)
+                                passwordRepository.changePassword(password: new)
                             } else {
-                                return .failure(.invalidPassword)
+                                .failure(.invalidPassword)
                             }
                         }
                         .receive(on: mainQueue)

@@ -61,7 +61,7 @@ enum APIErrorEvent: AnalyticsEvent {
     var params: [String: String]? {
         switch self {
         case .payloadError(let details), .serverError(let details):
-            return details?.params ?? [:]
+            details?.params ?? [:]
         }
     }
 

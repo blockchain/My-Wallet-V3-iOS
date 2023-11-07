@@ -96,9 +96,9 @@ final class BitcoinWalletAccountRepository {
             .flatMap { [accountNamingReplenishement] (btcAccounts: [BitcoinWalletAccount]) -> AnyPublisher<Void, Never> in
                 let updatedAccounts: [BitcoinWalletAccount] = btcAccounts.compactMap { btcAccount in
                     if let label = accounts.first(where: { $0.hdAccountIndex == btcAccount.index })?.newForcedUpdateLabel {
-                        return btcAccount.updateLabel(label)
+                        btcAccount.updateLabel(label)
                     } else {
-                        return nil
+                        nil
                     }
                 }
                 let info: [AccountToRename] = updatedAccounts.map { (index: $0.index, label: $0.label) }

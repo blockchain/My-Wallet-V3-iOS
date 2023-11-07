@@ -176,12 +176,12 @@ extension ItemType: Identifiable {
     public var id: String {
         switch self {
         case .compositionView(let compositionView):
-            return compositionView.leading.reduce(into: "") { partialResult, item in
+            compositionView.leading.reduce(into: "") { partialResult, item in
                 partialResult += item.id
             }
 
         case .leaf(let ItemType):
-            return ItemType.id
+            ItemType.id
         }
     }
 }

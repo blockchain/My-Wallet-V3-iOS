@@ -46,7 +46,6 @@ final class APIClient: SimpleBuyClientAPI {
 
     private enum Path {
         static let accumulatedTrades = ["trades", "accumulated"]
-        static let transactions = ["payments", "transactions"]
         static let paymentMethods = ["payments", "methods"]
         static let eligiblePaymentMethods = ["eligible", "payment-methods"]
         static let applePayInfo = ["payments", "apple-pay", "info"]
@@ -150,12 +149,11 @@ final class APIClient: SimpleBuyClientAPI {
     func supportedPairs(
         with option: SupportedPairsFilterOption
     ) -> AnyPublisher<SupportedPairsResponse, NabuNetworkError> {
-        let queryParameters: [URLQueryItem]
-        switch option {
+        let queryParameters: [URLQueryItem] = switch option {
         case .all:
-            queryParameters = []
+            []
         case .only(fiatCurrency: let currency):
-            queryParameters = [
+            [
                 URLQueryItem(
                     name: Parameter.fiatCurrency,
                     value: currency.rawValue
@@ -183,22 +181,27 @@ final class APIClient: SimpleBuyClientAPI {
     // MARK: - OrdersActivityClientAPI
 
     func activityResponse(
-        currency: Currency,
+        currency: Currency?,
         product: String
     ) -> AnyPublisher<OrdersActivityResponse, NabuNetworkError> {
-        let path = Path.transactions
-        let parameters = [
-            URLQueryItem(
-                name: Parameter.currency,
-                value: currency.code
-            ),
+        var parameters = [
             URLQueryItem(
                 name: Parameter.product,
                 value: product
+            ),
+            URLQueryItem(
+                name: "limit",
+                value: "100"
             )
         ]
+        if let currency {
+            parameters.append(URLQueryItem(
+                name: Parameter.currency,
+                value: currency.code
+            ))
+        }
         let request = requestBuilder.get(
-            path: path,
+            path: "/payments/transactions",
             parameters: parameters,
             authenticated: true
         )!

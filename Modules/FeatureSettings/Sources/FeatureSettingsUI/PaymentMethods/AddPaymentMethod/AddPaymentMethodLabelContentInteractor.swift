@@ -86,9 +86,9 @@ final class AddPaymentMethodLabelContentInteractor: LabelContentInteracting {
         interactor.isEnabledForUser
             .map { isEnabledForUser in
                 if isEnabledForUser {
-                    return .settings
+                    .settings
                 } else {
-                    return .disclaimer(accessibilityId: localizedStrings.accessibilityId)
+                    .disclaimer(accessibilityId: localizedStrings.accessibilityId)
                 }
             }
             .bindAndCatch(to: descriptorRelay)

@@ -34,13 +34,13 @@ extension BlockchainDomainsAdapterState {
     var loadingState: LoadingState<String> {
         switch self {
         case .unavailable:
-            return .loading
+            .loading
         case .domainsClaimed(let domains):
-            return .loaded(next: "\(domains.count)")
+            .loaded(next: "\(domains.count)")
         case .kycForClaimDomain:
-            return .loaded(next: LocalizationConstants.Settings.cryptoDomainsClaim)
+            .loaded(next: LocalizationConstants.Settings.cryptoDomainsClaim)
         case .readyToClaimDomain:
-            return .loaded(next: LocalizationConstants.Settings.cryptoDomainsClaim)
+            .loaded(next: LocalizationConstants.Settings.cryptoDomainsClaim)
         }
     }
 }

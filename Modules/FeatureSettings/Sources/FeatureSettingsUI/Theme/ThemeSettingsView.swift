@@ -84,11 +84,11 @@ extension DarkModeSetting: Identifiable {
     var icon: Icon {
         switch self {
         case .light:
-            return Icon.sun.with(length: 20.pt)
+            Icon.sun.with(length: 20.pt)
         case .dark:
-            return Icon.moon.with(length: 20.pt)
+            Icon.moon.with(length: 20.pt)
         case .automatic:
-            return Icon.settings.with(length: 20.pt)
+            Icon.settings.with(length: 20.pt)
         }
     }
 }

@@ -23,15 +23,15 @@ extension MissingCredentialsError: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case .guid:
-            return "missing wallet GUID"
+            "missing wallet GUID"
         case .sessionToken:
-            return "missing session token"
+            "missing session token"
         case .sharedKey:
-            return "missing shared key"
+            "missing shared key"
         case .userId:
-            return "missing user id"
+            "missing user id"
         case .offlineToken:
-            return "missing offline token"
+            "missing offline token"
         }
     }
 }
@@ -46,7 +46,7 @@ extension CredentialWritingError: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case .offlineToken:
-            return "Error while writing offline token"
+            "Error while writing offline token"
         }
     }
 }

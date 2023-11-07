@@ -23,13 +23,13 @@ public struct DexService {
     ) -> AnyPublisher<Result<String, UX.Error>, Never> {
         transactionCreationService
             .build(quote: quote)
-            .flatMap { output in
+            .flatMap { output -> AnyPublisher<Result<String, UX.Error>, Never> in
                 switch output {
                 case .success(let success):
-                    return transactionCreationService
+                    transactionCreationService
                         .signAndPush(token: quote.sellAmount.currency, output: success)
                 case .failure(let error):
-                    return .just(.failure(error))
+                    .just(.failure(error))
                 }
             }
             .eraseToAnyPublisher()
@@ -122,9 +122,9 @@ extension DexService: DependencyKey {
                     .flatMap { result -> AnyPublisher<Result<[DexBalance], UX.Error>, Never> in
                         switch result {
                         case .failure(let error):
-                            return .just(.failure(UX.Error(error: error)))
+                            .just(.failure(UX.Error(error: error)))
                         case .success(let value):
-                            return .just(.success(dexBalances(value)))
+                            .just(.success(dexBalances(value)))
                         }
                     }
                     .eraseToAnyPublisher()

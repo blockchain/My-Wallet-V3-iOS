@@ -30,9 +30,9 @@ extension AppMode {
     public var filter: AssetFilter {
         switch self {
         case .pkw:
-            return .nonCustodial
+            .nonCustodial
         case .trading:
-            return [.custodial, .interest, .staking, .activeRewards]
+            [.custodial, .interest, .staking, .activeRewards]
         }
     }
 }

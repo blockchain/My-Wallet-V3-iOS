@@ -456,18 +456,18 @@ extension EnterAmountViewController {
         static func digitPadHeight(device: DevicePresenter.DeviceType) -> CGFloat {
             switch device {
             case .superCompact, .compact:
-                return Compact.digitPadHeight
+                Compact.digitPadHeight
             case .max, .regular:
-                return Standard.digitPadHeight
+                Standard.digitPadHeight
             }
         }
 
         static func topSelectionViewHeight(device: DevicePresenter.DeviceType) -> CGFloat {
             switch device {
             case .superCompact:
-                return SuperCompact.topSelectionViewHeight
+                SuperCompact.topSelectionViewHeight
             case .compact, .max, .regular:
-                return Standard.topSelectionViewHeight
+                Standard.topSelectionViewHeight
             }
         }
 

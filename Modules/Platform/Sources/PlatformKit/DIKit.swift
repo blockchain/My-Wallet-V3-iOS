@@ -243,7 +243,7 @@ extension DependencyContainer {
                 client: DIKit.resolve(),
                 fiatCurrencyService: DIKit.resolve(),
                 priceService: DIKit.resolve(),
-                enabledCurrenciesService: DIKit.resolve()
+                currenciesService: DIKit.resolve()
             ) as OrdersActivityServiceAPI
         }
 

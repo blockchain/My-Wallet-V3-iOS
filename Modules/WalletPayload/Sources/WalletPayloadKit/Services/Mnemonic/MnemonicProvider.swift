@@ -18,9 +18,9 @@ enum MnemonicStrength {
     var value: Int {
         switch self {
         case .normal:
-            return 128
+            128
         case .high:
-            return 256
+            256
         }
     }
 

@@ -20,7 +20,7 @@ public protocol ErrorRecording {
     func error(_ error: Error)
 }
 
-/// Sets the User Id 
+/// Sets the User Id
 public protocol UserIdSetting {
     func setUserId(for id: String)
 }

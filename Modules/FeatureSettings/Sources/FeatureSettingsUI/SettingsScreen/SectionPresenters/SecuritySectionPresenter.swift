@@ -59,7 +59,7 @@ final class SecuritySectionPresenter: SettingsSectionPresenting {
             .catchAndReturn(false)
             .map { verified -> SettingsSectionLoadingState in
                 if verified {
-                    return .loaded(
+                    .loaded(
                         next: .some(
                             SettingsSectionViewModel(
                                 sectionType: .security,
@@ -76,7 +76,7 @@ final class SecuritySectionPresenter: SettingsSectionPresenting {
                         )
                     )
                 } else {
-                    return .loaded(
+                    .loaded(
                         next: .some(
                             SettingsSectionViewModel(
                                 sectionType: .security,

@@ -12,32 +12,32 @@ public enum MetadataInitialisationError: LocalizedError, Equatable {
     public static func == (lhs: MetadataInitialisationError, rhs: MetadataInitialisationError) -> Bool {
         switch (lhs, rhs) {
         case (.failedToDeriveSecondPasswordNode(let leftError), .failedToDeriveSecondPasswordNode(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         case (.failedToLoadRemoteMetadataNode(let leftError), .failedToLoadRemoteMetadataNode(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         case (.failedToDecodeRemoteMetadataNode(let leftError), .failedToDecodeRemoteMetadataNode(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         case (.failedToDeriveRemoteMetadataNode(let leftError), .failedToDeriveRemoteMetadataNode(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         case (.failedToGenerateNodes(let leftError), .failedToGenerateNodes(let rightError)):
-            return leftError.localizedDescription == rightError.localizedDescription
+            leftError.localizedDescription == rightError.localizedDescription
         default:
-            return false
+            false
         }
     }
 
     public var errorDescription: String? {
         switch self {
         case .failedToDeriveSecondPasswordNode(let deriveSecondPasswordNodeError):
-            return deriveSecondPasswordNodeError.errorDescription
+            deriveSecondPasswordNodeError.errorDescription
         case .failedToLoadRemoteMetadataNode(let loadRemoteMetadataError):
-            return loadRemoteMetadataError.errorDescription
+            loadRemoteMetadataError.errorDescription
         case .failedToDecodeRemoteMetadataNode(let decodingError):
-            return decodingError.formattedDescription
+            decodingError.formattedDescription
         case .failedToDeriveRemoteMetadataNode(let metadataInitError):
-            return metadataInitError.errorDescription
+            metadataInitError.errorDescription
         case .failedToGenerateNodes(let error):
-            return error.localizedDescription
+            error.localizedDescription
         }
     }
 }

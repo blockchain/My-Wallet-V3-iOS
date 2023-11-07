@@ -15,57 +15,56 @@ extension TransactionErrorState {
     private typealias Localization = LocalizationConstants.Transaction.Error
 
     public var recoveryWarningHint: String {
-        let text: String
-        switch self {
+        let text: String = switch self {
         case .none:
-            text = "" // no error
+            "" // no error
         case .insufficientFunds(_, _, let sourceCurrency, _):
-            text = String.localizedStringWithFormat(
+            String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryHint,
                 sourceCurrency.displayCode
             )
         case .belowFees(let fees, _):
-            text = String.localizedStringWithFormat(
+            String.localizedStringWithFormat(
                 Localization.insufficientFundsRecoveryHint,
                 fees.displayCode
             )
         case .belowMinimumLimit(let minimum):
-            text = String.localizedStringWithFormat(
+            String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryHint,
                 minimum.shortDisplayString
             )
         case .overMaximumSourceLimit(let maximum, _, _):
-            text = String.localizedStringWithFormat(
+            String.localizedStringWithFormat(
                 Localization.overMaximumSourceLimitRecoveryHint,
                 maximum.shortDisplayString
             )
         case .overMaximumPersonalLimit:
-            text = Localization.overMaximumPersonalLimitRecoveryHint
+            Localization.overMaximumPersonalLimitRecoveryHint
         case .ux(let ux):
-            text = ux.title
+            ux.title
 
         // MARK: Unchecked
 
         case .addressIsContract:
-            text = Localization.addressIsContractShort
+            Localization.addressIsContractShort
         case .invalidAddress:
-            text = Localization.invalidAddressShort
+            Localization.invalidAddressShort
         case .invalidPassword:
-            text = Localization.invalidPasswordShort
+            Localization.invalidPasswordShort
         case .optionInvalid:
-            text = Localization.optionInvalidShort
+            Localization.optionInvalidShort
         case .pendingOrdersLimitReached:
-            text = Localization.pendingOrdersLimitReachedShort
+            Localization.pendingOrdersLimitReachedShort
         case .transactionInFlight:
-            text = Localization.transactionInFlightShort
+            Localization.transactionInFlightShort
         case .unknownError:
-            text = Localization.unknownErrorShort
+            Localization.unknownErrorShort
         case .fatalError:
-            text = Localization.fatalErrorShort
+            Localization.fatalErrorShort
         case .nabuError:
-            text = Localization.nextworkErrorShort
+            Localization.nextworkErrorShort
         case .sourceRequiresUpdate:
-            text = ""
+            ""
         }
         return text
     }
@@ -160,10 +159,9 @@ extension TransactionErrorState {
     }
 
     func recoveryWarningMessage(for action: AssetAction) -> String {
-        let text: String
-        switch self {
+        let text: String = switch self {
         case .belowFees(let fee, let balance):
-            text = String.localizedStringWithFormat(
+            String.localizedStringWithFormat(
                 Localization.insuffientFundsToPayForFeesMessage,
                 balance.currencyType.displayCode,
                 fee.shortDisplayString,
@@ -171,23 +169,23 @@ extension TransactionErrorState {
                 balance.currencyType.name
             )
         case .insufficientFunds:
-            text = localizedInsufficientFundsMessage(action: action)
+            localizedInsufficientFundsMessage(action: action)
         case .belowMinimumLimit:
-            text = localizedBelowMinimumLimitMessage(action: action)
+            localizedBelowMinimumLimitMessage(action: action)
         case .overMaximumSourceLimit:
-            text = localizedOverMaxSourceLimitMessage(action: action)
+            localizedOverMaxSourceLimitMessage(action: action)
         case .overMaximumPersonalLimit:
-            text = localizedOverMaxPersonalLimitMessage(action: action)
+            localizedOverMaxPersonalLimitMessage(action: action)
         case .nabuError(let error):
-            text = transactionErrorDescription(for: error.code, action: action)
+            transactionErrorDescription(for: error.code, action: action)
                 ?? error.description
                 ?? Localization.unknownErrorDescription
         case .fatalError(let fatalTransactionError):
-            text = transactionErrorDescription(for: fatalTransactionError, action: action)
+            transactionErrorDescription(for: fatalTransactionError, action: action)
         case .unknownError:
-            text = Localization.unknownErrorDescription
+            Localization.unknownErrorDescription
         default:
-            text = String(describing: self)
+            String(describing: self)
         }
         return text
     }
@@ -250,16 +248,15 @@ extension TransactionErrorState {
                 )
             ]
         case .overMaximumPersonalLimit(_, _, let suggestedUpgrade):
-            let calloutTitle: String
-            switch action {
+            let calloutTitle: String = switch action {
             case .buy:
-                calloutTitle = Localization.overMaximumPersonalLimitRecoveryCalloutTitle_buy
+                Localization.overMaximumPersonalLimitRecoveryCalloutTitle_buy
             case .swap:
-                calloutTitle = Localization.overMaximumPersonalLimitRecoveryCalloutTitle_swap
+                Localization.overMaximumPersonalLimitRecoveryCalloutTitle_swap
             case .send:
-                calloutTitle = Localization.overMaximumPersonalLimitRecoveryCalloutTitle_send
+                Localization.overMaximumPersonalLimitRecoveryCalloutTitle_send
             default:
-                calloutTitle = Localization.overMaximumPersonalLimitRecoveryCalloutTitle_other
+                Localization.overMaximumPersonalLimitRecoveryCalloutTitle_other
             }
             return suggestedUpgrade == nil ? [] : [
                 ErrorRecoveryState.Callout(
@@ -312,35 +309,35 @@ extension TransactionErrorState {
     private func transactionErrorTitle(for code: NabuErrorCode, action: AssetAction) -> String? {
         switch code {
         case .cardInsufficientFunds:
-            return Localization.cardInsufficientFundsTitle
+            Localization.cardInsufficientFundsTitle
         case .cardBankDecline:
-            return Localization.cardBankDeclineTitle
+            Localization.cardBankDeclineTitle
         case .cardCreateBankDeclined:
-            return Localization.cardCreateBankDeclinedTitle
+            Localization.cardCreateBankDeclinedTitle
         case .cardDuplicate:
-            return Localization.cardDuplicateTitle
+            Localization.cardDuplicateTitle
         case .cardBlockchainDecline:
-            return Localization.cardBlockchainDeclineTitle
+            Localization.cardBlockchainDeclineTitle
         case .cardAcquirerDecline:
-            return Localization.cardAcquirerDeclineTitle
+            Localization.cardAcquirerDeclineTitle
         case .cardPaymentNotSupported:
-            return Localization.cardUnsupportedPaymentMethodTitle
+            Localization.cardUnsupportedPaymentMethodTitle
         case .cardCreateFailed:
-            return Localization.cardCreateFailedTitle
+            Localization.cardCreateFailedTitle
         case .cardPaymentFailed:
-            return Localization.cardPaymentFailedTitle
+            Localization.cardPaymentFailedTitle
         case .cardCreateAbandoned:
-            return Localization.cardCreateAbandonedTitle
+            Localization.cardCreateAbandonedTitle
         case .cardCreateExpired:
-            return Localization.cardCreateExpiredTitle
+            Localization.cardCreateExpiredTitle
         case .cardCreateDebitOnly:
-            return Localization.cardCreateDebitOnlyTitle
+            Localization.cardCreateDebitOnlyTitle
         case .cardPaymentDebitOnly:
-            return Localization.cardPaymentDebitOnlyTitle
+            Localization.cardPaymentDebitOnlyTitle
         case .cardCreateNoToken:
-            return Localization.cardCreateNoTokenTitle
+            Localization.cardCreateNoTokenTitle
         default:
-            return nil
+            nil
         }
     }
 
@@ -348,79 +345,79 @@ extension TransactionErrorState {
     private func transactionErrorDescription(for code: NabuErrorCode, action: AssetAction) -> String? {
         switch code {
         case .notFound:
-            return Localization.notFound
+            Localization.notFound
         case .orderBelowMinLimit:
-            return String(format: Localization.tradingBelowMin, action.name)
+            String(format: Localization.tradingBelowMin, action.name)
         case .orderAboveMaxLimit:
-            return String(format: Localization.tradingAboveMax, action.name)
+            String(format: Localization.tradingAboveMax, action.name)
         case .dailyLimitExceeded:
-            return String(format: Localization.tradingDailyExceeded, action.name)
+            String(format: Localization.tradingDailyExceeded, action.name)
         case .weeklyLimitExceeded:
-            return String(format: Localization.tradingWeeklyExceeded, action.name)
+            String(format: Localization.tradingWeeklyExceeded, action.name)
         case .annualLimitExceeded:
-            return String(format: Localization.tradingYearlyExceeded, action.name)
+            String(format: Localization.tradingYearlyExceeded, action.name)
         case .tradingDisabled:
-            return Localization.tradingServiceDisabled
+            Localization.tradingServiceDisabled
         case .pendingOrdersLimitReached:
-            return Localization.pendingOrderLimitReached
+            Localization.pendingOrderLimitReached
         case .invalidCryptoAddress:
-            return Localization.tradingInvalidAddress
+            Localization.tradingInvalidAddress
         case .invalidCryptoCurrency:
-            return Localization.tradingInvalidCurrency
+            Localization.tradingInvalidCurrency
         case .invalidFiatCurrency:
-            return Localization.tradingInvalidFiat
+            Localization.tradingInvalidFiat
         case .orderDirectionDisabled:
-            return Localization.tradingDirectionDisabled
+            Localization.tradingDirectionDisabled
         case .userNotEligibleForSwap:
-            return Localization.tradingIneligibleForSwap
+            Localization.tradingIneligibleForSwap
         case .invalidDestinationAddress:
-            return Localization.tradingInvalidAddress
+            Localization.tradingInvalidAddress
         case .notFoundCustodialQuote:
-            return Localization.tradingQuoteInvalidOrExpired
+            Localization.tradingQuoteInvalidOrExpired
         case .orderAmountNegative:
-            return Localization.tradingInvalidDestinationAmount
+            Localization.tradingInvalidDestinationAmount
         case .withdrawalForbidden:
-            return Localization.pendingWithdraw
+            Localization.pendingWithdraw
         case .withdrawalLocked:
-            return Localization.withdrawBalanceLocked
+            Localization.withdrawBalanceLocked
         case .insufficientBalance:
-            return String(format: Localization.tradingInsufficientBalance, action.name)
+            String(format: Localization.tradingInsufficientBalance, action.name)
         case .albertExecutionError:
-            return Localization.tradingAlbertError
+            Localization.tradingAlbertError
         case .orderInProgress:
-            return String(format: Localization.tooManyTransaction, action.name)
+            String(format: Localization.tooManyTransaction, action.name)
         case .cardInsufficientFunds:
-            return Localization.cardInsufficientFunds
+            Localization.cardInsufficientFunds
         case .cardBankDecline:
-            return Localization.cardBankDecline
+            Localization.cardBankDecline
         case .cardCreateBankDeclined:
-            return Localization.cardCreateBankDeclined
+            Localization.cardCreateBankDeclined
         case .cardDuplicate:
-            return Localization.cardDuplicate
+            Localization.cardDuplicate
         case .cardBlockchainDecline:
-            return Localization.cardBlockchainDecline
+            Localization.cardBlockchainDecline
         case .cardAcquirerDecline:
-            return Localization.cardAcquirerDecline
+            Localization.cardAcquirerDecline
         case .cardPaymentNotSupported:
-            return Localization.cardUnsupportedPaymentMethod
+            Localization.cardUnsupportedPaymentMethod
         case .cardCreateFailed:
-            return Localization.cardCreateFailed
+            Localization.cardCreateFailed
         case .cardPaymentFailed:
-            return Localization.cardPaymentFailed
+            Localization.cardPaymentFailed
         case .cardCreateAbandoned:
-            return Localization.cardCreateAbandoned
+            Localization.cardCreateAbandoned
         case .cardCreateExpired:
-            return Localization.cardCreateExpired
+            Localization.cardCreateExpired
         case .cardCreateBankDeclined:
-            return Localization.cardCreateBankDeclined
+            Localization.cardCreateBankDeclined
         case .cardCreateDebitOnly:
-            return Localization.cardCreateDebitOnly
+            Localization.cardCreateDebitOnly
         case .cardPaymentDebitOnly:
-            return Localization.cardPaymentDebitOnly
+            Localization.cardPaymentDebitOnly
         case .cardCreateNoToken:
-            return Localization.cardCreateNoToken
+            Localization.cardCreateNoToken
         default:
-            return nil
+            nil
         }
     }
 
@@ -534,11 +531,10 @@ extension TransactionErrorState {
         let text: String
         switch action {
         case .buy:
-            let format: String
-            if accountLabel.contains(availableAmount.displayCode) {
-                format = Localization.overMaximumSourceLimitRecoveryMessage_buy_funds
+            let format: String = if accountLabel.contains(availableAmount.displayCode) {
+                Localization.overMaximumSourceLimitRecoveryMessage_buy_funds
             } else {
-                format = Localization.overMaximumSourceLimitRecoveryMessage_buy
+                Localization.overMaximumSourceLimitRecoveryMessage_buy
             }
             text = String.localizedStringWithFormat(
                 format,
@@ -646,13 +642,12 @@ extension TransactionErrorState {
         availableAmount: MoneyValue,
         suggestedUpgrade: TransactionValidationState.LimitsUpgrade?
     ) -> String {
-        let format: String
-        if effectiveLimit.timeframe == .single {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_buy_single
+        let format: String = if effectiveLimit.timeframe == .single {
+            Localization.overMaximumPersonalLimitRecoveryMessage_buy_single
         } else if suggestedUpgrade?.requiresVerified == true {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_buy_gold
+            Localization.overMaximumPersonalLimitRecoveryMessage_buy_gold
         } else {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_buy_other
+            Localization.overMaximumPersonalLimitRecoveryMessage_buy_other
         }
         return String.localizedStringWithFormat(
             format,
@@ -666,13 +661,12 @@ extension TransactionErrorState {
         availableAmount: MoneyValue,
         suggestedUpgrade: TransactionValidationState.LimitsUpgrade?
     ) -> String {
-        let format: String
-        if effectiveLimit.timeframe == .single {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_sell_single
+        let format: String = if effectiveLimit.timeframe == .single {
+            Localization.overMaximumPersonalLimitRecoveryMessage_sell_single
         } else if suggestedUpgrade?.requiresVerified == true {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_sell_gold
+            Localization.overMaximumPersonalLimitRecoveryMessage_sell_gold
         } else {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_sell_other
+            Localization.overMaximumPersonalLimitRecoveryMessage_sell_other
         }
         return String.localizedStringWithFormat(
             format,
@@ -686,13 +680,12 @@ extension TransactionErrorState {
         availableAmount: MoneyValue,
         suggestedUpgrade: TransactionValidationState.LimitsUpgrade?
     ) -> String {
-        let format: String
-        if effectiveLimit.timeframe == .single {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_swap_single
+        let format: String = if effectiveLimit.timeframe == .single {
+            Localization.overMaximumPersonalLimitRecoveryMessage_swap_single
         } else if suggestedUpgrade?.requiresVerified == true {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_swap_gold
+            Localization.overMaximumPersonalLimitRecoveryMessage_swap_gold
         } else {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_swap_other
+            Localization.overMaximumPersonalLimitRecoveryMessage_swap_other
         }
         return String.localizedStringWithFormat(
             format,
@@ -706,13 +699,12 @@ extension TransactionErrorState {
         availableAmount: MoneyValue,
         suggestedUpgrade: TransactionValidationState.LimitsUpgrade?
     ) -> String {
-        let format: String
-        if effectiveLimit.timeframe == .single {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_send_single
+        let format: String = if effectiveLimit.timeframe == .single {
+            Localization.overMaximumPersonalLimitRecoveryMessage_send_single
         } else if suggestedUpgrade?.requiresVerified == true {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_send_gold
+            Localization.overMaximumPersonalLimitRecoveryMessage_send_gold
         } else {
-            format = Localization.overMaximumPersonalLimitRecoveryMessage_send_other
+            Localization.overMaximumPersonalLimitRecoveryMessage_send_other
         }
         return String.localizedStringWithFormat(
             format,
@@ -733,25 +725,24 @@ extension TransactionErrorState {
     }
 
     private func localized(_ effectiveLimit: EffectiveLimit, availableAmount: MoneyValue) -> String {
-        let localizedEffectiveLimit: String
-        switch effectiveLimit.timeframe {
+        let localizedEffectiveLimit: String = switch effectiveLimit.timeframe {
         case .daily:
-            localizedEffectiveLimit = String.localizedStringWithFormat(
+            String.localizedStringWithFormat(
                 Localization.overMaximumSourceLimitRecoveryValueTimeFrameDay,
                 effectiveLimit.value.shortDisplayString
             )
         case .monthly:
-            localizedEffectiveLimit = String.localizedStringWithFormat(
+            String.localizedStringWithFormat(
                 Localization.overMaximumSourceLimitRecoveryValueTimeFrameMonth,
                 effectiveLimit.value.shortDisplayString
             )
         case .yearly:
-            localizedEffectiveLimit = String.localizedStringWithFormat(
+            String.localizedStringWithFormat(
                 Localization.overMaximumSourceLimitRecoveryValueTimeFrameYear,
                 effectiveLimit.value.shortDisplayString
             )
         case .single:
-            localizedEffectiveLimit = availableAmount.shortDisplayString
+            availableAmount.shortDisplayString
         }
         return localizedEffectiveLimit
     }
@@ -767,22 +758,22 @@ extension TransactionValidationFailure {
     func title(_ action: AssetAction) -> String? {
         switch state {
         case .noSourcesAvailable:
-            return LocalizationConstants.Errors.noSourcesAvailable.interpolating(action.localizedName)
+            LocalizationConstants.Errors.noSourcesAvailable.interpolating(action.localizedName)
         case .insufficientInterestWithdrawalBalance:
-            return LocalizationConstants.Errors.insufficientInterestWithdrawalBalance
+            LocalizationConstants.Errors.insufficientInterestWithdrawalBalance
         default:
-            return state.mapToTransactionErrorState.recoveryWarningTitle(for: action)
+            state.mapToTransactionErrorState.recoveryWarningTitle(for: action)
         }
     }
 
     func message(_ action: AssetAction) -> String {
         switch state {
         case .noSourcesAvailable:
-            return LocalizationConstants.Errors.noSourcesAvailableMessage.interpolating(action.localizedName)
+            LocalizationConstants.Errors.noSourcesAvailableMessage.interpolating(action.localizedName)
         case .insufficientInterestWithdrawalBalance:
-            return LocalizationConstants.Errors.insufficientInterestWithdrawalBalanceMessage
+            LocalizationConstants.Errors.insufficientInterestWithdrawalBalanceMessage
         default:
-            return state.mapToTransactionErrorState.recoveryWarningMessage(for: action)
+            state.mapToTransactionErrorState.recoveryWarningMessage(for: action)
         }
     }
 }
@@ -792,27 +783,27 @@ extension AssetAction {
     var localizedName: String {
         switch self {
         case .buy:
-            return LocalizationConstants.WalletAction.Default.Buy.title
+            LocalizationConstants.WalletAction.Default.Buy.title
         case .deposit, .stakingDeposit, .activeRewardsDeposit:
-            return LocalizationConstants.WalletAction.Default.Deposit.title
+            LocalizationConstants.WalletAction.Default.Deposit.title
         case .interestTransfer:
-            return LocalizationConstants.WalletAction.Default.Interest.title
+            LocalizationConstants.WalletAction.Default.Interest.title
         case .interestWithdraw:
-            return LocalizationConstants.WalletAction.Default.Interest.title
+            LocalizationConstants.WalletAction.Default.Interest.title
         case .receive:
-            return LocalizationConstants.WalletAction.Default.Receive.title
+            LocalizationConstants.WalletAction.Default.Receive.title
         case .sell:
-            return LocalizationConstants.WalletAction.Default.Sell.title
+            LocalizationConstants.WalletAction.Default.Sell.title
         case .send:
-            return LocalizationConstants.WalletAction.Default.Send.title
+            LocalizationConstants.WalletAction.Default.Send.title
         case .sign:
-            return LocalizationConstants.WalletAction.Default.Sign.title
+            LocalizationConstants.WalletAction.Default.Sign.title
         case .swap:
-            return LocalizationConstants.WalletAction.Default.Swap.title
+            LocalizationConstants.WalletAction.Default.Swap.title
         case .viewActivity:
-            return LocalizationConstants.WalletAction.Default.Activity.title
+            LocalizationConstants.WalletAction.Default.Activity.title
         case .withdraw, .activeRewardsWithdraw, .stakingWithdraw:
-            return LocalizationConstants.WalletAction.Default.Withdraw.title
+            LocalizationConstants.WalletAction.Default.Withdraw.title
         }
     }
 }

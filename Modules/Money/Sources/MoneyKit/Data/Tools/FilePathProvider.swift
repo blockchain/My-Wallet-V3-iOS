@@ -28,9 +28,9 @@ final class FilePathProvider: FilePathProviderAPI {
     func url(fileName: String, from origin: FileOrigin) -> URL? {
         switch origin {
         case .bundle:
-            return bundle(fileName: fileName)
+            bundle(fileName: fileName)
         case .documentsDirectory:
-            return documentsDirectory(fileName: fileName)
+            documentsDirectory(fileName: fileName)
         }
     }
 

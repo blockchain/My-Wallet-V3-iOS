@@ -13,9 +13,9 @@ extension OpenBankingState {
 
     public static func linkBankAccount(_ bankAccount: OpenBanking.BankAccount? = nil) -> Self {
         if let bankAccount {
-            return .institutionList(.init(result: .success(bankAccount)))
+            .institutionList(.init(result: .success(bankAccount)))
         } else {
-            return .institutionList(.init())
+            .institutionList(.init())
         }
     }
 

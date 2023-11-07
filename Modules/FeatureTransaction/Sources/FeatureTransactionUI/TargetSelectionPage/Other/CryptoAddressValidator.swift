@@ -33,9 +33,9 @@ final class CryptoAddressValidator: TextValidating {
                 switch validation {
                 case .invalid,
                      .inactive:
-                    return .invalid(reason: LocalizedString.invalidAddressShort)
+                    .invalid(reason: LocalizedString.invalidAddressShort)
                 case .valid:
-                    return .valid
+                    .valid
                 }
             }
             .bindAndCatch(to: validationStateRelay)

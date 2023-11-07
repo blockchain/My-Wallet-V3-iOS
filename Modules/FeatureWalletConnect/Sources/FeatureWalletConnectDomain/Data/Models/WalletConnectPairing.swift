@@ -11,42 +11,42 @@ public enum WalletConnectPairings: Codable, Equatable, Hashable {
     public var v2: DAppPairing? {
         switch self {
         case .v2(let dAppPairing):
-            return dAppPairing
+            dAppPairing
         }
     }
 
     public var name: String {
         switch self {
         case .v2(let dAppPairing):
-            return dAppPairing.name
+            dAppPairing.name
         }
     }
 
     public var description: String {
         switch self {
         case .v2(let dAppPairing):
-            return dAppPairing.description
+            dAppPairing.description
         }
     }
 
     public var iconURL: URL? {
         switch self {
         case .v2(let dAppPairing):
-            return dAppPairing.iconURL
+            dAppPairing.iconURL
         }
     }
 
     public var url: String? {
         switch self {
         case .v2(let dAppPairing):
-            return URL(string: dAppPairing.url)?.host
+            URL(string: dAppPairing.url)?.host
         }
     }
 
     public var networks: [EVMNetwork] {
         switch self {
         case .v2(let dAppPairing):
-            return dAppPairing.networks
+            dAppPairing.networks
         }
     }
 }

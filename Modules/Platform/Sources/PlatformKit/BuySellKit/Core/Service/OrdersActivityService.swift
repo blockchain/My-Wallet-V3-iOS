@@ -16,6 +16,14 @@ public protocol OrdersActivityServiceAPI: AnyObject {
     func activity(
         cryptoCurrency: CryptoCurrency
     ) -> AnyPublisher<[CustodialActivityEvent.Crypto], NabuNetworkError>
+
+    func activityCryptoCurrency(
+        displayCurrency: FiatCurrency
+    ) -> AnyPublisher<[CustodialActivityEvent.Crypto], NabuNetworkError>
+
+    func allActivity(
+        displayCurrency: FiatCurrency
+    ) -> AnyPublisher<[Either<CustodialActivityEvent.Fiat, CustodialActivityEvent.Crypto>], NabuNetworkError>
 }
 
 final class OrdersActivityService: OrdersActivityServiceAPI {
@@ -23,28 +31,41 @@ final class OrdersActivityService: OrdersActivityServiceAPI {
     private let client: OrdersActivityClientAPI
     private let fiatCurrencyService: FiatCurrencyServiceAPI
     private let priceService: PriceServiceAPI
-    private let enabledCurrenciesService: EnabledCurrenciesServiceAPI
+    private let currenciesService: EnabledCurrenciesServiceAPI
     private let cachedValue: CachedValueNew<
-        CurrencyType,
+        Key,
         OrdersActivityResponse,
         NabuNetworkError
     >
+    private enum Key: Hashable {
+        case all
+        case currency(CurrencyType)
+
+        var currency: CurrencyType? {
+            switch self {
+            case .all:
+                return nil
+            case .currency(let value):
+                return value
+            }
+        }
+    }
 
     init(
         app: AppProtocol,
         client: OrdersActivityClientAPI,
         fiatCurrencyService: FiatCurrencyServiceAPI,
         priceService: PriceServiceAPI,
-        enabledCurrenciesService: EnabledCurrenciesServiceAPI
+        currenciesService: EnabledCurrenciesServiceAPI
     ) {
         self.client = client
         self.fiatCurrencyService = fiatCurrencyService
         self.priceService = priceService
-        self.enabledCurrenciesService = enabledCurrenciesService
+        self.currenciesService = currenciesService
 
-        let cache = InMemoryCache<CurrencyType, OrdersActivityResponse>(
+        let cache = InMemoryCache<Key, OrdersActivityResponse>(
             configuration: .onLoginLogoutTransaction(),
-            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 90)
+            refreshControl: PeriodicCacheRefreshControl(refreshInterval: 40)
         )
         .eraseToAnyCache()
         self.cachedValue = CachedValueNew(
@@ -52,8 +73,12 @@ final class OrdersActivityService: OrdersActivityServiceAPI {
             fetch: { [app] key in
                 app.publisher(for: blockchain.app.is.external.brokerage, as: Bool.self)
                     .replaceError(with: false)
-                    .flatMap { isEligible in
-                        client.activityResponse(currency: key, product: isEligible ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY")
+                    .flatMap { isExternalBrokerage in
+                        client
+                            .activityResponse(
+                                currency: key.currency,
+                                product: isExternalBrokerage ? "EXTERNAL_BROKERAGE" : "SIMPLEBUY"
+                            )
                             .eraseToAnyPublisher()
                     }
                     .eraseToAnyPublisher()
@@ -65,7 +90,7 @@ final class OrdersActivityService: OrdersActivityServiceAPI {
         fiatCurrency: FiatCurrency
     ) -> AnyPublisher<[CustodialActivityEvent.Fiat], NabuNetworkError> {
         cachedValue
-            .get(key: fiatCurrency.currencyType)
+            .get(key: .currency(fiatCurrency.currencyType))
             .map(\.items)
             .map { items in
                 items
@@ -79,39 +104,96 @@ final class OrdersActivityService: OrdersActivityServiceAPI {
         cryptoCurrency: CryptoCurrency
     ) -> AnyPublisher<[CustodialActivityEvent.Crypto], NabuNetworkError> {
         cachedValue
-            .get(key: cryptoCurrency.currencyType)
+            .get(key: .currency(cryptoCurrency.currencyType))
             .map(\.items)
-            .flatMap { [fiatCurrencyService, priceService, enabledCurrenciesService] items in
-                items
-                    .map { item in
-                        // Get the display currency:
-                        fiatCurrencyService
-                            .displayCurrency
-                            .flatMap { [priceService] fiatCurrency in
-                                // Get price of activity currency at each activity time:
-                                priceService
-                                    .price(
-                                        of: cryptoCurrency,
-                                        in: fiatCurrency,
-                                        at: .time(item.insertedAtDate)
-                                    )
-                                    .optional()
-                                    .replaceError(with: nil)
-                            }
-                            // Map to CustodialActivityEvent.Crypto
-                            .compactMap { [enabledCurrenciesService] price in
-                                guard let fiatPrice = price?.moneyValue.fiatValue else {
-                                    return nil
-                                }
-                                return CustodialActivityEvent.Crypto(
-                                    item: item,
-                                    price: fiatPrice,
-                                    enabledCurrenciesService: enabledCurrenciesService
-                                )
-                            }
+            .flatMap { [fiatCurrencyService, priceService, currenciesService] items in
+                fiatCurrencyService
+                    .displayCurrency
+                    .flatMap { displayCurrency in
+                        mapCryptoItems(
+                            items: items,
+                            displayCurrency: displayCurrency,
+                            priceService: priceService,
+                            currenciesService: currenciesService
+                        )
                     }
-                    .zip()
             }
             .eraseToAnyPublisher()
     }
+
+    func activityCryptoCurrency(
+        displayCurrency: FiatCurrency
+    ) -> AnyPublisher<[CustodialActivityEvent.Crypto], NabuNetworkError> {
+        cachedValue
+            .get(key: .all)
+            .map(\.items)
+            .flatMap { [priceService, currenciesService] items in
+                mapCryptoItems(
+                    items: items,
+                    displayCurrency: displayCurrency,
+                    priceService: priceService,
+                    currenciesService: currenciesService
+                )
+            }
+            .eraseToAnyPublisher()
+    }
+
+    func allActivity(
+        displayCurrency: FiatCurrency
+    ) -> AnyPublisher<[Either<CustodialActivityEvent.Fiat, CustodialActivityEvent.Crypto>], NabuNetworkError> {
+        cachedValue
+            .get(key: .all)
+            .map(\.items)
+            .flatMap { [priceService, currenciesService] items in
+                let fiatItems = items
+                    .compactMap(CustodialActivityEvent.Fiat.init)
+                    .filter { $0.paymentError == nil }
+                    .map(Either<CustodialActivityEvent.Fiat, CustodialActivityEvent.Crypto>.left)
+
+                return mapCryptoItems(
+                    items: items,
+                    displayCurrency: displayCurrency,
+                    priceService: priceService,
+                    currenciesService: currenciesService
+                )
+                .map { items in
+                    items.map(Either<CustodialActivityEvent.Fiat, CustodialActivityEvent.Crypto>.right)
+                        + fiatItems
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
+private func mapCryptoItems(
+    items: [OrdersActivityResponse.Item],
+    displayCurrency: FiatCurrency,
+    priceService: PriceServiceAPI,
+    currenciesService: EnabledCurrenciesServiceAPI
+) -> AnyPublisher<[CustodialActivityEvent.Crypto], Never> {
+    items
+        .compactMap { item -> AnyPublisher<CustodialActivityEvent.Crypto, Never>? in
+            guard let cryptoCurrency = CryptoCurrency(code: item.amount.symbol, service: currenciesService) else {
+                return nil
+            }
+            // Get price of activity currency at each activity time:
+            return priceService
+                .price(
+                    of: cryptoCurrency,
+                    in: displayCurrency,
+                    at: .time(item.insertedAtDate)
+                )
+                .optional()
+                .replaceError(with: nil)
+                // Map to CustodialActivityEvent.Crypto:
+                .compactMap { price in
+                    CustodialActivityEvent.Crypto(
+                        item: item,
+                        price: price?.moneyValue.fiatValue,
+                        enabledCurrenciesService: currenciesService
+                    )
+                }
+                .eraseToAnyPublisher()
+        }
+        .zip()
 }

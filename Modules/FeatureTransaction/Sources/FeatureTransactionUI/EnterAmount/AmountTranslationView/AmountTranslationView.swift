@@ -329,9 +329,9 @@ extension ActiveAmountInput {
     var tag: Tag {
         switch self {
         case .crypto:
-            return blockchain.ux.transaction.enter.amount.active.input.crypto[]
+            blockchain.ux.transaction.enter.amount.active.input.crypto[]
         case .fiat:
-            return blockchain.ux.transaction.enter.amount.active.input.fiat[]
+            blockchain.ux.transaction.enter.amount.active.input.fiat[]
         }
     }
 }
@@ -407,11 +407,11 @@ extension MoneyValuePair {
 
     public func toFiat(in app: AppProtocol) async throws -> MoneyValuePair {
         if quote.isFiat {
-            return exchangeRate
+            exchangeRate
         } else if base.isFiat {
-            return MoneyValuePair(base: quote, quote: base).exchangeRate
+            MoneyValuePair(base: quote, quote: base).exchangeRate
         } else {
-            return try await MoneyValuePair(
+            try await MoneyValuePair(
                 base: .one(currency: base.currency),
                 exchangeRate: app.get(blockchain.api.nabu.gateway.price.crypto[base.currency.code].fiat.quote.value)
             )

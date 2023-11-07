@@ -9,9 +9,9 @@ public enum MetadataInitError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidPayload(let remoteMetadataNodesDecodingError):
-            return remoteMetadataNodesDecodingError.errorDescription
+            remoteMetadataNodesDecodingError.errorDescription
         case .failedToInitNodes:
-            return "Failure to initialize metadata nodes"
+            "Failure to initialize metadata nodes"
         }
     }
 }

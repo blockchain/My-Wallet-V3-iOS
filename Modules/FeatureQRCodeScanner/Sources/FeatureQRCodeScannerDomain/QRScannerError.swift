@@ -18,13 +18,13 @@ public enum AVCaptureDeviceError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .failedToRetrieveDevice:
-            return LocalizationConstants.Errors.failedToRetrieveDevice
+            LocalizationConstants.Errors.failedToRetrieveDevice
         case .inputError:
-            return LocalizationConstants.Errors.inputError
+            LocalizationConstants.Errors.inputError
         case .notAuthorized:
-            return nil
+            nil
         case .unknown:
-            return nil
+            nil
         }
     }
 }

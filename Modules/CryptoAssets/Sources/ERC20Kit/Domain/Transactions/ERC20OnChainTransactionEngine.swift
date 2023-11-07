@@ -91,13 +91,12 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
             .zip(walletCurrencyService.displayCurrency.eraseError())
             .prefix(1)
             .map { [feeCryptoCurrency, cryptoCurrency, predefinedAmount] availableBalance, fiatCurrency -> PendingTransaction in
-                let amount: MoneyValue
-                if let predefinedAmount,
+                let amount: MoneyValue = if let predefinedAmount,
                    predefinedAmount.currency == cryptoCurrency
                 {
-                    amount = predefinedAmount
+                    predefinedAmount
                 } else {
-                    amount = .zero(currency: cryptoCurrency)
+                    .zero(currency: cryptoCurrency)
                 }
                 return PendingTransaction(
                     amount: amount,
@@ -182,13 +181,13 @@ final class ERC20OnChainTransactionEngine: OnChainTransactionEngine {
         if let feeSelection = newConfirmation as? TransactionConfirmations.FeeSelection,
            feeSelection.selectedLevel != pendingTransaction.feeLevel
         {
-            return updateFeeSelection(
+            updateFeeSelection(
                 pendingTransaction: pendingTransaction,
                 newFeeLevel: feeSelection.selectedLevel,
                 customFeeAmount: nil
             )
         } else {
-            return defaultDoOptionUpdateRequest(
+            defaultDoOptionUpdateRequest(
                 pendingTransaction: pendingTransaction,
                 newConfirmation: newConfirmation
             )

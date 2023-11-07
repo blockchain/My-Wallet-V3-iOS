@@ -14,30 +14,30 @@ extension RandomAccessCollection where Element: Publisher {
     public func zip() -> AnyPublisher<[Element.Output], Element.Failure> {
         switch count {
         case 0:
-            return Just([])
+            Just([])
                 .setFailureType(to: Element.Failure.self)
                 .eraseToAnyPublisher()
         case 1:
-            return self[_0]
+            self[_0]
                 .map { [$0] }
                 .eraseToAnyPublisher()
         case 2:
-            return self[_0]
+            self[_0]
                 .zip(self[_1])
                 .map { [$0, $1] }
                 .eraseToAnyPublisher()
         case 3:
-            return self[_0]
+            self[_0]
                 .zip(self[_1], self[_2])
                 .map { [$0, $1, $2] }
                 .eraseToAnyPublisher()
         case 4:
-            return self[_0]
+            self[_0]
                 .zip(self[_1], self[_2], self[_3])
                 .map { [$0, $1, $2, $3] }
                 .eraseToAnyPublisher()
         default:
-            return prefix(4).zip()
+            prefix(4).zip()
                 .zip(dropFirst(4).zip())
                 .map { $0 + $1 }
                 .eraseToAnyPublisher()
@@ -47,30 +47,30 @@ extension RandomAccessCollection where Element: Publisher {
     public func combineLatest() -> AnyPublisher<[Element.Output], Element.Failure> {
         switch count {
         case 0:
-            return Just([])
+            Just([])
                 .setFailureType(to: Element.Failure.self)
                 .eraseToAnyPublisher()
         case 1:
-            return self[_0]
+            self[_0]
                 .map { [$0] }
                 .eraseToAnyPublisher()
         case 2:
-            return self[_0]
+            self[_0]
                 .combineLatest(self[_1])
                 .map { [$0, $1] }
                 .eraseToAnyPublisher()
         case 3:
-            return self[_0]
+            self[_0]
                 .combineLatest(self[_1], self[_2])
                 .map { [$0, $1, $2] }
                 .eraseToAnyPublisher()
         case 4:
-            return self[_0]
+            self[_0]
                 .combineLatest(self[_1], self[_2], self[_3])
                 .map { [$0, $1, $2, $3] }
                 .eraseToAnyPublisher()
         default:
-            return prefix(4).combineLatest()
+            prefix(4).combineLatest()
                 .combineLatest(dropFirst(4).combineLatest())
                 .map { $0 + $1 }
                 .eraseToAnyPublisher()

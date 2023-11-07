@@ -53,9 +53,9 @@ extension SendCheckout {
             public var tagTitle: String {
                 switch self {
                 case .network(let level):
-                    return level
+                    level
                 case .processing:
-                    return ""
+                    ""
                 }
             }
         }

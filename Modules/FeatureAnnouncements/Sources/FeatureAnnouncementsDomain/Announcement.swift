@@ -7,9 +7,9 @@ public struct Announcement: Decodable, Identifiable, Equatable, Comparable {
 
     public static func < (lhs: Announcement, rhs: Announcement) -> Bool {
         if lhs.priority == rhs.priority {
-            return lhs.createdAt > rhs.createdAt
+            lhs.createdAt > rhs.createdAt
         } else {
-            return lhs.priority < rhs.priority
+            lhs.priority < rhs.priority
         }
     }
 
