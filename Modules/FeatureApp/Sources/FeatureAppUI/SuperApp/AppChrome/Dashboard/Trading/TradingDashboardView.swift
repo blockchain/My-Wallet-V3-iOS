@@ -76,14 +76,14 @@ struct TradingDashboardView: View {
                             RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y))
                                 .fill(Color.semantic.light)
                                 .shadow(color: .semantic.dark.opacity(0.5), radius: shadowRadius(forScrollOffset: scrollOffset.y))
-                                .padding(.init(top: 0, leading: 16, bottom: 0, trailing: 16))
+                                .padding(.init(top: 8, leading: 16, bottom: 8, trailing: 16))
                                 .onChange(of: proxy.size) { _ in
                                     disclaimerHeight = proxy.size.height
                                 }
-                        }
+                            }
                     )
                     .mask(RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y)).padding(.bottom, -20))
-                    .padding([.top, .bottom], 8.pt)
+                    .padding([.top, .bottom], 16.pt)
             }
         }
         .superAppNavigationBar(
