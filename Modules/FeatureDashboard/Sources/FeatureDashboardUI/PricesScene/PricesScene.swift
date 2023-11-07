@@ -189,10 +189,10 @@ extension [PricesRowData] {
 
     func filtered(
         by searchText: String,
-        using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
+        using algorithm: StringDistanceAlgorithm = StringContainsAlgorithm(caseInsensitive: true)
     ) -> [PricesRowData] {
         filter {
-            $0.currency.filter(by: searchText, using: algorithm)
+            $0.currency.matchSearch(searchText)
         }
     }
 
@@ -200,18 +200,18 @@ extension [PricesRowData] {
         by searchText: String,
         filter: PricesScene.Filter,
         favourites: Set<String>,
-        using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
+        using algorithm: StringDistanceAlgorithm = StringContainsAlgorithm(caseInsensitive: true)
     ) -> [PricesRowData] {
         switch filter {
         case .all:
             filtered(by: searchText)
         case .favorites:
             self.filter {
-                favourites.contains($0.currency.code) && $0.currency.filter(by: searchText, using: algorithm)
+                favourites.contains($0.currency.code) && $0.currency.matchSearch(searchText)
             }
         case .tradable:
             self.filter {
-                $0.isTradable && $0.currency.filter(by: searchText, using: algorithm)
+                $0.isTradable && $0.currency.matchSearch(searchText)
             }
         }
     }
