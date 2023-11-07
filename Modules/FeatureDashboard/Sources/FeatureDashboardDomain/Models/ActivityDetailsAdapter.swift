@@ -318,7 +318,7 @@ extension CustodialActivityEvent.Crypto {
                 trailing: [
                     .text(
                         .init(
-                            value: valuePair.quote.toDisplayString(includeSymbol: true),
+                            value: valuePair?.quote.toDisplayString(includeSymbol: true) ?? " ",
                             style: trailingItemStyle
                         )
                     ),
@@ -360,7 +360,7 @@ extension CustodialActivityEvent.Crypto {
                 trailing: [
                     .text(
                         .init(
-                            value: fee.convert(using: price).toDisplayString(includeSymbol: true),
+                            value: price.flatMap { fee.convert(using: $0).toDisplayString(includeSymbol: true) } ?? " ",
                             style: trailingItemStyle
                         )
                     ),
@@ -399,7 +399,7 @@ extension CustodialActivityEvent.Crypto {
                 trailing: [
                     .text(
                         .init(
-                            value: price.displayString,
+                            value: price?.displayString ?? " ",
                             style: trailingItemStyle
                         )
                     )
@@ -426,7 +426,7 @@ extension CustodialActivityEvent.Crypto {
             totalInCrypto = amount
         }
         let total = MoneyValue(cryptoValue: totalInCrypto)
-        let totalInFiat = total.convert(using: price)
+        let totalInFiat: FiatValue? = price.flatMap { price in total.convert(using: price) }
 
         return ItemType.compositionView(
             .init(
@@ -441,7 +441,7 @@ extension CustodialActivityEvent.Crypto {
                 trailing: [
                     .text(
                         .init(
-                            value: totalInFiat.toDisplayString(includeSymbol: true),
+                            value: totalInFiat?.toDisplayString(includeSymbol: true) ?? " ",
                             style: trailingItemStyle
                         )
                     ),

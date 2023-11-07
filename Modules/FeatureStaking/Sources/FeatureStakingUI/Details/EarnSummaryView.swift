@@ -705,7 +705,6 @@ struct EarnSummaryView_Previews: PreviewProvider {
         preview.limit.days.unbonding = 0
         preview.limit.withdraw.is.disabled = true
         preview.limit.reward.frequency = blockchain.user.earn.product.asset.limit.reward.frequency.daily[]
-        preview.activity = []
         return preview
     }()
 }

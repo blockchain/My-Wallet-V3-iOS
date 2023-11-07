@@ -10,7 +10,7 @@ import MoneyKit
 import PlatformKit
 import UnifiedActivityDomain
 
-class CustodialActivityService: CustodialActivityServiceAPI {
+final class CustodialActivityService: CustodialActivityServiceAPI {
     private let app: AppProtocol
     private let coincore: CoincoreAPI
     private let fiatCurrencyService: FiatCurrencySettingsServiceAPI
@@ -43,7 +43,7 @@ class CustodialActivityService: CustodialActivityServiceAPI {
         self.activeRewardsActivityService = activeRewardsActivityService
     }
 
-    func getActivity(fiatCurrency: FiatCurrency) -> AsyncStream<[ActivityEntry]> {
+    private func getActivity(fiatCurrency: FiatCurrency) -> AnyPublisher<[ActivityEntry], Never> {
         let assets = coincore.cryptoAssets.filter { asset in
             asset.asset.assetModel.supports(product: .custodialWalletBalance) ||
             asset.asset.assetModel.supports(product: .interestBalance) ||
@@ -52,48 +52,59 @@ class CustodialActivityService: CustodialActivityServiceAPI {
         }
         var streams: [(String, AnyPublisher<[ActivityEntry], Never>)] = [
             (
-                "fiat \(fiatCurrency)",
-                ordersActivity.activity(fiatCurrency: fiatCurrency).replaceError(with: [])
-                .mapEach(ActivityEntryAdapter.createEntry)
+                "orders",
+                ordersActivity
+                    .allActivity(displayCurrency: fiatCurrency)
+                    .replaceError(with: [])
+                    .mapEach { item in ActivityEntryAdapter.createEntry(with: item) }
+            ),
+            (
+                "buy & sell",
+                buySellActivity
+                    .buySellActivityEvents(cryptoCurrency: nil)
+                    .replaceError(with: [])
+                    .mapEach { item in
+                        ActivityEntryAdapter.createEntry(with: item)
+                    }
             )
         ]
 
+        if assets.contains(where: { $0.asset.supports(product: .staking)}) {
+            streams.append(
+                (
+                    "staking",
+                    stakingActivityService
+                        .activity(currency: nil)
+                        .replaceError(with: [])
+                        .mapEach { item in ActivityEntryAdapter.createEntry(with: item, type: .staking) }
+                )
+            )
+        }
+        if assets.contains(where: { $0.asset.supports(product: .interestBalance)}) {
+            streams.append(
+                (
+                    "savings",
+                    savingsActivityService
+                        .activity(currency: nil)
+                        .replaceError(with: [])
+                        .mapEach { item in ActivityEntryAdapter.createEntry(with: item, type: .saving) }
+                )
+            )
+        }
+
+        if assets.contains(where: { $0.asset.supports(product: .activeRewardsBalance)}) {
+            streams.append(
+                (
+                    "active rewards",
+                    activeRewardsActivityService
+                        .activity(currency: nil)
+                        .replaceError(with: [])
+                        .mapEach { item in ActivityEntryAdapter.createEntry(with: item, type: .activeRewards) }
+                )
+            )
+        }
+
         for asset in assets {
-            streams.append(
-                ("buy & sell \(asset.asset)", buySellActivity.buySellActivityEvents(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
-                    ActivityEntryAdapter.createEntry(with: item)
-                })
-            )
-
-            streams.append(
-                ("orders \(asset.asset)", ordersActivity.activity(cryptoCurrency: asset.asset).replaceError(with: []).mapEach { item in
-                    ActivityEntryAdapter.createEntry(with: item)
-                })
-            )
-
-            if asset.asset.supports(product: .staking) {
-                streams.append(
-                    ("staking \(asset.asset)", stakingActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
-                        ActivityEntryAdapter.createEntry(with: item, type: .staking)
-                    })
-                )
-            }
-            if asset.asset.supports(product: .interestBalance) {
-                streams.append(
-                    ("savings \(asset.asset)", savingsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
-                        ActivityEntryAdapter.createEntry(with: item, type: .saving)
-                    })
-                )
-            }
-
-            if asset.asset.supports(product: .activeRewardsBalance) {
-                streams.append(
-                    ("active rewards \(asset.asset)", activeRewardsActivityService.activity(currency: asset.asset).replaceError(with: []).mapEach { item in
-                        ActivityEntryAdapter.createEntry(with: item, type: .activeRewards)
-                    })
-                )
-            }
-
             streams.append(
                 ("swap \(asset.asset)", swapActivity.fetchActivity(cryptoCurrency: asset.asset, directions: [.internal]).replaceError(with: []).mapEach { item in
                     if item.pair.outputCurrencyType.isFiatCurrency {
@@ -109,20 +120,19 @@ class CustodialActivityService: CustodialActivityServiceAPI {
             )
         }
 
-        return combineLatest(
-            streams.map { _, stream in stream.values },
-            bufferingPolicy: .unbounded
-        )
-        .map { items in
-            items.flatMap { $0 }.sorted(by: { $0.timestamp > $1.timestamp })
-        }
-        .eraseToStream()
+        return streams
+            .map { _, stream in stream.prepend([]) }
+            .combineLatest()
+            .map { items in
+                items.flatMap { $0 }.sorted(by: { $0.timestamp > $1.timestamp })
+            }
+            .eraseToAnyPublisher()
     }
 
     func activity() -> AnyPublisher<[ActivityEntry], Never> {
         app.publisher(for: blockchain.user.currency.preferred.fiat.display.currency, as: FiatCurrency.self)
             .compactMap(\.value)
-            .map { self.getActivity(fiatCurrency: $0).publisher() }
+            .map { self.getActivity(fiatCurrency: $0) }
             .switchToLatest()
             .eraseToAnyPublisher()
     }

@@ -15,14 +15,14 @@ public enum CustodialActivityEvent {
 
     public struct Crypto: Equatable {
         public let amount: CryptoValue
-        public let valuePair: MoneyValuePair
+        public let valuePair: MoneyValuePair?
         public let identifier: String
         public let date: Date
         public let type: EventType
         public let state: State
         public let receivingAddress: String?
         public let fee: CryptoValue
-        public let price: FiatValue
+        public let price: FiatValue?
         public let txHash: String
     }
 
@@ -100,7 +100,7 @@ extension CustodialActivityEvent.Fiat {
 }
 
 extension CustodialActivityEvent.Crypto {
-    init?(item: OrdersActivityResponse.Item, price: FiatValue, enabledCurrenciesService: EnabledCurrenciesServiceAPI) {
+    init?(item: OrdersActivityResponse.Item, price: FiatValue?, enabledCurrenciesService: EnabledCurrenciesServiceAPI) {
         guard let state = item.custodialActivityState else {
             return nil
         }
@@ -118,7 +118,9 @@ extension CustodialActivityEvent.Crypto {
             minor: BigInt(item.amountMinor) ?? 0,
             currency: cryptoCurrency
         )
-        let moneyValuePair = MoneyValuePair(base: amount.moneyValue, exchangeRate: price.moneyValue)
+        let moneyValuePair: MoneyValuePair? = price.flatMap { price in
+            MoneyValuePair(base: amount.moneyValue, exchangeRate: price.moneyValue)
+        }
         let feeMinor: BigInt = item.feeMinor.flatMap { BigInt($0) } ?? 0
         let fee = CryptoValue.create(minor: feeMinor, currency: cryptoCurrency)
         self.init(

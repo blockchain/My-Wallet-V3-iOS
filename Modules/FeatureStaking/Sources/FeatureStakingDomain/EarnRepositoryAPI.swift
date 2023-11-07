@@ -16,7 +16,7 @@ public protocol EarnRepositoryAPI {
     func userRates() -> AnyPublisher<EarnUserRates, Nabu.Error>
     func limits(currency: FiatCurrency) -> AnyPublisher<EarnLimits, Nabu.Error>
     func address(currency: CryptoCurrency) -> AnyPublisher<EarnAddress, Nabu.Error>
-    func activity(currency: CryptoCurrency) -> AnyPublisher<[EarnActivity], Nabu.Error>
+    func activity(currency: CryptoCurrency?) -> AnyPublisher<[EarnActivity], Nabu.Error>
 
     func deposit(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error>
     func withdraw(amount: MoneyValue) -> AnyPublisher<Void, Nabu.Error>

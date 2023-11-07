@@ -45,11 +45,12 @@ public final class EarnObserver: Client.Observer {
     }
 
     func fetched(_ products: [EarnProduct]) {
-        for product in [EarnProduct.savings, EarnProduct.staking, EarnProduct.active] {
+        let services = products.map { product in
             let service = resolve(tag: product) as EarnAccountService
             service.isEnabled = products.contains(product)
+            return service
         }
-        subscription = products.map { product in resolve(tag: product) as EarnAccountService } // TODO: Do not rely on DIKit
+        subscription = services
             .map { service in
                 [
                     service.limits()
@@ -283,16 +284,9 @@ public final class EarnAccountService {
             .eraseToAnyPublisher()
     }
 
-    public func activity(currency: CryptoCurrency) -> AnyPublisher<[EarnActivity], UX.Error> {
+    public func activity(currency: CryptoCurrency?) -> AnyPublisher<[EarnActivity], UX.Error> {
         guard isEnabled else { return .just([]) }
         return repository.activity(currency: currency)
-            .handleEvents(
-                receiveOutput: { [app, context] activity in
-                    Task {
-                        try await app.set(id[currency.code].activity.key(to: context), to: activity.json())
-                    }
-                }
-            )
             .mapError(UX.Error.init)
             .eraseToAnyPublisher()
     }

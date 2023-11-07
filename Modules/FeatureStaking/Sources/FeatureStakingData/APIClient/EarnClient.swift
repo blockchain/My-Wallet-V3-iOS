@@ -28,7 +28,7 @@ public final class EarnClient {
     public func balances() -> AnyPublisher<EarnAccounts, Nabu.Error> {
         networkAdapter.perform(
             request: requestBuilder.get(
-                path: ["accounts", product],
+                path: "/accounts/\(product)",
                 authenticated: true
             )!
         )
@@ -37,7 +37,7 @@ public final class EarnClient {
     public func eligibility() -> AnyPublisher<EarnEligibility, Nabu.Error> {
         networkAdapter.perform(
             request: requestBuilder.get(
-                path: ["earn", "eligible"],
+                path: "/earn/eligible",
                 parameters: [
                     URLQueryItem(name: "product", value: product)
                 ],
@@ -49,7 +49,7 @@ public final class EarnClient {
     public func userRates() -> AnyPublisher<EarnUserRates, Nabu.Error> {
         networkAdapter.perform(
             request: requestBuilder.get(
-                path: ["earn", "rates-user"],
+                path: "/earn/rates-user",
                 parameters: [
                     URLQueryItem(name: "product", value: product)
                 ],
@@ -61,7 +61,7 @@ public final class EarnClient {
     public func limits(currency: FiatCurrency) -> AnyPublisher<EarnLimits, Nabu.Error> {
         let response: AnyPublisher<[String: EarnLimits], Nabu.Error> = networkAdapter.perform(
             request: requestBuilder.get(
-                path: ["earn", "limits"],
+                path: "/earn/limits",
                 parameters: [
                     URLQueryItem(name: "product", value: product),
                     URLQueryItem(name: "currency", value: currency.code)
@@ -75,27 +75,34 @@ public final class EarnClient {
     public func address(currency: CryptoCurrency) -> AnyPublisher<EarnAddress, Nabu.Error> {
         networkAdapter.perform(
             request: requestBuilder.get(
-                path: ["payments", "accounts", product],
+                path: "/payments/accounts/\(product)",
                 parameters: [.init(name: "ccy", value: currency.code)],
                 authenticated: true
             )!
         )
     }
 
-    public func activity(currency: CryptoCurrency) -> AnyPublisher<[EarnActivity], Nabu.Error> {
+    public func activity(currency: CryptoCurrency?) -> AnyPublisher<[EarnActivity], Nabu.Error> {
+        var parameters = [
+            URLQueryItem(
+                name: "product",
+                value: product
+            ),
+            URLQueryItem(
+                name: "limit",
+                value: "100"
+            )
+        ]
+        if let currency {
+            parameters.append(URLQueryItem(
+                name: "currency",
+                value: currency.code
+            ))
+        }
         let request: AnyPublisher<EarnActivityList, Nabu.Error> = networkAdapter.perform(
             request: requestBuilder.get(
-                path: ["payments", "transactions"],
-                parameters: [
-                    URLQueryItem(
-                        name: "currency",
-                        value: currency.code
-                    ),
-                    URLQueryItem(
-                        name: "product",
-                        value: product
-                    )
-                ],
+                path: "/payments/transactions",
+                parameters: parameters,
                 authenticated: true
             )!
         )
@@ -106,7 +113,7 @@ public final class EarnClient {
         networkAdapter.perform(
             request: requestBuilder
                 .post(
-                    path: ["custodial", "transfer"],
+                    path: "/custodial/transfer",
                     body: try? [
                         "amount": amount.minorString,
                         "currency": amount.code,
@@ -122,7 +129,7 @@ public final class EarnClient {
         networkAdapter.perform(
             request: requestBuilder
                 .post(
-                    path: ["custodial", "transfer"],
+                    path: "/custodial/transfer",
                     body: try? [
                         "amount": amount.minorString,
                         "currency": amount.code,
@@ -140,7 +147,7 @@ public final class EarnClient {
         networkAdapter.perform(
             request: requestBuilder
                 .get(
-                    path: ["earn", "withdrawal-requests"],
+                    path: "/earn/withdrawal-requests",
                     parameters: [
                         URLQueryItem(
                             name: "ccy",
@@ -162,7 +169,7 @@ public final class EarnClient {
         networkAdapter.perform(
             request: requestBuilder
                 .get(
-                    path: ["earn", "bonding-txs"],
+                    path: "/earn/bonding-txs",
                     parameters: [
                         URLQueryItem(
                             name: "ccy",

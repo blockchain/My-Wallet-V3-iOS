@@ -8,7 +8,7 @@ protocol OrdersActivityClientAPI: AnyObject {
 
     /// Fetch order activity response
     func activityResponse(
-        currency: Currency,
+        currency: Currency?,
         product: String
     ) -> AnyPublisher<OrdersActivityResponse, NabuNetworkError>
 }

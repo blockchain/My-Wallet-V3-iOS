@@ -10,6 +10,17 @@ import UnifiedActivityDomain
 
 public enum ActivityEntryAdapter {
 
+    public static func createEntry(
+        with activity: Either<CustodialActivityEvent.Fiat, CustodialActivityEvent.Crypto>
+    ) -> ActivityEntry {
+        switch activity {
+        case .left(let value):
+             createEntry(with: value)
+        case .right(let value):
+             createEntry(with: value)
+        }
+    }
+
     public static func createEntry(with activity: CustodialActivityEvent.Fiat) -> ActivityEntry {
         let compositionView = ActivityItem.CompositionView(
             leadingImage: activity.leadingImage(),
@@ -234,12 +245,13 @@ extension CustodialActivityEvent.Crypto {
     }
 
     fileprivate func trailingLabel1() -> LeafItemType {
-        var string = ""
-        switch type {
+        let valueToDisplay = valuePair?.quote ?? amount.moneyValue
+        let displayString = valueToDisplay.toDisplayString(includeSymbol: true)
+        let string: String = switch type {
         case .withdrawal:
-            string = "- \(valuePair.quote.toDisplayString(includeSymbol: true))"
+            "- \(displayString)"
         case .deposit:
-            string = "\(valuePair.quote.toDisplayString(includeSymbol: true))"
+            displayString
         }
         let trailingItem1Style = ActivityItem.Text.Style(
             typography: ActivityTypography.paragraph2,

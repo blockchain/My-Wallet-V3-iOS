@@ -78,10 +78,7 @@ class CustodialActivityDetailsService: CustodialActivityDetailsServiceAPI {
     }
 
     private func buySellActivityDetails(entry: ActivityEntry) async -> ActivityDetail.GroupedItems? {
-        guard let currency = entry.asset?.cryptoCurrency else {
-            return nil
-        }
-        let buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: currency)
+        let buySellActivity = try? await buySellActivity.buySellActivityEvents(cryptoCurrency: nil)
             .await()
             .filter { $0.identifier == entry.id && $0.creationDate == entry.date }
             .first

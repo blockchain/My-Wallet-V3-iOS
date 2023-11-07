@@ -6,7 +6,7 @@ import PlatformKit
 
 public protocol BuySellActivityItemEventServiceAPI: AnyObject {
     func buySellActivityEvents(
-        cryptoCurrency: CryptoCurrency
+        cryptoCurrency: CryptoCurrency?
     ) -> AnyPublisher<[BuySellActivityItemEvent], OrdersServiceError>
 }
 
@@ -30,7 +30,9 @@ final class BuySellActivityItemEventService: BuySellActivityItemEventServiceAPI 
         self.kycTiersService = kycTiersService
     }
 
-    func buySellActivityEvents(cryptoCurrency: CryptoCurrency) -> AnyPublisher<[BuySellActivityItemEvent], OrdersServiceError> {
+    func buySellActivityEvents(
+        cryptoCurrency: CryptoCurrency?
+    ) -> AnyPublisher<[BuySellActivityItemEvent], OrdersServiceError> {
         isVerifiedApproved
             .setFailureType(to: OrdersServiceError.self)
             .flatMap { [ordersService] isVerifiedApproved -> AnyPublisher<[BuySellActivityItemEvent], OrdersServiceError> in
@@ -39,11 +41,15 @@ final class BuySellActivityItemEventService: BuySellActivityItemEventServiceAPI 
                 }
                 return ordersService.orders
                     .map { orders -> [BuySellActivityItemEvent] in
-                        orders
-                            .filter { order in
-                                order.outputValue.currency == cryptoCurrency
-                                || order.inputValue.currency == cryptoCurrency
-                            }
+                        if let cryptoCurrency {
+                            return orders
+                                .filter { order in
+                                    order.outputValue.currency == cryptoCurrency
+                                        || order.inputValue.currency == cryptoCurrency
+                                }
+                                .map(BuySellActivityItemEvent.init(with:))
+                        }
+                        return orders
                             .map(BuySellActivityItemEvent.init(with:))
                     }
                     .eraseToAnyPublisher()
