@@ -39,10 +39,12 @@ public class AppLoaderService: ObservableObject {
         try await withThrowingTaskGroup(of: Void.self) { group in
             group.addTask {
                 for await isBlocked in self.app.stream(blockchain.user.is.blocked, as: Bool.self) {
-                    if isBlocked.value == true {
+                    guard let isBlocked = isBlocked.value else { continue }
+                    if isBlocked {
                         throw AppLoaderServiceError.userIsBlocked
+                    } else {
+                        return
                     }
-                    return
                 }
             }
 

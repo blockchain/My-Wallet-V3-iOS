@@ -278,6 +278,7 @@ struct NabuAuthenticationExecutor: NabuAuthenticationExecutorAPI {
                 }
             }
             .handleEvents(receiveOutput: { nabuSessionTokenResponse in
+                app.state.set(blockchain.user.is.blocked, to: false)
                 siftService.set(
                     userId: nabuSessionTokenResponse.userId
                 )
