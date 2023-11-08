@@ -2,10 +2,13 @@
 
 import Combine
 import FeatureAuthenticationDomain
+import ToolKit
 
 class MockRecaptchaService: GoogleRecaptchaServiceAPI {
 
-    func load() {}
+    func load() async throws -> EmptyValue {
+        .noValue
+    }
 
     func verifyForSignup() -> AnyPublisher<String, GoogleRecaptchaError> {
         .just("")

@@ -19,16 +19,13 @@ final class GoogleRecaptchaService: GoogleRecaptchaServiceAPI {
         self.siteKey = siteKey
     }
 
-    func load() {
-        DispatchQueue.main.async { [siteKey] in
-            Recaptcha.getClient(siteKey: siteKey) { [weak self] client, error in
-                if let error {
-                    print("RecaptchaClient creation error: \(error.errorMessage ?? "").")
-                }
-                if let client {
-                    self?.recaptchaClient = client
-                }
-            }
+    func load() async throws -> EmptyValue {
+        do {
+            let client = try await Recaptcha.getClient(withSiteKey: siteKey, withTimeout: 15000)
+            self.recaptchaClient = client
+            return .noValue
+        } catch let error as RecaptchaError {
+            throw GoogleRecaptchaError.rcaRecaptchaError(String(describing: error.errorMessage))
         }
     }
 
@@ -43,26 +40,21 @@ final class GoogleRecaptchaService: GoogleRecaptchaServiceAPI {
         verify(action: .signup)
     }
 
-    private func verify(action: RecaptchaActionType) -> AnyPublisher<String, GoogleRecaptchaError> {
+    private func verify(action: RecaptchaAction) -> AnyPublisher<String, GoogleRecaptchaError> {
         guard let recaptchaClient else {
             return .failure(.unknownError)
         }
+
         return Deferred {
             Future { promise in
-                recaptchaClient
-                    .execute(RecaptchaAction(action: action)) { token, error in
-                        if token == nil, error == nil {
-                            promise(.failure(GoogleRecaptchaError.unknownError))
-                        }
-                        if let recaptchaToken = token {
-                            promise(.success(recaptchaToken.recaptchaToken))
-                        } else {
-                            promise(.failure(GoogleRecaptchaError.missingRecaptchaTokenError))
-                        }
-                        if let recaptchaError = error {
-                            promise(.failure(GoogleRecaptchaError.rcaRecaptchaError(recaptchaError.localizedDescription)))
-                        }
+                Task(priority: .userInitiated) {
+                    do {
+                        let token = try await recaptchaClient.execute(withAction: action, withTimeout: 15000)
+                        promise(.success(token))
+                    } catch let error as RecaptchaError {
+                        promise(.failure(GoogleRecaptchaError.rcaRecaptchaError(String(describing: error.errorMessage))))
                     }
+                }
             }
         }
         .eraseToAnyPublisher()

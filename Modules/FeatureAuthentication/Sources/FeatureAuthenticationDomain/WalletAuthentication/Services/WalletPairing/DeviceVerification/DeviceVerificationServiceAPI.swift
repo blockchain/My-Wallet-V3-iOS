@@ -5,7 +5,7 @@ import Errors
 import Extensions
 import Foundation
 
-public enum DeviceVerificationServiceError: Error, Equatable, TimeoutFailure {
+public enum DeviceVerificationServiceError: LocalizedError, Equatable, TimeoutFailure {
     // email request error
     case recaptchaError(GoogleRecaptchaError)
 
@@ -19,6 +19,24 @@ public enum DeviceVerificationServiceError: Error, Equatable, TimeoutFailure {
     // other network errors
     case networkError(NetworkError)
     case timeout
+
+    // internal description, no need for localization
+    public var errorDescription: String? {
+        switch self {
+        case .recaptchaError(let googleRecaptchaError):
+            return googleRecaptchaError.errorDescription
+        case .expiredEmailCode:
+            return "Expired email code"
+        case .missingWalletInfo:
+            return "Missing wallet info"
+        case .missingSessionToken:
+            return "Session token missing"
+        case .networkError(let networkError):
+            return networkError.description
+        case .timeout:
+            return "Timeout occured"
+        }
+    }
 
     public static func == (lhs: DeviceVerificationServiceError, rhs: DeviceVerificationServiceError) -> Bool {
         String(describing: lhs) == String(describing: rhs)

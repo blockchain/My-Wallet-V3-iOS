@@ -228,6 +228,7 @@ struct EmailLoginReducer: Reducer {
                 state.isLoading = false
                 state.verifyDeviceState?.sendEmailButtonIsLoading = false
                 if case .failure(let error) = response {
+                    app.post(error: error)
                     switch error {
                     case .recaptchaError,
                          .missingSessionToken:

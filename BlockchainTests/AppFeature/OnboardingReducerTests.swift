@@ -126,6 +126,7 @@ import XCTest
         await testStore.receive(.pin(.authenticate)) { state in
             state.pinState?.authenticate = true
         }
+        await testStore.receive(.recaptchaInitiliazed(.success(.noValue)))
     }
 
     func test_should_passwordScreen_when_pin_is_not_set() async {
@@ -166,6 +167,7 @@ import XCTest
             )
         }
         await testStore.receive(.passwordScreen(.start))
+        await testStore.receive(.recaptchaInitiliazed(.success(.noValue)))
     }
 
     func test_should_authenticate_pinIsSet_and_icloud_restoration_exists() async {
@@ -187,6 +189,7 @@ import XCTest
         await testStore.receive(.pin(.authenticate)) { state in
             state.pinState?.authenticate = true
         }
+        await testStore.receive(.recaptchaInitiliazed(.success(.noValue)))
     }
 
     func test_should_passwordScreen_whenPin_not_set_and_icloud_restoration_exists() async {
@@ -208,6 +211,7 @@ import XCTest
             )
         }
         await testStore.receive(.passwordScreen(.start))
+        await testStore.receive(.recaptchaInitiliazed(.success(.noValue)))
     }
 
     func test_should_show_welcome_screen() async {
@@ -230,6 +234,7 @@ import XCTest
         await testStore.receive(.welcomeScreen(.start)) { state in
             state.welcomeState?.buildVersion = "v1.0.0"
         }
+        await testStore.receive(.recaptchaInitiliazed(.success(.noValue)))
     }
 
     func test_forget_wallet_should_show_welcome_screen() async {
@@ -251,6 +256,7 @@ import XCTest
         await testStore.receive(.pin(.authenticate)) { state in
             state.pinState?.authenticate = true
         }
+        await testStore.receive(.recaptchaInitiliazed(.success(.noValue)))
 
         // when sending forgetWallet as a direct action
         await testStore.send(.forgetWallet) { state in
@@ -284,6 +290,7 @@ import XCTest
         }
 
         await testStore.receive(.passwordScreen(.start))
+        await testStore.receive(.recaptchaInitiliazed(.success(.noValue)))
         // when sending forgetWallet from password screen
         await testStore.send(.passwordScreen(.alert(.presented(.forgetWallet)))) { state in
             state.passwordRequiredState = nil

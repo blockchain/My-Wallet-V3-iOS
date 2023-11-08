@@ -343,6 +343,7 @@ import XCTest
         }
 
         await testStore.receive(.onboarding(.welcomeScreen(.start)))
+        await testStore.receive(.onboarding(.recaptchaInitiliazed(.success(.noValue))))
         await testStore.send(.onboarding(.welcomeScreen(.enter(into: .manualLogin)))) { state in
             state.onboarding?.welcomeState?.route = RouteIntent(route: .manualLogin, action: .enterInto())
             state.onboarding?.welcomeState?.manualCredentialsState = .init()
@@ -408,6 +409,7 @@ import XCTest
         await testStore.receive(.onboarding(.passwordScreen(.start)))
 
         // when authenticating
+        await testStore.receive(.onboarding(.recaptchaInitiliazed(.success(.noValue))))
         await testStore.send(.onboarding(.passwordScreen(.authenticate("password"))))
 
         await testStore.receive(.fetchWallet(password: "password"))
@@ -450,6 +452,8 @@ import XCTest
         await testStore.receive(.onboarding(.pin(.authenticate))) { state in
             state.onboarding?.pinState?.authenticate = true
         }
+
+        await testStore.receive(.onboarding(.recaptchaInitiliazed(.success(.noValue))))
 
         // when authenticating
         await testStore.send(.onboarding(.pin(.handleAuthentication("password"))))
@@ -511,6 +515,8 @@ import XCTest
             state.onboarding?.passwordRequiredState = nil
         }
 
+        await testStore.receive(.onboarding(.recaptchaInitiliazed(.success(.noValue))))
+
         await testStore.send(.onboarding(.pin(.logout))) { state in
             state.loggedIn = nil
             state.onboarding = .init(
@@ -564,6 +570,7 @@ import XCTest
         await testStore.receive(.onboarding(.pin(.authenticate))) { state in
             state.onboarding?.pinState?.authenticate = true
         }
+        await testStore.receive(.onboarding(.recaptchaInitiliazed(.success(.noValue))))
     }
 
     func test_clearPinIfNeeded_correctly_clears_pin() {

@@ -35,6 +35,7 @@ public enum Onboarding {
         case informSecondPasswordDetected
         case informForWalletInitialization
         case forgetWallet
+        case recaptchaInitiliazed(Result<EmptyValue, GoogleRecaptchaError>)
     }
 
     public struct State: Equatable {
@@ -100,8 +101,13 @@ struct OnboardingReducer: Reducer {
                 return Effect.send(.proceedToFlow)
             case .start:
                 return .merge(
-                    .run { _ in
-                        recaptchaService.load()
+                    .run { send in
+                        do {
+                            let value = try await recaptchaService.load()
+                            await send(.recaptchaInitiliazed(.success(.noValue)))
+                        } catch let error as GoogleRecaptchaError {
+                            await send(.recaptchaInitiliazed(.failure(error)))
+                        }
                     },
                     .publisher {
                         appUpgradeState()
@@ -121,6 +127,13 @@ struct OnboardingReducer: Reducer {
                     settingsAuthenticating: appSettings
                 )
             case .pin:
+                return .none
+
+            case .recaptchaInitiliazed(.failure(let error)):
+                app.post(error: error)
+                return .none
+
+            case .recaptchaInitiliazed:
                 return .none
 
             case .welcomeScreen(.route(nil)):
