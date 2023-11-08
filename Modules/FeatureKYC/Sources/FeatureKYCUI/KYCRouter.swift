@@ -1017,11 +1017,11 @@ public func registerFlows() {
     let accountUsageService: KYCAccountUsageServiceAPI = DIKit.resolve()
     let window: TopMostViewControllerProviding = DIKit.resolve()
 
-    OnboardingFlow.register(.veriff) { _ in
+    OnboardingFlow.register(.collectKyc) { _ in
         VeriffManualInputFlowSequenceViewController()
     }
 
-    OnboardingFlow.register(.questions) { metadata in
+    OnboardingFlow.register(.collectKycQuestions) { metadata in
         let context = try metadata["context"].decode(String.self)
         return FlowSequenceHostingViewController { completion in
             AccountUsageView(

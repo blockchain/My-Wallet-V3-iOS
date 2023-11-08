@@ -17,21 +17,35 @@ extension OnboardingFlow {
 }
 
 extension OnboardingFlow.Slug {
-    public static let prove: Self = "PROVE"
-    public static let proveChallenge: Self = "PROVE_CHALLENGE"
-    public static let provePhoneNumberVerification: Self = "PROVE_PHONE_NUMBER_VERIFICATION"
-    public static let verificationInProgress: Self = "VERIFICATION_IN_PROGRESS"
-    public static let loading: Self = "LOADING"
-    public static let veriff: Self = "VERIFF"
-    public static let questions: Self = "KYC_QUESTIONS"
-    public static let veriffIntroduction: Self = "VERIFF_INTRODUCTION"
-    public static let error: Self = "ERROR"
-    public static let none: Self = "NONE"
-    public static let pendingKYC: Self = "PENDING_KYC"
+    public static let proveMobileAuth: Self = "PROVE_MOBILE_AUTH" // Determines if mobile auth is possible
+    public static let proveCollectData: Self = "PROVE_INSTANT_LINK_COLLECT_DATA" // Collects phone number and challenge
+    public static let proveChallenge: Self = "PROVE_CHALLENGE" // Collects challenge only
+    public static let proveSmsLoading: Self = "PROVE_INSTANT_LINK_SMS_LOADING" // SMS sent screen
+    public static let proveApplicationSubmitted: Self = "PROVE_APPLICATION_SUBMITTED" // Application submitted
+    public static let provePrefillData: Self = "PROVE_PREFILL_DATA" // Personal info
+    public static let displayMessage: Self = "DISPLAY_MESSAGE" // Error message screen?
+    public static let pendingKYC: Self = "PENDING_KYC" // Loading screen
+
+    public static let collectKyc: Self = "COLLECT_KYC" // Veriff flow
+    public static let collectSsn: Self = "COLLECT_SSN" // Legacy SSN collection
+    public static let collectUserData: Self = "COLLECT_USERDATA_FULL" // Legacy KYC
+
+    // KYC Questions: has the context enum as a metadata field: `"TIER_TWO_VERIFICATION", "FIAT_DEPOSIT", "FIAT_WITHDRAW", "TRADING","PROVE_ONBOARDING_FLOW"`
+    public static let collectKycQuestions: Self = "COLLECT_KYC_QUESTIONS"
 }
 
 extension OnboardingFlow.Slug: CaseIterable {
-    public static var allCases: [OnboardingFlow.Slug] = [.prove, .veriff, .error]
+    public static var allCases: [OnboardingFlow.Slug] = [
+        .proveMobileAuth,
+        .displayMessage,
+        .proveChallenge,
+        .proveCollectData,
+        .proveSmsLoading,
+        .proveApplicationSubmitted,
+        .pendingKYC,
+        .provePrefillData,
+        .collectKyc
+    ]
 }
 
 extension OnboardingFlow: WhichFlowSequenceViewController {
@@ -40,13 +54,15 @@ extension OnboardingFlow: WhichFlowSequenceViewController {
     private var lock: UnfairLock { Self.lock }
 
     public private(set) static var map: [OnboardingFlow.Slug: (AnyJSON) throws -> FlowSequenceViewController] = [
-        .error: makeErrorFlowSequenceViewController,
-        .proveChallenge: makeChallengeFlowSequenceViewController(_:),
-        .provePhoneNumberVerification: makePhoneNumberVerificationFlowSequenceViewController,
-        .verificationInProgress: makeVerificationInProgressFlowSequenceViewController,
-        .loading: makeInProgressFlowSequenceViewController,
-        .veriffIntroduction: makeVeriffIntroductionFlowSequenceViewController,
-        .pendingKYC: makeApplicationSubmittedViewFlowSequenceViewController
+        .proveMobileAuth: makePendingFlowSequenceViewController, // Missing service
+        .displayMessage: makeErrorFlowSequenceViewController,
+        .proveChallenge: makeChallengeFlowSequenceViewController, // Split page
+        .proveCollectData: makeChallengeFlowSequenceViewController,
+        .proveSmsLoading: makeProveSmsLoadingFlowSequenceViewController,
+        .proveApplicationSubmitted: makeApplicationSubmittedViewFlowSequenceViewController,
+        .pendingKYC: makePendingFlowSequenceViewController,
+        .provePrefillData: makePersonalInformationConfirmationFlowSequenceViewController,
+        .collectKyc: makeVeriffIntroductionFlowSequenceViewController,
     ]
 
     public static func register(_ slug: OnboardingFlow.Slug, _ builder: @escaping (AnyJSON) throws -> FlowSequenceViewController) {
@@ -70,7 +86,7 @@ extension OnboardingFlow: WhichFlowSequenceViewController {
 
 /* Defaults */
 
-func makeInProgressFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
+func makePendingFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
     FlowSequenceHostingViewController { completion in
         InProgressView()
             .task {
@@ -84,7 +100,7 @@ func makeInProgressFlowSequenceViewController(_ metadata: AnyJSON) throws -> Flo
     }
 }
 
-func makeVerificationInProgressFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
+func makeProveApplicationSubmittedFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
     FlowSequenceHostingViewController { _ in
         VerificationInProgressView()
     }
@@ -113,7 +129,7 @@ func makeChallengeFlowSequenceViewController(_ metadata: AnyJSON) throws -> Flow
     }
 }
 
-func makePhoneNumberVerificationFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
+func makeProveSmsLoadingFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
     FlowSequenceHostingViewController { completion in
         PhoneNumberVerificationView(completion: completion)
     }

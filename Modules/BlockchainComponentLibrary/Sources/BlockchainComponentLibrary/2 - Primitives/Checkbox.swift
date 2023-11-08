@@ -63,10 +63,10 @@ private struct CheckboxToggleStyle: ToggleStyle {
 
     private func headerIcon(isOn: Bool) -> some View {
         if isOn {
-            Icon.check
+            return Icon.check
                 .color(.semantic.background)
         } else {
-            Icon.check
+            return Icon.check
                 .color(.clear)
         }
     }

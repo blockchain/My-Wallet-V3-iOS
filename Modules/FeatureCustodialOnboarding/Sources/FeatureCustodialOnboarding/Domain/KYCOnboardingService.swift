@@ -23,7 +23,7 @@ public class KYCOnboardingService {
                 } catch let error as Nabu.Error where error.response?.statusCode == 204 {
                     return nil
                 } catch {
-                    return OnboardingFlow(next_action: .init(slug: .error, metadata: AnyJSON(error)))
+                    return OnboardingFlow(next_action: .init(slug: .displayMessage, metadata: AnyJSON(error)))
                 }
             }
         )

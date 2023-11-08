@@ -14,7 +14,7 @@ class OnboardingFlowService {
                 do {
                     return try await client.next()
                 } catch {
-                    return OnboardingFlow(next_action: .init(slug: .error, metadata: AnyJSON(error)))
+                    return OnboardingFlow(next_action: .init(slug: .displayMessage, metadata: AnyJSON(error)))
                 }
             }
         )
