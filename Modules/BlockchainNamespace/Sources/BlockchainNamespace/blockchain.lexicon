@@ -1272,6 +1272,25 @@ blockchain:
 				+ blockchain.session.state.shared.value
 			settings:
 				accessibility:
+					content:
+						size:
+							category:
+							+ blockchain.db.type.enum
+							+ blockchain.session.state.shared.value
+								accessibility:
+									extra_extra_extra_large:
+									extra_extra_large:
+									extra_large:
+									large:
+									medium:
+								extra_extra_extra_large:
+								extra_extra_large:
+								extra_large:
+								extra_small:
+								large:
+								medium:
+								small:
+								unspecified:
 					large_text:
 						is:
 							enabled:

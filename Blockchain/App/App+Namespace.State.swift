@@ -38,6 +38,9 @@ final class ApplicationStateObserver: Client.Observer {
                 state.set(blockchain.app.did.update, to: versionIsGreater)
             }
             state.set(blockchain.app.version, to: Bundle.main.plist.version.string)
+
+            state.set(blockchain.ui.device.settings.accessibility.large_text.is.enabled, to: UIApplication.shared.preferredContentSizeCategory > .large)
+            state.set(blockchain.ui.device.settings.accessibility.content.size.category, to: UIApplication.shared.preferredContentSizeCategory.tag)
         }
 
         didEnterBackgroundNotification = notificationCenter.publisher(for: UIApplication.didEnterBackgroundNotification)
@@ -51,6 +54,16 @@ final class ApplicationStateObserver: Client.Observer {
 
         notificationCenter.publisher(for: UIApplication.userDidTakeScreenshotNotification)
             .sink { [app] _ in app.post(event: blockchain.app.did.take.screenshot) }
+            .store(in: &bag)
+
+        notificationCenter.publisher(for: UIContentSizeCategory.didChangeNotification)
+            .sink { [app] event in
+                guard let newValue = event.userInfo?[UIContentSizeCategory.newValueUserInfoKey] as? UIContentSizeCategory else { return }
+                app.state.transaction { state in
+                    state.set(blockchain.ui.device.settings.accessibility.large_text.is.enabled, to: newValue > .large)
+                    state.set(blockchain.ui.device.settings.accessibility.content.size.category, to: newValue.tag)
+                }
+            }
             .store(in: &bag)
 
         app.on(blockchain.ux.type.story) { [app] event in
@@ -85,4 +98,26 @@ final class ApplicationStateObserver: Client.Observer {
             task?.cancel()
         }
     }
+}
+
+extension UIContentSizeCategory {
+
+    var tag: Tag {
+        switch self {
+        case .extraSmall: return blockchain.ui.device.settings.accessibility.content.size.category.extra_small[]
+        case .small: return blockchain.ui.device.settings.accessibility.content.size.category.small[]
+        case .medium: return blockchain.ui.device.settings.accessibility.content.size.category.medium[]
+        case .large: return blockchain.ui.device.settings.accessibility.content.size.category.large[]
+        case .extraLarge: return blockchain.ui.device.settings.accessibility.content.size.category.extra_large[]
+        case .extraExtraLarge: return blockchain.ui.device.settings.accessibility.content.size.category.extra_extra_large[]
+        case .extraExtraExtraLarge: return blockchain.ui.device.settings.accessibility.content.size.category.extra_extra_extra_large[]
+        case .accessibilityMedium: return blockchain.ui.device.settings.accessibility.content.size.category.accessibility.medium[]
+        case .accessibilityLarge: return blockchain.ui.device.settings.accessibility.content.size.category.accessibility.large[]
+        case .accessibilityExtraLarge: return blockchain.ui.device.settings.accessibility.content.size.category.accessibility.extra_large[]
+        case .accessibilityExtraExtraLarge: return blockchain.ui.device.settings.accessibility.content.size.category.accessibility.extra_extra_large[]
+        case .accessibilityExtraExtraExtraLarge: return blockchain.ui.device.settings.accessibility.content.size.category.accessibility.extra_extra_extra_large[]
+        case _: return blockchain.ui.device.settings.accessibility.content.size.category.unspecified[]
+        }
+    }
+
 }

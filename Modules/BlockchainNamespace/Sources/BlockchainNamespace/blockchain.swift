@@ -5057,8 +5057,101 @@ public final class L_blockchain_ui_device_settings_accessibility: L, I_blockchai
 }
 public protocol I_blockchain_ui_device_settings_accessibility: I {}
 public extension I_blockchain_ui_device_settings_accessibility {
+	var `content`: L_blockchain_ui_device_settings_accessibility_content { .init("\(__).content") }
 	var `large_text`: L_blockchain_ui_device_settings_accessibility_large__text { .init("\(__).large_text") }
 }
+public final class L_blockchain_ui_device_settings_accessibility_content: L, I_blockchain_ui_device_settings_accessibility_content {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content: I {}
+public extension I_blockchain_ui_device_settings_accessibility_content {
+	var `size`: L_blockchain_ui_device_settings_accessibility_content_size { .init("\(__).size") }
+}
+public final class L_blockchain_ui_device_settings_accessibility_content_size: L, I_blockchain_ui_device_settings_accessibility_content_size {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size: I {}
+public extension I_blockchain_ui_device_settings_accessibility_content_size {
+	var `category`: L_blockchain_ui_device_settings_accessibility_content_size_category { .init("\(__).category") }
+}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category: L, I_blockchain_ui_device_settings_accessibility_content_size_category {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category: I_blockchain_db_type_enum, I_blockchain_session_state_shared_value {}
+public extension I_blockchain_ui_device_settings_accessibility_content_size_category {
+	var `accessibility`: L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility { .init("\(__).accessibility") }
+	var `extra_extra_extra_large`: L_blockchain_ui_device_settings_accessibility_content_size_category_extra__extra__extra__large { .init("\(__).extra_extra_extra_large") }
+	var `extra_extra_large`: L_blockchain_ui_device_settings_accessibility_content_size_category_extra__extra__large { .init("\(__).extra_extra_large") }
+	var `extra_large`: L_blockchain_ui_device_settings_accessibility_content_size_category_extra__large { .init("\(__).extra_large") }
+	var `extra_small`: L_blockchain_ui_device_settings_accessibility_content_size_category_extra__small { .init("\(__).extra_small") }
+	var `large`: L_blockchain_ui_device_settings_accessibility_content_size_category_large { .init("\(__).large") }
+	var `medium`: L_blockchain_ui_device_settings_accessibility_content_size_category_medium { .init("\(__).medium") }
+	var `small`: L_blockchain_ui_device_settings_accessibility_content_size_category_small { .init("\(__).small") }
+	var `unspecified`: L_blockchain_ui_device_settings_accessibility_content_size_category_unspecified { .init("\(__).unspecified") }
+}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility: L, I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.accessibility", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility: I {}
+public extension I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility {
+	var `extra_extra_extra_large`: L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__extra__extra__large { .init("\(__).extra_extra_extra_large") }
+	var `extra_extra_large`: L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__extra__large { .init("\(__).extra_extra_large") }
+	var `extra_large`: L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__large { .init("\(__).extra_large") }
+	var `large`: L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_large { .init("\(__).large") }
+	var `medium`: L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_medium { .init("\(__).medium") }
+}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__extra__extra__large: L, I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__extra__extra__large {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.accessibility.extra_extra_extra_large", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__extra__extra__large: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__extra__large: L, I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__extra__large {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.accessibility.extra_extra_large", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__extra__large: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__large: L, I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__large {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.accessibility.extra_large", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_extra__large: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_large: L, I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_large {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.accessibility.large", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_large: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_medium: L, I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_medium {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.accessibility.medium", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_accessibility_medium: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_extra__extra__extra__large: L, I_blockchain_ui_device_settings_accessibility_content_size_category_extra__extra__extra__large {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.extra_extra_extra_large", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_extra__extra__extra__large: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_extra__extra__large: L, I_blockchain_ui_device_settings_accessibility_content_size_category_extra__extra__large {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.extra_extra_large", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_extra__extra__large: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_extra__large: L, I_blockchain_ui_device_settings_accessibility_content_size_category_extra__large {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.extra_large", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_extra__large: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_extra__small: L, I_blockchain_ui_device_settings_accessibility_content_size_category_extra__small {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.extra_small", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_extra__small: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_large: L, I_blockchain_ui_device_settings_accessibility_content_size_category_large {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.large", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_large: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_medium: L, I_blockchain_ui_device_settings_accessibility_content_size_category_medium {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.medium", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_medium: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_small: L, I_blockchain_ui_device_settings_accessibility_content_size_category_small {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.small", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_small: I {}
+public final class L_blockchain_ui_device_settings_accessibility_content_size_category_unspecified: L, I_blockchain_ui_device_settings_accessibility_content_size_category_unspecified {
+	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.content.size.category.unspecified", comment: "") }
+}
+public protocol I_blockchain_ui_device_settings_accessibility_content_size_category_unspecified: I {}
 public final class L_blockchain_ui_device_settings_accessibility_large__text: L, I_blockchain_ui_device_settings_accessibility_large__text {
 	public override class var localized: String { NSLocalizedString("blockchain.ui.device.settings.accessibility.large_text", comment: "") }
 }
