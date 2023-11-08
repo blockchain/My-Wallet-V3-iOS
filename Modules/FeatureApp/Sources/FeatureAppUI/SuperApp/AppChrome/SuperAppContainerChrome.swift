@@ -27,20 +27,20 @@ public struct SuperAppContainerChrome: View {
 
     @ViewBuilder
     public var body: some View {
-        if isIos15, isSmallDevice {
-            SuperAppContentViewSmallDevice(
-                store: store,
-                currentModeSelection: viewStore.appMode,
-                contentOffset: $contentOffset,
-                isRefreshing: $isRefreshing
-            )
-            .isSmallDevice(isSmallDevice)
-            .app(app)
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
-        } else {
-            AppLoaderView {
+        AppLoaderView {
+            if isIos15, isSmallDevice {
+                SuperAppContentViewSmallDevice(
+                    store: store,
+                    currentModeSelection: viewStore.appMode,
+                    contentOffset: $contentOffset,
+                    isRefreshing: $isRefreshing
+                )
+                .isSmallDevice(isSmallDevice)
+                .app(app)
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
+            } else {
                 SuperAppContentView(
                     store: store,
                     currentModeSelection: viewStore.appMode,
@@ -48,9 +48,9 @@ public struct SuperAppContainerChrome: View {
                     isRefreshing: $isRefreshing
                 )
                 .app(app)
-            }
-            .onAppear {
-                viewStore.send(.onAppear)
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
             }
         }
     }
