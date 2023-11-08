@@ -196,7 +196,7 @@ extension SuperAppRootController {
 }
 
 func isSmallDevice() -> Bool {
-    CGRect.screen.size.max <= 667
+    CGRect.screen.size.max <= 736
 }
 
 // MARK: - Frame invalidation
