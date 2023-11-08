@@ -402,10 +402,7 @@ extension DexConfirmation.State.Quote {
         guard let quote else {
             return nil
         }
-        guard let slippage = Double(quote.slippage) else {
-            return nil
-        }
-        guard let bcdcFeePercentage = Double(quote.bcdcFeePercentage) else {
+        guard let slippage = quote.slippageDouble else {
             return nil
         }
         self = DexConfirmation.State.Quote(
@@ -415,10 +412,20 @@ extension DexConfirmation.State.Quote {
             from: quote.sellAmount,
             minimumReceivedAmount: quote.buyAmount.minimum ?? quote.buyAmount.amount,
             fees: quote.fees,
-            blockchainFee: bcdcFeePercentage,
+            blockchainFee: quote.bcdcFeePercentageDouble,
             slippage: slippage,
             to: quote.buyAmount.amount
         )
+    }
+}
+
+extension DexQuoteOutput {
+    fileprivate var slippageDouble: Double? {
+        Double(slippage)
+    }
+
+    fileprivate var bcdcFeePercentageDouble: Double {
+        Double(bcdcFeePercentage) ?? 0
     }
 }
 

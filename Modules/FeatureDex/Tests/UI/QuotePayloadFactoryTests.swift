@@ -20,7 +20,11 @@ final class QuotePayloadFactoryTests: XCTestCase {
             buyAmount: DexQuoteOutput.BuyAmount(amount: ether(major: 2), minimum: ether(major: 1)),
             field: .source,
             isValidated: true,
-            fees: [.init(type: .network, value: bitcoin(major: 0.01))],
+            fees: [
+                .init(type: .network, value: bitcoin(major: 0.01)),
+                .init(type: .crossChain, value: bitcoin(major: 0.02)),
+                .init(type: .total, value: bitcoin(major: 0.03))
+            ],
             sellAmount: bitcoin(major: 1),
             slippage: "0.1234",
             bcdcFeePercentage: "0.008",
@@ -35,7 +39,7 @@ final class QuotePayloadFactoryTests: XCTestCase {
         XCTAssertEqual(result.minOutputAmount, "1")
 
         XCTAssertEqual(result.slippageAllowed, "0.1234")
-        XCTAssertEqual(result.networkFeeAmount, "0.01")
+        XCTAssertEqual(result.networkFeeAmount, "0.03")
         XCTAssertEqual(result.networkFeeCurrency, "BTC")
     }
 
@@ -51,7 +55,11 @@ final class QuotePayloadFactoryTests: XCTestCase {
             ),
             field: .source,
             isValidated: true,
-            fees: [.init(type: .network, value: bitcoin("1234567"))],
+            fees: [
+                .init(type: .network, value: bitcoin("1234567")),
+                .init(type: .crossChain, value: bitcoin("1234568")),
+                .init(type: .total, value: bitcoin("1234569"))
+            ],
             sellAmount: bitcoin("112345678"),
             slippage: "0.123456789",
             bcdcFeePercentage: "0.008",
@@ -66,7 +74,7 @@ final class QuotePayloadFactoryTests: XCTestCase {
         XCTAssertEqual(result.minOutputAmount, "1.123456789123456789")
 
         XCTAssertEqual(result.slippageAllowed, "0.123456789")
-        XCTAssertEqual(result.networkFeeAmount, "0.01234567")
+        XCTAssertEqual(result.networkFeeAmount, "0.01234569")
         XCTAssertEqual(result.networkFeeCurrency, "BTC")
     }
 

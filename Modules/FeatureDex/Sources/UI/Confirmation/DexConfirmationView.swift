@@ -93,38 +93,28 @@ struct DexConfirmationView: View {
             if let value = viewStore.quote.estimatedConfirmationTime {
                 tableRow(
                     title: L10n.estimatedConfirmationTime,
-                    value: {
-                        tableRowTitle("\(value)s")
-                    },
+                    value: { tableRowTitle("\(value)s") },
                     tooltip: nil
                 )
             }
             tableRow(
                 title: L10n.allowedSlippage,
-                value: {
-                    tableRowTitle(formatSlippage(viewStore.quote.slippage))
-                },
+                value: { tableRowTitle(viewStore.quote.slippage.formatted(.percent)) },
                 tooltip: nil
             )
             tableRow(
                 title: L10n.blockchainFee,
-                value: {
-                    tableRowTitle(formatSlippage(viewStore.quote.blockchainFee))
-                },
-                tooltip: (L10n.SlippageTooltip.title, L10n.SlippageTooltip.body)
+                value: { tableRowTitle(viewStore.quote.blockchainFee.formatted(.percent)) },
+                tooltip: nil
             )
             tableRow(
                 title: L10n.exchangeRate,
-                value: {
-                    tableRowTitle("\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)")
-                },
+                value: { tableRowTitle(exchangeRateRowTitle) },
                 tooltip: nil
             )
             tableRow(
                 title: L10n.minAmount,
-                value: {
-                    ValueWithQuoteView(value: viewStore.quote.minimumReceivedAmount, isEstimated: false)
-                },
+                value: { ValueWithQuoteView(value: viewStore.quote.minimumReceivedAmount, isEstimated: false) },
                 tooltip: (title: L10n.MinAmountTooltip.title, message: L10n.MinAmountTooltip.body)
             )
         }
@@ -134,6 +124,10 @@ struct DexConfirmationView: View {
                 .fill(Color.semantic.background)
         )
         feeRows
+    }
+
+    private var exchangeRateRowTitle: String {
+        "\(viewStore.quote.exchangeRate.base.displayString) = \(viewStore.quote.exchangeRate.quote.displayString)"
     }
 
     @ViewBuilder

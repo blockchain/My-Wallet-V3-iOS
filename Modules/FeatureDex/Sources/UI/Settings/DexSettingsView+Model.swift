@@ -17,7 +17,7 @@ extension DexSettingsView {
 
             init(value: Double) {
                 self.value = value
-                self.label = formatSlippage(value)
+                self.label = value.formatted(.percent)
             }
         }
 
@@ -44,6 +44,3 @@ extension DexSettingsView {
 
 private let allowedSlippages: [Double] = [0.002, 0.005, 0.01, 0.03]
 let defaultSlippage: Double = 0.005
-func formatSlippage(_ value: Double) -> String {
-    value.formatted(.percent)
-}

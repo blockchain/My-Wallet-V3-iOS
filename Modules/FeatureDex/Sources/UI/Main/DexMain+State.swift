@@ -128,7 +128,7 @@ extension DexMain.State {
 
 extension DexMain.State {
     struct Settings: Equatable {
-        @BindingState var expressMode: Bool = false
+        @BindingState var expressMode: Bool = true
         @BindingState var gasOnDestination: Bool = false
         @BindingState var slippage: Double = defaultSlippage
     }

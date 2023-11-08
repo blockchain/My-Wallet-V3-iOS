@@ -43,7 +43,7 @@ public struct DexQuoteOutput: Equatable {
     public let isCrossChain: Bool
 
     public var networkFee: CryptoValue? {
-        fees.first(where: { $0.type == .network })?.value
+        fees.first(where: { $0.type == .total })?.value
     }
 
     public let response: DexQuoteResponse.Transaction
