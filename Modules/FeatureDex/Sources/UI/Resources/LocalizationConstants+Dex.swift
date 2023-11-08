@@ -65,7 +65,7 @@ extension L10n.ProductRouter {
             comment: "Dex: ProductRouter: Dex title"
         )
         static var body = NSLocalizedString(
-            "Swap thousands of tokens on Ethereum and Polygon",
+            "Swap thousands of tokens on %@",
             comment: "Dex: ProductRouter: Dex body"
         )
         static var new = NSLocalizedString(

@@ -75,7 +75,13 @@ struct SwapProductRouterView: View {
                         Icon.coins.small()
                     },
                     title: .init(L10n.ProductRouter.Dex.title),
-                    byline: .init(L10n.ProductRouter.Dex.body),
+                    byline: .init(
+                        L10n.ProductRouter.Dex.body.interpolating(
+                            ListFormatter.localizedString(
+                                byJoining: ["Ethereum", "Polygon", "BNB Smart Chain"]
+                            )
+                        )
+                    ),
                     trailing: { TagView(text: L10n.ProductRouter.Dex.new, variant: .new) },
                     footer: {
                         Image("logos-array-dex-swap", bundle: .module)
