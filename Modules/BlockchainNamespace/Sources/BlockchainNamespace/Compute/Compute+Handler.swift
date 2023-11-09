@@ -207,9 +207,14 @@ extension Compute.Handler {
         @discardableResult
         func raise(to depth: Int) -> Any? {
             lock.lock(); defer { lock.unlock() }
+            guard result.indices ~= depth - 1 else { return nil }
             result = result.prefix(upTo: depth).array
-            bindings = bindings.prefix(through: depth).array
-            computes = computes.prefix(through: depth).array
+            if bindings.indices ~= depth {
+                bindings = bindings.prefix(through: depth).array
+            }
+            if computes.indices ~= depth {
+                computes = computes.prefix(through: depth).array
+            }
             return result.at(depth - 1)
         }
 
