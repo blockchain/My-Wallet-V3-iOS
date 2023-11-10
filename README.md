@@ -4,12 +4,12 @@
 
 # Tooling
 
-* Homebrew: 4.0.21+
-* Xcode: 14.3+
-* Ruby: 3.2.1
-* Ruby-Gems: 3.4.0
-* Swiftlint: 0.51.0+
-* Swiftformat: 0.51.4+
+* Homebrew: 4.1.19+
+* Xcode: 15.0.1+
+* Ruby: 3.2.2
+* Ruby-Gems: 3.4.10
+* Swiftlint: 0.53.0+
+* Swiftformat: 0.52.8+
 
 # Building
 
@@ -30,8 +30,8 @@ Install a Ruby version manager such as [rbenv](https://github.com/rbenv/rbenv).
 
 Install a recent ruby version:
 
-    $ rbenv install 3.2.1
-    $ rbenv global 3.2.1
+    $ rbenv install 3.2.2
+    $ rbenv global 3.2.2
     $ eval "$(rbenv init -)"
 
 ## Install Ruby dependencies

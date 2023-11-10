@@ -11,6 +11,10 @@ extension DependencyContainer {
 
     public static var moneyDomainKit = module {
 
+        factory { () -> CurrencyConversionServiceAPI in
+            CurrencyConversionService(priceService: DIKit.resolve())
+        }
+
         factory { () -> PriceServiceAPI in
             PriceService(
                 app: DIKit.resolve(),

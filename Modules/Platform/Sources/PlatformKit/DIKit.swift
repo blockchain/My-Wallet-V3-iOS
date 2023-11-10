@@ -103,8 +103,6 @@ extension DependencyContainer {
 
         single { ReactiveWallet() as ReactiveWalletAPI }
 
-        single { WalletService() as WalletOptionsAPI }
-
         factory { CustodialPendingDepositService() as CustodialPendingDepositServiceAPI }
 
         factory { () -> CustodialAddressServiceAPI in
@@ -116,10 +114,6 @@ extension DependencyContainer {
         factory { NSUbiquitousKeyValueStore.default as UbiquitousKeyValueStore }
 
         single { TradingBalanceService() as TradingBalanceServiceAPI }
-
-        factory { () -> CurrencyConversionServiceAPI in
-            CurrencyConversionService(priceService: DIKit.resolve())
-        }
 
         factory { SendEmailNotificationService() as SendEmailNotificationServiceAPI }
 

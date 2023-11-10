@@ -8,6 +8,7 @@ import MoneyKit
 @testable import PlatformKit
 @testable import PlatformKitMock
 @testable import PlatformUIKit
+@testable import MoneyKitMock
 import SnapshotTesting
 import SwiftUI
 import XCTest

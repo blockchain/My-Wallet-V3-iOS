@@ -18,12 +18,10 @@ let package = Package(
         .library(name: "EthereumDataKit", targets: ["EthereumDataKit"]),
         .library(name: "ERC20Kit", targets: ["ERC20Kit"]),
         .library(name: "ERC20DataKit", targets: ["ERC20DataKit"]),
-        .library(name: "StellarKit", targets: ["StellarKit"]),
         .library(name: "BitcoinChainKitMock", targets: ["BitcoinChainKitMock"]),
         .library(name: "BitcoinKitMock", targets: ["BitcoinKitMock"]),
         .library(name: "EthereumKitMock", targets: ["EthereumKitMock"]),
-        .library(name: "ERC20KitMock", targets: ["ERC20KitMock"]),
-        .library(name: "StellarKitMock", targets: ["StellarKitMock"])
+        .library(name: "ERC20KitMock", targets: ["ERC20KitMock"])
     ],
     dependencies: [
         .package(
@@ -37,10 +35,6 @@ let package = Package(
         .package(
             url: "https://github.com/ReactiveX/RxSwift.git",
             from: "6.6.0"
-        ),
-        .package(
-            url: "https://github.com/Soneso/stellar-ios-mac-sdk.git",
-            exact: "2.4.7"
         ),
         .package(
             url: "https://github.com/oliveratkinson-bc/wallet-core.git",
@@ -146,24 +140,6 @@ let package = Package(
             ]
         ),
         .target(
-            name: "StellarKit",
-            dependencies: [
-                .target(name: "_StellarSDK"),
-                .product(name: "BigInt", package: "BigInt"),
-                .product(name: "DIKit", package: "DIKit"),
-                .product(name: "FeatureCryptoDomainDomain", package: "FeatureCryptoDomain"),
-                .product(name: "FeatureTransactionDomain", package: "FeatureTransaction"),
-                .product(name: "PlatformKit", package: "Platform"),
-                .product(name: "RxSwift", package: "RxSwift"),
-                .product(name: "ToolKit", package: "Tool")
-            ]
-        ),
-        .target(
-            name: "_StellarSDK",
-            dependencies: [.product(name: "stellarsdk", package: "stellar-ios-mac-sdk")],
-            swiftSettings: [.unsafeFlags(["-suppress-warnings"])]
-        ),
-        .target(
             name: "_BitcoinSDK",
             dependencies: [.product(name: "YenomBitcoinKit", package: "YenomBitcoinKit")],
             swiftSettings: [.unsafeFlags(["-suppress-warnings"])]
@@ -198,13 +174,6 @@ let package = Package(
                 .target(name: "EthereumKit"),
                 .product(name: "Errors", package: "Errors"),
                 .product(name: "TestKit", package: "Test")
-            ]
-        ),
-        .target(
-            name: "StellarKitMock",
-            dependencies: [
-                .target(name: "StellarKit"),
-                .product(name: "RxSwift", package: "RxSwift")
             ]
         ),
         .testTarget(
@@ -267,19 +236,6 @@ let package = Package(
                 .product(name: "MoneyKitMock", package: "Money"),
                 .product(name: "PlatformKitMock", package: "Platform"),
                 .product(name: "TestKit", package: "Test")
-            ]
-        ),
-        .testTarget(
-            name: "StellarKitTests",
-            dependencies: [
-                .target(name: "StellarKit"),
-                .target(name: "StellarKitMock"),
-                .product(name: "PlatformKitMock", package: "Platform"),
-                .product(name: "TestKit", package: "Test"),
-                .product(name: "RxBlocking", package: "RxSwift")
-            ],
-            resources: [
-                .copy("account_response.json")
             ]
         )
     ]

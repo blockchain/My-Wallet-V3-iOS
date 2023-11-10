@@ -79,8 +79,7 @@ final class PinInteractor: PinInteracting {
     }
 
     /// Validates if the provided pin payload (i.e. pin code and pin key combination) is correct.
-    /// Calling this method will also fetch the WalletOptions to see if the server is under maintenance,
-    /// then, handle updating the local pin store (i.e. the keychain),
+    /// Calling this method will handle updating the local pin store (i.e. the keychain),
     /// depending on the response for the remote pin store.
     /// - Parameter payload: the pin payload
     /// - Returns: Single warpping the pin decryption key

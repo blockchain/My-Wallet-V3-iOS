@@ -465,19 +465,32 @@ extension TransactionEngine {
 
 extension TransactionEngine {
 
-    public func defaultValidateAmount(pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
+    public func defaultValidateAmount(
+        pendingTransaction: PendingTransaction
+    ) -> AnyPublisher<PendingTransaction, Error> {
+        guard let sourceAccount else {
+            return .failure(TransactionValidationFailure(state: .uninitialized))
+        }
+        return defaultValidateAmount(
+            pendingTransaction: pendingTransaction,
+            sourceAccountBalance: { sourceAccount.balance }
+        )
+    }
+
+    public func defaultValidateAmount(
+        pendingTransaction: PendingTransaction,
+        sourceAccountBalance: () -> AnyPublisher<MoneyValue, Error>
+    ) -> AnyPublisher<PendingTransaction, Error> {
         guard pendingTransaction.amount.isNotZero else {
             return .just(pendingTransaction)
         }
-        guard let sourceAccount, transactionTarget != nil else {
-            return .error(TransactionValidationFailure(state: .uninitialized))
+        guard transactionTarget != nil else {
+            return .failure(TransactionValidationFailure(state: .uninitialized))
         }
-
         return fetchExchangeRates(for: pendingTransaction)
             .eraseError()
-            .zip(sourceAccount.balance)
-            .asSingle()
-            .map { [weak self] exchangeRates, sourceBalance -> Void in
+            .zip(sourceAccountBalance())
+            .tryMap { [weak self] exchangeRates, sourceBalance -> Void in
                 guard let self else {
                     return
                 }
@@ -532,8 +545,7 @@ extension TransactionEngine {
                     sourceToAmountRate: sourceToInputAmountRate
                 )
             }
-            .asCompletable()
-            .updateTxValidityCompletable(pendingTransaction: pendingTransaction)
+            .updateTxValidity(pendingTransaction: pendingTransaction)
     }
 
     private func transactionLimitsInSourceCurrency(

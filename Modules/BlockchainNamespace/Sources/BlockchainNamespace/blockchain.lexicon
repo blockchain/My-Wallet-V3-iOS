@@ -679,6 +679,14 @@ blockchain:
 				+ blockchain.db.collection
 					is:
 						enabled:
+			xlm:
+				horizon:
+					url:
+					+ blockchain.db.type.string
+					+ blockchain.session.configuration.value
+				timeout:
+				+ blockchain.db.type.number
+				+ blockchain.session.configuration.value
 		deep_link:
 			activity:
 				transaction:

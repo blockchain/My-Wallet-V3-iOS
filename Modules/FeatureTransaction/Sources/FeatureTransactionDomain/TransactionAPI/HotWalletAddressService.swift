@@ -33,16 +33,13 @@ public protocol HotWalletAddressServiceAPI {
 final class HotWalletAddressService: HotWalletAddressServiceAPI {
 
     private let app: AppProtocol
-    private let walletOptions: WalletOptionsAPI
     private let accountRepository: NabuAccountsRepositoryProtocol
 
     init(
         app: AppProtocol = resolve(),
-        walletOptions: WalletOptionsAPI = resolve(),
         accountRepository: NabuAccountsRepositoryProtocol = resolve()
     ) {
         self.app = app
-        self.walletOptions = walletOptions
         self.accountRepository = accountRepository
     }
 
@@ -50,57 +47,24 @@ final class HotWalletAddressService: HotWalletAddressServiceAPI {
         for cryptoCurrency: CryptoCurrency,
         product: HotWalletProduct
     ) -> AnyPublisher<String?, Never> {
-        isWalletOptionsEnabled(cryptoCurrency: cryptoCurrency)
-            .zip(app.publisher(for: blockchain.app.configuration.hot.wallet.address.is.dynamic, as: Bool.self).replaceError(with: false))
-            .flatMap { [accountRepository, walletOptions] isWalletOptions, isDynamic -> AnyPublisher<String?, Never> in
-                if isDynamic {
-                    accountRepository.account(product: product, currency: networkNativeAsset(for: cryptoCurrency) ?? cryptoCurrency)
-                        .map { account in account.agent?.address }
-                        .replaceError(with: nil)
-                        .eraseToAnyPublisher()
-                } else if isWalletOptions {
-                    walletOptions.walletOptions
-                        .asPublisher()
-                        .map(\.hotWalletAddresses?[product.rawValue])
-                        .map { addresses -> String? in
-                            guard let main = mainChainCode(for: cryptoCurrency) else { return nil }
-                            return addresses?[main]
-                        }
-                        .replaceError(with: nil)
-                        .eraseToAnyPublisher()
-                } else {
-                    .just(nil)
+        app.publisher(for: blockchain.app.configuration.hot.wallet.address.is.dynamic, as: Bool.self).replaceError(with: false)
+            .flatMap { [accountRepository] isDynamic -> AnyPublisher<String?, Never> in
+                guard isDynamic else {
+                    return .just(nil)
                 }
+                return accountRepository.account(product: product, currency: networkNativeAsset(for: cryptoCurrency) ?? cryptoCurrency)
+                    .map { account in account.agent?.address }
+                    .replaceError(with: nil)
+                    .eraseToAnyPublisher()           
             }
             .eraseToAnyPublisher()
     }
-
-    private func isWalletOptionsEnabled(cryptoCurrency: CryptoCurrency) -> AnyPublisher<Bool, Never> {
-        guard mainChainCode(for: cryptoCurrency) != nil else {
-            // No App support.
-            return .just(false)
-        }
-        return app.remoteConfiguration.publisher(for: "ios_ff_hot_wallet_custodial").map(\.isYes).eraseToAnyPublisher()
-    }
 }
 
-private func networkNativeAsset(for cryptoCurrency: CryptoCurrency, enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()) -> CryptoCurrency? {
+private func networkNativeAsset(
+    for cryptoCurrency: CryptoCurrency,
+    enabledCurrenciesService: EnabledCurrenciesServiceAPI = resolve()
+) -> CryptoCurrency? {
     guard let network = enabledCurrenciesService.network(for: cryptoCurrency) else { return nil }
     return network.nativeAsset
-}
-
-private func mainChainCode(for cryptoCurrency: CryptoCurrency) -> String? {
-    switch cryptoCurrency {
-    case .ethereum:
-        Constants.ethKey
-    case let model where model.assetModel.kind.erc20ParentChain == Constants.ethParentChain:
-        Constants.ethKey
-    default:
-        nil
-    }
-}
-
-private enum Constants {
-    static let ethParentChain = "ETH"
-    static let ethKey = "eth"
 }

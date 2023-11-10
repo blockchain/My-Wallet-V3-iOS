@@ -9,13 +9,11 @@ import XCTest
 class KYCCountrySelectionPresenterTests: XCTestCase {
 
     private var view: MockKYCCountrySelectionView!
-    private var walletService: WalletServiceMock!
     private var presenter: KYCCountrySelectionPresenter!
 
     override func setUp() {
         super.setUp()
         view = MockKYCCountrySelectionView()
-        walletService = WalletServiceMock()
         let jwtService = JWTServiceMock()
         jwtService.expectedResult = .success("jwt-token")
         let kycClient = KYCClientMock()

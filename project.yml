@@ -223,6 +223,8 @@ packages:
     path: Modules/ComposableArchitectureExtensions
   CryptoAssets:
     path: Modules/CryptoAssets
+  FeatureStellar:
+    path: Modules/FeatureStellar
   FeatureApp:
     path: Modules/FeatureApp
   FeatureAppUpgrade:
@@ -480,6 +482,8 @@ targets:
         product: RxAnalyticsKit
       - package: CommonCrypto
         product: CommonCryptoKit
+      - package: FeatureStellar
+        product: StellarKit
       - package: CryptoAssets
         product: BitcoinCashKit
       - package: CryptoAssets

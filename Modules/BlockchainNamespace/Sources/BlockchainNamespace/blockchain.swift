@@ -1154,6 +1154,7 @@ public extension I_blockchain_app_configuration {
 	var `upsell`: L_blockchain_app_configuration_upsell { .init("\(__).upsell") }
 	var `wallet`: L_blockchain_app_configuration_wallet { .init("\(__).wallet") }
 	var `wire`: L_blockchain_app_configuration_wire { .init("\(__).wire") }
+	var `xlm`: L_blockchain_app_configuration_xlm { .init("\(__).xlm") }
 }
 public final class L_blockchain_app_configuration_action: L, I_blockchain_app_configuration_action {
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.action", comment: "") }
@@ -2761,6 +2762,29 @@ public final class L_blockchain_app_configuration_wire_transfer_is_enabled: L, I
 	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.wire.transfer.is.enabled", comment: "") }
 }
 public protocol I_blockchain_app_configuration_wire_transfer_is_enabled: I {}
+public final class L_blockchain_app_configuration_xlm: L, I_blockchain_app_configuration_xlm {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.xlm", comment: "") }
+}
+public protocol I_blockchain_app_configuration_xlm: I {}
+public extension I_blockchain_app_configuration_xlm {
+	var `horizon`: L_blockchain_app_configuration_xlm_horizon { .init("\(__).horizon") }
+	var `timeout`: L_blockchain_app_configuration_xlm_timeout { .init("\(__).timeout") }
+}
+public final class L_blockchain_app_configuration_xlm_horizon: L, I_blockchain_app_configuration_xlm_horizon {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.xlm.horizon", comment: "") }
+}
+public protocol I_blockchain_app_configuration_xlm_horizon: I {}
+public extension I_blockchain_app_configuration_xlm_horizon {
+	var `url`: L_blockchain_app_configuration_xlm_horizon_url { .init("\(__).url") }
+}
+public final class L_blockchain_app_configuration_xlm_horizon_url: L, I_blockchain_app_configuration_xlm_horizon_url {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.xlm.horizon.url", comment: "") }
+}
+public protocol I_blockchain_app_configuration_xlm_horizon_url: I_blockchain_db_type_string, I_blockchain_session_configuration_value {}
+public final class L_blockchain_app_configuration_xlm_timeout: L, I_blockchain_app_configuration_xlm_timeout {
+	public override class var localized: String { NSLocalizedString("blockchain.app.configuration.xlm.timeout", comment: "") }
+}
+public protocol I_blockchain_app_configuration_xlm_timeout: I_blockchain_db_type_number, I_blockchain_session_configuration_value {}
 public final class L_blockchain_app_deep__link: L, I_blockchain_app_deep__link {
 	public override class var localized: String { NSLocalizedString("blockchain.app.deep_link", comment: "") }
 }

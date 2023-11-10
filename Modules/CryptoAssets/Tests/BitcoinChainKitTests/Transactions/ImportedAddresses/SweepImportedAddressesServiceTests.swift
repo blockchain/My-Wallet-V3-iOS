@@ -96,7 +96,7 @@ final class SweepImportedAddressesServiceTests: XCTestCase {
             .just(MockChainAccount(coinType: .bitcoin, xpub: XPub(address: "12", derivationType: .bech32), hdAccountIndex: 0))
         }
 
-        var mockDoPerformSweepResultValue: Result<EmptyValue, Error> = .success(.noValue)
+        let mockDoPerformSweepResultValue: Result<EmptyValue, Error> = .success(.noValue)
         let mockDoPerfomSweep: DoPerformSweep = { source, _, _ -> AnyPublisher<TxPairResult, Never> in
             .just(
                 TxPairResult(
@@ -107,7 +107,7 @@ final class SweepImportedAddressesServiceTests: XCTestCase {
         }
 
         let appTest = App.test
-        var mockRepoLastUpdateDate = Calendar.current.date(bySettingHour: 10, minute: 10, second: 0, of: Date()) ?? Date()
+        let mockRepoLastUpdateDate = Calendar.current.date(bySettingHour: 10, minute: 10, second: 0, of: Date()) ?? Date()
         let mockRepo = SweepImportedAddressesRepository(app: appTest, now: { mockRepoLastUpdateDate })
 
         let sut = SweepImportedAddressesService(
@@ -794,7 +794,7 @@ class MockFiatCurrencyService: MoneyKit.FiatCurrencyServiceAPI {
     var tradingCurrencyPublisher: AnyPublisher<MoneyKit.FiatCurrency, Never> = .empty()
 }
 
-class MockCurrencyConversionService: PlatformKit.CurrencyConversionServiceAPI {
+class MockCurrencyConversionService: CurrencyConversionServiceAPI {
     func conversionRate(from sourceCurrency: MoneyKit.CurrencyType, to targetCurrency: MoneyKit.CurrencyType) -> AnyPublisher<MoneyKit.MoneyValue, MoneyKit.PriceServiceError> {
         .empty()
     }
@@ -807,7 +807,7 @@ class MockCurrencyConversionService: PlatformKit.CurrencyConversionServiceAPI {
 class MockOnChainTxEngine: OnChainTransactionEngine {
 
     var walletCurrencyService: MoneyKit.FiatCurrencyServiceAPI = MockFiatCurrencyService()
-    var currencyConversionService: PlatformKit.CurrencyConversionServiceAPI = MockCurrencyConversionService()
+    var currencyConversionService: CurrencyConversionServiceAPI = MockCurrencyConversionService()
     var askForRefreshConfirmation: AskForRefreshConfirmation!
 
     var sourceAccount: Coincore.BlockchainAccount!

@@ -158,7 +158,7 @@ final class BuyTransactionEngine: TransactionEngine {
     func validateAmount(
         pendingTransaction: PendingTransaction
     ) -> Single<PendingTransaction> {
-        defaultValidateAmount(pendingTransaction: pendingTransaction)
+        defaultValidateAmount(pendingTransaction: pendingTransaction).asSingle()
             .flatMap(weak: self) { (self, pendingTransaction) in
                 self.validateIfSourceAccountIsBlocked(pendingTransaction)
             }

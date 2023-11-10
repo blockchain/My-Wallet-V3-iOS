@@ -33,6 +33,7 @@ let package = Package(
         .package(path: "../Errors"),
         .package(path: "../Extensions"),
         .package(path: "../Tool"),
+        .package(path: "../Test"),
         .package(path: "../Network")
     ],
     targets: [
@@ -66,7 +67,7 @@ let package = Package(
             dependencies: [
                 .target(name: "MoneyKit"),
                 .target(name: "MoneyKitMock"),
-                .product(name: "ToolKitMock", package: "Tool")
+                .product(name: "TestKit", package: "Test")
             ]
         )
     ]

@@ -157,6 +157,7 @@ let package = Package(
             dependencies: [
                 .target(name: "FeatureAppUI"),
                 .product(name: "PlatformKitMock", package: "Platform"),
+                .product(name: "MoneyKitMock", package: "Money"),
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing")
             ],
             exclude: ["__Snapshots__"]

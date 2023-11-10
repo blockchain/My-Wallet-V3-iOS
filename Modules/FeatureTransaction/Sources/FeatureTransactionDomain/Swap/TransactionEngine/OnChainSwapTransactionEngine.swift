@@ -108,7 +108,7 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
                 guard let self else { return .error(ToolKitError.nullReference(Self.self)) }
                 switch pendingTransaction.validationState {
                 case .canExecute:
-                    return defaultValidateAmount(pendingTransaction: pendingTransaction)
+                    return defaultValidateAmount(pendingTransaction: pendingTransaction).asSingle()
                 default:
                     return .just(pendingTransaction)
                 }
