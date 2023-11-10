@@ -21,18 +21,26 @@ extension ActivityDetailsAdapter {
 
         let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: items)
 
-        let copyAction = ItemType.leaf(.button(.init(
-            text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
-            style: .secondary,
-            actionType: .copy,
-            actionData: activity.id
-        )))
+        let group3TxRow: [ItemType]
+        if activity.id.isNotEmpty {
+            let copyAction = ItemType.leaf(.button(.init(
+                text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
+                style: .secondary,
+                actionType: .copy,
+                actionData: activity.id
+            )))
+            group3TxRow = [
+                activity.transactionRow(),
+                copyAction
+            ]
+        } else {
+            group3TxRow = []
+        }
 
-        let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
-            activity.dateRow(),
-            activity.transactionRow(),
-            copyAction
-        ])
+        let group3 = ActivityDetail.GroupedItems.Item(
+            title: "", 
+            itemGroup: [activity.dateRow()] + group3TxRow
+        )
 
         return ActivityDetail.GroupedItems(
             title: activity.title(product: type),

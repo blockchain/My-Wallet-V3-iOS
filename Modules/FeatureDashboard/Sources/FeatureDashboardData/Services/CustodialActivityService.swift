@@ -69,7 +69,7 @@ final class CustodialActivityService: CustodialActivityServiceAPI {
             )
         ]
 
-        if assets.contains(where: { $0.asset.supports(product: .staking)}) {
+        if assets.contains(where: { $0.asset.supports(product: .staking) }) {
             streams.append(
                 (
                     "staking",
@@ -80,7 +80,7 @@ final class CustodialActivityService: CustodialActivityServiceAPI {
                 )
             )
         }
-        if assets.contains(where: { $0.asset.supports(product: .interestBalance)}) {
+        if assets.contains(where: { $0.asset.supports(product: .interestBalance) }) {
             streams.append(
                 (
                     "savings",
@@ -92,7 +92,7 @@ final class CustodialActivityService: CustodialActivityServiceAPI {
             )
         }
 
-        if assets.contains(where: { $0.asset.supports(product: .activeRewardsBalance)}) {
+        if assets.contains(where: { $0.asset.supports(product: .activeRewardsBalance) }) {
             streams.append(
                 (
                     "active rewards",

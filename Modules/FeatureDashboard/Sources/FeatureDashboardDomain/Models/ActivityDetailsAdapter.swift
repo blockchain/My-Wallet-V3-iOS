@@ -42,44 +42,46 @@ public enum ActivityDetailsAdapter {
         let normalizedTxHash = activity.txHash.splitIfNotEmpty(separator: ":").first.map(String.init)
         let txHash = normalizedTxHash ?? activity.txHash
 
-        let copyAction: [ItemType]
+        let idRowAndCopyAction: [ItemType]
 
-        if txHash.isNotEmpty {
-            copyAction = [
+        if activity.identifier.isNotEmpty {
+            idRowAndCopyAction = [
+                activity.transactionIdRow(),
                 ItemType.leaf(.button(.init(
                     text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
                     style: .secondary,
                     actionType: .copy,
                     actionData: activity.identifier
-                )))]
+                )))
+            ]
         } else {
-            copyAction = []
+            idRowAndCopyAction = []
         }
 
         let group3 = ActivityDetail.GroupedItems.Item(
-            title: "", 
+            title: "",
             itemGroup: [
-                activity.dateRow(),
-                activity.transactionIdRow()
-            ] + copyAction
+                activity.dateRow()
+            ] + idRowAndCopyAction
         )
 
-        let copyHashAction: [ItemType]
+        let group4: [ActivityDetail.GroupedItems.Item]
         if txHash.isNotEmpty {
-            copyHashAction = [ItemType.leaf(.button(.init(
+            let copyHashAction = ItemType.leaf(.button(.init(
                 text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionHashButtonLabel,
                 style: .secondary,
                 actionType: .copy,
                 actionData: activity.txHash
-            )))]
+            )))
+            group4 = [
+                ActivityDetail.GroupedItems.Item(
+                    title: "",
+                    itemGroup: [activity.transactionHashRow(), copyHashAction]
+                )
+            ]
         } else {
-            copyHashAction = []
+            group4 = []
         }
-
-        let group4 = ActivityDetail.GroupedItems.Item(
-            title: "", 
-            itemGroup: [activity.transactionHashRow()] + copyHashAction
-        )
 
         let floatingActions: [ActivityItem.Button]
         if let url = activity.amount.currency.network()?.networkConfig.explorerUrl ?? explorerUrl(currency: activity.amount.currencyType), txHash.isNotEmpty {
@@ -98,7 +100,7 @@ public enum ActivityDetailsAdapter {
         return ActivityDetail.GroupedItems(
             title: activity.title(),
             icon: activity.leadingImage(),
-            itemGroups: [group1, group2, group3, group4],
+            itemGroups: [group1, group2, group3] + group4,
             floatingActions: floatingActions
         )
     }
@@ -155,11 +157,23 @@ public enum ActivityDetailsAdapter {
             actionData: activity.identifier
         )))
 
-        let group3 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: [
-            activity.dateRow(),
-            activity.transactionRow(),
-            copyAction
-        ])
+        let group3TransactionItems: [ItemType]
+
+        if activity.identifier.isNotEmpty {
+            group3TransactionItems = [
+                activity.transactionRow(),
+                copyAction
+            ]
+        } else {
+            group3TransactionItems = []
+        }
+
+        let group3 = ActivityDetail.GroupedItems.Item(
+            title: "", 
+            itemGroup: [
+                activity.dateRow()
+            ] + group3TransactionItems
+        )
 
         return ActivityDetail.GroupedItems(
             title: activity.title(),
@@ -186,24 +200,25 @@ public enum ActivityDetailsAdapter {
 
         let group2 = ActivityDetail.GroupedItems.Item(title: "", itemGroup: items)
 
-        let copyAction: [ItemType]
+        let group3TransactionItems: [ItemType]
         if activity.identifier.isNotEmpty {
-            copyAction = [ItemType.leaf(.button(.init(
+            let copyAction = ItemType.leaf(.button(.init(
                 text: LocalizationConstants.SuperApp.ActivityDetails.copyTransactionButtonLabel,
                 style: .secondary,
                 actionType: .copy,
                 actionData: activity.identifier
-            )))]
+            )))
+            group3TransactionItems = [
+                activity.transactionIdRow(),
+                copyAction
+            ]
         } else {
-            copyAction = []
+            group3TransactionItems = []
         }
 
         let group3 = ActivityDetail.GroupedItems.Item(
-            title: "", 
-            itemGroup: [
-                activity.dateRow(),
-                activity.transactionIdRow()
-            ] + copyAction
+            title: "",
+            itemGroup: [activity.dateRow()] + group3TransactionItems
         )
 
         var group4: ActivityDetail.GroupedItems.Item?
@@ -1201,7 +1216,7 @@ extension SwapActivityItemEvent.EventStatus {
 extension SwapActivityItemEvent {
     fileprivate func leadingImage() -> ImageType {
         if let inputLogoUrl = pair.inputCurrencyType.cryptoCurrency?.logoURL?.absoluteString,
-            let outputLogoUrl = pair.outputCurrencyType.cryptoCurrency?.logoURL?.absoluteString
+           let outputLogoUrl = pair.outputCurrencyType.cryptoCurrency?.logoURL?.absoluteString
         {
             ImageType.overlappingPair(
                 .init(back: outputLogoUrl, front: inputLogoUrl)
