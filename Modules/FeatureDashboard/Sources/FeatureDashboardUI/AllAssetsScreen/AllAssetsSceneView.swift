@@ -72,6 +72,7 @@ public struct AllAssetsSceneView: View {
         SearchBar(
             text: viewStore.$searchText,
             isFirstResponder: viewStore.$isSearching,
+            hasAutocorrection: false,
             cancelButtonText: L10n.cancelButton,
             placeholder: L10n.searchPlaceholder
         )

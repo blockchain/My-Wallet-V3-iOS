@@ -49,6 +49,7 @@ public struct BuyEntryView: View {
             SearchBar(
                 text: $search,
                 isFirstResponder: $isSearching.animation(),
+                hasAutocorrection: false,
                 cancelButtonText: L10n.cancel,
                 placeholder: L10n.search
             )

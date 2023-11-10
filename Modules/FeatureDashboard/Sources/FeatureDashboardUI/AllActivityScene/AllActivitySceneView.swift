@@ -88,6 +88,7 @@ public struct AllActivitySceneView: View {
         SearchBar(
             text: viewStore.$searchText,
             isFirstResponder: viewStore.$isSearching,
+            hasAutocorrection: false,
             cancelButtonText: LocalizationConstants.SuperApp.AllActivity.cancelButton,
             placeholder: LocalizationConstants.SuperApp.AllActivity.searchPlaceholder
         )
