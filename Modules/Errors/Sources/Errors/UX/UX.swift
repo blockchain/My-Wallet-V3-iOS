@@ -130,6 +130,9 @@ extension UX.Error {
             if let id = request.allHTTPHeaderFields?["X-Request-ID"] {
                 metadata[L10n.request] = id
             }
+            if let path = request.url?.path {
+                metadata[(request.httpMethod ?? "GET")] = path
+            }
         }
 
         self.metadata = metadata

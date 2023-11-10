@@ -89,7 +89,7 @@ final class NabuErrorTests: XCTestCase {
             XCTAssertEqual(action.title, "Contact Support")
             XCTAssertEqual(action.url, "https://blockchain.com/support")
         }
-        XCTAssertEqual(ux.metadata, ["Request": "request-id"])
+        XCTAssertEqual(ux.metadata, ["Request": "request-id", "GET": "/ux"])
     }
 
     func test_oops_from_json() throws {
@@ -114,6 +114,6 @@ final class NabuErrorTests: XCTestCase {
             XCTAssertEqual(action.title, "Oops! OK")
             XCTAssertNil(action.url)
         }
-        XCTAssertEqual(ux.metadata, [:])
+        XCTAssertEqual(ux.metadata, ["GET": "/oops"])
     }
 }
