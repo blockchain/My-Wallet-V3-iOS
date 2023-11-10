@@ -30,7 +30,6 @@ public enum ChallengeType: String, Codable, Hashable {
 }
 
 public struct PersonalInformation: Codable, Hashable {
-    public var prefillId: String
     public var firstName, lastName: String
     public var addresses: [Address]?
     public var address: Address?
@@ -39,7 +38,7 @@ public struct PersonalInformation: Codable, Hashable {
 }
 
 public struct Address: Codable, Hashable {
-    public var address, extendedAddress, city, region: String?
+    public var line1, line2, city, state, country: String?
     public var postalCode: String?
 }
 
@@ -102,7 +101,7 @@ public class ProveClient {
     public func challenge(dateOfBirth: String?, last4Ssn: String?) async throws -> Challenge {
         try await adapter.perform(
             request: requestBuilder.post(
-                path: "/onboarding/prove/ownership/pre-fill",
+                path: "/onboarding/prove/ownership/prefill",
                 body: [
                     "dob": dateOfBirth,
                     "ssn": last4Ssn
@@ -115,10 +114,10 @@ public class ProveClient {
         .await()
     }
 
-    public func lookupPrefill(id: String) async throws -> PersonalInformation {
+    public func lookupPrefill() async throws -> PersonalInformation {
         try await adapter.perform(
             request: requestBuilder.get(
-                path: "/onboarding/prove/ownership/pre-fill/\(id)"
+                path: "/onboarding/prove/ownership/prefill"
             )
             .or(throw: "Could not build request in \(#fileID).\(#function)".error())
         )
@@ -128,25 +127,10 @@ public class ProveClient {
     public func confirm(personalInformation: PersonalInformation) async throws -> Ownership {
         try await adapter.perform(
             request: requestBuilder.post(
-                path: "/onboarding/prove/ownership/pre-fill",
+                path: "/onboarding/prove/ownership/prefill",
                 body: [
-                    "prefillId": personalInformation.prefillId,
                     "action": "CONFIRM",
                     "prefillDataUpdated": personalInformation.json()
-                ].json()
-            )
-            .or(throw: "Could not build request in \(#fileID).\(#function)".error())
-        )
-        .await()
-    }
-
-    public func reject(personalInformation: PersonalInformation) async throws -> Ownership {
-        try await adapter.perform(
-            request: requestBuilder.post(
-                path: "/onboarding/prove/ownership/pre-fill",
-                body: [
-                    "prefillId": personalInformation.prefillId,
-                    "action": "REJECT"
                 ].json()
             )
             .or(throw: "Could not build request in \(#fileID).\(#function)".error())

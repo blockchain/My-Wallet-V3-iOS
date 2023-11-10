@@ -68,7 +68,6 @@ public class KYCOnboardingService {
     public func challenge(dateOfBirth: String?, last4Ssn: String?) async throws -> Challenge {
         let challenge = try await proveClient.challenge(dateOfBirth: dateOfBirth, last4Ssn: last4Ssn)
         try await app.transaction { app in
-            try await app.set(blockchain.ux.kyc.prove.challenge.prefill.id, to: challenge.prefill.prefillId)
             try await app.set(blockchain.ux.kyc.prove.challenge.prefill.info, to: challenge.prefill.json())
         }
         return challenge
@@ -78,12 +77,8 @@ public class KYCOnboardingService {
         try await proveClient.confirm(personalInformation: personalInformation)
     }
 
-    public func reject(_ personalInformation: PersonalInformation) async throws -> Ownership {
-        try await proveClient.reject(personalInformation: personalInformation)
-    }
-
-    public func lookupPrefill(id: String) async throws -> PersonalInformation {
-        try await proveClient.lookupPrefill(id: id)
+    public func lookupPrefill() async throws -> PersonalInformation {
+        try await proveClient.lookupPrefill()
     }
 }
 

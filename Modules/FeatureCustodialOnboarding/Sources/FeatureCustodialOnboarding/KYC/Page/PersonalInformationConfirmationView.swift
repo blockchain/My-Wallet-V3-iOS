@@ -1,4 +1,6 @@
 import BlockchainUI
+import FeatureAddressSearchDomain
+import FeatureAddressSearchUI
 import SwiftUI
 
 public struct PersonalInformationConfirmationView: View {
@@ -6,16 +8,25 @@ public struct PersonalInformationConfirmationView: View {
     @BlockchainApp var app
 
     let personalInformation: PersonalInformation
+    let addressSearchBuilder: AddressSearchBuilder
+
     @State private var edit: PersonalInformation {
         didSet { selectAddress = false }
     }
+
+    @State private var searchAddressPresented = false
 
     var completion: () -> Void
 
     @StateObject var object = PersonalInformationConfirmationObject()
 
-    init(personalInformation: PersonalInformation, completion: @escaping () -> Void) {
+    init(
+        personalInformation: PersonalInformation,
+        addressSearchBuilder: AddressSearchBuilder = AddressSearchBuilder(),
+        completion: @escaping () -> Void
+    ) {
         self.personalInformation = personalInformation
+        self.addressSearchBuilder = addressSearchBuilder
         self.completion = completion
         _edit = .init(wrappedValue: personalInformation)
     }
@@ -68,6 +79,19 @@ public struct PersonalInformationConfirmationView: View {
         .onAppear {
             $app.post(event: blockchain.ux.kyc.prove.personal.information.confirmation)
         }
+        .sheet(isPresented: $searchAddressPresented) {
+            addressSearchBuilder.searchAddressView(
+                prefill: edit.addresses?.first?.toSearchAddress
+            ) { result in
+                switch result {
+                case .saved(let address):
+                    edit.address = address.toAddress
+                case .abandoned:
+                    break
+                }
+                searchAddressPresented = false
+            }
+        }
     }
 
     @State private var selected: PartialKeyPath<PersonalInformation>?
@@ -107,7 +131,7 @@ public struct PersonalInformationConfirmationView: View {
                     action: { selectAddress.toggle() },
                     label: {
                         HStack {
-                            Text(edit.address?.address ?? "Select Address")
+                            Text(edit.address?.line1 ?? "Select Address")
                                 .typography(.body1)
                                 .foregroundColor(.semantic.title)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -132,10 +156,15 @@ public struct PersonalInformationConfirmationView: View {
                         addresses()
                     }
                 }
-                Button(L10n.changeAddress, action: {})
-                    .typography(.caption1)
-                    .foregroundColor(.semantic.primary)
-                    .padding(4.pt)
+                Button(
+                    L10n.changeAddress,
+                    action: {
+                        searchAddressPresented = true
+                    }
+                )
+                .typography(.caption1)
+                .foregroundColor(.semantic.primary)
+                .padding(4.pt)
             }
 
             VStack(spacing: .zero) {
@@ -196,13 +225,13 @@ public struct PersonalInformationConfirmationView: View {
                             action: { edit.address = address },
                             label: {
                                 VStack(alignment: .leading, spacing: 0) {
-                                    if let first = address.address {
+                                    if let first = address.line1 {
                                         Text(first)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .typography(.paragraph2)
                                             .foregroundColor(.semantic.title)
                                     }
-                                    if let second = address.extendedAddress {
+                                    if let second = address.line2 {
                                         Text(second)
                                             .frame(maxWidth: .infinity, alignment: .leading)
                                             .typography(.caption1)
@@ -252,38 +281,109 @@ public struct PersonalInformationConfirmationView: View {
         }
         return state
     }
+}
 
-    @discardableResult
-    func reject(personalInformation: PersonalInformation) async -> AsyncState<Ownership, UX.Error> {
-        state = .loading
-        do {
-            state = try await .success(KYCOnboardingService.reject(personalInformation))
-        } catch {
-            state = .failure(UX.Error(error: error))
-        }
-        return state
+extension Address {
+    var toSearchAddress: FeatureAddressSearchDomain.Address {
+        FeatureAddressSearchDomain.Address(state: state, country: country)
     }
 }
+
+extension FeatureAddressSearchDomain.Address {
+    var toAddress: Address? {
+        Address(
+            line1: line1,
+            line2: line2,
+            city: city,
+            state: state,
+            country: country,
+            postalCode: postCode
+        )
+    }
+}
+
+#if DEBUG
 
 struct PersonalInformationConfirmationView_Preview: PreviewProvider {
     static var previews: some View {
         PersonalInformationConfirmationView(
             personalInformation: PersonalInformation(
-                prefillId: "1",
                 firstName: "Oliver",
                 lastName: "Atkinson",
                 addresses: [
-                    Address(address: "1 Coltsfoot Court", extendedAddress: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", postalCode: "HG3 2WW"),
-                    Address(address: "2 Coltsfoot Court", extendedAddress: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", postalCode: "HG3 2WW"),
-                    Address(address: "3 Coltsfoot Court", extendedAddress: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", postalCode: "HG3 2WW"),
-                    Address(address: "4 Coltsfoot Court", extendedAddress: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", postalCode: "HG3 2WW")
+                    Address(line1: "1 Coltsfoot Court", line2: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", country: "FR", postalCode: "HG3 2WW"),
+                    Address(line1: "2 Coltsfoot Court", line2: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", country: "FR", postalCode: "HG3 2WW"),
+                    Address(line1: "3 Coltsfoot Court", line2: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", country: "FR", postalCode: "HG3 2WW"),
+                    Address(line1: "4 Coltsfoot Court", line2: "Harrogate, Yorkshire, HG3 2WW", city: "Harrogate", country: "FR", postalCode: "HG3 2WW")
                 ],
                 ssn: "1234567890",
                 dob: "04/03/1990"
-            ),
+            ), 
+            addressSearchBuilder: AddressSearchBuilder(addressSearchService: NoOpAddressSearchService()),
             completion: {
                 print(#fileID, #line)
             }
         )
     }
 }
+
+struct NoOpAddressSearchService: AddressSearchServiceAPI {
+
+    static func sampleResult(
+        addressId: String? = "addressId",
+        text: String? = "line 1 line 2",
+        type: String? = AddressSearchResult.AddressType.address.rawValue,
+        highlight: String? = nil,
+        description: String? = "London E14 6GF"
+    ) -> AddressSearchResult {
+        AddressSearchResult(
+            addressId: addressId,
+            text: text,
+            type: type,
+            highlight: highlight,
+            description: description
+        )
+    }
+
+    static func sampleDetails(
+        addressId: String? = "addressId",
+        line1: String? = "line 1",
+        line2: String? = "line 2",
+        line3: String? = nil,
+        line4: String? = nil,
+        line5: String? = nil,
+        street: String? = "street 3",
+        buildingNumber: String? = nil,
+        city: String? = "London",
+        postCode: String? = "E14 6GF",
+        state: String? = nil,
+        country: String? = "GB",
+        label: String? = nil
+    ) -> AddressDetailsSearchResult {
+        AddressDetailsSearchResult(
+            addressId: addressId,
+            line1: line1,
+            line2: line2,
+            line3: line3,
+            line4: line4,
+            line5: line5,
+            street: street,
+            buildingNumber: buildingNumber,
+            city: city,
+            postCode: postCode,
+            state: state,
+            country: country,
+            label: label
+        )
+    }
+
+    func fetchAddresses(searchText: String, containerId: String?, countryCode: String, sateCode: String?) -> AnyPublisher<[FeatureAddressSearchDomain.AddressSearchResult], FeatureAddressSearchDomain.AddressSearchServiceError> {
+        .just([Self.sampleResult()])
+    }
+    
+    func fetchAddress(addressId: String) -> AnyPublisher<FeatureAddressSearchDomain.AddressDetailsSearchResult, FeatureAddressSearchDomain.AddressSearchServiceError> {
+        .just(Self.sampleDetails())
+    }
+}
+
+#endif

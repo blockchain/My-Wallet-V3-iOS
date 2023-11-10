@@ -19,6 +19,7 @@ let package = Package(
     dependencies: [
         .package(path: "../Blockchain"),
         .package(path: "../FeatureQuickActions"),
+        .package(path: "../FeatureAddressSearch"),
         .package(path: "../FeatureExternalTradingMigration"),
         .package(path: "../Network")
     ],
@@ -45,6 +46,14 @@ let package = Package(
                 .product(
                     name: "NetworkKit",
                     package: "Network"
+                ),
+                .product(
+                    name: "FeatureAddressSearchDomain",
+                    package: "FeatureAddressSearch"
+                ),
+                .product(
+                    name: "FeatureAddressSearchUI",
+                    package: "FeatureAddressSearch"
                 )
             ]
         ),

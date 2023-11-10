@@ -6,7 +6,6 @@ import ComposableNavigation
 import Errors
 import FeatureAddressSearchDomain
 import Localization
-import MoneyKit
 import SwiftUI
 import ToolKit
 

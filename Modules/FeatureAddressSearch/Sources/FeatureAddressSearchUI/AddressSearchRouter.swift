@@ -6,7 +6,57 @@ import DIKit
 import Extensions
 import FeatureAddressSearchDomain
 import Foundation
+import Localization
 import SwiftUI
+
+public final class AddressSearchBuilder {
+
+    private let addressService: AddressServiceAPI
+    private let addressSearchService: AddressSearchServiceAPI
+
+    public init(
+        addressService: AddressServiceAPI = NoOpAddressService(),
+        addressSearchService: AddressSearchServiceAPI = resolve()
+    ) {
+        self.addressService = addressService
+        self.addressSearchService = addressSearchService
+    }
+
+    @MainActor
+    public func searchAddressView(
+        prefill: Address? = nil,
+        config: AddressSearchFeatureConfig = .default,
+        onComplete: @escaping (AddressResult) -> Void
+    ) -> some View {
+        AddressSearchView(
+            store: Store(
+                initialState: .init(address: prefill, error: nil),
+                reducer: { [addressService, addressSearchService] in
+                    AddressSearchReducer(
+                        mainQueue: .main,
+                        config: config,
+                        addressService: addressService,
+                        addressSearchService: addressSearchService,
+                        onComplete: onComplete
+                    )
+                }
+            )
+        )
+    }
+}
+
+public final class NoOpAddressService: AddressServiceAPI {
+
+    public init() {}
+
+    public func fetchAddress() -> AnyPublisher<Address?, AddressServiceError> {
+        .just(nil)
+    }
+    
+    public func save(address: Address) -> AnyPublisher<Address, AddressServiceError> {
+        .just(address)
+    }
+}
 
 public final class AddressSearchRouter: AddressSearchRouterAPI {
 
@@ -124,4 +174,21 @@ public final class AddressSearchRouter: AddressSearchRouterAPI {
             }
         }.eraseToAnyPublisher()
     }
+}
+
+extension AddressSearchFeatureConfig {
+
+    private typealias L10n = LocalizationConstants.AddressSearch.DefaultConfig
+
+    public static let `default`: AddressSearchFeatureConfig = AddressSearchFeatureConfig(
+        addressSearchScreen: AddressSearchScreenConfig(
+            title: L10n.title,
+            subtitle: L10n.subtitle
+        ),
+        addressEditScreen: AddressEditScreenConfig(
+            title: L10n.title,
+            saveAddressButtonTitle: L10n.nextButtonTitle
+        )
+    )
+        
 }

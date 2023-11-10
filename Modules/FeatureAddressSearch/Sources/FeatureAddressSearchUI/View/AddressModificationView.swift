@@ -227,7 +227,30 @@ func countryName(_ code: String) -> String {
 #if DEBUG
 struct AddressModification_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
+        Group {
+            NavigationView {
+                AddressModificationView(
+                    store: Store(
+                        initialState: .init(
+                            addressDetailsId: MockServices.addressId,
+                            isPresentedFromSearchView: false,
+                            failureAlert: nil
+                        ),
+                        reducer: {
+                            AddressModificationReducer(
+                                mainQueue: .main,
+                                config: .init(title: "Title", subtitle: "Subtitle"),
+                                addressService: MockServices(),
+                                addressSearchService: MockServices(),
+                                onComplete: { _ in }
+                            )
+                        }
+                    )
+                )
+            }
+            .environment(\.navigationBarColor, .semantic.light)
+        }
+        Group {
             AddressModificationView(
                 store: Store(
                     initialState: .init(
@@ -254,7 +277,6 @@ struct AddressModification_Previews: PreviewProvider {
                 )
             )
         }
-        .environment(\.navigationBarColor, .semantic.light)
     }
 }
 #endif

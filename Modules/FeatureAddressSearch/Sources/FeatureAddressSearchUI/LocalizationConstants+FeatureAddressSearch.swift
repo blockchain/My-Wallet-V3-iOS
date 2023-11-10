@@ -77,6 +77,23 @@ extension LocalizationConstants.AddressSearch {
 
 extension LocalizationConstants.AddressSearch {
 
+    enum DefaultConfig {
+        public static let title = NSLocalizedString(
+            "Enter your address",
+            comment: "Address Verification title"
+        )
+
+        public static let subtitle = NSLocalizedString(
+            "This should be where you currently live",
+            comment: "Address Verification subtitle"
+        )
+
+        public static let nextButtonTitle = NSLocalizedString(
+            "Next",
+            comment: "Address Verification Continue button title"
+        )
+    }
+
     enum Form {
 
         static let addressLine1 = NSLocalizedString(

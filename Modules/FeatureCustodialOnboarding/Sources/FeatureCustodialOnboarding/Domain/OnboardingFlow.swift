@@ -136,11 +136,10 @@ func makeProveSmsLoadingFlowSequenceViewController(_ metadata: AnyJSON) throws -
 }
 
 func makePersonalInformationConfirmationFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
-    let id: String = try metadata["prefillId"].decode(String.self)
     @Dependency(\.KYCOnboardingService) var KYCOnboardingService
     return FlowSequenceHostingViewController { completion in
         AsyncContentView(
-            source: { try await KYCOnboardingService.lookupPrefill(id: id) },
+            source: { try await KYCOnboardingService.lookupPrefill() },
             errorView: { error in ErrorView(ux: UX.Error(error: error)) },
             content: { personalInformation in
                 PersonalInformationConfirmationView(personalInformation: personalInformation, completion: completion)
@@ -152,9 +151,20 @@ func makePersonalInformationConfirmationFlowSequenceViewController(_ metadata: A
 func makeErrorFlowSequenceViewController(_ metadata: AnyJSON) throws -> FlowSequenceViewController {
     try FlowSequenceHostingViewController { completion in
         do {
-            return try ErrorView(ux: UX.Error(nabu: metadata.decode(Nabu.Error.self)), navigationBarClose: false, dismiss: completion)
+            let dialog = try metadata["ux"].decode(UX.Dialog.self)
+            let error = Nabu.Error(
+                id: OnboardingFlow.Slug.displayMessage.value,
+                code: .unknown,
+                type: .unknown,
+                ux: dialog
+            )
+            return ErrorView(ux: UX.Error(nabu: error))
         } catch {
-            return try ErrorView(ux: UX.Error(error: metadata.as(Error.self)), navigationBarClose: false, dismiss: completion)
+            do {
+                return try ErrorView(ux: UX.Error(nabu: metadata.decode(Nabu.Error.self)), navigationBarClose: false, dismiss: completion)
+            } catch {
+                return try ErrorView(ux: UX.Error(error: metadata.as(Error.self)), navigationBarClose: false, dismiss: completion)
+            }
         }
     }
 }

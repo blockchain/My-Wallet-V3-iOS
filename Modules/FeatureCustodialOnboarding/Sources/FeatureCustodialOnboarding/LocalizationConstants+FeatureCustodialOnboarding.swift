@@ -3,7 +3,9 @@ import Localization
 typealias L10n = LocalizationConstants.CustodialOnboarding
 
 extension LocalizationConstants {
-    enum CustodialOnboarding {}
+    enum CustodialOnboarding {
+        enum AddressSearch {}
+    }
 }
 
 extension LocalizationConstants.CustodialOnboarding {

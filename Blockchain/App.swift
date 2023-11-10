@@ -11,7 +11,6 @@ import EthereumDataKit
 import Extensions
 import FeatureAddressSearchData
 import FeatureAddressSearchDomain
-import FeatureAddressSearchUI
 import FeatureAnnouncementsData
 import FeatureAnnouncementsDomain
 import FeatureAppDomain
@@ -128,7 +127,6 @@ func defineDependencies() {
         DependencyContainer.buySellKit
         DependencyContainer.featureAddressSearchDomain
         DependencyContainer.featureAddressSearchData
-        DependencyContainer.featureAddressSearchUI
         DependencyContainer.featureKYCDomain
         DependencyContainer.featureKYCUI
         DependencyContainer.blockchainApp

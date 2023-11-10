@@ -237,6 +237,8 @@ packages:
     path: Modules/FeatureAuthentication
   FeatureCardPayment:
     path: Modules/FeatureCardPayment
+  FeatureCustodialOnboarding:
+    path: Modules/FeatureCustodialOnboarding
   FeatureCustomerSupport:
     path: Modules/FeatureCustomerSupport
   FeatureDashboard:
@@ -408,6 +410,7 @@ targets:
       - package: FeatureDashboard
       - package: FeatureCryptoDomain
       - package: FeatureCoin
+      - package: FeatureCustodialOnboarding
       - package: FeatureCustomerSupport
         product: FeatureCustomerSupportUI
       - package: FeatureDebug

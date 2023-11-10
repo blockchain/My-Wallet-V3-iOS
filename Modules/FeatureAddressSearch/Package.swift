@@ -37,41 +37,34 @@ let package = Package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
             exact: "1.2.0"
         ),
+        .package(
+            url: "https://github.com/dchatzieleftheriou-bc/DIKit.git",
+            exact: "1.0.1"
+        ),
         .package(path: "../Localization"),
         .package(path: "../UIComponents"),
         .package(path: "../Network"),
         .package(path: "../Errors"),
         .package(path: "../BlockchainComponentLibrary"),
         .package(path: "../ComposableArchitectureExtensions"),
-        .package(path: "../Tool"),
-        .package(path: "../Money")
+        .package(path: "../Tool")
     ],
     targets: [
         .target(
             name: "FeatureAddressSearchDomain",
             dependencies: [
-                .product(
-                    name: "Errors",
-                    package: "Errors"
-                ),
-                .product(
-                    name: "ToolKit",
-                    package: "Tool"
-                )
+                .product(name: "Errors", package: "Errors"),
+                .product(name: "ToolKit", package: "Tool"),
+                .product(name: "DIKit", package: "DIKit")
             ]
         ),
         .target(
             name: "FeatureAddressSearchData",
             dependencies: [
                 .target(name: "FeatureAddressSearchDomain"),
-                .product(
-                    name: "NetworkKit",
-                    package: "Network"
-                ),
-                .product(
-                    name: "Errors",
-                    package: "Errors"
-                )
+                .product(name: "NetworkKit", package: "Network"),
+                .product(name: "Errors", package: "Errors"),
+                .product(name: "DIKit", package: "DIKit")
             ]
         ),
         .target(
@@ -85,7 +78,6 @@ let package = Package(
                 .product(name: "BlockchainComponentLibrary", package: "BlockchainComponentLibrary"),
                 .product(name: "ToolKit", package: "Tool"),
                 .product(name: "UIComponents", package: "UIComponents"),
-                .product(name: "MoneyKit", package: "Money"),
                 .product(name: "ErrorsUI", package: "Errors")
             ]
         ),
