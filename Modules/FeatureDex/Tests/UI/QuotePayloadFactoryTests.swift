@@ -14,7 +14,7 @@ final class QuotePayloadFactoryTests: XCTestCase {
     func testOutputMajor() {
         _ = App.preview
         let quote = DexQuoteOutput(
-            response: mockTxResponse,
+            responseTx: mockTxResponse,
             allowanceSpender: "",
             estimatedConfirmationTime: 52,
             buyAmount: DexQuoteOutput.BuyAmount(amount: ether(major: 2), minimum: ether(major: 1)),
@@ -28,6 +28,7 @@ final class QuotePayloadFactoryTests: XCTestCase {
             sellAmount: bitcoin(major: 1),
             slippage: "0.1234",
             bcdcFeePercentage: "0.008",
+            networkFee: bitcoin(major: 0.03),
             isCrossChain: true
         )
         let result = QuotePayloadFactory.create(quote, service: EnabledCurrenciesService.default)!
@@ -46,7 +47,7 @@ final class QuotePayloadFactoryTests: XCTestCase {
     func testOutputLong() {
         _ = App.preview
         let quote = DexQuoteOutput(
-            response: mockTxResponse,
+            responseTx: mockTxResponse,
             allowanceSpender: "",
             estimatedConfirmationTime: 52,
             buyAmount: DexQuoteOutput.BuyAmount(
@@ -63,6 +64,7 @@ final class QuotePayloadFactoryTests: XCTestCase {
             sellAmount: bitcoin("112345678"),
             slippage: "0.123456789",
             bcdcFeePercentage: "0.008",
+            networkFee: bitcoin("1234569"),
             isCrossChain: true
         )
         let result = QuotePayloadFactory.create(quote, service: EnabledCurrenciesService.default)!

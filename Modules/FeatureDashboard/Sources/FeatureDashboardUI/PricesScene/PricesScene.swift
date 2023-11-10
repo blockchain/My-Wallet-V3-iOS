@@ -188,8 +188,7 @@ extension [PricesRowData] {
     }
 
     func filtered(
-        by searchText: String,
-        using algorithm: StringDistanceAlgorithm = StringContainsAlgorithm(caseInsensitive: true)
+        by searchText: String
     ) -> [PricesRowData] {
         filter {
             $0.currency.matchSearch(searchText)
@@ -199,8 +198,7 @@ extension [PricesRowData] {
     func filtered(
         by searchText: String,
         filter: PricesScene.Filter,
-        favourites: Set<String>,
-        using algorithm: StringDistanceAlgorithm = StringContainsAlgorithm(caseInsensitive: true)
+        favourites: Set<String>
     ) -> [PricesRowData] {
         switch filter {
         case .all:

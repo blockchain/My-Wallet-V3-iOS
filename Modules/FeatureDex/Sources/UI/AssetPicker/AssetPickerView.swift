@@ -61,7 +61,7 @@ public struct AssetPickerView: View {
 
     @ViewBuilder
     private var assetsSection: some View {
-        if viewStore.isSearching, viewStore.searchText.isNotEmpty {
+        if viewStore.searchText.isNotEmpty {
             section(
                 data: viewStore.searchResults,
                 sectionTitle: nil,

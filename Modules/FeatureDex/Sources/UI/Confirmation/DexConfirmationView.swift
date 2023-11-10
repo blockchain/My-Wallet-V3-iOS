@@ -100,12 +100,12 @@ struct DexConfirmationView: View {
             tableRow(
                 title: L10n.allowedSlippage,
                 value: { tableRowTitle(viewStore.quote.slippage.formatted(.percent)) },
-                tooltip: nil
+                tooltip: (L10n.SlippageTooltip.title, L10n.SlippageTooltip.body)
             )
             tableRow(
                 title: L10n.blockchainFee,
                 value: { tableRowTitle(viewStore.quote.blockchainFee.formatted(.percent)) },
-                tooltip: nil
+                tooltip: (L10n.ProductFeeTooltip.title, L10n.ProductFeeTooltip.body)
             )
             tableRow(
                 title: L10n.exchangeRate,

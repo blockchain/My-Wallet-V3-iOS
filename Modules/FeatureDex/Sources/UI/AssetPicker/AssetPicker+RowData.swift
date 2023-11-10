@@ -53,13 +53,7 @@ extension AssetPicker {
 }
 
 extension [AssetPicker.RowData] {
-
-    func filtered(
-        by searchText: String,
-        using algorithm: StringDistanceAlgorithm = FuzzyAlgorithm(caseInsensitive: true)
-    ) -> Self {
-        filter {
-            $0.currency.filter(by: searchText, using: algorithm)
-        }
+    func filtered(by searchText: String) -> Self {
+        filter { $0.currency.matchSearch(searchText) }
     }
 }

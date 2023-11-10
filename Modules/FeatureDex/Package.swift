@@ -54,7 +54,10 @@ let package = Package(
         ),
         .testTarget(
             name: "FeatureDexUITests",
-            dependencies: ["FeatureDexUI"],
+            dependencies: [
+                .target(name: "FeatureDexUI"),
+                .product(name: "Blockchain", package: "Blockchain")
+            ],
             path: "Tests/UI"
         )
     ]

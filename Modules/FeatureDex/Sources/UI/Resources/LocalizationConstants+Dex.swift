@@ -373,6 +373,14 @@ extension L10n.Confirmation {
         )
     }
 
+    enum ProductFeeTooltip {
+        static let title = L10n.Confirmation.blockchainFee
+        static let body = NSLocalizedString(
+            "This is a small fee for using the Blockchain.com DEX service.",
+            comment: "Dex: Main"
+        )
+    }
+
     enum SlippageTooltip {
         static let title = L10n.Confirmation.allowedSlippage
         static let body = L10n.Settings.Slippage.body
@@ -416,11 +424,6 @@ extension L10n.Confirmation {
 
     static let blockchainFee = NSLocalizedString(
         "Blockchain.com fee",
-        comment: "Dex: Main"
-    )
-
-    static let blockchainFeeDescription = NSLocalizedString(
-        "This is a small fee for using the Blockchain.com DEX service.",
         comment: "Dex: Main"
     )
 

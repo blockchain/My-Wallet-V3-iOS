@@ -41,15 +41,12 @@ public struct DexQuoteOutput: Equatable {
     public let allowanceSpender: String
     public let bcdcFeePercentage: String
     public let isCrossChain: Bool
+    public let networkFee: CryptoValue?
 
-    public var networkFee: CryptoValue? {
-        fees.first(where: { $0.type == .total })?.value
-    }
-
-    public let response: DexQuoteResponse.Transaction
+    public let responseTx: DexQuoteResponse.Transaction
 
     init(
-        response: DexQuoteResponse.Transaction,
+        responseTx: DexQuoteResponse.Transaction,
         allowanceSpender: String,
         estimatedConfirmationTime: Int?,
         buyAmount: BuyAmount,
@@ -59,6 +56,7 @@ public struct DexQuoteOutput: Equatable {
         sellAmount: CryptoValue,
         slippage: String,
         bcdcFeePercentage: String,
+        networkFee: CryptoValue?,
         isCrossChain: Bool
     ) {
         self.allowanceSpender = allowanceSpender
@@ -68,10 +66,11 @@ public struct DexQuoteOutput: Equatable {
         self.isValidated = isValidated
         self.sellAmount = sellAmount
         self.slippage = slippage
-        self.response = response
+        self.responseTx = responseTx
         self.fees = fees
         self.isCrossChain = isCrossChain
         self.bcdcFeePercentage = bcdcFeePercentage
+        self.networkFee = networkFee
     }
 
     public init?(
@@ -95,11 +94,12 @@ public struct DexQuoteOutput: Equatable {
             from: response.quote.buyAmount,
             currenciesService: currenciesService
         )
+        let networkFee = fees.first(where: { $0.type == .total }) ?? fees.first(where: { $0.type == .network })
 
         guard let field = FeatureDexDomain.field(from: request) else { return nil }
         let isCrossChain = buyAmount.currency.network() != sellAmount.currency.network()
         self.init(
-            response: response.tx,
+            responseTx: response.tx,
             allowanceSpender: response.quote.spenderAddress,
             estimatedConfirmationTime: response.approxConfirmationTime,
             buyAmount: BuyAmount(amount: buyAmount, minimum: minimumBuyAmount),
@@ -109,6 +109,7 @@ public struct DexQuoteOutput: Equatable {
             sellAmount: sellAmount,
             slippage: request.params.slippage,
             bcdcFeePercentage: response.quote.bcdcFeePercentage,
+            networkFee: networkFee?.value,
             isCrossChain: isCrossChain
         )
     }
@@ -219,7 +220,7 @@ extension DexQuoteOutput {
         sell: CryptoValue
     ) -> DexQuoteOutput {
         DexQuoteOutput(
-            response: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
+            responseTx: .init(data: "", gasLimit: "0", gasPrice: "0", value: "0", to: ""),
             allowanceSpender: "",
             estimatedConfirmationTime: 52,
             buyAmount: BuyAmount(
@@ -236,6 +237,7 @@ extension DexQuoteOutput {
             sellAmount: sell,
             slippage: "0.003",
             bcdcFeePercentage: "0.008",
+            networkFee: .create(major: Double(0.333), currency: .ethereum),
             isCrossChain: true
         )
     }

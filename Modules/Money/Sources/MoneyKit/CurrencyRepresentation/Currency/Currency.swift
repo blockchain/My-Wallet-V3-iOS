@@ -66,30 +66,34 @@ extension Currency {
 
 extension Currency {
 
-    public func matchSearch(_ searchString: String?) -> Bool {
-        guard let searchString,
-              !searchString.isEmpty
-        else {
+    public func matchSearch(_ searchText: String?) -> Bool {
+        guard let searchText, searchText.isNotEmpty else {
             return true
         }
-        return name.localizedCaseInsensitiveContains(searchString)
-            || code.localizedCaseInsensitiveContains(searchString)
-            || displayCode.localizedCaseInsensitiveContains(searchString)
-    }
-
-    public func filter(by searchText: String, using algorithm: StringDistanceAlgorithm) -> Bool {
         let values: [String] = switch currencyType {
         case .crypto(let value):
             value.searcheableParameters
         case .fiat(let value):
             value.searcheableParameters
         }
-        for value in values {
-            if value.distance(between: searchText, using: algorithm) == 0 {
-                return true
-            }
+        return values.contains { value in
+            value.localizedCaseInsensitiveContains(searchText)
         }
-        return false
+    }
+
+    public func filter(by searchText: String, using algorithm: StringDistanceAlgorithm) -> Bool {
+        guard searchText.isNotEmpty else {
+            return true
+        }
+        let values: [String] = switch currencyType {
+        case .crypto(let value):
+            value.searcheableParameters
+        case .fiat(let value):
+            value.searcheableParameters
+        }
+        return values.contains { value in
+            value.distance(between: searchText, using: algorithm) == 0
+        }
     }
 }
 
