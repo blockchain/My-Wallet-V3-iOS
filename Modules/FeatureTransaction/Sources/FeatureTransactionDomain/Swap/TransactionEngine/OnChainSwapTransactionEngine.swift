@@ -109,6 +109,9 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
                 switch pendingTransaction.validationState {
                 case .canExecute:
                     return defaultValidateAmount(pendingTransaction: pendingTransaction).asSingle()
+                    // we need to do this mapping because the underlying transaction engine does swaps for the same currency. Both source and target would appear as the same currency. Example: An USDC-USDT swap in the UI would actually be a USDC-USDC on the ERC20 swap engine
+                case .insufficientFunds(let sourceAmount, let targetAmount,_,_):
+                    return .just(pendingTransaction.update(validationState: .insufficientFunds(sourceAmount, targetAmount, sourceAccount.currencyType, transactionTarget.currencyType)))
                 default:
                     return .just(pendingTransaction)
                 }
@@ -124,6 +127,9 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
                 switch pendingTransaction.validationState {
                 case .canExecute:
                     return defaultDoValidateAll(pendingTransaction: pendingTransaction)
+                    // we need to do this mapping because the underlying transaction engine does swaps for the same currency. Both source and target would appear as the same currency. Example: An USDC-USDT swap in the UI would actually be a USDC-USDC on the ERC20 swap engine
+                case .insufficientFunds(let sourceAmount, let targetAmount,_,_):
+                    return .just(pendingTransaction.update(validationState: .insufficientFunds(sourceAmount, targetAmount, sourceAccount.currencyType, transactionTarget.currencyType)))
                 default:
                     return .just(pendingTransaction)
                 }
@@ -256,7 +262,7 @@ final class OnChainSwapTransactionEngine: SwapTransactionEngine {
             customFeeAmount: customFeeAmount
         )
     }
-
+    
     func update(amount: MoneyValue, pendingTransaction: PendingTransaction) -> Single<PendingTransaction> {
         validateUpdateAmount(amount)
             .asSingle()

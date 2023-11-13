@@ -448,8 +448,6 @@ public struct SwapEnterAmount: Reducer {
                     return .none
                 }
 
-                print("🔥 \(error)")
-
                 if error == .none {
                     state.transactionError = nil
                 } else {

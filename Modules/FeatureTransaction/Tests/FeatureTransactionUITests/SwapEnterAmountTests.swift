@@ -66,39 +66,40 @@ class SwapEnterAmountTests: XCTestCase {
         XCTAssertTrue(mockDefaultPairsService.getDefaultPairsCalled)
     }
 
-//    func test_on_input_changed() async {
-//        var state = SwapEnterAmount.State(
-//            sourceInformation: defaultSourcePair,
-//            targetInformation: defaultTargetPair
-//        )
-//
-//        state.defaultFiatCurrency = FiatCurrency.USD
-//        state.sourceValuePrice = MoneyValue.one(currency: .USD)
-//        testStore = TestStore(
-//            initialState: state,
-//            reducer: {
-//                SwapEnterAmount(
-//                    app: App.test,
-//                    defaultSwaptPairsService: mockDefaultPairsService,
-//                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
-//                    minMaxAmountsPublisher: minMaxAmountsPublisher,
-//                    errorStatePublisher: errorStatePublisher,
-//                    dismiss: completionHandlerSpy.onDismiss,
-//                    onPairsSelected: completionHandlerSpy.onPairsSelected,
-//                    onAmountChanged: completionHandlerSpy.onAmountChanged,
-//                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
-//                )
-//            }
-//        )
-//        await testStore.send(.onInputChanged("1"), assert: {
-//            var inputFormatter = CurrencyInputFormatter()
-//            inputFormatter.append("1")
-//            $0.input = inputFormatter
-//            $0.amountCryptoEntered = .create(majorDisplay: "1", currency: self.defaultSourcePair.currency.currencyType)
-//        })
-//        XCTAssertTrue(completionHandlerSpy.onAmountChangedCalled)
-//        XCTAssertEqual(completionHandlerSpy.onAmountChangedMoneyValue, testStore.state.amountCryptoEntered)
-//    }
+    func test_on_input_changed() async {
+        var state = SwapEnterAmount.State(
+            sourceInformation: defaultSourcePair,
+            targetInformation: defaultTargetPair
+        )
+
+        state.defaultFiatCurrency = FiatCurrency.USD
+        state.sourceValuePrice = MoneyValue.one(currency: .USD)
+        testStore = TestStore(
+            initialState: state,
+            reducer: {
+                SwapEnterAmount(
+                    app: App.test,
+                    defaultSwaptPairsService: mockDefaultPairsService,
+                    supportedPairsInteractorService: MockSupportedPairsInteractorService(),
+                    minMaxAmountsPublisher: minMaxAmountsPublisher,
+                    errorStatePublisher: errorStatePublisher,
+                    dismiss: completionHandlerSpy.onDismiss,
+                    onPairsSelected: completionHandlerSpy.onPairsSelected,
+                    onAmountChanged: completionHandlerSpy.onAmountChanged,
+                    onPreviewTapped: completionHandlerSpy.onPreviewTapped
+                )
+            }
+        )
+        await testStore.send(.onInputChanged("1"), assert: {
+            var inputFormatter = CurrencyInputFormatter()
+            inputFormatter.append("1")
+            $0.input = inputFormatter
+            $0.amountCryptoEntered = .create(majorDisplay: "1", currency: self.defaultSourcePair.currency.currencyType)
+            $0.isLoading = true
+        })
+        XCTAssertTrue(completionHandlerSpy.onAmountChangedCalled)
+        XCTAssertEqual(completionHandlerSpy.onAmountChangedMoneyValue, testStore.state.amountCryptoEntered)
+    }
 
     func test_on_max_button_tapped() async {
         var state = SwapEnterAmount.State(
