@@ -20,12 +20,14 @@ public struct SwapEnterAmount: Reducer {
     public var onPairsSelected: (String, String) -> Void
     public var onPreviewTapped: (MoneyValue) -> Void
     public var minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never>
+    public var errorStatePublisher: AnyPublisher<TransactionErrorState, Never>
 
     public init(
         app: AppProtocol,
         defaultSwaptPairsService: DefaultSwapCurrencyPairsServiceAPI,
         supportedPairsInteractorService: SupportedPairsInteractorServiceAPI,
         minMaxAmountsPublisher: AnyPublisher<TransactionMinMaxValues, Never>,
+        errorStatePublisher: AnyPublisher<TransactionErrorState, Never>,
         dismiss: @escaping () -> Void,
         onPairsSelected: @escaping (String, String) -> Void,
         onAmountChanged: @escaping (MoneyValue) -> Void,
@@ -39,6 +41,7 @@ public struct SwapEnterAmount: Reducer {
         self.minMaxAmountsPublisher = minMaxAmountsPublisher
         self.onPreviewTapped = onPreviewTapped
         self.onPairsSelected = onPairsSelected
+        self.errorStatePublisher = errorStatePublisher
     }
 
     // MARK: - State
@@ -50,6 +53,7 @@ public struct SwapEnterAmount: Reducer {
         @BindingState var sourceBalance: MoneyValue?
         @BindingState var sourceValuePrice: MoneyValue?
         @BindingState var defaultFiatCurrency: FiatCurrency?
+        var transactionError: TransactionErrorState?
         var transactionMinMaxValues: TransactionMinMaxValues?
         var isEnteringFiat: Bool = true
         var selectFromCryptoAccountState: SwapFromAccountSelect.State?
@@ -75,37 +79,31 @@ public struct SwapEnterAmount: Reducer {
             return amountCryptoEntered.isZero
         }
 
+        var isLoading: Bool = false
+
         var transactionDetails: (forbidden: Bool, ctaLabel: String) {
-            guard let maxAmountToSwap,
-                  let currentEnteredMoneyValue = amountCryptoEntered,
-                  currentEnteredMoneyValue.isZero == false,
-                  sourceInformation != nil, targetInformation != nil
-            else {
-                return (forbidden: false, ctaLabel: LocalizationConstants.Swap.previewSwap)
+            if let transactionError {
+                return (forbidden: true, ctaLabel: transactionError.recoveryWarningHint)
             }
 
-            if let minAmountToSwap,
+            if let currentEnteredMoneyValue = amountCryptoEntered,
+               currentEnteredMoneyValue.isZero == false,
+                let minAmountToSwap,
                (try? currentEnteredMoneyValue < minAmountToSwap) ?? false
             {
+                let displayString = isEnteringFiat ? transactionMinMaxValues?
+                    .minSpendableFiatValue
+                    .toDisplayString(includeSymbol: true) :
 
-                let displayString = isEnteringFiat ? transactionMinMaxValues?.minSpendableFiatValue.toDisplayString(includeSymbol: true) :
-                transactionMinMaxValues?.minSpendableCryptoValue.toDisplayString(includeSymbol: true)
+                transactionMinMaxValues?
+                    .minSpendableCryptoValue
+                    .toDisplayString(includeSymbol: true)
 
                 return (
                     forbidden: true,
                     ctaLabel: String.localizedStringWithFormat(
                         LocalizationConstants.Swap.belowMinimumLimitCTA,
                         displayString ?? ""
-                    )
-                )
-            }
-
-            if (try? currentEnteredMoneyValue > maxAmountToSwap) ?? false {
-                return (
-                    forbidden: true,
-                    ctaLabel: String.localizedStringWithFormat(
-                        LocalizationConstants.Swap.notEnoughCoin,
-                        sourceInformation?.currency.code ?? ""
                     )
                 )
             }
@@ -210,6 +208,8 @@ public struct SwapEnterAmount: Reducer {
         case onBackspace
         case resetInput(newInput: String?)
         case onMinMaxAmountsFetched(TransactionMinMaxValues)
+        case onTransactionErrorFetched(TransactionErrorState)
+
     }
 
     // MARK: - Reducer
@@ -236,7 +236,10 @@ public struct SwapEnterAmount: Reducer {
                         minMaxAmountsPublisher
                             .map(Action.onMinMaxAmountsFetched)
                     },
-
+                    .publisher {
+                        errorStatePublisher
+                            .map(Action.onTransactionErrorFetched)
+                    }.animation(),
                     .run { [sourceInformation = state.sourceInformation, targetInformation = state.targetInformation] send in
                         guard sourceInformation == nil || targetInformation == nil else {
                             return
@@ -250,6 +253,7 @@ public struct SwapEnterAmount: Reducer {
                             await send(.updateSourceBalance)
                         }
                     }
+
                 )
 
             case .didFetchSourceBalance(let moneyValue):
@@ -282,10 +286,14 @@ public struct SwapEnterAmount: Reducer {
                     return .none
                 }
 
+                state.isLoading = true
+                state.transactionMinMaxValues = nil
+
                 if text.isNotEmpty {
                     state.input.append(Character(text))
                 }
-                if let amount = state.amountCryptoEntered {
+
+                if let amount = state.amountCryptoEntered  {
                     onAmountChanged(amount)
                 }
                 return .none
@@ -404,7 +412,7 @@ public struct SwapEnterAmount: Reducer {
                         if let currency = try? await app.get(blockchain.coin.core.account[accountId].currency, as: CryptoCurrency.self) {
                             await send(.binding(.set(
                                 \.$targetInformation,
-                                SelectionInformation(accountId: accountId, currency: currency)
+                                 SelectionInformation(accountId: accountId, currency: currency)
                             )))
                         }
                     }
@@ -431,6 +439,23 @@ public struct SwapEnterAmount: Reducer {
                 if let input {
                     state.input.reset(to: input)
                 }
+                return .none
+
+            case .onTransactionErrorFetched(let error):
+                state.isLoading = false
+
+                guard !error.isUX, error.fatalError == nil else {
+                    return .none
+                }
+
+                print("🔥 \(error)")
+
+                if error == .none {
+                    state.transactionError = nil
+                } else {
+                    state.transactionError = error
+                }
+
                 return .none
             }
         }
@@ -463,6 +488,7 @@ struct TransactionModelAdapterReducer: Reducer {
                 if let sourceAccountId = state.sourceInformation?.accountId,
                    let targetAccountId = state.targetInformation?.accountId
                 {
+                    state.isLoading = true
                     onPairsSelected(sourceAccountId, targetAccountId)
                 }
 

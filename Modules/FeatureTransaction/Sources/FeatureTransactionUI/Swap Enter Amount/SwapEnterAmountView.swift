@@ -48,6 +48,7 @@ public struct SwapEnterAmountView: View {
                 previewSwapButton
                     .padding(Spacing.padding2)
 
+
                 DigitPadViewSwiftUI(
                     inputValue: viewStore.binding(get: \.input.suggestion, send: SwapEnterAmount.Action.onInputChanged),
                     backspace: { viewStore.send(.onBackspace) }
@@ -219,11 +220,32 @@ public struct SwapEnterAmountView: View {
     @ViewBuilder
     private var previewSwapButton: some View {
         if viewStore.transactionDetails.forbidden {
-            SecondaryButton(title: viewStore.transactionDetails.ctaLabel, action: {})
+            SecondaryButton(title: viewStore.transactionDetails.ctaLabel,
+                            isLoading: viewStore.isLoading,
+                            action: {
+                if let transactionError = viewStore.transactionError {
+                    $app.post(
+                        event: blockchain.ux.tooltip.entry.paragraph.button.minimal.tap,
+                        context: [
+                            blockchain.ux.tooltip.title: transactionError.recoveryWarningTitle(for: .swap) ?? "N/A",
+                            blockchain.ux.tooltip.body: transactionError.recoveryWarningMessage(for: .swap),
+                            blockchain.ui.type.action.then.enter.into.detents: [
+                                blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                            ]
+                        ]
+                    )
+                }
+            })
+            .transition(.opacity)
+            .batch {
+                set(blockchain.ux.tooltip.entry.paragraph.button.minimal.tap.then.enter.into, to: blockchain.ux.tooltip)
+            }
         } else {
-            PrimaryButton(title: viewStore.transactionDetails.ctaLabel, action: {
+            PrimaryButton(title: viewStore.transactionDetails.ctaLabel, 
+                          isLoading: viewStore.isLoading, action: {
                 viewStore.send(.onPreviewTapped)
             })
+            .transition(.opacity)
             .disabled(viewStore.previewButtonDisabled)
         }
     }

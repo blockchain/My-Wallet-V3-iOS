@@ -474,7 +474,10 @@ extension TransactionAction {
             Logger.shared.error(error)
             var newState = oldState
             newState.nextEnabled = true
-            newState.step = .error
+            // we don't want to display any pushed errors on this screen
+            if oldState.step != .selectSourceTargetAmount {
+                newState.step = .error
+            }
             newState.errorState = .fatalError(FatalTransactionError(error: error))
             newState.executionStatus = .error
             return newState.withUpdatedBackstack(oldState: oldState)
@@ -550,7 +553,7 @@ extension TransactionAction {
     }
 }
 
-enum FatalTransactionError: Error, Equatable, CustomStringConvertible {
+public enum FatalTransactionError: Error, Equatable, CustomStringConvertible {
     case rxError(RxError)
     case generic(Error)
     case message(String)
@@ -585,7 +588,7 @@ enum FatalTransactionError: Error, Equatable, CustomStringConvertible {
         }
     }
 
-    var description: String {
+    public var description: String {
         switch self {
         case .rxError(let error):
             error.debugDescription
@@ -607,7 +610,7 @@ enum FatalTransactionError: Error, Equatable, CustomStringConvertible {
         }
     }
 
-    static func == (lhs: FatalTransactionError, rhs: FatalTransactionError) -> Bool {
+    public static func == (lhs: FatalTransactionError, rhs: FatalTransactionError) -> Bool {
         switch (lhs, rhs) {
         case (.rxError(let left), .rxError(let right)):
             left.debugDescription == right.localizedDescription

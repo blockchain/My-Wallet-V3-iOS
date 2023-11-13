@@ -31,7 +31,7 @@ extension TransactionErrorState {
         case .belowMinimumLimit(let minimum):
             String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryHint,
-                minimum.shortDisplayString
+                minimum.displayString
             )
         case .overMaximumSourceLimit(let maximum, _, _):
             String.localizedStringWithFormat(
@@ -120,7 +120,7 @@ extension TransactionErrorState {
         case .belowMinimumLimit(let minimum):
             return String.localizedStringWithFormat(
                 Localization.belowMinimumLimitRecoveryTitle,
-                minimum.shortDisplayString
+                minimum.displayString
             )
         case .overMaximumSourceLimit(let availableAmount, _, _) where action == .send:
             return String.localizedStringWithFormat(

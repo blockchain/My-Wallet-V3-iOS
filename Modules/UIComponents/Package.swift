@@ -23,7 +23,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/pointfreeco/swift-case-paths",
-            from: "1.0.0"
+            exact: "1.0.0"
         ),
         .package(path: "../Tool"),
         .package(path: "../BlockchainComponentLibrary")

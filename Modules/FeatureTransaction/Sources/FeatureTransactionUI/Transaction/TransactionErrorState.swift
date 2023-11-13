@@ -11,7 +11,7 @@ import PlatformKit
 import SwiftUI
 import ToolKit
 
-enum TransactionErrorState: Equatable, Error {
+public enum TransactionErrorState: Equatable, Error {
     /// The tansaction is valid
     case none
     /// Any other error

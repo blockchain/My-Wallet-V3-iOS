@@ -67,7 +67,7 @@ final class EnterAmountPageBuilder {
         let publisher = transactionModel.state.publisher
             .compactMap { state -> TransactionMinMaxValues? in
                 if state.source != nil {
-                    TransactionMinMaxValues(
+                   TransactionMinMaxValues(
                         maxSpendableFiatValue: state.maxSpendableWithActiveAmountInputType(.fiat),
                         maxSpendableCryptoValue: state.maxSpendableWithActiveAmountInputType(.crypto),
                         minSpendableFiatValue: state.minSpendableWithActiveAmountInputType(.fiat),
@@ -80,11 +80,19 @@ final class EnterAmountPageBuilder {
             .ignoreFailure(setFailureType: Never.self)
             .eraseToAnyPublisher()
 
+        let errorStatePublisher = transactionModel.state.publisher
+            .compactMap { state -> TransactionErrorState? in
+                state.errorState
+            }
+            .ignoreFailure(setFailureType: Never.self)
+            .eraseToAnyPublisher()
+
         let swapEnterAmountReducer = SwapEnterAmount(
             app: resolve(),
             defaultSwaptPairsService: resolve(),
             supportedPairsInteractorService: resolve(),
             minMaxAmountsPublisher: publisher,
+            errorStatePublisher: errorStatePublisher,
             dismiss: { [weak self] in
                 self?.transactionModel.process(action: .resetFlow)
             },
@@ -113,6 +121,7 @@ final class EnterAmountPageBuilder {
                 self?.transactionModel.process(action: .updateAmount(amount))
             },
             onPreviewTapped: { [weak self] amount in
+                self?.app.post(value: amount.minorString, of: blockchain.ux.transaction.enter.amount.input.value)
                 self?.transactionModel.process(action: .updateAmount(amount))
                 DispatchQueue.main.async {
                     self?.transactionModel.process(action: .confirmSwap)

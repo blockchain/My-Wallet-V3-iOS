@@ -16,7 +16,7 @@ struct TooltipView: View {
                 Text(title)
                     .typography(.title3)
                     .foregroundColor(.semantic.title)
-                Text(message)
+                Text(LocalizedStringKey(message))
                     .typography(.body1)
                     .foregroundColor(.semantic.body)
             }
