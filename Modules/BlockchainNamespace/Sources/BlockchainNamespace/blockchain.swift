@@ -10502,6 +10502,7 @@ public final class L_blockchain_ux_kyc_prove: L, I_blockchain_ux_kyc_prove {
 public protocol I_blockchain_ux_kyc_prove: I {}
 public extension I_blockchain_ux_kyc_prove {
 	var `challenge`: L_blockchain_ux_kyc_prove_challenge { .init("\(__).challenge") }
+	var `instant`: L_blockchain_ux_kyc_prove_instant { .init("\(__).instant") }
 	var `is`: L_blockchain_ux_kyc_prove_is { .init("\(__).is") }
 	var `personal`: L_blockchain_ux_kyc_prove_personal { .init("\(__).personal") }
 	var `phone`: L_blockchain_ux_kyc_prove_phone { .init("\(__).phone") }
@@ -10553,6 +10554,24 @@ public final class L_blockchain_ux_kyc_prove_challenge_ssn_next: L, I_blockchain
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.challenge.ssn.next", comment: "") }
 }
 public protocol I_blockchain_ux_kyc_prove_challenge_ssn_next: I_blockchain_ux_type_task {}
+public final class L_blockchain_ux_kyc_prove_instant: L, I_blockchain_ux_kyc_prove_instant {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.instant", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_prove_instant: I {}
+public extension I_blockchain_ux_kyc_prove_instant {
+	var `link`: L_blockchain_ux_kyc_prove_instant_link { .init("\(__).link") }
+}
+public final class L_blockchain_ux_kyc_prove_instant_link: L, I_blockchain_ux_kyc_prove_instant_link {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.instant.link", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_prove_instant_link: I {}
+public extension I_blockchain_ux_kyc_prove_instant_link {
+	var `url`: L_blockchain_ux_kyc_prove_instant_link_url { .init("\(__).url") }
+}
+public final class L_blockchain_ux_kyc_prove_instant_link_url: L, I_blockchain_ux_kyc_prove_instant_link_url {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.instant.link.url", comment: "") }
+}
+public protocol I_blockchain_ux_kyc_prove_instant_link_url: I_blockchain_db_type_url, I_blockchain_session_state_stored_value {}
 public final class L_blockchain_ux_kyc_prove_is: L, I_blockchain_ux_kyc_prove_is {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.kyc.prove.is", comment: "") }
 }

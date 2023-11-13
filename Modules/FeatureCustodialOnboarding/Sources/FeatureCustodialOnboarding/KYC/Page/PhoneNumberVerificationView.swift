@@ -6,6 +6,7 @@ public struct PhoneNumberVerificationView: View {
     @BlockchainApp var app
 
     @StateObject private var object = PhoneNumberVerificationObject()
+    @State var url: URL?
 
     public var completion: () -> Void
 
@@ -43,6 +44,15 @@ public struct PhoneNumberVerificationView: View {
                 }
             }
             .frame(maxHeight: .infinity, alignment: .top)
+            if let url {
+                MinimalButton(title: "Open Instant Link") {
+                    #if canImport(UIKit)
+                    UIApplication.shared.open(url)
+                    #elseif canImport(AppKit)
+                    NSWorkspace.shared.open(url)
+                    #endif
+                }
+            }
             if object.isVerified {
                 PrimaryButton(
                     title: L10n.next,
@@ -67,6 +77,9 @@ public struct PhoneNumberVerificationView: View {
         .task { await object.poll() }
         .onAppear {
             $app.post(event: blockchain.ux.kyc.prove.phone.number.verification)
+        }
+        .bindings {
+            subscribe($url, to: blockchain.ux.kyc.prove.instant.link.url)
         }
     }
 }
@@ -127,5 +140,6 @@ public struct PhoneNumberVerification: Codable {
 struct PhoneNumberVerificationView_Preview: PreviewProvider {
     static var previews: some View {
         PhoneNumberVerificationView(completion: { print(#fileID) })
+            .app(App.preview)
     }
 }

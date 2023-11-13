@@ -54,6 +54,10 @@ extension Ownership.Status {
     public static let rejected: Self = "REJECTED"
 }
 
+public struct InstantLinkResponse: Codable {
+    public let instantLinkUrlForTesting: URL?
+}
+
 public class ProveClient {
 
     @Dependency(\.networkAdapter) var adapter
@@ -65,7 +69,7 @@ public class ProveClient {
         mobileNumber: String,
         dateOfBirth: String?,
         last4Ssn: String?
-    ) async throws {
+    ) async throws -> InstantLinkResponse {
         try await adapter.perform(
             request: requestBuilder.post(
                 path: "/onboarding/prove/possession/instant-link",

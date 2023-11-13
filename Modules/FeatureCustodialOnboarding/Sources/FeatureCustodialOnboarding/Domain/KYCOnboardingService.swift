@@ -34,18 +34,15 @@ public class KYCOnboardingService {
         last4Ssn: String?,
         dateOfBirth: Date?
     ) async throws {
-        guard let dateOfBirth else {
-            return try await proveClient.requestInstantLink(
-                mobileNumber: mobileNumber,
-                dateOfBirth: nil,
-                last4Ssn: last4Ssn
-            )
-        }
-        return try await proveClient.requestInstantLink(
+        let response = try await proveClient.requestInstantLink(
             mobileNumber: mobileNumber,
-            dateOfBirth: dobFormatter.string(from: dateOfBirth),
-            last4Ssn: nil
+            dateOfBirth: dobFormatter.format(dateOfBirth),
+            last4Ssn: last4Ssn
         )
+
+        try await app.transaction { app in
+            try await app.set(blockchain.ux.kyc.prove.instant.link.url, to: response.instantLinkUrlForTesting)
+        }
     }
 
     public func requestInstantLinkResend() async throws {
@@ -95,5 +92,14 @@ extension DependencyValues {
     public var KYCOnboardingService: KYCOnboardingService {
         get { self[KYCOnboardingServiceDependencyKey.self] }
         set { self[KYCOnboardingServiceDependencyKey.self] = newValue }
+    }
+}
+
+extension DateFormatter {
+    func format(_ date: Date?) -> String? {
+        guard let date else {
+            return nil
+        }
+        return string(from: date)
     }
 }

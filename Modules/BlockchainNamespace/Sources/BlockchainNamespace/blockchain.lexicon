@@ -2822,6 +2822,11 @@ blockchain:
 					+ blockchain.ux.type.story
 						next:
 						+ blockchain.ux.type.task
+				instant:
+					link:
+						url:
+						+ blockchain.db.type.url
+						+ blockchain.session.state.stored.value
 				is:
 					enabled:
 					+ blockchain.db.type.boolean
