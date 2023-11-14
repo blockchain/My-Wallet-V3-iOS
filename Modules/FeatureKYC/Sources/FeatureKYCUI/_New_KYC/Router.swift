@@ -173,7 +173,7 @@ public final class Router: Routing {
         flowCompletion: @escaping (FlowResult) -> Void
     ) {
         // NOTE: you must retain the router to get the flow completion
-        presentLegacyKYC(from: presenter, requiredTier: requiredTier)
+        presentKYC(from: presenter, requiredTier: requiredTier)
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: flowCompletion)
             .store(in: &cancellables)

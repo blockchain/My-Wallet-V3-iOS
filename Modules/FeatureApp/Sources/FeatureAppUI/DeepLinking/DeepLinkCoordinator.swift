@@ -144,14 +144,14 @@ public final class DeepLinkCoordinator: Client.Observer {
         .subscribe()
 
     func kyc(_ event: Session.Event) {
-        guard let tier = try? event.context.decode(blockchain.app.deep_link.kyc.tier, as: KYC.Tier.self),
-              let topViewController = window.topMostViewController
-        else {
+        guard let topViewController = window.topMostViewController else {
             return
         }
 
+        let tier = try? event.context.decode(blockchain.app.deep_link.kyc.tier, as: KYC.Tier.self)
+
         kycRouter
-            .presentEmailVerificationAndKYCIfNeeded(from: topViewController, requiredTier: tier)
+            .presentEmailVerificationAndKYCIfNeeded(from: topViewController, requiredTier: tier ?? .verified)
             .subscribe()
             .store(in: &bag)
     }
