@@ -134,9 +134,11 @@ extension NetworkCommunicator {
     }
 
     fileprivate static func retailCommunicator(
-        authenticator: AuthenticatorAPI = resolve()
+        authenticator: AuthenticatorAPI = resolve(),
+        eventRecorder: AnalyticsEventRecorderAPI = resolve()
     ) -> NetworkCommunicator {
-        NetworkCommunicator(authenticator: authenticator)
+        NetworkCommunicator(authenticator: authenticator,
+                            eventRecorder: eventRecorder)
     }
 
     fileprivate static func everypayCommunicator(
