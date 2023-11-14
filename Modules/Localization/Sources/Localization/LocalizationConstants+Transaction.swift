@@ -1748,8 +1748,12 @@ extension LocalizationConstants.Transaction.Error {
         "The minimum amount for you can sell is **%@**.",
         comment: "Error recovery message - input below minimum amount valid for 'sell' transaction"
     )
-    public static let belowMinimumLimitRecoveryMessage_swap = NSLocalizedString(
-        "To avoid uncesssary fees and network slipage, the minimum amount for this pair is **%@**.",
+    public static let belowMinimumLimitRecoveryMessage_swap_noncustodial = NSLocalizedString(
+        "To avoid unnecessary fees and network slippage, the minimum amount for this pair is **%@**.",
+        comment: "Error recovery message - input below minimum amount valid for 'swap' transaction"
+    )
+    public static let belowMinimumLimitRecoveryMessage_swap_custodial = NSLocalizedString(
+        "The minimum amount for this pair is **%@**.",
         comment: "Error recovery message - input below minimum amount valid for 'swap' transaction"
     )
     public static let belowMinimumLimitRecoveryMessage_send = NSLocalizedString(

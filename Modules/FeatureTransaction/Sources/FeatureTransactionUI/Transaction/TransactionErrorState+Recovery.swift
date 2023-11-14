@@ -1,5 +1,7 @@
 // Copyright © Blockchain Luxembourg S.A. All rights reserved.
 
+import BlockchainUI
+import DIKit
 import Errors
 import FeatureOpenBankingUI
 import FeatureTransactionDomain
@@ -491,10 +493,18 @@ extension TransactionErrorState {
                 minimum.displayString
             )
         case .swap:
-            text = String.localizedStringWithFormat(
-                Localization.belowMinimumLimitRecoveryMessage_swap,
-                minimum.displayString
-            )
+            let app: AppProtocol = DIKit.resolve()
+            if app.currentMode == .trading {
+                text = String.localizedStringWithFormat(
+                    Localization.belowMinimumLimitRecoveryMessage_swap_custodial,
+                    minimum.displayString
+                )
+            } else {
+                text = String.localizedStringWithFormat(
+                    Localization.belowMinimumLimitRecoveryMessage_swap_noncustodial,
+                    minimum.displayString
+                )
+            }
         case .send,
                 .interestTransfer,
                 .stakingDeposit,
