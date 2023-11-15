@@ -126,6 +126,7 @@ public actor IndexMutiSeriesPriceService {
             if source.pendingContinuations.isNil {
                 yield(currencyPair, to: continuation, bufferingPolicy: limit, with: source)
             } else {
+                source.fetched = false
                 source.pendingContinuations?.append(
                     PendingContinuation(currencyPair: currencyPair, bufferingPolicy: limit, continuation: continuation)
                 )
