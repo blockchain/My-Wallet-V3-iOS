@@ -219,7 +219,7 @@ extension EarnSummaryView {
                         .disabled(
                             my.limit.withdraw.is.disabled ?? false
                             || countDownLock
-                            || (product == .active && !bondingTxsRequests.isEmpty)
+                            || (product == .active && bondingTxsRequests.withdrawalLockDate.isNotNil)
                             || (product == .active && earningBalance?.isZero ?? false)
                         )
                         SecondaryButton(
@@ -563,7 +563,9 @@ extension EarnSummaryView {
 
         @ViewBuilder var footer: some View {
             Group {
-                if !bondingTxsRequests.isEmpty, product != .savings {
+                if product == .active, bondingTxsRequests.withdrawalLockDate.isNotNil {
+                    pendingRequestsSection
+                } else if product == .staking, !bondingTxsRequests.isEmpty {
                     pendingRequestsSection
                 } else if let isDisabled = my.limit.withdraw.is.disabled, isDisabled, let disclaimer = product.withdrawDisclaimer {
                     Section {
