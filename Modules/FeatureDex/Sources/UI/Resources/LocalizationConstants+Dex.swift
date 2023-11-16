@@ -57,6 +57,10 @@ extension L10n.ProductRouter {
             "Cross-chain, limited token pairs",
             comment: "Dex: ProductRouter: Swap body"
         )
+        static let warning = NSLocalizedString(
+            "Requires verification",
+            comment: "Dex: ProductRouter: Swap warning"
+        )
     }
 
     enum Dex {

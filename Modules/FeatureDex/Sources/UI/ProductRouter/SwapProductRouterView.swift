@@ -9,6 +9,9 @@ struct SwapProductRouterView: View {
     @BlockchainApp var app
     @Environment(\.scheduler) var scheduler
     @Environment(\.dismiss) var dismiss
+    
+    @State private var kycState: Tag = blockchain.user.account.kyc.state.none[]
+    private var shouldKYC: Bool { kycState == blockchain.user.account.kyc.state.none[] }
 
     private var router = blockchain.ux.currency.exchange.router
 
@@ -20,6 +23,9 @@ struct SwapProductRouterView: View {
         .background(Color.semantic.light.ignoresSafeArea())
         .navigationTitle(L10n.ProductRouter.title)
         .navigationBarTitleDisplayMode(.inline)
+        .bindings {
+            subscribe($kycState, to: blockchain.user.account.kyc.state)
+        }
     }
 
     @ViewBuilder
@@ -39,7 +45,18 @@ struct SwapProductRouterView: View {
     private var blockchainComSwapRow: some View {
         Button(
             action: {
-                $app.post(event: router.blockchain.swap.paragraph.row.tap)
+                if shouldKYC {
+                    $app.post(
+                        event: router.blockchain.swap.paragraph.button.secondary.tap,
+                        context: [
+                            blockchain.ui.type.action.then.enter.into.detents: [
+                                blockchain.ui.type.action.then.enter.into.detents.automatic.dimension
+                            ]
+                        ]
+                    )
+                } else {
+                    $app.post(event: router.blockchain.swap.paragraph.row.tap)
+                }
             },
             label: {
                 TableRow(
@@ -49,8 +66,13 @@ struct SwapProductRouterView: View {
                     title: TableRowTitle(L10n.ProductRouter.Swap.title),
                     byline: TableRowByline(L10n.ProductRouter.Swap.body),
                     footer: {
-                        Image("logos-array-blockchain-com-swap", bundle: .module)
-                            .padding(.leading, Spacing.padding5)
+                        VStack(alignment: .leading) {
+                            if shouldKYC {
+                                TagView(text: L10n.ProductRouter.Swap.warning, icon: .verified, variant: .warning)
+                            }
+                            Image("logos-array-blockchain-com-swap", bundle: .module)
+                        }
+                        .padding(.leading, Spacing.padding5)
                     }
                 )
                 .background(Color.semantic.background)
@@ -60,6 +82,7 @@ struct SwapProductRouterView: View {
         )
         .batch {
             set(router.blockchain.swap.paragraph.row.tap.then.navigate.to, to: blockchain.ux.transaction["swap"])
+            set(router.blockchain.swap.paragraph.button.secondary.tap.then.enter.into, to: blockchain.ux.user.custodial.onboarding.before.you.continue)
         }
     }
 
