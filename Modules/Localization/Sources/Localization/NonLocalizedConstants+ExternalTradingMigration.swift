@@ -22,9 +22,9 @@ extension NonLocalizedConstants.ExternalTradingMigration {
 
     public enum Consent {
         public static let headerTitle = NSLocalizedString("We’re upgrading your experience", comment: "ExternalTradingMigration: We’re upgrading your experience")
-        public static let headerDescription = NSLocalizedString("As we evolve, we’re partnering with a trusted third-party provider to ensure you continue to enjoy our services seamlessly.", comment: "ExternalTradingMigration: As we evolve, we’re partnering with a trusted third-party provider to ensure you continue to enjoy our services seamlessly.")
-        public static let disclaimerItemsToConsolidate = NSLocalizedString("By tapping “Continue”, I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided below. By so agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account. Bakkt’s User Agreement.", comment: "ExternalTradingMigration: Upgrade")
-        public static let disclaimerNoItemsToConsolidate = NSLocalizedString("By tapping on “Upgrade”,I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided below. By so agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account. Bakkt’s User Agreement", comment: "ExternalTradingMigration: Disclaimer")
+        public static let headerDescription = NSLocalizedString("We've partnered with a new crypto service provider so you can continue to enjoy our services.", comment: "ExternalTradingMigration: We've partnered with a new crypto service provider so you can continue to enjoy our services.")
+        public static let disclaimerItemsToConsolidate = NSLocalizedString("By tapping “Continue”, I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided below. By agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account. Bakkt’s User Agreement.", comment: "ExternalTradingMigration: Upgrade")
+        public static let disclaimerNoItemsToConsolidate = NSLocalizedString("By tapping “Upgrade”, I hereby agree to the terms and conditions laid out in the Bakkt User Agreement provided below. By agreeing, I understand that the information I am providing will be used to create my new account application to Bakkt Crypto Solutions, LLC and Bakkt Marketplace, LLC for purposes of opening and maintaining an account. Bakkt’s User Agreement.", comment: "ExternalTradingMigration: Disclaimer")
 
         public enum EnchancedTransactions {
             public static let title = NSLocalizedString("Enhanced transactions", comment: "ExternalTradingMigration: Enhanced transactions")
@@ -70,38 +70,37 @@ extension NonLocalizedConstants.ExternalTradingMigration {
     public enum AssetMigration {
         public static let headerTitle = NSLocalizedString("One last step", comment: "ExternalTradingMigration: One last step")
 
-        public static let headerDescription = NSLocalizedString("The following assets are becoming unsupported in our new Terms of Service. We'll consolidate them into Bitcoin for a smoother transition, ensuring your funds remain secure and easily manageable.", comment: "ExternalTradingMigration: The following assets are becoming unsupported in our new Terms of Service. We'll consolidate them into Bitcoin for a smoother transition, ensuring your funds remain secure and easily manageable.")
+        public static let headerDescription = NSLocalizedString("The following assets will no longer be available under our new Terms of Service.\n\nThese assets will automatically be converted into Bitcoin (BTC), so you can continue to store or trade.", comment: "ExternalTradingMigration: The following assets will no longer be available under our new Terms of Service.\n\nThese assets will automatically be converted into Bitcoin (BTC), so you can continue to store or trade.")
 
-        public static let disclaimer = NSLocalizedString("Consolidating your assets into Bitcoin (BTC) does not have any costs involved. Supported assets in your balances will remain the same.", comment: "ExternalTradingMigration: Consolidating your assets into Bitcoin (BTC) does not have any costs involved. Supported assets in your balances will remain the same.")
+        public static let disclaimer = NSLocalizedString("There is no charge for swapping your assets into Bitcoin (BTC). All other supported assets will remain the same.", comment: "ExternalTradingMigration: There is no charge for swapping your assets into Bitcoin (BTC). All other supported assets will remain the same.")
     }
 
     public enum MigrationInProgress {
         public static let headerTitle = NSLocalizedString("Migration in progress", comment: "ExternalTradingMigration: Migration in progress")
-
-        public static let headerDescription = NSLocalizedString("We are upgrading your account. This process might take up to 24 hours. \n\n During this period, your funds may be temporarily inaccessible. Don’t worry, our team is working diligently to minimize any disruption.", comment: "ExternalTradingMigration: We are upgrading your account. This process might take up to 24 hours. During this period, your funds may be temporarily inaccessible. Don’t worry, our team is working diligently to minimize any disruption.")
+        public static let headerDescription = NSLocalizedString("We are currently upgrading your account which may take up to 24 hours. Please note that your funds may be temporarily unavailable during this time.", comment: "ExternalTradingMigration: We are currently upgrading your account which may take up to 24 hours. Please note that your funds may be temporarily unavailable during this time.")
         public static let goToDashboard = NSLocalizedString("Go to dashboard", comment: "ExternalTradingMigration: Go to dashboard")
     }
 }
 
 extension NonLocalizedConstants.Bakkt {
     public static let bakktStartMigrationWithAssetsTitle = NSLocalizedString(
-        "Before you continue trading",
-        comment: "Bakkt Migration Title: Before you continue trading"
+        "Upgrade account to continue",
+        comment: "Bakkt Migration Title: Upgrade account to continue"
     )
 
     public static let bakktStartMigrationWithAssetsMessage = NSLocalizedString(
-        "We’re partnering with a trusted virtual asset provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto.",
-        comment: "Bakkt Migration Message: We’re partnering with a trusted virtual asset provider to ensure you enjoy our services seamlessly. Please, upgrade your account to continue trading crypto."
+        "We've partnered with a new crypto service provider. To continue trading, please upgrade your account.",
+        comment: "Bakkt Migration Message: We've partnered with a new crypto service provider. To continue trading, please upgrade your account."
     )
 
     public static let bakktStartMigrationNoAssetsTitle = NSLocalizedString(
         "Important information",
-        comment: "Bakkt Migration Title: Before you continue trading"
+        comment: "Bakkt Migration Title: Important information"
     )
 
     public static let bakktStartMigrationNoAssetsMessage = NSLocalizedString(
-        "We’re partnering with a trusted virtual asset provider to ensure you enjoy our services seamlessly. Please review your new Terms of Service to start trading crypto.",
-        comment: "Bakkt Migration Message: We’re partnering with a trusted virtual asset provider to ensure you enjoy our services seamlessly. Please review your new Terms of Service to start trading crypto."
+        "Your account has been upgraded as Blockchain.com has partnered with a new crypto service provider. Please review our new Terms of Services to trade crypto.",
+        comment: "Bakkt Migration Message: Your account has been upgraded as Blockchain.com has partnered with a new crypto service provider. Please review our new Terms of Services to trade crypto."
     )
 
     public static let bakktUpgradeAccountButton = NSLocalizedString(
@@ -130,8 +129,8 @@ extension NonLocalizedConstants.Bakkt {
     )
 
     public static let bakktMigrationSuccessAnnouncementCardMessage = NSLocalizedString(
-        "You're all set up! 🥳\nContinue trading today",
-        comment: "Bakkt Migration: You're all set up! 🥳\nContinue trading today"
+        "You're all set to continue trading 🥳",
+        comment: "Bakkt Migration: You're all set to continue trading 🥳"
     )
 
     public static func depositDisclaimerBakkt() -> String {
