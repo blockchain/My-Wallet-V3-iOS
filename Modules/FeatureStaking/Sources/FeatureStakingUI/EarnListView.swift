@@ -177,6 +177,9 @@ struct EarnListView<Header: View, Content: View>: View {
                         }
                     } else {
                         balance
+                        FinancialPromotionAssetsDisclaimerView()
+                            .textCase(nil)
+                            .padding(.bottom, Spacing.padding1)
                     }
                 }
                 .frame(maxWidth: 100.vw)

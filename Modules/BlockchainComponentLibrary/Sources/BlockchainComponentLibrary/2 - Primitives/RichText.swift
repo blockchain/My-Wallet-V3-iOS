@@ -97,6 +97,7 @@ extension SwiftUI.Text {
         mutating func visitLink(_ link: Markdown.Link) -> SwiftUI.Text {
             defaultVisit(link)
                 .foregroundColor(.semantic.primary)
+                .underline(true, color: .semantic.primary)
         }
 
         mutating func visitLineBreak(_ lineBreak: LineBreak) -> SwiftUI.Text {

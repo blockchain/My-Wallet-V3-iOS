@@ -67,23 +67,23 @@ struct TradingDashboardView: View {
                     loadingView
                 }
             }
-            .padding(.top, displayDisclaimer ? max(disclaimerHeight, 68).pt : 0.pt)
+            .padding(.top, displayDisclaimer ? max(disclaimerHeight, 60).pt : 0.pt)
             if onboarding.isFinished {
                 FinancialPromotionDisclaimerView(display: $displayDisclaimer)
                     .padding()
                     .background(
                         GeometryReader { proxy in
-                            RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y))
-                                .fill(Color.semantic.light)
+                            RoundedRectangle(cornerRadius: Spacing.padding1)
+                                .fill(Color.semantic.background)
                                 .shadow(color: .semantic.dark.opacity(0.5), radius: shadowRadius(forScrollOffset: scrollOffset.y))
-                                .padding(.init(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                .padding(.init(top: 8, leading: 8, bottom: 8, trailing: 8))
                                 .onChange(of: proxy.size) { _ in
                                     disclaimerHeight = proxy.size.height
                                 }
-                            }
+                        }
                     )
                     .mask(RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y)).padding(.bottom, -20))
-                    .padding([.top, .bottom], 16.pt)
+                    .padding([.bottom], 8.pt)
             }
         }
         .superAppNavigationBar(

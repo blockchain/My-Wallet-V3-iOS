@@ -9997,6 +9997,7 @@ public final class L_blockchain_ux_finproms: L, I_blockchain_ux_finproms {
 public protocol I_blockchain_ux_finproms: I {}
 public extension I_blockchain_ux_finproms {
 	var `approval`: L_blockchain_ux_finproms_approval { .init("\(__).approval") }
+	var `assets`: L_blockchain_ux_finproms_assets { .init("\(__).assets") }
 	var `disclaimer`: L_blockchain_ux_finproms_disclaimer { .init("\(__).disclaimer") }
 }
 public final class L_blockchain_ux_finproms_approval: L, I_blockchain_ux_finproms_approval {
@@ -10015,6 +10016,29 @@ public final class L_blockchain_ux_finproms_approval_text: L, I_blockchain_ux_fi
 	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.approval.text", comment: "") }
 }
 public protocol I_blockchain_ux_finproms_approval_text: I_blockchain_db_type_string, I_blockchain_session_configuration_value {}
+public final class L_blockchain_ux_finproms_assets: L, I_blockchain_ux_finproms_assets {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.assets", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_assets: I {}
+public extension I_blockchain_ux_finproms_assets {
+	var `disclaimer`: L_blockchain_ux_finproms_assets_disclaimer { .init("\(__).disclaimer") }
+}
+public final class L_blockchain_ux_finproms_assets_disclaimer: L, I_blockchain_ux_finproms_assets_disclaimer {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.assets.disclaimer", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_assets_disclaimer: I {}
+public extension I_blockchain_ux_finproms_assets_disclaimer {
+	var `tap`: L_blockchain_ux_finproms_assets_disclaimer_tap { .init("\(__).tap") }
+	var `text`: L_blockchain_ux_finproms_assets_disclaimer_text { .init("\(__).text") }
+}
+public final class L_blockchain_ux_finproms_assets_disclaimer_tap: L, I_blockchain_ux_finproms_assets_disclaimer_tap {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.assets.disclaimer.tap", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_assets_disclaimer_tap: I_blockchain_session_configuration_value, I_blockchain_ux_type_action {}
+public final class L_blockchain_ux_finproms_assets_disclaimer_text: L, I_blockchain_ux_finproms_assets_disclaimer_text {
+	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.assets.disclaimer.text", comment: "") }
+}
+public protocol I_blockchain_ux_finproms_assets_disclaimer_text: I_blockchain_db_type_string, I_blockchain_session_configuration_value {}
 public final class L_blockchain_ux_finproms_disclaimer: L, I_blockchain_ux_finproms_disclaimer {
 	public override class var localized: String { NSLocalizedString("blockchain.ux.finproms.disclaimer", comment: "") }
 }

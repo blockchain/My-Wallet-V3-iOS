@@ -2657,6 +2657,14 @@ blockchain:
 				text:
 				+ blockchain.db.type.string
 				+ blockchain.session.configuration.value
+			assets:
+				disclaimer:
+					tap:
+					+ blockchain.session.configuration.value
+					+ blockchain.ux.type.action
+					text:
+					+ blockchain.db.type.string
+					+ blockchain.session.configuration.value
 			disclaimer:
 				is:
 					dismiss:
