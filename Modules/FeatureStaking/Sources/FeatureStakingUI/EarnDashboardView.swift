@@ -14,8 +14,13 @@ public struct EarnDashboardView: View {
     @State var showCompare: Bool = false
     @StateObject private var object = Object()
 
+    @State private var scrollOffset: CGPoint = .zero
+    @State private var displayDisclaimer: Bool = false
+    @State private var disclaimerHeight: CGFloat = 0
+
     public init() {}
     public var body: some View {
+        ZStack(alignment: .top) {
             VStack {
                 if object.model.isNotNil {
                     LargeSegmentedControl(
@@ -52,55 +57,74 @@ public struct EarnDashboardView: View {
                     .background(Color.semantic.light)
                 }
             }
-            .background(Color.semantic.light.ignoresSafeArea())
-            .superAppNavigationBar(
-                leading: { [app] in dashboardLeadingItem(app: app) },
-                trailing: { [app] in dashboardTrailingItem(app: app) },
-                scrollOffset: nil
+            .padding(.top, displayDisclaimer ? max(disclaimerHeight, 60).pt : 0.pt)
+            if object.model.isNotNil {
+                FinancialPromotionDisclaimerView(display: $displayDisclaimer)
+                    .padding()
+                    .background(
+                        GeometryReader { proxy in
+                            RoundedRectangle(cornerRadius: Spacing.padding1)
+                                .fill(Color.semantic.background)
+                                .shadow(color: .semantic.dark.opacity(0.5), radius: shadowRadius(forScrollOffset: scrollOffset.y))
+                                .padding(.init(top: 8, leading: 8, bottom: 8, trailing: 8))
+                                .onChange(of: proxy.size) { _ in
+                                    disclaimerHeight = proxy.size.height
+                                }
+                        }
+                    )
+                    .mask(RoundedRectangle(cornerRadius: shadowRadius(forScrollOffset: scrollOffset.y)).padding(.bottom, -20))
+                    .padding([.bottom], 8.pt)
+            }
+        }
+        .background(Color.semantic.light.ignoresSafeArea())
+        .superAppNavigationBar(
+            leading: { [app] in dashboardLeadingItem(app: app) },
+            trailing: { [app] in dashboardTrailingItem(app: app) },
+            scrollOffset: $scrollOffset.y
+        )
+        .onAppear {
+            object.fetch(app: app)
+            showIntro = !((try? app.state.get(blockchain.ux.earn.intro.did.show)) ?? false)
+        }
+        .onChange(of: object.totalBalance) { balance in
+            selected = (balance?.isPositive ?? false) ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
+        }
+        .sheet(isPresented: $showIntro, content: {
+            EarnIntroView(
+                store: Store(
+                    initialState: .init(products: object.products),
+                    reducer: {
+                        EarnIntro(
+                            app: app,
+                            onDismiss: {
+                                showIntro = false
+                            }
+                        )
+                    }
+                )
             )
-            .onAppear {
-                object.fetch(app: app)
-                showIntro = !((try? app.state.get(blockchain.ux.earn.intro.did.show)) ?? false)
-            }
-            .onChange(of: object.totalBalance) { balance in
-                selected = (balance?.isPositive ?? false) ? blockchain.ux.earn.portfolio[] : blockchain.ux.earn.discover[]
-            }
-            .sheet(isPresented: $showIntro, content: {
-                EarnIntroView(
-                    store: Store(
-                        initialState: .init(products: object.products),
-                        reducer: {
-                            EarnIntro(
-                                app: app,
-                                onDismiss: {
-                                    showIntro = false
-                                }
-                            )
-                        }
-                    )
+        })
+        .sheet(isPresented: $showCompare, content: {
+            EarnProductCompareView(
+                store: Store(
+                    initialState: EarnProductCompare.State(
+                        products: object.products,
+                        model: object.model
+                    ),
+                    reducer: {
+                        EarnProductCompare(
+                            onDismiss: {
+                                showCompare = false
+                            }
+                        )
+                    }
                 )
-            })
-            .sheet(isPresented: $showCompare, content: {
-                EarnProductCompareView(
-                    store: Store(
-                        initialState: EarnProductCompare.State(
-                            products: object.products,
-                            model: object.model
-                        ),
-                        reducer: {
-                            EarnProductCompare(
-                                onDismiss: {
-                                    showCompare = false
-                                }
-                            )
-                        }
-                    )
-                )
-            })
-            .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
-            .batch {
-                set(blockchain.ux.earn.article.plain.navigation.bar.button.close.tap.then.close, to: true)
-            }
+            )
+        })
+        .post(lifecycleOf: blockchain.ux.earn.article.plain, update: object.model)
+        .batch {
+            set(blockchain.ux.earn.article.plain.navigation.bar.button.close.tap.then.close, to: true)
+        }
     }
 
     @ViewBuilder var content: some View {
@@ -142,6 +166,18 @@ public struct EarnDashboardView: View {
         )
         .id(blockchain.ux.earn.discover[])
         .tag(blockchain.ux.earn.discover[])
+    }
+
+    func shadowRadius(forScrollOffset offset: CGFloat) -> CGFloat {
+        let lowerBound: CGFloat = 30
+        let upperBound: CGFloat = 70
+        if offset < lowerBound {
+            return 0
+        } else if offset > upperBound {
+            return 8
+        } else {
+            return ((offset - lowerBound) / (upperBound - lowerBound)) * 8
+        }
     }
 }
 
@@ -268,13 +304,13 @@ extension EarnDashboardView {
                 for: blockchain.ux.earn.supported.products,
                 as: [EarnProduct].self
             )
-            .replaceError(with: [.savings, .staking])
-            .map { products in
-                OrderedSet<EarnProduct>(products)
-            }
-            .removeDuplicates()
-            .share()
-            .eraseToAnyPublisher()
+                .replaceError(with: [.savings, .staking])
+                .map { products in
+                    OrderedSet<EarnProduct>(products)
+                }
+                .removeDuplicates()
+                .share()
+                .eraseToAnyPublisher()
 
             products.flatMap { products -> AnyPublisher<[Model], Never> in
                 products.map { product -> AnyPublisher<[Model?], Never> in
@@ -290,7 +326,7 @@ extension EarnDashboardView {
                 .map { products -> [Model] in products.joined().compacted().array }
                 .eraseToAnyPublisher()
             }
-             .receive(on: DispatchQueue.main.animation())
+            .receive(on: DispatchQueue.main.animation())
             .assign(to: &$model)
 
             func balance(_ product: EarnProduct, _ asset: CryptoCurrency) -> AnyPublisher<MoneyValue, Never> {
@@ -306,11 +342,11 @@ extension EarnDashboardView {
                     .compactMap(\.value)
 
                 return balancePublisher.combineLatest(quotePublisher)
-                        .map { balance, quote -> MoneyValue in
-                            balance.convert(using: quote)
-                        }
-                        .replaceError(with: .zero(currency: .USD))
-                        .eraseToAnyPublisher()
+                    .map { balance, quote -> MoneyValue in
+                        balance.convert(using: quote)
+                    }
+                    .replaceError(with: .zero(currency: .USD))
+                    .eraseToAnyPublisher()
             }
 
             func totalBalance(for product: EarnProduct) -> AnyPublisher<MoneyValue?, Never> {

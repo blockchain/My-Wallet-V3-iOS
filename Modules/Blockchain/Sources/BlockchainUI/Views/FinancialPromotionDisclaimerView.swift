@@ -36,7 +36,7 @@ public struct FinancialPromotionDisclaimerView: View {
                         .padding(.horizontal)
                         .multilineTextAlignment(.center)
                         .typography(.micro)
-                        .foregroundColor(Color(red: 0.4, green: 0.44, blue: 0.52))
+                        .foregroundColor(.semantic.title)
                         .onTapGesture {
                             $app.post(event: blockchain.ux.finproms.disclaimer.tap)
                         }
@@ -45,11 +45,14 @@ public struct FinancialPromotionDisclaimerView: View {
                 Color.clear.frame(width: 1, height: 1)
             }
         }
-        .bindings(managing: { state in isSynchronized = state.isSynchronized }) {
-            subscribe($text, to: blockchain.ux.finproms.disclaimer.text)
-            subscribe($isDismissed, to: blockchain.ux.finproms.disclaimer.is.dismissed)
-            subscribe($isDismissEnabled, to: blockchain.ux.finproms.disclaimer.is.dismiss.enabled)
-        }
+        .bindings(
+            managing: { state in isSynchronized = state.isSynchronized },
+            {
+                subscribe($text, to: blockchain.ux.finproms.disclaimer.text)
+                subscribe($isDismissed, to: blockchain.ux.finproms.disclaimer.is.dismissed)
+                subscribe($isDismissEnabled, to: blockchain.ux.finproms.disclaimer.is.dismiss.enabled)
+            }
+        )
         .onChange(of: isSynchronized) { _ in
             display = text.isNotNilOrEmpty
         }
@@ -73,8 +76,8 @@ public struct FinancialPromotionApprovalView: View {
                 Text(rich: text)
                     .padding(.horizontal)
                     .multilineTextAlignment(.center)
-                    .typography(.micro)
-                    .foregroundColor(Color(red: 0.4, green: 0.44, blue: 0.52))
+                    .typography(.caption1)
+                    .foregroundColor(.semantic.title)
                     .onTapGesture {
                         $app.post(event: blockchain.ux.finproms.approval.tap)
                     }
@@ -82,8 +85,45 @@ public struct FinancialPromotionApprovalView: View {
                 Color.clear.frame(width: 1, height: 1)
             }
         }
-        .bindings(managing: { state in isSynchronized = state.isSynchronized }) {
-            subscribe($text, to: blockchain.ux.finproms.approval.text)
+        .bindings(
+            managing: { state in isSynchronized = state.isSynchronized },
+            {
+                subscribe($text, to: blockchain.ux.finproms.approval.text)
+            }
+        )
+    }
+}
+
+public struct FinancialPromotionAssetsDisclaimerView: View {
+    @BlockchainApp var app
+
+    @State private var text: String?
+    @State private var isSynchronized: Bool = false
+
+    public init() {}
+
+    public var body: some View {
+        Group {
+            if isSynchronized, text.isNil {
+                EmptyView()
+            } else if let text {
+                Text(rich: text)
+                    .padding(.horizontal, Spacing.padding1)
+                    .multilineTextAlignment(.center)
+                    .typography(.micro)
+                    .foregroundColor(Color(red: 0.4, green: 0.44, blue: 0.52))
+                    .onTapGesture {
+                        $app.post(event: blockchain.ux.finproms.assets.disclaimer.tap)
+                    }
+            } else {
+                Color.clear.frame(width: 1, height: 1)
+            }
         }
+        .bindings(
+            managing: { state in isSynchronized = state.isSynchronized },
+            {
+                subscribe($text, to: blockchain.ux.finproms.assets.disclaimer.text)
+            }
+        )
     }
 }
