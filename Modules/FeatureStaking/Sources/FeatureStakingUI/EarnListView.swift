@@ -185,10 +185,19 @@ struct EarnListView<Header: View, Content: View>: View {
                 .frame(maxWidth: 100.vw)
                 .background(backgroundColor)
                 .listRowInsets(.zero),
-                footer: VStack {}
-                    .frame(height: 64)
-                    .background(backgroundColor)
-                    .listRowInsets(.zero),
+                footer: VStack {
+                    FinancialPromotionApprovalView()
+                        .padding(Spacing.padding1)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16).fill(Color.semantic.background)
+                        )
+                        .frame(maxWidth: .infinity, minHeight: 64)
+                        .padding(.top, Spacing.padding1)
+                }
+                .frame(minHeight: 64.pt)
+                .background(backgroundColor)
+                .padding(.bottom, 72.pt)
+                .listRowInsets(.zero),
                 content: {
                     if model.isNotNil, filtered.isEmpty {
                         VStack(alignment: .center) {
