@@ -108,17 +108,25 @@ extension Session {
                     app.state.set(blockchain.app.configuration.remote.is.stale, to: false)
                 }
 
+                func onMain(_ block: @escaping () -> Void) {
+                    if isInTest {
+                        block()
+                    } else {
+                        DispatchQueue.main.async(execute: block)
+                    }
+                }
+
                 remote.fetch(withExpirationDuration: expiration) { _, error in
                     guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
                     remote.activate { _, error in
                         guard error.peek(as: .error, if: \.isNotNil).isNil else { return errored() }
-                        DispatchQueue.main.async {
+                        onMain {
                             activate(keys: remote.allKeys(from: .remote))
                             self.setupRealtimeListener(
                                 remote: remote,
                                 errored: errored,
                                 activate: { keys in
-                                    DispatchQueue.main.async { activate(keys: keys) }
+                                    onMain { activate(keys: keys) }
                                 }
                             )
                         }

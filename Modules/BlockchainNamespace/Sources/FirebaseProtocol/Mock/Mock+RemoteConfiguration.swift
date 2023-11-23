@@ -28,9 +28,7 @@ extension Mock {
         }
 
         public func activate(completion: ((Bool, Error?) -> Void)?) {
-            DispatchQueue.global().async {
-                completion?(true, nil)
-            }
+            completion?(true, nil)
         }
 
         public func allKeys(from source: RemoteConfigurationSource) -> [String] {

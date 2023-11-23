@@ -9,9 +9,14 @@ final class FeatureCustomerSupportTests: XCTestCase {
     var sdk: Test.Intercom.Type = Test.Intercom.self
     var url: URL?
 
-    override func setUp() {
-        super.setUp()
+    override func setUp() async throws {
+        try await super.setUp()
         app = App.test
+        try await app.register(
+            napi: blockchain.api.nabu.gateway.user,
+            domain: blockchain.api.nabu.gateway.user.intercom.identity.user.digest,
+            repository: { _ async -> AnyJSON in "digest" }
+        )
         sut = CustomerSupportObserver(
             app: app,
             scheduler: .immediate,
@@ -36,12 +41,20 @@ final class FeatureCustomerSupportTests: XCTestCase {
         XCTAssertEqual(sdk.appId, "app-id")
     }
 
-    func test_sign_in() throws {
+    func test_sign_in() async throws {
+
+        let signIn = expectation(description: "signIn")
+
+        Test.Intercom.signInExpectation = signIn
         app.signIn(userId: "user-id")
         app.state.set(blockchain.user.email.address, to: "oliver@blockchain.com")
+
+        await fulfillment(of: [signIn])
+
         XCTAssertTrue(sdk.did.login)
         XCTAssertEqual(sdk.attributes.userId, "user-id")
         XCTAssertEqual(sdk.attributes.email, "oliver@blockchain.com")
+        XCTAssertEqual(sdk.digest, "digest")
     }
 
     func test_sign_out() {
@@ -75,8 +88,9 @@ enum Test {
 
     class Intercom: Intercom_p {
 
-        static var apiKey, appId: String!
+        static var apiKey, appId, digest: String!
         static var attributes: UserAttributes!
+        static var signInExpectation: XCTestExpectation?
 
         static var did = (
             present: false,
@@ -88,6 +102,7 @@ enum Test {
             apiKey = nil
             appId = nil
             attributes = nil
+            digest = nil
             did = (false, false, false)
         }
 
@@ -96,10 +111,15 @@ enum Test {
             appId = forAppId
         }
 
+        static func setUserHash(_ digest: String) {
+            self.digest = digest
+        }
+
         static func loginUser(with attributes: UserAttributes, completion: ((Result<Void, Error>) -> Void)?) {
             Self.attributes = attributes
             did.login = true
             completion?(.success(()))
+            signInExpectation?.fulfill()
         }
 
         static func logout() {

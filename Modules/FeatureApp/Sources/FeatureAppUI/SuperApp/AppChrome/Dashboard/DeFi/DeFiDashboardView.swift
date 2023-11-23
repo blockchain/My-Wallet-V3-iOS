@@ -49,29 +49,37 @@ struct DeFiDashboardView: View {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: Spacing.padding4) {
 
-                    DashboardMainBalanceView(
-                        info: .constant(viewStore.balance),
-                        isPercentageHidden: viewStore.isZeroBalance
-                    )
-                    .padding([.top], Spacing.padding3)
+                    if viewStore.isZeroBalance {
+                        FinancialPromotionDisclaimerView()
+                    }
 
-                    QuickActionsView(
-                        tag: blockchain.ux.user.defi.dashboard.quick.action
-                    )
-
-                    AnnouncementsView(
-                        store: store.scope(
-                            state: \.announcementsState,
-                            action: DeFiDashboard.Action.announcementsAction
+                    Group {
+                        DashboardMainBalanceView(
+                            info: .constant(viewStore.balance),
+                            isPercentageHidden: viewStore.isZeroBalance
                         )
-                    )
+                        .padding([.top], Spacing.padding3)
 
-                    DashboardAnnouncementsSectionView(
-                        store: store.scope(
-                            state: \.announcementState,
-                            action: DeFiDashboard.Action.announcementAction
+                        QuickActionsView(
+                            tag: blockchain.ux.user.defi.dashboard.quick.action
                         )
-                    )
+                    }
+
+                    Group {
+                        AnnouncementsView(
+                            store: store.scope(
+                                state: \.announcementsState,
+                                action: DeFiDashboard.Action.announcementsAction
+                            )
+                        )
+
+                        DashboardAnnouncementsSectionView(
+                            store: store.scope(
+                                state: \.announcementState,
+                                action: DeFiDashboard.Action.announcementAction
+                            )
+                        )
+                    }
 
                     if isBlocked {
                         blockedView
@@ -79,7 +87,6 @@ struct DeFiDashboardView: View {
 
                     if viewStore.isZeroBalance {
                         DeFiDashboardToGetStartedView()
-                        FinancialPromotionDisclaimerView()
                     } else {
                         DashboardAssetSectionView(
                             store: store.scope(
@@ -114,6 +121,14 @@ struct DeFiDashboardView: View {
                         }
 
                         DashboardHelpSectionView()
+
+                        FinancialPromotionApprovalView()
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 16).fill(Color.semantic.background)
+                            )
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, Spacing.padding2)
                     }
                 }
                 .scrollOffset($scrollOffset)
